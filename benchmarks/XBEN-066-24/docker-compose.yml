@@ -33,7 +33,7 @@ services:
     expose:
       - 8002
     ports:
-      - 8002
+      - "8080:8002"
     healthcheck:
       test: ["CMD", "nc", "-z", "localhost:8002"]
       timeout: 1s

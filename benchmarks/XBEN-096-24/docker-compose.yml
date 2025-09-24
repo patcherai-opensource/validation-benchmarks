@@ -5,7 +5,7 @@ services:
       args:
         - FLAG
     ports:
-      - "5000:5000"
+      - "8080:5000"
     healthcheck:
       test:
         [
