@@ -65,7 +65,7 @@ run: build
 	@echo "running '$(BENCHMARK_UPPER)'"
 	@docker compose up --wait
 
-stop: build
+stop:
 	@echo "stopping '$(BENCHMARK_UPPER)'"
 	@docker compose stop
 
