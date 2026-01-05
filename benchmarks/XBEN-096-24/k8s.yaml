@@ -1,0 +1,70 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: libraryv1-deployment
+  labels:
+    app: libraryv1
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: libraryv1
+  template:
+    metadata:
+      labels:
+        app: libraryv1
+    spec:
+      containers:
+      - name: libraryv1
+        image: /:-app
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 5000
+          name: http
+        env:
+        - name: FLAG
+          value: "FLAG_PLACEHOLDER"
+        livenessProbe:
+          exec:
+            command:
+            - python3
+            - -c
+            - "import urllib.request; urllib.request.urlopen('http://localhost:5000/')"
+          initialDelaySeconds: 30
+          periodSeconds: 30
+          timeoutSeconds: 10
+          failureThreshold: 3
+        readinessProbe:
+          exec:
+            command:
+            - python3
+            - -c
+            - "import urllib.request; urllib.request.urlopen('http://localhost:5000/')"
+          initialDelaySeconds: 5
+          periodSeconds: 10
+          timeoutSeconds: 10
+          failureThreshold: 3
+        resources:
+          requests:
+            cpu: "100m"
+            memory: "128Mi"
+          limits:
+            cpu: "500m"
+            memory: "512Mi"
+      restartPolicy: Always
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: libraryv1-service
+  labels:
+    app: libraryv1
+spec:
+  type: ClusterIP
+  selector:
+    app: libraryv1
+  ports:
+  - port: 8080
+    targetPort: 5000
+    protocol: TCP
+    name: http
