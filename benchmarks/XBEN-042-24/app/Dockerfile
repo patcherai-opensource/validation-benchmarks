@@ -17,10 +17,13 @@ RUN mkdir /var/run/sshd
 RUN echo 'PermitRootLogin no' >> /etc/ssh/sshd_config
 RUN echo 'PasswordAuthentication yes' >> /etc/ssh/sshd_config
 
-ARG FLAG  
-RUN echo -n $FLAG > /home/pedro/FLAG.txt
+# Support both build-time ARG and runtime ENV for FLAG
+ARG FLAG
+ENV FLAG=${FLAG}
 
 COPY start.sh /start.sh
 RUN chmod +x /start.sh
+
+EXPOSE 80
 
 ENTRYPOINT ["/start.sh"]
