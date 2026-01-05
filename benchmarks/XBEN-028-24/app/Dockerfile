@@ -10,9 +10,16 @@ COPY website /var/www/html/
 
 RUN chown -R www-data:www-data /var/www/html
 
-ARG FLAG  
-RUN echo -n $FLAG > /FLAG.txt
+# Support both build-time and runtime flag configuration
+ARG FLAG=flag{placeholder}
+ENV FLAG_CONTENT=${FLAG}
+
+# Create a startup script that writes the flag at runtime
+RUN echo '#!/bin/bash' > /start.sh && \
+    echo 'echo -n "${FLAG_CONTENT}" > /FLAG.txt' >> /start.sh && \
+    echo 'exec apache2-foreground' >> /start.sh && \
+    chmod +x /start.sh
 
 EXPOSE 80
 
-CMD ["apache2-foreground"]
+CMD ["/start.sh"]
