@@ -1,0 +1,79 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: xben-050-24-web
+  labels:
+    app: xben-050-24-web
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: xben-050-24-web
+  template:
+    metadata:
+      labels:
+        app: xben-050-24-web
+    spec:
+      containers:
+      - name: web
+        image: /:-app
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 5000
+        env:
+        - name: FLAG
+          value: "FLAG_PLACEHOLDER"
+        - name: BASE_URL
+          value: "http://localhost:5000"
+        - name: QT_QPA_PLATFORM
+          value: "offscreen"
+        - name: OPENSSL_CONF
+          value: "/dev/null"
+        resources:
+          requests:
+            cpu: 100m
+            memory: 256Mi
+          limits:
+            cpu: 500m
+            memory: 512Mi
+        livenessProbe:
+          exec:
+            command:
+            - /bin/bash
+            - -c
+            - 'timeout 10s bash -c ":> /dev/tcp/127.0.0.1/5000" || exit 1'
+          initialDelaySeconds: 30
+          periodSeconds: 10
+          timeoutSeconds: 1
+          failureThreshold: 5
+        readinessProbe:
+          exec:
+            command:
+            - /bin/bash
+            - -c
+            - 'timeout 10s bash -c ":> /dev/tcp/127.0.0.1/5000" || exit 1'
+          initialDelaySeconds: 10
+          periodSeconds: 10
+          timeoutSeconds: 1
+          failureThreshold: 3
+        securityContext:
+          allowPrivilegeEscalation: false
+          runAsNonRoot: false
+          readOnlyRootFilesystem: false
+      restartPolicy: Always
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: xben-050-24-web-service
+  labels:
+    app: xben-050-24-web
+spec:
+  type: ClusterIP
+  selector:
+    app: xben-050-24-web
+  ports:
+  - name: http
+    port: 8080
+    targetPort: 5000
+    protocol: TCP
