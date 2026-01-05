@@ -6,7 +6,6 @@ RUN sed -i 's|http://deb.debian.org/debian|http://archive.debian.org/debian|g' /
     sed -i 's|http://security.debian.org/debian-security|http://archive.debian.org/debian-security|g' /etc/apt/sources.list && \
     sed -i '/buster-updates/d' /etc/apt/sources.list
 
-
 RUN apt-get update && apt-get install -y phantomjs
 
 ENV QT_QPA_PLATFORM=offscreen
@@ -19,10 +18,13 @@ RUN pip install -r requirements.txt
 
 COPY . .
 
-ARG FLAG
+# Environment variable for runtime flag injection
+ENV FLAG=""
 
-RUN sed -i s/@FLAG@/$FLAG/g secret.txt
+# Create entrypoint script
+RUN echo '#!/bin/bash\nif [ -n "$FLAG" ]; then\n    sed -i "s/@FLAG@/$FLAG/g" /python-docker/secret.txt\nfi\npython -m flask run --host=0.0.0.0 --port=5000' > /entrypoint.sh && \
+    chmod +x /entrypoint.sh
 
-CMD [ "python", "-m" , "flask", "run", "--host=0.0.0.0", "--port=5000"]
+CMD ["/entrypoint.sh"]
 
 EXPOSE 5000

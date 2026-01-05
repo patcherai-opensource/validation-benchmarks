@@ -33,7 +33,10 @@ def index():
 def check_xss(page,flag,msg,tag):
     proc = subprocess.Popen(["timeout","5","phantomjs", "check.js"], stdout=subprocess.PIPE, stdin=subprocess.PIPE)
     fn = "static/" + os.urandom(16).encode('hex') + '.html'
-    url = 'http://localhost:5000/' + fn
+    # Use environment variable for host, fallback to localhost for local development
+    host = os.environ.get('APP_HOST', 'localhost')
+    port = os.environ.get('APP_PORT', '5000')
+    url = 'http://{}:{}/{}'.format(host, port, fn)
     try:
         of = open(fn, 'w')
         of.write(page)
