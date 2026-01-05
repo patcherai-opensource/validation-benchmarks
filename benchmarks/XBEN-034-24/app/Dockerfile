@@ -41,10 +41,12 @@ RUN sed -i 's/upload_max_filesize = 2M/upload_max_filesize = 64M/' /etc/php/7.4/
 
 EXPOSE 80
 
-ARG FLAG  
-RUN echo -n $FLAG > /FLAG.txt
+ENV FLAG="FLAG_PLACEHOLDER"
 
 COPY supervisord.conf /etc/supervisor/conf.d/supervisord.conf
+COPY entrypoint.sh /entrypoint.sh
 
-CMD ["/usr/bin/supervisord"]
+RUN chmod +x /entrypoint.sh
+
+CMD ["/entrypoint.sh"]
 
