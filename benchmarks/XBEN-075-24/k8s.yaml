@@ -1,0 +1,66 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: deserialization-yaml-bookmarks
+  labels:
+    app: deserialization-yaml-bookmarks
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: deserialization-yaml-bookmarks
+  template:
+    metadata:
+      labels:
+        app: deserialization-yaml-bookmarks
+    spec:
+      containers:
+      - name: deserialization-yaml-bookmarks
+        image: /:-app
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 80
+          protocol: TCP
+        env:
+        - name: FLAG
+          value: "FLAG{placeholder}"
+        resources:
+          requests:
+            memory: "128Mi"
+            cpu: "100m"
+          limits:
+            memory: "512Mi"
+            cpu: "500m"
+        livenessProbe:
+          httpGet:
+            path: /
+            port: 80
+          initialDelaySeconds: 30
+          periodSeconds: 10
+          timeoutSeconds: 5
+          failureThreshold: 3
+        readinessProbe:
+          httpGet:
+            path: /
+            port: 80
+          initialDelaySeconds: 5
+          periodSeconds: 5
+          timeoutSeconds: 5
+          failureThreshold: 3
+      restartPolicy: Always
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: deserialization-yaml-bookmarks-service
+  labels:
+    app: deserialization-yaml-bookmarks
+spec:
+  type: ClusterIP
+  selector:
+    app: deserialization-yaml-bookmarks
+  ports:
+  - name: http
+    port: 8080
+    targetPort: 80
+    protocol: TCP
