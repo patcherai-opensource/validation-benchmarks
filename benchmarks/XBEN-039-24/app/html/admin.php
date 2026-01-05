@@ -9,7 +9,7 @@ if (isset($_SESSION['admin_logged_in']) && $_SESSION['admin_logged_in'] === true
 
 $errorMessage = '';
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    $conn = new mysqli('db', 'user', 'password', 'blogDB');
+    $conn = new mysqli(getenv('MYSQL_HOST') ?: 'localhost', getenv('MYSQL_USER') ?: 'user', getenv('MYSQL_PASSWORD') ?: 'password', getenv('MYSQL_DATABASE') ?: 'blogDB');
     if ($conn->connect_error) {
         die("Connection failed: " . $conn->connect_error);
     }

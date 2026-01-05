@@ -1,5 +1,5 @@
 <?php
-    $conn = new mysqli('db', 'user', 'password', 'blogDB');
+    $conn = new mysqli(getenv('MYSQL_HOST') ?: 'localhost', getenv('MYSQL_USER') ?: 'user', getenv('MYSQL_PASSWORD') ?: 'password', getenv('MYSQL_DATABASE') ?: 'blogDB');
     if ($conn->connect_error) {
         die("Connection failed: " . $conn->connect_error);
     }
