@@ -5,6 +5,7 @@ RUN apt-get update && apt-get install -y apache2 \
     python3 \
     python3-pip \
     curl \
+    mysql-client \
     && apt-get clean \
     && apt-get autoremove \
     && rm -rf /var/lib/apt/lists/*
@@ -18,10 +19,14 @@ COPY ./website/run.py /var/www/idor_json_cookie_trading_platform/
 COPY ./website/app /var/www/idor_json_cookie_trading_platform/app
 
 ARG FLAG  
-RUN echo -n $FLAG > /flag
+RUN echo -n ${FLAG:-FLAG_PLACEHOLDER} > /flag
 
 RUN a2dissite 000-default.conf
 RUN a2ensite idor_json_cookie_trading_platform-httpd.conf
 RUN a2enmod headers
 
-CMD  /usr/sbin/apache2ctl -D FOREGROUND
+# Create startup script
+COPY ./start.sh /start.sh
+RUN chmod +x /start.sh
+
+CMD ["/start.sh"]
