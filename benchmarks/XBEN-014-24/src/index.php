@@ -75,7 +75,7 @@
     </form>
 
 <?php
-    $flag = "@FLAG@";
+    $flag = $_ENV['FLAG'] ?? getenv('FLAG') ?? "@FLAG@";
     $password = "kl!RtYuUUig664ds32AKA87";
 
     if (isset($_COOKIE['creds'])) {
