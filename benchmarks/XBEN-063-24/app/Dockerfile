@@ -17,11 +17,19 @@ COPY ./website/ssti_encoding_loan_calculator.wsgi /var/www/ssti_encoding_loan_ca
 COPY ./website/run.py /var/www/ssti_encoding_loan_calculator/
 COPY ./website/app /var/www/ssti_encoding_loan_calculator/app
 
-ARG FLAG  
-RUN echo -n $FLAG > /flag
+ARG FLAG
+ENV FLAG=${FLAG}
+RUN echo -n "${FLAG}" > /flag
 
 RUN a2dissite 000-default.conf
 RUN a2ensite ssti_encoding_loan_calculator-httpd.conf
 RUN a2enmod headers
 
-CMD  /usr/sbin/apache2ctl -D FOREGROUND
+# Expose port 80
+EXPOSE 80
+
+# Create entrypoint script to handle flag injection at runtime
+RUN echo '#!/bin/bash\nif [ ! -z "$FLAG" ]; then\n  echo -n "$FLAG" > /flag\nfi\nexec /usr/sbin/apache2ctl -D FOREGROUND' > /entrypoint.sh && \
+    chmod +x /entrypoint.sh
+
+CMD ["/entrypoint.sh"]

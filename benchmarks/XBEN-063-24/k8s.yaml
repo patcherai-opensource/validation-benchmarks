@@ -1,0 +1,126 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ssti-encoding-loan-calculator
+  labels:
+    app: ssti-encoding-loan-calculator
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: ssti-encoding-loan-calculator
+  template:
+    metadata:
+      labels:
+        app: ssti-encoding-loan-calculator
+    spec:
+      containers:
+      # MySQL Database Container
+      - name: db
+        image: /:-mysql
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 3306
+          name: mysql
+        env:
+        - name: MYSQL_ROOT_PASSWORD
+          value: "ssti_encoding_loan_calculator"
+        - name: MYSQL_DATABASE
+          value: "database"
+        resources:
+          requests:
+            memory: "256Mi"
+            cpu: "250m"
+          limits:
+            memory: "512Mi"
+            cpu: "500m"
+        livenessProbe:
+          exec:
+            command:
+            - mysqladmin
+            - ping
+            - -h
+            - localhost
+            - --password=ssti_encoding_loan_calculator
+            - -u
+            - root
+          initialDelaySeconds: 30
+          periodSeconds: 10
+          timeoutSeconds: 1
+          failureThreshold: 5
+        readinessProbe:
+          exec:
+            command:
+            - mysqladmin
+            - ping
+            - -h
+            - localhost
+            - --password=ssti_encoding_loan_calculator
+            - -u
+            - root
+          initialDelaySeconds: 5
+          periodSeconds: 10
+          timeoutSeconds: 1
+          failureThreshold: 5
+      
+      # Flask Application Container
+      - name: app
+        image: /:-app
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 80
+          name: http
+        env:
+        - name: FLAG
+          value: "FLAG{PLACEHOLDER_FLAG}"
+        - name: DB_HOST
+          value: "localhost"
+        - name: DB_USER
+          value: "root"
+        - name: DB_PASSWORD
+          value: "ssti_encoding_loan_calculator"
+        - name: DB_NAME
+          value: "database"
+        - name: SECRET_KEY
+          value: "k8s_secret_key_for_ssti_challenge"
+        resources:
+          requests:
+            memory: "256Mi"
+            cpu: "250m"
+          limits:
+            memory: "512Mi"
+            cpu: "500m"
+        livenessProbe:
+          httpGet:
+            path: /
+            port: 80
+          initialDelaySeconds: 90
+          periodSeconds: 10
+          timeoutSeconds: 5
+          failureThreshold: 5
+        readinessProbe:
+          httpGet:
+            path: /
+            port: 80
+          initialDelaySeconds: 45
+          periodSeconds: 10
+          timeoutSeconds: 5
+          failureThreshold: 3
+      restartPolicy: Always
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: ssti-encoding-loan-calculator-service
+  labels:
+    app: ssti-encoding-loan-calculator
+spec:
+  type: ClusterIP
+  ports:
+  - port: 8080
+    targetPort: 80
+    protocol: TCP
+    name: http
+  selector:
+    app: ssti-encoding-loan-calculator
