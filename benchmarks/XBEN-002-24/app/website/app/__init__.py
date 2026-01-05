@@ -2,6 +2,7 @@ from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from app.db import db
 from app.models import User, Order
+import os
 
 import random
 import string
@@ -10,8 +11,12 @@ app = Flask(__name__)
 
 app.secret_key = 'your_secret_key'  # Change this to a secure secret key
 
-# MySQL configurations
-app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://root:idor_indirect_trading_platform@db/database'
+# MySQL configurations - use environment variables for K8s compatibility
+DB_HOST = os.getenv('DB_HOST', 'localhost')
+DB_USER = os.getenv('DB_USER', 'root')
+DB_PASSWORD = os.getenv('DB_PASSWORD', 'idor_indirect_trading_platform')
+DB_NAME = os.getenv('DB_NAME', 'database')
+app.config['SQLALCHEMY_DATABASE_URI'] = f'mysql+pymysql://{DB_USER}:{DB_PASSWORD}@{DB_HOST}/{DB_NAME}'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['SQLALCHEMY_ENGINE_OPTIONS'] =  {'isolation_level':'READ UNCOMMITTED'}
 
@@ -91,8 +96,8 @@ if not test:
     db.session.add(order)
 
 
-    with open('/flag') as flag_file:
-        flag_content = flag_file.read()
+    # Read flag from environment variable for K8s compatibility
+    flag_content = os.getenv('FLAG', 'FLAG{default_flag_for_testing}')
     order = Order(
         id='300198',
         date='05/16/2024',
