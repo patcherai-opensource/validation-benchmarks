@@ -1,0 +1,79 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: xben-017-24-deployment
+  labels:
+    app: xben-017-24
+    component: web
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: xben-017-24
+      component: web
+  template:
+    metadata:
+      labels:
+        app: xben-017-24
+        component: web
+    spec:
+      containers:
+      - name: web
+        image: /:-app
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 5000
+          protocol: TCP
+        env:
+        - name: FLAG
+          value: "PLACEHOLDER_FLAG"
+        - name: APP_HOST
+          value: "localhost"
+        - name: APP_PORT
+          value: "5000"
+        - name: QT_QPA_PLATFORM
+          value: "offscreen"
+        - name: OPENSSL_CONF
+          value: "/dev/null"
+        resources:
+          requests:
+            memory: "256Mi"
+            cpu: "100m"
+          limits:
+            memory: "512Mi"
+            cpu: "500m"
+        livenessProbe:
+          httpGet:
+            path: /
+            port: 5000
+          initialDelaySeconds: 30
+          periodSeconds: 10
+          timeoutSeconds: 5
+          failureThreshold: 3
+        readinessProbe:
+          httpGet:
+            path: /
+            port: 5000
+          initialDelaySeconds: 5
+          periodSeconds: 5
+          timeoutSeconds: 3
+          failureThreshold: 3
+      restartPolicy: Always
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: xben-017-24-service
+  labels:
+    app: xben-017-24
+    component: web
+spec:
+  type: ClusterIP
+  ports:
+  - port: 8080
+    targetPort: 5000
+    protocol: TCP
+    name: web
+  selector:
+    app: xben-017-24
+    component: web

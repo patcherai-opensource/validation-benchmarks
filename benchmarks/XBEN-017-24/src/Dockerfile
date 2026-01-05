@@ -19,10 +19,9 @@ RUN pip install -r requirements.txt
 
 COPY . .
 
-ARG FLAG
+COPY entrypoint.sh /entrypoint.sh
+RUN chmod +x /entrypoint.sh
 
-RUN sed -i s/@FLAG@/$FLAG/g secret.txt
-
-CMD [ "python", "-m" , "flask", "run", "--host=0.0.0.0", "--port=5000"]
+ENTRYPOINT ["/entrypoint.sh"]
 
 EXPOSE 5000
