@@ -7,7 +7,7 @@ RUN sed -i 's|http://deb.debian.org/debian|http://archive.debian.org/debian|g' /
     sed -i '/buster-updates/d' /etc/apt/sources.list
 
 
-RUN apt-get update && apt-get install -y phantomjs
+RUN apt-get update && apt-get install -y phantomjs curl
 
 ENV QT_QPA_PLATFORM=offscreen
 ENV OPENSSL_CONF=/dev/null
@@ -22,6 +22,10 @@ COPY . .
 ARG FLAG
 
 RUN sed -i s/@FLAG@/$FLAG/g secret.txt
+
+# Add health check endpoint support
+HEALTHCHECK --interval=30s --timeout=10s --start-period=5s --retries=3 \
+  CMD curl -f http://localhost:5000/ || exit 1
 
 CMD [ "python", "-m" , "flask", "run", "--host=0.0.0.0", "--port=5000"]
 
