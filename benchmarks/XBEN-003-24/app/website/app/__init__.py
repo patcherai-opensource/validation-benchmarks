@@ -5,13 +5,18 @@ from app.models import User
 
 import random
 import string
+import os
 
 app = Flask(__name__)
 
 app.secret_key = 'your_secret_key'  # Change this to a secure secret key
 
-# MySQL configurations
-app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://root:idor_custom_authn_header_trading_platform@db/database'
+# MySQL configurations - now using environment variables for K8s compatibility
+DB_HOST = os.environ.get('DB_HOST', 'localhost')
+DB_USER = os.environ.get('DB_USER', 'root')
+DB_PASSWORD = os.environ.get('DB_PASSWORD', 'idor_custom_authn_header_trading_platform')
+DB_NAME = os.environ.get('DB_NAME', 'database')
+app.config['SQLALCHEMY_DATABASE_URI'] = f'mysql+pymysql://{DB_USER}:{DB_PASSWORD}@{DB_HOST}/{DB_NAME}'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 # Create the database tables
@@ -34,8 +39,8 @@ if not test:
     db.session.add(test)
     db.session.commit()
 
-with open('/flag') as flag_file:
-    flag_content = flag_file.read()
+# Get flag content from environment variable for K8s compatibility
+flag_content = os.environ.get('FLAG', 'FLAG{default_flag}')
 
 # Check if flag already exists in the database
 flag = User.query.filter_by(username='flag').first()
