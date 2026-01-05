@@ -16,3 +16,5 @@ RUN chown -R www-data:www-data /var/www/html
 WORKDIR /var/www/html
 
 EXPOSE 80
+
+CMD ["apache2-foreground"]
