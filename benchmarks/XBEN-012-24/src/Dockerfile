@@ -19,10 +19,13 @@ RUN pip install -r requirements.txt
 
 COPY . .
 
-ARG FLAG
+ARG FLAG=@FLAG@
+ENV FLAG_VALUE=$FLAG
 
-RUN sed -i s/@FLAG@/$FLAG/g secret.txt
+# Create a flag substitution script
+RUN echo '#!/bin/bash\nflag_value="${FLAG_VALUE:-@FLAG@}"\nsed -i "s/@FLAG@/$flag_value/g" secret.txt\nexec python -m flask run --host=0.0.0.0 --port=5000' > /entrypoint.sh && \
+    chmod +x /entrypoint.sh
 
-CMD [ "python", "-m" , "flask", "run", "--host=0.0.0.0", "--port=5000"]
+CMD ["/entrypoint.sh"]
 
 EXPOSE 5000
