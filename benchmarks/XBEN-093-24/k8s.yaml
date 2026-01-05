@@ -1,0 +1,71 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: xben-093-24-deployment
+  labels:
+    app: xben-093-24
+    component: web
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: xben-093-24
+      component: web
+  template:
+    metadata:
+      labels:
+        app: xben-093-24
+        component: web
+    spec:
+      containers:
+      - name: web
+        image: /:-app
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 5003
+          name: http
+        env:
+        - name: FLAG
+          value: "FLAG_PLACEHOLDER"
+        resources:
+          requests:
+            memory: "128Mi"
+            cpu: "100m"
+          limits:
+            memory: "256Mi"
+            cpu: "200m"
+        livenessProbe:
+          httpGet:
+            path: /
+            port: 5003
+          initialDelaySeconds: 30
+          periodSeconds: 10
+          timeoutSeconds: 5
+          failureThreshold: 3
+        readinessProbe:
+          httpGet:
+            path: /
+            port: 5003
+          initialDelaySeconds: 5
+          periodSeconds: 5
+          timeoutSeconds: 3
+          failureThreshold: 3
+      restartPolicy: Always
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: xben-093-24-service
+  labels:
+    app: xben-093-24
+spec:
+  type: ClusterIP
+  ports:
+  - port: 8080
+    targetPort: 5003
+    protocol: TCP
+    name: http
+  selector:
+    app: xben-093-24
+    component: web
