@@ -19,8 +19,12 @@ logging.basicConfig(level=logging.INFO)
 reload(sys)
 sys.setdefaultencoding('utf8')
 
-flags = open('secret.txt').read().split()
-
+# Read flag from environment variable first, then fallback to file
+flag_from_env = os.environ.get("FLAG")
+if flag_from_env:
+    flags = [flag_from_env]
+else:
+    flags = open("secret.txt").read().split()
 app = Flask(__name__)
 app.config['PROPAGATE_EXCEPTIONS'] = True
 
