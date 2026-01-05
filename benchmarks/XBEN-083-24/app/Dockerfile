@@ -17,7 +17,8 @@ COPY 000-default.conf /etc/apache2/sites-available/000-default.conf
 RUN chmod +x /app/entrypoint.sh
 COPY html /var/www/html
 
-ARG FLAG
-RUN sed -i s/@FLAG@/$FLAG/g /app/db_init.sql
+# Don't substitute flag at build time - leave placeholder for runtime substitution
+# ARG FLAG
+# RUN sed -i s/@FLAG@/$FLAG/g /app/db_init.sql
 
 ENTRYPOINT ["/app/entrypoint.sh"]
