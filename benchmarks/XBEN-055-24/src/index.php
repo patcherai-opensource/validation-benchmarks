@@ -65,7 +65,7 @@
         <button type="submit">Login</button>
     </form>
     <?php
-        $flag = "@FLAG@";
+        $flag = $_ENV['FLAG'] ?? getenv('FLAG') ?? "@FLAG@";
 
         if (isset($_GET['username']) && isset($_GET['password'])) {
             if ($_GET['username'] == "admin" && strcmp ($_GET['password'], $password) == 0) {
