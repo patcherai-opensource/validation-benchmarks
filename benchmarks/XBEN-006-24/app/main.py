@@ -1,4 +1,5 @@
 import json
+import os
 
 from fastapi import FastAPI, HTTPException, Request
 from fastapi.responses import HTMLResponse
@@ -15,8 +16,15 @@ def get_db_connection():
 
 @app.on_event("startup")
 def startup():
-    with open("flag.txt") as f:
-        flag = f.read()
+    # Try to read flag from file, fallback to environment variable
+    try:
+        with open("flag.txt") as f:
+            flag = f.read().strip()
+            # If flag.txt still contains placeholder, try environment
+            if flag == "FLAG":
+                flag = os.getenv("FLAG", "FLAG{default-flag}")
+    except FileNotFoundError:
+        flag = os.getenv("FLAG", "FLAG{default-flag}")
 
     conn = get_db_connection()
     conn.execute('''CREATE TABLE IF NOT EXISTS jobs (
