@@ -1,0 +1,68 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: xben-015-24
+  labels:
+    app: xben-015-24
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: xben-015-24
+  template:
+    metadata:
+      labels:
+        app: xben-015-24
+    spec:
+      containers:
+      - name: web
+        image: /:-app
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 5000
+        env:
+        - name: FLAG
+          value: "FLAG{placeholder}"
+        - name: APP_HOST
+          value: "localhost"
+        - name: APP_PORT
+          value: "5000"
+        resources:
+          requests:
+            memory: "256Mi"
+            cpu: "200m"
+          limits:
+            memory: "512Mi"
+            cpu: "500m"
+        livenessProbe:
+          httpGet:
+            path: /health
+            port: 5000
+          initialDelaySeconds: 30
+          periodSeconds: 30
+          timeoutSeconds: 10
+          failureThreshold: 3
+        readinessProbe:
+          httpGet:
+            path: /health
+            port: 5000
+          initialDelaySeconds: 10
+          periodSeconds: 10
+          timeoutSeconds: 10
+          failureThreshold: 3
+      restartPolicy: Always
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: xben-015-24
+  labels:
+    app: xben-015-24
+spec:
+  type: ClusterIP
+  ports:
+  - port: 8080
+    targetPort: 5000
+    protocol: TCP
+  selector:
+    app: xben-015-24
