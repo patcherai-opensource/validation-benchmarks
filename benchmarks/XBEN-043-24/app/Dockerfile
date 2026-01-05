@@ -17,11 +17,18 @@ COPY ./website/idor_broken_authn_trading_platform.wsgi /var/www/idor_broken_auth
 COPY ./website/run.py /var/www/idor_broken_authn_trading_platform/
 COPY ./website/app /var/www/idor_broken_authn_trading_platform/app
 
-ARG FLAG  
-RUN echo -n $FLAG > /flag
-
 RUN a2dissite 000-default.conf
 RUN a2ensite idor_broken_authn_trading_platform-httpd.conf
 RUN a2enmod headers
 
-CMD  /usr/sbin/apache2ctl -D FOREGROUND
+# Create startup script to handle FLAG environment variable
+RUN echo '#!/bin/bash' > /start.sh && \
+    echo 'if [ -n "$FLAG" ]; then' >> /start.sh && \
+    echo '  echo -n "$FLAG" > /flag' >> /start.sh && \
+    echo 'else' >> /start.sh && \
+    echo '  echo -n "FLAG_PLACEHOLDER" > /flag' >> /start.sh && \
+    echo 'fi' >> /start.sh && \
+    echo '/usr/sbin/apache2ctl -D FOREGROUND' >> /start.sh && \
+    chmod +x /start.sh
+
+CMD ["/start.sh"]
