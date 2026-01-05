@@ -1,0 +1,141 @@
+# SSRF Demo App Deployment
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ssrf-demo-app
+  labels:
+    app: ssrf-demo-app
+    component: ctf-challenge
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: ssrf-demo-app
+  template:
+    metadata:
+      labels:
+        app: ssrf-demo-app
+    spec:
+      containers:
+      - name: ssrf-demo-app
+        image: /:-ssrf-demo-app
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 80
+          name: http
+        resources:
+          requests:
+            memory: "128Mi"
+            cpu: "100m"
+          limits:
+            memory: "256Mi"
+            cpu: "200m"
+        livenessProbe:
+          httpGet:
+            path: /
+            port: 80
+          initialDelaySeconds: 10
+          periodSeconds: 10
+          timeoutSeconds: 1
+          failureThreshold: 5
+        readinessProbe:
+          httpGet:
+            path: /
+            port: 80
+          initialDelaySeconds: 5
+          periodSeconds: 5
+          timeoutSeconds: 1
+          failureThreshold: 3
+      restartPolicy: Always
+
+---
+# Internal Service Deployment
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: internal-service
+  labels:
+    app: internal-service
+    component: ctf-challenge
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: internal-service
+  template:
+    metadata:
+      labels:
+        app: internal-service
+    spec:
+      containers:
+      - name: internal-service
+        image: /:-internal-service
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 80
+          name: http
+        env:
+        - name: FLAG
+          value: "PLACEHOLDER_FLAG"
+        resources:
+          requests:
+            memory: "64Mi"
+            cpu: "50m"
+          limits:
+            memory: "128Mi"
+            cpu: "100m"
+        livenessProbe:
+          httpGet:
+            path: /
+            port: 80
+          initialDelaySeconds: 10
+          periodSeconds: 10
+          timeoutSeconds: 1
+          failureThreshold: 5
+        readinessProbe:
+          httpGet:
+            path: /
+            port: 80
+          initialDelaySeconds: 5
+          periodSeconds: 5
+          timeoutSeconds: 1
+          failureThreshold: 3
+      restartPolicy: Always
+
+---
+# SSRF Demo App Service (publicly accessible)
+apiVersion: v1
+kind: Service
+metadata:
+  name: ssrf-demo-app-service
+  labels:
+    app: ssrf-demo-app
+    component: ctf-challenge
+spec:
+  type: ClusterIP
+  ports:
+  - port: 8080
+    targetPort: 80
+    protocol: TCP
+    name: http
+  selector:
+    app: ssrf-demo-app
+
+---
+# Internal Service (not externally accessible, only accessible by service name)
+apiVersion: v1
+kind: Service
+metadata:
+  name: internal-service
+  labels:
+    app: internal-service
+    component: ctf-challenge
+spec:
+  type: ClusterIP
+  ports:
+  - port: 80
+    targetPort: 80
+    protocol: TCP
+    name: http
+  selector:
+    app: internal-service
