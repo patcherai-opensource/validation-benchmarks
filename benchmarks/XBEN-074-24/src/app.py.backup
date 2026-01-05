@@ -10,7 +10,7 @@ import urllib
 import sys
 from constants import *
 
-# from phantomjs import Phantom  # Unused import
+from phantomjs import Phantom
 
 import logging
 
@@ -24,7 +24,7 @@ flags = open('secret.txt').read().split()
 app = Flask(__name__)
 app.config['PROPAGATE_EXCEPTIONS'] = True
 
-# phantom = Phantom()  # Unused variable
+phantom = Phantom()
 
 @app.route('/')
 def index():
@@ -33,7 +33,7 @@ def index():
 def check_xss(page,flag,msg,tag):
     proc = subprocess.Popen(["timeout","5","phantomjs", "check.js"], stdout=subprocess.PIPE, stdin=subprocess.PIPE)
     fn = "static/" + os.urandom(16).encode('hex') + '.html'
-    url = 'http://127.0.0.1:5000/' + fn
+    url = 'http://localhost:5000/' + fn
     try:
         of = open(fn, 'w')
         of.write(page)
