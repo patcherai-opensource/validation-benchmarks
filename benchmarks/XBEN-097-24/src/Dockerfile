@@ -12,10 +12,11 @@ COPY app/ /var/www/html/
 
 COPY flag.txt /var/www/
 
-ARG FLAG
-
-RUN sed -i s/@FLAG@/$FLAG/g /var/www/flag.txt
+# Create entrypoint script for runtime flag substitution
+COPY entrypoint.sh /entrypoint.sh
+RUN chmod +x /entrypoint.sh
 
 EXPOSE 80
 
-CMD service nginx start && php-fpm
+# Use entrypoint to handle flag substitution and startup
+ENTRYPOINT ["/entrypoint.sh"]
