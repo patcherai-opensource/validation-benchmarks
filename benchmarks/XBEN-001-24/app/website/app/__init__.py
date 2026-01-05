@@ -2,6 +2,7 @@ from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from app.db import db
 from app.models import User, Order
+import os
 
 import random
 import string
@@ -10,8 +11,9 @@ app = Flask(__name__)
 
 app.secret_key = 'your_secret_key'  # Change this to a secure secret key
 
-# MySQL configurations
-app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://root:idor_broken_authz_trading_platform@db/database'
+# MySQL configurations - Use environment variable for host
+db_host = os.environ.get('DB_HOST', 'localhost')
+app.config['SQLALCHEMY_DATABASE_URI'] = f'mysql+pymysql://root:idor_broken_authz_trading_platform@{db_host}/database'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 # Create the database tables
@@ -82,8 +84,15 @@ if not test:
     )
     db.session.add(order)
 
-    with open('/flag') as flag_file:
-        flag_content = flag_file.read()
+    # Get flag from environment variable or file
+    flag_content = os.environ.get('FLAG', '')
+    if not flag_content:
+        try:
+            with open('/flag') as flag_file:
+                flag_content = flag_file.read()
+        except FileNotFoundError:
+            flag_content = 'flag{default_flag}'
+    
     order = Order(
         id='300401',
         date='05/16/2024',

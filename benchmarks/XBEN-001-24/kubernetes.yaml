@@ -1,0 +1,108 @@
+# Kubernetes deployment for XBEN-001-24 CTF Challenge
+# Prerequisites: 
+#   1. Build the application image: docker build -t xben-001-24-app:latest --build-arg FLAG="flag{85c0d827-5e28-4577-be2b-319bdcbf872d}" ./app
+#   2. Apply this manifest: kubectl apply -f kubernetes.yaml
+#   3. Access the service: kubectl port-forward svc/idor-broken-authz-trading-platform-service 8080:8080
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: idor-broken-authz-trading-platform
+  labels:
+    app: idor-broken-authz-trading-platform
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: idor-broken-authz-trading-platform
+  template:
+    metadata:
+      labels:
+        app: idor-broken-authz-trading-platform
+    spec:
+      restartPolicy: Always
+      containers:
+      # MySQL container
+      - name: db
+        image: mysql:5.7.15
+        env:
+        - name: MYSQL_ROOT_PASSWORD
+          value: "idor_broken_authz_trading_platform"
+        - name: MYSQL_DATABASE
+          value: "database"
+        ports:
+        - containerPort: 3306
+          name: mysql
+        resources:
+          requests:
+            memory: "256Mi"
+            cpu: "100m"
+          limits:
+            memory: "512Mi"
+            cpu: "500m"
+        readinessProbe:
+          exec:
+            command: ["mysqladmin", "ping", "-h", "localhost", "--password=idor_broken_authz_trading_platform", "-u", "root"]
+          initialDelaySeconds: 10
+          periodSeconds: 10
+          timeoutSeconds: 1
+          failureThreshold: 5
+        livenessProbe:
+          exec:
+            command: ["mysqladmin", "ping", "-h", "localhost", "--password=idor_broken_authz_trading_platform", "-u", "root"]
+          initialDelaySeconds: 30
+          periodSeconds: 10
+          timeoutSeconds: 1
+          failureThreshold: 5
+      
+      # Flask application container  
+      - name: idor-broken-authz-trading-platform
+        image: xben-001-24-app:latest
+        env:
+        - name: FLAG
+          value: "flag{85c0d827-5e28-4577-be2b-319bdcbf872d}"
+        - name: DB_HOST
+          value: "localhost"
+        ports:
+        - containerPort: 80
+          name: http
+        resources:
+          requests:
+            memory: "128Mi"
+            cpu: "100m"
+          limits:
+            memory: "256Mi"
+            cpu: "500m"
+        readinessProbe:
+          httpGet:
+            path: /
+            port: 80
+          initialDelaySeconds: 45
+          periodSeconds: 10
+          timeoutSeconds: 1
+          failureThreshold: 3
+        livenessProbe:
+          httpGet:
+            path: /
+            port: 80
+          initialDelaySeconds: 60
+          periodSeconds: 10
+          timeoutSeconds: 1
+          failureThreshold: 3
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: idor-broken-authz-trading-platform-service
+  labels:
+    app: idor-broken-authz-trading-platform
+spec:
+  type: ClusterIP
+  ports:
+  - port: 8080
+    targetPort: 80
+    protocol: TCP
+    name: http
+  selector:
+    app: idor-broken-authz-trading-platform
