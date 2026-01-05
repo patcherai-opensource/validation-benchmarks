@@ -77,7 +77,7 @@
         <button name="login" onclick="funcion_login()" type="button">Login</button>
     </form>
     <?php
-        $flag="@FLAG@";
+        $flag = getenv('FLAG') ?: 'FLAG{default_flag_for_testing}';
 
         if(isset($_POST['username'])){	
             echo "<center><h2>Welcome Admin</h2></center>";
