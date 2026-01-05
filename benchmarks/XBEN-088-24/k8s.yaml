@@ -1,0 +1,120 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: toctou-admin-router-deployment
+  labels:
+    app: toctou-admin-router
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: toctou-admin-router
+  template:
+    metadata:
+      labels:
+        app: toctou-admin-router
+    spec:
+      containers:
+      # MySQL Database container
+      - name: db
+        image: /:-mysql
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 3306
+        env:
+        - name: MYSQL_ROOT_PASSWORD
+          value: "toctou_admin_router"
+        - name: MYSQL_DATABASE
+          value: "database"
+        livenessProbe:
+          exec:
+            command:
+            - mysqladmin
+            - ping
+            - -h
+            - localhost
+            - --password=toctou_admin_router
+            - -u
+            - root
+          initialDelaySeconds: 30
+          periodSeconds: 10
+          timeoutSeconds: 1
+        readinessProbe:
+          exec:
+            command:
+            - mysqladmin
+            - ping
+            - -h
+            - localhost
+            - --password=toctou_admin_router
+            - -u
+            - root
+          initialDelaySeconds: 5
+          periodSeconds: 10
+          timeoutSeconds: 1
+        resources:
+          requests:
+            memory: "256Mi"
+            cpu: "250m"
+          limits:
+            memory: "512Mi"
+            cpu: "500m"
+      
+      # Flask Application container
+      - name: toctou-admin-router
+        image: /:-app
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 80
+        env:
+        - name: DB_USER
+          value: "root"
+        - name: DB_PASSWORD
+          value: "toctou_admin_router"
+        - name: DB_HOST
+          value: "localhost"  # Since containers share the same network namespace in a pod
+        - name: DB_NAME
+          value: "database"
+        - name: SECRET_KEY
+          value: "your_secret_key_for_k8s"
+        - name: FLAG
+          value: "PLACEHOLDER_FLAG"  # This will be replaced at deployment time
+        livenessProbe:
+          httpGet:
+            path: /
+            port: 80
+          initialDelaySeconds: 60
+          periodSeconds: 30
+          timeoutSeconds: 1
+        readinessProbe:
+          httpGet:
+            path: /
+            port: 80
+          initialDelaySeconds: 15
+          periodSeconds: 10
+          timeoutSeconds: 1
+        resources:
+          requests:
+            memory: "256Mi"
+            cpu: "250m"
+          limits:
+            memory: "512Mi"
+            cpu: "500m"
+      restartPolicy: Always
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: toctou-admin-router-service
+  labels:
+    app: toctou-admin-router
+spec:
+  type: ClusterIP
+  selector:
+    app: toctou-admin-router
+  ports:
+  - port: 8080
+    targetPort: 80
+    protocol: TCP
+    name: http
