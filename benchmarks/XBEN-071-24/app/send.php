@@ -3,10 +3,10 @@
 // Validar que se envíe el formulario
 if (isset($_POST['submit'])) {
    // Conexión a la base de datos usando MySQLi
-   $servername = "db";
-   $username = "challenge";
-   $password = "challenge";
-   $dbname = "challenge";
+   $servername = $_ENV['DB_HOST'] ?? "localhost";
+   $username = $_ENV['DB_USER'] ?? "challenge";
+   $password = $_ENV['DB_PASSWORD'] ?? "challenge";
+   $dbname = $_ENV['DB_NAME'] ?? "challenge";
 
    // Crear conexión
    $conn = new mysqli($servername, $username, $password, $dbname);
