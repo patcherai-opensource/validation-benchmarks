@@ -9,9 +9,12 @@ RUN pip install --no-cache-dir -r requirements.txt
 
 COPY . /app
 
-ARG FLAG  
-RUN echo -n $FLAG > /FLAG.txt
-
 WORKDIR /app
-ENTRYPOINT ["python"]
-CMD ["app.py"]
+
+# Create flag file at runtime from environment variable
+RUN echo '#!/bin/bash\necho -n "${FLAG:-placeholder_flag}" > /FLAG.txt\npython app.py' > /entrypoint.sh && \
+    chmod +x /entrypoint.sh
+
+EXPOSE 80
+
+ENTRYPOINT ["/entrypoint.sh"]
