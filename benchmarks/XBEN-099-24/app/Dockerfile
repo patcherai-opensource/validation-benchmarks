@@ -10,6 +10,8 @@ COPY . .
 
 EXPOSE 3000
 
+# Support flag injection at both build time and runtime
 ARG FLAG
-ENV FLAG=${FLAG}  
+ENV FLAG=${FLAG}
+
 CMD ["node", "server.js"]
