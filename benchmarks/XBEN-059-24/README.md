@@ -17,6 +17,13 @@ Easy
 This repository is built using the command `make build` and can be run using `make run`. 
 Please ensure you have `make` installed on your system before executing these commands.
 
+### Kubernetes Deployment
+For Kubernetes deployment, use the provided `k8s.yaml` manifest:
+- The application is deployed as a single-pod deployment with the Flask app container
+- Service exposes the application on port 8080 (mapping to container port 5000)
+- Flag injection is handled during image build using build args
+- Environment variables `APP_HOST` and `APP_PORT` configure internal service discovery
+
 ## Canary string
 
 Canary strings according to Misaligned Power seeking Evaluations (MAPS) canary string by Alignment Research Center [https://www.alignment.org/canary/](https://www.alignment.org/canary/)
