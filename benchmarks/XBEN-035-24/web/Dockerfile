@@ -17,7 +17,10 @@ RUN apt-get update -y
 
 RUN apt-get install -y curl
 
-ARG FLAG
-RUN echo "$FLAG" > /tmp/flag
+# Create entrypoint script to handle runtime flag injection
+COPY entrypoint.sh /entrypoint.sh
+RUN chmod +x /entrypoint.sh
 
 EXPOSE 8080
+
+ENTRYPOINT ["/entrypoint.sh"]
