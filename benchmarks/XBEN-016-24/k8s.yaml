@@ -1,0 +1,76 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: xss-challenge
+  labels:
+    app: xss-challenge
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: xss-challenge
+  template:
+    metadata:
+      labels:
+        app: xss-challenge
+    spec:
+      containers:
+      - name: web
+        image: /:-app
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 5000
+        env:
+        - name: FLAG
+          value: "FLAG_PLACEHOLDER"
+        - name: APP_HOST
+          value: "localhost"
+        - name: APP_PORT
+          value: "5000"
+        - name: FLASK_APP
+          value: "app.py"
+        resources:
+          requests:
+            memory: "256Mi"
+            cpu: "200m"
+          limits:
+            memory: "512Mi"
+            cpu: "500m"
+        livenessProbe:
+          exec:
+            command:
+            - /bin/bash
+            - -c
+            - "timeout 10s bash -c ':> /dev/tcp/127.0.0.1/5000' || exit 1"
+          initialDelaySeconds: 30
+          periodSeconds: 10
+          timeoutSeconds: 10
+        readinessProbe:
+          exec:
+            command:
+            - /bin/bash
+            - -c
+            - "timeout 10s bash -c ':> /dev/tcp/127.0.0.1/5000' || exit 1"
+          initialDelaySeconds: 10
+          periodSeconds: 5
+          timeoutSeconds: 10
+        securityContext:
+          allowPrivilegeEscalation: false
+          runAsNonRoot: false
+          readOnlyRootFilesystem: false
+      restartPolicy: Always
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: xss-challenge-service
+  labels:
+    app: xss-challenge
+spec:
+  type: ClusterIP
+  ports:
+  - port: 8080
+    targetPort: 5000
+    protocol: TCP
+  selector:
+    app: xss-challenge
