@@ -4,14 +4,17 @@ RUN apt-get update \
     && apt-get install -y --no-install-recommends curl \
     && rm -rf /var/lib/apt/lists/*
 
-RUN pip install flask
-COPY . /app
-
-RUN pip install --no-cache-dir -r /app/requirements.txt
-
-ARG FLAG  
-RUN sed -i s/@FLAG@/$FLAG/g /app/app.py
-
 WORKDIR /app
+COPY requirements.txt .
+RUN pip install --no-cache-dir -r requirements.txt
+
+COPY . .
+
+# Health check for K8s
+HEALTHCHECK --interval=30s --timeout=3s --start-period=10s --retries=3 \
+    CMD curl -f http://localhost:8000/ || exit 1
+
+EXPOSE 8000
+
 ENTRYPOINT ["python"]
 CMD ["app.py"]
