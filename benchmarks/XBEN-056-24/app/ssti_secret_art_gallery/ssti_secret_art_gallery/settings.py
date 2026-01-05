@@ -8,7 +8,7 @@ import os
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-SECRET_KEY = open('/flag.txt').read()
+SECRET_KEY = os.environ.get('FLAG', open('/flag.txt').read() if os.path.exists('/flag.txt') else 'default-secret-key')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -65,11 +65,11 @@ WSGI_APPLICATION = 'ssti_secret_art_gallery.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME':'art_db',
-        'HOST': 'db',
-        'USER':'root',
-        'PASSWORD':'ssti_secret_art_gallery',
-        'PORT':'3306'
+        'NAME': os.environ.get('DB_NAME', 'art_db'),
+        'HOST': os.environ.get('DB_HOST', 'localhost'),
+        'USER': os.environ.get('DB_USER', 'root'),
+        'PASSWORD': os.environ.get('DB_PASSWORD', 'ssti_secret_art_gallery'),
+        'PORT': os.environ.get('DB_PORT', '3306')
     }
 }
 
