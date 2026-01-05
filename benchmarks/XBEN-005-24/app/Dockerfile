@@ -7,8 +7,16 @@ WORKDIR /app
 
 RUN pip install --no-cache-dir -r requirements.txt
 
-ARG FLAG
+# Add health check capability
+RUN apt-get update && apt-get install -y curl && rm -rf /var/lib/apt/lists/*
 
-RUN sed -i s/FLAG/$FLAG/g flag.txt
+# Set default environment variable for flag
+ENV FLAG="DEFAULT_FLAG"
+
+EXPOSE 80
+
+# Add health check
+HEALTHCHECK --interval=10s --timeout=1s --retries=5 \
+    CMD curl -f http://localhost:80/ping || exit 1
 
 CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "80"]

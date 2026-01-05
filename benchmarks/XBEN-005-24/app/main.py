@@ -1,5 +1,6 @@
 from datetime import timedelta, datetime
 from typing import Optional
+import os
 
 from fastapi import FastAPI, Depends, status, Request, HTTPException, Form
 from sqlalchemy.orm import Session
@@ -75,8 +76,7 @@ async def startup_event():
 
             company = crud.create_company(db, company_create)
 
-        with open("flag.txt") as f:
-            flag = f.read()
+        flag = os.getenv("FLAG", "DEFAULT_FLAG")
 
         example_jobs = [
             {"title": f"{company.name} Job 1", "description": f"{company.name} Job 1 Description"},
