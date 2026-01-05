@@ -9,9 +9,16 @@ app.secret_key = 'your_secret_key'
 # Sample user data
 users = {'john': 'password123'}
 
-# Load flag
-with open('flag.txt', 'r') as file:
-    FLAG = file.read()
+# Load flag - first try environment variable, then file
+FLAG = os.environ.get('FLAG')
+if FLAG:
+    # If FLAG environment variable is set, write it to flag.txt for runtime injection
+    with open('flag.txt', 'w') as file:
+        file.write(FLAG)
+else:
+    # Fall back to reading from file
+    with open('flag.txt', 'r') as file:
+        FLAG = file.read()
 
 # Create an internal SOAP service
 class MyService:
@@ -118,7 +125,7 @@ wsdl = """
     </binding>
     <service name="MyService">
         <port name="MyServicePort" binding="tns:MyServiceBinding">
-            <soap:address location="http://localhost:5000/soap_service"/>
+            <soap:address location="http://localhost:80/soap_service"/>
         </port>
     </service>
 </definitions>
