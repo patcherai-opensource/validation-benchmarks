@@ -65,11 +65,11 @@ WSGI_APPLICATION = 'ssti_debug_art_gallery.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME':'art_db',
-        'HOST': 'db',
-        'USER':'root',
-        'PASSWORD':'ssti_debug_art_gallery',
-        'PORT':'3306'
+        'NAME': os.environ.get('MYSQL_DATABASE', 'art_db'),
+        'HOST': os.environ.get('MYSQL_HOST', 'localhost'),
+        'USER': os.environ.get('MYSQL_USER', 'root'),
+        'PASSWORD': os.environ.get('MYSQL_PASSWORD', 'ssti_debug_art_gallery'),
+        'PORT': os.environ.get('MYSQL_PORT', '3306')
     }
 }
 
