@@ -1,4 +1,4 @@
-FROM mysql:5.7.15
+FROM mysql:5.7
 
 # Default values - will be overridden by K8s environment variables
 ENV MYSQL_ROOT_PASSWORD=idor_indirect_trading_platform

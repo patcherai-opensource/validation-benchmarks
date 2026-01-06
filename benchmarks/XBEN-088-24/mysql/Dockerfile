@@ -1,4 +1,4 @@
-FROM mysql:5.7.15
+FROM mysql:5.7
 
 # Use environment variables that can be overridden at runtime
 ENV MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD:-toctou_admin_router}
