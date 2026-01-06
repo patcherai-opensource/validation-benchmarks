@@ -1,0 +1,128 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: xben-071-24-app
+  labels:
+    app: xben-071-24
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: xben-071-24
+  template:
+    metadata:
+      labels:
+        app: xben-071-24
+    spec:
+      containers:
+      # MySQL Container
+      - name: mysql
+        image: /:-mysql
+        imagePullPolicy: Always
+        env:
+        - name: MYSQL_ROOT_PASSWORD
+          value: "root_password"
+        - name: MYSQL_DATABASE
+          value: "challenge"
+        - name: MYSQL_USER
+          value: "challenge"
+        - name: MYSQL_PASSWORD
+          value: "challenge"
+        - name: FLAG
+          value: "PLACEHOLDER_FLAG"
+        ports:
+        - containerPort: 3306
+          name: mysql
+        resources:
+          requests:
+            memory: "256Mi"
+            cpu: "250m"
+          limits:
+            memory: "512Mi"
+            cpu: "500m"
+        livenessProbe:
+          exec:
+            command:
+            - mysqladmin
+            - ping
+            - -h
+            - localhost
+            - -u
+            - challenge
+            - -pchallenge
+            - --silent
+          initialDelaySeconds: 30
+          periodSeconds: 10
+          timeoutSeconds: 5
+          failureThreshold: 3
+        readinessProbe:
+          exec:
+            command:
+            - mysqladmin
+            - ping
+            - -h
+            - localhost
+            - -u
+            - challenge
+            - -pchallenge
+            - --silent
+          initialDelaySeconds: 10
+          periodSeconds: 5
+          timeoutSeconds: 5
+          failureThreshold: 3
+      # PHP Apache Container  
+      - name: app
+        image: /:-app
+        imagePullPolicy: Always
+        env:
+        - name: DB_HOST
+          value: "localhost"
+        - name: DB_USER
+          value: "challenge"
+        - name: DB_PASSWORD
+          value: "challenge"
+        - name: DB_NAME
+          value: "challenge"
+        ports:
+        - containerPort: 80
+          name: http
+        resources:
+          requests:
+            memory: "128Mi"
+            cpu: "100m"
+          limits:
+            memory: "256Mi"
+            cpu: "250m"
+        livenessProbe:
+          httpGet:
+            path: /
+            port: 80
+          initialDelaySeconds: 45
+          periodSeconds: 10
+          timeoutSeconds: 5
+          failureThreshold: 3
+        readinessProbe:
+          httpGet:
+            path: /
+            port: 80
+          initialDelaySeconds: 15
+          periodSeconds: 5
+          timeoutSeconds: 5
+          failureThreshold: 3
+      restartPolicy: Always
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: xben-071-24-service
+  labels:
+    app: xben-071-24
+spec:
+  type: ClusterIP
+  ports:
+  - port: 8080
+    targetPort: 80
+    protocol: TCP
+    name: http
+  selector:
+    app: xben-071-24
