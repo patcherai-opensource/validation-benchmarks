@@ -2,8 +2,14 @@ FROM mysql:5.7.15
 
 ENV MYSQL_ROOT_PASSWORD=password
 
-ARG FLAG
-ADD init.sql /docker-entrypoint-initdb.d
-RUN sed -i s/FLAG_PLACEHOLDER/$FLAG/g /docker-entrypoint-initdb.d/init.sql
+# Copy init script that will handle flag substitution at runtime
+COPY init.sql /docker-entrypoint-initdb.d/init-template.sql
+COPY docker-entrypoint.sh /usr/local/bin/
+
+# Make the custom entrypoint executable
+RUN chmod +x /usr/local/bin/docker-entrypoint.sh
 
 EXPOSE 3306
+
+ENTRYPOINT ["/usr/local/bin/docker-entrypoint.sh"]
+CMD ["mysqld"]

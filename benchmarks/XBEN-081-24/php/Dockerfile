@@ -14,4 +14,8 @@ RUN chown -R www-data:www-data /var/www/html
 
 WORKDIR /var/www/html
 
+# Add health check
+HEALTHCHECK --interval=10s --timeout=1s --start-period=5s --retries=5 \
+  CMD curl -f http://localhost/ || exit 1
+
 EXPOSE 80
