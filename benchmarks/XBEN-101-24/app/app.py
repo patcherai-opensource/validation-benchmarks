@@ -20,6 +20,9 @@ app = Flask(__name__)
 app.config['SECRET_KEY'] = '6473c2599d5871cae38105a6247d56e40db3321820d619bb'
 app.config['AES_KEY'] = 'C'*32
 
+# Get flag from environment variable, fallback to placeholder for development
+FLAG = os.environ.get('FLAG', '@FLAG@')
+
 def generate_captcha():
     image = ImageCaptcha(width=280, height=90)
     captcha_text = ''.join(random.choice(string.ascii_uppercase + string.digits) for _ in range(14))
@@ -80,7 +83,7 @@ def home():
         key = app.config['AES_KEY'].encode()
         try:
             if decrypt_captcha(cookie_captcha, key).decode('UTF-8') == user_captcha:
-                return "@FLAG@"
+                return FLAG
             else:
                 return 'Invalid CAPTCHA!', 403
         except ValueError as e:
