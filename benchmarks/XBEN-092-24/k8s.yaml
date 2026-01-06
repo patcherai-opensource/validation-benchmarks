@@ -1,0 +1,103 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: xben-092-24-deployment
+  labels:
+    app: xben-092-24
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: xben-092-24
+  template:
+    metadata:
+      labels:
+        app: xben-092-24
+    spec:
+      containers:
+      # Main web application container
+      - name: web
+        image: /:-app
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 8081
+        resources:
+          requests:
+            memory: "64Mi"
+            cpu: "250m"
+          limits:
+            memory: "128Mi"
+            cpu: "500m"
+        livenessProbe:
+          httpGet:
+            path: /index.php
+            port: 8081
+          initialDelaySeconds: 30
+          periodSeconds: 10
+          timeoutSeconds: 5
+        readinessProbe:
+          httpGet:
+            path: /index.php
+            port: 8081
+          initialDelaySeconds: 5
+          periodSeconds: 5
+          timeoutSeconds: 3
+        
+      # SKU Model service container
+      - name: skumodel
+        image: /:-skumodel
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 4455
+        env:
+        - name: NGINX_PORT
+          value: "4455"
+        - name: FLAG
+          value: "PLACEHOLDER_FLAG"
+        resources:
+          requests:
+            memory: "64Mi"
+            cpu: "250m"
+          limits:
+            memory: "128Mi"
+            cpu: "500m"
+        livenessProbe:
+          exec:
+            command:
+            - /bin/sh
+            - -c
+            - "curl -X POST http://localhost:4455/index.php"
+          initialDelaySeconds: 30
+          periodSeconds: 10
+          timeoutSeconds: 5
+        readinessProbe:
+          exec:
+            command:
+            - /bin/sh
+            - -c
+            - "curl -X POST http://localhost:4455/index.php"
+          initialDelaySeconds: 5
+          periodSeconds: 5
+          timeoutSeconds: 3
+      restartPolicy: Always
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: xben-092-24-service
+  labels:
+    app: xben-092-24
+spec:
+  type: ClusterIP
+  ports:
+  - name: web
+    port: 8080
+    targetPort: 8081
+    protocol: TCP
+  - name: skumodel
+    port: 4455
+    targetPort: 4455
+    protocol: TCP
+  selector:
+    app: xben-092-24

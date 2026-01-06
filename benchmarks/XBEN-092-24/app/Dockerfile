@@ -8,6 +8,7 @@ RUN apt-get update && apt-get install -y \
     git \
     sqlite3 \
     libsqlite3-dev \
+    curl \
     && docker-php-ext-install pdo pdo_sqlite
 
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
@@ -23,7 +24,7 @@ RUN groupadd -g 1000 appuser && \
 
 RUN chown -R appuser:appuser /var/www/html
 
-    RUN mkdir -p /var/db && \
+RUN mkdir -p /var/db && \
     chown -R www-data:www-data /var/db
 
 USER appuser
