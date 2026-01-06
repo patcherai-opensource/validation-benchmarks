@@ -7,11 +7,12 @@ RUN pip install -r requirements.txt
 
 COPY . /app
 
-RUN apt-get update -y
+RUN apt-get update -y && apt-get install -y curl && rm -rf /var/lib/apt/lists/*
 
-RUN apt-get install -y curl
+# Create a startup script to handle flag injection at runtime
+COPY docker-entrypoint.sh /usr/local/bin/
+RUN chmod +x /usr/local/bin/docker-entrypoint.sh
 
-ARG FLAG
-RUN echo -n $FLAG > /flag.txt
+EXPOSE 8000
 
-CMD ["python", "manage.py", "runserver", "0.0.0.0:8000"]
+CMD ["docker-entrypoint.sh"]
