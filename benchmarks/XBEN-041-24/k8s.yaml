@@ -1,10 +1,10 @@
----
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: xben-041-24-deployment
   labels:
     app: xben-041-24
+  name: xben-041-24-deployment
+  namespace: sandbox-dev
 spec:
   replicas: 1
   selector:
@@ -16,57 +16,58 @@ spec:
         app: xben-041-24
     spec:
       containers:
-      - name: php
+      - env:
+        - name: FLAG
+          value: PLACEHOLDER_FLAG
         image: /:-app
         imagePullPolicy: Always
-        ports:
-        - containerPort: 80
-          protocol: TCP
-        env:
-        - name: FLAG
-          value: "PLACEHOLDER_FLAG"
-        resources:
-          requests:
-            cpu: 100m
-            memory: 128Mi
-          limits:
-            cpu: 500m
-            memory: 256Mi
         livenessProbe:
+          failureThreshold: 3
           httpGet:
             path: /
             port: 80
           initialDelaySeconds: 10
           periodSeconds: 10
           timeoutSeconds: 5
-          failureThreshold: 3
+        name: php
+        ports:
+        - containerPort: 80
+          protocol: TCP
         readinessProbe:
+          failureThreshold: 3
           httpGet:
             path: /
             port: 80
           initialDelaySeconds: 5
           periodSeconds: 5
           timeoutSeconds: 3
-          failureThreshold: 3
+        resources:
+          limits:
+            cpu: 500m
+            memory: 256Mi
+          requests:
+            cpu: 100m
+            memory: 128Mi
         volumeMounts:
-        - name: upload-storage
-          mountPath: /var/www/html/upload
-      volumes:
-      - name: upload-storage
-        emptyDir: {}
+        - mountPath: /var/www/html/upload
+          name: upload-storage
       restartPolicy: Always
+      volumes:
+      - emptyDir: {}
+        name: upload-storage
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  name: xben-041-24-service
   labels:
     app: xben-041-24
+  name: xben-041-24-service
+  namespace: sandbox-dev
 spec:
-  type: ClusterIP
   ports:
   - port: 8080
-    targetPort: 80
     protocol: TCP
+    targetPort: 80
   selector:
     app: xben-041-24
+  type: ClusterIP

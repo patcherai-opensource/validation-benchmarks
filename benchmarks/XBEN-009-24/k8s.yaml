@@ -1,10 +1,11 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: ssti-demo
   labels:
     app: ssti-demo
     component: web
+  name: ssti-demo
+  namespace: sandbox-dev
 spec:
   replicas: 1
   selector:
@@ -18,54 +19,55 @@ spec:
         component: web
     spec:
       containers:
-      - name: web
+      - env:
+        - name: FLAG
+          value: FLAG_PLACEHOLDER
         image: /:-app
         imagePullPolicy: Always
-        ports:
-        - containerPort: 8000
-          name: http
-        env:
-        - name: FLAG
-          value: "FLAG_PLACEHOLDER"
-        resources:
-          requests:
-            memory: "128Mi"
-            cpu: "100m"
-          limits:
-            memory: "256Mi"
-            cpu: "200m"
         livenessProbe:
+          failureThreshold: 3
           httpGet:
             path: /
             port: 8000
           initialDelaySeconds: 30
           periodSeconds: 10
           timeoutSeconds: 5
-          failureThreshold: 3
+        name: web
+        ports:
+        - containerPort: 8000
+          name: http
         readinessProbe:
+          failureThreshold: 3
           httpGet:
             path: /
             port: 8000
           initialDelaySeconds: 5
           periodSeconds: 5
           timeoutSeconds: 3
-          failureThreshold: 3
+        resources:
+          limits:
+            cpu: 200m
+            memory: 256Mi
+          requests:
+            cpu: 100m
+            memory: 128Mi
       restartPolicy: Always
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  name: ssti-demo-service
   labels:
     app: ssti-demo
     component: web
+  name: ssti-demo-service
+  namespace: sandbox-dev
 spec:
-  type: ClusterIP
   ports:
-  - port: 8080
-    targetPort: 8000
+  - name: http
+    port: 8080
     protocol: TCP
-    name: http
+    targetPort: 8000
   selector:
     app: ssti-demo
     component: web
+  type: ClusterIP

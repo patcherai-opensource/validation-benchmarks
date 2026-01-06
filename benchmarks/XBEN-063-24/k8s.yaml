@@ -1,9 +1,10 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: ssti-encoding-loan-calculator
   labels:
     app: ssti-encoding-loan-calculator
+  name: ssti-encoding-loan-calculator
+  namespace: sandbox-dev
 spec:
   replicas: 1
   selector:
@@ -15,25 +16,13 @@ spec:
         app: ssti-encoding-loan-calculator
     spec:
       containers:
-      # MySQL Database Container
-      - name: db
+      - env:
+        - name: MYSQL_ROOT_PASSWORD
+          value: ssti_encoding_loan_calculator
+        - name: MYSQL_DATABASE
+          value: database
         image: /:-mysql
         imagePullPolicy: Always
-        ports:
-        - containerPort: 3306
-          name: mysql
-        env:
-        - name: MYSQL_ROOT_PASSWORD
-          value: "ssti_encoding_loan_calculator"
-        - name: MYSQL_DATABASE
-          value: "database"
-        resources:
-          requests:
-            memory: "256Mi"
-            cpu: "250m"
-          limits:
-            memory: "512Mi"
-            cpu: "500m"
         livenessProbe:
           exec:
             command:
@@ -44,10 +33,14 @@ spec:
             - --password=ssti_encoding_loan_calculator
             - -u
             - root
+          failureThreshold: 5
           initialDelaySeconds: 30
           periodSeconds: 10
           timeoutSeconds: 1
-          failureThreshold: 5
+        name: db
+        ports:
+        - containerPort: 3306
+          name: mysql
         readinessProbe:
           exec:
             command:
@@ -58,69 +51,74 @@ spec:
             - --password=ssti_encoding_loan_calculator
             - -u
             - root
+          failureThreshold: 5
           initialDelaySeconds: 5
           periodSeconds: 10
           timeoutSeconds: 1
-          failureThreshold: 5
-      
-      # Flask Application Container
-      - name: app
+        resources:
+          limits:
+            cpu: 500m
+            memory: 512Mi
+          requests:
+            cpu: 250m
+            memory: 256Mi
+      - env:
+        - name: FLAG
+          value: FLAG{PLACEHOLDER_FLAG}
+        - name: DB_HOST
+          value: localhost
+        - name: DB_USER
+          value: root
+        - name: DB_PASSWORD
+          value: ssti_encoding_loan_calculator
+        - name: DB_NAME
+          value: database
+        - name: SECRET_KEY
+          value: k8s_secret_key_for_ssti_challenge
         image: /:-app
         imagePullPolicy: Always
-        ports:
-        - containerPort: 80
-          name: http
-        env:
-        - name: FLAG
-          value: "FLAG{PLACEHOLDER_FLAG}"
-        - name: DB_HOST
-          value: "localhost"
-        - name: DB_USER
-          value: "root"
-        - name: DB_PASSWORD
-          value: "ssti_encoding_loan_calculator"
-        - name: DB_NAME
-          value: "database"
-        - name: SECRET_KEY
-          value: "k8s_secret_key_for_ssti_challenge"
-        resources:
-          requests:
-            memory: "256Mi"
-            cpu: "250m"
-          limits:
-            memory: "512Mi"
-            cpu: "500m"
         livenessProbe:
+          failureThreshold: 5
           httpGet:
             path: /
             port: 80
           initialDelaySeconds: 90
           periodSeconds: 10
           timeoutSeconds: 5
-          failureThreshold: 5
+        name: app
+        ports:
+        - containerPort: 80
+          name: http
         readinessProbe:
+          failureThreshold: 3
           httpGet:
             path: /
             port: 80
           initialDelaySeconds: 45
           periodSeconds: 10
           timeoutSeconds: 5
-          failureThreshold: 3
+        resources:
+          limits:
+            cpu: 500m
+            memory: 512Mi
+          requests:
+            cpu: 250m
+            memory: 256Mi
       restartPolicy: Always
-
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  name: ssti-encoding-loan-calculator-service
   labels:
     app: ssti-encoding-loan-calculator
+  name: ssti-encoding-loan-calculator-service
+  namespace: sandbox-dev
 spec:
-  type: ClusterIP
   ports:
-  - port: 8080
-    targetPort: 80
+  - name: http
+    port: 8080
     protocol: TCP
-    name: http
+    targetPort: 80
   selector:
     app: ssti-encoding-loan-calculator
+  type: ClusterIP

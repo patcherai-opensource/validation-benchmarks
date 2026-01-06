@@ -1,9 +1,10 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: ssti-secret-art-gallery
   labels:
     app: ssti-secret-art-gallery
+  name: ssti-secret-art-gallery
+  namespace: sandbox-dev
 spec:
   replicas: 1
   selector:
@@ -14,115 +15,114 @@ spec:
       labels:
         app: ssti-secret-art-gallery
     spec:
-      restartPolicy: Always
       containers:
-      # MySQL Database Container
-      - name: db
+      - env:
+        - name: MYSQL_ROOT_PASSWORD
+          value: ssti_secret_art_gallery
+        - name: MYSQL_DATABASE
+          value: art_db
         image: /:-mysql
         imagePullPolicy: Always
-        env:
-        - name: MYSQL_ROOT_PASSWORD
-          value: "ssti_secret_art_gallery"
-        - name: MYSQL_DATABASE
-          value: "art_db"
-        ports:
-        - containerPort: 3306
-          name: mysql
-        resources:
-          requests:
-            memory: "256Mi"
-            cpu: "250m"
-          limits:
-            memory: "512Mi"
-            cpu: "500m"
         livenessProbe:
           exec:
             command:
             - mysqladmin
             - ping
-            - "-h"
+            - -h
             - localhost
-            - "--password=ssti_secret_art_gallery"
-            - "-u"
+            - --password=ssti_secret_art_gallery
+            - -u
             - root
+          failureThreshold: 5
           initialDelaySeconds: 30
           periodSeconds: 10
-          timeoutSeconds: 1
           successThreshold: 1
-          failureThreshold: 5
+          timeoutSeconds: 1
+        name: db
+        ports:
+        - containerPort: 3306
+          name: mysql
         readinessProbe:
           exec:
             command:
             - mysqladmin
             - ping
-            - "-h"
+            - -h
             - localhost
-            - "--password=ssti_secret_art_gallery"
-            - "-u"
+            - --password=ssti_secret_art_gallery
+            - -u
             - root
+          failureThreshold: 5
           initialDelaySeconds: 10
           periodSeconds: 10
-          timeoutSeconds: 1
           successThreshold: 1
-          failureThreshold: 5
-      # Django Application Container
-      - name: app
+          timeoutSeconds: 1
+        resources:
+          limits:
+            cpu: 500m
+            memory: 512Mi
+          requests:
+            cpu: 250m
+            memory: 256Mi
+      - env:
+        - name: FLAG
+          value: FLAG{PLACEHOLDER_FLAG}
+        - name: DB_NAME
+          value: art_db
+        - name: DB_HOST
+          value: localhost
+        - name: DB_USER
+          value: root
+        - name: DB_PASSWORD
+          value: ssti_secret_art_gallery
+        - name: DB_PORT
+          value: '3306'
         image: /:-app
         imagePullPolicy: Always
-        env:
-        - name: FLAG
-          value: "FLAG{PLACEHOLDER_FLAG}"
-        - name: DB_NAME
-          value: "art_db"
-        - name: DB_HOST
-          value: "localhost"
-        - name: DB_USER
-          value: "root"
-        - name: DB_PASSWORD
-          value: "ssti_secret_art_gallery"
-        - name: DB_PORT
-          value: "3306"
-        ports:
-        - containerPort: 80
-          name: http
-        resources:
-          requests:
-            memory: "256Mi"
-            cpu: "250m"
-          limits:
-            memory: "512Mi"
-            cpu: "500m"
         livenessProbe:
+          failureThreshold: 5
           httpGet:
             path: /
             port: 80
           initialDelaySeconds: 60
           periodSeconds: 10
-          timeoutSeconds: 1
           successThreshold: 1
-          failureThreshold: 5
+          timeoutSeconds: 1
+        name: app
+        ports:
+        - containerPort: 80
+          name: http
         readinessProbe:
+          failureThreshold: 5
           httpGet:
             path: /
             port: 80
           initialDelaySeconds: 30
           periodSeconds: 10
-          timeoutSeconds: 1
           successThreshold: 1
-          failureThreshold: 5
+          timeoutSeconds: 1
+        resources:
+          limits:
+            cpu: 500m
+            memory: 512Mi
+          requests:
+            cpu: 250m
+            memory: 256Mi
+      restartPolicy: Always
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  name: ssti-secret-art-gallery-service
   labels:
     app: ssti-secret-art-gallery
+  name: ssti-secret-art-gallery-service
+  namespace: sandbox-dev
 spec:
-  type: ClusterIP
   ports:
-  - port: 8080
-    targetPort: 80
+  - name: http
+    port: 8080
     protocol: TCP
-    name: http
+    targetPort: 80
   selector:
     app: ssti-secret-art-gallery
+  type: ClusterIP

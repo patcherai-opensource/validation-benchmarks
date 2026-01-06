@@ -1,9 +1,10 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: ssti-debug-art-gallery
   labels:
     app: ssti-debug-art-gallery
+  name: ssti-debug-art-gallery
+  namespace: sandbox-dev
 spec:
   replicas: 1
   selector:
@@ -15,18 +16,13 @@ spec:
         app: ssti-debug-art-gallery
     spec:
       containers:
-      # MySQL Database Container
-      - name: mysql
+      - env:
+        - name: MYSQL_ROOT_PASSWORD
+          value: ssti_debug_art_gallery
+        - name: MYSQL_DATABASE
+          value: art_db
         image: /:-mysql
         imagePullPolicy: Always
-        ports:
-        - containerPort: 3306
-          name: mysql
-        env:
-        - name: MYSQL_ROOT_PASSWORD
-          value: "ssti_debug_art_gallery"
-        - name: MYSQL_DATABASE
-          value: "art_db"
         livenessProbe:
           exec:
             command:
@@ -37,11 +33,15 @@ spec:
             - --password=ssti_debug_art_gallery
             - -u
             - root
+          failureThreshold: 5
           initialDelaySeconds: 30
           periodSeconds: 10
-          timeoutSeconds: 1
           successThreshold: 1
-          failureThreshold: 5
+          timeoutSeconds: 1
+        name: mysql
+        ports:
+        - containerPort: 3306
+          name: mysql
         readinessProbe:
           exec:
             command:
@@ -52,79 +52,77 @@ spec:
             - --password=ssti_debug_art_gallery
             - -u
             - root
+          failureThreshold: 3
           initialDelaySeconds: 10
           periodSeconds: 10
-          timeoutSeconds: 1
           successThreshold: 1
-          failureThreshold: 3
+          timeoutSeconds: 1
         resources:
-          requests:
-            memory: "512Mi"
-            cpu: "250m"
           limits:
-            memory: "1Gi"
-            cpu: "500m"
-      
-      # Django Application Container
-      - name: app
+            cpu: 500m
+            memory: 1Gi
+          requests:
+            cpu: 250m
+            memory: 512Mi
+      - env:
+        - name: FLAG
+          value: FLAG_PLACEHOLDER
+        - name: MYSQL_DATABASE
+          value: art_db
+        - name: MYSQL_HOST
+          value: localhost
+        - name: MYSQL_USER
+          value: root
+        - name: MYSQL_PASSWORD
+          value: ssti_debug_art_gallery
+        - name: MYSQL_PORT
+          value: '3306'
         image: /:-app
         imagePullPolicy: Always
-        ports:
-        - containerPort: 80
-          name: http
-        env:
-        - name: FLAG
-          value: "FLAG_PLACEHOLDER"
-        - name: MYSQL_DATABASE
-          value: "art_db"
-        - name: MYSQL_HOST
-          value: "localhost"
-        - name: MYSQL_USER
-          value: "root"
-        - name: MYSQL_PASSWORD
-          value: "ssti_debug_art_gallery"
-        - name: MYSQL_PORT
-          value: "3306"
         livenessProbe:
+          failureThreshold: 5
           httpGet:
             path: /
             port: 80
           initialDelaySeconds: 60
           periodSeconds: 10
-          timeoutSeconds: 1
           successThreshold: 1
-          failureThreshold: 5
+          timeoutSeconds: 1
+        name: app
+        ports:
+        - containerPort: 80
+          name: http
         readinessProbe:
+          failureThreshold: 3
           httpGet:
             path: /
             port: 80
           initialDelaySeconds: 30
           periodSeconds: 10
-          timeoutSeconds: 1
           successThreshold: 1
-          failureThreshold: 3
+          timeoutSeconds: 1
         resources:
-          requests:
-            memory: "256Mi"
-            cpu: "250m"
           limits:
-            memory: "512Mi"
-            cpu: "500m"
+            cpu: 500m
+            memory: 512Mi
+          requests:
+            cpu: 250m
+            memory: 256Mi
       restartPolicy: Always
-
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  name: ssti-debug-art-gallery-service
   labels:
     app: ssti-debug-art-gallery
+  name: ssti-debug-art-gallery-service
+  namespace: sandbox-dev
 spec:
-  type: ClusterIP
   ports:
-  - port: 8080
-    targetPort: 80
+  - name: http
+    port: 8080
     protocol: TCP
-    name: http
+    targetPort: 80
   selector:
     app: ssti-debug-art-gallery
+  type: ClusterIP

@@ -1,9 +1,10 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: xben-095-24
   labels:
     app: xben-095-24
+  name: xben-095-24
+  namespace: sandbox-dev
 spec:
   replicas: 1
   selector:
@@ -15,37 +16,11 @@ spec:
         app: xben-095-24
     spec:
       containers:
-      # MySQL Database Container
-      - name: mysql
+      - env:
+        - name: MYSQL_ROOT_PASSWORD
+          value: password
         image: /:-mysql
         imagePullPolicy: Always
-        ports:
-        - containerPort: 3306
-        env:
-        - name: MYSQL_ROOT_PASSWORD
-          value: "password"
-        resources:
-          requests:
-            memory: "256Mi"
-            cpu: "250m"
-          limits:
-            memory: "512Mi"
-            cpu: "500m"
-        readinessProbe:
-          exec:
-            command:
-            - mysqladmin
-            - ping
-            - -h
-            - localhost
-            - --password=MyPass1234
-            - -u
-            - ctfuser
-          initialDelaySeconds: 10
-          periodSeconds: 10
-          timeoutSeconds: 1
-          successThreshold: 1
-          failureThreshold: 5
         livenessProbe:
           exec:
             command:
@@ -56,68 +31,92 @@ spec:
             - --password=MyPass1234
             - -u
             - ctfuser
+          failureThreshold: 3
           initialDelaySeconds: 30
           periodSeconds: 10
-          timeoutSeconds: 1
           successThreshold: 1
-          failureThreshold: 3
-      # PHP Web Application Container
-      - name: web
+          timeoutSeconds: 1
+        name: mysql
+        ports:
+        - containerPort: 3306
+        readinessProbe:
+          exec:
+            command:
+            - mysqladmin
+            - ping
+            - -h
+            - localhost
+            - --password=MyPass1234
+            - -u
+            - ctfuser
+          failureThreshold: 5
+          initialDelaySeconds: 10
+          periodSeconds: 10
+          successThreshold: 1
+          timeoutSeconds: 1
+        resources:
+          limits:
+            cpu: 500m
+            memory: 512Mi
+          requests:
+            cpu: 250m
+            memory: 256Mi
+      - env:
+        - name: MYSQL_HOST
+          value: localhost
+        - name: MYSQL_USER
+          value: ctfuser
+        - name: MYSQL_PASSWORD
+          value: MyPass1234
+        - name: MYSQL_DATABASE
+          value: ctf
+        - name: FLAG
+          value: PLACEHOLDER_FLAG
         image: /:-app
         imagePullPolicy: Always
+        livenessProbe:
+          failureThreshold: 3
+          httpGet:
+            path: /
+            port: 80
+          initialDelaySeconds: 30
+          periodSeconds: 10
+          successThreshold: 1
+          timeoutSeconds: 1
+        name: web
         ports:
         - containerPort: 80
-        env:
-        - name: MYSQL_HOST
-          value: "localhost"
-        - name: MYSQL_USER
-          value: "ctfuser"
-        - name: MYSQL_PASSWORD
-          value: "MyPass1234"
-        - name: MYSQL_DATABASE
-          value: "ctf"
-        - name: FLAG
-          value: "PLACEHOLDER_FLAG"
-        resources:
-          requests:
-            memory: "128Mi"
-            cpu: "100m"
-          limits:
-            memory: "256Mi"
-            cpu: "250m"
         readinessProbe:
+          failureThreshold: 3
           httpGet:
             path: /
             port: 80
           initialDelaySeconds: 15
           periodSeconds: 5
-          timeoutSeconds: 1
           successThreshold: 1
-          failureThreshold: 3
-        livenessProbe:
-          httpGet:
-            path: /
-            port: 80
-          initialDelaySeconds: 30
-          periodSeconds: 10
           timeoutSeconds: 1
-          successThreshold: 1
-          failureThreshold: 3
+        resources:
+          limits:
+            cpu: 250m
+            memory: 256Mi
+          requests:
+            cpu: 100m
+            memory: 128Mi
       restartPolicy: Always
-
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  name: xben-095-24-service
   labels:
     app: xben-095-24
+  name: xben-095-24-service
+  namespace: sandbox-dev
 spec:
-  type: ClusterIP
   ports:
-  - port: 8080
-    targetPort: 80
+  - name: http
+    port: 8080
     protocol: TCP
-    name: http
+    targetPort: 80
   selector:
     app: xben-095-24
+  type: ClusterIP

@@ -1,9 +1,10 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: xben-087-24-app
   labels:
     app: xben-087-24
+  name: xben-087-24-app
+  namespace: sandbox-dev
 spec:
   replicas: 1
   selector:
@@ -15,59 +16,59 @@ spec:
         app: xben-087-24
     spec:
       containers:
-      - name: web
+      - env:
+        - name: FLAG
+          value: FLAG{PLACEHOLDER_FLAG}
+        - name: APP_HOST
+          value: localhost
+        - name: APP_PORT
+          value: '5000'
         image: /:-app
         imagePullPolicy: Always
-        ports:
-        - containerPort: 5000
-        env:
-        - name: FLAG
-          value: "FLAG{PLACEHOLDER_FLAG}"
-        - name: APP_HOST
-          value: "localhost"
-        - name: APP_PORT
-          value: "5000"
-        resources:
-          requests:
-            memory: "256Mi"
-            cpu: "250m"
-          limits:
-            memory: "512Mi"
-            cpu: "500m"
         livenessProbe:
           exec:
             command:
             - sh
             - -c
-            - "timeout 10s bash -c ':> /dev/tcp/127.0.0.1/5000' || exit 1"
+            - timeout 10s bash -c ':> /dev/tcp/127.0.0.1/5000' || exit 1
+          failureThreshold: 3
           initialDelaySeconds: 30
           periodSeconds: 10
           timeoutSeconds: 10
-          failureThreshold: 3
+        name: web
+        ports:
+        - containerPort: 5000
         readinessProbe:
           exec:
             command:
             - sh
             - -c
-            - "timeout 10s bash -c ':> /dev/tcp/127.0.0.1/5000' || exit 1"
+            - timeout 10s bash -c ':> /dev/tcp/127.0.0.1/5000' || exit 1
+          failureThreshold: 3
           initialDelaySeconds: 5
           periodSeconds: 5
           timeoutSeconds: 10
-          failureThreshold: 3
+        resources:
+          limits:
+            cpu: 500m
+            memory: 512Mi
+          requests:
+            cpu: 250m
+            memory: 256Mi
       restartPolicy: Always
-
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  name: xben-087-24-service
   labels:
     app: xben-087-24
+  name: xben-087-24-service
+  namespace: sandbox-dev
 spec:
-  type: ClusterIP
   ports:
   - port: 8080
-    targetPort: 5000
     protocol: TCP
+    targetPort: 5000
   selector:
     app: xben-087-24
+  type: ClusterIP

@@ -1,9 +1,10 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: xben-062-24
   labels:
     app: xben-062-24
+  name: xben-062-24
+  namespace: sandbox-dev
 spec:
   replicas: 1
   selector:
@@ -15,58 +16,59 @@ spec:
         app: xben-062-24
     spec:
       containers:
-      - name: web
+      - env:
+        - name: APP_HOST
+          value: localhost
+        - name: APP_PORT
+          value: '5000'
+        - name: RUNTIME_FLAG
+          value: FLAG_PLACEHOLDER
+        - name: QT_QPA_PLATFORM
+          value: offscreen
+        - name: OPENSSL_CONF
+          value: /dev/null
         image: /:-app
         imagePullPolicy: Always
-        ports:
-        - containerPort: 5000
-        env:
-        - name: APP_HOST
-          value: "localhost"
-        - name: APP_PORT
-          value: "5000"
-        - name: RUNTIME_FLAG
-          value: "FLAG_PLACEHOLDER"
-        - name: QT_QPA_PLATFORM
-          value: "offscreen"
-        - name: OPENSSL_CONF
-          value: "/dev/null"
-        resources:
-          requests:
-            memory: "256Mi"
-            cpu: "250m"
-          limits:
-            memory: "512Mi"
-            cpu: "500m"
         livenessProbe:
+          failureThreshold: 3
           httpGet:
             path: /
             port: 5000
           initialDelaySeconds: 30
-          timeoutSeconds: 10
           periodSeconds: 10
-          failureThreshold: 3
+          timeoutSeconds: 10
+        name: web
+        ports:
+        - containerPort: 5000
         readinessProbe:
+          failureThreshold: 3
           httpGet:
             path: /
             port: 5000
           initialDelaySeconds: 10
-          timeoutSeconds: 5
           periodSeconds: 5
-          failureThreshold: 3
+          timeoutSeconds: 5
+        resources:
+          limits:
+            cpu: 500m
+            memory: 512Mi
+          requests:
+            cpu: 250m
+            memory: 256Mi
       restartPolicy: Always
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  name: xben-062-24
   labels:
     app: xben-062-24
+  name: xben-062-24
+  namespace: sandbox-dev
 spec:
-  type: ClusterIP
   ports:
   - port: 8080
-    targetPort: 5000
     protocol: TCP
+    targetPort: 5000
   selector:
     app: xben-062-24
+  type: ClusterIP

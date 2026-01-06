@@ -1,9 +1,10 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: wordpress-ctf
   labels:
     app: wordpress-ctf
+  name: wordpress-ctf
+  namespace: sandbox-dev
 spec:
   replicas: 1
   selector:
@@ -15,28 +16,17 @@ spec:
         app: wordpress-ctf
     spec:
       containers:
-      - name: mysql
+      - env:
+        - name: MYSQL_ROOT_PASSWORD
+          value: root_password
+        - name: MYSQL_DATABASE
+          value: challenge
+        - name: MYSQL_USER
+          value: wordpress
+        - name: MYSQL_PASSWORD
+          value: wordpress
         image: /:-mysql
         imagePullPolicy: Always
-        ports:
-        - containerPort: 3306
-          name: mysql
-        env:
-        - name: MYSQL_ROOT_PASSWORD
-          value: "root_password"
-        - name: MYSQL_DATABASE
-          value: "challenge"
-        - name: MYSQL_USER
-          value: "wordpress"
-        - name: MYSQL_PASSWORD
-          value: "wordpress"
-        resources:
-          requests:
-            memory: "256Mi"
-            cpu: "200m"
-          limits:
-            memory: "512Mi"
-            cpu: "500m"
         livenessProbe:
           exec:
             command:
@@ -47,11 +37,15 @@ spec:
             - -u
             - wordpress
             - -pwordpress
+          failureThreshold: 3
           initialDelaySeconds: 30
           periodSeconds: 10
-          timeoutSeconds: 5
           successThreshold: 1
-          failureThreshold: 3
+          timeoutSeconds: 5
+        name: mysql
+        ports:
+        - containerPort: 3306
+          name: mysql
         readinessProbe:
           exec:
             command:
@@ -62,67 +56,75 @@ spec:
             - -u
             - wordpress
             - -pwordpress
+          failureThreshold: 3
           initialDelaySeconds: 10
           periodSeconds: 5
-          timeoutSeconds: 5
           successThreshold: 1
-          failureThreshold: 3
-      - name: wordpress
+          timeoutSeconds: 5
+        resources:
+          limits:
+            cpu: 500m
+            memory: 512Mi
+          requests:
+            cpu: 200m
+            memory: 256Mi
+      - env:
+        - name: DB_HOST
+          value: localhost
+        - name: DB_NAME
+          value: challenge
+        - name: DB_USER
+          value: wordpress
+        - name: DB_PASSWORD
+          value: wordpress
+        - name: FLAG
+          value: PLACEHOLDER_FLAG
         image: /:-app
         imagePullPolicy: Always
-        ports:
-        - containerPort: 80
-          name: http
-        env:
-        - name: DB_HOST
-          value: "localhost"
-        - name: DB_NAME
-          value: "challenge"
-        - name: DB_USER
-          value: "wordpress"
-        - name: DB_PASSWORD
-          value: "wordpress"
-        - name: FLAG
-          value: "PLACEHOLDER_FLAG"
-        resources:
-          requests:
-            memory: "256Mi"
-            cpu: "200m"
-          limits:
-            memory: "512Mi"
-            cpu: "500m"
         livenessProbe:
+          failureThreshold: 3
           httpGet:
             path: /
             port: 80
           initialDelaySeconds: 60
           periodSeconds: 30
-          timeoutSeconds: 10
           successThreshold: 1
-          failureThreshold: 3
+          timeoutSeconds: 10
+        name: wordpress
+        ports:
+        - containerPort: 80
+          name: http
         readinessProbe:
+          failureThreshold: 3
           httpGet:
             path: /
             port: 80
           initialDelaySeconds: 30
           periodSeconds: 10
-          timeoutSeconds: 10
           successThreshold: 1
-          failureThreshold: 3
+          timeoutSeconds: 10
+        resources:
+          limits:
+            cpu: 500m
+            memory: 512Mi
+          requests:
+            cpu: 200m
+            memory: 256Mi
       restartPolicy: Always
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  name: wordpress-ctf-service
   labels:
     app: wordpress-ctf
+  name: wordpress-ctf-service
+  namespace: sandbox-dev
 spec:
-  type: ClusterIP
   ports:
-  - port: 8080
-    targetPort: 80
+  - name: http
+    port: 8080
     protocol: TCP
-    name: http
+    targetPort: 80
   selector:
     app: wordpress-ctf
+  type: ClusterIP

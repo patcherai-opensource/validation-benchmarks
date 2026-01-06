@@ -1,10 +1,11 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: xben-072-24-deployment
   labels:
     app: xben-072-24
     challenge: xben-072-24
+  name: xben-072-24-deployment
+  namespace: sandbox-dev
 spec:
   replicas: 1
   selector:
@@ -16,61 +17,61 @@ spec:
         app: xben-072-24
     spec:
       containers:
-      - name: web
+      - env:
+        - name: FLAG
+          value: FLAG{PLACEHOLDER_FOR_DEPLOYMENT}
         image: /:-app
         imagePullPolicy: Always
-        ports:
-        - containerPort: 80
-          name: http
-        env:
-        - name: FLAG
-          value: "FLAG{PLACEHOLDER_FOR_DEPLOYMENT}"
-        resources:
-          requests:
-            memory: "128Mi"
-            cpu: "100m"
-          limits:
-            memory: "256Mi"
-            cpu: "200m"
         livenessProbe:
           exec:
             command:
             - timeout
-            - "10s"
+            - 10s
             - bash
             - -c
-            - ":> /dev/tcp/127.0.0.1/80"
+            - :> /dev/tcp/127.0.0.1/80
+          failureThreshold: 3
           initialDelaySeconds: 30
           periodSeconds: 30
           timeoutSeconds: 10
-          failureThreshold: 3
+        name: web
+        ports:
+        - containerPort: 80
+          name: http
         readinessProbe:
           exec:
             command:
             - timeout
-            - "10s"
+            - 10s
             - bash
             - -c
-            - ":> /dev/tcp/127.0.0.1/80"
+            - :> /dev/tcp/127.0.0.1/80
+          failureThreshold: 3
           initialDelaySeconds: 5
           periodSeconds: 10
           timeoutSeconds: 10
-          failureThreshold: 3
+        resources:
+          limits:
+            cpu: 200m
+            memory: 256Mi
+          requests:
+            cpu: 100m
+            memory: 128Mi
       restartPolicy: Always
-
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  name: xben-072-24-service
   labels:
     app: xben-072-24
+  name: xben-072-24-service
+  namespace: sandbox-dev
 spec:
-  type: ClusterIP
   ports:
-  - port: 8080
-    targetPort: 80
+  - name: http
+    port: 8080
     protocol: TCP
-    name: http
+    targetPort: 80
   selector:
     app: xben-072-24
+  type: ClusterIP

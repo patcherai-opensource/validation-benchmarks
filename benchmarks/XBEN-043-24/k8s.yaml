@@ -1,9 +1,10 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: idor-broken-authn-trading-platform
   labels:
     app: idor-broken-authn-trading-platform
+  name: idor-broken-authn-trading-platform
+  namespace: sandbox-dev
 spec:
   replicas: 1
   selector:
@@ -14,75 +15,67 @@ spec:
       labels:
         app: idor-broken-authn-trading-platform
     spec:
-      restartPolicy: Always
       containers:
-      - name: app
+      - env:
+        - name: FLAG
+          value: FLAG_PLACEHOLDER
         image: /:-app
         imagePullPolicy: Always
+        livenessProbe:
+          failureThreshold: 5
+          httpGet:
+            path: /
+            port: 80
+          initialDelaySeconds: 30
+          periodSeconds: 10
+          successThreshold: 1
+          timeoutSeconds: 1
+        name: app
         ports:
         - containerPort: 80
           name: http
-        env:
-        - name: FLAG
-          value: "FLAG_PLACEHOLDER"
+        readinessProbe:
+          failureThreshold: 3
+          httpGet:
+            path: /
+            port: 80
+          initialDelaySeconds: 10
+          periodSeconds: 5
+          successThreshold: 1
+          timeoutSeconds: 1
         resources:
+          limits:
+            cpu: 500m
+            memory: 512Mi
           requests:
             cpu: 100m
             memory: 128Mi
-          limits:
-            cpu: 500m
-            memory: 512Mi
-        livenessProbe:
-          httpGet:
-            path: /
-            port: 80
-          initialDelaySeconds: 30
-          periodSeconds: 10
-          timeoutSeconds: 1
-          successThreshold: 1
-          failureThreshold: 5
-        readinessProbe:
-          httpGet:
-            path: /
-            port: 80
-          initialDelaySeconds: 10
-          periodSeconds: 5
-          timeoutSeconds: 1
-          successThreshold: 1
-          failureThreshold: 3
-      - name: db
+      - env:
+        - name: MYSQL_ROOT_PASSWORD
+          value: idor_broken_authn_trading_platform
+        - name: MYSQL_DATABASE
+          value: database
         image: /:-mysql
         imagePullPolicy: Always
+        livenessProbe:
+          exec:
+            command:
+            - mysqladmin
+            - ping
+            - -h
+            - localhost
+            - --password=idor_broken_authn_trading_platform
+            - -u
+            - root
+          failureThreshold: 5
+          initialDelaySeconds: 30
+          periodSeconds: 10
+          successThreshold: 1
+          timeoutSeconds: 1
+        name: db
         ports:
         - containerPort: 3306
           name: mysql
-        env:
-        - name: MYSQL_ROOT_PASSWORD
-          value: "idor_broken_authn_trading_platform"
-        - name: MYSQL_DATABASE
-          value: "database"
-        resources:
-          requests:
-            cpu: 100m
-            memory: 256Mi
-          limits:
-            cpu: 500m
-            memory: 512Mi
-        livenessProbe:
-          exec:
-            command:
-            - mysqladmin
-            - ping
-            - -h
-            - localhost
-            - --password=idor_broken_authn_trading_platform
-            - -u
-            - root
-          initialDelaySeconds: 30
-          periodSeconds: 10
-          timeoutSeconds: 1
-          successThreshold: 1
-          failureThreshold: 5
         readinessProbe:
           exec:
             command:
@@ -93,24 +86,33 @@ spec:
             - --password=idor_broken_authn_trading_platform
             - -u
             - root
+          failureThreshold: 3
           initialDelaySeconds: 10
           periodSeconds: 5
-          timeoutSeconds: 1
           successThreshold: 1
-          failureThreshold: 3
+          timeoutSeconds: 1
+        resources:
+          limits:
+            cpu: 500m
+            memory: 512Mi
+          requests:
+            cpu: 100m
+            memory: 256Mi
+      restartPolicy: Always
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  name: idor-broken-authn-trading-platform
   labels:
     app: idor-broken-authn-trading-platform
+  name: idor-broken-authn-trading-platform
+  namespace: sandbox-dev
 spec:
-  type: ClusterIP
   ports:
-  - port: 8080
-    targetPort: 80
+  - name: http
+    port: 8080
     protocol: TCP
-    name: http
+    targetPort: 80
   selector:
     app: idor-broken-authn-trading-platform
+  type: ClusterIP

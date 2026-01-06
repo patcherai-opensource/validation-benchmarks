@@ -1,9 +1,10 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: deserialization-yaml-bookmarks
   labels:
     app: deserialization-yaml-bookmarks
+  name: deserialization-yaml-bookmarks
+  namespace: sandbox-dev
 spec:
   replicas: 1
   selector:
@@ -15,52 +16,53 @@ spec:
         app: deserialization-yaml-bookmarks
     spec:
       containers:
-      - name: deserialization-yaml-bookmarks
+      - env:
+        - name: FLAG
+          value: FLAG{placeholder}
         image: /:-app
         imagePullPolicy: Always
-        ports:
-        - containerPort: 80
-          protocol: TCP
-        env:
-        - name: FLAG
-          value: "FLAG{placeholder}"
-        resources:
-          requests:
-            memory: "128Mi"
-            cpu: "100m"
-          limits:
-            memory: "512Mi"
-            cpu: "500m"
         livenessProbe:
+          failureThreshold: 3
           httpGet:
             path: /
             port: 80
           initialDelaySeconds: 30
           periodSeconds: 10
           timeoutSeconds: 5
-          failureThreshold: 3
+        name: deserialization-yaml-bookmarks
+        ports:
+        - containerPort: 80
+          protocol: TCP
         readinessProbe:
+          failureThreshold: 3
           httpGet:
             path: /
             port: 80
           initialDelaySeconds: 5
           periodSeconds: 5
           timeoutSeconds: 5
-          failureThreshold: 3
+        resources:
+          limits:
+            cpu: 500m
+            memory: 512Mi
+          requests:
+            cpu: 100m
+            memory: 128Mi
       restartPolicy: Always
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  name: deserialization-yaml-bookmarks-service
   labels:
     app: deserialization-yaml-bookmarks
+  name: deserialization-yaml-bookmarks-service
+  namespace: sandbox-dev
 spec:
-  type: ClusterIP
-  selector:
-    app: deserialization-yaml-bookmarks
   ports:
   - name: http
     port: 8080
-    targetPort: 80
     protocol: TCP
+    targetPort: 80
+  selector:
+    app: deserialization-yaml-bookmarks
+  type: ClusterIP

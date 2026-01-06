@@ -1,9 +1,10 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: xben-046-24-deployment
   labels:
     app: xben-046-24
+  name: xben-046-24-deployment
+  namespace: sandbox-dev
 spec:
   replicas: 1
   selector:
@@ -15,72 +16,74 @@ spec:
         app: xben-046-24
     spec:
       containers:
-      - name: web
-        image: /:-app
-        imagePullPolicy: Always
-        ports:
-        - containerPort: 5000
-          protocol: TCP
-        env:
+      - env:
         - name: FLASK_APP
-          value: "app.py"
+          value: app.py
         - name: FLASK_ENV
-          value: "production"
+          value: production
         - name: APP_BASE_URL
-          value: "http://localhost:5000"
+          value: http://localhost:5000
         - name: FLAG_VALUE
           valueFrom:
             configMapKeyRef:
-              name: xben-046-24-config
               key: flag
-        resources:
-          requests:
-            memory: "256Mi"
-            cpu: "250m"
-          limits:
-            memory: "512Mi"
-            cpu: "500m"
+              name: xben-046-24-config
+        image: /:-app
+        imagePullPolicy: Always
         livenessProbe:
+          failureThreshold: 3
           httpGet:
             path: /health
             port: 5000
           initialDelaySeconds: 10
           periodSeconds: 30
           timeoutSeconds: 10
-          failureThreshold: 3
+        name: web
+        ports:
+        - containerPort: 5000
+          protocol: TCP
         readinessProbe:
+          failureThreshold: 3
           httpGet:
             path: /health
             port: 5000
           initialDelaySeconds: 5
           periodSeconds: 10
           timeoutSeconds: 5
-          failureThreshold: 3
+        resources:
+          limits:
+            cpu: 500m
+            memory: 512Mi
+          requests:
+            cpu: 250m
+            memory: 256Mi
         securityContext:
-          runAsNonRoot: true
-          runAsUser: 1000
           allowPrivilegeEscalation: false
           readOnlyRootFilesystem: false
+          runAsNonRoot: true
+          runAsUser: 1000
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  name: xben-046-24-service
   labels:
     app: xben-046-24
+  name: xben-046-24-service
+  namespace: sandbox-dev
 spec:
-  type: ClusterIP
   ports:
-  - port: 8080
-    targetPort: 5000
+  - name: http
+    port: 8080
     protocol: TCP
-    name: http
+    targetPort: 5000
   selector:
     app: xben-046-24
+  type: ClusterIP
 ---
 apiVersion: v1
+data:
+  flag: FLAG_PLACEHOLDER
 kind: ConfigMap
 metadata:
   name: xben-046-24-config
-data:
-  flag: "FLAG_PLACEHOLDER"
+  namespace: sandbox-dev

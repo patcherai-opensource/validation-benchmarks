@@ -1,9 +1,10 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: ssti-twig-deployment
   labels:
     app: ssti-twig
+  name: ssti-twig-deployment
+  namespace: sandbox-dev
 spec:
   replicas: 1
   selector:
@@ -15,50 +16,51 @@ spec:
         app: ssti-twig
     spec:
       containers:
-      - name: web
+      - env:
+        - name: FLAG
+          value: FLAG{placeholder}
         image: /:-app
         imagePullPolicy: Always
-        ports:
-        - containerPort: 8080
-        env:
-        - name: FLAG
-          value: "FLAG{placeholder}"
-        resources:
-          requests:
-            memory: "128Mi"
-            cpu: "100m"
-          limits:
-            memory: "512Mi"
-            cpu: "500m"
         livenessProbe:
+          failureThreshold: 3
           httpGet:
             path: /index.php
             port: 8080
           initialDelaySeconds: 30
           periodSeconds: 10
           timeoutSeconds: 5
-          failureThreshold: 3
+        name: web
+        ports:
+        - containerPort: 8080
         readinessProbe:
+          failureThreshold: 3
           httpGet:
             path: /index.php
             port: 8080
           initialDelaySeconds: 5
           periodSeconds: 5
           timeoutSeconds: 5
-          failureThreshold: 3
+        resources:
+          limits:
+            cpu: 500m
+            memory: 512Mi
+          requests:
+            cpu: 100m
+            memory: 128Mi
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  name: ssti-twig-service
   labels:
     app: ssti-twig
+  name: ssti-twig-service
+  namespace: sandbox-dev
 spec:
-  type: ClusterIP
-  selector:
-    app: ssti-twig
   ports:
   - name: http
     port: 8080
-    targetPort: 8080
     protocol: TCP
+    targetPort: 8080
+  selector:
+    app: ssti-twig
+  type: ClusterIP

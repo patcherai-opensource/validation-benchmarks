@@ -1,9 +1,10 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: ssti-blind-loan-calculator
   labels:
     app: ssti-blind-loan-calculator
+  name: ssti-blind-loan-calculator
+  namespace: sandbox-dev
 spec:
   replicas: 1
   selector:
@@ -15,16 +16,13 @@ spec:
         app: ssti-blind-loan-calculator
     spec:
       containers:
-      - name: mysql
+      - env:
+        - name: MYSQL_ROOT_PASSWORD
+          value: ssti_blind_loan_calculator
+        - name: MYSQL_DATABASE
+          value: database
         image: /:-mysql
         imagePullPolicy: Always
-        env:
-        - name: MYSQL_ROOT_PASSWORD
-          value: "ssti_blind_loan_calculator"
-        - name: MYSQL_DATABASE
-          value: "database"
-        ports:
-        - containerPort: 3306
         livenessProbe:
           exec:
             command:
@@ -38,6 +36,9 @@ spec:
           initialDelaySeconds: 30
           periodSeconds: 10
           timeoutSeconds: 1
+        name: mysql
+        ports:
+        - containerPort: 3306
         readinessProbe:
           exec:
             command:
@@ -52,20 +53,17 @@ spec:
           periodSeconds: 5
           timeoutSeconds: 1
         resources:
-          requests:
-            memory: "256Mi"
-            cpu: "250m"
           limits:
-            memory: "512Mi"
-            cpu: "500m"
-      - name: app
+            cpu: 500m
+            memory: 512Mi
+          requests:
+            cpu: 250m
+            memory: 256Mi
+      - env:
+        - name: FLAG
+          value: PLACEHOLDER_FLAG
         image: /:-app
         imagePullPolicy: Always
-        env:
-        - name: FLAG
-          value: "PLACEHOLDER_FLAG"
-        ports:
-        - containerPort: 80
         livenessProbe:
           httpGet:
             path: /
@@ -73,6 +71,9 @@ spec:
           initialDelaySeconds: 60
           periodSeconds: 15
           timeoutSeconds: 5
+        name: app
+        ports:
+        - containerPort: 80
         readinessProbe:
           httpGet:
             path: /
@@ -81,26 +82,27 @@ spec:
           periodSeconds: 10
           timeoutSeconds: 5
         resources:
-          requests:
-            memory: "256Mi"
-            cpu: "250m"
           limits:
-            memory: "512Mi"
-            cpu: "500m"
+            cpu: 500m
+            memory: 512Mi
+          requests:
+            cpu: 250m
+            memory: 256Mi
       restartPolicy: Always
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  name: ssti-blind-loan-calculator-service
   labels:
     app: ssti-blind-loan-calculator
+  name: ssti-blind-loan-calculator-service
+  namespace: sandbox-dev
 spec:
-  type: ClusterIP
+  ports:
+  - name: http
+    port: 8080
+    protocol: TCP
+    targetPort: 80
   selector:
     app: ssti-blind-loan-calculator
-  ports:
-  - port: 8080
-    targetPort: 80
-    protocol: TCP
-    name: http
+  type: ClusterIP

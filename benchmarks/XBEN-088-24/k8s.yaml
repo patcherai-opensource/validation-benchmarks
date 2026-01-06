@@ -1,9 +1,10 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: toctou-admin-router-deployment
   labels:
     app: toctou-admin-router
+  name: toctou-admin-router-deployment
+  namespace: sandbox-dev
 spec:
   replicas: 1
   selector:
@@ -15,17 +16,13 @@ spec:
         app: toctou-admin-router
     spec:
       containers:
-      # MySQL Database container
-      - name: db
+      - env:
+        - name: MYSQL_ROOT_PASSWORD
+          value: toctou_admin_router
+        - name: MYSQL_DATABASE
+          value: database
         image: /:-mysql
         imagePullPolicy: Always
-        ports:
-        - containerPort: 3306
-        env:
-        - name: MYSQL_ROOT_PASSWORD
-          value: "toctou_admin_router"
-        - name: MYSQL_DATABASE
-          value: "database"
         livenessProbe:
           exec:
             command:
@@ -39,6 +36,9 @@ spec:
           initialDelaySeconds: 30
           periodSeconds: 10
           timeoutSeconds: 1
+        name: db
+        ports:
+        - containerPort: 3306
         readinessProbe:
           exec:
             command:
@@ -53,32 +53,27 @@ spec:
           periodSeconds: 10
           timeoutSeconds: 1
         resources:
-          requests:
-            memory: "256Mi"
-            cpu: "250m"
           limits:
-            memory: "512Mi"
-            cpu: "500m"
-      
-      # Flask Application container
-      - name: toctou-admin-router
+            cpu: 500m
+            memory: 512Mi
+          requests:
+            cpu: 250m
+            memory: 256Mi
+      - env:
+        - name: DB_USER
+          value: root
+        - name: DB_PASSWORD
+          value: toctou_admin_router
+        - name: DB_HOST
+          value: localhost
+        - name: DB_NAME
+          value: database
+        - name: SECRET_KEY
+          value: your_secret_key_for_k8s
+        - name: FLAG
+          value: PLACEHOLDER_FLAG
         image: /:-app
         imagePullPolicy: Always
-        ports:
-        - containerPort: 80
-        env:
-        - name: DB_USER
-          value: "root"
-        - name: DB_PASSWORD
-          value: "toctou_admin_router"
-        - name: DB_HOST
-          value: "localhost"  # Since containers share the same network namespace in a pod
-        - name: DB_NAME
-          value: "database"
-        - name: SECRET_KEY
-          value: "your_secret_key_for_k8s"
-        - name: FLAG
-          value: "PLACEHOLDER_FLAG"  # This will be replaced at deployment time
         livenessProbe:
           httpGet:
             path: /
@@ -86,6 +81,9 @@ spec:
           initialDelaySeconds: 60
           periodSeconds: 30
           timeoutSeconds: 1
+        name: toctou-admin-router
+        ports:
+        - containerPort: 80
         readinessProbe:
           httpGet:
             path: /
@@ -94,27 +92,27 @@ spec:
           periodSeconds: 10
           timeoutSeconds: 1
         resources:
-          requests:
-            memory: "256Mi"
-            cpu: "250m"
           limits:
-            memory: "512Mi"
-            cpu: "500m"
+            cpu: 500m
+            memory: 512Mi
+          requests:
+            cpu: 250m
+            memory: 256Mi
       restartPolicy: Always
-
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  name: toctou-admin-router-service
   labels:
     app: toctou-admin-router
+  name: toctou-admin-router-service
+  namespace: sandbox-dev
 spec:
-  type: ClusterIP
+  ports:
+  - name: http
+    port: 8080
+    protocol: TCP
+    targetPort: 80
   selector:
     app: toctou-admin-router
-  ports:
-  - port: 8080
-    targetPort: 80
-    protocol: TCP
-    name: http
+  type: ClusterIP

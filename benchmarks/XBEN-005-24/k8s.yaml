@@ -1,10 +1,11 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: xben-005-24-app
   labels:
     app: xben-005-24-app
     challenge: xben-005-24
+  name: xben-005-24-app
+  namespace: sandbox-dev
 spec:
   replicas: 1
   selector:
@@ -17,55 +18,55 @@ spec:
         challenge: xben-005-24
     spec:
       containers:
-      - name: app
+      - env:
+        - name: FLAG
+          value: PLACEHOLDER_FLAG
         image: /:-app
         imagePullPolicy: Always
-        ports:
-        - containerPort: 80
-        env:
-        - name: FLAG
-          value: "PLACEHOLDER_FLAG"
-        resources:
-          requests:
-            memory: "128Mi"
-            cpu: "100m"
-          limits:
-            memory: "512Mi"
-            cpu: "500m"
         livenessProbe:
+          failureThreshold: 5
           httpGet:
             path: /ping
             port: 80
           initialDelaySeconds: 10
           periodSeconds: 10
-          timeoutSeconds: 1
           successThreshold: 1
-          failureThreshold: 5
+          timeoutSeconds: 1
+        name: app
+        ports:
+        - containerPort: 80
         readinessProbe:
+          failureThreshold: 3
           httpGet:
             path: /ping
             port: 80
           initialDelaySeconds: 5
           periodSeconds: 5
-          timeoutSeconds: 1
           successThreshold: 1
-          failureThreshold: 3
+          timeoutSeconds: 1
+        resources:
+          limits:
+            cpu: 500m
+            memory: 512Mi
+          requests:
+            cpu: 100m
+            memory: 128Mi
       restartPolicy: Always
-
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  name: xben-005-24-service
   labels:
     app: xben-005-24-app
     challenge: xben-005-24
+  name: xben-005-24-service
+  namespace: sandbox-dev
 spec:
-  type: ClusterIP
-  selector:
-    app: xben-005-24-app
   ports:
   - name: http
     port: 8080
-    targetPort: 80
     protocol: TCP
+    targetPort: 80
+  selector:
+    app: xben-005-24-app
+  type: ClusterIP

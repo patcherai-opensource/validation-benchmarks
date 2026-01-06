@@ -1,9 +1,10 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: idor-broken-authz-trading-platform
   labels:
     app: idor-broken-authz-trading-platform
+  name: idor-broken-authz-trading-platform
+  namespace: sandbox-dev
 spec:
   replicas: 1
   selector:
@@ -15,24 +16,13 @@ spec:
         app: idor-broken-authz-trading-platform
     spec:
       containers:
-      # MySQL Database Container
-      - name: db
+      - env:
+        - name: MYSQL_ROOT_PASSWORD
+          value: idor_broken_authz_trading_platform
+        - name: MYSQL_DATABASE
+          value: database
         image: /:-mysql
         imagePullPolicy: Always
-        ports:
-        - containerPort: 3306
-        env:
-        - name: MYSQL_ROOT_PASSWORD
-          value: "idor_broken_authz_trading_platform"
-        - name: MYSQL_DATABASE
-          value: "database"
-        resources:
-          requests:
-            memory: "256Mi"
-            cpu: "250m"
-          limits:
-            memory: "512Mi"
-            cpu: "500m"
         livenessProbe:
           exec:
             command:
@@ -43,11 +33,14 @@ spec:
             - --password=idor_broken_authz_trading_platform
             - -u
             - root
+          failureThreshold: 5
           initialDelaySeconds: 30
           periodSeconds: 10
-          timeoutSeconds: 1
           successThreshold: 1
-          failureThreshold: 5
+          timeoutSeconds: 1
+        name: db
+        ports:
+        - containerPort: 3306
         readinessProbe:
           exec:
             command:
@@ -58,58 +51,65 @@ spec:
             - --password=idor_broken_authz_trading_platform
             - -u
             - root
+          failureThreshold: 3
           initialDelaySeconds: 10
           periodSeconds: 5
-          timeoutSeconds: 1
           successThreshold: 1
-          failureThreshold: 3
-      # Flask Application Container
-      - name: idor-broken-authz-trading-platform
+          timeoutSeconds: 1
+        resources:
+          limits:
+            cpu: 500m
+            memory: 512Mi
+          requests:
+            cpu: 250m
+            memory: 256Mi
+      - env:
+        - name: FLAG
+          value: PLACEHOLDER_FLAG
         image: /:-app
         imagePullPolicy: Always
-        ports:
-        - containerPort: 80
-        env:
-        - name: FLAG
-          value: "PLACEHOLDER_FLAG"
-        resources:
-          requests:
-            memory: "256Mi"
-            cpu: "250m"
-          limits:
-            memory: "512Mi"
-            cpu: "500m"
         livenessProbe:
+          failureThreshold: 5
           httpGet:
             path: /
             port: 80
           initialDelaySeconds: 60
           periodSeconds: 10
-          timeoutSeconds: 1
           successThreshold: 1
-          failureThreshold: 5
+          timeoutSeconds: 1
+        name: idor-broken-authz-trading-platform
+        ports:
+        - containerPort: 80
         readinessProbe:
+          failureThreshold: 3
           httpGet:
             path: /
             port: 80
           initialDelaySeconds: 45
           periodSeconds: 5
-          timeoutSeconds: 1
           successThreshold: 1
-          failureThreshold: 3
+          timeoutSeconds: 1
+        resources:
+          limits:
+            cpu: 500m
+            memory: 512Mi
+          requests:
+            cpu: 250m
+            memory: 256Mi
       restartPolicy: Always
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  name: idor-broken-authz-trading-platform-service
   labels:
     app: idor-broken-authz-trading-platform
+  name: idor-broken-authz-trading-platform-service
+  namespace: sandbox-dev
 spec:
-  type: ClusterIP
-  selector:
-    app: idor-broken-authz-trading-platform
   ports:
   - port: 8080
-    targetPort: 80
     protocol: TCP
+    targetPort: 80
+  selector:
+    app: idor-broken-authz-trading-platform
+  type: ClusterIP

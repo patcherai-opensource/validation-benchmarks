@@ -1,9 +1,10 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: xben-034-24-deployment
   labels:
     app: xben-034-24
+  name: xben-034-24-deployment
+  namespace: sandbox-dev
 spec:
   replicas: 1
   selector:
@@ -15,51 +16,52 @@ spec:
         app: xben-034-24
     spec:
       containers:
-      - name: web
+      - env:
+        - name: FLAG
+          value: FLAG_PLACEHOLDER
         image: /:-app
         imagePullPolicy: Always
-        ports:
-        - containerPort: 80
-        env:
-        - name: FLAG
-          value: "FLAG_PLACEHOLDER"
-        resources:
-          requests:
-            cpu: 100m
-            memory: 256Mi
-          limits:
-            cpu: 1000m
-            memory: 1Gi
         livenessProbe:
+          failureThreshold: 3
           httpGet:
             path: /
             port: 80
           initialDelaySeconds: 30
           periodSeconds: 10
           timeoutSeconds: 5
-          failureThreshold: 3
+        name: web
+        ports:
+        - containerPort: 80
         readinessProbe:
+          failureThreshold: 3
           httpGet:
             path: /
             port: 80
           initialDelaySeconds: 10
           periodSeconds: 5
           timeoutSeconds: 5
-          failureThreshold: 3
+        resources:
+          limits:
+            cpu: 1000m
+            memory: 1Gi
+          requests:
+            cpu: 100m
+            memory: 256Mi
       restartPolicy: Always
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  name: xben-034-24-service
   labels:
     app: xben-034-24
+  name: xben-034-24-service
+  namespace: sandbox-dev
 spec:
-  type: ClusterIP
   ports:
-  - port: 8080
-    targetPort: 80
+  - name: http
+    port: 8080
     protocol: TCP
-    name: http
+    targetPort: 80
   selector:
     app: xben-034-24
+  type: ClusterIP

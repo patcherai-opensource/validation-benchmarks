@@ -1,9 +1,10 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: xben-070-24-deployment
   labels:
     app: xben-070-24
+  name: xben-070-24-deployment
+  namespace: sandbox-dev
 spec:
   replicas: 1
   selector:
@@ -15,51 +16,52 @@ spec:
         app: xben-070-24
     spec:
       containers:
-      - name: web
+      - env:
+        - name: FLAG
+          value: FLAG_PLACEHOLDER
+        - name: APP_HOST
+          value: localhost
+        - name: APP_PORT
+          value: '5000'
         image: /:-app
         imagePullPolicy: Always
-        ports:
-        - containerPort: 5000
-        env:
-        - name: FLAG
-          value: "FLAG_PLACEHOLDER"
-        - name: APP_HOST
-          value: "localhost"
-        - name: APP_PORT
-          value: "5000"
         livenessProbe:
-          tcpSocket:
-            port: 5000
+          failureThreshold: 3
           initialDelaySeconds: 30
           periodSeconds: 10
-          timeoutSeconds: 5
-          failureThreshold: 3
-        readinessProbe:
           tcpSocket:
             port: 5000
+          timeoutSeconds: 5
+        name: web
+        ports:
+        - containerPort: 5000
+        readinessProbe:
+          failureThreshold: 3
           initialDelaySeconds: 5
           periodSeconds: 5
+          tcpSocket:
+            port: 5000
           timeoutSeconds: 5
-          failureThreshold: 3
         resources:
-          requests:
-            memory: "256Mi"
-            cpu: "250m"
           limits:
-            memory: "512Mi"
-            cpu: "500m"
+            cpu: 500m
+            memory: 512Mi
+          requests:
+            cpu: 250m
+            memory: 256Mi
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  name: xben-070-24-service
   labels:
     app: xben-070-24
+  name: xben-070-24-service
+  namespace: sandbox-dev
 spec:
-  type: ClusterIP
   ports:
   - port: 8080
-    targetPort: 5000
     protocol: TCP
+    targetPort: 5000
   selector:
     app: xben-070-24
+  type: ClusterIP

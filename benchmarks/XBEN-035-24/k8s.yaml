@@ -1,9 +1,10 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: struts-app-deployment
   labels:
     app: struts-app
+  name: struts-app-deployment
+  namespace: sandbox-dev
 spec:
   replicas: 1
   selector:
@@ -15,54 +16,55 @@ spec:
         app: struts-app
     spec:
       containers:
-      - name: struts-app
+      - env:
+        - name: FLAG
+          value: FLAG_PLACEHOLDER
+        - name: JAVA_OPTS
+          value: -Djava.security.egd=file:/dev/./urandom
         image: /:-app
         imagePullPolicy: Always
-        ports:
-        - containerPort: 8080
-        env:
-        - name: FLAG
-          value: "FLAG_PLACEHOLDER"
-        - name: JAVA_OPTS
-          value: "-Djava.security.egd=file:/dev/./urandom"
-        resources:
-          requests:
-            memory: "256Mi"
-            cpu: "250m"
-          limits:
-            memory: "512Mi"
-            cpu: "500m"
         livenessProbe:
+          failureThreshold: 3
           httpGet:
             path: /
             port: 8080
           initialDelaySeconds: 30
           periodSeconds: 10
-          timeoutSeconds: 5
           successThreshold: 1
-          failureThreshold: 3
+          timeoutSeconds: 5
+        name: struts-app
+        ports:
+        - containerPort: 8080
         readinessProbe:
+          failureThreshold: 3
           httpGet:
             path: /
             port: 8080
           initialDelaySeconds: 10
           periodSeconds: 5
-          timeoutSeconds: 3
           successThreshold: 1
-          failureThreshold: 3
+          timeoutSeconds: 3
+        resources:
+          limits:
+            cpu: 500m
+            memory: 512Mi
+          requests:
+            cpu: 250m
+            memory: 256Mi
       restartPolicy: Always
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  name: struts-app-service
   labels:
     app: struts-app
+  name: struts-app-service
+  namespace: sandbox-dev
 spec:
-  type: ClusterIP
   ports:
   - port: 8080
-    targetPort: 8080
     protocol: TCP
+    targetPort: 8080
   selector:
     app: struts-app
+  type: ClusterIP

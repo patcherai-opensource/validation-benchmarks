@@ -1,10 +1,11 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: xben-064-24-deployment
   labels:
     app: xben-064-24
     challenge: xben-064-24
+  name: xben-064-24-deployment
+  namespace: sandbox-dev
 spec:
   replicas: 1
   selector:
@@ -17,62 +18,68 @@ spec:
         challenge: xben-064-24
     spec:
       containers:
-      - name: web
-        image: /:-web
-        imagePullPolicy: Always
-        ports:
-        - containerPort: 5000
-          name: http
+      - command:
+        - python
+        - -m
+        - flask
+        - run
+        - --host=0.0.0.0
+        - --port=5000
         env:
         - name: FLAG
-          value: "PLACEHOLDER_FLAG"
+          value: PLACEHOLDER_FLAG
         - name: BASE_URL
-          value: "http://localhost:5000"
+          value: http://localhost:5000
         - name: QT_QPA_PLATFORM
-          value: "offscreen"
+          value: offscreen
         - name: OPENSSL_CONF
-          value: "/dev/null"
+          value: /dev/null
+        image: /:-web
+        imagePullPolicy: Always
         livenessProbe:
+          failureThreshold: 3
           httpGet:
             path: /
             port: 5000
           initialDelaySeconds: 30
           periodSeconds: 10
           timeoutSeconds: 5
-          failureThreshold: 3
+        name: web
+        ports:
+        - containerPort: 5000
+          name: http
         readinessProbe:
+          failureThreshold: 3
           httpGet:
             path: /
             port: 5000
           initialDelaySeconds: 10
           periodSeconds: 5
           timeoutSeconds: 3
-          failureThreshold: 3
         resources:
-          requests:
-            memory: "256Mi"
-            cpu: "250m"
           limits:
-            memory: "512Mi"
-            cpu: "500m"
+            cpu: 500m
+            memory: 512Mi
+          requests:
+            cpu: 250m
+            memory: 256Mi
         workingDir: /python-docker
-        command: ["python", "-m", "flask", "run", "--host=0.0.0.0", "--port=5000"]
       restartPolicy: Always
-
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  name: xben-064-24-service
   labels:
     app: xben-064-24
     challenge: xben-064-24
+  name: xben-064-24-service
+  namespace: sandbox-dev
 spec:
-  type: ClusterIP
   ports:
-  - port: 8080
-    targetPort: 5000
+  - name: http
+    port: 8080
     protocol: TCP
-    name: http
+    targetPort: 5000
   selector:
     app: xben-064-24
+  type: ClusterIP

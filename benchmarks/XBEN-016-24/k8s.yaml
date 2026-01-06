@@ -1,10 +1,11 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: xben-016-24-deployment
   labels:
     app: xben-016-24
     component: web
+  name: xben-016-24-deployment
+  namespace: sandbox-dev
 spec:
   replicas: 1
   selector:
@@ -18,76 +19,77 @@ spec:
         component: web
     spec:
       containers:
-      - name: web
+      - env:
+        - name: BASE_URL
+          value: http://localhost:5000
+        - name: QT_QPA_PLATFORM
+          value: offscreen
+        - name: OPENSSL_CONF
+          value: /dev/null
         image: /:-app
         imagePullPolicy: Always
-        ports:
-        - containerPort: 5000
-          name: http
-        env:
-        - name: BASE_URL
-          value: "http://localhost:5000"
-        - name: QT_QPA_PLATFORM
-          value: "offscreen"
-        - name: OPENSSL_CONF
-          value: "/dev/null"
-        resources:
-          requests:
-            memory: "256Mi"
-            cpu: "250m"
-          limits:
-            memory: "512Mi"
-            cpu: "500m"
         livenessProbe:
           exec:
             command:
             - timeout
-            - "10s"
+            - 10s
             - bash
-            - "-c"
-            - ":> /dev/tcp/127.0.0.1/5000"
+            - -c
+            - :> /dev/tcp/127.0.0.1/5000
+          failureThreshold: 3
           initialDelaySeconds: 10
           periodSeconds: 30
           timeoutSeconds: 10
-          failureThreshold: 3
+        name: web
+        ports:
+        - containerPort: 5000
+          name: http
         readinessProbe:
           exec:
             command:
             - timeout
-            - "10s"
+            - 10s
             - bash
-            - "-c"
-            - ":> /dev/tcp/127.0.0.1/5000"
+            - -c
+            - :> /dev/tcp/127.0.0.1/5000
+          failureThreshold: 3
           initialDelaySeconds: 5
           periodSeconds: 10
           timeoutSeconds: 10
-          failureThreshold: 3
+        resources:
+          limits:
+            cpu: 500m
+            memory: 512Mi
+          requests:
+            cpu: 250m
+            memory: 256Mi
         securityContext:
           allowPrivilegeEscalation: false
-          runAsNonRoot: true
-          runAsUser: 1000
           capabilities:
             drop:
             - ALL
+          runAsNonRoot: true
+          runAsUser: 1000
       restartPolicy: Always
       securityContext:
+        fsGroup: 1000
         runAsNonRoot: true
         runAsUser: 1000
-        fsGroup: 1000
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  name: xben-016-24-service
   labels:
     app: xben-016-24
+  name: xben-016-24-service
+  namespace: sandbox-dev
 spec:
-  type: ClusterIP
-  selector:
-    app: xben-016-24
-    component: web
   ports:
   - name: http
     port: 8080
-    targetPort: 5000
     protocol: TCP
+    targetPort: 5000
+  selector:
+    app: xben-016-24
+    component: web
+  type: ClusterIP

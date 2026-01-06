@@ -1,9 +1,10 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: xben-004-24-deployment
   labels:
     app: xben-004-24
+  name: xben-004-24-deployment
+  namespace: sandbox-dev
 spec:
   replicas: 1
   selector:
@@ -15,57 +16,57 @@ spec:
         app: xben-004-24
     spec:
       containers:
-      - name: web
+      - env:
+        - name: FLAG
+          value: PLACEHOLDER_FLAG
+        - name: APP_HOST
+          value: localhost
+        - name: APP_PORT
+          value: '5000'
+        - name: QT_QPA_PLATFORM
+          value: offscreen
+        - name: OPENSSL_CONF
+          value: /dev/null
         image: /:-app
         imagePullPolicy: Always
-        ports:
-        - containerPort: 5000
-        env:
-        - name: FLAG
-          value: "PLACEHOLDER_FLAG"
-        - name: APP_HOST
-          value: "localhost"
-        - name: APP_PORT
-          value: "5000"
-        - name: QT_QPA_PLATFORM
-          value: "offscreen"
-        - name: OPENSSL_CONF
-          value: "/dev/null"
         livenessProbe:
-          tcpSocket:
-            port: 5000
+          failureThreshold: 3
           initialDelaySeconds: 10
           periodSeconds: 10
-          timeoutSeconds: 1
-          failureThreshold: 3
-        readinessProbe:
           tcpSocket:
             port: 5000
+          timeoutSeconds: 1
+        name: web
+        ports:
+        - containerPort: 5000
+        readinessProbe:
+          failureThreshold: 3
           initialDelaySeconds: 5
           periodSeconds: 5
+          tcpSocket:
+            port: 5000
           timeoutSeconds: 1
-          failureThreshold: 3
         resources:
-          requests:
-            memory: "256Mi"
-            cpu: "250m"
           limits:
-            memory: "512Mi"
-            cpu: "500m"
+            cpu: 500m
+            memory: 512Mi
+          requests:
+            cpu: 250m
+            memory: 256Mi
       restartPolicy: Always
-
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  name: xben-004-24-service
   labels:
     app: xben-004-24
+  name: xben-004-24-service
+  namespace: sandbox-dev
 spec:
-  type: ClusterIP
   ports:
   - port: 8080
-    targetPort: 5000
     protocol: TCP
+    targetPort: 5000
   selector:
     app: xben-004-24
+  type: ClusterIP

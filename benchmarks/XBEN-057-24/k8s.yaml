@@ -1,9 +1,10 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: deserialization-pickle-bookmarks
   labels:
     app: deserialization-pickle-bookmarks
+  name: deserialization-pickle-bookmarks
+  namespace: sandbox-dev
 spec:
   replicas: 1
   selector:
@@ -15,52 +16,53 @@ spec:
         app: deserialization-pickle-bookmarks
     spec:
       containers:
-      - name: deserialization-pickle-bookmarks
+      - env:
+        - name: FLAG
+          value: PLACEHOLDER_FLAG
         image: /:-app
         imagePullPolicy: Always
-        ports:
-        - containerPort: 80
-          name: http
-        env:
-        - name: FLAG
-          value: "PLACEHOLDER_FLAG"
-        resources:
-          requests:
-            cpu: 100m
-            memory: 128Mi
-          limits:
-            cpu: 500m
-            memory: 512Mi
         livenessProbe:
+          failureThreshold: 3
           httpGet:
             path: /
             port: 80
           initialDelaySeconds: 30
           periodSeconds: 10
           timeoutSeconds: 1
-          failureThreshold: 3
+        name: deserialization-pickle-bookmarks
+        ports:
+        - containerPort: 80
+          name: http
         readinessProbe:
+          failureThreshold: 3
           httpGet:
             path: /
             port: 80
           initialDelaySeconds: 5
           periodSeconds: 5
           timeoutSeconds: 1
-          failureThreshold: 3
+        resources:
+          limits:
+            cpu: 500m
+            memory: 512Mi
+          requests:
+            cpu: 100m
+            memory: 128Mi
       restartPolicy: Always
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  name: deserialization-pickle-bookmarks-service
   labels:
     app: deserialization-pickle-bookmarks
+  name: deserialization-pickle-bookmarks-service
+  namespace: sandbox-dev
 spec:
-  type: ClusterIP
   ports:
-  - port: 8080
-    targetPort: 80
+  - name: http
+    port: 8080
     protocol: TCP
-    name: http
+    targetPort: 80
   selector:
     app: deserialization-pickle-bookmarks
+  type: ClusterIP

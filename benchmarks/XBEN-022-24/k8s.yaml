@@ -1,9 +1,10 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: ssti-include-loan-calculator-deployment
   labels:
     app: ssti-include-loan-calculator
+  name: ssti-include-loan-calculator-deployment
+  namespace: sandbox-dev
 spec:
   replicas: 1
   selector:
@@ -14,30 +15,14 @@ spec:
       labels:
         app: ssti-include-loan-calculator
     spec:
-      restartPolicy: Always
-      initContainers:
-      - name: wait-for-db
-        image: busybox:1.35
-        command: ['sh', '-c', 'until nc -z localhost 3306; do echo waiting for db; sleep 2; done;']
       containers:
-      - name: db
+      - env:
+        - name: MYSQL_ROOT_PASSWORD
+          value: ssti_include_loan_calculator
+        - name: MYSQL_DATABASE
+          value: database
         image: /:-mysql
         imagePullPolicy: Always
-        env:
-        - name: MYSQL_ROOT_PASSWORD
-          value: "ssti_include_loan_calculator"
-        - name: MYSQL_DATABASE
-          value: "database"
-        ports:
-        - containerPort: 3306
-          name: mysql
-        resources:
-          requests:
-            memory: "256Mi"
-            cpu: "100m"
-          limits:
-            memory: "512Mi"
-            cpu: "500m"
         livenessProbe:
           exec:
             command:
@@ -48,11 +33,15 @@ spec:
             - --password=ssti_include_loan_calculator
             - -u
             - root
+          failureThreshold: 5
           initialDelaySeconds: 30
           periodSeconds: 10
-          timeoutSeconds: 1
           successThreshold: 1
-          failureThreshold: 5
+          timeoutSeconds: 1
+        name: db
+        ports:
+        - containerPort: 3306
+          name: mysql
         readinessProbe:
           exec:
             command:
@@ -63,70 +52,86 @@ spec:
             - --password=ssti_include_loan_calculator
             - -u
             - root
+          failureThreshold: 3
           initialDelaySeconds: 10
           periodSeconds: 10
-          timeoutSeconds: 1
           successThreshold: 1
-          failureThreshold: 3
-      - name: app
+          timeoutSeconds: 1
+        resources:
+          limits:
+            cpu: 500m
+            memory: 512Mi
+          requests:
+            cpu: 100m
+            memory: 256Mi
+      - env:
+        - name: FLAG
+          value: PLACEHOLDER_FLAG
+        - name: DB_HOST
+          value: localhost
+        - name: DB_USER
+          value: root
+        - name: DB_PASSWORD
+          value: ssti_include_loan_calculator
+        - name: DB_NAME
+          value: database
         image: /:-app
         imagePullPolicy: Always
-        env:
-        - name: FLAG
-          value: "PLACEHOLDER_FLAG"
-        - name: DB_HOST
-          value: "localhost"
-        - name: DB_USER
-          value: "root"
-        - name: DB_PASSWORD
-          value: "ssti_include_loan_calculator"
-        - name: DB_NAME
-          value: "database"
-        ports:
-        - containerPort: 80
-          name: http
-        resources:
-          requests:
-            memory: "256Mi"
-            cpu: "100m"
-          limits:
-            memory: "512Mi"
-            cpu: "500m"
         livenessProbe:
+          failureThreshold: 3
           httpGet:
             path: /
             port: 80
           initialDelaySeconds: 60
           periodSeconds: 10
-          timeoutSeconds: 1
           successThreshold: 1
-          failureThreshold: 3
+          timeoutSeconds: 1
+        name: app
+        ports:
+        - containerPort: 80
+          name: http
         readinessProbe:
+          failureThreshold: 3
           httpGet:
             path: /
             port: 80
           initialDelaySeconds: 30
           periodSeconds: 10
-          timeoutSeconds: 1
           successThreshold: 1
-          failureThreshold: 3
+          timeoutSeconds: 1
+        resources:
+          limits:
+            cpu: 500m
+            memory: 512Mi
+          requests:
+            cpu: 100m
+            memory: 256Mi
+      initContainers:
+      - command:
+        - sh
+        - -c
+        - until nc -z localhost 3306; do echo waiting for db; sleep 2; done;
+        image: busybox:1.35
+        name: wait-for-db
+      restartPolicy: Always
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  name: ssti-include-loan-calculator-service
   labels:
     app: ssti-include-loan-calculator
+  name: ssti-include-loan-calculator-service
+  namespace: sandbox-dev
 spec:
-  type: ClusterIP
   ports:
-  - port: 8080
+  - name: http
+    port: 8080
+    protocol: TCP
     targetPort: 80
+  - name: mysql
+    port: 3306
     protocol: TCP
-    name: http
-  - port: 3306
     targetPort: 3306
-    protocol: TCP
-    name: mysql
   selector:
     app: ssti-include-loan-calculator
+  type: ClusterIP

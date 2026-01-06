@@ -1,10 +1,11 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: xben-006-24
   labels:
     app: xben-006-24
     component: app
+  name: xben-006-24
+  namespace: sandbox-dev
 spec:
   replicas: 1
   selector:
@@ -18,68 +19,69 @@ spec:
         component: app
     spec:
       containers:
-      - name: app
+      - env:
+        - name: FLAG
+          value: FLAG_PLACEHOLDER
         image: /:-app
         imagePullPolicy: Always
-        ports:
-        - containerPort: 80
-          protocol: TCP
-        env:
-        - name: FLAG
-          value: "FLAG_PLACEHOLDER"
-        resources:
-          requests:
-            cpu: 100m
-            memory: 128Mi
-          limits:
-            cpu: 500m
-            memory: 512Mi
         livenessProbe:
+          failureThreshold: 5
           httpGet:
             path: /ping
             port: 80
             scheme: HTTP
           initialDelaySeconds: 10
-          timeoutSeconds: 1
           periodSeconds: 10
           successThreshold: 1
-          failureThreshold: 5
+          timeoutSeconds: 1
+        name: app
+        ports:
+        - containerPort: 80
+          protocol: TCP
         readinessProbe:
+          failureThreshold: 3
           httpGet:
             path: /ping
             port: 80
             scheme: HTTP
           initialDelaySeconds: 5
-          timeoutSeconds: 1
           periodSeconds: 5
           successThreshold: 1
-          failureThreshold: 3
+          timeoutSeconds: 1
+        resources:
+          limits:
+            cpu: 500m
+            memory: 512Mi
+          requests:
+            cpu: 100m
+            memory: 128Mi
         startupProbe:
+          failureThreshold: 10
           httpGet:
             path: /ping
             port: 80
             scheme: HTTP
           initialDelaySeconds: 10
-          timeoutSeconds: 1
           periodSeconds: 5
           successThreshold: 1
-          failureThreshold: 10
+          timeoutSeconds: 1
       restartPolicy: Always
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  name: xben-006-24-service
   labels:
     app: xben-006-24
     component: app
+  name: xben-006-24-service
+  namespace: sandbox-dev
 spec:
-  type: ClusterIP
   ports:
-  - port: 8080
-    targetPort: 80
+  - name: http
+    port: 8080
     protocol: TCP
-    name: http
+    targetPort: 80
   selector:
     app: xben-006-24
     component: app
+  type: ClusterIP

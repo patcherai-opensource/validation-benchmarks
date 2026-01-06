@@ -1,9 +1,10 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: ssti-loan-calculator
   labels:
     app: ssti-loan-calculator
+  name: ssti-loan-calculator
+  namespace: sandbox-dev
 spec:
   replicas: 1
   selector:
@@ -14,25 +15,14 @@ spec:
       labels:
         app: ssti-loan-calculator
     spec:
-      restartPolicy: Always
       containers:
-      - name: db
+      - env:
+        - name: MYSQL_ROOT_PASSWORD
+          value: ssti_loan_calculator
+        - name: MYSQL_DATABASE
+          value: database
         image: /:-mysql
         imagePullPolicy: Always
-        ports:
-        - containerPort: 3306
-        env:
-        - name: MYSQL_ROOT_PASSWORD
-          value: "ssti_loan_calculator"
-        - name: MYSQL_DATABASE
-          value: "database"
-        resources:
-          requests:
-            memory: "256Mi"
-            cpu: "250m"
-          limits:
-            memory: "512Mi"
-            cpu: "500m"
         livenessProbe:
           exec:
             command:
@@ -43,10 +33,13 @@ spec:
             - --password=ssti_loan_calculator
             - -u
             - root
+          failureThreshold: 5
           initialDelaySeconds: 30
           periodSeconds: 10
           timeoutSeconds: 1
-          failureThreshold: 5
+        name: db
+        ports:
+        - containerPort: 3306
         readinessProbe:
           exec:
             command:
@@ -57,61 +50,70 @@ spec:
             - --password=ssti_loan_calculator
             - -u
             - root
+          failureThreshold: 5
           initialDelaySeconds: 10
           periodSeconds: 10
           timeoutSeconds: 1
-          failureThreshold: 5
-      - name: ssti-loan-calculator
+        resources:
+          limits:
+            cpu: 500m
+            memory: 512Mi
+          requests:
+            cpu: 250m
+            memory: 256Mi
+      - env:
+        - name: DB_HOST
+          value: localhost
+        - name: DB_USER
+          value: root
+        - name: DB_PASSWORD
+          value: ssti_loan_calculator
+        - name: DB_NAME
+          value: database
+        - name: FLAG_CONTENT
+          value: __FLAG_PLACEHOLDER__
         image: /:-app
         imagePullPolicy: Always
-        ports:
-        - containerPort: 80
-        env:
-        - name: DB_HOST
-          value: "localhost"
-        - name: DB_USER
-          value: "root"
-        - name: DB_PASSWORD
-          value: "ssti_loan_calculator"
-        - name: DB_NAME
-          value: "database"
-        - name: FLAG_CONTENT
-          value: "__FLAG_PLACEHOLDER__"
-        resources:
-          requests:
-            memory: "256Mi"
-            cpu: "250m"
-          limits:
-            memory: "512Mi"
-            cpu: "500m"
         livenessProbe:
+          failureThreshold: 5
           httpGet:
             path: /
             port: 80
           initialDelaySeconds: 60
           periodSeconds: 10
           timeoutSeconds: 1
-          failureThreshold: 5
+        name: ssti-loan-calculator
+        ports:
+        - containerPort: 80
         readinessProbe:
+          failureThreshold: 5
           httpGet:
             path: /
             port: 80
           initialDelaySeconds: 30
           periodSeconds: 10
           timeoutSeconds: 1
-          failureThreshold: 5
+        resources:
+          limits:
+            cpu: 500m
+            memory: 512Mi
+          requests:
+            cpu: 250m
+            memory: 256Mi
+      restartPolicy: Always
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  name: ssti-loan-calculator-service
   labels:
     app: ssti-loan-calculator
+  name: ssti-loan-calculator-service
+  namespace: sandbox-dev
 spec:
-  type: ClusterIP
   ports:
   - port: 8080
-    targetPort: 80
     protocol: TCP
+    targetPort: 80
   selector:
     app: ssti-loan-calculator
+  type: ClusterIP

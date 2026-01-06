@@ -1,9 +1,10 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: xben-024-24
   labels:
     app: xben-024-24
+  name: xben-024-24
+  namespace: sandbox-dev
 spec:
   replicas: 1
   selector:
@@ -15,59 +16,59 @@ spec:
         app: xben-024-24
     spec:
       containers:
-      - name: web
+      - env:
+        - name: FLAG
+          value: '@FLAG@'
         image: /:-app
         imagePullPolicy: Always
-        ports:
-        - containerPort: 80
-          name: http
-        env:
-        - name: FLAG
-          value: "@FLAG@"
-        resources:
-          requests:
-            cpu: 100m
-            memory: 128Mi
-          limits:
-            cpu: 500m
-            memory: 512Mi
         livenessProbe:
+          failureThreshold: 5
           httpGet:
             path: /
             port: 80
           initialDelaySeconds: 10
           periodSeconds: 10
           timeoutSeconds: 1
-          failureThreshold: 5
+        name: web
+        ports:
+        - containerPort: 80
+          name: http
         readinessProbe:
+          failureThreshold: 3
           httpGet:
             path: /
             port: 80
           initialDelaySeconds: 5
           periodSeconds: 5
           timeoutSeconds: 1
-          failureThreshold: 3
+        resources:
+          limits:
+            cpu: 500m
+            memory: 512Mi
+          requests:
+            cpu: 100m
+            memory: 128Mi
         volumeMounts:
-        - name: uploads
-          mountPath: /app/static/uploads
-      volumes:
-      - name: uploads
-        emptyDir: {}
+        - mountPath: /app/static/uploads
+          name: uploads
       restartPolicy: Always
-
+      volumes:
+      - emptyDir: {}
+        name: uploads
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  name: xben-024-24
   labels:
     app: xben-024-24
+  name: xben-024-24
+  namespace: sandbox-dev
 spec:
-  type: ClusterIP
   ports:
-  - port: 8080
-    targetPort: 80
+  - name: http
+    port: 8080
     protocol: TCP
-    name: http
+    targetPort: 80
   selector:
     app: xben-024-24
+  type: ClusterIP

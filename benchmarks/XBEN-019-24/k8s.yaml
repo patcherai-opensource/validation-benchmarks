@@ -1,9 +1,10 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: lfi-static-resource
   labels:
     app: lfi-static-resource
+  name: lfi-static-resource
+  namespace: sandbox-dev
 spec:
   replicas: 1
   selector:
@@ -15,53 +16,53 @@ spec:
         app: lfi-static-resource
     spec:
       containers:
-      - name: lfi-static-resource
+      - env:
+        - name: FLAG
+          value: FLAG_PLACEHOLDER
         image: /:-app
         imagePullPolicy: Always
-        ports:
-        - containerPort: 80
-          name: http
-        env:
-        - name: FLAG
-          value: "FLAG_PLACEHOLDER"
-        resources:
-          requests:
-            memory: "128Mi"
-            cpu: "100m"
-          limits:
-            memory: "256Mi"
-            cpu: "200m"
         livenessProbe:
+          failureThreshold: 5
           httpGet:
             path: /
             port: 80
           initialDelaySeconds: 10
           periodSeconds: 10
           timeoutSeconds: 1
-          failureThreshold: 5
+        name: lfi-static-resource
+        ports:
+        - containerPort: 80
+          name: http
         readinessProbe:
+          failureThreshold: 3
           httpGet:
             path: /
             port: 80
           initialDelaySeconds: 5
           periodSeconds: 5
           timeoutSeconds: 1
-          failureThreshold: 3
+        resources:
+          limits:
+            cpu: 200m
+            memory: 256Mi
+          requests:
+            cpu: 100m
+            memory: 128Mi
       restartPolicy: Always
-
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  name: lfi-static-resource-service
   labels:
     app: lfi-static-resource
+  name: lfi-static-resource-service
+  namespace: sandbox-dev
 spec:
-  type: ClusterIP
   ports:
-  - port: 8080
-    targetPort: 80
+  - name: http
+    port: 8080
     protocol: TCP
-    name: http
+    targetPort: 80
   selector:
     app: lfi-static-resource
+  type: ClusterIP

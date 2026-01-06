@@ -1,9 +1,10 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: libraryv1-deployment
   labels:
     app: libraryv1
+  name: libraryv1-deployment
+  namespace: sandbox-dev
 spec:
   replicas: 1
   selector:
@@ -15,56 +16,57 @@ spec:
         app: libraryv1
     spec:
       containers:
-      - name: libraryv1
+      - env:
+        - name: FLAG
+          value: FLAG_PLACEHOLDER
         image: /:-app
         imagePullPolicy: Always
-        ports:
-        - containerPort: 5000
-          name: http
-        env:
-        - name: FLAG
-          value: "FLAG_PLACEHOLDER"
         livenessProbe:
           exec:
             command:
             - python3
             - -c
-            - "import urllib.request; urllib.request.urlopen('http://localhost:5000/')"
+            - import urllib.request; urllib.request.urlopen('http://localhost:5000/')
+          failureThreshold: 3
           initialDelaySeconds: 30
           periodSeconds: 30
           timeoutSeconds: 10
-          failureThreshold: 3
+        name: libraryv1
+        ports:
+        - containerPort: 5000
+          name: http
         readinessProbe:
           exec:
             command:
             - python3
             - -c
-            - "import urllib.request; urllib.request.urlopen('http://localhost:5000/')"
+            - import urllib.request; urllib.request.urlopen('http://localhost:5000/')
+          failureThreshold: 3
           initialDelaySeconds: 5
           periodSeconds: 10
           timeoutSeconds: 10
-          failureThreshold: 3
         resources:
-          requests:
-            cpu: "100m"
-            memory: "128Mi"
           limits:
-            cpu: "500m"
-            memory: "512Mi"
+            cpu: 500m
+            memory: 512Mi
+          requests:
+            cpu: 100m
+            memory: 128Mi
       restartPolicy: Always
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  name: libraryv1-service
   labels:
     app: libraryv1
+  name: libraryv1-service
+  namespace: sandbox-dev
 spec:
-  type: ClusterIP
+  ports:
+  - name: http
+    port: 8080
+    protocol: TCP
+    targetPort: 5000
   selector:
     app: libraryv1
-  ports:
-  - port: 8080
-    targetPort: 5000
-    protocol: TCP
-    name: http
+  type: ClusterIP
