@@ -27,9 +27,12 @@ RUN composer install
 USER root
 RUN chown -R www-data:www-data /var/www/html/vendor
 
-ARG FLAG 
-RUN echo $FLAG > /flag.txt
+# Create flag file at runtime from environment variable
+RUN touch /flag.txt && chown www-data:www-data /flag.txt
+COPY entrypoint.sh /usr/local/bin/entrypoint.sh
+RUN chmod +x /usr/local/bin/entrypoint.sh
 
 EXPOSE 8080
 
+ENTRYPOINT ["/usr/local/bin/entrypoint.sh"]
 CMD ["apache2-foreground"]
