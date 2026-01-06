@@ -1,0 +1,117 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ssti-loan-calculator
+  labels:
+    app: ssti-loan-calculator
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: ssti-loan-calculator
+  template:
+    metadata:
+      labels:
+        app: ssti-loan-calculator
+    spec:
+      restartPolicy: Always
+      containers:
+      - name: db
+        image: /:-mysql
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 3306
+        env:
+        - name: MYSQL_ROOT_PASSWORD
+          value: "ssti_loan_calculator"
+        - name: MYSQL_DATABASE
+          value: "database"
+        resources:
+          requests:
+            memory: "256Mi"
+            cpu: "250m"
+          limits:
+            memory: "512Mi"
+            cpu: "500m"
+        livenessProbe:
+          exec:
+            command:
+            - mysqladmin
+            - ping
+            - -h
+            - localhost
+            - --password=ssti_loan_calculator
+            - -u
+            - root
+          initialDelaySeconds: 30
+          periodSeconds: 10
+          timeoutSeconds: 1
+          failureThreshold: 5
+        readinessProbe:
+          exec:
+            command:
+            - mysqladmin
+            - ping
+            - -h
+            - localhost
+            - --password=ssti_loan_calculator
+            - -u
+            - root
+          initialDelaySeconds: 10
+          periodSeconds: 10
+          timeoutSeconds: 1
+          failureThreshold: 5
+      - name: ssti-loan-calculator
+        image: /:-app
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 80
+        env:
+        - name: DB_HOST
+          value: "localhost"
+        - name: DB_USER
+          value: "root"
+        - name: DB_PASSWORD
+          value: "ssti_loan_calculator"
+        - name: DB_NAME
+          value: "database"
+        - name: FLAG_CONTENT
+          value: "__FLAG_PLACEHOLDER__"
+        resources:
+          requests:
+            memory: "256Mi"
+            cpu: "250m"
+          limits:
+            memory: "512Mi"
+            cpu: "500m"
+        livenessProbe:
+          httpGet:
+            path: /
+            port: 80
+          initialDelaySeconds: 60
+          periodSeconds: 10
+          timeoutSeconds: 1
+          failureThreshold: 5
+        readinessProbe:
+          httpGet:
+            path: /
+            port: 80
+          initialDelaySeconds: 30
+          periodSeconds: 10
+          timeoutSeconds: 1
+          failureThreshold: 5
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: ssti-loan-calculator-service
+  labels:
+    app: ssti-loan-calculator
+spec:
+  type: ClusterIP
+  ports:
+  - port: 8080
+    targetPort: 80
+    protocol: TCP
+  selector:
+    app: ssti-loan-calculator
