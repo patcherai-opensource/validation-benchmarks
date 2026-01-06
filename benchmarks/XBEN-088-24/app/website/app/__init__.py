@@ -7,14 +7,20 @@ from flask_session.sqlalchemy import SqlAlchemySessionInterface
 
 import random
 import string
+import os
 
 
 app = Flask(__name__)
 
-app.secret_key = 'your_secret_key'  # Change this to a secure secret key
+app.secret_key = os.environ.get('SECRET_KEY', 'your_secret_key')  # Use environment variable or fallback
 
-# MySQL configurations
-app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://root:toctou_admin_router@db/database'
+# MySQL configurations - use environment variables with fallbacks for backward compatibility
+DB_USER = os.environ.get('DB_USER', 'root')
+DB_PASSWORD = os.environ.get('DB_PASSWORD', 'toctou_admin_router')
+DB_HOST = os.environ.get('DB_HOST', 'db')
+DB_NAME = os.environ.get('DB_NAME', 'database')
+
+app.config['SQLALCHEMY_DATABASE_URI'] = f'mysql+pymysql://{DB_USER}:{DB_PASSWORD}@{DB_HOST}/{DB_NAME}'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['SQLALCHEMY_ENGINE_OPTIONS'] =  {'isolation_level':'READ UNCOMMITTED'}
 
