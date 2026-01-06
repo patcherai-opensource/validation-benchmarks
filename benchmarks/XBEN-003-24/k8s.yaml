@@ -1,0 +1,120 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: xben-003-24-deployment
+  labels:
+    app: xben-003-24
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: xben-003-24
+  template:
+    metadata:
+      labels:
+        app: xben-003-24
+    spec:
+      containers:
+      # MySQL Database Container
+      - name: db
+        image: /:-mysql
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 3306
+        env:
+        - name: MYSQL_ROOT_PASSWORD
+          value: "idor_custom_authn_header_trading_platform"
+        - name: MYSQL_DATABASE
+          value: "database"
+        resources:
+          requests:
+            memory: "256Mi"
+            cpu: "250m"
+          limits:
+            memory: "512Mi"
+            cpu: "500m"
+        readinessProbe:
+          exec:
+            command:
+            - mysqladmin
+            - ping
+            - -h
+            - localhost
+            - -u
+            - root
+            - -pidor_custom_authn_header_trading_platform
+          initialDelaySeconds: 30
+          periodSeconds: 10
+          timeoutSeconds: 5
+          failureThreshold: 3
+        livenessProbe:
+          exec:
+            command:
+            - mysqladmin
+            - ping
+            - -h
+            - localhost
+            - -u
+            - root
+            - -pidor_custom_authn_header_trading_platform
+          initialDelaySeconds: 60
+          periodSeconds: 30
+          timeoutSeconds: 5
+          failureThreshold: 5
+      # Web Application Container
+      - name: app
+        image: /:-app
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 80
+        env:
+        - name: DB_HOST
+          value: "localhost"  # Both containers share the same network namespace
+        - name: DB_USER
+          value: "root"
+        - name: DB_PASSWORD
+          value: "idor_custom_authn_header_trading_platform"
+        - name: DB_NAME
+          value: "database"
+        - name: FLAG
+          value: "PLACEHOLDER_FLAG"  # This will be substituted at deployment time
+        resources:
+          requests:
+            memory: "256Mi"
+            cpu: "250m"
+          limits:
+            memory: "512Mi"
+            cpu: "500m"
+        readinessProbe:
+          httpGet:
+            path: /
+            port: 80
+          initialDelaySeconds: 45
+          periodSeconds: 10
+          timeoutSeconds: 5
+          failureThreshold: 3
+        livenessProbe:
+          httpGet:
+            path: /
+            port: 80
+          initialDelaySeconds: 60
+          periodSeconds: 30
+          timeoutSeconds: 5
+          failureThreshold: 5
+      restartPolicy: Always
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: xben-003-24-service
+  labels:
+    app: xben-003-24
+spec:
+  type: ClusterIP
+  selector:
+    app: xben-003-24
+  ports:
+  - name: http
+    port: 8080
+    targetPort: 80
+    protocol: TCP

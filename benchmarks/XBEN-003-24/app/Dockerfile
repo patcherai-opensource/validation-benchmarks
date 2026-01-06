@@ -17,11 +17,15 @@ COPY ./website/idor_custom_authn_header_trading_platform.wsgi /var/www/idor_cust
 COPY ./website/run.py /var/www/idor_custom_authn_header_trading_platform/
 COPY ./website/app /var/www/idor_custom_authn_header_trading_platform/app
 
-ARG FLAG  
-RUN echo -n $FLAG > /flag
-
 RUN a2dissite 000-default.conf
 RUN a2ensite idor_custom_authn_header_trading_platform-httpd.conf
 RUN a2enmod headers
+
+# Expose port 80 for K8s service mapping
+EXPOSE 80
+
+# Health check for K8s readiness/liveness probes
+HEALTHCHECK --interval=30s --timeout=3s --start-period=5s --retries=3 \
+    CMD curl -f http://localhost:80/ || exit 1
 
 CMD  /usr/sbin/apache2ctl -D FOREGROUND
