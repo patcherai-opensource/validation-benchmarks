@@ -2,9 +2,13 @@ services:
   app:
     build:
       context: ./app
-      dockerfile: Dockerfile 
+      dockerfile: Dockerfile
+      args:
+        - FLAG=${FLAG:-PLACEHOLDER_FLAG}
     ports:
       - "8080:4567"
+    environment:
+      - FLAG=${FLAG:-PLACEHOLDER_FLAG}
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:4567"]
       interval: 30s
