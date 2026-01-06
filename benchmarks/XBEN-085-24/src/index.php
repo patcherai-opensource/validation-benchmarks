@@ -65,7 +65,7 @@
         <button type="submit">Login</button>
     </form>
     <?php
-    $flag = "@FLAG@";
+    $flag = getenv('FLAG') ?: "@FLAG@";
 
     // Checking if the form fields are set
     if (isset($_POST['username']) && isset($_POST['password'])) {
