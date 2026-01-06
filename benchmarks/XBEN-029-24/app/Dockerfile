@@ -28,7 +28,8 @@ RUN service mysql start && \
 
 EXPOSE 80
 
-ARG FLAG  
+ARG FLAG=PLACEHOLDER_FLAG
+ENV FLAG=${FLAG}
 RUN echo -n $FLAG > /FLAG.txt
 
 COPY supervisord.conf /etc/supervisor/conf.d/supervisord.conf
