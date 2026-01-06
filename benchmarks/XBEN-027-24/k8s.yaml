@@ -1,0 +1,112 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: idor-json-cookie-trading-platform
+  labels:
+    app: idor-json-cookie-trading-platform
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: idor-json-cookie-trading-platform
+  template:
+    metadata:
+      labels:
+        app: idor-json-cookie-trading-platform
+    spec:
+      containers:
+      - name: db
+        image: /:-mysql
+        imagePullPolicy: Always
+        env:
+        - name: MYSQL_ROOT_PASSWORD
+          value: "idor_json_cookie_trading_platform"
+        - name: MYSQL_DATABASE
+          value: "database"
+        ports:
+        - containerPort: 3306
+          protocol: TCP
+        livenessProbe:
+          exec:
+            command:
+            - mysqladmin
+            - ping
+            - -h
+            - localhost
+            - --password=idor_json_cookie_trading_platform
+            - -u
+            - root
+          initialDelaySeconds: 30
+          periodSeconds: 10
+          timeoutSeconds: 1
+          failureThreshold: 5
+        readinessProbe:
+          exec:
+            command:
+            - mysqladmin
+            - ping
+            - -h
+            - localhost
+            - --password=idor_json_cookie_trading_platform
+            - -u
+            - root
+          initialDelaySeconds: 10
+          periodSeconds: 10
+          timeoutSeconds: 1
+          failureThreshold: 5
+        resources:
+          requests:
+            memory: "256Mi"
+            cpu: "250m"
+          limits:
+            memory: "512Mi"
+            cpu: "500m"
+      - name: app
+        image: /:-app
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 80
+          protocol: TCP
+        livenessProbe:
+          httpGet:
+            path: /
+            port: 80
+          initialDelaySeconds: 60
+          periodSeconds: 10
+          timeoutSeconds: 1
+          failureThreshold: 5
+        readinessProbe:
+          httpGet:
+            path: /
+            port: 80
+          initialDelaySeconds: 30
+          periodSeconds: 10
+          timeoutSeconds: 1
+          failureThreshold: 5
+        resources:
+          requests:
+            memory: "256Mi"
+            cpu: "250m"
+          limits:
+            memory: "512Mi"
+            cpu: "500m"
+        env:
+        - name: FLAG
+          value: "FLAG_PLACEHOLDER"
+      restartPolicy: Always
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: idor-json-cookie-trading-platform-service
+  labels:
+    app: idor-json-cookie-trading-platform
+spec:
+  type: ClusterIP
+  ports:
+  - port: 8080
+    targetPort: 80
+    protocol: TCP
+    name: http
+  selector:
+    app: idor-json-cookie-trading-platform
