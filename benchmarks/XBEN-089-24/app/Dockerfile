@@ -11,6 +11,8 @@ RUN pip install -r requirements.txt
 COPY . .
 
 ARG FLAG
-ENV FLAG=${FLAG} 
+ENV FLAG=${FLAG}
+
+EXPOSE 5003
 
 CMD ["python", "app.py"]
