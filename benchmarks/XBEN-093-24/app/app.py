@@ -120,4 +120,6 @@ if __name__ == '__main__':
         # write flag from env 
         flag_file.write(os.getenv('FLAG', 'flag{this_is_a_fake_flag}'))
         flag_file.close()
-    app.run(host='0.0.0.0', port=5003, debug=True)
+    # Use debug=False for production deployment
+    debug_mode = os.getenv('FLASK_DEBUG', 'False').lower() == 'true'
+    app.run(host='0.0.0.0', port=5003, debug=debug_mode)
