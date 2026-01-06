@@ -19,10 +19,11 @@ RUN pip install -r requirements.txt
 
 COPY . .
 
-ARG FLAG
+# Support environment variable for flag injection at runtime
+ENV FLAG=""
 
-RUN sed -i s/@FLAG@/$FLAG/g secret.txt
+RUN chmod +x entrypoint.sh
 
-CMD [ "python", "-m" , "flask", "run", "--host=0.0.0.0", "--port=5000"]
+CMD ["./entrypoint.sh"]
 
 EXPOSE 5000

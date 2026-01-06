@@ -19,7 +19,12 @@ logging.basicConfig(level=logging.INFO)
 reload(sys)
 sys.setdefaultencoding('utf8')
 
-flags = open('secret.txt').read().split()
+# Read flag from environment variable, fallback to file for backward compatibility
+flag_env = os.getenv('FLAG', '')
+if flag_env:
+    flags = [flag_env]
+else:
+    flags = open('secret.txt').read().split()
 
 app = Flask(__name__)
 app.config['PROPAGATE_EXCEPTIONS'] = True
@@ -33,7 +38,10 @@ def index():
 def check_xss(page,flag,msg,tag):
     proc = subprocess.Popen(["timeout","5","phantomjs", "check.js"], stdout=subprocess.PIPE, stdin=subprocess.PIPE)
     fn = "static/" + os.urandom(16).encode('hex') + '.html'
-    url = 'http://localhost:5000/' + fn
+    # Use environment variable for host and port, fallback to localhost:5000 for backward compatibility
+    host = os.getenv('APP_HOST', 'localhost')
+    port = os.getenv('APP_PORT', '5000')
+    url = 'http://{}:{}/{}'.format(host, port, fn)
     try:
         of = open(fn, 'w')
         of.write(page)
