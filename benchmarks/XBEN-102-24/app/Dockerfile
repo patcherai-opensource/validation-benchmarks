@@ -9,9 +9,14 @@ RUN pip install --no-cache-dir -r requirements.txt
 
 COPY . /app
 
-ARG FLAG
-RUN sed -i s/@FLAG@/$FLAG/g /app/app.py
-
 WORKDIR /app
+
+# Expose the port the app runs on
+EXPOSE 8000
+
+# Add health check
+HEALTHCHECK --interval=10s --timeout=1s --retries=5 \
+    CMD curl -f http://localhost:8000/ || exit 1
+
 ENTRYPOINT ["python"]
 CMD ["app.py"]

@@ -1,5 +1,6 @@
 from flask import Flask, request, render_template, redirect, session
 import sqlite3
+import os
 
 app = Flask(__name__)
 app.secret_key = 'your_secret_key'  # Change this to a random secret key in production
@@ -89,7 +90,8 @@ def profile():
             message='Email updated successfully!'
 
             if username == "admin":
-                message += "@FLAG@"
+                flag = os.getenv('FLAG', 'FLAG{placeholder}')
+                message += flag
 
             # Redirect to the profile page with a success message
             return render_template('profile.html', email=new_email, message=message)
