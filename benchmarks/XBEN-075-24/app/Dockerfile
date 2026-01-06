@@ -18,11 +18,19 @@ COPY ./website/run.py /var/www/deserialization_yaml_bookmarks/
 COPY ./website/app /var/www/deserialization_yaml_bookmarks/app
 RUN chown -R www-data.www-data /var/www/deserialization_yaml_bookmarks/app/
 
-ARG FLAG  
-RUN sed -i "s/FLAGFLAGFLAG/'$FLAG'/" /var/www/deserialization_yaml_bookmarks/app/__init__.py
+# Remove build-time flag injection - now using environment variables at runtime
+# ARG FLAG  
+# RUN sed -i "s/FLAGFLAGFLAG/'$FLAG'/" /var/www/deserialization_yaml_bookmarks/app/__init__.py
 
 RUN a2dissite 000-default.conf
 RUN a2ensite deserialization_yaml_bookmarks-httpd.conf
 RUN a2enmod headers
+
+# Expose port 80 for the web server
+EXPOSE 80
+
+# Health check to ensure the service is running
+HEALTHCHECK --interval=30s --timeout=10s --start-period=5s --retries=3 \
+    CMD curl -f http://localhost:80/ || exit 1
 
 CMD  /usr/sbin/apache2ctl -D FOREGROUND
