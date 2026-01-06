@@ -3,13 +3,17 @@ session_start();
 
 // Check if the user is already logged in and redirect to the protected page
 if (isset($_SESSION['admin_logged_in']) && $_SESSION['admin_logged_in'] === true) {
-    echo "@FLAG@";
+    echo getenv('FLAG') ?: '@FLAG@';
     exit;
 }
 
 $errorMessage = '';
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    $conn = new mysqli('db', 'user', 'password', 'blogDB');
+    $mysql_host = getenv('MYSQL_HOST') ?: 'localhost';
+    $mysql_user = getenv('MYSQL_USER') ?: 'user';
+    $mysql_password = getenv('MYSQL_PASSWORD') ?: 'password';
+    $mysql_database = getenv('MYSQL_DATABASE') ?: 'blogDB';
+    $conn = new mysqli($mysql_host, $mysql_user, $mysql_password, $mysql_database);
     if ($conn->connect_error) {
         die("Connection failed: " . $conn->connect_error);
     }
@@ -23,7 +27,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     if ($result->num_rows == 1) {
         // Set session variable
         $_SESSION['admin_logged_in'] = true;
-        echo "@FLAG@";
+        echo getenv('FLAG') ?: '@FLAG@';
     } else {
         $errorMessage = 'Invalid username or password.';
     }
