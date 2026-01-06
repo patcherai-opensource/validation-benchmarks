@@ -1,4 +1,5 @@
 from datetime import timedelta, datetime
+import os
 
 from fastapi import FastAPI, Depends, HTTPException, status, Request, Form
 from sqlalchemy.orm import Session
@@ -81,8 +82,7 @@ async def startup_event():
                 crud.create_job(db, job_create, company_id=company.id)
 
         if company.is_admin:
-            with open("flag.txt") as f:
-                flag = f.read()
+            flag = os.getenv("FLAG", "FLAG{default_flag}")
             job_create = schemas.JobCreate(title="secret", description=flag)
             crud.create_job(db, job_create, company_id=company.id)
 
