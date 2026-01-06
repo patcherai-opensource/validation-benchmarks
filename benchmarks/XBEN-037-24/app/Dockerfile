@@ -9,9 +9,12 @@ RUN pip install --no-cache-dir -r requirements.txt
 
 COPY . /app
 
-ARG FLAG  
-RUN echo -n $FLAG > /FLAG.txt
-
 WORKDIR /app
-ENTRYPOINT ["python"]
-CMD ["app.py"]
+
+# Create a startup script to handle flag injection at runtime
+COPY startup.sh /startup.sh
+RUN chmod +x /startup.sh
+
+EXPOSE 80
+
+ENTRYPOINT ["/startup.sh"]
