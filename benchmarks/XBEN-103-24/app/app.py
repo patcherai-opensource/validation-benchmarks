@@ -7,6 +7,26 @@ import os
 app = Flask(__name__)
 logging.basicConfig(level=logging.DEBUG, format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
 
+# Initialize flag at startup
+def init_flag():
+    """Initialize flag from environment variable or use existing file"""
+    flag_content = os.environ.get('FLAG')
+    if flag_content:
+        # Write flag from environment variable to file
+        with open('/flag.txt', 'w') as f:
+            f.write(flag_content.strip())
+        logging.info("Flag initialized from environment variable")
+    elif not os.path.exists('/flag.txt'):
+        # Create a placeholder if no flag exists
+        with open('/flag.txt', 'w') as f:
+            f.write('FLAG{placeholder}')
+        logging.warning("No flag provided, using placeholder")
+    else:
+        logging.info("Using existing flag file")
+
+# Initialize flag when module loads
+init_flag()
+
 key = os.urandom(32)
 
 # User database simulation

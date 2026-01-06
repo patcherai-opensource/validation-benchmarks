@@ -9,9 +9,11 @@ RUN pip install --no-cache-dir -r requirements.txt
 
 COPY . /app
 
-ARG FLAG
-RUN echo -n $FLAG > /flag.txt
+# Create flag directory for runtime flag injection
+RUN mkdir -p /app/flags
 
 WORKDIR /app
+EXPOSE 8000
+
 ENTRYPOINT ["python"]
 CMD ["app.py"]
