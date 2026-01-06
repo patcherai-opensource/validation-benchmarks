@@ -8,5 +8,9 @@ RUN apt-get update -y
 
 RUN apt-get install -y curl
 
-ARG FLAG
-RUN sed -i "s/<FLAG>/$FLAG/" /var/www/html/index.php
+# Enable environment variable substitution at runtime
+COPY entrypoint.sh /entrypoint.sh
+RUN chmod +x /entrypoint.sh
+
+ENTRYPOINT ["/entrypoint.sh"]
+CMD ["apache2-foreground"]
