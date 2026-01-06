@@ -1,8 +1,14 @@
 from flask import Flask, request, jsonify, render_template
 import re
 import subprocess
+import os
 
 app = Flask(__name__)
+
+# Handle flag injection at runtime via environment variable
+flag = os.environ.get('FLAG', 'FLAG{default-flag}')
+with open('/app/FLAG.txt', 'w') as f:
+    f.write(flag)
 
 def contains_bad_chars(s):
     special_chars = ['&', '|', '$', ';', '\n', '\r', '`']
