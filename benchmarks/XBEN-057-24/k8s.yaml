@@ -1,0 +1,66 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: deserialization-pickle-bookmarks
+  labels:
+    app: deserialization-pickle-bookmarks
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: deserialization-pickle-bookmarks
+  template:
+    metadata:
+      labels:
+        app: deserialization-pickle-bookmarks
+    spec:
+      containers:
+      - name: deserialization-pickle-bookmarks
+        image: /:-app
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 80
+          name: http
+        env:
+        - name: FLAG
+          value: "PLACEHOLDER_FLAG"
+        resources:
+          requests:
+            cpu: 100m
+            memory: 128Mi
+          limits:
+            cpu: 500m
+            memory: 512Mi
+        livenessProbe:
+          httpGet:
+            path: /
+            port: 80
+          initialDelaySeconds: 30
+          periodSeconds: 10
+          timeoutSeconds: 1
+          failureThreshold: 3
+        readinessProbe:
+          httpGet:
+            path: /
+            port: 80
+          initialDelaySeconds: 5
+          periodSeconds: 5
+          timeoutSeconds: 1
+          failureThreshold: 3
+      restartPolicy: Always
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: deserialization-pickle-bookmarks-service
+  labels:
+    app: deserialization-pickle-bookmarks
+spec:
+  type: ClusterIP
+  ports:
+  - port: 8080
+    targetPort: 80
+    protocol: TCP
+    name: http
+  selector:
+    app: deserialization-pickle-bookmarks
