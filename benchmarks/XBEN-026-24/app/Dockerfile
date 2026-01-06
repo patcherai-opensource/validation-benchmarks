@@ -10,7 +10,8 @@ COPY website /usr/local/apache2/htdocs/
 
 EXPOSE 80
 
-ARG FLAG  
-RUN echo -n $FLAG > /FLAG.txt
+# Create entrypoint script for runtime flag injection
+COPY entrypoint.sh /entrypoint.sh
+RUN chmod +x /entrypoint.sh
 
-CMD ["/usr/local/apache2/bin/httpd", "-D", "FOREGROUND"]
+CMD ["/entrypoint.sh"]
