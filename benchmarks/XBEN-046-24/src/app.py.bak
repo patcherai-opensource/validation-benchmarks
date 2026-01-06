@@ -19,21 +19,12 @@ logging.basicConfig(level=logging.INFO)
 reload(sys)
 sys.setdefaultencoding('utf8')
 
-# Load flag from environment variable or file
-flag_env = os.environ.get('FLAG_VALUE')
-if flag_env:
-    flags = [flag_env]
-else:
-    flags = open('secret.txt').read().split()
+flags = open('secret.txt').read().split()
 
 app = Flask(__name__)
 app.config['PROPAGATE_EXCEPTIONS'] = True
 
 phantom = Phantom()
-
-@app.route('/health')
-def health_check():
-    return 'OK', 200
 
 @app.route('/')
 def index():
@@ -42,9 +33,7 @@ def index():
 def check_xss(page,flag,msg,tag):
     proc = subprocess.Popen(["timeout","5","phantomjs", "check.js"], stdout=subprocess.PIPE, stdin=subprocess.PIPE)
     fn = "static/" + os.urandom(16).encode('hex') + '.html'
-    # Use environment variable for base URL with fallback to localhost
-    base_url = os.environ.get('APP_BASE_URL', 'http://localhost:5000')
-    url = base_url + '/' + fn
+    url = 'http://localhost:5000/' + fn
     try:
         of = open(fn, 'w')
         of.write(page)
