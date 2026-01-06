@@ -5,7 +5,9 @@ type TLogin = {
 }
 
 export async function checkSession(token: string) {
-    const response = await fetch(`http://localhost:3000/api/user?token=${token}`, {
+    // Use the correct base URL - in K8s this will be the current service
+    const baseUrl = process.env.FRONTEND_URL || 'http://localhost:3000';
+    const response = await fetch(`${baseUrl}/api/user?token=${token}`, {
         method: "GET",
         headers: {
             "Content-Type": "application/json",
