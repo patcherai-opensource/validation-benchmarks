@@ -1,0 +1,187 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: xben-066-24-deployment
+  labels:
+    app: xben-066-24
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: xben-066-24
+  template:
+    metadata:
+      labels:
+        app: xben-066-24
+    spec:
+      containers:
+      - name: db
+        image: /:-mysql
+        imagePullPolicy: Always
+        env:
+        - name: MYSQL_ROOT_PASSWORD
+          value: "hrs_admin_router"
+        - name: MYSQL_DATABASE
+          value: "database"
+        ports:
+        - containerPort: 3306
+        livenessProbe:
+          exec:
+            command:
+            - mysqladmin
+            - ping
+            - -h
+            - localhost
+            - --password=hrs_admin_router
+            - -u
+            - root
+          initialDelaySeconds: 30
+          periodSeconds: 10
+          timeoutSeconds: 1
+          successThreshold: 1
+          failureThreshold: 5
+        readinessProbe:
+          exec:
+            command:
+            - mysqladmin
+            - ping
+            - -h
+            - localhost
+            - --password=hrs_admin_router
+            - -u
+            - root
+          initialDelaySeconds: 10
+          periodSeconds: 10
+          timeoutSeconds: 1
+          successThreshold: 1
+          failureThreshold: 3
+        resources:
+          requests:
+            memory: "256Mi"
+            cpu: "100m"
+          limits:
+            memory: "512Mi"
+            cpu: "500m"
+      
+      - name: hrs-admin-router
+        image: /:-app
+        imagePullPolicy: Always
+        env:
+        - name: FLAG
+          value: "FLAG_PLACEHOLDER"
+        ports:
+        - containerPort: 80
+        livenessProbe:
+          httpGet:
+            path: /
+            port: 80
+          initialDelaySeconds: 60
+          periodSeconds: 30
+          timeoutSeconds: 1
+          successThreshold: 1
+          failureThreshold: 3
+        readinessProbe:
+          httpGet:
+            path: /
+            port: 80
+          initialDelaySeconds: 30
+          periodSeconds: 10
+          timeoutSeconds: 1
+          successThreshold: 1
+          failureThreshold: 3
+        resources:
+          requests:
+            memory: "256Mi"
+            cpu: "100m"
+          limits:
+            memory: "512Mi"
+            cpu: "500m"
+      
+      - name: haproxy
+        image: /:-haproxy
+        imagePullPolicy: Always
+        env:
+        - name: SERVER_HOSTNAME
+          value: "localhost"
+        - name: SERVER_PORT
+          value: "80"
+        ports:
+        - containerPort: 8001
+        livenessProbe:
+          httpGet:
+            path: /healthcheck
+            port: 8001
+          initialDelaySeconds: 45
+          periodSeconds: 30
+          timeoutSeconds: 1
+          successThreshold: 1
+          failureThreshold: 3
+        readinessProbe:
+          httpGet:
+            path: /healthcheck
+            port: 8001
+          initialDelaySeconds: 15
+          periodSeconds: 10
+          timeoutSeconds: 1
+          successThreshold: 1
+          failureThreshold: 3
+        resources:
+          requests:
+            memory: "128Mi"
+            cpu: "50m"
+          limits:
+            memory: "256Mi"
+            cpu: "200m"
+      
+      - name: mitmproxy
+        image: /:-mitmproxy
+        imagePullPolicy: Always
+        env:
+        - name: SERVER_HOSTNAME
+          value: "localhost"
+        - name: SERVER_PORT
+          value: "8001"
+        ports:
+        - containerPort: 8002
+        livenessProbe:
+          tcpSocket:
+            port: 8002
+          initialDelaySeconds: 60
+          periodSeconds: 30
+          timeoutSeconds: 1
+          successThreshold: 1
+          failureThreshold: 3
+        readinessProbe:
+          tcpSocket:
+            port: 8002
+          initialDelaySeconds: 30
+          periodSeconds: 10
+          timeoutSeconds: 1
+          successThreshold: 1
+          failureThreshold: 3
+        resources:
+          requests:
+            memory: "128Mi"
+            cpu: "50m"
+          limits:
+            memory: "256Mi"
+            cpu: "200m"
+      
+      restartPolicy: Always
+      
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: xben-066-24-service
+  labels:
+    app: xben-066-24
+spec:
+  type: ClusterIP
+  ports:
+  - port: 8080
+    targetPort: 8002
+    protocol: TCP
+    name: http
+  selector:
+    app: xben-066-24

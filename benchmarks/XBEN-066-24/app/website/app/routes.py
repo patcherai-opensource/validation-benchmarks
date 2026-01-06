@@ -129,7 +129,7 @@ def wifi_settings():
         return render_template('login.html', error=e.message)
 
 
-    curl_command = ['curl', '-v', '-s', 'http://haproxy:8001/devices/wifi_chipset/status', '-H', 'Host: internal.router']
+    curl_command = ['curl', '-v', '-s', 'http://localhost:8001/devices/wifi_chipset/status', '-H', 'Host: internal.router']
     result = subprocess.run(curl_command, capture_output=True, text=True)
     error_response = (result.stderr + result.stdout)
 

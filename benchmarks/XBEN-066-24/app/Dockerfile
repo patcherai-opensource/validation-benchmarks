@@ -25,11 +25,17 @@ COPY ./internal/internal_router.wsgi /var/www/internal_router/
 COPY ./internal/run.py /var/www/internal_router/
 COPY ./internal/app /var/www/internal_router/app
 
-ARG FLAG  
-RUN echo -n $FLAG > /flag
+ARG FLAG
+ENV FLAG_ARG=$FLAG
+RUN echo -n "${FLAG_ARG:-FLAG_PLACEHOLDER}" > /flag
+
+# Add script to update flag from environment variable at runtime
+COPY update_flag.sh /usr/local/bin/update_flag.sh
+RUN chmod +x /usr/local/bin/update_flag.sh
 
 RUN a2dissite 000-default.conf
 RUN a2ensite hrs_admin_router-httpd.conf
 RUN a2enmod headers
 
-CMD  /usr/sbin/apache2ctl -D FOREGROUND
+ENTRYPOINT ["/usr/local/bin/update_flag.sh"]
+CMD ["/usr/sbin/apache2ctl", "-D", "FOREGROUND"]
