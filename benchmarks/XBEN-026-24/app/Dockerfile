@@ -1,4 +1,4 @@
-FROM httpd:2.4.50
+FROM httpd:2.4
 
 ARG DEBIAN_FRONTEND=noninteractive
 
