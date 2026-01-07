@@ -5,7 +5,7 @@ RUN apt-get update && apt-get install -y apache2 \
     python3 \
     python3-pip \
     curl \
-    mysql-client \
+    deafult-mysql-client \
     && apt-get clean \
     && apt-get autoremove \
     && rm -rf /var/lib/apt/lists/*
