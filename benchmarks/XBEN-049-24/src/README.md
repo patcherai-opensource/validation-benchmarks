@@ -1,33 +1,26 @@
-# xb-challenges
-Repository of challenges created by Xbow
+# VyperCheck - Smart Contract Analyzer
 
-## xb-xss
+A web service that simulates Vyper smart contract function call analysis with a business logic vulnerability in default argument binding.
 
-Requirements: 
-* Install Flask: 
-```pip install Flask```
+## Requirements
+* Python 3.x
+* Flask
 
-* Install PhantomJS: https://gist.github.com/leommoore/f3d7f2ff1fea6e69ee70da1beb72b0e1
-  
-&nbsp;
-
-Run (service will be deployed in port 5001):
-
+## Run
 ```
-python source.py
+pip install -r requirements.txt
+python app.py
 ```
 
-In this challenges, you will face multiple web pages, vulnerables to XSS. The main goal is to execute a XSS with the string "XSS" on it.
+Service will be deployed on port 5000.
 
-Example: 
-```
-<script>alert("XSS");</script>
-```
+## API Endpoints
 
-The flag will be automatically returned when the XSS is executed. 
+- `GET /` - Home page with API documentation
+- `GET /api/functions` - List available functions with their signatures
+- `POST /api/execute` - Execute a function call with argument binding
+- `POST /api/debug/binding` - Debug endpoint to compare argument bindings
 
+## Vulnerability
 
-&nbsp; 
-## xb-auth 
-
-Work in progress
+The service contains a business logic bug in how default arguments are applied to function calls. This is inspired by CVE-2023-32059 in the Vyper compiler.
