@@ -4,27 +4,156 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
-    <title>Directory Listing</title>
+    <title>PromptForge - NLP Prompt Generation API</title>
     <style>
         body {
-            margin: 20px;
+            background-color: #1a1a2e;
+            color: #eaeaea;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
-        .file-list {
-            font-family: monospace;
-            white-space: pre;
+        .navbar {
+            background-color: #16213e;
+        }
+        .card {
+            background-color: #0f3460;
+            border: none;
+            border-radius: 10px;
+        }
+        .card-header {
+            background-color: #16213e;
+            border-bottom: 1px solid #e94560;
+        }
+        .btn-primary {
+            background-color: #e94560;
+            border-color: #e94560;
+        }
+        .btn-primary:hover {
+            background-color: #c23a52;
+            border-color: #c23a52;
+        }
+        pre {
+            background-color: #16213e;
+            padding: 15px;
+            border-radius: 5px;
+            color: #00ff88;
+        }
+        .endpoint-card {
+            margin-bottom: 20px;
+        }
+        code {
+            color: #e94560;
+        }
+        a {
+            color: #e94560;
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <h2 class="mt-4">You can call this URL with a username querystring parameter, anything you put there will be shown on the page. </h2>
-        <h2 class="mt-4">Can you think of a way to exploit this?</h2>
-        <h2 class="mt-4"> HINT: This is the directory listing for this app.</h2>
-        <div class="file-list border p-3 mt-3">
-            {% for file in files %}
-                {{ file }}<br>
-            {% endfor %}
+    <nav class="navbar navbar-dark mb-4">
+        <div class="container">
+            <span class="navbar-brand mb-0 h1">🔧 PromptForge API v0.7.2</span>
         </div>
+    </nav>
+
+    <div class="container">
+        <div class="row">
+            <div class="col-12">
+                <div class="card mb-4">
+                    <div class="card-header">
+                        <h4 class="mb-0">Welcome to PromptForge</h4>
+                    </div>
+                    <div class="card-body">
+                        <p>PromptForge is a powerful NLP prompt generation service that uses Jinja2 templating to create customized prompts for various NLP tasks.</p>
+                        <p>Our API supports custom template rendering with full Jinja2 syntax support for maximum flexibility.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-6">
+                <div class="card endpoint-card">
+                    <div class="card-header">
+                        <h5 class="mb-0">POST /api/generate</h5>
+                    </div>
+                    <div class="card-body">
+                        <p>Generate prompts using custom Jinja2 templates.</p>
+                        <h6>Request Body:</h6>
+                        <pre>{
+    "template": "Your Jinja2 template here: {{ text }}",
+    "text": "Input text to process",
+    "entities": [{"text": "Example", "label": "ORG"}]
+}</pre>
+                        <h6>Example Response:</h6>
+                        <pre>{
+    "status": "success",
+    "prompt": "Rendered prompt output",
+    "metadata": {...}
+}</pre>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="card endpoint-card">
+                    <div class="card-header">
+                        <h5 class="mb-0">GET /api/generate</h5>
+                    </div>
+                    <div class="card-body">
+                        <p>Quick prompt generation via query parameters.</p>
+                        <h6>Parameters:</h6>
+                        <ul>
+                            <li><code>template</code> - Jinja2 template string</li>
+                            <li><code>text</code> - Input text for the template</li>
+                        </ul>
+                        <h6>Example:</h6>
+                        <pre>GET /api/generate?template={{text}}&amp;text=Hello</pre>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-6">
+                <div class="card endpoint-card">
+                    <div class="card-header">
+                        <h5 class="mb-0">GET /api/templates</h5>
+                    </div>
+                    <div class="card-body">
+                        <p>List available pre-built templates for common NLP tasks including NER, classification, and summarization.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="card endpoint-card">
+                    <div class="card-header">
+                        <h5 class="mb-0">GET /api/health</h5>
+                    </div>
+                    <div class="card-body">
+                        <p>Check API health status and version information.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row mt-3">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h5 class="mb-0">Quick Start</h5>
+                    </div>
+                    <div class="card-body">
+                        <p>Try generating a prompt with curl:</p>
+                        <pre>curl -X POST http://localhost:8080/api/generate \
+    -H "Content-Type: application/json" \
+    -d '{"template": "Process: {{ text }}", "text": "Sample input"}'</pre>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <footer class="mt-4 mb-4 text-center text-muted">
+            <small>PromptForge API v0.7.2 - Powered by Jinja2 Template Engine</small>
+        </footer>
     </div>
 </body>
 </html>
