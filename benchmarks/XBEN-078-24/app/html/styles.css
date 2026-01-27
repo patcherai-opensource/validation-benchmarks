@@ -1,27 +1,166 @@
 body {
-    font-family: Arial, sans-serif;
-    background-color: #f4f4f9;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #1a1a2e;
+    color: #eaeaea;
     margin: 0;
     padding: 20px;
+    line-height: 1.6;
 }
 .container {
     width: 80%;
+    max-width: 900px;
     margin: auto;
-    background: white;
+    background: #16213e;
+    padding: 30px;
+    border-radius: 12px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+}
+.header {
+    text-align: center;
+    border-bottom: 2px solid #0f3460;
+    padding-bottom: 20px;
+    margin-bottom: 30px;
+}
+.header h1 {
+    color: #e94560;
+    font-size: 2.5em;
+    margin-bottom: 5px;
+}
+.tagline {
+    color: #888;
+    font-style: italic;
+}
+.info-section, .stats-section, .login-section, .api-section {
+    background: #0f3460;
     padding: 20px;
     border-radius: 8px;
-}
-.post {
-    border-bottom: 1px solid #ccc;
-    padding-bottom: 20px;
     margin-bottom: 20px;
 }
-.post h2 a {
-    color: #333;
+.info-section h2, .stats-section h3, .login-section h3, .api-section h3 {
+    color: #e94560;
+    margin-top: 0;
+}
+.info-section ul {
+    color: #ccc;
+}
+.btn {
+    display: inline-block;
+    background: #e94560;
+    color: white;
+    padding: 12px 24px;
+    text-decoration: none;
+    border-radius: 6px;
+    margin-top: 10px;
+    transition: background 0.3s;
+}
+.btn:hover {
+    background: #c73e54;
+}
+code {
+    background: #1a1a2e;
+    padding: 8px 12px;
+    border-radius: 4px;
+    display: block;
+    margin: 10px 0;
+    color: #4ecca3;
+    font-family: 'Courier New', monospace;
+}
+.hint {
+    color: #888;
+    font-size: 0.9em;
+}
+footer {
+    text-align: center;
+    color: #666;
+    margin-top: 30px;
+    padding-top: 20px;
+    border-top: 1px solid #333;
+}
+/* Admin panel styles */
+.admin-container {
+    width: 90%;
+    max-width: 1200px;
+}
+.login-form {
+    max-width: 400px;
+    margin: 50px auto;
+}
+.login-form input {
+    width: 100%;
+    padding: 12px;
+    margin: 10px 0;
+    border: none;
+    border-radius: 6px;
+    background: #1a1a2e;
+    color: #eaeaea;
+    box-sizing: border-box;
+}
+.login-form button {
+    width: 100%;
+    padding: 12px;
+    background: #e94560;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 1em;
+}
+.login-form button:hover {
+    background: #c73e54;
+}
+.error {
+    color: #e94560;
+    background: rgba(233, 69, 96, 0.1);
+    padding: 10px;
+    border-radius: 6px;
+    margin-bottom: 15px;
+}
+.success {
+    color: #4ecca3;
+    background: rgba(78, 204, 163, 0.1);
+    padding: 10px;
+    border-radius: 6px;
+    margin-bottom: 15px;
+}
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+table th, table td {
+    padding: 12px;
+    text-align: left;
+    border-bottom: 1px solid #0f3460;
+}
+table th {
+    background: #0f3460;
+    color: #e94560;
+}
+table tr:hover {
+    background: rgba(15, 52, 96, 0.5);
+}
+.filter-form {
+    background: #0f3460;
+    padding: 20px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+}
+.filter-form input, .filter-form select {
+    padding: 10px;
+    margin-right: 10px;
+    border: none;
+    border-radius: 4px;
+    background: #1a1a2e;
+    color: #eaeaea;
+}
+.nav-links {
+    margin-bottom: 20px;
+}
+.nav-links a {
+    color: #e94560;
+    margin-right: 20px;
     text-decoration: none;
 }
-.post img {
-    width: 100%;
-    height: auto;
-    border-radius: 5px;
+.nav-links a:hover {
+    text-decoration: underline;
 }
