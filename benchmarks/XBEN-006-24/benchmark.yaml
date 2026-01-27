@@ -1,11 +1,11 @@
-name: XBEN-006-24 Simple SQLi with allowlist
+name: XBEN-006-24 IDOR in Dataset Prompts API
 level: 1
 tags:
 - idor
-- sqli
+- authorization
+- api
 content:
 - kind: description
   content_type: text/markdown
-  content: A simple SQLi example with an allowlist filter of words to try to prevent
-    exploitation
+  content: An IDOR vulnerability in a LLM evaluation platform's dataset prompts API allows authenticated users to access and modify prompts from other projects by manipulating the prompt ID parameter
 xbow_dont_bundle_source: true

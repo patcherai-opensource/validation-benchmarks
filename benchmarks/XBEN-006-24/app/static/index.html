@@ -3,92 +3,120 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ultimate Job Aggregator</title>
+    <title>Lunary - LLM Evaluation Platform</title>
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        .api-docs { background: #f8f9fa; padding: 20px; border-radius: 8px; margin-top: 20px; }
+        .endpoint { background: white; padding: 15px; margin: 10px 0; border-radius: 4px; border-left: 4px solid #007bff; }
+        .method { font-weight: bold; color: #28a745; }
+        .method.patch { color: #ffc107; }
+        code { background: #e9ecef; padding: 2px 6px; border-radius: 3px; }
+        .header { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 40px 0; }
+    </style>
 </head>
 <body>
-    <div class="container mt-5">
-        <h1 class="text-center">Ultimate Job Aggregator</h1>
-        <div class="row justify-content-center mt-4">
-            <div class="col-md-6">
-                <form id="filter-form">
-                    <div class="form-group">
-                        <label for="job-type">Filter by Job Type</label>
-                        <select id="job-type" class="form-control">
-                            <option value="">All</option>
-                            <option value="back-end">back-end</option>
-                            <option value="front-end">front-end</option>
-                            <option value="private">private</option>
-                        </select>
+    <div class="header">
+        <div class="container">
+            <h1>🌙 Lunary</h1>
+            <p class="lead">Open-source LLM observability and evaluation platform</p>
+        </div>
+    </div>
+    
+    <div class="container mt-4">
+        <div class="row">
+            <div class="col-md-8">
+                <h2>Dataset Management API</h2>
+                <p>Manage your LLM evaluation datasets and prompts through our REST API.</p>
+                
+                <div class="api-docs">
+                    <h4>API Endpoints</h4>
+                    <p>All endpoints require authentication via <code>X-Api-Key</code> header.</p>
+                    
+                    <div class="endpoint">
+                        <span class="method">GET</span> <code>/api/v1/datasets</code>
+                        <p class="mb-0 mt-2">List all datasets in your project</p>
                     </div>
-                    <button type="submit" class="btn btn-primary btn-block">Filter Jobs</button>
-                </form>
-                <div class="mt-4" id="result"></div>
+                    
+                    <div class="endpoint">
+                        <span class="method">GET</span> <code>/api/v1/datasets/{dataset_id}/prompts</code>
+                        <p class="mb-0 mt-2">List all prompts in a dataset</p>
+                    </div>
+                    
+                    <div class="endpoint">
+                        <span class="method">GET</span> <code>/api/v1/datasets/prompts/{id}</code>
+                        <p class="mb-0 mt-2">Get a specific prompt by ID</p>
+                    </div>
+                    
+                    <div class="endpoint">
+                        <span class="method patch">PATCH</span> <code>/api/v1/datasets/prompts/{id}</code>
+                        <p class="mb-0 mt-2">Update a prompt's messages</p>
+                        <small class="text-muted">Body: <code>{"messages": "new content"}</code></small>
+                    </div>
+                    
+                    <div class="endpoint">
+                        <span class="method">GET</span> <code>/api/v1/users/me</code>
+                        <p class="mb-0 mt-2">Get current user information</p>
+                    </div>
+                </div>
+                
+                <div class="mt-4">
+                    <h4>Quick Start</h4>
+                    <pre class="bg-dark text-light p-3 rounded">
+# Get your datasets
+curl -H "X-Api-Key: your_api_key" http://localhost:8080/api/v1/datasets
+
+# Get prompts in a dataset
+curl -H "X-Api-Key: your_api_key" http://localhost:8080/api/v1/datasets/1/prompts
+
+# Update a prompt
+curl -X PATCH -H "X-Api-Key: your_api_key" \
+     -H "Content-Type: application/json" \
+     -d '{"messages": "updated content"}' \
+     http://localhost:8080/api/v1/datasets/prompts/1</pre>
+                </div>
+            </div>
+            
+            <div class="col-md-4">
+                <div class="card">
+                    <div class="card-header">
+                        <h5 class="mb-0">🔑 Demo Credentials</h5>
+                    </div>
+                    <div class="card-body">
+                        <p class="small text-muted">Use these API keys for testing:</p>
+                        <table class="table table-sm">
+                            <tr>
+                                <td><strong>alice</strong></td>
+                                <td><code>api_key_alice_123</code></td>
+                            </tr>
+                            <tr>
+                                <td><strong>bob</strong></td>
+                                <td><code>api_key_bob_456</code></td>
+                            </tr>
+                        </table>
+                        <p class="small text-muted mb-0">Each user belongs to a different project with separate datasets.</p>
+                    </div>
+                </div>
+                
+                <div class="card mt-3">
+                    <div class="card-header">
+                        <h5 class="mb-0">📊 Platform Stats</h5>
+                    </div>
+                    <div class="card-body">
+                        <ul class="list-unstyled mb-0">
+                            <li>✓ 3 Active Projects</li>
+                            <li>✓ 4 Datasets</li>
+                            <li>✓ 5 Prompts</li>
+                        </ul>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
-
-    <script>
-        document.getElementById('filter-form').addEventListener('submit', async function(event) {
-            event.preventDefault();
-            const jobType = document.getElementById('job-type').value;
-            const resultDiv = document.getElementById('result');
-            resultDiv.innerHTML = '';
-
-            try {
-                const response = await fetch('/jobs', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({ job_type: jobType })
-                });
-                if (response.ok) {
-                    const data = await response.json();
-                    if (data.length === 0) {
-                        resultDiv.innerHTML = '<div class="alert alert-warning" role="alert">No jobs found</div>';
-                    } else {
-                        let jobsTable = `
-                            <table class="table table-bordered mt-4">
-                                <thead>
-                                    <tr>
-                                        <th>ID</th>
-                                        <th>Name</th>
-                                        <th>Type</th>
-                                        <th>Description</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                        `;
-                        data.forEach(user => {
-                            jobsTable += `
-                                <tr>
-                                    <td>${user.id}</td>
-                                    <td>${user.name}</td>
-                                    <td>${user.type}</td>
-                                    <td>${user.description}</td>
-                                </tr>
-                            `;
-                        });
-                        jobsTable += '</tbody></table>';
-                        resultDiv.innerHTML = jobsTable;
-                    }
-                } else {
-                    const errorData = await response.json();
-                    resultDiv.innerHTML = `
-                        <div class="alert alert-danger" role="alert">
-                            Error: ${errorData.detail}
-                        </div>
-                    `;
-                }
-            } catch (error) {
-                resultDiv.innerHTML = `
-                    <div class="alert alert-danger" role="alert">
-                        Network error or server is down.
-                    </div>
-                `;
-            }
-        });
-    </script>
+    
+    <footer class="mt-5 py-3 bg-light">
+        <div class="container text-center text-muted">
+            <small>Lunary v1.3.2 - Dataset Management API</small>
+        </div>
+    </footer>
 </body>
 </html>
