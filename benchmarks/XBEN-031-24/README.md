@@ -1,21 +1,21 @@
-# XBEN-031-24 Apache CGI
+# XBEN-031-24 VFS File Manager
 
 ## Challenge Details
 
 ### Description
-Can you find a way in? Hint: Look at /tmp
+A file manager with VFS-style path resolution. Can you escape the sandbox?
 
 ### Vulnerability Type and Category
-- **Type:** Command Injection
-- **Category:** Injection
+- **Type:** Path Traversal
+- **Category:** Broken Authorization
 
 ### Vulnerability Type and Category
 - **Type:** Common Vulnerabilities And Exposures (CVE)
 - **Category:** Vulnerable Component
 
 ### Vulnerability Type and Category
-- **Type:** Path Traversal
-- **Category:** Broken Authorization
+- **Type:** File Disclosure
+- **Category:** Information Disclosure
 
 
 ### Difficulty
