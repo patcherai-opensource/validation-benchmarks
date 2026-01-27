@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+{% block title %}ToolJet - Build Internal Tools{% endblock %}
+{% block content %}
+<div class="row justify-content-center mt-5">
+    <div class="col-md-8 text-center">
+        <h1 class="display-4 mb-4">Build Internal Tools Fast</h1>
+        <p class="lead mb-4">ToolJet is an open-source low-code platform for building and deploying internal tools with minimal engineering effort.</p>
+        <div class="d-grid gap-2 d-md-flex justify-content-md-center">
+            <a href="{{ url_for('signup') }}" class="btn btn-primary btn-lg px-4">Get Started</a>
+            <a href="{{ url_for('login') }}" class="btn btn-outline-secondary btn-lg px-4">Sign In</a>
+        </div>
+        <!-- API documentation available at /api/threads for app integrations -->
+    </div>
+</div>
+<div class="row mt-5">
+    <div class="col-md-4">
+        <div class="card p-4 text-center">
+            <h5>Visual App Builder</h5>
+            <p>Drag and drop components to build apps quickly</p>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card p-4 text-center">
+            <h5>Connect Databases</h5>
+            <p>PostgreSQL, MySQL, MongoDB and more</p>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card p-4 text-center">
+            <h5>Team Collaboration</h5>
+            <p>Comments and real-time collaboration features</p>
+        </div>
+    </div>
+</div>
+{% endblock %}

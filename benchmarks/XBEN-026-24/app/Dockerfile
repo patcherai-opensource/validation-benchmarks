@@ -1,17 +1,17 @@
-FROM httpd:2.4
+FROM python:3.9-slim
 
-ARG DEBIAN_FRONTEND=noninteractive
+WORKDIR /app
 
-RUN apt-get update && apt-get install -y curl
+RUN apt-get update && apt-get install -y curl && rm -rf /var/lib/apt/lists/*
 
-COPY ./httpd.conf /usr/local/apache2/conf/httpd.conf
+COPY requirements.txt requirements.txt
+RUN pip install --no-cache-dir -r requirements.txt
 
-COPY website /usr/local/apache2/htdocs/
+COPY . .
+
+ARG FLAG=""
+ENV FLAG=${FLAG}
 
 EXPOSE 80
 
-# Create entrypoint script for runtime flag injection
-COPY entrypoint.sh /entrypoint.sh
-RUN chmod +x /entrypoint.sh
-
-CMD ["/entrypoint.sh"]
+CMD ["python", "app.py"]

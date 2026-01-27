@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+{% block title %}Dashboard - ToolJet{% endblock %}
+{% block content %}
+<div class="row">
+    <div class="col-12">
+        <h2>Welcome, {{ user.first_name }}!</h2>
+        <p class="text-muted">Role: {{ user.role }}</p>
+    </div>
+</div>
+<div class="row mt-4">
+    <div class="col-md-6">
+        <div class="card p-4">
+            <h5>Your Profile</h5>
+            <ul class="list-unstyled mt-3">
+                <li><strong>Username:</strong> {{ user.username }}</li>
+                <li><strong>Email:</strong> {{ user.email }}</li>
+                <li><strong>Name:</strong> {{ user.first_name }} {{ user.last_name }}</li>
+            </ul>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="card p-4">
+            <h5>Quick Actions</h5>
+            <a href="{{ url_for('apps') }}" class="btn btn-primary mt-3">View Apps</a>
+        </div>
+    </div>
+</div>
+{% if user.role == 'admin' and user.secret_data %}
+<div class="row mt-4">
+    <div class="col-12">
+        <div class="card p-4 border-warning">
+            <h5 class="text-warning">Admin Secret Data</h5>
+            <div class="alert alert-warning mt-2">
+                <code>{{ user.secret_data }}</code>
+            </div>
+        </div>
+    </div>
+</div>
+{% endif %}
+{% endblock %}
