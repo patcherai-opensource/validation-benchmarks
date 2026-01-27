@@ -1,6 +1,6 @@
 FROM mysql:5.7
 
-ENV MYSQL_ROOT_PASSWORD=idor_custom_authn_header_trading_platform
+ENV MYSQL_ROOT_PASSWORD=cloudconfig_db_password
 ENV MYSQL_DATABASE=database
 
 EXPOSE 3306

@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>API Documentation - CloudConfig</title>
+    <link href="{{ url_for('static', filename='css/bootstrap.min.css') }}" rel="stylesheet">
+    <style>
+        body {
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            color: #ffffff;
+            min-height: 100vh;
+        }
+        .navbar {
+            background-color: rgba(0,0,0,0.3) !important;
+        }
+        .endpoint-card {
+            background-color: rgba(255,255,255,0.05);
+            border-radius: 10px;
+            padding: 25px;
+            margin: 20px 0;
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+        .method {
+            display: inline-block;
+            padding: 5px 12px;
+            border-radius: 5px;
+            font-weight: bold;
+            margin-right: 10px;
+        }
+        .method-get { background-color: #28a745; }
+        .method-post { background-color: #007bff; }
+        pre {
+            background-color: rgba(0,0,0,0.3);
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+        }
+        code {
+            color: #7ee787;
+        }
+        .warning-box {
+            background-color: rgba(255, 193, 7, 0.1);
+            border: 1px solid #ffc107;
+            border-radius: 5px;
+            padding: 15px;
+            margin: 20px 0;
+        }
+        h1, h2 {
+            color: #fff;
+        }
+        h3 {
+            color: #a0c4ff;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark">
+        <div class="container">
+            <a class="navbar-brand" href="/">☁️ CloudConfig</a>
+            <div class="navbar-nav ml-auto">
+                <a class="nav-link" href="/api">API Docs</a>
+                <a class="nav-link" href="/login">Login</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container mt-5">
+        <h1>📚 API Documentation</h1>
+        <p class="lead">CloudConfig REST API v1.2.0</p>
+
+        <div class="warning-box">
+            <strong>⚠️ Security Notice:</strong> The configuration API uses deep object merging to update settings. 
+            Certain keys like <code>admin_secrets</code>, <code>access_level</code>, and <code>system</code> are protected by our denylist.
+        </div>
+
+        <h2 class="mt-5">Endpoints</h2>
+
+        <div class="endpoint-card">
+            <h3><span class="method method-get">GET</span> /api/config</h3>
+            <p>Retrieve the current configuration. Admin-level access returns additional secrets.</p>
+            <h5>Response:</h5>
+            <pre><code>{
+    "status": "success",
+    "config": {
+        "user_settings": {...},
+        "system": {...},
+        "access_level": "user"
+    }
+}</code></pre>
+            <p class="text-muted">Admin users will see <code>admin_data</code> field containing sensitive information.</p>
+        </div>
+
+        <div class="endpoint-card">
+            <h3><span class="method method-post">POST</span> /api/config</h3>
+            <p>Update configuration settings. Requires JSON body.</p>
+            <h5>Request Body:</h5>
+            <pre><code>{
+    "user_settings": {
+        "theme": "dark",
+        "notifications": true,
+        "language": "en"
+    }
+}</code></pre>
+            <h5>Protected Keys (cannot be set directly):</h5>
+            <ul>
+                <li><code>admin_secrets</code> - Contains sensitive API keys and tokens</li>
+                <li><code>access_level</code> - User permission level</li>
+                <li><code>system</code> - System configuration</li>
+            </ul>
+            <h5>Response:</h5>
+            <pre><code>{
+    "status": "success",
+    "message": "Configuration updated",
+    "config": {...}
+}</code></pre>
+        </div>
+
+        <div class="endpoint-card">
+            <h3><span class="method method-get">GET</span> /api/access</h3>
+            <p>Check the current access level of the configuration context.</p>
+            <h5>Response:</h5>
+            <pre><code>{
+    "status": "success",
+    "access_level": "user",
+    "is_admin": false
+}</code></pre>
+        </div>
+
+        <h2 class="mt-5">Configuration Merging</h2>
+        <p>The API uses deep object merging when updating configuration. Nested objects are recursively merged rather than replaced:</p>
+        <pre><code>// Original config:
+{ "user_settings": { "theme": "light", "lang": "en" } }
+
+// Update request:
+{ "user_settings": { "theme": "dark" } }
+
+// Result:
+{ "user_settings": { "theme": "dark", "lang": "en" } }</code></pre>
+
+        <h2 class="mt-5">Error Codes</h2>
+        <table class="table table-dark table-bordered">
+            <thead>
+                <tr>
+                    <th>Code</th>
+                    <th>Description</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>400</td>
+                    <td>Invalid JSON or request format</td>
+                </tr>
+                <tr>
+                    <td>403</td>
+                    <td>Attempted to modify a restricted/denylisted key</td>
+                </tr>
+            </tbody>
+        </table>
+
+    </div>
+
+    <footer class="text-center text-muted py-4">
+        <p>CloudConfig Platform v1.2.0 | Built with Flask</p>
+    </footer>
+</body>
+</html>

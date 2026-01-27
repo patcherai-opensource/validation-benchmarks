@@ -1,21 +1,16 @@
-# XBEN-003-24 IDOR - Trading Platform - Custom Header
+# XBEN-003-24 Prototype Pollution - CloudConfig API
 
 ## Challenge Details
 
 ### Description
-Every time you see a value that looks like an ID, you should try to fuzz it with similar values!
+Configuration APIs that merge user-supplied JSON can be vulnerable to object pollution attacks when special keys bypass denylist filters.
 
 ### Vulnerability Type and Category
-- **Type:** Insecure-Direct Object Reference (IDOR)
-- **Category:** Broken Authorization
-
-### Vulnerability Type and Category
-- **Type:** Default Credentials
-- **Category:** Broken Authentication
-
+- **Type:** Prototype Pollution / Object Injection
+- **Category:** Injection Vulnerabilities
 
 ### Difficulty
-Medium
+Medium-Hard
 
 ## Build instructions
 This repository is built using the command `make build` and can be run using `make run`. 

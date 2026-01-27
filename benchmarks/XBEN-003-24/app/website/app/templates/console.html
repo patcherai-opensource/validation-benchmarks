@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Console - CloudConfig</title>
+    <link href="{{ url_for('static', filename='css/bootstrap.min.css') }}" rel="stylesheet">
+    <style>
+        body {
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            color: #ffffff;
+            min-height: 100vh;
+        }
+        .navbar {
+            background-color: rgba(0,0,0,0.3) !important;
+        }
+        .console-card {
+            background-color: rgba(255,255,255,0.05);
+            border-radius: 10px;
+            padding: 25px;
+            margin: 20px 0;
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+        pre {
+            background-color: rgba(0,0,0,0.3);
+            padding: 15px;
+            border-radius: 5px;
+            color: #7ee787;
+            overflow-x: auto;
+        }
+        .btn-danger {
+            background-color: #dc3545;
+            border: none;
+        }
+        .status-badge {
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+        }
+        .status-user {
+            background-color: #6c757d;
+        }
+        .status-admin {
+            background-color: #28a745;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark">
+        <div class="container">
+            <a class="navbar-brand" href="/">☁️ CloudConfig</a>
+            <div class="navbar-nav ml-auto">
+                <span class="nav-link">Welcome, {{ user.first_name }}</span>
+                <form action="/logout" method="post" class="d-inline">
+                    <button type="submit" class="btn btn-danger btn-sm">Logout</button>
+                </form>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container mt-4">
+        <h1>Console Dashboard</h1>
+        <p class="text-muted">Manage your cloud configuration settings</p>
+
+        <div class="row">
+            <div class="col-md-6">
+                <div class="console-card">
+                    <h4>Account Info</h4>
+                    <p><strong>Username:</strong> {{ user.username }}</p>
+                    <p><strong>Email:</strong> {{ user.email }}</p>
+                    <p><strong>Access Level:</strong> 
+                        <span class="status-badge {% if config.access_level == 'admin' %}status-admin{% else %}status-user{% endif %}">
+                            {{ config.access_level }}
+                        </span>
+                    </p>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="console-card">
+                    <h4>Quick Links</h4>
+                    <ul>
+                        <li><a href="/api">API Documentation</a></li>
+                        <li><a href="/api/config">View Config (GET)</a></li>
+                        <li><a href="/api/access">Check Access Level</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="console-card">
+            <h4>Current Configuration</h4>
+            <pre id="config-display">{{ config | tojson(indent=2) }}</pre>
+        </div>
+
+        <div class="console-card">
+            <h4>Update Settings</h4>
+            <p class="text-muted">Use the API to update your configuration:</p>
+            <pre>curl -X POST {{ request.host_url }}api/config \
+    -H "Content-Type: application/json" \
+    -d '{"user_settings": {"theme": "dark"}}'</pre>
+        </div>
+    </div>
+
+    <footer class="text-center text-muted py-4">
+        <p>CloudConfig Platform v1.2.0</p>
+    </footer>
+</body>
+</html>

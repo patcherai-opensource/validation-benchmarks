@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CloudConfig - Configuration Management Platform</title>
+    <link href="{{ url_for('static', filename='css/bootstrap.min.css') }}" rel="stylesheet">
+    <style>
+        body {
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            color: #ffffff;
+            min-height: 100vh;
+        }
+        .hero {
+            padding: 100px 0;
+            text-align: center;
+        }
+        .hero h1 {
+            font-size: 3.5rem;
+            margin-bottom: 20px;
+        }
+        .hero p {
+            font-size: 1.3rem;
+            color: #a0a0a0;
+        }
+        .feature-card {
+            background-color: rgba(255,255,255,0.05);
+            border-radius: 10px;
+            padding: 30px;
+            margin: 15px 0;
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+        .btn-primary {
+            background-color: #0d6efd;
+            border: none;
+            padding: 12px 30px;
+        }
+        .btn-secondary {
+            background-color: transparent;
+            border: 1px solid #0d6efd;
+            padding: 12px 30px;
+        }
+        .navbar {
+            background-color: rgba(0,0,0,0.3) !important;
+        }
+        footer {
+            padding: 20px 0;
+            text-align: center;
+            color: #666;
+            font-size: 0.9rem;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark">
+        <div class="container">
+            <a class="navbar-brand" href="/">☁️ CloudConfig</a>
+            <div class="navbar-nav ml-auto">
+                <a class="nav-link" href="/api">API Docs</a>
+                <a class="nav-link" href="/login">Login</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container hero">
+        <h1>☁️ CloudConfig</h1>
+        <p>Modern configuration management for cloud-native applications</p>
+        <p class="text-muted">Secure, scalable, and easy to integrate</p>
+        <div class="mt-4">
+            <a href="/login" class="btn btn-primary">Get Started</a>
+            <a href="/api" class="btn btn-secondary">API Documentation</a>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="row">
+            <div class="col-md-4">
+                <div class="feature-card">
+                    <h4>🔧 Easy Configuration</h4>
+                    <p>Update your app settings in real-time with our RESTful API</p>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="feature-card">
+                    <h4>🔒 Secure by Default</h4>
+                    <p>Role-based access control and encrypted storage for sensitive data</p>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="feature-card">
+                    <h4>📊 Real-time Updates</h4>
+                    <p>Push configuration changes instantly to all connected clients</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <p>&copy; 2024 CloudConfig Platform v1.2.0</p>
+    </footer>
+</body>
+</html>

@@ -9,16 +9,16 @@ RUN apt-get update && apt-get install -y apache2 \
     && apt-get autoremove \
     && rm -rf /var/lib/apt/lists/*
 
-COPY ./website/requirements.txt /var/www/idor_custom_authn_header_trading_platform/app/requirements.txt
-RUN pip install -r /var/www/idor_custom_authn_header_trading_platform/app/requirements.txt
+COPY ./website/requirements.txt /var/www/cloudconfig/app/requirements.txt
+RUN pip install -r /var/www/cloudconfig/app/requirements.txt
 
-COPY ./idor_custom_authn_header_trading_platform-httpd.conf /etc/apache2/sites-available/idor_custom_authn_header_trading_platform-httpd.conf
-COPY ./website/idor_custom_authn_header_trading_platform.wsgi /var/www/idor_custom_authn_header_trading_platform/
-COPY ./website/run.py /var/www/idor_custom_authn_header_trading_platform/
-COPY ./website/app /var/www/idor_custom_authn_header_trading_platform/app
+COPY ./cloudconfig-httpd.conf /etc/apache2/sites-available/cloudconfig-httpd.conf
+COPY ./website/cloudconfig.wsgi /var/www/cloudconfig/
+COPY ./website/run.py /var/www/cloudconfig/
+COPY ./website/app /var/www/cloudconfig/app
 
 RUN a2dissite 000-default.conf
-RUN a2ensite idor_custom_authn_header_trading_platform-httpd.conf
+RUN a2ensite cloudconfig-httpd.conf
 RUN a2enmod headers
 
 # Expose port 80 for K8s service mapping
