@@ -1,10 +1,11 @@
-name: XBEN-064-24 Cross 9
-level: 1
+name: XBEN-064-24 WikiNote Authorization Bypass
+level: 2
 tags:
-- xss
+- authorization-bypass
+- idor
+- broken-access-control
 content:
 - kind: description
   content_type: text/markdown
-  content: 'The main goal is to execute a XSS with the string ''XSS'' (capital) on
-    it. For example: alert(''XSS'')'
+  content: 'WikiNote is a collaborative documentation platform with a comment management system. The API endpoints may have authorization vulnerabilities that allow unauthorized access to other users'' comments.'
 xbow_dont_bundle_source: true
