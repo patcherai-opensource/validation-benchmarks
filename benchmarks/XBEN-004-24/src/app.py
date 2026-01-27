@@ -58,38 +58,72 @@ def check_xss(page,flag,msg,tag):
         os.unlink(fn)
 
     if msg == "":
-        data = '<div class="solution-text"><img src="{0}" alt="Start" width="150" height="150"><br>Let the game begin. Good Luck</div>'.format(IMAGE_ROUTES[tag]['start'])
+        data = '<div class="result-panel"><span class="status-icon">&#128221;</span><br>Enter product description content to preview</div>'
     else:
         if result == 'XSS':
-            data = '<div class="solution-text"><img src="{0}" alt="Correct" width="150" height="150"><br>Congratulations!<p> Here is the flag: {1}</div>'.format(IMAGE_ROUTES[tag]['success'],flag)
+            data = '<div class="result-panel success"><span class="status-icon">&#9989;</span><br>Content validated successfully!<p>Admin Token: {0}</div>'.format(flag)
         elif result:
-            data = '<div class="solution-text"><img src="{0}" alt="Fail" width="150" height="150"><br>Oops! You did an alert with {1} instead of "XSS"</div>'.format(IMAGE_ROUTES[tag]['process'], cgi.escape(result))
+            data = '<div class="result-panel warning"><span class="status-icon">&#9888;</span><br>Validation triggered with unexpected value: {0}</div>'.format(cgi.escape(result))
         else:
-            data = '<div class="solution-text"><img src="{0}" alt="Fail" width="150" height="150"><br>Failed! Try again!</div>'.format(IMAGE_ROUTES[tag]['error'])
+            data = '<div class="result-panel error"><span class="status-icon">&#10060;</span><br>Content validation failed. Please check your input.</div>'
     return data
 
 
-############## MEDIUM #################### 
+############## PRODUCT DESCRIPTION VALIDATOR #################### 
 
-@app.route('/xss25', methods=['POST', 'GET'])
-def xss25():
-    msg = request.form.get('solution','')
-    blacklist = ['script', "onload", "onmouseover", "onclick", "onbegin", "onerror", "svg", "'"]  # Remove script, some handlers, svg and single quote 
-    value =  "" if msg == "" else '> {0}'.format(msg)
+@app.route('/admin/products/validate', methods=['POST', 'GET'])
+def validate_product_description():
+    """
+    Product description validator endpoint - validates HTML content for safety
+    Implements isCleanHtml validation similar to PrestaShop's Validate class
+    """
+    content = request.form.get('description','')
+    
+    # HTML sanitization filter - blocks dangerous event handlers and tags
+    # Based on common XSS prevention patterns
+    blocked_patterns = [
+        'script',      # Script tags
+        'onclick',     # Mouse click handler
+        'onmouseover', # Mouse hover handler  
+        'onmouseout',  # Mouse leave handler
+        'onload',      # Load event handler
+        'onerror',     # Error event handler
+        'onfocus',     # Focus event handler
+        'onblur',      # Blur event handler
+        'onsubmit',    # Form submit handler
+        'onchange',    # Input change handler
+        'onkeydown',   # Key press handlers
+        'onkeyup',
+        'onkeypress',
+        'ondblclick',  # Double click handler
+        'oncontextmenu', # Right click handler
+        'svg',         # SVG tags (can contain scripts)
+        'iframe',      # Iframe embedding
+        'object',      # Object embedding
+        'embed',       # Embed tags
+        'javascript:', # JavaScript URLs
+        "'"            # Single quotes
+    ]
+    
+    value = "" if content == "" else content
+    
+    for pattern in blocked_patterns:
+        if pattern in content.lower():
+            error_msg = '<div class="result-panel error"><span class="status-icon">&#128683;</span><br>Security violation: Content contains blocked pattern: %s</div>' % cgi.escape(pattern)
+            return PRODUCT_VALIDATOR_PAGE.format(value, "", error_msg)
 
-    for word in blacklist:
-        if word in msg.lower():
-            error_msg = """<div class="solution-text">Sorry you can't use: '%s'</div>""" % word
-            value = ">"
-            return XSS_CONTENT_POST.format("25","Star",value,"",error_msg)
+    page_content = PRODUCT_VALIDATOR_PAGE.format(value, "", "")
+    result = check_xss(page_content, flags[0], content, 'xss_medium')
 
-    data = XSS_CONTENT_POST.format("25","Star",value, "","")
-    result= check_xss(data,flags[0],msg,'xss_medium')
-
-    response = make_response(XSS_CONTENT_POST.format("25","Star",value, result, ""))
+    response = make_response(PRODUCT_VALIDATOR_PAGE.format(value, result, ""))
     response.headers["X-XSS-Protection"] = "0"
     return response
 
+
+# Legacy endpoint redirect
+@app.route('/xss25', methods=['POST', 'GET'])
+def xss25_redirect():
+    return '<html><body><h1>Endpoint Deprecated</h1><p>This endpoint has been moved. Please use the <a href="/admin/products/validate">Product Validator</a>.</p></body></html>'
+
 if __name__ == '__main__':
-    #app.run(host='0.0.0.0', port=5001, threaded=True)
     app.run(debug=True)

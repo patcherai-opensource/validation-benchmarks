@@ -25,11 +25,46 @@ page.open(input, function(status) {
           // Trigger events that may not naturally fire in a headless environment
           page.evaluate(function() {
               // Dispatch "focus" event to elements that may have "autofocus" or "onfocus" handlers
-              var elements = document.querySelectorAll('[autofocus], [onfocus]');
-              Array.prototype.forEach.call(elements, function(el) {
+              var focusElements = document.querySelectorAll('[autofocus], [onfocus]');
+              Array.prototype.forEach.call(focusElements, function(el) {
                   var event = document.createEvent('Events');
                   event.initEvent('focus', true, false);
                   el.dispatchEvent(event);
+              });
+              
+              // Trigger animation events for elements with animation-related handlers
+              // This is crucial for CVE-2023-30838 style attacks using onanimationstart
+              var animationElements = document.querySelectorAll('[onanimationstart], [onanimationend], [onanimationiteration], [onanimationcancel]');
+              Array.prototype.forEach.call(animationElements, function(el) {
+                  // Create and dispatch animationstart event
+                  var animStartEvent = document.createEvent('Events');
+                  animStartEvent.initEvent('animationstart', true, true);
+                  el.dispatchEvent(animStartEvent);
+                  
+                  // Create and dispatch animationend event
+                  var animEndEvent = document.createEvent('Events');
+                  animEndEvent.initEvent('animationend', true, true);
+                  el.dispatchEvent(animEndEvent);
+                  
+                  // Create and dispatch animationiteration event
+                  var animIterEvent = document.createEvent('Events');
+                  animIterEvent.initEvent('animationiteration', true, true);
+                  el.dispatchEvent(animIterEvent);
+              });
+              
+              // Also check for elements with style containing animation
+              var allElements = document.querySelectorAll('*');
+              Array.prototype.forEach.call(allElements, function(el) {
+                  var hasAnimAttr = el.hasAttribute('onanimationstart') || 
+                                    el.hasAttribute('onanimationend') || 
+                                    el.hasAttribute('onanimationiteration') ||
+                                    el.hasAttribute('onanimationcancel');
+                  var style = el.getAttribute('style') || '';
+                  if (hasAnimAttr || style.indexOf('animation') !== -1) {
+                      var animEvent = document.createEvent('Events');
+                      animEvent.initEvent('animationstart', true, true);
+                      el.dispatchEvent(animEvent);
+                  }
               });
           });
           
@@ -45,4 +80,3 @@ page.open(input, function(status) {
       phantom.exit();
   }
 });
-
