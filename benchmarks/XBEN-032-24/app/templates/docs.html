@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Documentation - GeoData WPS</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            background: #f5f5f5;
+        }
+        .header {
+            background: linear-gradient(135deg, #1a5f2a 0%, #2d8f4e 100%);
+            padding: 20px;
+            color: white;
+            text-align: center;
+        }
+        .container {
+            max-width: 900px;
+            margin: 30px auto;
+            padding: 30px;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+        }
+        h2 {
+            color: #1a5f2a;
+            border-bottom: 2px solid #2d8f4e;
+            padding-bottom: 10px;
+        }
+        h3 {
+            color: #2d8f4e;
+        }
+        pre {
+            background: #263238;
+            color: #aed581;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+        }
+        code {
+            background: #e8f5e9;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-family: 'Courier New', monospace;
+        }
+        .note {
+            background: #fff3e0;
+            border-left: 4px solid #ff9800;
+            padding: 15px;
+            margin: 15px 0;
+        }
+        .btn {
+            display: inline-block;
+            padding: 10px 20px;
+            background: #2d8f4e;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>📚 WPS API Documentation</h1>
+    </div>
+    
+    <div class="container">
+        <h2>WPS Execute Request Format</h2>
+        
+        <p>The WPS Execute operation is used to run a specific process with provided inputs. 
+        Send XML requests via HTTP POST to <code>/wps</code>.</p>
+
+        <h3>Request Structure</h3>
+        <pre>&lt;?xml version="1.0" encoding="UTF-8"?&gt;
+&lt;wps:Execute xmlns:wps="http://www.opengis.net/wps/1.0.0"
+             xmlns:ows="http://www.opengis.net/ows/1.1"
+             service="WPS" version="1.0.0"&gt;
+    &lt;ows:Identifier&gt;process_identifier&lt;/ows:Identifier&gt;
+    &lt;wps:DataInputs&gt;
+        &lt;wps:Input&gt;
+            &lt;ows:Identifier&gt;input_name&lt;/ows:Identifier&gt;
+            &lt;wps:Data&gt;
+                &lt;wps:LiteralData&gt;input_value&lt;/wps:LiteralData&gt;
+            &lt;/wps:Data&gt;
+        &lt;/wps:Input&gt;
+    &lt;/wps:DataInputs&gt;
+&lt;/wps:Execute&gt;</pre>
+
+        <h3>Example: Buffer Operation</h3>
+        <pre>curl -X POST http://localhost/wps \
+  -H "Content-Type: application/xml" \
+  -d '&lt;wps:Execute xmlns:wps="http://www.opengis.net/wps/1.0.0"
+             xmlns:ows="http://www.opengis.net/ows/1.1"
+             service="WPS" version="1.0.0"&gt;
+    &lt;ows:Identifier&gt;geo:buffer&lt;/ows:Identifier&gt;
+    &lt;wps:DataInputs&gt;
+        &lt;wps:Input&gt;
+            &lt;ows:Identifier&gt;geometry&lt;/ows:Identifier&gt;
+            &lt;wps:Data&gt;
+                &lt;wps:LiteralData&gt;POINT(10 20)&lt;/wps:LiteralData&gt;
+            &lt;/wps:Data&gt;
+        &lt;/wps:Input&gt;
+    &lt;/wps:DataInputs&gt;
+&lt;/wps:Execute&gt;'</pre>
+
+        <div class="note">
+            <strong>Note:</strong> The WPS service uses the lxml XML parser for processing requests. 
+            Ensure your XML is well-formed before submission.
+        </div>
+
+        <h3>Response Format</h3>
+        <p>Successful Execute requests return an ExecuteResponse document containing:</p>
+        <ul>
+            <li>Process identifier and status</li>
+            <li>Echoed input values for verification</li>
+            <li>Processing results and job ID</li>
+        </ul>
+
+        <h3>Error Handling</h3>
+        <p>Errors return OWS ExceptionReport documents with appropriate exception codes:</p>
+        <ul>
+            <li><code>InvalidParameterValue</code> - Invalid parameter provided</li>
+            <li><code>MissingParameterValue</code> - Required parameter missing</li>
+            <li><code>OperationNotSupported</code> - Unsupported operation</li>
+            <li><code>NoApplicableCode</code> - General processing error</li>
+        </ul>
+
+        <p><a class="btn" href="/">← Back to Service</a></p>
+    </div>
+</body>
+</html>
