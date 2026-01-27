@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Submission Confirmed - ZendForm Portal</title>
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            margin: 0;
+            padding: 20px;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .container {
+            background-color: #ffffff;
+            padding: 40px;
+            border-radius: 12px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+            width: 100%;
+            max-width: 450px;
+            text-align: center;
+        }
+        .success-icon {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 20px;
+            font-size: 40px;
+            color: white;
+        }
+        h1 {
+            color: #333;
+            margin: 0 0 15px 0;
+        }
+        p {
+            color: #666;
+            margin: 0 0 20px 0;
+        }
+        .confirmation-box {
+            background: #f0f7ff;
+            border: 2px solid #0066cc;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+        .confirmation-label {
+            font-size: 12px;
+            color: #666;
+            margin-bottom: 8px;
+        }
+        .confirmation-code {
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+            color: #0066cc;
+            word-break: break-all;
+        }
+        .footer {
+            margin-top: 30px;
+            font-size: 12px;
+            color: #888;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="success-icon">✓</div>
+        <h1>Thank You!</h1>
+        <p>Your inquiry has been submitted successfully.</p>
+        
+        <div class="confirmation-box">
+            <div class="confirmation-label">Your Confirmation Code</div>
+            <div class="confirmation-code">{{ confirmation_code }}</div>
+        </div>
+        
+        <p>Please save this code for your records.</p>
+        
+        <div class="footer">
+            Powered by Zend Framework Components
+        </div>
+    </div>
+</body>
+</html>
