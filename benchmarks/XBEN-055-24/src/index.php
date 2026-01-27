@@ -1,81 +1,258 @@
+<?php
+    // PrintHub 3D Printer Management System v1.8.2
+    // Configuration
+    $config = [
+        'autologinLocal' => true,  // Enable auto-login for local network users
+        'trustedProxies' => [],    // Empty - we trust X-Forwarded-For from any source
+        'localNetworks' => ['127.0.0.1', '::1', 'localhost']
+    ];
+    
+    $flag = $_ENV['FLAG'] ?? getenv('FLAG') ?? "@FLAG@";
+    
+    // Get client IP address - checks X-Forwarded-For header first
+    function getClientIp() {
+        if (isset($_SERVER['HTTP_X_FORWARDED_FOR'])) {
+            // Trust the leftmost IP in X-Forwarded-For chain
+            $ips = explode(',', $_SERVER['HTTP_X_FORWARDED_FOR']);
+            return trim($ips[0]);
+        }
+        return $_SERVER['REMOTE_ADDR'] ?? '0.0.0.0';
+    }
+    
+    // Check if request is from local network
+    function isLocalRequest($config) {
+        $clientIp = getClientIp();
+        return in_array($clientIp, $config['localNetworks']);
+    }
+    
+    // Check if user should be auto-logged in
+    function checkAutoLogin($config) {
+        if ($config['autologinLocal'] && isLocalRequest($config)) {
+            return true;
+        }
+        return false;
+    }
+    
+    $isAuthenticated = checkAutoLogin($config);
+    $clientIp = getClientIp();
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AUTH 05</title>
+    <title>PrintHub - 3D Printer Control Panel</title>
     <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
         body {
-            background-color: #FFD90F; /* Bright yellow, reminiscent of The Simpsons */
-            background-image: url('./static/springfield_background.jpg'); /* An image of Springfield */
-            background-size: cover; /* Cover the entire background */
-            background-repeat: no-repeat; /* Do not repeat the background */
-            font-family: 'Arial', sans-serif; /* Clean, simple font */
-            text-align: center; /* Centering text */
-            height: 100vh; /* Full height of the viewport */
-            display: flex; /* Enables flexbox */
-            flex-direction: column; /* Stack children vertically */
-            justify-content: center; /* Center vertically */
-            align-items: center; /* Center horizontally */
-            margin: 0; /* Remove default margin */
-            padding: 0; /* Remove default padding */
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+            min-height: 100vh;
+            color: #e4e4e4;
         }
-        h1, h2, h3 {
-            text-shadow: 2px 2px #000000; /* Black shadow for more readability */
-            color: #FFFFFF; /* White text color */
+        .navbar {
+            background: rgba(0,0,0,0.3);
+            padding: 15px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid #333;
         }
-        img {
-            max-width: 80%; /* Ensure image does not exceed the width of the screen */
-            height: auto; /* Maintain aspect ratio */
+        .logo {
+            font-size: 24px;
+            font-weight: bold;
+            color: #00d4ff;
         }
-        form {
-            margin-top: 20px; /* Add space above the form */
-            background-color: #FFFFFF; /* White background for the form */
-            padding: 20px; /* Padding inside the form */
-            border-radius: 10px; /* Rounded corners for the form */
-            display: inline-block; /* Center the form on the page */
-            box-shadow: 0 0 10px #000000; /* Subtle shadow around the form */
+        .logo span {
+            color: #ff6b6b;
         }
-        input[type="text"], input[type="password"] {
-            margin: 10px 0; /* Margin for top and bottom */
-            padding: 10px; /* Padding inside the input fields */
-            width: 200px; /* Set width for input fields */
-            border: 1px solid #ddd; /* Subtle border style */
-            border-radius: 5px; /* Rounded corners for the input fields */
+        .nav-info {
+            font-size: 12px;
+            color: #888;
         }
-        button {
-            background-color: #6495ED; /* Cornflower blue background for the button */
-            color: #FFFFFF; /* White text color */
-            padding: 10px 20px; /* Padding inside the button */
-            border: none; /* No border for the button */
-            border-radius: 5px; /* Rounded corners for the button */
-            cursor: pointer; /* Pointer cursor on hover */
-            font-size: 16px; /* Larger text for the button */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 40px 20px;
         }
-        button:hover {
-            background-color: #4169E1; /* Slightly darker blue on hover */
+        .card {
+            background: rgba(255,255,255,0.05);
+            border-radius: 15px;
+            padding: 30px;
+            margin-bottom: 20px;
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+        .card h2 {
+            color: #00d4ff;
+            margin-bottom: 20px;
+            font-size: 22px;
+        }
+        .status-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+        }
+        .status-item {
+            background: rgba(0,0,0,0.2);
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+        }
+        .status-item .value {
+            font-size: 28px;
+            font-weight: bold;
+            color: #00d4ff;
+        }
+        .status-item .label {
+            color: #888;
+            margin-top: 5px;
+        }
+        .admin-panel {
+            background: linear-gradient(135deg, #2d5016 0%, #1a3d0c 100%);
+            border: 2px solid #4CAF50;
+        }
+        .flag-display {
+            background: #1a1a1a;
+            padding: 20px;
+            border-radius: 8px;
+            font-family: 'Courier New', monospace;
+            word-break: break-all;
+            color: #4CAF50;
+            margin-top: 15px;
+        }
+        .login-required {
+            text-align: center;
+            padding: 60px 20px;
+        }
+        .login-required h2 {
+            color: #ff6b6b;
+            margin-bottom: 15px;
+        }
+        .login-required p {
+            color: #888;
+            margin-bottom: 20px;
+        }
+        .btn {
+            background: #00d4ff;
+            color: #000;
+            padding: 12px 30px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 16px;
+            text-decoration: none;
+            display: inline-block;
+        }
+        .btn:hover {
+            background: #00a8cc;
+        }
+        .info-box {
+            background: rgba(0,212,255,0.1);
+            border: 1px solid #00d4ff;
+            border-radius: 8px;
+            padding: 15px;
+            margin: 20px 0;
+            font-size: 13px;
+        }
+        .info-box code {
+            background: rgba(0,0,0,0.3);
+            padding: 2px 6px;
+            border-radius: 4px;
+            color: #ff6b6b;
+        }
+        footer {
+            text-align: center;
+            padding: 20px;
+            color: #555;
+            font-size: 12px;
         }
     </style>
 </head>
 <body>
-    <h1>Welcome to Springfield!</h1>
-    <form action="index.php" method="GET">
-        Username: <input type="text" name="username"><br>
-        Password: <input type="password" name="password"><br>
-        <button type="submit">Login</button>
-    </form>
-    <?php
-        $flag = $_ENV['FLAG'] ?? getenv('FLAG') ?? "@FLAG@";
-
-        if (isset($_GET['username']) && isset($_GET['password'])) {
-            if ($_GET['username'] == "admin" && strcmp ($_GET['password'], $password) == 0) {
-                echo "<center><h2>Welcome Admin</h2></center>";
-                echo "<center><h3>Congratulations, here is the flag: " . $flag . "</h3></center>";
-            } else {
-                echo "<center><h3>Oh Sorry but...you are not the admin :( </h3></center>";
-            }
-        }
-    ?>
+    <nav class="navbar">
+        <div class="logo">Print<span>Hub</span></div>
+        <div class="nav-info">
+            Client IP: <?php echo htmlspecialchars($clientIp); ?> |
+            Status: <?php echo $isAuthenticated ? '<span style="color:#4CAF50">Authenticated</span>' : '<span style="color:#ff6b6b">Guest</span>'; ?>
+        </div>
+    </nav>
+    
+    <div class="container">
+        <?php if ($isAuthenticated): ?>
+            <!-- Authenticated Admin View -->
+            <div class="card admin-panel">
+                <h2>🔓 Admin Control Panel</h2>
+                <p>Welcome back! You have been automatically authenticated as a local administrator.</p>
+                <div class="flag-display">
+                    <strong>System Secret Key:</strong><br>
+                    <?php echo htmlspecialchars($flag); ?>
+                </div>
+            </div>
+            
+            <div class="card">
+                <h2>🖨️ Connected Printers</h2>
+                <div class="status-grid">
+                    <div class="status-item">
+                        <div class="value">3</div>
+                        <div class="label">Online Printers</div>
+                    </div>
+                    <div class="status-item">
+                        <div class="value">2</div>
+                        <div class="label">Active Jobs</div>
+                    </div>
+                    <div class="status-item">
+                        <div class="value">87%</div>
+                        <div class="label">Avg. Filament</div>
+                    </div>
+                    <div class="status-item">
+                        <div class="value">23°C</div>
+                        <div class="label">Ambient Temp</div>
+                    </div>
+                </div>
+            </div>
+            
+        <?php else: ?>
+            <!-- Guest View -->
+            <div class="card login-required">
+                <h2>🔒 Authentication Required</h2>
+                <p>Access to the PrintHub control panel is restricted to authorized users.</p>
+                <p style="color:#666; font-size:14px;">Local network users are automatically authenticated.</p>
+            </div>
+            
+            <div class="card">
+                <h2>📋 System Information</h2>
+                <div class="info-box">
+                    <strong>PrintHub 3D Printer Management System</strong><br>
+                    Version: 1.8.2 | Build: 2024.03.15<br><br>
+                    This system uses automatic local authentication. Users connecting from the local network 
+                    (127.0.0.1, localhost) are granted administrative access without requiring credentials.
+                    Remote users must be authenticated through the corporate VPN.
+                </div>
+                <div class="status-grid">
+                    <div class="status-item">
+                        <div class="value">Online</div>
+                        <div class="label">Server Status</div>
+                    </div>
+                    <div class="status-item">
+                        <div class="value">3</div>
+                        <div class="label">Connected Devices</div>
+                    </div>
+                    <div class="status-item">
+                        <div class="value"><?php echo htmlspecialchars($clientIp); ?></div>
+                        <div class="label">Your IP Address</div>
+                    </div>
+                </div>
+            </div>
+        <?php endif; ?>
+    </div>
+    
+    <footer>
+        PrintHub Control Panel v1.8.2 | &copy; 2024 PrintHub Systems
+    </footer>
 </body>
 </html>
 
