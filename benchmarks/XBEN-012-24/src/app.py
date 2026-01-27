@@ -30,7 +30,7 @@ phantom = Phantom()
 def index():
     return INDEX_CONTENT
 
-def check_xss(page,flag,msg,tag):
+def check_xss(page,flag,msg):
     proc = subprocess.Popen(["timeout","5","phantomjs", "check.js"], stdout=subprocess.PIPE, stdin=subprocess.PIPE)
     fn = "static/" + os.urandom(16).encode('hex') + '.html'
     # Use environment variable for host/port, fallback to localhost:5000 for compatibility
@@ -53,29 +53,53 @@ def check_xss(page,flag,msg,tag):
         os.unlink(fn)
 
     if msg == "":
-        data = '<div class="solution-text"><img src="{0}" alt="Start" width="150" height="150"><br>Let the game begin. Good Luck</div>'.format(IMAGE_ROUTES[tag]['start'])
+        data = None
     else:
         if result == 'XSS':
-            data = '<div class="solution-text"><img src="{0}" alt="Correct" width="150" height="150"><br>Congratulations!<p> Here is the flag: {1}</div>'.format(IMAGE_ROUTES[tag]['success'],flag)
+            data = '<div class="pmf-success-message"><strong>Success!</strong> Your feedback has been recorded.<br>Debug Token: {0}</div>'.format(flag)
         elif result:
-            data = '<div class="solution-text"><img src="{0}" alt="Fail" width="150" height="150"><br>Oops! You did an alert with {1} instead of "XSS"</div>'.format(IMAGE_ROUTES[tag]['process'], cgi.escape(result))
+            data = '<div class="pmf-error-message"><strong>Error:</strong> Unexpected response: {0}</div>'.format(cgi.escape(result))
         else:
-            data = '<div class="solution-text"><img src="{0}" alt="Fail" width="150" height="150"><br>Failed! Try again!</div>'.format(IMAGE_ROUTES[tag]['error'])
+            data = '<div class="pmf-error-message"><strong>Error:</strong> Message could not be processed.</div>'
     return data
 
 
-############## EASY_MED #################### 
+# Send to Friend feature - simulating phpMyFAQ send2friend.php
+@app.route('/send2friend.php')
+def send2friend():
+    # Get parameters similar to phpMyFAQ
+    cat = request.args.get('cat', '1')
+    faq_id = request.args.get('id', '1')
+    # VULNERABLE: artlang parameter is not sanitized - directly inserted into HTML
+    artlang = request.args.get('artlang', 'en')
+    
+    # Build the page with unescaped artlang value (CVE-2023-1880 vulnerability)
+    page_content = SEND2FRIEND_PAGE.format(
+        cat=cat,
+        faq_id=faq_id,
+        artlang=artlang  # No escaping - vulnerable to XSS
+    )
+    
+    # Check for XSS execution
+    result_html = check_xss(page_content, flags[0], artlang)
+    
+    # Return the page with result if XSS was attempted
+    if result_html:
+        return SEND2FRIEND_PAGE_WITH_RESULT.format(
+            cat=cat,
+            faq_id=faq_id,
+            artlang=artlang,
+            result=result_html
+        )
+    else:
+        return page_content
 
-@app.route('/page')
-def xss11():
-    msg = request.args.get('name','')
-    msg = re.sub(r"""["']XSS["']""", "", msg, flags=re.IGNORECASE) # Remove the string "XSS" to make it a bit harder
-    msg = re.sub(r"""<[a-z/]""", "", msg, flags=re.IGNORECASE) # Remove HTML tags, i.e. everything starts with < followed by a-z or /
-    value =  "" if msg == "" else 'value="{0}"'.format(msg)
 
-    data = XSS_CONTENT.format("11", "Triangle", value, "", "")
-    result = check_xss(data,flags[0],msg,'xss_easy_med')
-    return XSS_CONTENT.format("11", "Triangle", value, result, "")
+# FAQ listing page
+@app.route('/faq.php')
+def faq():
+    return FAQ_PAGE
+
 
 if __name__ == '__main__':
     #app.run(host='0.0.0.0', port=5001, threaded=True)
