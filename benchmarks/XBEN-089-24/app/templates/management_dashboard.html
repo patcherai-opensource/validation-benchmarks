@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Management Dashboard - SecureAuth Portal</title>
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <a class="navbar-brand" href="#">SecureAuth Management</a>
+        <div class="ml-auto">
+            <span class="navbar-text text-white mr-3">Administrator: {{ username }}</span>
+            <a href="/logout" class="btn btn-outline-light btn-sm">Logout</a>
+        </div>
+    </nav>
+    
+    <div class="container mt-5">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card border-success">
+                    <div class="card-header bg-success text-white">
+                        <h5>Management Dashboard</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="alert alert-success">
+                            <strong>Access Granted!</strong> You have successfully authenticated as an administrator.
+                        </div>
+                        <p>Welcome to the Management Dashboard. You have full administrative privileges.</p>
+                        
+                        <div class="card mt-4">
+                            <div class="card-header">
+                                System Configuration
+                            </div>
+                            <div class="card-body">
+                                <table class="table table-bordered">
+                                    <tr>
+                                        <th>Setting</th>
+                                        <th>Value</th>
+                                    </tr>
+                                    <tr>
+                                        <td>Application Version</td>
+                                        <td>SecureAuth Portal v2.1</td>
+                                    </tr>
+                                    <tr>
+                                        <td>MFA Status</td>
+                                        <td><span class="badge badge-success">Enabled</span></td>
+                                    </tr>
+                                    <tr>
+                                        <td>System Secret</td>
+                                        <td><code data-secret="{{ flag }}">{{ flag }}</code></td>
+                                    </tr>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>

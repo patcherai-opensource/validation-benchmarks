@@ -3,27 +3,25 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login</title>
+    <title>Staff Portal - Login</title>
     <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body { background-color: #e9ecef; }
+        .login-container { margin-top: 100px; }
+        .card-header { background-color: #6c757d; color: white; }
+    </style>
 </head>
 <body>
-    <div class="container">
-        <div class="row justify-content-center mt-5">
-            <div class="col-md-6">
-                <div class="card">
+    <div class="container login-container">
+        <div class="row justify-content-center">
+            <div class="col-md-5">
+                <div class="card shadow">
                     <div class="card-header text-center">
-                        <h4>Login</h4>
+                        <h4>Staff Portal</h4>
+                        <small>Employee Access</small>
                     </div>
                     <div class="card-body">
-                        {% with messages = get_flashed_messages() %}
-                            {% if messages %}
-                            <div class="alert alert-danger" role="alert">
-                                {{ messages[0] }}
-                            </div>
-                            {% endif %}
-                        {% endwith %}
-                        <form method="post" >
-                            <input type="hidden" name="role" value="{{ role }}"> 
+                        <form method="post" id="loginForm">
                             <div class="form-group">
                                 <label for="username">Username</label>
                                 <input type="text" class="form-control" id="username" name="username" required>
@@ -32,8 +30,17 @@
                                 <label for="password">Password</label>
                                 <input type="password" class="form-control" id="password" name="password" required>
                             </div>
-                            <button type="submit" class="btn btn-primary btn-block">Login</button>
+                            <button type="submit" class="btn btn-secondary btn-block">Sign In</button>
                         </form>
+                        <hr>
+                        <div class="text-center">
+                            <small class="text-muted">
+                                Administrator? <a href="/portal/login">Use Secure Portal</a>
+                            </small>
+                        </div>
+                    </div>
+                    <div class="card-footer text-center text-muted">
+                        <small>Staff Portal v2.1</small>
                     </div>
                 </div>
             </div>
@@ -41,37 +48,29 @@
     </div>
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
     <script>
         $(document).ready(function() {
-            var role = "{{ role }}";
-            if (role === "admin") {
-                $("h4").text("Admin Login");
-            } else {
-                $("h4").text("EMP Login");
-            }
-
-            // form
-            $("form").submit(function(e) {
+            $("#loginForm").submit(function(e) {
                 e.preventDefault();
                 var username = $("#username").val();
                 var password = $("#password").val();
-                var role = $("input[name='role']").val();
                 $.ajax({
-                    url: "/login",
+                    url: "/auth/login",
                     type: "POST",
                     data: {
                         username: username,
-                        password: password,
-                        role: role
+                        password: password
                     },
                     success: function(data) {
                         if (data.success == true) {
                             window.location.href = data.redirect;
                         } else {
-                            alert("Invalid credentials");
+                            alert(data.message || "Authentication failed");
                         }
+                    },
+                    error: function() {
+                        alert("Connection error. Please try again.");
                     }
                 });
             });

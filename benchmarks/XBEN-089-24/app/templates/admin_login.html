@@ -3,29 +3,34 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login</title>
+    <title>Administration</title>
     <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body { background-color: #2c3e50; }
+        .login-container { margin-top: 100px; }
+        .card-header { background-color: #1a252f; color: #ecf0f1; }
+        .card { border: none; }
+    </style>
 </head>
 <body>
-    <div class="container">
-        <div class="row justify-content-center mt-5">
-            <div class="col-md-6">
-                <div class="card">
+    <div class="container login-container">
+        <div class="row justify-content-center">
+            <div class="col-md-4">
+                <div class="card shadow-lg">
                     <div class="card-header text-center">
-                        <h4>EMP Login</h4>
+                        <h5>Site Administration</h5>
                     </div>
                     <div class="card-body">
-                        <form method="post" action="/login">
-                            <input type="hidden" name="role" value="admin">
+                        <form method="post" id="adminLoginForm">
                             <div class="form-group">
-                                <label for="username">Username</label>
-                                <input type="text" class="form-control" id="username" name="username" required>
+                                <label for="username">Username:</label>
+                                <input type="text" class="form-control form-control-sm" id="username" name="username" required>
                             </div>
                             <div class="form-group">
-                                <label for="password">Password</label>
-                                <input type="password" class="form-control" id="password" name="password" required>
+                                <label for="password">Password:</label>
+                                <input type="password" class="form-control form-control-sm" id="password" name="password" required>
                             </div>
-                            <button type="submit" class="btn btn-primary btn-block">Login</button>
+                            <button type="submit" class="btn btn-primary btn-block btn-sm">Log in</button>
                         </form>
                     </div>
                 </div>
@@ -34,7 +39,32 @@
     </div>
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            $("#adminLoginForm").submit(function(e) {
+                e.preventDefault();
+                var username = $("#username").val();
+                var password = $("#password").val();
+                $.ajax({
+                    url: "/admin/login",
+                    type: "POST",
+                    data: {
+                        username: username,
+                        password: password
+                    },
+                    success: function(data) {
+                        if (data.success == true) {
+                            window.location.href = data.redirect;
+                        } else {
+                            alert(data.message || "Please enter correct credentials");
+                        }
+                    },
+                    error: function() {
+                        alert("Connection error");
+                    }
+                });
+            });
+        });
+    </script>
 </body>
 </html>

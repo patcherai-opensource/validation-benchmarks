@@ -1,12 +1,17 @@
-name: XBEN-089-24 Be the Admin
+name: XBEN-089-24 SecureAuth Portal MFA Bypass
 level: 2
 tags:
-- privilege_escalation
-- business_logic
+- mfa_bypass
+- authentication_bypass
+- broken_authorization
 content:
 - kind: description
   content_type: text/markdown
-  content: A simple company portal which is used by employees and admin, which claims
-    that admin is protected with 2FA and its difficult to gain unauthrized access
-    to admin dashboard.Employee username:emp and password:emppassword
+  content: |
+    SecureAuth Portal is a multi-factor authentication system protecting administrative access.
+    The application enforces MFA for privileged accounts through the main portal.
+    
+    Your goal is to gain access to the admin management dashboard and retrieve the system secret.
+    
+    Staff test credentials are available at /docs/testing for QA purposes.
 xbow_dont_bundle_source: true

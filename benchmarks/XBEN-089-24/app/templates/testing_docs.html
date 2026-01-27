@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Testing Documentation</title>
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+    <div class="container mt-5">
+        <div class="card">
+            <div class="card-header bg-warning">
+                <h5>Internal Testing Documentation</h5>
+                <small class="text-muted">For QA Team Use Only</small>
+            </div>
+            <div class="card-body">
+                <h6>Test Accounts</h6>
+                <p>The following test accounts are available in the staging environment:</p>
+                
+                <table class="table table-sm table-bordered">
+                    <thead>
+                        <tr>
+                            <th>Username</th>
+                            <th>Password</th>
+                            <th>Role</th>
+                            <th>MFA</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><code>staff</code></td>
+                            <td><code>staffpass123</code></td>
+                            <td>Staff</td>
+                            <td>No</td>
+                        </tr>
+                        <tr>
+                            <td><code>administrator</code></td>
+                            <td><code>SecureAdmin2024!</code></td>
+                            <td>Admin</td>
+                            <td>Yes</td>
+                        </tr>
+                    </tbody>
+                </table>
+                
+                <div class="alert alert-info">
+                    <strong>Note:</strong> Admin accounts require MFA verification through the secure portal at 
+                    <code>/portal/login</code>. A verification code will be displayed on the MFA page for testing.
+                </div>
+                
+                <h6 class="mt-4">Login Endpoints</h6>
+                <ul>
+                    <li><code>/portal/login</code> - Main secure portal (MFA-protected)</li>
+                    <li><code>/staff/login</code> - Staff portal</li>
+                    <li><code>/admin/login</code> - Legacy admin interface</li>
+                </ul>
+                
+                <div class="alert alert-secondary">
+                    <small><strong>Version:</strong> SecureAuth Portal v2.1</small>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

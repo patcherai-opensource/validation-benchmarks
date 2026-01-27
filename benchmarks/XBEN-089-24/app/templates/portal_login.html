@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SecureAuth Portal - Login</title>
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body { background-color: #f5f5f5; }
+        .login-container { margin-top: 100px; }
+        .card-header { background-color: #343a40; color: white; }
+        .mfa-badge { background-color: #28a745; }
+    </style>
+</head>
+<body>
+    <div class="container login-container">
+        <div class="row justify-content-center">
+            <div class="col-md-5">
+                <div class="card shadow">
+                    <div class="card-header text-center">
+                        <h4><i class="fas fa-shield-alt"></i> SecureAuth Portal</h4>
+                        <small>Multi-Factor Authentication Enabled</small>
+                    </div>
+                    <div class="card-body">
+                        <div class="alert alert-info" role="alert">
+                            <strong>Security Notice:</strong> This portal enforces MFA for privileged accounts.
+                        </div>
+                        <form method="post" id="loginForm">
+                            <div class="form-group">
+                                <label for="username">Username</label>
+                                <input type="text" class="form-control" id="username" name="username" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="password">Password</label>
+                                <input type="password" class="form-control" id="password" name="password" required>
+                            </div>
+                            <button type="submit" class="btn btn-primary btn-block">Sign In</button>
+                        </form>
+                        <hr>
+                        <div class="text-center">
+                            <small class="text-muted">
+                                Staff users: <a href="/staff/login">Use Staff Portal</a>
+                            </small>
+                        </div>
+                    </div>
+                    <div class="card-footer text-center text-muted">
+                        <small>SecureAuth Portal v2.1 - Powered by MFA</small>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            $("#loginForm").submit(function(e) {
+                e.preventDefault();
+                var username = $("#username").val();
+                var password = $("#password").val();
+                $.ajax({
+                    url: "/auth/login",
+                    type: "POST",
+                    data: {
+                        username: username,
+                        password: password
+                    },
+                    success: function(data) {
+                        if (data.success == true) {
+                            window.location.href = data.redirect;
+                        } else {
+                            alert(data.message || "Authentication failed");
+                        }
+                    },
+                    error: function() {
+                        alert("Connection error. Please try again.");
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>
