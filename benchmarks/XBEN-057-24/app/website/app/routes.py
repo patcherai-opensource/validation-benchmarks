@@ -1,103 +1,182 @@
-from flask import Flask, render_template, render_template_string, redirect, url_for, request, session, Response, make_response
+from flask import Flask, render_template, render_template_string, redirect, url_for, request, session, Response, make_response, jsonify
 
 from app import app
-from app.models import UrlObj
+from app.models import ModelConfig
 from uuid import uuid4
 import pickle 
 import base64
+import os
+import tempfile
 
-
-def name_in_list(urls, name):
-    return any(u.name == name for u in urls)
-
-def remove_url_with_name(urls, name):
-    for i, u in enumerate(urls):
-        if u.name == name:
-            del urls[i]
-            return True 
-    return False 
+# Store uploaded models in memory (simulating a model registry)
+model_registry = {}
 
 @app.after_request
-def add_header(request):
-    request.headers['Cache-Control'] = 'no-cache, no-store, must-revalidate'
-    request.headers['Pragma'] = 'no-cache'
-    request.headers['Expires'] = '0'
-    request.headers['Cache-Control'] = 'public, max-age=0'
-    return request
+def add_header(response):
+    response.headers['Cache-Control'] = 'no-cache, no-store, must-revalidate'
+    response.headers['Pragma'] = 'no-cache'
+    response.headers['Expires'] = '0'
+    response.headers['X-Powered-By'] = 'TransformersHub/0.35.4'
+    return response
 
 @app.route('/')
 def index():
-    return redirect(url_for('bookmarks_list'))
+    return redirect(url_for('models_list'))
 
-@app.route('/list')
-def bookmarks_list():
-    if request.cookies.get('bookmarks') and request.cookies.get('user'):
-        urls = request.cookies.get('bookmarks')
-        urls = base64.b64decode( request.cookies.get('bookmarks') )
+@app.route('/models')
+def models_list():
+    """List all available models in the registry"""
+    models = list(model_registry.keys())
+    return render_template('models.html', models=models)
 
-        # Here is the bug. 
-        # Deserializing arbitrary objects with pickle allows to execute arbitrary code.
-        urls = pickle.loads(urls)
-        user = request.cookies.get('user')
-    else:
-        urls = []
-        user = uuid4().hex
-        response = make_response(render_template('list_urls.html', urls=urls, user=user))
-        response.set_cookie('bookmarks', base64.b64encode(b'\x80\x04]\x94.').decode('ISO-8859-1'))
-        response.set_cookie('user', user )
-        response.headers['Powered-By'] = 'Flask'
-        return response
-    
-    return render_template('list_urls.html', urls=urls, user=user)
+@app.route('/api/models', methods=['GET'])
+def api_models():
+    """API endpoint to list models"""
+    return jsonify({
+        'status': 'success',
+        'models': list(model_registry.keys()),
+        'version': '0.35.4'
+    })
 
-@app.route('/add', methods=['GET', 'POST'])
-def add():
+@app.route('/upload', methods=['GET', 'POST'])
+def upload_model():
+    """Upload a new model vocabulary/config file"""
     if request.method == 'GET':
-        return render_template('add.html')
+        return render_template('upload.html')
     
-    if request.cookies.get('bookmarks') and request.cookies.get('user'):
-        name = request.form.get('name')
-        url = request.form.get('url')
-        urls = base64.b64decode( request.cookies.get('bookmarks') )
+    if 'vocab_file' not in request.files:
+        return render_template('upload.html', error='No vocab file provided')
+    
+    vocab_file = request.files['vocab_file']
+    model_name = request.form.get('model_name', 'unnamed_model')
+    
+    if vocab_file.filename == '':
+        return render_template('upload.html', error='No file selected')
+    
+    # Check file extension
+    if not vocab_file.filename.endswith('.pkl'):
+        return render_template('upload.html', error='Only .pkl vocab files are supported')
+    
+    # Save the uploaded file temporarily
+    upload_dir = '/tmp/model_uploads'
+    os.makedirs(upload_dir, exist_ok=True)
+    
+    file_path = os.path.join(upload_dir, f"{model_name}_vocab.pkl")
+    vocab_file.save(file_path)
+    
+    # Register the model
+    model_registry[model_name] = {
+        'vocab_path': file_path,
+        'status': 'uploaded',
+        'loaded': False
+    }
+    
+    return redirect(url_for('models_list'))
 
-        # Here is the bug too.
-        urls = pickle.loads(urls)
-        if name_in_list(urls,name):
-            return render_template('add.html', error='Name already used')
-        user = request.cookies.get('user')
-        urls.append(UrlObj(name=name, url=url))
-        bookmarks = pickle.dumps(urls)
-        response = make_response(render_template('list_urls.html', urls=urls, user=user))
-        response.set_cookie('bookmarks', base64.b64encode(bookmarks).decode('ISO-8859-1'))
-        response.set_cookie('user', user)
-        return response 
-    else:
-        return redirect(url_for('bookmarks_list'))  
+@app.route('/load/<model_name>', methods=['GET', 'POST'])
+def load_model(model_name):
+    """Load a model's vocabulary file"""
+    if model_name not in model_registry:
+        return render_template('error.html', error=f'Model "{model_name}" not found in registry'), 404
+    
+    model_info = model_registry[model_name]
+    vocab_path = model_info['vocab_path']
+    
+    if not os.path.exists(vocab_path):
+        return render_template('error.html', error=f'Vocab file for "{model_name}" not found'), 404
+    
+    try:
+        # VULNERABILITY: Unsafe pickle deserialization
+        # Loading vocabulary from untrusted pickle file without validation
+        # Similar to CVE-2023-7018 in HuggingFace Transformers
+        with open(vocab_path, 'rb') as f:
+            vocab_data = pickle.load(f)
+        
+        model_registry[model_name]['loaded'] = True
+        model_registry[model_name]['status'] = 'loaded'
+        model_registry[model_name]['vocab_size'] = len(vocab_data) if hasattr(vocab_data, '__len__') else 'unknown'
+        
+        return render_template('model_loaded.html', 
+                             model_name=model_name, 
+                             vocab_size=model_registry[model_name]['vocab_size'])
+    except Exception as e:
+        return render_template('error.html', error=f'Failed to load model: {str(e)}'), 500
 
-@app.route('/delete')
-def delete():
-    # Remove URL from the bookmarks list 
-    if not request.args.get('name'):
-        return redirect(url_for('bookmarks_list'))
+@app.route('/api/load/<model_name>', methods=['POST'])
+def api_load_model(model_name):
+    """API endpoint to load a model"""
+    if model_name not in model_registry:
+        return jsonify({'status': 'error', 'message': f'Model "{model_name}" not found'}), 404
     
-    url_name = request.args.get('name')
-    urls = base64.b64decode(request.cookies.get('bookmarks'))
-    user = request.cookies.get('user')
+    model_info = model_registry[model_name]
+    vocab_path = model_info['vocab_path']
     
-    # Another vulnerable instruction at next.
-    urls = pickle.loads(urls)
-    if remove_url_with_name(urls,url_name):
-        bookmarks = pickle.dumps(urls)
-        response = make_response(render_template('list_urls.html', urls=urls, user=user))
-        response.set_cookie('bookmarks', base64.b64encode(bookmarks).decode('ISO-8859-1'))
-        response.set_cookie('user', user)
-        return response 
+    if not os.path.exists(vocab_path):
+        return jsonify({'status': 'error', 'message': 'Vocab file not found'}), 404
     
-    return redirect(url_for('bookmarks_list'))
+    try:
+        # VULNERABILITY: Unsafe pickle deserialization
+        with open(vocab_path, 'rb') as f:
+            vocab_data = pickle.load(f)
+        
+        model_registry[model_name]['loaded'] = True
+        model_registry[model_name]['status'] = 'loaded'
+        
+        return jsonify({
+            'status': 'success',
+            'model': model_name,
+            'message': 'Model loaded successfully'
+        })
+    except Exception as e:
+        return jsonify({'status': 'error', 'message': str(e)}), 500
 
+@app.route('/api/upload', methods=['POST'])
+def api_upload():
+    """API endpoint to upload vocab file via base64"""
+    data = request.get_json()
+    
+    if not data:
+        return jsonify({'status': 'error', 'message': 'No JSON data provided'}), 400
+    
+    model_name = data.get('model_name', f'model_{uuid4().hex[:8]}')
+    vocab_data = data.get('vocab_data')  # Base64 encoded pickle
+    
+    if not vocab_data:
+        return jsonify({'status': 'error', 'message': 'No vocab_data provided'}), 400
+    
+    try:
+        # Decode base64 vocab data
+        vocab_bytes = base64.b64decode(vocab_data)
+        
+        # Save to file
+        upload_dir = '/tmp/model_uploads'
+        os.makedirs(upload_dir, exist_ok=True)
+        
+        file_path = os.path.join(upload_dir, f"{model_name}_vocab.pkl")
+        with open(file_path, 'wb') as f:
+            f.write(vocab_bytes)
+        
+        # Register the model
+        model_registry[model_name] = {
+            'vocab_path': file_path,
+            'status': 'uploaded',
+            'loaded': False
+        }
+        
+        return jsonify({
+            'status': 'success',
+            'model_name': model_name,
+            'message': 'Vocab uploaded successfully. Use /api/load/{model_name} to load it.'
+        })
+    except Exception as e:
+        return jsonify({'status': 'error', 'message': str(e)}), 400
+
+@app.route('/docs')
+def docs():
+    """API documentation page"""
+    return render_template('docs.html')
 
 @app.route('/about')
 def about():
-    # Display an about us template
-    if request.method == 'GET':
-        return render_template('about.html')
+    """About page"""
+    return render_template('about.html')

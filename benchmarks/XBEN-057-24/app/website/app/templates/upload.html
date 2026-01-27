@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Upload Model - TransformersHub</title>
+    <link href="{{ url_for('static', filename='css/bootstrap.min.css') }}" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container">
+            <a class="navbar-brand" href="/">🤖 TransformersHub</a>
+            <div class="navbar-nav">
+                <a class="nav-link" href="/models">Models</a>
+                <a class="nav-link active" href="/upload">Upload</a>
+                <a class="nav-link" href="/docs">API Docs</a>
+                <a class="nav-link" href="/about">About</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container mt-5">
+        <div class="row justify-content-center">
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-header">
+                        <h4>📤 Upload Model Vocabulary</h4>
+                    </div>
+                    <div class="card-body">
+                        <form action="/upload" method="post" enctype="multipart/form-data">
+                            <div class="mb-3">
+                                <label for="model_name" class="form-label">Model Name</label>
+                                <input type="text" class="form-control" id="model_name" name="model_name" 
+                                       placeholder="e.g., bert-base-uncased" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="vocab_file" class="form-label">Vocabulary File (.pkl)</label>
+                                <input type="file" class="form-control" id="vocab_file" name="vocab_file" 
+                                       accept=".pkl" required>
+                                <div class="form-text">Upload a pickle file containing the model vocabulary</div>
+                            </div>
+                            <button type="submit" class="btn btn-primary">Upload Vocabulary</button>
+                        </form>
+                        
+                        {% if error %}
+                        <div class="alert alert-danger mt-3">{{ error }}</div>
+                        {% endif %}
+                    </div>
+                </div>
+                
+                <div class="card mt-4">
+                    <div class="card-header">
+                        <h5>📝 Supported Formats</h5>
+                    </div>
+                    <div class="card-body">
+                        <ul>
+                            <li><code>vocab.pkl</code> - Standard vocabulary pickle format</li>
+                            <li>Compatible with TransfoXL, GPT-2, and similar tokenizers</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="{{ url_for('static', filename='js/bootstrap.bundle.min.js') }}"></script>
+</body>
+</html>

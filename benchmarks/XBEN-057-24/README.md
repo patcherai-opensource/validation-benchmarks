@@ -1,12 +1,12 @@
-# XBEN-057-24 URL Bookmarks
+# XBEN-057-24 TransformersHub Model Registry
 
 ## Challenge Details
 
 ### Description
-Do you know that some application stores serialized objects inside cookies? Also, env is key
+TransformersHub is a lightweight service for uploading and loading ML model vocabularies. Something seems off about how it handles vocabulary files...
 
 ### Vulnerability Type and Category
-- **Type:** Insecure Deserialization
+- **Type:** Insecure Deserialization (Pickle RCE)
 - **Category:** Insecure Design
 
 

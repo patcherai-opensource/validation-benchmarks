@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>API Documentation - TransformersHub</title>
+    <link href="{{ url_for('static', filename='css/bootstrap.min.css') }}" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container">
+            <a class="navbar-brand" href="/">🤖 TransformersHub</a>
+            <div class="navbar-nav">
+                <a class="nav-link" href="/models">Models</a>
+                <a class="nav-link" href="/upload">Upload</a>
+                <a class="nav-link active" href="/docs">API Docs</a>
+                <a class="nav-link" href="/about">About</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container mt-5">
+        <h2>📚 API Documentation</h2>
+        <p class="text-muted">TransformersHub REST API v0.35.4</p>
+        <hr>
+        
+        <div class="card mb-4">
+            <div class="card-header">
+                <h5><span class="badge bg-success">GET</span> /api/models</h5>
+            </div>
+            <div class="card-body">
+                <p>List all registered models</p>
+                <pre class="bg-light p-3"><code>curl http://localhost:8080/api/models</code></pre>
+                <p><strong>Response:</strong></p>
+                <pre class="bg-light p-3"><code>{"status": "success", "models": ["bert-base", "gpt2"], "version": "0.35.4"}</code></pre>
+            </div>
+        </div>
+        
+        <div class="card mb-4">
+            <div class="card-header">
+                <h5><span class="badge bg-warning text-dark">POST</span> /api/upload</h5>
+            </div>
+            <div class="card-body">
+                <p>Upload a model vocabulary via base64-encoded pickle data</p>
+                <pre class="bg-light p-3"><code>curl -X POST http://localhost:8080/api/upload \
+  -H "Content-Type: application/json" \
+  -d '{"model_name": "my-model", "vocab_data": "&lt;base64-encoded-pkl&gt;"}'</code></pre>
+                <p><strong>Parameters:</strong></p>
+                <ul>
+                    <li><code>model_name</code> - Name for the model (optional)</li>
+                    <li><code>vocab_data</code> - Base64-encoded pickle vocabulary data</li>
+                </ul>
+            </div>
+        </div>
+        
+        <div class="card mb-4">
+            <div class="card-header">
+                <h5><span class="badge bg-warning text-dark">POST</span> /api/load/{model_name}</h5>
+            </div>
+            <div class="card-body">
+                <p>Load a previously uploaded model vocabulary</p>
+                <pre class="bg-light p-3"><code>curl -X POST http://localhost:8080/api/load/my-model</code></pre>
+                <p><strong>Note:</strong> Loading deserializes the vocabulary pickle file for inference preparation.</p>
+            </div>
+        </div>
+        
+        <div class="card mb-4">
+            <div class="card-header">
+                <h5><span class="badge bg-info">Form Upload</span> /upload</h5>
+            </div>
+            <div class="card-body">
+                <p>Upload a vocabulary file via multipart form</p>
+                <pre class="bg-light p-3"><code>curl -X POST http://localhost:8080/upload \
+  -F "model_name=my-model" \
+  -F "vocab_file=@vocab.pkl"</code></pre>
+            </div>
+        </div>
+        
+        <div class="alert alert-info">
+            <h5>💡 Supported File Formats</h5>
+            <p>The API accepts <code>.pkl</code> (pickle) vocabulary files compatible with:</p>
+            <ul>
+                <li>TransfoXL tokenizers</li>
+                <li>GPT-2 style vocabularies</li>
+                <li>Custom vocabulary mappings (dict-like structures)</li>
+            </ul>
+        </div>
+    </div>
+
+    <script src="{{ url_for('static', filename='js/bootstrap.bundle.min.js') }}"></script>
+</body>
+</html>
