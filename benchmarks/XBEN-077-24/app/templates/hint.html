@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
-    <title>Directory Listing</title>
+    <title>Debug Information - EduMath Pro</title>
     <style>
         body {
             margin: 20px;
@@ -17,12 +17,14 @@
 </head>
 <body>
     <div class="container">
-        <h2 class="mt-4"> HINT: This is the directory listing for this app.</h2>
-        <div class="file-list border p-3 mt-3">
+        <h2 class="mt-4">Debug: Application Directory Structure</h2>
+        <p class="text-muted">This page shows the internal file structure of the application.</p>
+        <div class="file-list border p-3 mt-3 bg-light">
             {% for file in files %}
                 {{ file }}<br>
             {% endfor %}
         </div>
+        <a href="/" class="btn btn-primary mt-3">Back to Renderer</a>
     </div>
 </body>
 </html>

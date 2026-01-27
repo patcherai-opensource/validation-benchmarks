@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css">
+    <title>Equation Templates - EduMath Pro</title>
+</head>
+<body>
+    <nav class="navbar navbar-dark bg-primary">
+        <span class="navbar-brand mb-0 h1">EduMath Pro - MathML Renderer</span>
+        <span class="navbar-text">v1.2.0</span>
+    </nav>
+    
+    <div class="container mt-4">
+        <h2>Sample MathML Templates</h2>
+        <p class="text-muted">Download these templates and modify them for your equations.</p>
+        
+        <div class="row">
+            <div class="col-md-6">
+                <div class="card mb-3">
+                    <div class="card-header">Quadratic Formula</div>
+                    <div class="card-body">
+                        <pre class="bg-light p-2"><code>&lt;?xml version="1.0" encoding="UTF-8"?&gt;
+&lt;math xmlns="http://www.w3.org/1998/Math/MathML"&gt;
+  &lt;mrow&gt;
+    &lt;mi&gt;x&lt;/mi&gt;
+    &lt;mo&gt;=&lt;/mo&gt;
+    &lt;mfrac&gt;
+      &lt;mrow&gt;
+        &lt;mo&gt;-&lt;/mo&gt;&lt;mi&gt;b&lt;/mi&gt;
+        &lt;mo&gt;&amp;#x00B1;&lt;/mo&gt;
+        &lt;msqrt&gt;
+          &lt;mrow&gt;
+            &lt;msup&gt;&lt;mi&gt;b&lt;/mi&gt;&lt;mn&gt;2&lt;/mn&gt;&lt;/msup&gt;
+            &lt;mo&gt;-&lt;/mo&gt;
+            &lt;mn&gt;4&lt;/mn&gt;&lt;mi&gt;a&lt;/mi&gt;&lt;mi&gt;c&lt;/mi&gt;
+          &lt;/mrow&gt;
+        &lt;/msqrt&gt;
+      &lt;/mrow&gt;
+      &lt;mrow&gt;
+        &lt;mn&gt;2&lt;/mn&gt;&lt;mi&gt;a&lt;/mi&gt;
+      &lt;/mrow&gt;
+    &lt;/mfrac&gt;
+  &lt;/mrow&gt;
+&lt;/math&gt;</code></pre>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-md-6">
+                <div class="card mb-3">
+                    <div class="card-header">Pythagorean Theorem</div>
+                    <div class="card-body">
+                        <pre class="bg-light p-2"><code>&lt;?xml version="1.0" encoding="UTF-8"?&gt;
+&lt;math xmlns="http://www.w3.org/1998/Math/MathML"&gt;
+  &lt;mrow&gt;
+    &lt;msup&gt;&lt;mi&gt;a&lt;/mi&gt;&lt;mn&gt;2&lt;/mn&gt;&lt;/msup&gt;
+    &lt;mo&gt;+&lt;/mo&gt;
+    &lt;msup&gt;&lt;mi&gt;b&lt;/mi&gt;&lt;mn&gt;2&lt;/mn&gt;&lt;/msup&gt;
+    &lt;mo&gt;=&lt;/mo&gt;
+    &lt;msup&gt;&lt;mi&gt;c&lt;/mi&gt;&lt;mn&gt;2&lt;/mn&gt;&lt;/msup&gt;
+  &lt;/mrow&gt;
+&lt;/math&gt;</code></pre>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="alert alert-info mt-3">
+            <strong>Note:</strong> MathML files are processed as XML. Ensure your files are valid XML with proper encoding declarations.
+        </div>
+        
+        <a href="/" class="btn btn-primary">Back to Renderer</a>
+    </div>
+    
+    <footer class="mt-5 py-3 bg-light">
+        <div class="container text-center text-muted">
+            <small>EduMath Pro &copy; 2024 - Powered by lxml XML Parser</small>
+        </div>
+    </footer>
+</body>
+</html>
