@@ -30,8 +30,9 @@ phantom = Phantom()
 def index():
     return INDEX_CONTENT
 
-def check_xss(page,flag,msg,tag):
-    proc = subprocess.Popen(["timeout","5","phantomjs", "check.js"], stdout=subprocess.PIPE, stdin=subprocess.PIPE)
+def check_xss(page, flag, msg):
+    """Check if XSS payload was executed using PhantomJS"""
+    proc = subprocess.Popen(["timeout", "5", "phantomjs", "check.js"], stdout=subprocess.PIPE, stdin=subprocess.PIPE)
     fn = "static/" + os.urandom(16).encode('hex') + '.html'
     host = os.environ.get('APP_HOST', 'localhost')
     port = os.environ.get('APP_PORT', '5000')
@@ -45,35 +46,110 @@ def check_xss(page,flag,msg,tag):
         proc.stdin.write(url)
         proc.stdin.close()
         result = proc.stdout.readline().strip()
-        print "Resultado:"
+        print "Result:"
         print result
-
     finally:
         os.unlink(fn)
 
     if msg == "":
-        data = '<div class="solution-text"><img src="{0}" alt="Start" width="150" height="150"><br>Let the game begin. Good Luck</div>'.format(IMAGE_ROUTES[tag]['start'])
+        return CURRENCY_START
     else:
         if result == 'XSS':
-            data = '<div class="solution-text"><img src="{0}" alt="Correct" width="150" height="150"><br>Congratulations!<p> Here is the flag: {1}</div>'.format(IMAGE_ROUTES[tag]['success'],flag)
+            return CURRENCY_SUCCESS.format(flag)
         elif result:
-            data = '<div class="solution-text"><img src="{0}" alt="Fail" width="150" height="150"><br>Oops! You did an alert with {1} instead of "XSS"</div>'.format(IMAGE_ROUTES[tag]['process'], cgi.escape(result))
+            return CURRENCY_PARTIAL.format(cgi.escape(result))
         else:
-            data = '<div class="solution-text"><img src="{0}" alt="Fail" width="150" height="150"><br>Failed! Try again!</div>'.format(IMAGE_ROUTES[tag]['error'])
-    return data
+            return CURRENCY_FAILURE
 
 
-############## EASY #################### 
+@app.route('/samples/Wizards/NumberFormat/Currency', methods=['POST', 'GET'])
+def currency_wizard():
+    """Currency Format Wizard - vulnerable to XSS in currency parameter"""
+    # Get form parameters
+    currency = request.form.get('currency', '')
+    decimals = request.form.get('decimals', '2')
+    thousands = 'checked' if request.form.get('thousands') else ''
+    position = request.form.get('position', 'leading')
+    spacing = 'checked' if request.form.get('spacing') else ''
+    
+    # Determine select options
+    dec_0 = 'selected' if decimals == '0' else ''
+    dec_2 = 'selected' if decimals == '2' else ''
+    dec_4 = 'selected' if decimals == '4' else ''
+    pos_leading = 'selected' if position == 'leading' else ''
+    pos_trailing = 'selected' if position == 'trailing' else ''
+    
+    if currency:
+        # Generate the format mask (simulating PhpSpreadsheet behavior)
+        # The currency symbol is inserted DIRECTLY into HTML without sanitization - this is the XSS vulnerability
+        dec_places = int(decimals) if decimals.isdigit() else 2
+        decimal_part = '.' + '0' * dec_places if dec_places > 0 else ''
+        thousands_part = '#,##' if thousands else ''
+        
+        if position == 'leading':
+            if spacing:
+                mask = currency + ' ' + thousands_part + '0' + decimal_part
+                example1 = currency + ' 1,234.56' if thousands else currency + ' 1234.56'
+                example2 = currency + ' -9,876.54' if thousands else currency + ' -9876.54'
+            else:
+                mask = currency + thousands_part + '0' + decimal_part
+                example1 = currency + '1,234.56' if thousands else currency + '1234.56'
+                example2 = currency + '-9,876.54' if thousands else currency + '-9876.54'
+        else:
+            if spacing:
+                mask = thousands_part + '0' + decimal_part + ' ' + currency
+                example1 = '1,234.56 ' + currency if thousands else '1234.56 ' + currency
+                example2 = '-9,876.54 ' + currency if thousands else '-9876.54 ' + currency
+            else:
+                mask = thousands_part + '0' + decimal_part + currency
+                example1 = '1,234.56' + currency if thousands else '1234.56' + currency
+                example2 = '-9,876.54' + currency if thousands else '-9876.54' + currency
+        
+        # Build the result HTML - currency is reflected without sanitization (XSS vulnerability)
+        result_html = CURRENCY_RESULT.format(
+            mask,
+            example1,
+            example2,
+            currency,  # Unsanitized - direct reflection!
+            decimals,
+            'true' if thousands else 'false',
+            position,
+            'true' if spacing else 'false'
+        )
+        
+        # Build the page with the vulnerable currency value
+        page = CURRENCY_PAGE.format(
+            currency,  # Unsanitized - direct reflection in input value!
+            dec_0, dec_2, dec_4,
+            thousands,
+            pos_leading, pos_trailing,
+            spacing,
+            result_html
+        )
+        
+        # Check for XSS and get appropriate response
+        xss_result = check_xss(page, flags[0], currency)
+        
+        # Return page with XSS check result
+        return CURRENCY_PAGE.format(
+            currency,  # Still unsanitized
+            dec_0, dec_2, dec_4,
+            thousands,
+            pos_leading, pos_trailing,
+            spacing,
+            xss_result
+        )
+    else:
+        # Initial page load with no input
+        return CURRENCY_PAGE.format(
+            '',  # empty currency
+            '', 'selected', '',  # default 2 decimals
+            '',  # no thousands
+            'selected', '',  # leading position
+            '',  # no spacing
+            CURRENCY_START
+        )
 
-@app.route('/page', methods=['POST', 'GET'])
-def xss8():
-    msg = request.form.get('solution','')
-    value =  "" if msg == "" else '> {0}'.format(msg) # Simple XSS no filters
-
-    data = XSS_CONTENT_POST.format("8", "Circle", value, "", "")
-    result = check_xss(data,flags[0],msg,'xss_easy')
-    return XSS_CONTENT_POST.format("8", "Circle", value, result, "")
 
 if __name__ == '__main__':
-    #app.run(host='0.0.0.0', port=5001, threaded=True)
     app.run(debug=True)
