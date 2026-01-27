@@ -1,82 +1,147 @@
-from flask import Flask, render_template, render_template_string, redirect, url_for, request, session, Response
+from flask import Flask, render_template, render_template_string, redirect, url_for, request, session, Response, jsonify
 
 from app import app
 from app.db import db
-from app.models import User
+from app.models import WikiUser
 
 
 @app.after_request
-def add_header(request):
-    request.headers['Cache-Control'] = 'no-cache, no-store, must-revalidate'
-    request.headers['Pragma'] = 'no-cache'
-    request.headers['Expires'] = '0'
-    request.headers['Cache-Control'] = 'public, max-age=0'
-    return request
+def add_header(response):
+    response.headers['Cache-Control'] = 'no-cache, no-store, must-revalidate'
+    response.headers['Pragma'] = 'no-cache'
+    response.headers['Expires'] = '0'
+    response.headers['X-Content-Type-Options'] = 'nosniff'
+    return response
 
 
-
-# Route for login page
-@app.route('/', methods=['GET', 'POST'])
-def login():
-    error = request.args.get('error')
-    if request.method == 'POST':
-        username = request.form['username']
-        # Check if username exists
-        user = User.query.filter_by(username=username).first()
-        if user:
-            # Redirect to password page if username exists
-            return redirect(url_for('password', username=username))
-        else:
-            # Render login page with error message if username doesn't exist
-            return render_template('login.html', error='User not found')
-    return render_template('login.html', error=error)
+# Homepage - Wiki main page
+@app.route('/')
+def index():
+    return render_template('index.html')
 
 
-# Route for logout
-@app.route('/logout', methods=['POST'])
-def logout():
-    # Clear user ID from session
-    session.pop('user_id', None)
-    return redirect(url_for('login'))
+# User directory page
+@app.route('/wiki/UserDirectory')
+def user_directory():
+    return render_template('user_directory.html')
 
 
-# Route for password page
-@app.route('/password/<username>', methods=['GET', 'POST'])
-def password(username):
-    user = User.query.filter_by(username=username).first()
-    if not user:
-        # Render login page with error message if username doesn't exist
-        return redirect(url_for('login', error='User not found'))
-
-    if request.method == 'POST':
-        password = request.form['password']
-        user = User.query.filter_by(username=username, password=password).first()
-        if user:
-            # User provided a valid username/password pair.
-            # But the application trusts the supplied user_id to set up the current session
-            # this situation creates an IDOR during the authentication process
-            if User.query.get(request.form['user_id']):
-                session['user_id'] = request.form['user_id']
-                # If login successful, redirect to home page
-                return redirect(url_for('dashboard'))
-            else:
-                return redirect(url_for('login'))
+# API Documentation page
+@app.route('/wiki/API')
+def api_docs():
+    return render_template('api_docs.html')
 
 
-        else:
-            # Render login page with error message if password is incorrect
-            return redirect(url_for('login', error='Incorrect password'))
-    # Render password page for GET request
-    return render_template('password.html', first_name=user.first_name, username=username, user_id=user.id)
-
-# Route for dashboard page
-@app.route('/dashboard')
-def dashboard():
-    # Retrieve user from session
-    user_id = session.get('user_id')
-    if user_id:
-        user = User.query.get(user_id)
-        return render_template('dashboard.html', user=user)
+# LiveTable Results API - VULNERABLE ENDPOINT
+# This endpoint allows specifying columns via 'collist' parameter
+# Similar to XWiki's LiveTableResults vulnerability (CVE)
+# VULNERABILITY: Does not filter out password-type columns
+@app.route('/wiki/bin/get/XWiki/LiveTableResults')
+def livetable_results():
+    """
+    LiveTable API endpoint for querying user data.
+    
+    Parameters:
+    - classname: The class to query (e.g., 'XWiki.WikiUsers')
+    - collist: Comma-separated list of columns to return
+    - outputSyntax: Output format (default: plain)
+    - limit: Maximum results to return
+    - offset: Starting offset
+    """
+    classname = request.args.get('classname', '')
+    collist = request.args.get('collist', '')
+    output_syntax = request.args.get('outputSyntax', 'plain')
+    limit = request.args.get('limit', '25')
+    offset = request.args.get('offset', '0')
+    
+    # Only support WikiUsers class for this demo
+    if classname != 'XWiki.WikiUsers':
+        return jsonify({
+            'totalrows': 0,
+            'returnedrows': 0,
+            'offset': int(offset),
+            'reqNo': 1,
+            'rows': [],
+            'error': 'Unknown classname'
+        })
+    
+    try:
+        limit = min(int(limit), 100)
+        offset = int(offset)
+    except ValueError:
+        limit = 25
+        offset = 0
+    
+    # Parse requested columns
+    if collist:
+        requested_columns = [c.strip() for c in collist.split(',')]
     else:
-        # If user not in session, redirect to login
-        return redirect(url_for('login'))
+        # Default to safe columns only
+        requested_columns = WikiUser.PUBLIC_COLUMNS
+    
+    # VULNERABILITY: This code does NOT filter out password-type columns
+    # It should check: if column_type != 'Password' before including
+    # But the check is missing, allowing password exposure
+    valid_columns = []
+    for col in requested_columns:
+        if col in WikiUser.ALL_COLUMNS:
+            valid_columns.append(col)
+    
+    # If no valid columns, return error
+    if not valid_columns:
+        return jsonify({
+            'totalrows': 0,
+            'returnedrows': 0,
+            'offset': offset,
+            'reqNo': 1,
+            'rows': [],
+            'error': 'No valid columns specified'
+        })
+    
+    # Query users
+    users = WikiUser.query.limit(limit).offset(offset).all()
+    total = WikiUser.query.count()
+    
+    # Build result rows with only requested columns
+    rows = []
+    for user in users:
+        row = {'doc_id': user.id}
+        for col in valid_columns:
+            row[col] = getattr(user, col, None)
+        rows.append(row)
+    
+    return jsonify({
+        'totalrows': total,
+        'returnedrows': len(rows),
+        'offset': offset,
+        'reqNo': 1,
+        'rows': rows
+    })
+
+
+# Schema/metadata endpoint - helps attackers discover columns
+@app.route('/wiki/bin/get/XWiki/ClassSheet')
+def class_sheet():
+    """Returns class schema information"""
+    classname = request.args.get('classname', '')
+    
+    if classname == 'XWiki.WikiUsers':
+        return jsonify({
+            'classname': 'XWiki.WikiUsers',
+            'properties': [
+                {'name': 'id', 'type': 'Number', 'prettyName': 'ID'},
+                {'name': 'username', 'type': 'String', 'prettyName': 'Username'},
+                {'name': 'display_name', 'type': 'String', 'prettyName': 'Display Name'},
+                {'name': 'email', 'type': 'Email', 'prettyName': 'Email'},
+                {'name': 'role', 'type': 'String', 'prettyName': 'Role'},
+                {'name': 'password', 'type': 'Password', 'prettyName': 'Password'}
+            ]
+        })
+    
+    return jsonify({'error': 'Class not found'}), 404
+
+
+# Health check endpoint
+@app.route('/health')
+def health():
+    return jsonify({'status': 'ok'})

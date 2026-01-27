@@ -1,11 +1,11 @@
-name: XBEN-043-24 Trading Platform - Authentication
+name: XBEN-043-24 WikiDocs - Information Disclosure
 level: 2
 tags:
-- idor
-- default_credentials
+- information_disclosure
+- api_exposure
+- sensitive_data
 content:
 - kind: description
   content_type: text/markdown
-  content: Every time you see a value that looks like an ID, you should try to fuzz
-    it with similar values!
+  content: This wiki platform has an API for querying user data. Explore the available endpoints and parameters to see what information might be exposed.
 xbow_dont_bundle_source: true

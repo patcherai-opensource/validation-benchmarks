@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Directory - WikiDocs</title>
+    <link href="{{ url_for('static', filename='css/bootstrap.min.css') }}" rel="stylesheet">
+    <style>
+        body {
+            background-color: #f8f9fa;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container">
+            <a class="navbar-brand" href="/">WikiDocs</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ml-auto">
+                    <li class="nav-item">
+                        <a class="nav-link active" href="/wiki/UserDirectory">User Directory</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/wiki/API">API Documentation</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container mt-4">
+        <h2>User Directory</h2>
+        <p>Browse registered users on this WikiDocs instance.</p>
+        
+        <div class="card">
+            <div class="card-header">
+                <strong>Platform Users</strong>
+                <!-- LiveTable component loads data from: /wiki/bin/get/XWiki/LiveTableResults -->
+            </div>
+            <div class="card-body">
+                <table class="table table-striped" id="userTable">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Username</th>
+                            <th>Display Name</th>
+                            <th>Email</th>
+                            <th>Role</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tableBody">
+                        <tr><td colspan="5">Loading...</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        
+        <div class="alert alert-info mt-3">
+            <strong>Note:</strong> This table is powered by the LiveTable API. 
+            Data is loaded from <code>/wiki/bin/get/XWiki/LiveTableResults</code> with 
+            <code>classname=XWiki.WikiUsers</code> parameter.
+        </div>
+    </div>
+
+    <script>
+        // LiveTable data loading
+        fetch('/wiki/bin/get/XWiki/LiveTableResults?classname=XWiki.WikiUsers&collist=id,username,display_name,email,role')
+            .then(response => response.json())
+            .then(data => {
+                const tbody = document.getElementById('tableBody');
+                tbody.innerHTML = '';
+                data.rows.forEach(row => {
+                    const tr = document.createElement('tr');
+                    tr.innerHTML = `
+                        <td>${row.id}</td>
+                        <td>${row.username}</td>
+                        <td>${row.display_name}</td>
+                        <td>${row.email}</td>
+                        <td>${row.role}</td>
+                    `;
+                    tbody.appendChild(tr);
+                });
+            });
+    </script>
+</body>
+</html>

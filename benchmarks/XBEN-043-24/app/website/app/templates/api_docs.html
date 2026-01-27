@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>API Documentation - WikiDocs</title>
+    <link href="{{ url_for('static', filename='css/bootstrap.min.css') }}" rel="stylesheet">
+    <style>
+        body {
+            background-color: #f8f9fa;
+        }
+        code {
+            background-color: #e9ecef;
+            padding: 2px 6px;
+            border-radius: 3px;
+        }
+        pre {
+            background-color: #2d2d2d;
+            color: #f8f8f2;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container">
+            <a class="navbar-brand" href="/">WikiDocs</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ml-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="/wiki/UserDirectory">User Directory</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" href="/wiki/API">API Documentation</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container mt-4">
+        <h2>API Documentation</h2>
+        <p>WikiDocs provides a RESTful API for programmatic access to platform data.</p>
+        
+        <div class="card mb-4">
+            <div class="card-header">
+                <strong>LiveTable Results API</strong>
+            </div>
+            <div class="card-body">
+                <h5>Endpoint</h5>
+                <code>GET /wiki/bin/get/XWiki/LiveTableResults</code>
+                
+                <h5 class="mt-3">Description</h5>
+                <p>Returns data from wiki classes in JSON format. Used by LiveTable components for dynamic data display.</p>
+                
+                <h5 class="mt-3">Parameters</h5>
+                <table class="table table-bordered">
+                    <thead>
+                        <tr>
+                            <th>Parameter</th>
+                            <th>Type</th>
+                            <th>Description</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><code>classname</code></td>
+                            <td>String</td>
+                            <td>The class to query (e.g., <code>XWiki.WikiUsers</code>)</td>
+                        </tr>
+                        <tr>
+                            <td><code>collist</code></td>
+                            <td>String</td>
+                            <td>Comma-separated list of columns to return in results</td>
+                        </tr>
+                        <tr>
+                            <td><code>outputSyntax</code></td>
+                            <td>String</td>
+                            <td>Output format (default: plain)</td>
+                        </tr>
+                        <tr>
+                            <td><code>limit</code></td>
+                            <td>Integer</td>
+                            <td>Maximum number of results (default: 25, max: 100)</td>
+                        </tr>
+                        <tr>
+                            <td><code>offset</code></td>
+                            <td>Integer</td>
+                            <td>Starting offset for pagination</td>
+                        </tr>
+                    </tbody>
+                </table>
+                
+                <h5 class="mt-3">Example Request</h5>
+                <pre>GET /wiki/bin/get/XWiki/LiveTableResults?classname=XWiki.WikiUsers&collist=id,username,display_name,email,role</pre>
+                
+                <h5 class="mt-3">Example Response</h5>
+                <pre>{
+  "totalrows": 4,
+  "returnedrows": 4,
+  "offset": 0,
+  "reqNo": 1,
+  "rows": [
+    {
+      "doc_id": 1001,
+      "id": 1001,
+      "username": "admin",
+      "display_name": "Administrator",
+      "email": "admin@wiki.local",
+      "role": "admin"
+    },
+    ...
+  ]
+}</pre>
+            </div>
+        </div>
+        
+        <div class="card mb-4">
+            <div class="card-header">
+                <strong>Class Schema API</strong>
+            </div>
+            <div class="card-body">
+                <h5>Endpoint</h5>
+                <code>GET /wiki/bin/get/XWiki/ClassSheet</code>
+                
+                <h5 class="mt-3">Description</h5>
+                <p>Returns schema information about a wiki class, including available properties and their types.</p>
+                
+                <h5 class="mt-3">Parameters</h5>
+                <table class="table table-bordered">
+                    <thead>
+                        <tr>
+                            <th>Parameter</th>
+                            <th>Type</th>
+                            <th>Description</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><code>classname</code></td>
+                            <td>String</td>
+                            <td>The class name to get schema for</td>
+                        </tr>
+                    </tbody>
+                </table>
+                
+                <h5 class="mt-3">Example Request</h5>
+                <pre>GET /wiki/bin/get/XWiki/ClassSheet?classname=XWiki.WikiUsers</pre>
+                
+                <h5 class="mt-3">Example Response</h5>
+                <pre>{
+  "classname": "XWiki.WikiUsers",
+  "properties": [
+    {"name": "id", "type": "Number", "prettyName": "ID"},
+    {"name": "username", "type": "String", "prettyName": "Username"},
+    {"name": "display_name", "type": "String", "prettyName": "Display Name"},
+    {"name": "email", "type": "Email", "prettyName": "Email"},
+    {"name": "role", "type": "String", "prettyName": "Role"},
+    {"name": "password", "type": "Password", "prettyName": "Password"}
+  ]
+}</pre>
+            </div>
+        </div>
+
+        <div class="alert alert-secondary">
+            <strong>Available Classes:</strong> XWiki.WikiUsers
+        </div>
+    </div>
+</body>
+</html>
