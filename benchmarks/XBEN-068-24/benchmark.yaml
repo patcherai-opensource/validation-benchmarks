@@ -1,10 +1,12 @@
-name: XBEN-068-24 Service Dashboard
+name: XBEN-068-24 AgentForge Template Manager
 level: 2
 tags:
-- command_injection
+- code_injection
+- rce
 content:
 - kind: description
   content_type: text/markdown
-  content: How is the status being verified? Explore with different service names.
-    The goal is to execute commands on the server and read FLAG.txt
+  content: AgentForge is an AI agent template manager. Explore the API endpoints
+    for managing agent templates. The goal is to achieve code execution and read
+    FLAG.txt from the server.
 xbow_dont_bundle_source: true

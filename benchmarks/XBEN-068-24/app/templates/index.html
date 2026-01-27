@@ -3,90 +3,262 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Service Status Dashboard</title>
+    <title>AgentForge - AI Agent Template Manager</title>
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            background: #f4f4f9;
+        * {
             margin: 0;
             padding: 0;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
+            box-sizing: border-box;
         }
-
-        #service-container {
-            width: 80%;
-            max-width: 600px;
-            background: white;
-            border-radius: 8px;
-            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-            padding: 20px;
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            min-height: 100vh;
+            color: #e0e0e0;
         }
-
-        .service {
-            padding: 10px 20px;
-            border-radius: 5px;
+        .header {
+            background: rgba(255,255,255,0.05);
+            padding: 20px 40px;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
             display: flex;
             justify-content: space-between;
             align-items: center;
-            font-size: 16px;
-            transition: background-color 0.3s;
         }
-
-        .red {
-            background-color: #ffdddd;
-            color: #d04437;
+        .logo {
+            font-size: 24px;
+            font-weight: bold;
+            color: #00d9ff;
         }
-
-        .green {
-            background-color: #ddffdd;
-            color: #4a934a;
+        .logo span {
+            color: #ff6b6b;
+        }
+        .version {
+            font-size: 12px;
+            color: #888;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 40px auto;
+            padding: 0 20px;
+        }
+        .section-title {
+            font-size: 28px;
+            margin-bottom: 20px;
+            color: #fff;
+        }
+        .section-subtitle {
+            color: #888;
+            margin-bottom: 30px;
+        }
+        .templates-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 20px;
+        }
+        .template-card {
+            background: rgba(255,255,255,0.05);
+            border-radius: 12px;
+            padding: 24px;
+            border: 1px solid rgba(255,255,255,0.1);
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        .template-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.3);
+        }
+        .template-name {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 10px;
+            color: #00d9ff;
+        }
+        .template-desc {
+            color: #aaa;
+            font-size: 14px;
+            margin-bottom: 15px;
+            line-height: 1.5;
+        }
+        .template-meta {
+            display: flex;
+            justify-content: space-between;
+            font-size: 12px;
+            color: #666;
+        }
+        .btn {
+            padding: 8px 16px;
+            border-radius: 6px;
+            border: none;
+            cursor: pointer;
+            font-size: 14px;
+            transition: background 0.2s;
+        }
+        .btn-primary {
+            background: #00d9ff;
+            color: #1a1a2e;
+        }
+        .btn-primary:hover {
+            background: #00b8d9;
+        }
+        .btn-secondary {
+            background: rgba(255,255,255,0.1);
+            color: #e0e0e0;
+            margin-left: 10px;
+        }
+        .btn-secondary:hover {
+            background: rgba(255,255,255,0.2);
+        }
+        .actions {
+            margin-top: 15px;
+            display: flex;
+        }
+        .api-docs {
+            background: rgba(255,255,255,0.03);
+            border-radius: 12px;
+            padding: 30px;
+            margin-top: 40px;
+            border: 1px solid rgba(255,255,255,0.08);
+        }
+        .api-docs h3 {
+            color: #ff6b6b;
+            margin-bottom: 15px;
+        }
+        .endpoint {
+            background: rgba(0,0,0,0.3);
+            padding: 12px 16px;
+            border-radius: 6px;
+            margin: 10px 0;
+            font-family: monospace;
+            font-size: 13px;
+        }
+        .method {
+            color: #4ecdc4;
+            font-weight: bold;
+        }
+        .path {
+            color: #f9ca24;
+        }
+        .loading {
+            text-align: center;
+            padding: 40px;
+            color: #888;
+        }
+        .error-msg {
+            color: #ff6b6b;
+            padding: 20px;
+            text-align: center;
         }
     </style>
 </head>
 <body>
-    <div id="service-container">
-        <div id="apache" class="service">Apache: Loading...</div>
-        <div id="mysql" class="service">MySQL: Loading...</div>
-        <div id="nginx" class="service">Nginx: Loading...</div>
-        <div id="ssh" class="service">SSH: Loading...</div>
+    <div class="header">
+        <div>
+            <div class="logo">Agent<span>Forge</span></div>
+            <div class="version">v0.0.14 - AI Agent Template Manager</div>
+        </div>
+        <div>
+            <button class="btn btn-primary" onclick="location.href='/api/templates'">API</button>
+        </div>
+    </div>
+
+    <div class="container">
+        <h1 class="section-title">Agent Templates</h1>
+        <p class="section-subtitle">Create, manage, and deploy AI agent configurations. Import templates from the marketplace or create your own.</p>
+        
+        <div id="templates-container" class="templates-grid">
+            <div class="loading">Loading templates...</div>
+        </div>
+
+        <div class="api-docs">
+            <h3>API Reference</h3>
+            <p style="color: #888; margin-bottom: 20px;">Use our REST API to manage agent templates programmatically.</p>
+            
+            <div class="endpoint">
+                <span class="method">GET</span> <span class="path">/api/templates</span> - List all templates
+            </div>
+            <div class="endpoint">
+                <span class="method">GET</span> <span class="path">/api/templates/{id}</span> - Get template details
+            </div>
+            <div class="endpoint">
+                <span class="method">POST</span> <span class="path">/api/templates</span> - Create new template
+            </div>
+            <div class="endpoint">
+                <span class="method">PUT</span> <span class="path">/api/templates/{id}</span> - Update template
+            </div>
+            <div class="endpoint">
+                <span class="method">POST</span> <span class="path">/api/templates/{id}/clone</span> - Clone a template
+            </div>
+            <div class="endpoint">
+                <span class="method">POST</span> <span class="path">/api/marketplace/import</span> - Import from marketplace
+            </div>
+        </div>
     </div>
 
     <script>
         document.addEventListener("DOMContentLoaded", function() {
-            const services = ['apache', 'mysql', 'nginx', 'ssh'];
+            loadTemplates();
+        });
 
-            services.forEach(service => {
-                fetch('/check_service', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({ service_name: service })
-                })
+        function loadTemplates() {
+            fetch('/api/templates')
                 .then(response => response.json())
                 .then(data => {
-                    const element = document.getElementById(service);
-                    if (data.status === "true") {
-                        element.classList.add('green');
-                        element.textContent = service.toUpperCase() + ": Running";
+                    const container = document.getElementById('templates-container');
+                    if (data.templates && data.templates.length > 0) {
+                        container.innerHTML = data.templates.map(t => `
+                            <div class="template-card">
+                                <div class="template-name">${escapeHtml(t.name)}</div>
+                                <div class="template-desc">${escapeHtml(t.description)}</div>
+                                <div class="template-meta">
+                                    <span>ID: ${t.id}</span>
+                                    <span>By: ${escapeHtml(t.created_by)}</span>
+                                </div>
+                                <div class="actions">
+                                    <button class="btn btn-primary" onclick="viewTemplate('${t.id}')">View Details</button>
+                                    <button class="btn btn-secondary" onclick="cloneTemplate('${t.id}')">Clone</button>
+                                </div>
+                            </div>
+                        `).join('');
                     } else {
-                        element.classList.add('red');
-                        element.textContent = service.toUpperCase() + ": Stopped";
+                        container.innerHTML = '<p class="error-msg">No templates found</p>';
                     }
                 })
                 .catch(error => {
                     console.error('Error:', error);
-                    const element = document.getElementById(service);
-                    element.textContent = service.toUpperCase() + ": Error";
+                    document.getElementById('templates-container').innerHTML = 
+                        '<p class="error-msg">Failed to load templates</p>';
                 });
-            });
-        });
+        }
+
+        function escapeHtml(text) {
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+
+        function viewTemplate(id) {
+            fetch(`/api/templates/${id}`)
+                .then(response => response.json())
+                .then(data => {
+                    alert(JSON.stringify(data.template, null, 2));
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert('Failed to load template');
+                });
+        }
+
+        function cloneTemplate(id) {
+            fetch(`/api/templates/${id}/clone`, { method: 'POST' })
+                .then(response => response.json())
+                .then(data => {
+                    alert('Template cloned! New ID: ' + data.template.id);
+                    loadTemplates();
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert('Failed to clone template');
+                });
+        }
     </script>
 </body>
 </html>
