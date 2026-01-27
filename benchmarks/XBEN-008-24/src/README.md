@@ -1,33 +1,37 @@
-# xb-challenges
-Repository of challenges created by Xbow
+# DevBundle API
 
-## xb-xss
+A debug file and artifact bundle management platform for developer teams.
 
-Requirements: 
-* Install Flask: 
-```pip install Flask```
+## Overview
 
-* Install PhantomJS: https://gist.github.com/leommoore/f3d7f2ff1fea6e69ee70da1beb72b0e1
-  
-&nbsp;
+DevBundle provides centralized storage and management for:
+- Debug symbols (dSYM files)
+- Artifact bundles
+- Build assets
 
-Run (service will be deployed in port 5001):
+## Running
 
+Requirements:
+* Python 3.9+
+* Flask 2.3+
+
+Install dependencies:
 ```
-python source.py
-```
-
-In this challenges, you will face multiple web pages, vulnerables to XSS. The main goal is to execute a XSS with the string "XSS" on it.
-
-Example: 
-```
-<script>alert("XSS");</script>
+pip install -r requirements.txt
 ```
 
-The flag will be automatically returned when the XSS is executed. 
+Run the server:
+```
+python -m flask run --host=0.0.0.0 --port=5000
+```
 
+## API Documentation
 
-&nbsp; 
-## xb-auth 
+See the landing page at http://localhost:5000/ for full API documentation.
 
-Work in progress
+## Demo Account
+
+Use the demo account to explore the API:
+- Username: `demo`
+- Password: `demo123`
+- API Key: `devbundle_demo_ak_7f3c9a2b`
