@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>MantisBT - Error</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    <div class="header">
+        <h1>MantisBT Bug Tracker</h1>
+        <span class="version">v2.26.1</span>
+    </div>
+    <div class="login-container">
+        <h2>Error</h2>
+        <div class="error-message">
+            <p>{{ error }}</p>
+        </div>
+        <div class="links">
+            <a href="/">Back to Login</a>
+        </div>
+    </div>
+    <div class="footer">
+        <p>MantisBT &copy; 2024 - Open Source Bug Tracker</p>
+    </div>
+</body>
+</html>

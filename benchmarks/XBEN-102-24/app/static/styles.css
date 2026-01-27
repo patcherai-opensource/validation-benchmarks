@@ -1,38 +1,206 @@
 body {
-    font-family: Arial, sans-serif;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     margin: 0;
     padding: 0;
+    background-color: #f5f5f5;
+}
+
+.header {
+    background-color: #4a6785;
+    color: white;
+    padding: 15px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.header h1 {
+    margin: 0;
+    font-size: 24px;
+}
+
+.header .version {
+    font-size: 12px;
+    opacity: 0.8;
+}
+
+.nav {
+    background-color: #5a7a9a;
+    padding: 10px 20px;
+    color: white;
+}
+
+.nav a {
+    color: white;
+    text-decoration: none;
+}
+
+.nav a:hover {
+    text-decoration: underline;
 }
 
 .login-container, .profile-container {
-    width: 300px;
-    margin: 100px auto;
-    padding: 20px;
-    border: 1px solid #ccc;
+    width: 400px;
+    margin: 50px auto;
+    padding: 30px;
+    border: 1px solid #ddd;
     border-radius: 5px;
-    background-color: #f9f9f9;
+    background-color: white;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
 }
 
-h1, h2 {
+.content {
+    max-width: 900px;
+    margin: 20px auto;
+    padding: 20px;
+    background-color: white;
+    border-radius: 5px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+h1, h2, h3 {
+    color: #333;
+}
+
+h2 {
     text-align: center;
+    margin-bottom: 20px;
 }
 
-input[type="text"], input[type="password"], input[type="email"], button {
+.form-group {
+    margin-bottom: 15px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 5px;
+    color: #555;
+    font-weight: bold;
+}
+
+input[type="text"], input[type="password"], input[type="email"] {
     display: block;
     width: 100%;
-    margin-bottom: 10px;
     padding: 10px;
     border: 1px solid #ccc;
     border-radius: 3px;
+    box-sizing: border-box;
 }
 
-button {
-    background-color: #4CAF50;
+input[type="text"]:focus, input[type="password"]:focus, input[type="email"]:focus {
+    border-color: #4a6785;
+    outline: none;
+}
+
+button, .btn-primary {
+    display: inline-block;
+    width: 100%;
+    padding: 12px;
+    background-color: #4a6785;
     color: white;
     border: none;
+    border-radius: 3px;
     cursor: pointer;
+    font-size: 14px;
+    text-align: center;
+    text-decoration: none;
 }
 
-button:hover {
-    background-color: #45a049;
+button:hover, .btn-primary:hover {
+    background-color: #3d566e;
+}
+
+.links {
+    margin-top: 20px;
+    text-align: center;
+}
+
+.links a {
+    color: #4a6785;
+    text-decoration: none;
+}
+
+.links a:hover {
+    text-decoration: underline;
+}
+
+.error-message {
+    background-color: #f8d7da;
+    border: 1px solid #f5c6cb;
+    color: #721c24;
+    padding: 10px;
+    border-radius: 3px;
+    margin-bottom: 15px;
+}
+
+.success-message {
+    background-color: #d4edda;
+    border: 1px solid #c3e6cb;
+    color: #155724;
+    padding: 10px;
+    border-radius: 3px;
+    margin-bottom: 15px;
+}
+
+.info-message {
+    background-color: #d1ecf1;
+    border: 1px solid #bee5eb;
+    color: #0c5460;
+    padding: 10px;
+    border-radius: 3px;
+    margin-bottom: 15px;
+}
+
+.admin-banner {
+    background-color: #fff3cd;
+    border: 1px solid #ffeeba;
+    color: #856404;
+    padding: 15px;
+    border-radius: 3px;
+    margin-bottom: 20px;
+    font-weight: bold;
+}
+
+.user-info, .users-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 15px;
+}
+
+.user-info th, .users-table th {
+    text-align: left;
+    padding: 10px;
+    background-color: #f8f9fa;
+    border: 1px solid #dee2e6;
+    width: 30%;
+}
+
+.user-info td, .users-table td {
+    padding: 10px;
+    border: 1px solid #dee2e6;
+}
+
+.users-table thead th {
+    background-color: #4a6785;
+    color: white;
+}
+
+.users-table tbody tr:nth-child(even) {
+    background-color: #f8f9fa;
+}
+
+.users-table tbody tr:hover {
+    background-color: #e9ecef;
+}
+
+.user-panel, .issues-panel {
+    margin-bottom: 20px;
+}
+
+.footer {
+    text-align: center;
+    padding: 20px;
+    color: #666;
+    font-size: 12px;
+    margin-top: 30px;
 }

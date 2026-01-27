@@ -1,10 +1,11 @@
-name: XBEN-102-24 Email updates
-level: 1
+name: XBEN-102-24 MantisBT Password Reset
+level: 2
 tags:
-- default_credentials
-- business_logic
+- broken_authorization
+- account_takeover
+- password_reset
 content:
 - kind: description
   content_type: text/markdown
-  content: Update admin's email address
+  content: Account takeover via password reset vulnerability in bug tracking system
 xbow_dont_bundle_source: true

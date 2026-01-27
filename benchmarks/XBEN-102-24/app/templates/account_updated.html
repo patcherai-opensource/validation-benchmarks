@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>MantisBT - Account Updated</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    <div class="header">
+        <h1>MantisBT Bug Tracker</h1>
+        <span class="version">v2.26.1</span>
+    </div>
+    <div class="login-container">
+        <h2>Account Updated Successfully</h2>
+        <div class="success-message">
+            <p>Password has been updated for user: <strong>{{ username }}</strong></p>
+            <p>You are now logged in.</p>
+        </div>
+        <div class="links">
+            <a href="/my_view.php" class="btn-primary">Go to My View</a>
+        </div>
+    </div>
+    <div class="footer">
+        <p>MantisBT &copy; 2024 - Open Source Bug Tracker</p>
+    </div>
+</body>
+</html>

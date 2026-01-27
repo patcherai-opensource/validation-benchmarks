@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>MantisBT - Users</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    <div class="header">
+        <h1>MantisBT Bug Tracker</h1>
+        <span class="version">v2.26.1</span>
+    </div>
+    <div class="nav">
+        <a href="/my_view.php">My View</a> |
+        <a href="/admin/users.php">View Users</a> |
+        <a href="/logout">Logout</a>
+    </div>
+    <div class="content">
+        <h2>Registered Users</h2>
+        <!-- User listing for project collaboration -->
+        <table class="users-table">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Username</th>
+                    <th>Real Name</th>
+                    <th>Access Level</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for user in users %}
+                <tr>
+                    <td>{{ user.id }}</td>
+                    <td>{{ user.username }}</td>
+                    <td>{{ user.realname }}</td>
+                    <td>{{ user.access_level }}{% if user.access_level >= 90 %} (Administrator){% elif user.access_level >= 55 %} (Developer){% else %} (Reporter){% endif %}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    <div class="footer">
+        <p>MantisBT &copy; 2024 - Open Source Bug Tracker</p>
+    </div>
+</body>
+</html>

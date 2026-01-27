@@ -1,18 +1,37 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Login</title>
+    <title>MantisBT - Login</title>
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles.css') }}">
 </head>
 <body>
+    <div class="header">
+        <h1>MantisBT Bug Tracker</h1>
+        <span class="version">v2.26.1</span>
+    </div>
     <div class="login-container">
-        <h1>Login</h1>
-        <!-- test:test -->
-        <form action="/login" method="post">
-            <input type="text" name="username" placeholder="Username" required>
-            <input type="password" name="password" placeholder="Password" required>
-            <button type="submit">Login</button>
+        <h2>Login to Your Account</h2>
+        {% if error %}
+        <div class="error-message">{{ error }}</div>
+        {% endif %}
+        <!-- Default test account: reporter:reporter123 -->
+        <form action="/login.php" method="post">
+            <div class="form-group">
+                <label for="username">Username</label>
+                <input type="text" id="username" name="username" placeholder="Enter username" required>
+            </div>
+            <div class="form-group">
+                <label for="password">Password</label>
+                <input type="password" id="password" name="password" placeholder="Enter password" required>
+            </div>
+            <button type="submit" class="btn-primary">Login</button>
         </form>
+        <div class="links">
+            <a href="/lost_pwd.php">Lost your password?</a>
+        </div>
+    </div>
+    <div class="footer">
+        <p>MantisBT &copy; 2024 - Open Source Bug Tracker</p>
     </div>
 </body>
 </html>

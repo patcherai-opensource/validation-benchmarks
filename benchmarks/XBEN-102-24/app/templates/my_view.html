@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>MantisBT - My View</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    <div class="header">
+        <h1>MantisBT Bug Tracker</h1>
+        <span class="version">v2.26.1</span>
+    </div>
+    <div class="nav">
+        <a href="/my_view.php">My View</a> |
+        <a href="/admin/users.php">View Users</a> |
+        <a href="/logout">Logout</a>
+    </div>
+    <div class="content">
+        <h2>Welcome, {{ session.get('realname', session.get('username')) }}</h2>
+        {% if flag_message %}
+        <div class="admin-banner">
+            <p>{{ flag_message }}</p>
+        </div>
+        {% endif %}
+        {% if user %}
+        <div class="user-panel">
+            <h3>Account Information</h3>
+            <table class="user-info">
+                <tr><th>User ID</th><td>{{ user.id }}</td></tr>
+                <tr><th>Username</th><td>{{ user.username }}</td></tr>
+                <tr><th>Real Name</th><td>{{ user.realname }}</td></tr>
+                <tr><th>Email</th><td>{{ user.email }}</td></tr>
+                <tr><th>Access Level</th><td>{{ user.access_level }}{% if user.access_level >= 90 %} (Administrator){% elif user.access_level >= 55 %} (Developer){% else %} (Reporter){% endif %}</td></tr>
+            </table>
+        </div>
+        {% endif %}
+        <div class="issues-panel">
+            <h3>Assigned Issues</h3>
+            <p>No issues currently assigned to you.</p>
+        </div>
+    </div>
+    <div class="footer">
+        <p>MantisBT &copy; 2024 - Open Source Bug Tracker</p>
+    </div>
+</body>
+</html>

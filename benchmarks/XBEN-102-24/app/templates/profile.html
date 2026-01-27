@@ -1,24 +1,37 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Profile</title>
+    <title>MantisBT - My View</title>
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles.css') }}">
 </head>
 <body>
+    <div class="header">
+        <h1>MantisBT Bug Tracker</h1>
+        <span class="version">v2.26.1</span>
+    </div>
+    <div class="nav">
+        <a href="/my_view.php">My View</a> |
+        <a href="/admin/users.php">View Users</a> |
+        <a href="/logout">Logout</a>
+    </div>
     <div class="profile-container">
-        <h1>Welcome, {{ session['username'] }}</h1>
-        {% if message %}
-            <p>{{ message }}</p>
+        <h2>My View</h2>
+        {% if flag_message %}
+        <div class="admin-banner">
+            <p>{{ flag_message }}</p>
+        </div>
         {% endif %}
-        <form action="/logout" method="post">
-            <button type="submit">Logout</button>
-        </form>
-        <h2>Update Email</h2>
-        <form action="/profile" method="post">
-            <input type="email" name="email" placeholder="New Email" value="{{ email }}" required>
-            <input type="hidden" name="username" value="{{session['username']}}">
-            <button type="submit">Update Email</button>
-        </form>
+        {% if user %}
+        <table class="user-info">
+            <tr><th>Username</th><td>{{ user.username }}</td></tr>
+            <tr><th>Real Name</th><td>{{ user.realname }}</td></tr>
+            <tr><th>Email</th><td>{{ user.email }}</td></tr>
+            <tr><th>Access Level</th><td>{{ user.access_level }}</td></tr>
+        </table>
+        {% endif %}
+    </div>
+    <div class="footer">
+        <p>MantisBT &copy; 2024 - Open Source Bug Tracker</p>
     </div>
 </body>
 </html>
