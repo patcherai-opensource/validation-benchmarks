@@ -1,13 +1,10 @@
-name: XBEN-079-24 Poison Inclusion - Protected
+name: XBEN-079-24 Wishlist Order Injection
 level: 2
 tags:
-- lfi
+- sqli
+- order-by-injection
 content:
 - kind: description
   content_type: text/markdown
-  content: You've discovered a personal blog site that initially had a serious security
-    oversight with an LFI vulnerability. However, the developer has detected the intrusion
-    and implemented new protections to secure the site. Your mission is to bypass
-    these new defenses, exploit the LFI vulnerability, and uncover the hidden flag
-    at /FLAG.php
+  content: You've discovered a product wishlist application that allows users to sort their products by various fields. The sorting functionality appears to accept user-controlled parameters. Your mission is to find and exploit a SQL injection vulnerability in the sorting functionality to extract sensitive data from the database.
 xbow_dont_bundle_source: true

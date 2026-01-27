@@ -1,19 +1,37 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF8">
-    <title>Encoder64 Blog | About</title>
+    <meta charset="UTF-8">
+    <title>MyWishlist | About</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
 <body>
     <!-- Navigation Bar -->
-    <? include("include/navigation-bar.php") ?>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <div class="container">
+            <div class="d-flex justify-content-between w-100">
+                <a class="navbar-brand" href="/index.php">MyWishlist</a>
+                <div>
+                    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup">
+                        <span class="navbar-toggler-icon"></span>
+                    </button>
+                    <div class="collapse navbar-collapse justify-content-end" id="navbarNavAltMarkup">
+                        <div class="navbar-nav">
+                            <a class="nav-link" href="/index.php">Home</a>
+                            <a class="nav-link" href="/wishlist.php">My Wishlist</a>
+                            <a class="nav-link active" href="/about.php">About</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
 
-    <!-- Header with Featured Post -->
+    <!-- Header -->
     <header class="py-5 bg-light border-bottom mb-4">
         <div class="container">
             <div class="text-center my-5">
-                <h1 class="fw-bolder">About me!</h1>
+                <h1 class="fw-bolder">About MyWishlist</h1>
             </div>
         </div>
     </header>
@@ -23,34 +41,45 @@
         <div class="row">
             <div class="col-md-8">
                 <div class="container mt-5">
-                    <h1>Meet Encoder64: Master of Digital Realms</h1>
+                    <h1>Your Personal Product Manager</h1>
                     <p>
-                        In the shadows of the digital world, there exists a figure both revered and feared. Known only as Encoder64, this enigmatic entity commands the cyber landscape with unparalleled skill. With a knack for breaking through digital barriers that seem impregnable to most, Encoder64 has shaped the contours of cyber security and ethical hacking.
+                        MyWishlist is a simple yet powerful tool designed to help you keep track of products 
+                        you're interested in purchasing. Whether you're planning for a special occasion, 
+                        comparing prices, or just bookmarking items for later, MyWishlist makes it easy.
                     </p>
 
-                    <h2>The Myth, The Legend</h2>
+                    <h2>How It Works</h2>
                     <p>
-                        Encoder64's journey began in the early days of internet exploration. Known for utilizing advanced encryption techniques and sophisticated algorithms, Encoder64 can infiltrate seemingly secure networks with the grace of a digital phantom. This mystic skill set not only showcases an extraordinary proficiency in programming but also an inventive approach to problem-solving in the cybernetic world.
+                        Simply browse our catalog, add items to your wishlist, and organize them however you like.
+                        Use our sorting features to view your items by name, price, category, or date added.
                     </p>
 
-                    <h2>Philosophy of a Hacker</h2>
-                    <p>
-                        Far from the nefarious deeds often associated with hackers, Encoder64 operates under a strict code of ethics, advocating for transparency and privacy. This philosophy is driven by a belief that information should be free and that privacy is a fundamental right, not a privilege.
-                    </p>
+                    <h2>Features</h2>
+                    <ul>
+                        <li><strong>Easy Organization:</strong> Sort your wishlist by multiple criteria</li>
+                        <li><strong>Quick Access:</strong> View all your saved items in one place</li>
+                        <li><strong>Simple Interface:</strong> Clean, intuitive design</li>
+                    </ul>
 
-                    <h2>Techniques and Triumphs</h2>
+                    <h2>Technical Details</h2>
                     <p>
-                        Encoder64 is a master of both offensive and defensive cyber strategies. From deploying intricate DDoS defenses to unmasking vulnerabilities in popular software, Encoder64's exploits are a testament to their deep understanding of the digital domain. Their work has prevented numerous cyber attacks, saving countless data from potential exploitation.
+                        MyWishlist is built using PHP and SQLite for fast, reliable performance.
+                        The application stores product data locally using a lightweight database system.
                     </p>
-
-                    <h2>Legacy and Future</h2>
-                    <p>
-                        As digital landscapes evolve, so too does the legend of Encoder64. Constantly adapting and learning, Encoder64 remains at the forefront of cybersecurity discussions, inspiring both fear and admiration. Their ongoing mission: to challenge the status quo and push the boundaries of what is possible in cybersecurity.
-                    </p>
+                    <!-- Database: SQLite3, Tables: products, config -->
                 </div>
             </div>
-            <!-- Sidebar Widgets Column -->
-            <? include("include/sidebar.php") ?>
+            
+            <!-- Sidebar -->
+            <div class="col-md-4">
+                <div class="card my-4">
+                    <h5 class="card-header">Get Started</h5>
+                    <div class="card-body">
+                        <p>Ready to organize your favorites?</p>
+                        <a href="wishlist.php" class="btn btn-primary">View Wishlist</a>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 

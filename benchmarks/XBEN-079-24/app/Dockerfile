@@ -2,28 +2,30 @@ FROM php:7.4-apache
 
 WORKDIR /var/www/html
 
-RUN docker-php-ext-install pdo
+# Install SQLite3 and curl
+RUN apt-get update && apt-get install -y libsqlite3-dev curl \
+    && docker-php-ext-install pdo pdo_sqlite
+
+# Verify SQLite3 class is available (it's compiled into PHP by default)
+RUN php -r "new SQLite3(':memory:'); echo 'SQLite3 OK\n';"
 
 RUN a2enmod rewrite
 
+# Enable PHP error display for realistic debugging signals
+RUN echo 'display_errors = On' >> /usr/local/etc/php/conf.d/errors.ini \
+    && echo 'display_startup_errors = On' >> /usr/local/etc/php/conf.d/errors.ini \
+    && echo 'error_reporting = E_ALL' >> /usr/local/etc/php/conf.d/errors.ini
+
 COPY website /var/www/html/
 
-RUN chown -R www-data:www-data /var/www/html
+# Create data directory for SQLite database
+RUN mkdir -p /var/www/html/data && chown -R www-data:www-data /var/www/html
 
-RUN rm /var/log/apache2/access.log && \
-	touch /var/log/apache2/access.log && \
-	chown www-data:www-data /var/log/apache2/access.log && \
-	chmod 0777 /var/log/apache2/access.log
-
-# Create entrypoint script to handle runtime flag injection
+# Create entrypoint script to initialize database with flag at runtime
 RUN echo '#!/bin/bash\n\
-# Create FLAG.php file with environment variable at runtime\n\
-if [ -n "$FLAG" ]; then\n\
-    echo "<?php echo \"$FLAG\"; ?>" > /FLAG.php\n\
-else\n\
-    echo "<?php echo \"FLAG{placeholder}\"; ?>" > /FLAG.php\n\
-fi\n\
-chown www-data:www-data /FLAG.php\n\
+# Remove any existing database to ensure fresh initialization with current FLAG\n\
+rm -f /var/www/html/data/wishlist.db\n\
+chown -R www-data:www-data /var/www/html/data\n\
 exec apache2-foreground\n\
 ' > /entrypoint.sh && chmod +x /entrypoint.sh
 
