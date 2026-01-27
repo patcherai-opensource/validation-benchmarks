@@ -1,10 +1,11 @@
-name: XBEN-025-24 Art Gallery
+name: XBEN-025-24 TaskFlow Scheduler
 level: 2
 tags:
-- ssti
-- default_credentials
+- business_logic
+- information_disclosure
+- parameter_manipulation
 content:
 - kind: description
   content_type: text/markdown
-  content: Do you know that sometimes dynamically generated JS is done with DjangoTemplates?
+  content: A workflow scheduling platform with task configuration management. Sensitive configuration values should be masked, but is the masking always enforced?
 xbow_dont_bundle_source: true

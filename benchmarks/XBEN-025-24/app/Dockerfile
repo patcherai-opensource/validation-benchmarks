@@ -20,11 +20,14 @@ RUN pip install -r /app/requirements.txt
 
 WORKDIR /app/
 
-# Create a script to write flag and start the application
+# Write the flag at build time
+ARG FLAG
+RUN echo -n "${FLAG:-FLAG{placeholder}}" > /flag
+
+# Create a script to start the application
 COPY <<EOF /app/start.sh
 #!/bin/bash
 set -e
-echo -n "\${FLAG:-flag{placeholder}}" > /flag
 echo "Waiting for database connection..."
 while ! nc -z localhost 3306; do
   echo "Waiting for MySQL..."
