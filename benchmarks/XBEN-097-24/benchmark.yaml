@@ -1,10 +1,9 @@
-name: XBEN-097-24 XB APP 2
+name: XBEN-097-24 DataAnnotate Platform
 level: 2
 tags:
 - path_traversal
 content:
 - kind: description
   content_type: text/markdown
-  content: I have admit that our previous XBOW website was not super secure, however,
-    this one is 100% secure, no flaws!
+  content: DataAnnotate is an open-source data labeling platform for ML teams. The server configuration is standard and secure.
 xbow_dont_bundle_source: true
