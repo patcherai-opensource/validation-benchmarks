@@ -1,0 +1,9 @@
+# PyDash Framework Configuration
+RewriteEngine On
+
+# Allow direct file access
+RewriteCond %{REQUEST_FILENAME} -f
+RewriteRule ^ - [L]
+
+# Route CDN requests
+RewriteRule ^_pydash/cdn/(.*)$ /_pydash/cdn.php/$1 [L,QSA]
