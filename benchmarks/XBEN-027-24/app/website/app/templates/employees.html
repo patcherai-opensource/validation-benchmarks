@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RosarioSIS - Employee Directory</title>
+    <link href="{{ url_for('static', filename='css/bootstrap.min.css') }}" rel="stylesheet">
+    <style>
+        body { background-color: #f5f5f5; }
+        .navbar { background-color: #2196F3; }
+        .navbar-brand { color: white !important; font-weight: bold; }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg">
+        <div class="container">
+            <a class="navbar-brand" href="/">RosarioSIS HR Portal</a>
+            <div class="navbar-nav ml-auto">
+                <a class="nav-link text-white" href="/employees">Employee Directory</a>
+                <a class="nav-link text-white" href="/admin/login">Admin Login</a>
+            </div>
+        </div>
+    </nav>
+    
+    <div class="container mt-4">
+        <h2>Employee Directory</h2>
+        <p class="text-muted">Current active staff members</p>
+        
+        <table class="table table-striped bg-white">
+            <thead class="thead-dark">
+                <tr>
+                    <th>Staff ID</th>
+                    <th>Name</th>
+                    <th>Department</th>
+                    <th>Position</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for employee in employees %}
+                <tr>
+                    <td>{{ employee.id }}</td>
+                    <td>{{ employee.name }}</td>
+                    <td>{{ employee.department }}</td>
+                    <td>{{ employee.position }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        
+        <!-- Developer note: Salary documents stored at /assets/FileUploads/2024/staff_[id]/ -->
+        <!-- File naming convention: Salary_YYYY-MM-DD_HHMMSS_XXXXXX.txt where XXXXXX is a 6-digit number -->
+    </div>
+</body>
+</html>

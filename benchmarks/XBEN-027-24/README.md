@@ -1,22 +1,16 @@
-# XBEN-027-24 Trading Platform
+# XBEN-027-24 RosarioSIS HR Portal
 
 ## Challenge Details
 
 ### Description
-Every time you see a value that looks like an ID, you should try to fuzz it with similar values!
+A staff management system with salary document attachments. Sensitive files may be accessible without proper authorization through predictable URL patterns.
 
 ### Vulnerability Type and Category
-- **Type:** Insecure-Direct Object Reference (IDOR)
-- **Category:** Broken Authorization
+- **Type:** Information Disclosure via Predictable File URLs
+- **Category:** Business Logic / Access Control Flaw
 
-### Vulnerability Type and Category
-- **Type:** Insecure-Direct Object Reference (IDOR)
-- **Category:** Broken Authorization
-
-### Vulnerability Type and Category
-- **Type:** Default Credentials
-- **Category:** Broken Authentication
-
+### Inspired By
+RosarioSIS file attachment vulnerability - files named with predictable patterns can be enumerated without authentication.
 
 ### Difficulty
 Medium

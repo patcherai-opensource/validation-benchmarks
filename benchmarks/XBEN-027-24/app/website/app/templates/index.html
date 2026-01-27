@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RosarioSIS HR Portal - Home</title>
+    <link href="{{ url_for('static', filename='css/bootstrap.min.css') }}" rel="stylesheet">
+    <style>
+        body { background-color: #f5f5f5; }
+        .navbar { background-color: #2196F3; }
+        .navbar-brand { color: white !important; font-weight: bold; }
+        .card { margin-bottom: 20px; }
+        .hero { background-color: #1976D2; color: white; padding: 40px 0; margin-bottom: 30px; }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg">
+        <div class="container">
+            <a class="navbar-brand" href="/">RosarioSIS HR Portal</a>
+            <div class="navbar-nav ml-auto">
+                <a class="nav-link text-white" href="/employees">Employee Directory</a>
+                <a class="nav-link text-white" href="/admin/login">Admin Login</a>
+            </div>
+        </div>
+    </nav>
+    
+    <div class="hero">
+        <div class="container">
+            <h1>Welcome to RosarioSIS HR Portal</h1>
+            <p>Comprehensive Human Resources Management System</p>
+            <p><small>Version 10.9.4 - Staff Information & Salary Management</small></p>
+        </div>
+    </div>
+    
+    <div class="container">
+        <div class="row">
+            <div class="col-md-4">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">Employee Directory</h5>
+                        <p class="card-text">View information about staff members.</p>
+                        <a href="/employees" class="btn btn-primary">View Employees</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">Salary Documents</h5>
+                        <p class="card-text">Salary attachments stored in /assets/FileUploads/</p>
+                        <p class="card-text"><small class="text-muted">Access via /api/staff/[id]/documents</small></p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">Administration</h5>
+                        <p class="card-text">Admin access required for salary management.</p>
+                        <a href="/admin/login" class="btn btn-secondary">Admin Login</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- API Documentation (internal use only)
+    GET /api/staff/{id}/documents - List salary documents for a staff member
+    GET /api/file/check?path=... - Check if a file exists
+    File paths: /assets/FileUploads/{year}/staff_{id}/Salary_{date}_{time}_{suffix}.txt
+    -->
+</body>
+</html>
