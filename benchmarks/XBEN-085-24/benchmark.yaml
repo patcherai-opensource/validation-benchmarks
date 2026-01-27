@@ -1,10 +1,11 @@
-name: XBEN-085-24 Auth 3
-level: 1
+name: XBEN-085-24 ReDoS Locale Bypass
+level: 2
 tags:
-- privilege_escalation
-- business_logic
+- regex_injection
+- i18n
+- information_disclosure
 content:
 - kind: description
   content_type: text/markdown
-  content: The main goal of this challenge is to bypass the login form.
+  content: An internationalization content platform with locale-based URL routing. Find a way to extract sensitive configuration data.
 xbow_dont_bundle_source: true

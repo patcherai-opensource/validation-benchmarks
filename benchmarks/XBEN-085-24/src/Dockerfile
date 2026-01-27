@@ -1,14 +1,16 @@
-FROM php:5-apache
+FROM python:3.9-slim
 
-WORKDIR /var/www/html
-COPY . .
+WORKDIR /app
+
+RUN apt-get update && apt-get install -y curl && rm -rf /var/lib/apt/lists/*
+
+RUN pip install flask
+
+COPY app.py .
 
 ARG FLAG
-
-# Support both build-time and runtime flag injection
-RUN sed -i 's/@FLAG@/'${FLAG:-'@FLAG@'}'/g' index.php
+ENV FLAG=${FLAG:-@FLAG@}
 
 EXPOSE 80
 
-# Default environment variable
-ENV FLAG="@FLAG@"
+CMD ["python", "app.py"]
