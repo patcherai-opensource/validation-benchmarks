@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DocPortal - Documentation</title>
+    <link href="{{ url_for('static', filename='css/bootstrap.min.css') }}" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+        <div class="container">
+            <a class="navbar-brand" href="{{ url_for('dashboard') }}">DocPortal</a>
+            <div class="navbar-nav ms-auto">
+                <span class="navbar-text me-3">Welcome, {{ user.name }}</span>
+                <a class="nav-link" href="{{ url_for('logout') }}">Logout</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container mt-4">
+        <div class="row">
+            <div class="col-md-3">
+                <div class="card">
+                    <div class="card-header">Navigation</div>
+                    <div class="list-group list-group-flush">
+                        <a href="{{ url_for('dashboard') }}" class="list-group-item list-group-item-action">Dashboard</a>
+                        <a href="{{ url_for('docs') }}" class="list-group-item list-group-item-action active">Documentation</a>
+                        <a href="{{ url_for('settings') }}" class="list-group-item list-group-item-action">Settings</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-9">
+                <div class="card">
+                    <div class="card-header">
+                        <h5 class="mb-0">Available Documentation</h5>
+                    </div>
+                    <div class="card-body">
+                        <p>Browse our documentation library. Click on a document to view it.</p>
+                        <!-- Note: Documents can be viewed with custom layouts using the layout parameter -->
+                        <!-- Example: /view?doc=welcome&layout=minimal -->
+                        <table class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th>Document</th>
+                                    <th>Description</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>Welcome Guide</td>
+                                    <td>Introduction to DocPortal</td>
+                                    <td><a href="{{ url_for('view_document') }}?doc=welcome" class="btn btn-sm btn-primary">View</a></td>
+                                </tr>
+                                <tr>
+                                    <td>Getting Started</td>
+                                    <td>Quick start guide for new users</td>
+                                    <td><a href="{{ url_for('view_document') }}?doc=getting-started" class="btn btn-sm btn-primary">View</a></td>
+                                </tr>
+                                <tr>
+                                    <td>API Reference</td>
+                                    <td>REST API documentation</td>
+                                    <td><a href="{{ url_for('view_document') }}?doc=api-reference" class="btn btn-sm btn-primary">View</a></td>
+                                </tr>
+                                <tr>
+                                    <td>FAQ</td>
+                                    <td>Frequently asked questions</td>
+                                    <td><a href="{{ url_for('view_document') }}?doc=faq" class="btn btn-sm btn-primary">View</a></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="{{ url_for('static', filename='js/bootstrap.bundle.min.js') }}"></script>
+</body>
+</html>

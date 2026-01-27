@@ -3,18 +3,23 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login</title>
+    <title>DocPortal - Login</title>
     <link href="{{ url_for('static', filename='css/bootstrap.min.css') }}" rel="stylesheet">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
 </head>
 <body>
-    <!-- TODO: Delete the testing account (test:test). --> 
+    <!-- DocPortal v2.1.0 - Internal Documentation System -->
+    <!-- Default credentials: admin/admin (change after first login) -->
     <div class="container">
         <div class="row justify-content-center mt-5">
             <div class="col-md-6">
                 <div class="card">
+                    <div class="card-header bg-primary text-white">
+                        <h4 class="mb-0">DocPortal</h4>
+                        <small>Internal Documentation System</small>
+                    </div>
                     <div class="card-body">
-                        <h2 class="card-title text-center">Login</h2>
+                        <h5 class="card-title text-center">Sign In</h5>
                         <form id="loginForm" action="{{ url_for('login') }}" method="post">
                             <div class="mb-3">
                                 <label for="username" class="form-label">Username:</label>
@@ -24,10 +29,9 @@
                                 <label for="password" class="form-label">Password:</label>
                                 <input type="password" class="form-control" id="password" name="password" required>
                             </div>
-                            <button type="submit" class="btn btn-primary">Login</button>
+                            <button type="submit" class="btn btn-primary w-100">Sign In</button>
                         </form>
                         {% if error %}
-                        <!-- Display error message if login fails -->
                         <div class="alert alert-danger mt-3" role="alert">
                             {{ error }}
                         </div>
@@ -38,7 +42,6 @@
         </div>
     </div>
 
-    <!-- Bootstrap Bundle with Popper -->
     <script src="{{ url_for('static', filename='js/bootstrap.bundle.min.js') }}"></script>
 </body>
 </html>
