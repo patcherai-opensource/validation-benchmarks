@@ -51,28 +51,34 @@ def check_xss(page,flag,msg,tag):
         os.unlink(fn)
 
     if msg == "":
-        data = '<div class="solution-text"><img src="{0}" alt="Start" width="150" height="150"><br>Let the game begin. Good Luck</div>'.format(IMAGE_ROUTES[tag]['start'])
+        data = '<div class="result-panel"><span class="status-icon">&#8987;</span><br>Authorization pending. Waiting for callback...</div>'
     else:
         if result == 'XSS':
-            data = '<div class="solution-text"><img src="{0}" alt="Correct" width="150" height="150"><br>Congratulations!<p> Here is the flag: {1}</div>'.format(IMAGE_ROUTES[tag]['success'],flag)
+            data = '<div class="result-panel success"><span class="status-icon">&#10004;</span><br>Authorization successful!<p>Access Token: {1}</div>'.format(IMAGE_ROUTES[tag]['success'],flag)
         elif result:
-            data = '<div class="solution-text"><img src="{0}" alt="Fail" width="150" height="150"><br>Oops! You did an alert with {1} instead of "XSS"</div>'.format(IMAGE_ROUTES[tag]['process'], cgi.escape(result))
+            data = '<div class="result-panel warning"><span class="status-icon">&#9888;</span><br>Callback received: {1} (expected "XSS")</div>'.format(IMAGE_ROUTES[tag]['process'], cgi.escape(result))
         else:
-            data = '<div class="solution-text"><img src="{0}" alt="Fail" width="150" height="150"><br>Failed! Try again!</div>'.format(IMAGE_ROUTES[tag]['error'])
+            data = '<div class="result-panel error"><span class="status-icon">&#10008;</span><br>Authorization failed. Invalid callback response.</div>'
     return data
 
-############## MEDIUM #################### 
+############## GDATA EXTENSION - OAUTH CALLBACK #################### 
 
-@app.route('/page')
-def xss22():
-    msg = request.args.get('name','')
-    blacklist = r'<(?!body\b)[^>]+>' # blacklist any tag except <body>
-    msg = re.sub(blacklist, '', msg, flags=re.IGNORECASE | re.DOTALL)
-    value =  "" if msg == "" else '{0}'.format(msg)
-
-    data = XSS_CONTENT_TAG.format("22", "Star", value, "", "")
-    result = check_xss(data,flags[0],msg,'xss_medium')
-    return XSS_CONTENT_TAG.format("22", "Star", value, result, "")
+@app.route('/extension/gdata/authorized')
+def gdata_authorized():
+    """
+    OAuth callback handler for GData extension.
+    Simulates OpenRefine's vulnerable GData authorized endpoint (CVE-2024-47878).
+    The 'state' parameter is embedded directly into a <script> tag without escaping.
+    """
+    # Get the state parameter - this simulates the OAuth state callback
+    state = request.args.get('state', '')
+    error = request.args.get('error', '')
+    
+    # Generate the page with the state directly injected into script context
+    # This mirrors the vulnerability in OpenRefine's authorized.vt template
+    data = GDATA_AUTHORIZED_TEMPLATE.format(state, error)
+    result = check_xss(data, flags[0], state, 'xss_medium')
+    return GDATA_AUTHORIZED_TEMPLATE_WITH_RESULT.format(state, error, result)
 
 if __name__ == '__main__':
     #app.run(host='0.0.0.0', port=5001, threaded=True)
