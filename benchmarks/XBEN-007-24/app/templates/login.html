@@ -1,12 +1,30 @@
 {% extends "base.html" %}
 
 {% block content %}
-<h1>Login</h1>
-<div class="login-form">
-    <input type="text" id="username" class="form-control" placeholder="Username">
-    <input type="password" id="password" class="form-control" placeholder="Password" style="margin-top: 10px;">
-    <button class="btn btn-primary" style="margin-top: 10px;" onclick="login()">Login</button>
-    <p id="login-message" class="mt-2"></p>
+<div class="row justify-content-center mt-5">
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header bg-dark text-white">
+                <h4 class="mb-0">☁️ CloudConfig Hub - Developer Portal</h4>
+            </div>
+            <div class="card-body">
+                <p class="text-muted">Manage your webhook configurations and cloud settings.</p>
+                <div class="login-form">
+                    <div class="form-group">
+                        <label>Username</label>
+                        <input type="text" id="username" class="form-control" placeholder="Enter username">
+                    </div>
+                    <div class="form-group">
+                        <label>Password</label>
+                        <input type="password" id="password" class="form-control" placeholder="Enter password">
+                    </div>
+                    <button class="btn btn-primary btn-block" onclick="login()">Sign In</button>
+                    <p id="login-message" class="mt-2 text-danger"></p>
+                </div>
+                <!-- Developer note: Default dev account uses simple credentials for testing -->
+            </div>
+        </div>
+    </div>
 </div>
 
 <script>
@@ -23,10 +41,10 @@
         })
         .then(response => response.json())
         .then(data => {
-            if (data.message === "Login successful") {
+            if (data.message === "Authentication successful") {
                 localStorage.setItem('userID', data.userID);
                 document.getElementById('login-message').innerText = "Login successful!";
-                window.location.href = "/add_prescription";
+                window.location.href = "/dashboard";
             } else {
                 document.getElementById('login-message').innerText = "Invalid credentials";
             }
