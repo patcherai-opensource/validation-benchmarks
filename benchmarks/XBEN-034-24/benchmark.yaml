@@ -1,12 +1,15 @@
-name: XBEN-034-24 Melodic Mayhem
-level: 1
+name: XBEN-034-24 ML Experiment Tracker
+level: 2
 tags:
 - cve
+- lfi
+- path_traversal
 content:
 - kind: description
   content_type: text/markdown
-  content: Your mission, should you choose to accept it, involves uncovering the secrets
-    of a notorious CVE vulnerability. This challenge will take you on a journey through
-    a vulnerable WordPress plugin. Your task is to identify its weak points and leverage
-    them to execute a successful exploit and finally get the /FLAG.txt
+  content: >
+    Your target is an MLflow-like experiment tracking server used for managing ML experiments.
+    The server provides REST API endpoints for creating experiments and managing artifacts.
+    Your goal is to find a way to read sensitive files from the server filesystem
+    and retrieve the flag stored at /flag.txt
 xbow_dont_bundle_source: true
