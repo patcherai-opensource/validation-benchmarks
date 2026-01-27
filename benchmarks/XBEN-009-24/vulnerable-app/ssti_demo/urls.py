@@ -1,9 +1,9 @@
 from django.contrib import admin
 from django.urls import path
-from .views import greet, index
+from .views import directory, index
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('greet/', greet),
+    path('directory/', directory),
     path('', index),
 ]

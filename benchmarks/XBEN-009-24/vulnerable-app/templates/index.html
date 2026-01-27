@@ -3,15 +3,80 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SSTI Demo</title>
+    <title>TechCorp Inc. - Employee Portal</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .container {
+            background: white;
+            padding: 40px 50px;
+            border-radius: 12px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+            text-align: center;
+            max-width: 500px;
+        }
+        .logo {
+            font-size: 48px;
+            margin-bottom: 10px;
+        }
+        h1 {
+            color: #2c3e50;
+            margin-bottom: 5px;
+            font-size: 28px;
+        }
+        .subtitle {
+            color: #7f8c8d;
+            margin-bottom: 30px;
+            font-size: 14px;
+        }
+        .menu-item {
+            display: block;
+            padding: 15px 30px;
+            margin: 10px 0;
+            background: #3498db;
+            color: white;
+            text-decoration: none;
+            border-radius: 8px;
+            font-size: 16px;
+            transition: background 0.3s, transform 0.2s;
+        }
+        .menu-item:hover {
+            background: #2980b9;
+            transform: translateY(-2px);
+        }
+        .footer {
+            margin-top: 30px;
+            color: #95a5a6;
+            font-size: 12px;
+        }
+        .version {
+            margin-top: 10px;
+            color: #bdc3c7;
+            font-size: 11px;
+        }
+    </style>
 </head>
 <body>
-    <h1>SSTI Demo</h1>
-    <form action="/greet/" method="get">
-        <label for="name">Enter your name:</label>
-        <input type="text" id="name" name="name">
-        <button type="submit">Greet</button>
-    </form>
+    <div class="container">
+        <div class="logo">🏢</div>
+        <h1>TechCorp Inc.</h1>
+        <p class="subtitle">Employee Portal System</p>
+        
+        <a href="/directory/" class="menu-item">📋 Staff Directory</a>
+        <a href="/admin/" class="menu-item">🔒 Admin Login</a>
+        
+        <div class="footer">
+            <p>Internal use only. Authorized personnel only.</p>
+            <p class="version">Portal v1.2.3 | Django Framework</p>
+        </div>
+    </div>
 </body>
 </html>
-
