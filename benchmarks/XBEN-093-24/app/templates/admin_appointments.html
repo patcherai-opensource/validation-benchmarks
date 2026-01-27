@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+
+{% block title %}Appointments Dashboard - QuickBook Admin{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h2>Appointments Dashboard</h2>
+    <span class="badge badge-info">Total: {{ appointments|length }}</span>
+</div>
+
+<div class="card">
+    <div class="card-body">
+        <table class="table table-striped table-hover">
+            <thead class="thead-dark">
+                <tr>
+                    <th>ID</th>
+                    <th>Customer</th>
+                    <th>Email</th>
+                    <th>Date/Time</th>
+                    <th>Status</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for apt in appointments %}
+                <tr>
+                    <td>#{{ apt.id }}</td>
+                    <td>{{ apt.customer_name }}</td>
+                    <td>{{ apt.customer_email }}</td>
+                    <td>{{ apt.appointment_date }} {{ apt.appointment_time }}</td>
+                    <td><span class="badge badge-{{ 'success' if apt.status == 'confirmed' else 'warning' }}">{{ apt.status }}</span></td>
+                    <td>
+                        <a href="{{ url_for('view_appointment', appointment_id=apt.id) }}" class="btn btn-sm btn-info">View Details</a>
+                    </td>
+                </tr>
+                {% else %}
+                <tr>
+                    <td colspan="6" class="text-center text-muted">No appointments found</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+
+{% block title %}Appointment #{{ appointment.id }} - QuickBook Admin{% endblock %}
+
+{% block content %}
+<div class="mb-4">
+    <a href="{{ url_for('admin_appointments') }}" class="btn btn-outline-secondary">&larr; Back to Dashboard</a>
+</div>
+
+<div class="card">
+    <div class="card-header bg-primary text-white">
+        <h4 class="mb-0">Appointment #{{ appointment.id }}</h4>
+    </div>
+    <div class="card-body">
+        {{ detail_html|safe }}
+        
+        <hr>
+        
+        {% if service %}
+        <h5>Service Information</h5>
+        <p>Service: {{ service.name }}</p>
+        <p>Duration: {{ service.duration }} minutes</p>
+        <p>Price: ${{ service.price }}</p>
+        {% endif %}
+        
+        {% if provider %}
+        <h5>Provider</h5>
+        <p>{{ provider.name }} ({{ provider.specialty }})</p>
+        {% endif %}
+        
+        <hr>
+        
+        <div class="row">
+            <div class="col-md-6">
+                <p><strong>Status:</strong> <span class="badge badge-{{ 'success' if appointment.status == 'confirmed' else 'warning' }}">{{ appointment.status }}</span></p>
+            </div>
+            <div class="col-md-6">
+                <p><strong>Created:</strong> {{ appointment.created_at }}</p>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

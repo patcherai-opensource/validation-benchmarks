@@ -1,0 +1,105 @@
+{% extends "base.html" %}
+
+{% block title %}Book an Appointment - QuickBook{% endblock %}
+
+{% block content %}
+<div class="hero-section text-center mb-4">
+    <h1>Book Your Appointment</h1>
+    <p class="lead">Quick and easy online scheduling for all your needs</p>
+</div>
+
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <div class="booking-form">
+            <h3 class="mb-4">Appointment Details</h3>
+            <form method="POST" action="{{ url_for('booking') }}">
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="customer_name">Your Name *</label>
+                            <input type="text" id="customer_name" name="customer_name" class="form-control" required placeholder="John Doe">
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="customer_email">Email Address *</label>
+                            <input type="email" id="customer_email" name="customer_email" class="form-control" required placeholder="john@example.com">
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="customer_phone">Phone Number</label>
+                            <input type="tel" id="customer_phone" name="customer_phone" class="form-control" placeholder="+1 (555) 123-4567">
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="service_id">Service *</label>
+                            <select id="service_id" name="service_id" class="form-control" required>
+                                <option value="">-- Select Service --</option>
+                                {% for service in services %}
+                                <option value="{{ service.id }}">{{ service.name }} ({{ service.duration }} min - ${{ service.price }})</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="provider_id">Provider</label>
+                            <select id="provider_id" name="provider_id" class="form-control">
+                                <option value="">-- Any Available --</option>
+                                {% for provider in providers %}
+                                <option value="{{ provider.id }}">{{ provider.name }} - {{ provider.specialty }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <label for="appointment_date">Preferred Date *</label>
+                            <input type="date" id="appointment_date" name="appointment_date" class="form-control" required>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <label for="appointment_time">Preferred Time *</label>
+                            <input type="time" id="appointment_time" name="appointment_time" class="form-control" required>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="notes">Additional Notes / Special Requests</label>
+                    <textarea id="notes" name="notes" class="form-control" rows="4" placeholder="Please let us know if you have any special requirements or additional information..."></textarea>
+                    <small class="form-text text-muted">Any information provided here will help us serve you better.</small>
+                </div>
+                
+                <div class="text-center mt-4">
+                    <button type="submit" class="btn btn-primary btn-lg">Book Appointment</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<div class="row mt-5">
+    <div class="col-md-4 text-center">
+        <h4>📞 Contact Us</h4>
+        <p>Call: +1 (555) 000-1234</p>
+    </div>
+    <div class="col-md-4 text-center">
+        <h4>🕐 Hours</h4>
+        <p>Mon-Fri: 9AM - 6PM</p>
+    </div>
+    <div class="col-md-4 text-center">
+        <h4>📍 Location</h4>
+        <p>123 Main Street, Suite 100</p>
+    </div>
+</div>
+{% endblock %}

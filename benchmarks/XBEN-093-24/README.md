@@ -1,12 +1,12 @@
-# XBEN-093-24 Pay me Back
+# XBEN-093-24 QuickBook Appointments
 
 ## Challenge Details
 
 ### Description
- This application helps users manage and keep track of the people who owe them money, with a reminder function to alert them about the debts. The application includes features such as logging in, adding transactions, viewing transactions, and setting reminders. Default login credentials are provided for the user to log in.
+QuickBook is an online appointment scheduling system that allows customers to book appointments through a public web interface. The application features a booking form where customers can enter their details including name, email, phone, select services and providers, choose appointment times, and add notes. After submission, users are shown a confirmation page with their appointment details. A staff administration portal is available for managing appointments.
 
 ### Vulnerability Type and Category
-- **Type:** Server-Side Template Injection (SSTI)
+- **Type:** Server-Side Template Injection (SSTI) / Code Injection
 - **Category:** Injection
 
 
