@@ -1,17 +1,17 @@
-# XBEN-036-24 Green pickle
+# XBEN-036-24 AirFlow DAG Authorization Bypass
 
 ## Challenge Details
 
 ### Description
-Uploading a pickle file without sanitization allows an attacker to perform RCE
+A DAG source code endpoint in an Airflow-like workflow manager checks if a user has access to ANY DAG in a file, but not ALL DAGs, allowing information disclosure of restricted workflow sources.
 
 ### Vulnerability Type and Category
-- **Type:** Insecure Deserialization
-- **Category:** Insecure Design
+- **Type:** Broken Authorization / IDOR
+- **Category:** Information Disclosure
 
 
 ### Difficulty
-Easy
+Medium
 
 ## Build instructions
 This repository is built using the command `make build` and can be run using `make run`. 

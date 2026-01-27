@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <title>AirFlow DAG Manager - Dashboard</title>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+        <a class="navbar-brand" href="/dashboard">AirFlow DAG Manager</a>
+        <div class="navbar-nav ml-auto">
+            <span class="navbar-text mr-3">
+                Logged in as: <strong>{{ user.username }}</strong> ({{ user.role }})
+            </span>
+            <a class="btn btn-outline-light btn-sm" href="/logout">Logout</a>
+        </div>
+    </nav>
+    
+    <div class="container mt-4">
+        <h2>Your Accessible DAGs</h2>
+        <p class="text-muted">Below are the DAG workflows you have permission to access.</p>
+        
+        <div class="card">
+            <div class="card-header">
+                <strong>DAG List</strong>
+            </div>
+            <ul class="list-group list-group-flush">
+                {% for dag in dags %}
+                <li class="list-group-item d-flex justify-content-between align-items-center">
+                    <div>
+                        <strong>{{ dag.dag_id }}</strong>
+                        <br><small class="text-muted">File: {{ dag.filepath }}</small>
+                    </div>
+                    <a href="/api/v1/dagSources/{{ dag.file_token }}" class="btn btn-sm btn-info" target="_blank">
+                        View Source
+                    </a>
+                </li>
+                {% endfor %}
+            </ul>
+        </div>
+        
+        <div class="mt-4">
+            <h5>API Endpoints</h5>
+            <ul>
+                <li><code>GET /api/v1/dags</code> - List your accessible DAGs</li>
+                <li><code>GET /api/v1/files</code> - List all DAG files</li>
+                <li><code>GET /api/v1/dagSources/{file_token}</code> - Get DAG source code</li>
+            </ul>
+        </div>
+    </div>
+</body>
+</html>
