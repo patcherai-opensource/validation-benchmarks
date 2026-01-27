@@ -1,5 +1,5 @@
 
-class UrlObj():
-    def __init__(self, name='Url', url='http://example.com'):
-        self.name = name
-        self.url = url
+class SessionEntry():
+    def __init__(self, key='', value=''):
+        self.key = key
+        self.value = value

@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Session Result</title>
+    <link href="{{ url_for('static', filename='css/bootstrap.min.css') }}" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container">
+            <a class="navbar-brand" href="/">Jooby Session Manager</a>
+            <div class="navbar-nav">
+                <a class="nav-link" href="{{ url_for('dashboard') }}">Dashboard</a>
+                <a class="nav-link" href="{{ url_for('session_set') }}">Set Session</a>
+                <a class="nav-link" href="{{ url_for('session_list') }}">List Sessions</a>
+                <a class="nav-link" href="{{ url_for('profile') }}">Profile</a>
+                <a class="nav-link" href="{{ url_for('about') }}">About</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container mt-5">
+        <div class="row justify-content-center">
+            <div class="col-md-8">
+                <div class="card">
+                    <div class="card-header">
+                        <h4>Session Operation Result</h4>
+                    </div>
+                    <div class="card-body">
+                        {% if action == 'set' and success %}
+                        <div class="alert alert-success">
+                            <strong>Success!</strong> Session value stored successfully.
+                            <br>Key: <code>{{ key }}</code>
+                        </div>
+                        {% elif action == 'get' %}
+                            {% if error %}
+                            <div class="alert alert-warning">{{ error }}</div>
+                            {% elif value is not none %}
+                            <div class="alert alert-info">
+                                <strong>Key:</strong> <code>{{ key }}</code>
+                            </div>
+                            <div class="card">
+                                <div class="card-header">Retrieved Value</div>
+                                <div class="card-body">
+                                    <pre class="mb-0">{{ value }}</pre>
+                                </div>
+                            </div>
+                            {% if raw_value %}
+                            <div class="card mt-3">
+                                <div class="card-header">Raw Stored Value</div>
+                                <div class="card-body">
+                                    <pre class="mb-0 text-muted">{{ raw_value }}</pre>
+                                </div>
+                            </div>
+                            {% endif %}
+                            {% else %}
+                            <div class="alert alert-warning">
+                                Key <code>{{ key }}</code> not found in session.
+                            </div>
+                            {% endif %}
+                        {% endif %}
+
+                        <div class="mt-4">
+                            <a href="{{ url_for('session_set') }}" class="btn btn-primary">Store Another Value</a>
+                            <a href="{{ url_for('session_list') }}" class="btn btn-secondary">View All Keys</a>
+                            <a href="{{ url_for('dashboard') }}" class="btn btn-outline-secondary">Dashboard</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="{{ url_for('static', filename='js/bootstrap.bundle.min.js') }}"></script>
+</body>
+</html>

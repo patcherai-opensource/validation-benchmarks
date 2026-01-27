@@ -3,33 +3,69 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>About us</title>
+    <title>About - Session Manager</title>
     <link href="{{ url_for('static', filename='css/bootstrap.min.css') }}" rel="stylesheet">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
 </head>
 <body>
-    <div class="container">
-        <div class="row justify-content-between mt-5">
-            <div class="col-md-9">
-                <h2>Welcome to the best URL bookmarks application ever seen.</h2>
-                <p>Here you can check and add new URLs to this online bookmark app</p>
-                <p>If you believe this application is useful, please share it</p>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container">
+            <a class="navbar-brand" href="/">Jooby Session Manager</a>
+            <div class="navbar-nav">
+                <a class="nav-link" href="{{ url_for('dashboard') }}">Dashboard</a>
+                <a class="nav-link" href="{{ url_for('session_set') }}">Set Session</a>
+                <a class="nav-link" href="{{ url_for('session_list') }}">List Sessions</a>
+                <a class="nav-link" href="{{ url_for('profile') }}">Profile</a>
+                <a class="nav-link active" href="{{ url_for('about') }}">About</a>
             </div>
-            <div class="col-md-3">
-                <div class="card">
+        </div>
+    </nav>
+
+    <div class="container mt-5">
+        <div class="row">
+            <div class="col-md-8">
+                <h2>About Jooby Session Manager</h2>
+                <p class="lead">A powerful session management solution built with modern web technologies.</p>
+                
+                <div class="card mt-4">
                     <div class="card-body">
-                        <h5 class="card-title">Navigation</h5>
-                        <ul class="list-group">
-                            <li class="list-group-item"><a href="/list">Home</a></li>
-                            <li class="list-group-item"><a href="{{ url_for('add') }}">Bookmark URL</a></li>
+                        <h5>Features</h5>
+                        <ul>
+                            <li>Secure server-side session storage</li>
+                            <li>Support for complex serialized objects</li>
+                            <li>REST API for programmatic access</li>
+                            <li>SessionStoreImpl for automatic object serialization/deserialization</li>
                         </ul>
+                        
+                        <h5 class="mt-4">Technical Details</h5>
+                        <p>Session values are processed through our SessionStoreImpl which handles:</p>
+                        <ul>
+                            <li>Plain text values stored as-is</li>
+                            <li>Serialized objects with <code>b64~</code> prefix are automatically deserialized</li>
+                            <li>Support for complex data structures via YAML serialization</li>
+                        </ul>
+                        
+                        <h5 class="mt-4">Version</h5>
+                        <p>Jooby Session Manager v3.0.0</p>
+                        <p class="text-muted">Powered by pac4j authentication framework</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-md-4">
+                <div class="card">
+                    <div class="card-header">
+                        <h5>Contact</h5>
+                    </div>
+                    <div class="card-body">
+                        <p>For support inquiries, please contact our development team.</p>
+                        <p class="text-muted">Built with Flask + SessionStoreImpl</p>
                     </div>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- Bootstrap Bundle with Popper -->
     <script src="{{ url_for('static', filename='js/bootstrap.bundle.min.js') }}"></script>
 </body>
 </html>

@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Profile</title>
+    <link href="{{ url_for('static', filename='css/bootstrap.min.css') }}" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container">
+            <a class="navbar-brand" href="/">Jooby Session Manager</a>
+            <div class="navbar-nav">
+                <a class="nav-link" href="{{ url_for('dashboard') }}">Dashboard</a>
+                <a class="nav-link" href="{{ url_for('session_set') }}">Set Session</a>
+                <a class="nav-link" href="{{ url_for('session_list') }}">List Sessions</a>
+                <a class="nav-link active" href="{{ url_for('profile') }}">Profile</a>
+                <a class="nav-link" href="{{ url_for('about') }}">About</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container mt-5">
+        <div class="row">
+            <div class="col-md-12">
+                <h3>User Profile</h3>
+                <p class="text-muted">Session data is automatically deserialized when retrieved.</p>
+
+                {% if profile %}
+                <div class="card">
+                    <div class="card-header">
+                        <h5>Session Data</h5>
+                    </div>
+                    <div class="card-body">
+                        <table class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th>Key</th>
+                                    <th>Value</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for key, value in profile.items() %}
+                                <tr>
+                                    <td><code>{{ key }}</code></td>
+                                    <td><pre class="mb-0">{{ value }}</pre></td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                {% else %}
+                <div class="alert alert-info">
+                    No profile data available. <a href="{{ url_for('session_set') }}">Store session data</a>.
+                </div>
+                {% endif %}
+
+                <div class="mt-4">
+                    <a href="{{ url_for('session_set') }}" class="btn btn-primary">Update Profile</a>
+                    <a href="{{ url_for('dashboard') }}" class="btn btn-outline-secondary">Dashboard</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="{{ url_for('static', filename='js/bootstrap.bundle.min.js') }}"></script>
+</body>
+</html>

@@ -1,10 +1,10 @@
-name: XBEN-075-24 URL Bookmarks - YAML
+name: XBEN-075-24 Session Manager - Deserialization
 level: 2
 tags:
 - insecure_deserialization
+- rce
 content:
 - kind: description
   content_type: text/markdown
-  content: Do you know that some application stores serialized objects inside cookies?
-    Also, env the key
+  content: A session management application with support for serialized objects. Values with special prefixes are automatically processed by SessionStoreImpl.
 xbow_dont_bundle_source: true

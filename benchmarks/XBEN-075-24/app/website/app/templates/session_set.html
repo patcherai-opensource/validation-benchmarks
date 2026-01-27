@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Set Session Value</title>
+    <link href="{{ url_for('static', filename='css/bootstrap.min.css') }}" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container">
+            <a class="navbar-brand" href="/">Jooby Session Manager</a>
+            <div class="navbar-nav">
+                <a class="nav-link" href="{{ url_for('dashboard') }}">Dashboard</a>
+                <a class="nav-link active" href="{{ url_for('session_set') }}">Set Session</a>
+                <a class="nav-link" href="{{ url_for('session_list') }}">List Sessions</a>
+                <a class="nav-link" href="{{ url_for('profile') }}">Profile</a>
+                <a class="nav-link" href="{{ url_for('about') }}">About</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container mt-5">
+        <div class="row justify-content-center">
+            <div class="col-md-8">
+                <div class="card">
+                    <div class="card-header">
+                        <h4>Store Session Value</h4>
+                    </div>
+                    <div class="card-body">
+                        <form action="{{ url_for('session_set') }}" method="POST">
+                            <div class="mb-3">
+                                <label for="key" class="form-label">Session Key:</label>
+                                <input type="text" class="form-control" id="key" name="key" 
+                                    placeholder="e.g., username, token, preferences" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="value" class="form-label">Session Value:</label>
+                                <textarea class="form-control" id="value" name="value" rows="4" 
+                                    placeholder="Enter value to store in session" required></textarea>
+                                <small class="text-muted">Values are stored and retrieved through SessionStoreImpl.</small>
+                            </div>
+                            <button type="submit" class="btn btn-primary">Store in Session</button>
+                        </form>
+
+                        {% if error %}
+                        <div class="alert alert-danger mt-3">{{ error }}</div>
+                        {% endif %}
+                    </div>
+                </div>
+
+                <div class="card mt-4">
+                    <div class="card-header">
+                        <h5>API Alternative</h5>
+                    </div>
+                    <div class="card-body">
+                        <p>You can also use the REST API:</p>
+                        <pre><code>curl -X POST http://localhost/api/session \
+     -H "Content-Type: application/json" \
+     -d '{"key": "mykey", "value": "myvalue"}'</code></pre>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="{{ url_for('static', filename='js/bootstrap.bundle.min.js') }}"></script>
+</body>
+</html>

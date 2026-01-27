@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Session Keys</title>
+    <link href="{{ url_for('static', filename='css/bootstrap.min.css') }}" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container">
+            <a class="navbar-brand" href="/">Jooby Session Manager</a>
+            <div class="navbar-nav">
+                <a class="nav-link" href="{{ url_for('dashboard') }}">Dashboard</a>
+                <a class="nav-link" href="{{ url_for('session_set') }}">Set Session</a>
+                <a class="nav-link active" href="{{ url_for('session_list') }}">List Sessions</a>
+                <a class="nav-link" href="{{ url_for('profile') }}">Profile</a>
+                <a class="nav-link" href="{{ url_for('about') }}">About</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container mt-5">
+        <div class="row">
+            <div class="col-md-12">
+                <h3>Session Keys</h3>
+
+                {% if error %}
+                <div class="alert alert-warning">{{ error }}</div>
+                {% endif %}
+
+                {% if keys %}
+                <div class="card">
+                    <div class="card-header">
+                        <h5>Stored Session Keys ({{ keys|length }})</h5>
+                    </div>
+                    <ul class="list-group list-group-flush">
+                        {% for key in keys %}
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            <code>{{ key }}</code>
+                            <a href="{{ url_for('session_get') }}?key={{ key }}" class="btn btn-sm btn-outline-primary">
+                                Retrieve Value
+                            </a>
+                        </li>
+                        {% endfor %}
+                    </ul>
+                </div>
+                {% else %}
+                <div class="alert alert-info">
+                    No session keys stored yet. <a href="{{ url_for('session_set') }}">Store a value</a>.
+                </div>
+                {% endif %}
+
+                <div class="mt-4">
+                    <a href="{{ url_for('session_set') }}" class="btn btn-primary">Add New Key</a>
+                    <a href="{{ url_for('dashboard') }}" class="btn btn-outline-secondary">Dashboard</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="{{ url_for('static', filename='js/bootstrap.bundle.min.js') }}"></script>
+</body>
+</html>
