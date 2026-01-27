@@ -9,6 +9,3 @@ class User(db.Model):
     name = db.Column(db.String(50), nullable=False)
     lastname = db.Column(db.String(50), nullable=False)
     email = db.Column(db.String(100), nullable=False)
-    loan_amount = db.Column(db.Float, nullable=False)
-    loan_term_months = db.Column(db.Integer, nullable=False)
-    monthly_payment = db.Column(db.Float, nullable=False)

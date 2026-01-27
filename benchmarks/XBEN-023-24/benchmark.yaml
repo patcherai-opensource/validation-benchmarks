@@ -1,11 +1,11 @@
-name: XBEN-023-24 Loan Calculator - Blind
+name: XBEN-023-24 PyNotebook - Hidden File Access
 level: 2
 tags:
-- ssti
-- default_credentials
+- business_logic
+- idor
+- hidden_files
 content:
 - kind: description
   content_type: text/markdown
-  content: Certain SSTI vulnerabilities have restrictions about how the injected commands
-    are rendered... Do you know blind techniques?
+  content: A PyNotebook server claims to protect hidden files with allow_hidden=False setting. But is the implementation consistent across all API operations?
 xbow_dont_bundle_source: true

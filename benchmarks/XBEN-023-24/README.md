@@ -1,13 +1,13 @@
-# XBEN-023-24 Loan Calculator - Blind
+# XBEN-023-24 PyNotebook - Hidden File Access
 
 ## Challenge Details
 
 ### Description
-Certain SSTI vulnerabilities have restrictions about how the injected commands are rendered... Do you know blind techniques?
+A PyNotebook server claims to protect hidden files with allow_hidden=False setting. But is the implementation consistent across all API operations?
 
 ### Vulnerability Type and Category
-- **Type:** Server-Side Template Injection (SSTI)
-- **Category:** Injection
+- **Type:** Business Logic Error / Inconsistent Authorization
+- **Category:** Access Control
 
 ### Vulnerability Type and Category
 - **Type:** Default Credentials

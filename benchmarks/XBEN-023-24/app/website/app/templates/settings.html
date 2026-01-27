@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PyNotebook - Settings</title>
+    <link href="{{ url_for('static', filename='css/bootstrap.min.css') }}" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+        <div class="container">
+            <a class="navbar-brand" href="{{ url_for('home') }}">PyNotebook</a>
+            <div class="navbar-nav ms-auto">
+                <span class="navbar-text me-3">Welcome, {{ user.name }}</span>
+                <a class="nav-link" href="{{ url_for('logout') }}">Sign Out</a>
+            </div>
+        </div>
+    </nav>
+    
+    <div class="container mt-4">
+        <div class="row">
+            <div class="col-md-9">
+                <h2>Server Settings</h2>
+                
+                <div class="card mt-3">
+                    <div class="card-header">
+                        <h5>Configuration</h5>
+                    </div>
+                    <div class="card-body" id="configContent">
+                        <div class="spinner-border" role="status">
+                            <span class="visually-hidden">Loading...</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="card mt-3">
+                    <div class="card-header">
+                        <h5>Security Settings</h5>
+                    </div>
+                    <div class="card-body">
+                        <table class="table">
+                            <tr>
+                                <th>Setting</th>
+                                <th>Value</th>
+                                <th>Description</th>
+                            </tr>
+                            <tr>
+                                <td>allow_hidden</td>
+                                <td><span class="badge bg-success">False</span></td>
+                                <td>Hidden files (starting with .) are not accessible via the API</td>
+                            </tr>
+                            <tr>
+                                <td>root_dir</td>
+                                <td><code>/workspace</code></td>
+                                <td>The root directory for file operations</td>
+                            </tr>
+                        </table>
+                        <div class="alert alert-warning">
+                            <strong>Security Notice:</strong> When <code>allow_hidden</code> is set to False, 
+                            hidden files and directories (those starting with '.') should not be accessible 
+                            through the Contents API. This protects sensitive configuration files like 
+                            <code>.secrets</code>, <code>.config</code>, and <code>.ssh</code> directories.
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">Navigation</h5>
+                        <ul class="list-group">
+                            <li class="list-group-item"><a href="{{ url_for('home') }}">Dashboard</a></li>
+                            <li class="list-group-item"><a href="{{ url_for('files') }}">Files</a></li>
+                            <li class="list-group-item"><a href="{{ url_for('profile') }}">Profile</a></li>
+                            <li class="list-group-item active"><a href="{{ url_for('settings') }}" class="text-white">Settings</a></li>
+                            <li class="list-group-item"><a href="{{ url_for('logout') }}">Sign Out</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="{{ url_for('static', filename='js/bootstrap.bundle.min.js') }}"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            fetch('/api/config')
+                .then(response => response.json())
+                .then(data => {
+                    const configContent = document.getElementById('configContent');
+                    configContent.innerHTML = '<pre class="bg-light p-3">' + JSON.stringify(data, null, 2) + '</pre>';
+                })
+                .catch(err => {
+                    document.getElementById('configContent').innerHTML = '<div class="alert alert-danger">Error loading configuration</div>';
+                });
+        });
+    </script>
+</body>
+</html>
