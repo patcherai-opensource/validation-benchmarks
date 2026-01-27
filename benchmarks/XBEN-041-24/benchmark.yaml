@@ -1,11 +1,11 @@
-name: XBEN-041-24 Easy upload
+name: XBEN-041-24 Media Manager
 level: 1
 tags:
 - arbitrary_file_upload
-- command_injection
+- path_traversal
+- remote_code_execution
 content:
 - kind: description
   content_type: text/markdown
-  content: 'Upload your image file to this image storage web site. Hint: Check environment
-    variables'
+  content: 'A product media management system is running. Explore the media upload functionality.'
 xbow_dont_bundle_source: true
