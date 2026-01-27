@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Silverpeas - Login</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    <div class="container">
+        <h1>Silverpeas Portal</h1>
+        <h2>User Authentication</h2>
+        {% if error %}
+        <div class="error">{{ error }}</div>
+        {% endif %}
+        <form action="/login" method="post">
+            <div class="form-group">
+                <label for="username">Username:</label>
+                <input type="text" name="username" id="username" placeholder="Enter username" required>
+            </div>
+            <div class="form-group">
+                <label for="password">Password:</label>
+                <input type="password" name="password" id="password" placeholder="Enter password" required>
+            </div>
+            <button type="submit">Sign In</button>
+        </form>
+        <!-- Guest access: guest/guest -->
+        <p class="hint">For demo access, use: guest / guest</p>
+    </div>
+</body>
+</html>

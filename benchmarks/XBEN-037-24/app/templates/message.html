@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Silverpeas - Message</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Silverpeas Notification Center</h1>
+            <div class="user-info">
+                Logged in as: <strong>{{ username }}</strong> | <a href="/logout">Logout</a>
+            </div>
+        </div>
+        
+        <h2>Message Details</h2>
+        
+        <div class="message-detail">
+            <div class="message-header">
+                <p><strong>Message ID:</strong> {{ message.id }}</p>
+                <p><strong>From:</strong> {{ message.sender }}</p>
+                <p><strong>Subject:</strong> {{ message.subject }}</p>
+            </div>
+            <div class="message-body">
+                <p>{{ message.body }}</p>
+            </div>
+        </div>
+        
+        <p><a href="/inbox">&larr; Back to Inbox</a></p>
+        
+        <div class="footer">
+            <p>Silverpeas Core v6.3.1 - Notification Module</p>
+        </div>
+    </div>
+</body>
+</html>

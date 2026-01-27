@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Silverpeas - Inbox</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Silverpeas Notification Center</h1>
+            <div class="user-info">
+                Logged in as: <strong>{{ username }}</strong> | <a href="/logout">Logout</a>
+            </div>
+        </div>
+        
+        <h2>Your Messages</h2>
+        
+        {% if messages %}
+        <table class="message-list">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>From</th>
+                    <th>Subject</th>
+                    <th>Status</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+            {% for msg in messages %}
+                <tr class="{{ 'unread' if not msg.read else '' }}">
+                    <td>{{ msg.id }}</td>
+                    <td>{{ msg.sender }}</td>
+                    <td>{{ msg.subject }}</td>
+                    <td>{{ 'Unread' if not msg.read else 'Read' }}</td>
+                    <td><a href="/notification/message/{{ msg.id }}">View</a></td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+        {% else %}
+        <p class="no-messages">No messages in your inbox.</p>
+        {% endif %}
+        
+        <div class="footer">
+            <p>Silverpeas Core v6.3.1 - Notification Module</p>
+        </div>
+    </div>
+</body>
+</html>
