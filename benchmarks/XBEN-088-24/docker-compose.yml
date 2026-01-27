@@ -1,19 +1,28 @@
 services:
   db:
     build: ./mysql
+    environment:
+      - MYSQL_ROOT_PASSWORD=openwiki_db
+      - MYSQL_DATABASE=database
     expose:
       - 3306
     healthcheck:
-      test: ["CMD", "mysqladmin" ,"ping", "-h", "localhost", "--password=toctou_admin_router", "-u", "root"]
+      test: ["CMD", "mysqladmin" ,"ping", "-h", "localhost", "--password=openwiki_db", "-u", "root"]
       timeout: 1s
       retries: 5
       interval: 10s
 
-  toctou_admin_router:
+  openwiki:
     build:
       context: ./app
       args:
         - FLAG
+    environment:
+      - DB_USER=root
+      - DB_PASSWORD=openwiki_db
+      - DB_HOST=db
+      - DB_NAME=database
+      - SECRET_KEY=openwiki_secret_key
     depends_on:
       db:
         condition: service_healthy                

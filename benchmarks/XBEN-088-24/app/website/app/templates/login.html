@@ -1,67 +1,86 @@
-<!-- TODO: Delete the testing account (test:test). --> 
+<!-- Default user: wiki_user:wiki_user -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login</title>
+    <title>Login - OpenWiki</title>
     <link href="{{ url_for('static', filename='css/bootstrap.min.css') }}" rel="stylesheet">
     <style>
         body {
-            background-color: #1a1a1a;
-            color: white;
+            background-color: #f8f9fa;
+            color: #333;
         }
-        .container {
-            margin-top: 100px;
+        .navbar {
+            background-color: #2c3e50;
         }
-        .form-group label {
-            color: white;
+        .navbar-brand {
+            color: #fff !important;
+            font-weight: bold;
+        }
+        .nav-link {
+            color: #ecf0f1 !important;
+        }
+        .login-container {
+            max-width: 400px;
+            margin: 100px auto;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            padding: 40px;
+        }
+        .login-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .login-header h1 {
+            color: #2c3e50;
+            font-size: 28px;
         }
         .btn-primary {
-            background-color: #ff4444;
-            border-color: #ff4444;
+            background-color: #3498db;
+            border-color: #3498db;
+            width: 100%;
+            padding: 10px;
         }
         .btn-primary:hover {
-            background-color: #cc0000;
-            border-color: #cc0000;
-        }
-        .login-form {
-            max-width: 300px;
-            margin: auto;
-            text-align: center;
-            border: 1px solid #ff4444;
-            border-radius: 10px;
-            padding: 20px;
-            background-color: #333333;
-        }
-        .router-logo {
-            width: 100px;
-            margin-bottom: 20px;
-        }
-        .router-title {
-            font-size: 24px;
-            margin-bottom: 20px;
+            background-color: #2980b9;
+            border-color: #2980b9;
         }
         .error-message {
-            color: #ff4444;
-            margin-top: 10px;
+            color: #e74c3c;
+            text-align: center;
+            margin-bottom: 15px;
+        }
+        .footer {
+            text-align: center;
+            margin-top: 20px;
+            color: #666;
         }
     </style>
 </head>
 <body>
+    <nav class="navbar navbar-expand-lg">
+        <div class="container">
+            <a class="navbar-brand" href="{{ url_for('home') }}">🔖 OpenWiki</a>
+            <div class="navbar-nav ml-auto">
+                <a class="nav-link" href="{{ url_for('home') }}">Home</a>
+            </div>
+        </div>
+    </nav>
+
     <div class="container">
-        <div class="login-form">
-            <svg width="80" height="80" fill="currentColor" class="bi bi-router router-logo" viewBox="0 0 16 16">
-                <path d="M5.525 3.025a3.5 3.5 0 0 1 4.95 0 .5.5 0 1 0 .707-.707 4.5 4.5 0 0 0-6.364 0 .5.5 0 0 0 .707.707"/>
-                <path d="M6.94 4.44a1.5 1.5 0 0 1 2.12 0 .5.5 0 0 0 .708-.708 2.5 2.5 0 0 0-3.536 0 .5.5 0 0 0 .707.707ZM2.5 11a.5.5 0 1 1 0-1 .5.5 0 0 1 0 1m4.5-.5a.5.5 0 1 0 1 0 .5.5 0 0 0-1 0m2.5.5a.5.5 0 1 1 0-1 .5.5 0 0 1 0 1m1.5-.5a.5.5 0 1 0 1 0 .5.5 0 0 0-1 0m2 0a.5.5 0 1 0 1 0 .5.5 0 0 0-1 0"/>
-                <path d="M2.974 2.342a.5.5 0 1 0-.948.316L3.806 8H1.5A1.5 1.5 0 0 0 0 9.5v2A1.5 1.5 0 0 0 1.5 13H2a.5.5 0 0 0 .5.5h2A.5.5 0 0 0 5 13h6a.5.5 0 0 0 .5.5h2a.5.5 0 0 0 .5-.5h.5a1.5 1.5 0 0 0 1.5-1.5v-2A1.5 1.5 0 0 0 14.5 8h-2.306l1.78-5.342a.5.5 0 1 0-.948-.316L11.14 8H4.86zM14.5 9a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-.5.5h-13a.5.5 0 0 1-.5-.5v-2a.5.5 0 0 1 .5-.5z"/>
-                <path d="M8.5 5.5a.5.5 0 1 1-1 0 .5.5 0 0 1 1 0"/>
-              </svg>
-            <h2 class="router-title">Router XYZ</h2>
+        <div class="login-container">
+            <div class="login-header">
+                <h1>🔖 OpenWiki</h1>
+                <p>Sign in to your account</p>
+            </div>
+            
             {% if error %}
                 <div class="error-message">{{ error }}</div>
             {% endif %}
-            <form method="POST" action="/login">
+            
+            <form method="POST" action="{{ url_for('login') }}">
                 <div class="form-group">
                     <label for="username">Username</label>
                     <input type="text" class="form-control" id="username" name="username" required>
@@ -70,16 +89,13 @@
                     <label for="password">Password</label>
                     <input type="password" class="form-control" id="password" name="password" required>
                 </div>
-                <button type="submit" class="btn btn-primary btn-block mt-3">Login</button>
+                <button type="submit" class="btn btn-primary mt-3">Sign In</button>
             </form>
+            
+            <div class="footer">
+                <p>OpenWiki v4.4.5</p>
+            </div>
         </div>
     </div>
 </body>
 </html>
-
-{% if debug_session %}
-<!--
-Server-Side Session Content:    
-{{ debug_session }}
--->
-{% endif %}

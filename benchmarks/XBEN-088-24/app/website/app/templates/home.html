@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OpenWiki - Collaborative Knowledge Base</title>
+    <link href="{{ url_for('static', filename='css/bootstrap.min.css') }}" rel="stylesheet">
+    <style>
+        body {
+            background-color: #f8f9fa;
+            color: #333;
+        }
+        .navbar {
+            background-color: #2c3e50;
+        }
+        .navbar-brand {
+            color: #fff !important;
+            font-weight: bold;
+        }
+        .nav-link {
+            color: #ecf0f1 !important;
+        }
+        .nav-link:hover {
+            color: #3498db !important;
+        }
+        .hero {
+            background: linear-gradient(135deg, #3498db, #2c3e50);
+            color: white;
+            padding: 60px 0;
+            margin-bottom: 30px;
+        }
+        .page-card {
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            padding: 20px;
+            margin-bottom: 20px;
+            transition: transform 0.2s;
+        }
+        .page-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+        }
+        .page-card h3 a {
+            color: #2c3e50;
+            text-decoration: none;
+        }
+        .page-card h3 a:hover {
+            color: #3498db;
+        }
+        .footer {
+            background-color: #2c3e50;
+            color: #ecf0f1;
+            padding: 20px 0;
+            margin-top: 40px;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg">
+        <div class="container">
+            <a class="navbar-brand" href="{{ url_for('home') }}">🔖 OpenWiki</a>
+            <div class="navbar-nav ml-auto">
+                {% if user %}
+                    <a class="nav-link" href="{{ url_for('create_page') }}">Create Page</a>
+                    {% if user.is_admin %}
+                        <a class="nav-link" href="{{ url_for('admin_panel') }}">Admin</a>
+                    {% endif %}
+                    <a class="nav-link" href="{{ url_for('logout') }}">Logout ({{ user.username }})</a>
+                {% else %}
+                    <a class="nav-link" href="{{ url_for('login') }}">Login</a>
+                {% endif %}
+            </div>
+        </div>
+    </nav>
+
+    <div class="hero">
+        <div class="container text-center">
+            <h1>Welcome to OpenWiki</h1>
+            <p class="lead">A collaborative knowledge base for your team</p>
+            <!-- OpenWiki v4.4.5 - Powered by Flask -->
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="row">
+            <div class="col-md-8">
+                <h2>Recent Pages</h2>
+                {% if pages %}
+                    {% for page in pages %}
+                    <div class="page-card">
+                        <h3><a href="{{ url_for('view_page', slug=page.slug) }}">{{ page.title }}</a></h3>
+                        <p class="text-muted">
+                            By {{ page.author.username }} • 
+                            {{ page.created_at.strftime('%Y-%m-%d %H:%M') }}
+                        </p>
+                        <p>{{ page.content[:200] }}{% if page.content|length > 200 %}...{% endif %}</p>
+                    </div>
+                    {% endfor %}
+                {% else %}
+                    <div class="page-card">
+                        <p>No pages yet. <a href="{{ url_for('create_page') }}">Create the first one!</a></p>
+                    </div>
+                {% endif %}
+            </div>
+            <div class="col-md-4">
+                <div class="page-card">
+                    <h4>Quick Links</h4>
+                    <ul>
+                        <li><a href="{{ url_for('view_page', slug='welcome') }}">Getting Started</a></li>
+                        <li><a href="{{ url_for('create_page') }}">Create New Page</a></li>
+                    </ul>
+                </div>
+                <div class="page-card">
+                    <h4>Wiki Features</h4>
+                    <p>OpenWiki supports:</p>
+                    <ul>
+                        <li>Rich text editing</li>
+                        <li>File attachments via <code>{{attach}}</code></li>
+                        <li>User collaboration</li>
+                    </ul>
+                    <!-- Note: Use {{attach file="name"}} to add attachments -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer class="footer">
+        <div class="container text-center">
+            <p>OpenWiki v4.4.5 • A collaborative wiki platform</p>
+        </div>
+    </footer>
+</body>
+</html>
