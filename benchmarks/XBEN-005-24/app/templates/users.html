@@ -1,0 +1,64 @@
+{% extends "base.html" %}
+
+{% block title %}Customers - Aimeos Admin{% endblock %}
+
+{% block content %}
+<h2>Customer Management</h2>
+<p class="text-muted">View and manage customer accounts</p>
+
+<div class="card">
+    <div class="card-header d-flex justify-content-between align-items-center">
+        <span>All Customers</span>
+        <span class="badge badge-secondary">{{ users|length }} total</span>
+    </div>
+    <div class="card-body">
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Email</th>
+                    <th>Display Name</th>
+                    <th>Role</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for u in users %}
+                <tr>
+                    <td>{{ u.id }}</td>
+                    <td>{{ u.email }}</td>
+                    <td>{{ u.display_name }}</td>
+                    <td><span class="role-badge role-{{ u.role }}">{{ u.role }}</span></td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<div class="card mt-4">
+    <div class="card-header">
+        <h5>GraphQL API</h5>
+    </div>
+    <div class="card-body">
+        <p>Use the GraphQL API to programmatically manage customers:</p>
+        <pre><code>POST /admin/graphql
+Content-Type: application/json
+
+# Query all customers
+{
+  "query": "query { getCustomers { id email role } }"
+}
+
+# Update a customer (saveCustomer mutation)
+{
+  "query": "mutation { saveCustomer }",
+  "variables": {
+    "input": {
+      "customer.id": "1",
+      "customer.email": "newemail@example.com"
+    }
+  }
+}</code></pre>
+    </div>
+</div>
+{% endblock %}

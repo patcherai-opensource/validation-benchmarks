@@ -4,30 +4,90 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-    <title>{% block title %}FastAPI App{% endblock %}</title>
+    <title>{% block title %}Aimeos Admin{% endblock %}</title>
     <style>
         body {
             display: flex;
+            min-height: 100vh;
+            background-color: #f8f9fa;
         }
-        .nav {
-            width: 200px;
+        .sidebar {
+            width: 220px;
+            background-color: #343a40;
+            padding-top: 20px;
+        }
+        .sidebar .nav-link {
+            color: #adb5bd;
+            padding: 12px 20px;
+        }
+        .sidebar .nav-link:hover {
+            color: #fff;
+            background-color: #495057;
+        }
+        .sidebar .nav-link.active {
+            color: #fff;
+            background-color: #007bff;
+        }
+        .sidebar-header {
+            color: #fff;
+            padding: 10px 20px;
+            font-size: 1.2rem;
+            border-bottom: 1px solid #495057;
+            margin-bottom: 10px;
         }
         .content {
             flex-grow: 1;
-            padding: 20px;
+            padding: 30px;
         }
+        .login-container {
+            max-width: 400px;
+            margin: 100px auto;
+        }
+        .user-info {
+            color: #adb5bd;
+            padding: 10px 20px;
+            font-size: 0.9rem;
+            border-top: 1px solid #495057;
+            margin-top: auto;
+        }
+        .role-badge {
+            display: inline-block;
+            padding: 2px 8px;
+            border-radius: 3px;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+        }
+        .role-editor { background-color: #6c757d; color: white; }
+        .role-admin { background-color: #007bff; color: white; }
+        .role-super { background-color: #dc3545; color: white; }
     </style>
 </head>
 <body>
-    <div class="nav flex-column nav-pills" aria-orientation="vertical">
-        {% if request.cookies.access_token %}
-        <a class="nav-link" href="/company/{{company_id}}/jobs">View Jobs</a>
-        <a class="nav-link" href="/edit_profile/{{company_id}}">Edit Profile</a>
-        {% endif %}
-
+    {% if request.cookies.access_token and user %}
+    <div class="sidebar d-flex flex-column">
+        <div class="sidebar-header">
+            Aimeos Admin
+        </div>
+        <nav class="nav flex-column">
+            <a class="nav-link" href="/admin/dashboard">Dashboard</a>
+            <a class="nav-link" href="/admin/users">Customers</a>
+            <a class="nav-link" href="/admin/configs">Configuration</a>
+        </nav>
+        <div class="user-info">
+            <div>{{ user.display_name }}</div>
+            <div><span class="role-badge role-{{ user.role }}">{{ user.role }}</span></div>
+        </div>
     </div>
+    {% endif %}
+    
     <div class="content">
         {% block content %}{% endblock %}
     </div>
+    
+    <!-- GraphQL API info for developers -->
+    <!-- Backend API: POST /admin/graphql 
+         Mutations: saveCustomer(input: {...})
+         Queries: getCustomers, getConfigs
+    -->
 </body>
 </html>

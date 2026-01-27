@@ -1,4 +1,5 @@
 from pydantic import BaseModel
+from typing import Optional
 
 
 class Token(BaseModel):
@@ -10,6 +11,42 @@ class TokenData(BaseModel):
     username: str | None = None
 
 
+class UserBase(BaseModel):
+    email: str
+    display_name: str
+
+
+class UserCreate(UserBase):
+    password: str
+    role: str = "editor"
+
+
+class User(UserBase):
+    id: int
+    role: str
+
+    class Config:
+        orm_mode = True
+
+
+class ConfigBase(BaseModel):
+    key: str
+    value: str
+    access_level: str
+
+
+class ConfigCreate(ConfigBase):
+    pass
+
+
+class Config(ConfigBase):
+    id: int
+
+    class Config:
+        orm_mode = True
+
+
+# Keep old schemas for compatibility
 class CompanyBase(BaseModel):
     name: str
 

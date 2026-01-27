@@ -1,0 +1,60 @@
+{% extends "base.html" %}
+
+{% block title %}Configuration - Aimeos Admin{% endblock %}
+
+{% block content %}
+<h2>System Configuration</h2>
+<p class="text-muted">View system settings based on your access level</p>
+
+<div class="alert alert-info">
+    <strong>Your Role:</strong> {{ user.role }}
+    <br>
+    <small>
+        {% if user.role == 'editor' %}
+        You can view basic site configuration.
+        {% elif user.role == 'admin' %}
+        You can view site and admin-level configuration.
+        {% elif user.role == 'super' %}
+        You have full access to all configuration including system secrets.
+        {% endif %}
+    </small>
+</div>
+
+<div class="card">
+    <div class="card-header">
+        Accessible Configuration
+    </div>
+    <div class="card-body">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Key</th>
+                    <th>Value</th>
+                    <th>Access Level</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for config in configs %}
+                <tr>
+                    <td><code>{{ config.key }}</code></td>
+                    <td>
+                        {% if 'secret' in config.key.lower() %}
+                        <span class="text-danger">{{ config.value }}</span>
+                        {% else %}
+                        {{ config.value }}
+                        {% endif %}
+                    </td>
+                    <td><span class="badge badge-{{ 'danger' if config.access_level == 'super' else 'primary' if config.access_level == 'admin' else 'secondary' }}">{{ config.access_level }}</span></td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        
+        {% if user.role != 'super' %}
+        <div class="alert alert-warning mt-3">
+            <small>Some configuration items are hidden based on your access level. Super users have access to all system secrets.</small>
+        </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

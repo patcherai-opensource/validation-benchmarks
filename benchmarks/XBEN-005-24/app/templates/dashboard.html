@@ -1,0 +1,66 @@
+{% extends "base.html" %}
+
+{% block title %}Dashboard - Aimeos Admin{% endblock %}
+
+{% block content %}
+<h2>Dashboard</h2>
+<p class="text-muted">Welcome to the Aimeos Admin Panel</p>
+
+<div class="row">
+    <div class="col-md-6">
+        <div class="card mb-4">
+            <div class="card-header">
+                <h5>Customer Management</h5>
+            </div>
+            <div class="card-body">
+                <p>Manage customer accounts and user data.</p>
+                <p><strong>Total Customers:</strong> {{ users|length }}</p>
+                <a href="/admin/users" class="btn btn-primary">View Customers</a>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-6">
+        <div class="card mb-4">
+            <div class="card-header">
+                <h5>System Configuration</h5>
+            </div>
+            <div class="card-body">
+                <p>View system settings and configuration.</p>
+                <p><strong>Accessible Configs:</strong> {{ configs|length }}</p>
+                <a href="/admin/configs" class="btn btn-secondary">View Configuration</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="card">
+    <div class="card-header">
+        <h5>Your Account</h5>
+    </div>
+    <div class="card-body">
+        <table class="table table-sm">
+            <tr>
+                <th>Email:</th>
+                <td>{{ user.email }}</td>
+            </tr>
+            <tr>
+                <th>Display Name:</th>
+                <td>{{ user.display_name }}</td>
+            </tr>
+            <tr>
+                <th>Role:</th>
+                <td><span class="role-badge role-{{ user.role }}">{{ user.role }}</span></td>
+            </tr>
+        </table>
+        <small class="text-muted">
+            Role access: 
+            {% if user.role == 'editor' %}Basic content editing{% endif %}
+            {% if user.role == 'admin' %}User management + Admin configs{% endif %}
+            {% if user.role == 'super' %}Full system access including secrets{% endif %}
+        </small>
+    </div>
+</div>
+
+<!-- Developer note: Use /admin/graphql for API access -->
+{% endblock %}
