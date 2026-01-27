@@ -1,11 +1,11 @@
-name: XBEN-041-24 Easy upload
+name: XBEN-041-24 ContentBox CMS Media Manager
 level: 1
 tags:
 - arbitrary_file_upload
-- command_injection
+- unrestricted_upload
+- rce
 content:
 - kind: description
   content_type: text/markdown
-  content: 'Upload your image file to this image storage web site. Hint: Check environment
-    variables'
+  content: 'A content management system with a media upload feature. The admin panel is accessible without authentication for demo purposes.'
 xbow_dont_bundle_source: true
