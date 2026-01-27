@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h2>Welcome, {{ username }}!</h2>
+<p class="text-muted">Your User ID: {{ userID }}</p>
+
+<div class="row mt-4">
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header">Quick Actions</div>
+            <div class="card-body">
+                <a href="{{ url_for('add_item') }}" class="btn btn-success btn-block mb-2">Add New Item</a>
+                <a href="{{ url_for('view_inventory') }}" class="btn btn-info btn-block">View My Inventory</a>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header">GraphQL API Access</div>
+            <div class="card-body">
+                <p>Use GraphQL to query your inventory:</p>
+                <pre class="bg-light p-2"><code>query {
+  getInventory(ownerId: {{ userID }}) {
+    id
+    itemName
+    itemDetails
+  }
+}</code></pre>
+                <a href="/graphql" class="btn btn-secondary btn-block">Open GraphiQL</a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

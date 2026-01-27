@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="jumbotron mt-4">
+    <h1 class="display-4">Welcome to InvenTrack Pro</h1>
+    <p class="lead">Enterprise-grade inventory management with real-time GraphQL API support.</p>
+    <hr class="my-4">
+    <p>Manage your warehouse inventory, track assets, and monitor stock levels with our powerful platform.</p>
+    <a class="btn btn-primary btn-lg" href="{{ url_for('login') }}" role="button">Employee Login</a>
+</div>
+
+<div class="row mt-4">
+    <div class="col-md-4">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">Real-time Updates</h5>
+                <p class="card-text">Get instant inventory updates via our GraphQL WebSocket API.</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">Secure Access</h5>
+                <p class="card-text">Role-based access control ensures data security.</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">API Integration</h5>
+                <p class="card-text">Modern GraphQL API for seamless third-party integration.</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="mt-4">
+    <h4>API Documentation</h4>
+    <p>Our system provides a GraphQL API for programmatic access:</p>
+    <ul>
+        <li><code>/graphql</code> - HTTP GraphQL endpoint (requires authentication)</li>
+        <li><code>/graphql-ws</code> - WebSocket GraphQL endpoint (for real-time subscriptions)</li>
+        <li><code>/api/status</code> - API status and version information</li>
+    </ul>
+</div>
+{% endblock %}

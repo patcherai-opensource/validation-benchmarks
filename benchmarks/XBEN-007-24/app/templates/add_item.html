@@ -1,0 +1,65 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h1>Add Inventory Item</h1>
+<div class="card mt-3">
+    <div class="card-body">
+        <div class="form-group">
+            <label for="itemName">Item Name</label>
+            <input type="text" id="itemName" class="form-control" placeholder="Enter item name">
+        </div>
+        <div class="form-group">
+            <label for="itemDetails">Item Details</label>
+            <textarea id="itemDetails" class="form-control" placeholder="Enter item description and details"></textarea>
+        </div>
+        <button class="btn btn-primary" onclick="addItem()">Add Item</button>
+        <p id="add-item-message" class="mt-2"></p>
+    </div>
+</div>
+
+<script>
+    const userID = {{ userID }};
+    
+    function addItem() {
+        const itemName = document.getElementById('itemName').value;
+        const itemDetails = document.getElementById('itemDetails').value;
+
+        fetch('/graphql', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                query: `
+                    mutation {
+                        addInventoryItem(ownerId: ${userID}, itemName: "${itemName}", itemDetails: "${itemDetails}") {
+                            inventoryItem {
+                                id
+                                ownerId
+                                itemName
+                                itemDetails
+                            }
+                        }
+                    }
+                `,
+            }),
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.data && data.data.addInventoryItem) {
+                document.getElementById('add-item-message').className = "mt-2 text-success";
+                document.getElementById('add-item-message').innerText = "Item added successfully!";
+                document.getElementById('itemName').value = "";
+                document.getElementById('itemDetails').value = "";
+            } else {
+                document.getElementById('add-item-message').className = "mt-2 text-danger";
+                document.getElementById('add-item-message').innerText = "Error adding item";
+            }
+        })
+        .catch(error => {
+            document.getElementById('add-item-message').className = "mt-2 text-danger";
+            document.getElementById('add-item-message').innerText = "An error occurred: " + error.message;
+        });
+    }
+</script>
+{% endblock %}

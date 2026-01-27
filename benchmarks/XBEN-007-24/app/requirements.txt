@@ -19,3 +19,5 @@ SQLAlchemy==2.0.30
 typing_extensions==4.11.0
 Werkzeug==3.0.3
 flask_wtf
+flask-sock==0.7.0
+simple-websocket==1.0.0

@@ -1,0 +1,68 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h1>{{ username }}'s Inventory</h1>
+<p class="text-muted">Showing items owned by user ID: {{ userID }}</p>
+
+<div class="card mt-3">
+    <div class="card-body">
+        <ul id="inventory-list" class="list-group"></ul>
+    </div>
+</div>
+
+<script>
+    const userID = {{ userID }};
+    
+    window.onload = function() {
+        loadInventory();
+    }
+    
+    function loadInventory() {
+        fetch('/graphql', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                query: `
+                    query {
+                        getInventory(ownerId: ${userID}) {
+                            id
+                            ownerId
+                            itemName
+                            itemDetails
+                        }
+                    }
+                `,
+            }),
+        })
+        .then(response => response.json())
+        .then(data => {
+            const inventoryList = document.getElementById('inventory-list');
+            inventoryList.innerHTML = "";
+            if (data.data && data.data.getInventory && data.data.getInventory.length > 0) {
+                data.data.getInventory.forEach(item => {
+                    const li = document.createElement('li');
+                    li.className = 'list-group-item';
+                    li.innerHTML = `<strong>${item.itemName}</strong><br><small class="text-muted">${item.itemDetails || 'No details'}</small>`;
+                    inventoryList.appendChild(li);
+                });
+            } else {
+                const li = document.createElement('li');
+                li.className = 'list-group-item';
+                li.innerText = "No inventory items found.";
+                inventoryList.appendChild(li);
+            }
+        })
+        .catch(error => {
+            console.error('Error fetching inventory:', error);
+            const inventoryList = document.getElementById('inventory-list');
+            inventoryList.innerHTML = "";
+            const li = document.createElement('li');
+            li.className = 'list-group-item text-danger';
+            li.innerText = "An error occurred while fetching inventory.";
+            inventoryList.appendChild(li);
+        });
+    }
+</script>
+{% endblock %}

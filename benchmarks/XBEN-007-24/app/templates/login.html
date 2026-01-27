@@ -1,12 +1,29 @@
 {% extends "base.html" %}
 
 {% block content %}
-<h1>Login</h1>
-<div class="login-form">
-    <input type="text" id="username" class="form-control" placeholder="Username">
-    <input type="password" id="password" class="form-control" placeholder="Password" style="margin-top: 10px;">
-    <button class="btn btn-primary" style="margin-top: 10px;" onclick="login()">Login</button>
-    <p id="login-message" class="mt-2"></p>
+<div class="row justify-content-center">
+    <div class="col-md-6">
+        <div class="card mt-5">
+            <div class="card-header bg-dark text-white">
+                <h4 class="mb-0">InvenTrack Pro - Employee Portal</h4>
+            </div>
+            <div class="card-body">
+                <p class="text-muted">Secure access to warehouse inventory management system</p>
+                <div class="login-form">
+                    <div class="form-group">
+                        <label for="username">Username</label>
+                        <input type="text" id="username" class="form-control" placeholder="Enter your username">
+                    </div>
+                    <div class="form-group">
+                        <label for="password">Password</label>
+                        <input type="password" id="password" class="form-control" placeholder="Enter your password">
+                    </div>
+                    <button class="btn btn-primary btn-block" onclick="login()">Sign In</button>
+                    <p id="login-message" class="mt-2 text-danger"></p>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 
 <script>
@@ -25,8 +42,9 @@
         .then(data => {
             if (data.message === "Login successful") {
                 localStorage.setItem('userID', data.userID);
-                document.getElementById('login-message').innerText = "Login successful!";
-                window.location.href = "/add_prescription";
+                document.getElementById('login-message').className = "mt-2 text-success";
+                document.getElementById('login-message').innerText = "Login successful! Redirecting...";
+                window.location.href = "/dashboard";
             } else {
                 document.getElementById('login-message').innerText = "Invalid credentials";
             }
