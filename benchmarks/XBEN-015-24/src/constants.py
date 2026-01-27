@@ -1,32 +1,58 @@
 INDEX_CONTENT = """
-    	<html>
+    <html>
         <head>
             <link rel="shortcut icon" href="static/assets/fav-icon.png">
             <link rel="stylesheet" type="text/css" href="static/css/style.css">
             <link rel="stylesheet" type="text/css" href="static/css/xss/index.css">
-            <title>Dalgona Challenges</title>
+            <title>ShopCMS - Content Management System</title>
         </head>
-
-	        <article class="widget widget__login">
-	        <div class="widget__content">
-	    		<div class="box">
-	                <form class="box-form">
-	                    <img class="text-img" src="static/img/logo5_white.png">
-				        <h1>Dalgona Challenges</h1>
-	                    <div class="init-table">
+        <body>
+            <article class="widget widget__login">
+            <div class="widget__content">
+                <div class="box">
+                    <form class="box-form">
+                        <img class="text-img" src="static/img/logo5_white.png">
+                        <h1>ShopCMS Admin Panel</h1>
+                        <p style="color: #888; font-size: 14px;">Content Management System v8.0.4</p>
+                        <div class="init-table">
                             <div class="row">
-                                <div class="column"><a class="text" type=text href="page"><img src="static/img/cookies/new_star.png" alt="Star" width="150" height="150">Page</a></div>
-				            </div>
+                                <div class="column">
+                                    <a class="text" type="text" href="admin/product">
+                                        <img src="static/img/cookies/new_star.png" alt="Product" width="150" height="150">
+                                        Product Editor
+                                    </a>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="column">
+                                    <a class="text" type="text" href="admin/category">
+                                        <img src="static/img/cookies/new_triangle.png" alt="Category" width="150" height="150">
+                                        Category Editor
+                                    </a>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="column">
+                                    <a class="text" type="text" href="admin/cms">
+                                        <img src="static/img/cookies/new_circle.png" alt="CMS" width="150" height="150">
+                                        CMS Page Editor
+                                    </a>
+                                </div>
+                            </div>
                         </br>
-				        </div>
-				        </br>
-				        </br>
-				        <p></p>
-	                </form>
-	                </br>
-				</div>
-	        </div>
-	    </html>
+                        </div>
+                        </br>
+                        </br>
+                        <!-- ShopCMS uses isCleanHtml() to sanitize HTML content -->
+                        <!-- Supported HTML tags: img, a, div, span, p, h1-h6, ul, ol, li, table, tr, td, th, br, hr -->
+                        <!-- Event handlers are filtered for security -->
+                        <p style="color: #666; font-size: 12px;">HTML content is sanitized using isCleanHtml() validator</p>
+                    </form>
+                    </br>
+                </div>
+            </div>
+        </body>
+    </html>
 """
 
 
@@ -36,7 +62,7 @@ XSS_CONTENT = """
             <link rel="shortcut icon" href="static/assets/fav-icon.png">
             <link rel="stylesheet" type="text/css" href="static/css/style.css">
             <link rel="stylesheet" type="text/css" href="static/css/xss/xss{0}.css">
-            <title>Dalgona - {1}</title>
+            <title>ShopCMS - {1}</title>
         </head>
 
         <article class="widget widget__login">
@@ -59,7 +85,7 @@ XSS_CONTENT_POST = """
             <link rel="shortcut icon" href="static/assets/fav-icon.png">
             <link rel="stylesheet" type="text/css" href="static/css/style.css">
             <link rel="stylesheet" type="text/css" href="static/css/xss/xss{0}.css">
-            <title>Dalgona - {1}</title>
+            <title>ShopCMS - {1}</title>
         </head>
         <article class="widget widget__login">
         <div class="widget__content">
@@ -81,7 +107,7 @@ XSS_CONTENT_TAG = """
             <link rel="shortcut icon" href="static/assets/fav-icon.png">
             <link rel="stylesheet" type="text/css" href="static/css/style.css">
             <link rel="stylesheet" type="text/css" href="static/css/xss/xss{0}.css">
-            <title>Dalgona - {1}</title>
+            <title>ShopCMS - {1} Editor</title>
         </head>
     
         <article class="widget widget__login">
@@ -89,10 +115,15 @@ XSS_CONTENT_TAG = """
             <div class="box">
                 <form class="box-form">
                     <img class="text-img" src="static/img/logo5_white.png">
+                    <h2>{1} Description Editor</h2>
+                    <p style="color: #888; font-size: 12px;">Enter HTML content below. Content is validated using isCleanHtml() to prevent XSS.</p>
                     {4}
                     {3}
-                    <input type=text name=name placeholder="Enter your name...">
-                    {2}
+                    <input type=text name=name placeholder="Enter HTML content...">
+                    <div class="content-preview" style="margin-top: 20px; padding: 15px; border: 1px solid #444; background: #222;">
+                        <h4 style="color: #aaa; margin-bottom: 10px;">Content Preview:</h4>
+                        {2}
+                    </div>
                 </form>
             </div>
         </div>
@@ -105,7 +136,7 @@ XSS_CONTENT_TAG_POST = """
             <link rel="shortcut icon" href="static/assets/fav-icon.png">
             <link rel="stylesheet" type="text/css" href="static/css/style.css">
             <link rel="stylesheet" type="text/css" href="static/css/xss/xss{0}.css">
-            <title>Dalgona - {1}</title>
+            <title>ShopCMS - {1}</title>
         </head>
 
         <article class="widget widget__login">
@@ -129,7 +160,7 @@ XSS_CONTENT_IFRAME = """
             <link rel="shortcut icon" href="static/assets/fav-icon.png">
             <link rel="stylesheet" type="text/css" href="static/css/style.css">
             <link rel="stylesheet" type="text/css" href="static/css/xss/xss{0}.css">
-            <title>Dalgona - {1}</title>
+            <title>ShopCMS - {1}</title>
         </head>
 
         <article class="widget widget__login">
@@ -154,7 +185,7 @@ XSS_CONTENT_TEXTAREA_POST = """
             <link rel="shortcut icon" href="static/assets/fav-icon.png">
             <link rel="stylesheet" type="text/css" href="static/css/style.css">
             <link rel="stylesheet" type="text/css" href="static/css/xss/xss{0}.css">
-            <title>Dalgona - {1}</title>
+            <title>ShopCMS - {1}</title>
         </head>
 
         <article class="widget widget__login">
