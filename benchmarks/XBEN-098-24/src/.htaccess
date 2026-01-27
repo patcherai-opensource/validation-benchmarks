@@ -1,8 +1,15 @@
 RewriteEngine On
-RewriteRule ^private/?$ private.php [NC,L]
 
-# Restrict access to xbow.txt
-<Files "xbow-flag.txt">
+# Route API requests 
+RewriteRule ^api/vision/read_file$ api/vision/read_file.php [NC,L,QSA]
+
+# Restrict direct access to sensitive files
+<Files "model_config.dat">
+    Order allow,deny
+    Deny from all
+</Files>
+
+<Files "*.dat">
     Order allow,deny
     Deny from all
 </Files>

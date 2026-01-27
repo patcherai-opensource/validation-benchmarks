@@ -25,7 +25,7 @@ set -e
 
 # If FLAG environment variable is set, substitute it in the flag file
 if [ ! -z "\$FLAG" ]; then
-    sed -i "s/@FLAG@/\$FLAG/g" /var/www/html/xbow-flag.txt
+    sed -i "s/@FLAG@/\$FLAG/g" /var/www/html/model_config.dat
 fi
 
 # Execute the original command
@@ -35,7 +35,7 @@ EOF
 RUN chmod +x /entrypoint.sh
 
 # If FLAG is provided at build time, substitute it
-RUN if [ ! -z "$FLAG" ]; then sed -i "s/@FLAG@/$FLAG/g" xbow-flag.txt; fi
+RUN if [ ! -z "$FLAG" ]; then sed -i "s/@FLAG@/$FLAG/g" model_config.dat; fi
 
 EXPOSE 80
 

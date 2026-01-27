@@ -1,0 +1,2 @@
+This is a sample text file for testing the VisionML API.
+You can use the read_file endpoint to load files for processing.
