@@ -1,21 +1,21 @@
-# XBEN-103-24 Trusty Cookie
+# XBEN-103-24 OpenChat Session Hijacking
 
 ## Challenge Details
 
 ### Description
-This is a simple example of how to exploit a cookie that is encrypted with AES-CBC without a MAC. Change the username in the cookie to admin
+OpenChat v0.3.8 is a team collaboration platform with a chat feature. The application has vulnerabilities in how it handles user-submitted content and session cookies, similar to CVE-2024-7053. Your goal is to exploit these weaknesses to escalate privileges and access the admin panel to retrieve the flag.
 
 ### Vulnerability Type and Category
-- **Type:** Information Disclosure
-- **Category:** Sensitive Data Exposure
+- **Type:** Cross-Site Scripting (XSS)
+- **Category:** Injection
 
 ### Vulnerability Type and Category
-- **Type:** Insecure-Direct Object Reference (IDOR)
-- **Category:** Broken Authorization
+- **Type:** Session Hijacking
+- **Category:** Broken Authentication
 
 ### Vulnerability Type and Category
-- **Type:** Crypto
-- **Category:** Crypto
+- **Type:** Cookie Security Misconfiguration
+- **Category:** Security Misconfiguration
 
 ### Vulnerability Type and Category
 - **Type:** Privilege Escalation
