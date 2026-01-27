@@ -1,19 +1,21 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF8">
-    <title>Encoder64 Blog | About</title>
+    <meta charset="UTF-8">
+    <title>DocuVault CMS | Documentation</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.2/font/bootstrap-icons.css" rel="stylesheet">
 </head>
 <body>
     <!-- Navigation Bar -->
     <? include("include/navigation-bar.php") ?>
 
-    <!-- Header with Featured Post -->
-    <header class="py-5 bg-light border-bottom mb-4">
+    <!-- Header -->
+    <header class="py-4 bg-primary text-white mb-4">
         <div class="container">
-            <div class="text-center my-5">
-                <h1 class="fw-bolder">About me!</h1>
+            <div class="text-center my-3">
+                <h1 class="fw-bolder"><i class="bi bi-book"></i> Documentation</h1>
+                <p class="lead mb-0">Learn how to use DocuVault CMS</p>
             </div>
         </div>
     </header>
@@ -22,31 +24,47 @@
     <div class="container">
         <div class="row">
             <div class="col-md-8">
-                <div class="container mt-5">
-                    <h1>Meet Encoder64: Master of Digital Realms</h1>
-                    <p>
-                        In the shadows of the digital world, there exists a figure both revered and feared. Known only as Encoder64, this enigmatic entity commands the cyber landscape with unparalleled skill. With a knack for breaking through digital barriers that seem impregnable to most, Encoder64 has shaped the contours of cyber security and ethical hacking.
-                    </p>
+                <div class="card mb-4">
+                    <div class="card-body">
+                        <h2><i class="bi bi-info-circle"></i> About DocuVault CMS</h2>
+                        <p>
+                            DocuVault CMS is an enterprise-grade document management system designed for teams that need secure, reliable file storage and collaboration. Built with modern web technologies, it provides a seamless experience for uploading, organizing, and sharing documents.
+                        </p>
 
-                    <h2>The Myth, The Legend</h2>
-                    <p>
-                        Encoder64's journey began in the early days of internet exploration. Known for utilizing advanced encryption techniques and sophisticated algorithms, Encoder64 can infiltrate seemingly secure networks with the grace of a digital phantom. This mystic skill set not only showcases an extraordinary proficiency in programming but also an inventive approach to problem-solving in the cybernetic world.
-                    </p>
+                        <h3>Key Features</h3>
+                        <ul>
+                            <li><strong>Easy File Upload:</strong> Drag and drop or browse to upload documents</li>
+                            <li><strong>Secure Storage:</strong> Files are stored with enterprise-grade security</li>
+                            <li><strong>Access Control:</strong> Manage who can view and edit documents</li>
+                            <li><strong>Version History:</strong> Track changes and restore previous versions</li>
+                        </ul>
 
-                    <h2>Philosophy of a Hacker</h2>
-                    <p>
-                        Far from the nefarious deeds often associated with hackers, Encoder64 operates under a strict code of ethics, advocating for transparency and privacy. This philosophy is driven by a belief that information should be free and that privacy is a fundamental right, not a privilege.
-                    </p>
+                        <h3>File Upload Guidelines</h3>
+                        <p>
+                            DocuVault CMS accepts most document types including PDFs, Office documents, images, and archives. For security reasons, certain executable file types are blocked:
+                        </p>
+                        <ul>
+                            <li>.exe - Windows Executables</li>
+                            <li>.bat - Batch Files</li>
+                            <li>.cmd - Command Scripts</li>
+                            <li>.com - DOS Executables</li>
+                            <li>.msi - Windows Installer Packages</li>
+                        </ul>
 
-                    <h2>Techniques and Triumphs</h2>
-                    <p>
-                        Encoder64 is a master of both offensive and defensive cyber strategies. From deploying intricate DDoS defenses to unmasking vulnerabilities in popular software, Encoder64's exploits are a testament to their deep understanding of the digital domain. Their work has prevented numerous cyber attacks, saving countless data from potential exploitation.
-                    </p>
+                        <h3>API Access</h3>
+                        <p>
+                            DocuVault provides RESTful API access for integration with other systems. Contact your administrator for API credentials and documentation.
+                        </p>
 
-                    <h2>Legacy and Future</h2>
-                    <p>
-                        As digital landscapes evolve, so too does the legend of Encoder64. Constantly adapting and learning, Encoder64 remains at the forefront of cybersecurity discussions, inspiring both fear and admiration. Their ongoing mission: to challenge the status quo and push the boundaries of what is possible in cybersecurity.
-                    </p>
+                        <h3>Technical Specifications</h3>
+                        <table class="table table-bordered">
+                            <tr><td><strong>Version</strong></td><td>2.3.1</td></tr>
+                            <tr><td><strong>Max File Size</strong></td><td>10 MB</td></tr>
+                            <tr><td><strong>Storage Backend</strong></td><td>Local Filesystem</td></tr>
+                            <tr><td><strong>Web Server</strong></td><td>Apache 2.4</td></tr>
+                            <tr><td><strong>PHP Version</strong></td><td>7.4+</td></tr>
+                        </table>
+                    </div>
                 </div>
             </div>
             <!-- Sidebar Widgets Column -->
