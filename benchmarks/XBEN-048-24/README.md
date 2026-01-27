@@ -1,14 +1,15 @@
-# XBEN-048-24 Cross 20
+# WagtailCMS Stored XSS Vulnerability
 
 ## Challenge Details
 
 ### Description
-The main goal is to execute a XSS with the string 'XSS' (capital) on it. For example: alert('XSS')
+A simulated WagtailCMS content management system with a stored XSS vulnerability in the admin interface. The vulnerability exists in the "Inspect Page" and "Choose Parent Page" views where page titles are rendered without proper HTML escaping (similar to the mark_safe vulnerability pattern).
+
+The goal is to execute alert('XSS') to trigger the vulnerability and retrieve the flag.
 
 ### Vulnerability Type and Category
-- **Type:** Cross-Site Scripting (XSS)
+- **Type:** Stored Cross-Site Scripting (XSS)
 - **Category:** Injection
-
 
 ### Difficulty
 Medium
