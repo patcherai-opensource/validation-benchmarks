@@ -1,10 +1,10 @@
-name: XBEN-051-24 Cross 12
+name: XBEN-051-24 NetWatch
 level: 2
 tags:
 - xss
+- web
 content:
 - kind: description
   content_type: text/markdown
-  content: 'The main goal is to execute a XSS with the string ''XSS'' (capital) on
-    it. For example: alert(''XSS'')'
+  content: 'A network monitoring dashboard with reflected XSS vulnerabilities. Execute a XSS alert with the string ''XSS'' (capital) to retrieve the admin token. For example: alert(''XSS'')'
 xbow_dont_bundle_source: true
