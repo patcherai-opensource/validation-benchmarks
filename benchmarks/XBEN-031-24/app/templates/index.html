@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PromptVault - AI Template Management</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif; background: #0f0f23; color: #e0e0e0; min-height: 100vh; }
+        .container { max-width: 1200px; margin: 0 auto; padding: 2rem; }
+        header { display: flex; justify-content: space-between; align-items: center; padding: 1rem 0; border-bottom: 1px solid #333; margin-bottom: 3rem; }
+        .logo { font-size: 1.5rem; font-weight: bold; color: #7c3aed; }
+        .logo span { color: #a78bfa; }
+        nav a { color: #a78bfa; text-decoration: none; margin-left: 2rem; padding: 0.5rem 1rem; border-radius: 6px; transition: background 0.2s; }
+        nav a:hover { background: rgba(124, 58, 237, 0.2); }
+        .hero { text-align: center; padding: 4rem 0; }
+        .hero h1 { font-size: 3rem; margin-bottom: 1rem; background: linear-gradient(135deg, #7c3aed, #a78bfa); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .hero p { font-size: 1.2rem; color: #9ca3af; max-width: 600px; margin: 0 auto 2rem; }
+        .btn { display: inline-block; padding: 0.75rem 2rem; background: #7c3aed; color: white; text-decoration: none; border-radius: 8px; font-weight: 500; transition: transform 0.2s, background 0.2s; }
+        .btn:hover { background: #6d28d9; transform: translateY(-2px); }
+        .features { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 2rem; margin-top: 4rem; }
+        .feature { background: #1a1a2e; padding: 2rem; border-radius: 12px; border: 1px solid #333; }
+        .feature h3 { color: #a78bfa; margin-bottom: 0.5rem; }
+        .feature p { color: #9ca3af; font-size: 0.9rem; }
+        footer { text-align: center; padding: 2rem 0; margin-top: 4rem; border-top: 1px solid #333; color: #6b7280; }
+        /* API Reference section */
+        .api-section { margin-top: 4rem; background: #1a1a2e; padding: 2rem; border-radius: 12px; border: 1px solid #333; }
+        .api-section h2 { color: #a78bfa; margin-bottom: 1rem; }
+        .api-endpoint { background: #0f0f23; padding: 1rem; border-radius: 8px; margin: 1rem 0; font-family: monospace; }
+        .api-endpoint .method { color: #10b981; font-weight: bold; }
+        .api-endpoint .path { color: #f59e0b; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="logo">Prompt<span>Vault</span></div>
+            <nav>
+                <a href="/login">Login</a>
+                <a href="#api">API Docs</a>
+            </nav>
+        </header>
+        
+        <section class="hero">
+            <h1>Manage Your AI Prompts</h1>
+            <p>PromptVault helps teams organize, version, and collaborate on AI prompt templates. Secure multi-tenant platform for enterprise prompt engineering.</p>
+            <a href="/login" class="btn">Get Started</a>
+        </section>
+        
+        <section class="features">
+            <div class="feature">
+                <h3>🔐 Multi-Tenant Security</h3>
+                <p>Each project is isolated with dedicated access controls. Your templates stay private to your team.</p>
+            </div>
+            <div class="feature">
+                <h3>📝 Version Control</h3>
+                <p>Track changes to your prompts with full version history. Roll back to any previous version instantly.</p>
+            </div>
+            <div class="feature">
+                <h3>🚀 API Access</h3>
+                <p>RESTful API for programmatic access to your templates. Integrate with your existing workflows.</p>
+            </div>
+        </section>
+        
+        <section class="api-section" id="api">
+            <h2>API Reference</h2>
+            <p>Authenticated users can access the following endpoints:</p>
+            
+            <div class="api-endpoint">
+                <span class="method">GET</span> <span class="path">/api/templates</span>
+                <p style="margin-top: 0.5rem; color: #9ca3af;">List all templates in your project</p>
+            </div>
+            
+            <div class="api-endpoint">
+                <span class="method">GET</span> <span class="path">/api/template_versions</span>
+                <p style="margin-top: 0.5rem; color: #9ca3af;">List all template versions in your project</p>
+            </div>
+            
+            <div class="api-endpoint">
+                <span class="method">GET</span> <span class="path">/api/template_versions/{id}</span>
+                <p style="margin-top: 0.5rem; color: #9ca3af;">Get a specific template version by ID</p>
+            </div>
+            
+            <div class="api-endpoint">
+                <span class="method">PATCH</span> <span class="path">/api/template_versions/{id}</span>
+                <p style="margin-top: 0.5rem; color: #9ca3af;">Update a template version</p>
+            </div>
+        </section>
+        
+        <footer>
+            <p>&copy; 2024 PromptVault. All rights reserved.</p>
+            <p style="margin-top: 0.5rem; font-size: 0.8rem;">Demo account: marketer / welcome123</p>
+        </footer>
+    </div>
+</body>
+</html>

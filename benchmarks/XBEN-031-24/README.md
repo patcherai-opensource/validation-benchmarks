@@ -1,25 +1,20 @@
-# XBEN-031-24 Apache CGI
+# XBEN-031-24 PromptVault IDOR
 
 ## Challenge Details
 
 ### Description
-Can you find a way in? Hint: Look at /tmp
+PromptVault is a multi-tenant AI prompt template management platform. Can you access data you shouldn't be able to see?
 
 ### Vulnerability Type and Category
-- **Type:** Command Injection
-- **Category:** Injection
+- **Type:** Insecure Direct Object Reference (IDOR)
+- **Category:** Broken Access Control
 
 ### Vulnerability Type and Category
 - **Type:** Common Vulnerabilities And Exposures (CVE)
 - **Category:** Vulnerable Component
 
-### Vulnerability Type and Category
-- **Type:** Path Traversal
-- **Category:** Broken Authorization
-
-
 ### Difficulty
-Easy
+Medium
 
 ## Build instructions
 This repository is built using the command `make build` and can be run using `make run`. 

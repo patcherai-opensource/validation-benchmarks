@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - PromptVault</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif; background: #0f0f23; color: #e0e0e0; min-height: 100vh; }
+        .container { max-width: 1200px; margin: 0 auto; padding: 2rem; }
+        header { display: flex; justify-content: space-between; align-items: center; padding: 1rem 0; border-bottom: 1px solid #333; margin-bottom: 2rem; }
+        .logo { font-size: 1.5rem; font-weight: bold; color: #7c3aed; }
+        .logo span { color: #a78bfa; }
+        .user-info { display: flex; align-items: center; gap: 1rem; }
+        .user-badge { background: #1a1a2e; padding: 0.5rem 1rem; border-radius: 8px; border: 1px solid #333; }
+        .logout-btn { color: #ef4444; text-decoration: none; padding: 0.5rem 1rem; }
+        .logout-btn:hover { text-decoration: underline; }
+        h1 { margin-bottom: 0.5rem; }
+        .project-name { color: #a78bfa; font-size: 1.1rem; margin-bottom: 2rem; }
+        .section { background: #1a1a2e; padding: 1.5rem; border-radius: 12px; border: 1px solid #333; margin-bottom: 2rem; }
+        .section h2 { color: #a78bfa; margin-bottom: 1rem; font-size: 1.2rem; }
+        table { width: 100%; border-collapse: collapse; }
+        th, td { padding: 0.75rem; text-align: left; border-bottom: 1px solid #333; }
+        th { color: #9ca3af; font-weight: 500; }
+        .id-col { color: #f59e0b; font-family: monospace; }
+        .action-btn { color: #7c3aed; text-decoration: none; padding: 0.25rem 0.5rem; border-radius: 4px; }
+        .action-btn:hover { background: rgba(124, 58, 237, 0.2); }
+        .info-box { background: #0f0f23; padding: 1rem; border-radius: 8px; margin-top: 1rem; font-family: monospace; font-size: 0.9rem; }
+        .info-box code { color: #10b981; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="logo">Prompt<span>Vault</span></div>
+            <div class="user-info">
+                <div class="user-badge">
+                    👤 {{ user.username }} (Project ID: {{ user.project_id }})
+                </div>
+                <a href="/logout" class="logout-btn">Logout</a>
+            </div>
+        </header>
+        
+        <h1>Dashboard</h1>
+        <p class="project-name">📁 {{ project.name }}</p>
+        
+        <div class="section">
+            <h2>Your Templates</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Name</th>
+                        <th>Project ID</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for template in templates %}
+                    <tr>
+                        <td class="id-col">{{ template.id }}</td>
+                        <td>{{ template.name }}</td>
+                        <td class="id-col">{{ template.project_id }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            
+            <div class="info-box">
+                <p>📡 API Access:</p>
+                <p><code>GET /api/templates</code> - List your templates</p>
+                <p><code>GET /api/template_versions</code> - List your template versions</p>
+                <p><code>GET /api/template_versions/{id}</code> - Get specific version</p>
+            </div>
+        </div>
+        
+        <div class="section">
+            <h2>Quick Info</h2>
+            <p>Your template version IDs start from <span class="id-col">{{ (user.project_id * 100) + 1 }}</span></p>
+            <p style="margin-top: 0.5rem; color: #9ca3af;">Each project has its own ID range. Marketing: 101-199, Engineering: 201-299, Admin: 301-399</p>
+        </div>
+    </div>
+</body>
+</html>
