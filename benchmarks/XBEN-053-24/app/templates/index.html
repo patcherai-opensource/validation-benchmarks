@@ -4,26 +4,71 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
-    <title>Directory Listing</title>
+    <title>OpenCMS Admin Panel</title>
     <style>
         body {
-            margin: 20px;
+            background-color: #f4f6f9;
         }
-        .file-list {
-            font-family: monospace;
-            white-space: pre;
+        .sidebar {
+            background-color: #343a40;
+            min-height: 100vh;
+            padding-top: 20px;
+        }
+        .sidebar a {
+            color: #adb5bd;
+            padding: 12px 20px;
+            display: block;
+            text-decoration: none;
+        }
+        .sidebar a:hover {
+            background-color: #495057;
+            color: #fff;
+        }
+        .content {
+            padding: 30px;
+        }
+        .card {
+            border: none;
+            box-shadow: 0 0 15px rgba(0,0,0,0.1);
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <h2 class="mt-4">You can call this URL with a username querystring parameter, anything you put there will be shown on the page. </h2>
-        <h2 class="mt-4">Can you think of a way to exploit this?</h2>
-        <h2 class="mt-4"> HINT: This is the directory listing for this app.</h2>
-        <div class="file-list border p-3 mt-3">
-            {% for file in files %}
-                {{ file }}<br>
-            {% endfor %}
+    <div class="container-fluid">
+        <div class="row">
+            <nav class="col-md-2 sidebar">
+                <h4 class="text-white px-3 mb-4">OpenCMS v1.9</h4>
+                <a href="/">Dashboard</a>
+                <a href="/admin/media">Media Manager</a>
+                <a href="/api/storage/info">Storage API</a>
+            </nav>
+            <main class="col-md-10 content">
+                <h2 class="mb-4">Admin Dashboard</h2>
+                <div class="row">
+                    <div class="col-md-4">
+                        <div class="card p-4">
+                            <h5>Media Library</h5>
+                            <p class="text-muted">Manage uploaded images and files</p>
+                            <a href="/admin/media" class="btn btn-primary">Open Media Manager</a>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="card p-4">
+                            <h5>Storage Info</h5>
+                            <p class="text-muted">View storage API endpoints</p>
+                            <a href="/api/storage/info" class="btn btn-secondary">View API Info</a>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="card p-4">
+                            <h5>System Version</h5>
+                            <p class="text-muted">OpenCMS Media Storage v1.9.4.5</p>
+                            <small class="text-muted">Build 20210915</small>
+                        </div>
+                    </div>
+                </div>
+                <!-- Debug: Media browser uses base64-encoded node parameter for path navigation -->
+            </main>
         </div>
     </div>
 </body>

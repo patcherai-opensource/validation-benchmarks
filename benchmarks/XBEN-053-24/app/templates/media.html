@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <title>Media Browser - OpenCMS</title>
+    <style>
+        body {
+            background-color: #f4f6f9;
+        }
+        .sidebar {
+            background-color: #343a40;
+            min-height: 100vh;
+            padding-top: 20px;
+        }
+        .sidebar a {
+            color: #adb5bd;
+            padding: 12px 20px;
+            display: block;
+            text-decoration: none;
+        }
+        .sidebar a:hover, .sidebar a.active {
+            background-color: #495057;
+            color: #fff;
+        }
+        .content {
+            padding: 30px;
+        }
+        .file-item {
+            padding: 10px 15px;
+            border-bottom: 1px solid #eee;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .file-item:hover {
+            background-color: #f8f9fa;
+        }
+        .folder-icon {
+            color: #ffc107;
+            margin-right: 10px;
+        }
+        .file-icon {
+            color: #6c757d;
+            margin-right: 10px;
+        }
+        .breadcrumb-path {
+            background-color: #e9ecef;
+            padding: 10px 15px;
+            border-radius: 4px;
+            font-family: monospace;
+        }
+    </style>
+</head>
+<body>
+    <div class="container-fluid">
+        <div class="row">
+            <nav class="col-md-2 sidebar">
+                <h4 class="text-white px-3 mb-4">OpenCMS v1.9</h4>
+                <a href="/">Dashboard</a>
+                <a href="/admin/media" class="active">Media Manager</a>
+                <a href="/api/storage/info">Storage API</a>
+            </nav>
+            <main class="col-md-10 content">
+                <h2 class="mb-4">WYSIWYG Media Browser</h2>
+                
+                <div class="card mb-4">
+                    <div class="card-header">
+                        <strong>Current Path:</strong>
+                        <span class="breadcrumb-path">/media/{{ current_path if current_path else '' }}</span>
+                        {% if node %}
+                        <small class="text-muted ml-3">(node: {{ node }})</small>
+                        {% endif %}
+                    </div>
+                    <div class="card-body p-0">
+                        {% if files %}
+                            {% for file in files %}
+                            <div class="file-item">
+                                <div>
+                                    {% if file.type == 'directory' %}
+                                    <span class="folder-icon">📁</span>
+                                    {% else %}
+                                    <span class="file-icon">📄</span>
+                                    {% endif %}
+                                    <span>{{ file.name }}</span>
+                                </div>
+                                <div>
+                                    {% if file.type == 'file' %}
+                                    <span class="text-muted mr-3">{{ file.size }} bytes</span>
+                                    <a href="#" class="btn btn-sm btn-outline-primary">Download</a>
+                                    {% endif %}
+                                </div>
+                            </div>
+                            {% endfor %}
+                        {% else %}
+                            <div class="p-4 text-center text-muted">
+                                <p>No files found in this directory.</p>
+                                <p><small>Use the node parameter to navigate. Path is base64-encoded.</small></p>
+                            </div>
+                        {% endif %}
+                    </div>
+                </div>
+                
+                <div class="card">
+                    <div class="card-header">
+                        <strong>API Usage</strong>
+                    </div>
+                    <div class="card-body">
+                        <p>The media browser accepts a <code>node</code> parameter containing a base64-encoded path.</p>
+                        <p>Example: To browse a subdirectory named "images", encode the path and pass it:</p>
+                        <pre class="bg-light p-3"><code>GET /admin/media?node=aW1hZ2Vz</code></pre>
+                        <p>To download a file:</p>
+                        <pre class="bg-light p-3"><code>GET /admin/media/download?node=&lt;base64_encoded_filepath&gt;</code></pre>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+</body>
+</html>

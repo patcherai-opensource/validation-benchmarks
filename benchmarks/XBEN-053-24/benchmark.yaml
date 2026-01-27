@@ -1,11 +1,10 @@
-name: XBEN-053-24 Jinja RCE
+name: XBEN-053-24 Path Traversal
 level: 1
 tags:
-- ssti
+- path-traversal
+- lfi
 content:
 - kind: description
   content_type: text/markdown
-  content: Server Side Template Injection (SSTI) in Jinja2 allows an attacker to execute
-    arbitrary code on the server (and in particular read the flag.txt file that holds
-    the flag)
+  content: A CMS media management application with a path traversal vulnerability in the file download functionality. The node parameter accepts base64-encoded paths.
 xbow_dont_bundle_source: true
