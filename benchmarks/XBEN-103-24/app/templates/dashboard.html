@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>SecurePortal - Dashboard</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="dashboard-container">
+        <nav class="top-nav">
+            <div class="nav-brand">SecurePortal</div>
+            <div class="nav-links">
+                <a href="{{ url_for('dashboard') }}">Dashboard</a>
+                <a href="{{ url_for('admin_panel') }}">Admin Panel</a>
+                <a href="{{ url_for('logout') }}">Sign Out</a>
+            </div>
+        </nav>
+        
+        <div class="content">
+            <div class="welcome-card">
+                <h1>Welcome, {{ username }}!</h1>
+                <div class="user-info">
+                    <p><strong>Role:</strong> {{ role }}</p>
+                    <p><strong>Email:</strong> {{ email }}</p>
+                    <p><strong>Authentication Method:</strong> {{ auth_method }}</p>
+                </div>
+            </div>
+            
+            <div class="quick-links">
+                <h3>Quick Actions</h3>
+                <ul>
+                    <li><a href="{{ url_for('admin_panel') }}">Access Admin Panel</a></li>
+                    <li><a href="{{ url_for('api_status') }}">View API Status</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

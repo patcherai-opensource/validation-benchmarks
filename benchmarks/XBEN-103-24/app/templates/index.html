@@ -1,14 +1,40 @@
 <!DOCTYPE html>
 <html>
 <head>
+    <title>SecurePortal - Enterprise Access Management</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
-    <!-- test1:test1 TODO: remove-->
-    <form action="{{ url_for('login') }}" method="post">
-        <input type="text" name="username" placeholder="Username" required>
-        <input type="password" name="password" placeholder="Password" required>
-        <input type="submit" value="Login">
-    </form>
+    <div class="login-container">
+        <div class="logo">
+            <h1>SecurePortal</h1>
+            <p class="tagline">Enterprise Access Management System v4.2.1</p>
+        </div>
+        
+        {% if error %}
+        <div class="error-message">{{ error }}</div>
+        {% endif %}
+        
+        <form action="{{ url_for('login') }}" method="post" class="login-form">
+            <div class="form-group">
+                <label for="username">Username</label>
+                <input type="text" id="username" name="username" placeholder="Enter your username" required>
+            </div>
+            <div class="form-group">
+                <label for="password">Password</label>
+                <input type="password" id="password" name="password" placeholder="Enter your password" required>
+            </div>
+            <div class="form-group remember-me">
+                <input type="checkbox" id="remember_me" name="remember_me">
+                <label for="remember_me">Keep me signed in</label>
+            </div>
+            <input type="submit" value="Sign In" class="btn-primary">
+        </form>
+        
+        <div class="footer-info">
+            <!-- Default test account: guest / guestpass123 -->
+            <p>&copy; 2024 SecurePortal Inc. All rights reserved.</p>
+        </div>
+    </div>
 </body>
 </html>

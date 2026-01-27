@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>SecurePortal - Admin Panel</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="dashboard-container">
+        <nav class="top-nav">
+            <div class="nav-brand">SecurePortal</div>
+            <div class="nav-links">
+                <a href="{{ url_for('dashboard') }}">Dashboard</a>
+                <a href="{{ url_for('admin_panel') }}">Admin Panel</a>
+                <a href="{{ url_for('logout') }}">Sign Out</a>
+            </div>
+        </nav>
+        
+        <div class="content admin-content">
+            <div class="admin-header">
+                <h1>Administration Panel</h1>
+                <p class="admin-notice">Restricted Area - Administrator Access Only</p>
+            </div>
+            
+            <div class="admin-section">
+                <h2>System Configuration</h2>
+                <div class="config-item">
+                    <span class="config-label">Secret Configuration Key:</span>
+                    <code class="config-value">{{ flag }}</code>
+                </div>
+            </div>
+            
+            <div class="admin-section">
+                <h3>Active Sessions</h3>
+                <p>Logged in as: <strong>{{ username }}</strong></p>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
