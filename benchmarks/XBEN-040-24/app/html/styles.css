@@ -1,27 +1,154 @@
 body {
-    font-family: Arial, sans-serif;
-    background-color: #f4f4f9;
+    font-family: 'Segoe UI', Arial, sans-serif;
+    background-color: #1a1a2e;
     margin: 0;
     padding: 20px;
+    color: #e0e0e0;
 }
+
 .container {
-    width: 80%;
+    width: 90%;
+    max-width: 1200px;
     margin: auto;
-    background: white;
+    background-color: #16213e;
+    padding: 30px;
+    border-radius: 8px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+}
+
+h1 {
+    color: #00d9ff;
+    border-bottom: 2px solid #00d9ff;
+    padding-bottom: 10px;
+}
+
+h2 {
+    color: #94bbe9;
+}
+
+.subtitle {
+    color: #888;
+    font-style: italic;
+    margin-top: -10px;
+}
+
+.nav-links {
+    background-color: #0f3460;
+    padding: 15px;
+    border-radius: 5px;
+    margin: 20px 0;
+}
+
+.nav-links a {
+    color: #00d9ff;
+    text-decoration: none;
+    padding: 5px 10px;
+}
+
+.nav-links a:hover {
+    text-decoration: underline;
+}
+
+.device-table, .results-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 15px;
+}
+
+.device-table th, .results-table th {
+    background-color: #0f3460;
+    color: #00d9ff;
+    padding: 12px;
+    text-align: left;
+}
+
+.device-table td, .results-table td {
+    padding: 10px;
+    border-bottom: 1px solid #2a3f5f;
+}
+
+.device-table tr:hover, .results-table tr:hover {
+    background-color: #1f4068;
+}
+
+.status-active {
+    color: #00ff88;
+    font-weight: bold;
+}
+
+.status-inactive {
+    color: #ff4757;
+    font-weight: bold;
+}
+
+.search-box {
+    background-color: #0f3460;
     padding: 20px;
+    border-radius: 5px;
+    margin: 20px 0;
+}
+
+.search-box input[type="text"] {
+    width: 60%;
+    padding: 10px;
+    border: 1px solid #2a3f5f;
+    border-radius: 4px;
+    background-color: #1a1a2e;
+    color: #e0e0e0;
+    margin-right: 10px;
+}
+
+.search-box button, .login-form button {
+    padding: 10px 20px;
+    background-color: #00d9ff;
+    border: none;
+    border-radius: 4px;
+    color: #1a1a2e;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+.search-box button:hover, .login-form button:hover {
+    background-color: #00b8d4;
+}
+
+.error-box {
+    background-color: #ff4757;
+    color: white;
+    padding: 15px;
+    border-radius: 5px;
+    margin: 15px 0;
+}
+
+.results-section {
+    margin-top: 20px;
+}
+
+.login-form {
+    max-width: 400px;
+    margin: 20px auto;
+    background-color: #0f3460;
+    padding: 30px;
     border-radius: 8px;
 }
-.post {
-    border-bottom: 1px solid #ccc;
-    padding-bottom: 20px;
-    margin-bottom: 20px;
+
+.login-form label {
+    display: block;
+    margin: 10px 0 5px;
+    color: #94bbe9;
 }
-.post h2 a {
-    color: #333;
-    text-decoration: none;
-}
-.post img {
+
+.login-form input[type="text"], .login-form input[type="password"] {
     width: 100%;
-    height: auto;
-    border-radius: 5px;
+    padding: 10px;
+    border: 1px solid #2a3f5f;
+    border-radius: 4px;
+    background-color: #1a1a2e;
+    color: #e0e0e0;
+    box-sizing: border-box;
+}
+
+.login-form button {
+    width: 100%;
+    margin-top: 20px;
 }
