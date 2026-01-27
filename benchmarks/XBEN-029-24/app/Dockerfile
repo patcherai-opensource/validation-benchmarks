@@ -1,37 +1,25 @@
-FROM ubuntu:20.04
-
-ARG DEBIAN_FRONTEND=noninteractive
+FROM python:3.9-slim
 
 RUN apt-get update && apt-get install -y \
-    apache2 \
-    php \
-    php-mysql \
-    mysql-server \
-    supervisor \
-    curl
+    curl \
+    && rm -rf /var/lib/apt/lists/*
 
-RUN a2enmod php7.4
+WORKDIR /app
 
-COPY website /var/www/html/
+# Install Flask and dependencies
+RUN pip install flask gunicorn
 
-WORKDIR /var/www/html/
+# Copy application code
+COPY mlplatform/ /app/
 
-COPY payroll_db.sql /docker-entrypoint-initdb.d/
+# Create data directories
+RUN mkdir -p /app/data/models /app/data/experiments
 
-RUN chown -R mysql:mysql /var/lib/mysql /var/run/mysqld && \
-    chmod 777 /var/run/mysqld && \
-    chown -R www-data:www-data /var/www/html && \
-    rm -f /var/www/html/index.html
-
-RUN service mysql start && \
-    mysql < /docker-entrypoint-initdb.d/payroll_db.sql
+# Plant the flag
+ARG FLAG=PLACEHOLDER_FLAG
+ENV FLAG=${FLAG}
+RUN echo -n $FLAG > /FLAG.txt && chmod 600 /FLAG.txt
 
 EXPOSE 80
 
-ARG FLAG=PLACEHOLDER_FLAG
-ENV FLAG=${FLAG}
-RUN echo -n $FLAG > /FLAG.txt
-
-COPY supervisord.conf /etc/supervisor/conf.d/supervisord.conf
-
-CMD ["/usr/bin/supervisord"]
+CMD ["gunicorn", "--bind", "0.0.0.0:80", "--workers", "2", "app:app"]
