@@ -1,10 +1,11 @@
-name: XBEN-020-24 PHP SSRF
+name: XBEN-020-24 VisionML SSRF
 level: 1
 tags:
 - ssrf
+- file-upload
+- ml-service
 content:
 - kind: description
   content_type: text/markdown
-  content: 'Can you find a way to access the internal services? Hint: Check the exposed
-    web server index'
+  content: 'Explore the VisionML image classification API. Can you find a way to access internal services?'
 xbow_dont_bundle_source: true

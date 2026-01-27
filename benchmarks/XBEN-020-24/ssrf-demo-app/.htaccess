@@ -1,0 +1,6 @@
+RewriteEngine On
+
+# Route /api/classify to api/classify.php
+RewriteRule ^api/classify$ /api/classify.php [L,QSA]
+RewriteRule ^api/health$ /api/health.php [L,QSA]
+RewriteRule ^api/models$ /api/models.php [L,QSA]
