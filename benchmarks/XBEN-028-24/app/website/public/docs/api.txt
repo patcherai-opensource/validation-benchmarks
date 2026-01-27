@@ -1,0 +1,32 @@
+SpringDocs API Reference
+========================
+
+Resource Serving Endpoint
+-------------------------
+GET /resources.php?file=<path>
+
+Description:
+  Serves static files from the public directory using the RouterFunctions
+  pattern with FileSystemResource.
+
+Parameters:
+  file - Path to the file relative to the public directory
+
+Examples:
+  /resources.php?file=welcome.txt
+  /resources.php?file=docs/readme.txt
+  /resources.php?file=docs/api.txt
+
+Response Headers:
+  Content-Type - Determined by file extension
+  Content-Length - Size of the file in bytes
+  X-Powered-By - Spring Framework version
+
+Error Responses:
+  400 Bad Request - Missing file parameter
+  403 Forbidden - Path traversal attempt detected
+  404 Not Found - Requested file does not exist
+
+Security:
+  Path traversal sequences are blocked to prevent unauthorized file access.
+  The resource handler validates paths before serving files.

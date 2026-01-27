@@ -47,10 +47,14 @@
     </div>
 
     <div class="card my-4">
-        <h5 class="card-header">Help wanted!</h5>
+        <h5 class="card-header">Quick Resources</h5>
         <div class="card-body">
-            <h6>Help us improving the articles of the blog</h6>
-            <p>Submit yours <a href="posts/upload-article.php">here!</a></p>
+            <h6>Documentation Files</h6>
+            <ul class="list-unstyled mb-0">
+                <li><a href="/resources.php?file=welcome.txt">Welcome</a></li>
+                <li><a href="/resources.php?file=docs/readme.txt">README</a></li>
+                <li><a href="/resources.php?file=docs/api.txt">API Reference</a></li>
+            </ul>
         </div>
     </div>
 </div>

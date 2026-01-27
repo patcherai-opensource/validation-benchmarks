@@ -1,0 +1,4 @@
+Welcome to SpringDocs!
+
+Your documentation server is running correctly.
+Visit /resources.php?file=<filename> to access your files.

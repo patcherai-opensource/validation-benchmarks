@@ -1,61 +1,104 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF8">
-    <title>Encoder64 Blog | About</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SpringDocs - About</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        .hero-section { background: linear-gradient(135deg, #6DB33F 0%, #34302D 100%); color: white; }
+    </style>
 </head>
 <body>
     <!-- Navigation Bar -->
-    <? include("include/navigation-bar.php") ?>
-
-    <!-- Header with Featured Post -->
-    <header class="py-5 bg-light border-bottom mb-4">
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
         <div class="container">
-            <div class="text-center my-5">
-                <h1 class="fw-bolder">About me!</h1>
+            <a class="navbar-brand" href="/">
+                <strong>SpringDocs</strong>
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item"><a class="nav-link" href="/">Home</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/resources.php?file=docs/readme.txt">Documentation</a></li>
+                    <li class="nav-item"><a class="nav-link active" href="/about.php">About</a></li>
+                </ul>
             </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <header class="hero-section py-5">
+        <div class="container text-center">
+            <h1 class="display-4 fw-bold">About SpringDocs</h1>
+            <p class="lead">Built on Spring Framework's Functional Web Framework</p>
         </div>
     </header>
 
-    <!-- Main Content Section -->
-    <div class="container">
+    <!-- Main Content -->
+    <div class="container my-5">
         <div class="row">
-            <div class="col-md-8">
-                <div class="container mt-5">
-                    <h1>Meet Encoder64: Master of Digital Realms</h1>
-                    <p>
-                        In the shadows of the digital world, there exists a figure both revered and feared. Known only as Encoder64, this enigmatic entity commands the cyber landscape with unparalleled skill. With a knack for breaking through digital barriers that seem impregnable to most, Encoder64 has shaped the contours of cyber security and ethical hacking.
-                    </p>
+            <div class="col-lg-8 mx-auto">
+                <h2>Spring Framework Functional Web Framework</h2>
+                <p>
+                    SpringDocs leverages Spring Framework's functional web routing capabilities through 
+                    <code>WebMvc.fn</code> to serve static resources efficiently and securely.
+                </p>
 
-                    <h2>The Myth, The Legend</h2>
-                    <p>
-                        Encoder64's journey began in the early days of internet exploration. Known for utilizing advanced encryption techniques and sophisticated algorithms, Encoder64 can infiltrate seemingly secure networks with the grace of a digital phantom. This mystic skill set not only showcases an extraordinary proficiency in programming but also an inventive approach to problem-solving in the cybernetic world.
-                    </p>
+                <h3 class="mt-4">Architecture</h3>
+                <p>
+                    The application uses <code>RouterFunctions</code> with <code>FileSystemResource</code> 
+                    to serve documentation files from a designated public directory. This pattern provides 
+                    a clean, functional approach to handling HTTP requests.
+                </p>
 
-                    <h2>Philosophy of a Hacker</h2>
-                    <p>
-                        Far from the nefarious deeds often associated with hackers, Encoder64 operates under a strict code of ethics, advocating for transparency and privacy. This philosophy is driven by a belief that information should be free and that privacy is a fundamental right, not a privilege.
-                    </p>
+                <h3 class="mt-4">Resource Handling</h3>
+                <p>
+                    Static resources are served through a dedicated endpoint that maps file requests to 
+                    the underlying filesystem. The router validates requested paths and serves appropriate 
+                    content types based on file extensions.
+                </p>
 
-                    <h2>Techniques and Triumphs</h2>
-                    <p>
-                        Encoder64 is a master of both offensive and defensive cyber strategies. From deploying intricate DDoS defenses to unmasking vulnerabilities in popular software, Encoder64's exploits are a testament to their deep understanding of the digital domain. Their work has prevented numerous cyber attacks, saving countless data from potential exploitation.
-                    </p>
+                <div class="card mt-4">
+                    <div class="card-header">
+                        <strong>Technical Details</strong>
+                    </div>
+                    <div class="card-body">
+                        <ul class="mb-0">
+                            <li><strong>Framework:</strong> Spring Framework 5.3.18</li>
+                            <li><strong>Module:</strong> spring-webmvc (WebMvc.fn)</li>
+                            <li><strong>Resource Type:</strong> FileSystemResource</li>
+                            <li><strong>Routing:</strong> RouterFunctions.resources()</li>
+                            <li><strong>Base Path:</strong> /public/</li>
+                        </ul>
+                    </div>
+                </div>
 
-                    <h2>Legacy and Future</h2>
-                    <p>
-                        As digital landscapes evolve, so too does the legend of Encoder64. Constantly adapting and learning, Encoder64 remains at the forefront of cybersecurity discussions, inspiring both fear and admiration. Their ongoing mission: to challenge the status quo and push the boundaries of what is possible in cybersecurity.
-                    </p>
+                <h3 class="mt-4">Security Considerations</h3>
+                <p>
+                    Path traversal protection is implemented to prevent unauthorized access to files 
+                    outside the designated public directory. The system validates incoming paths and 
+                    blocks requests containing traversal sequences.
+                </p>
+
+                <div class="alert alert-info mt-4">
+                    <strong>Note:</strong> For production deployments, we recommend enabling Spring Security's 
+                    HTTP Firewall for additional protection, or running behind Tomcat/Jetty which provide 
+                    built-in request filtering.
                 </div>
             </div>
-            <!-- Sidebar Widgets Column -->
-            <? include("include/sidebar.php") ?>
         </div>
     </div>
 
-    <!-- Bootstrap core JavaScript -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Footer -->
+    <footer class="bg-dark text-white py-4 mt-5">
+        <div class="container text-center">
+            <p class="mb-0">&copy; 2024 SpringDocs. Powered by Spring Framework.</p>
+        </div>
+    </footer>
 
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
