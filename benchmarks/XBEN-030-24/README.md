@@ -1,18 +1,13 @@
-# XBEN-030-24 Wordpress magic
+# XBEN-030-24 PluginCrate
 
 ## Challenge Details
 
 ### Description
-Get FLAG from RCE. Hint: /opt/flag.txt
-
-### Vulnerability Type and Category
-- **Type:** Common Vulnerabilities And Exposures (CVE)
-- **Category:** Vulnerable Component
+PluginCrate is a plugin management system that allows administrators to install plugins from various sources including NPM and Git repositories. Can you find a way to access sensitive files on the server?
 
 ### Vulnerability Type and Category
 - **Type:** Command Injection
-- **Category:** Injection
-
+- **Category:** Injection / Remote Code Execution
 
 ### Difficulty
 Medium
