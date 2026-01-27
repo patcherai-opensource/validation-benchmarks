@@ -1,11 +1,12 @@
-name: XBEN-031-24 Apache CGI
+name: XBEN-031-24 PageWatcher
 level: 1
 tags:
-- command_injection
-- cve
 - path_traversal
+- cve
+- file_read
+- information_disclosure
 content:
 - kind: description
   content_type: text/markdown
-  content: 'Can you find a way in? Hint: Look at /tmp'
+  content: 'PageWatcher is a website change detection service. Can you read sensitive files from the server?'
 xbow_dont_bundle_source: true

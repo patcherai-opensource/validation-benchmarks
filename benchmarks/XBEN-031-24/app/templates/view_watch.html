@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Watch Details - PageWatcher</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: #f5f5f5; min-height: 100vh; }
+        .header { background: #2563eb; color: white; padding: 1rem 2rem; display: flex; justify-content: space-between; align-items: center; }
+        .header h1 { font-size: 1.5rem; }
+        .nav a { color: white; text-decoration: none; margin-left: 1.5rem; opacity: 0.9; }
+        .nav a:hover { opacity: 1; }
+        .container { max-width: 900px; margin: 0 auto; padding: 2rem; }
+        .card { background: white; border-radius: 8px; padding: 1.5rem; margin-bottom: 1rem; box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
+        .btn { display: inline-block; padding: 0.5rem 1rem; background: #2563eb; color: white; text-decoration: none; border-radius: 4px; border: none; cursor: pointer; font-size: 0.9rem; }
+        .btn:hover { background: #1d4ed8; }
+        .btn-danger { background: #dc2626; }
+        .btn-danger:hover { background: #b91c1c; }
+        .btn-success { background: #059669; }
+        .btn-success:hover { background: #047857; }
+        .meta { color: #6b7280; font-size: 0.9rem; }
+        .meta-item { margin-bottom: 0.5rem; }
+        .status { padding: 0.25rem 0.5rem; border-radius: 4px; font-size: 0.75rem; text-transform: uppercase; }
+        .status-pending { background: #fef3c7; color: #92400e; }
+        .status-checked { background: #d1fae5; color: #065f46; }
+        .content-preview { background: #1f2937; color: #e5e7eb; padding: 1rem; border-radius: 4px; font-family: monospace; font-size: 0.85rem; overflow-x: auto; white-space: pre-wrap; word-break: break-all; max-height: 400px; overflow-y: auto; }
+        .actions { display: flex; gap: 0.5rem; margin-top: 1rem; }
+        .alert { padding: 1rem; border-radius: 4px; margin-bottom: 1rem; }
+        .alert-info { background: #dbeafe; color: #1e40af; border: 1px solid #93c5fd; }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <h1>🔍 PageWatcher</h1>
+        <nav class="nav">
+            <a href="/">Dashboard</a>
+            <a href="/add">Add Watch</a>
+            <a href="/about">About</a>
+        </nav>
+    </header>
+    
+    <div class="container">
+        <div class="card">
+            <h2>{{ watch.title }}</h2>
+            <div class="meta" style="margin-top: 0.5rem;">
+                <div class="meta-item"><strong>URL:</strong> <code>{{ watch.url }}</code></div>
+                <div class="meta-item"><strong>Created:</strong> {{ watch.created_at }}</div>
+                <div class="meta-item"><strong>Status:</strong> <span class="status status-{{ watch.status }}">{{ watch.status }}</span></div>
+                {% if watch.last_checked %}
+                <div class="meta-item"><strong>Last Checked:</strong> {{ watch.last_checked }}</div>
+                {% endif %}
+            </div>
+            
+            <div class="actions">
+                <button onclick="triggerCheck()" class="btn btn-success">🔄 Check Now</button>
+                <button onclick="loadPreview()" class="btn">👁 Preview Content</button>
+                <button onclick="deleteWatch()" class="btn btn-danger">🗑 Delete</button>
+            </div>
+        </div>
+        
+        <div class="card">
+            <h3 style="margin-bottom: 1rem;">Content Preview</h3>
+            <div id="content-container">
+                {% if watch.status == 'pending' %}
+                <div class="alert alert-info">
+                    Content not yet fetched. Click "Check Now" to retrieve the page content.
+                </div>
+                {% elif watch.content %}
+                <div class="content-preview">{{ watch.content }}</div>
+                {% else %}
+                <div class="alert alert-info">No content available.</div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        const watchId = '{{ watch_id }}';
+        
+        async function triggerCheck() {
+            try {
+                const response = await fetch('/api/watch/' + watchId + '/check', {
+                    method: 'POST'
+                });
+                const data = await response.json();
+                if (response.ok) {
+                    alert('Check completed! Refreshing...');
+                    window.location.reload();
+                } else {
+                    alert('Error: ' + data.error);
+                }
+            } catch (err) {
+                alert('Network error');
+            }
+        }
+        
+        async function loadPreview() {
+            try {
+                const response = await fetch('/api/watch/' + watchId + '/preview');
+                const data = await response.json();
+                
+                if (response.ok && data.content) {
+                    document.getElementById('content-container').innerHTML = 
+                        '<div class="content-preview">' + escapeHtml(data.content) + '</div>';
+                } else {
+                    alert('Error: ' + (data.error || 'Failed to load preview'));
+                }
+            } catch (err) {
+                alert('Network error');
+            }
+        }
+        
+        async function deleteWatch() {
+            if (!confirm('Are you sure you want to delete this watch?')) return;
+            
+            try {
+                const response = await fetch('/api/watch/' + watchId, {
+                    method: 'DELETE'
+                });
+                if (response.ok) {
+                    window.location.href = '/';
+                } else {
+                    alert('Failed to delete');
+                }
+            } catch (err) {
+                alert('Network error');
+            }
+        }
+        
+        function escapeHtml(text) {
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+    </script>
+</body>
+</html>
