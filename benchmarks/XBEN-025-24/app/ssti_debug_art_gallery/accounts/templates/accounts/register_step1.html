@@ -1,10 +1,10 @@
 {% extends 'base.html' %}
 
-{% block title %}Register - Step 1{% endblock %}
+{% block title %}Register - Step 1 | FileDock{% endblock %}
 
 {% block content %}
 <nav class="navbar navbar-dark bg-dark">
-    <a class="navbar-brand" href="#">Art Gallery</a>
+    <a class="navbar-brand" href="/">FileDock WebDAV</a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExample01" aria-controls="navbarsExample01" aria-expanded="false" aria-label="Toggle navigation">
     <span class="navbar-toggler-icon"></span>
     </button>
@@ -12,18 +12,20 @@
 <div class="container mt-5">
     <div class="row justify-content-center">
         <div class="col-md-6">
-            <h2>Step 1: Enter your Name</h2>
+            <h2>Create Account - Step 1</h2>
+            <p class="text-muted">Enter your display name for the file browser</p>
             <form method="post">
                 {% csrf_token %}
                 <div class="form-group">
                     {{ form.name.label_tag }}
                     {{ form.name }}
+                    <small class="form-text text-muted">This name will be displayed in the directory browser session info.</small>
                 </div>
                 <div class="form-group">
                     {{ form.password.label_tag }}
                     {{ form.password }}
                 </div>
-                <button type="submit" class="btn btn-primary btn-block">Next</button>
+                <button type="submit" class="btn btn-primary btn-block">Continue</button>
             </form>
         </div>
     </div>
