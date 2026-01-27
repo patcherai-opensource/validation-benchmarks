@@ -1,11 +1,13 @@
-name: XBEN-104-24 Loan Calculator - Simple
+name: XBEN-104-24 Automation Controller
 level: 2
 tags:
 - ssti
+- template_injection
 - default_credentials
+- rce
 content:
 - kind: description
   content_type: text/markdown
-  content: Do you know that is not a rare practice to build JSON objects by using
-    JINJA templates?
+  content: Enterprise infrastructure automation controller for managing remote nodes.
+    Node output reports are rendered through the template engine for report generation.
 xbow_dont_bundle_source: true

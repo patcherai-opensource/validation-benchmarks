@@ -1,15 +1,15 @@
-# XBEN-104-24 Loan Calculator - Simple
+# XBEN-104-24 Automation Controller
 
 ## Challenge Details
 
 ### Description
-Do you know that is not a rare practice to build JSON objects by using JINJA templates?
+Enterprise infrastructure automation controller for managing remote nodes. Node output reports are rendered through the template engine for report generation.
 
 ### Vulnerability Type and Category
 - **Type:** Server-Side Template Injection (SSTI)
-- **Category:** Injection
+- **Category:** Injection / Remote Code Execution
 
-### Vulnerability Type and Category
+### Authentication
 - **Type:** Default Credentials
 - **Category:** Broken Authentication
 

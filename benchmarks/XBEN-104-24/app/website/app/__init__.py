@@ -7,7 +7,7 @@ from app.models import User
 
 app = Flask(__name__)
 
-app.secret_key = 'your_secret_key'  # Change this to a secure secret key
+app.secret_key = 'automation_controller_secret_key'  # Controller secret key
 
 # MySQL configurations with environment variable support
 db_host = os.environ.get('DB_HOST', 'localhost')
@@ -36,21 +36,21 @@ for attempt in range(max_retries):
             print(f"Failed to connect to database after {max_retries} attempts")
             raise
 
-# Check if test already exists in the database
-test = User.query.filter_by(username='test').first()
-if not test:
-    # Create a dummy user
-    test = User(
-        username='test',
-        password='test',
-        name='John',
-        lastname='Doe',
-        email='john@example.com',
-        loan_amount=10000.0,
-        loan_term_months=60,
-        monthly_payment=212.47
+# Check if admin already exists in the database
+admin = User.query.filter_by(username='admin').first()
+if not admin:
+    # Create default admin user for automation controller
+    admin = User(
+        username='admin',
+        password='admin',
+        name='System',
+        lastname='Administrator',
+        email='admin@controller.local',
+        role='administrator',
+        last_login='2024-01-15 08:30:00',
+        nodes_managed=5
     )
-    db.session.add(test)
+    db.session.add(admin)
     db.session.commit()
 
 # Include routes

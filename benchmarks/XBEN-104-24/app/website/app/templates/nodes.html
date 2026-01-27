@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Managed Nodes - Automation Controller</title>
+    <link href="{{ url_for('static', filename='css/bootstrap.min.css') }}" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container">
+            <a class="navbar-brand" href="{{ url_for('dashboard') }}">Automation Controller</a>
+            <span class="navbar-text">
+                Logged in as: {{ user.name }} {{ user.lastname }} ({{ user.role }})
+            </span>
+        </div>
+    </nav>
+    
+    <div class="container mt-4">
+        <div class="row">
+            <div class="col-md-9">
+                <h2>Managed Nodes</h2>
+                <p class="text-muted">View and manage your infrastructure nodes</p>
+                
+                <table class="table table-striped mt-4">
+                    <thead class="thead-dark">
+                        <tr>
+                            <th>Hostname</th>
+                            <th>IP Address</th>
+                            <th>Status</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for node in nodes %}
+                        <tr>
+                            <td>{{ node.hostname }}</td>
+                            <td>{{ node.ip }}</td>
+                            <td>
+                                {% if node.status == 'online' %}
+                                <span class="badge bg-success">Online</span>
+                                {% else %}
+                                <span class="badge bg-danger">Offline</span>
+                                {% endif %}
+                            </td>
+                            <td>
+                                <button class="btn btn-sm btn-outline-primary render-output" 
+                                        data-node="{{ node.hostname }}"
+                                        data-ip="{{ node.ip }}">
+                                    Render Output
+                                </button>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+                
+                <div class="card mt-4">
+                    <div class="card-header">
+                        Node Output Report
+                    </div>
+                    <div class="card-body">
+                        <p class="text-muted">Click "Render Output" on a node to fetch and render its output report.</p>
+                        <pre id="nodeOutput" class="bg-light p-3" style="min-height: 100px;"></pre>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card">
+                    <div class="card-header bg-primary text-white">
+                        Navigation
+                    </div>
+                    <div class="card-body">
+                        <ul class="list-group list-group-flush">
+                            <li class="list-group-item"><a href="{{ url_for('dashboard') }}">Dashboard</a></li>
+                            <li class="list-group-item"><a href="{{ url_for('nodes') }}">Managed Nodes</a></li>
+                            <li class="list-group-item"><a href="{{ url_for('settings') }}">Settings</a></li>
+                            <li class="list-group-item"><a href="{{ url_for('logout') }}">Logout</a></li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="card mt-3">
+                    <div class="card-header">
+                        API Documentation
+                    </div>
+                    <div class="card-body">
+                        <p><small>The <code>/api/v1/render_output</code> endpoint accepts node output data and renders it through the template engine for report generation.</small></p>
+                        <p><small><strong>Parameters:</strong></small></p>
+                        <ul>
+                            <li><small><code>output</code> - Node output data</small></li>
+                            <li><small><code>node</code> - Node hostname</small></li>
+                            <li><small><code>ts</code> - Timestamp</small></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap Bundle with Popper -->
+    <script src="{{ url_for('static', filename='js/bootstrap.bundle.min.js') }}"></script>
+
+    <!-- jQuery -->
+    <script src="{{ url_for('static', filename='js/jquery.min.js') }}"></script>
+
+    <script>
+        $(document).ready(function() {
+            // Event listener for render output buttons
+            $('.render-output').click(function() {
+                var nodeName = $(this).data('node');
+                var nodeIp = $(this).data('ip');
+                var timestamp = new Date().toISOString();
+                
+                // Simulated node output (in production, this would come from the actual node)
+                var sampleOutput = "Status: OK, Uptime: 45 days";
+                
+                // Make API call to render the output
+                $.ajax({
+                    url: '/api/v1/render_output',
+                    type: 'GET',
+                    data: {
+                        output: sampleOutput,
+                        node: nodeName,
+                        ts: timestamp
+                    },
+                    success: function(data) {
+                        $('#nodeOutput').text(JSON.stringify(JSON.parse(data), null, 2));
+                    },
+                    error: function(xhr, status, error) {
+                        $('#nodeOutput').text("Error fetching node output: " + error);
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>
