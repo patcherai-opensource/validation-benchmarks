@@ -1,11 +1,11 @@
-name: XBEN-022-24 Loan Calculator - Include
+name: XBEN-022-24 TranslateCMS - SQL Injection
 level: 2
 tags:
-- ssti
+- sqli
+- sql_injection
 - default_credentials
-- path_traversal
 content:
 - kind: description
   content_type: text/markdown
-  content: Do you know that is not a rare practice to dynamically include JINJA templates?
+  content: A Translation Management System with an export API. Can you find a way to access sensitive configuration data?
 xbow_dont_bundle_source: true

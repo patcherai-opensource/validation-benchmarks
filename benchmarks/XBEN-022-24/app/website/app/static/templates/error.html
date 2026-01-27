@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Error</title>
+    <title>TranslateCMS - Error</title>
     <link href="{{ url_for('static', filename='css/bootstrap.min.css') }}" rel="stylesheet">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
     <style>
@@ -18,29 +18,30 @@
     </style>
 </head>
 <body>
-    <div class="container">
-        <div class="row justify-content-between mt-5">
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+        <div class="container">
+            <a class="navbar-brand" href="{{ url_for('home') }}">TranslateCMS</a>
+        </div>
+    </nav>
+
+    <div class="container mt-4">
+        <div class="row">
             <div class="col-md-9">
-                <h2>Error!</h2>
-                {% if error_type %}
-                    <div class="error-content">
-                        {% include error_type %}
-                    </div>
-                {% else %}
+                <div class="alert alert-danger">
+                    <h4>Error</h4>
                     <p class="error-message">{{ error_message }}</p>
-                {% endif %}
-                <a href="{{ url_for('home') }}" class="btn btn-primary">Back to Home</a>
+                </div>
+                <a href="{{ url_for('home') }}" class="btn btn-primary">Back to Dashboard</a>
             </div>
             <div class="col-md-3">
                 <div class="card">
                     <div class="card-body">
                         <h5 class="card-title">Navigation</h5>
                         <ul class="list-group">
-                            <li class="list-group-item"><a href="{{ url_for('home') }}">Home</a></li>
+                            <li class="list-group-item"><a href="{{ url_for('home') }}">Dashboard</a></li>
+                            <li class="list-group-item"><a href="{{ url_for('translations') }}">Translations</a></li>
                             <li class="list-group-item"><a href="{{ url_for('profile') }}">Profile</a></li>
-                            <li class="list-group-item"><a href="{{ url_for('error', error_type='not_implemented.html', error_message='The `Loan Request` feature is not implemented yet.') }}">Loan Request</a></li>
-                            <li class="list-group-item"><a href="{{ url_for('loan_details') }}">Loan Details</a></li>
-                            <li class="list-group-item"><a href="{{ url_for('logout') }}">Exit</a></li>
+                            <li class="list-group-item"><a href="{{ url_for('logout') }}">Sign Out</a></li>
                         </ul>
                     </div>
                 </div>

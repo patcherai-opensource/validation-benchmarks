@@ -3,18 +3,27 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Profile</title>
+    <title>TranslateCMS - Profile</title>
     <link href="{{ url_for('static', filename='css/bootstrap.min.css') }}" rel="stylesheet">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
 </head>
 <body>
-    <div class="container">
-        <div class="row justify-content-between mt-5">
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+        <div class="container">
+            <a class="navbar-brand" href="{{ url_for('home') }}">TranslateCMS</a>
+            <span class="navbar-text text-white">
+                Logged in as: {{ user.name }} ({{ user.role }})
+            </span>
+        </div>
+    </nav>
+
+    <div class="container mt-4">
+        <div class="row">
             <div class="col-md-9">
                 <h2>User Profile</h2>
                 <form method="post" enctype="multipart/form-data" action="{{ url_for('update_profile') }}">
                     <div class="mb-3">
-                        <label for="name" class="form-label">Name:</label>
+                        <label for="name" class="form-label">First Name:</label>
                         <input type="text" class="form-control" id="name" name="name" value="{{ user.name }}" required>
                     </div>
                     <div class="mb-3">
@@ -26,25 +35,16 @@
                         <input type="email" class="form-control" id="email" name="email" value="{{ user.email }}" required>
                     </div>
                     <div class="mb-3">
-                        <label for="loan_amount" class="form-label">Loan Amount:</label>
-                        <input type="text" class="form-control" id="loan_amount" name="loan_amount" value="{{ user.loan_amount }}" required>
+                        <label class="form-label">Role:</label>
+                        <input type="text" class="form-control" value="{{ user.role }}" disabled>
                     </div>
+                    <!-- Profile image upload -->
                     <div class="mb-3">
-                        <label for="loan_term_months" class="form-label">Loan Term (Months):</label>
-                        <input type="text" class="form-control" id="loan_term_months" name="loan_term_months" value="{{ user.loan_term_months }}" required>
-                    </div>
-                    <div class="mb-3">
-                        <label for="monthly_payment" class="form-label">Monthly Payment:</label>
-                        <input type="text" class="form-control" id="monthly_payment" name="monthly_payment" value="{{ user.monthly_payment }}" required>
-                    </div>
-                    <!-- New input for uploading profile image -->
-                    <div class="mb-3">
-                        <label for="image_profile_filename" class="form-label">Image Profile:</label>
+                        <label for="image_profile_filename" class="form-label">Profile Image:</label>
                         <input type="file" class="form-control" id="profile_image" name="image_profile" style="opacity:0;height:0;">
                     
                         <div class="input-group mb-3">
                             <span class="input-group-text" id="text_input_span_id">Select Image</span>
-                            <!-- use 'caret-color: transparent' to hide input cursor, set autocomplete to off to remove possible input hint -->
                             <input type="text" id='text_input_id' class="form-control" placeholder="{{ user.image_profile_filename }}" style="caret-color: transparent" autocomplete="off">
                         </div>
                     </div>
@@ -56,11 +56,11 @@
                     <div class="card-body">
                         <h5 class="card-title">Navigation</h5>
                         <ul class="list-group">
-                            <li class="list-group-item"><a href="{{ url_for('home') }}">Home</a></li>
+                            <li class="list-group-item"><a href="{{ url_for('home') }}">Dashboard</a></li>
+                            <li class="list-group-item"><a href="{{ url_for('translations') }}">Translations</a></li>
                             <li class="list-group-item"><a href="{{ url_for('profile') }}">Profile</a></li>
-                            <li class="list-group-item"><a href="{{ url_for('error', error_type='not_implemented.html', error_message='The `Loan Request` feature is not implemented yet.') }}">Loan Request</a></li>
-                            <li class="list-group-item"><a href="{{ url_for('loan_details') }}">Loan Details</a></li>
-                            <li class="list-group-item"><a href="{{ url_for('logout') }}">Exit</a></li>
+                            <li class="list-group-item"><a href="{{ url_for('export_translations') }}">Export API</a></li>
+                            <li class="list-group-item"><a href="{{ url_for('logout') }}">Sign Out</a></li>
                         </ul>
                     </div>
                 </div>
@@ -75,18 +75,15 @@
         </div>
     </div>
 
-    <!-- use online jQuery -->
+    <!-- jQuery -->
     <script src="{{ url_for('static', filename='js/jquery.min.js') }}"></script>
     <script>
-    // bind file-input-form click action to text-input-span
     $('#text_input_span_id').click(function () {
         $("#profile_image").trigger('click');
     })
-    // bind file-input-form click action to text-input-form
     $('#text_input_id').click(function () {
         $("#profile_image").trigger('click');
     })
-    // display file name in text-input-form    
     $("#profile_image").change(function () {            
         $('#text_input_id').val(this.value.replace(/C:\\fakepath\\/i, ''))
     })

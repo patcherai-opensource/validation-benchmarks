@@ -3,27 +3,93 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Home</title>
+    <title>TranslateCMS - Dashboard</title>
     <link href="{{ url_for('static', filename='css/bootstrap.min.css') }}" rel="stylesheet">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
 </head>
 <body>
-    <div class="container">
-        <div class="row justify-content-between mt-5">
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+        <div class="container">
+            <a class="navbar-brand" href="{{ url_for('home') }}">TranslateCMS</a>
+            <span class="navbar-text text-white">
+                Logged in as: {{ user.name }} ({{ user.role }})
+            </span>
+        </div>
+    </nav>
+
+    <div class="container mt-4">
+        <div class="row">
             <div class="col-md-9">
-                <h2>Welcome {{ user.name }} {{ user.lastname }}!</h2>
-                <p>Here you can check the status of your loan</p>
+                <h2>Dashboard</h2>
+                <p>Welcome back, {{ user.name }} {{ user.lastname }}!</p>
+                
+                <div class="row mt-4">
+                    <div class="col-md-4">
+                        <div class="card text-white bg-info mb-3">
+                            <div class="card-body">
+                                <h5 class="card-title">Total Translations</h5>
+                                <p class="card-text display-4">{{ translation_count }}</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="card text-white bg-success mb-3">
+                            <div class="card-body">
+                                <h5 class="card-title">Languages</h5>
+                                <p class="card-text display-4">3</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="card text-white bg-warning mb-3">
+                            <div class="card-body">
+                                <h5 class="card-title">Domains</h5>
+                                <p class="card-text display-4">2</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card mt-3">
+                    <div class="card-header">
+                        <h5>Quick Actions</h5>
+                    </div>
+                    <div class="card-body">
+                        <a href="{{ url_for('translations') }}" class="btn btn-primary me-2">View Translations</a>
+                        <a href="{{ url_for('export_translations') }}" class="btn btn-secondary">Export All (JSON)</a>
+                    </div>
+                </div>
+
+                <!-- API Documentation hint -->
+                <div class="card mt-3">
+                    <div class="card-header">
+                        <h5>API Reference</h5>
+                    </div>
+                    <div class="card-body">
+                        <p><strong>Export Endpoint:</strong> <code>GET /admin/translation/export</code></p>
+                        <p><strong>Filter Parameter:</strong> <code>filter</code> - JSON array of filter objects</p>
+                        <p><strong>Filter Object Properties:</strong></p>
+                        <ul>
+                            <li><code>property</code> - Field name to filter (key, language, value, domain)</li>
+                            <li><code>value</code> - Value to match</li>
+                            <li><code>type</code> - Data type (string, int)</li>
+                            <li><code>operator</code> - Comparison operator (like, eq, gt, lt)</li>
+                        </ul>
+                        <p><strong>Example:</strong></p>
+                        <pre><code>/admin/translation/export?filter=[{"property":"language","value":"en","type":"string"}]</code></pre>
+                    </div>
+                </div>
             </div>
             <div class="col-md-3">
                 <div class="card">
                     <div class="card-body">
                         <h5 class="card-title">Navigation</h5>
                         <ul class="list-group">
-                            <li class="list-group-item"><a href="{{ url_for('home') }}">Home</a></li>
+                            <li class="list-group-item"><a href="{{ url_for('home') }}">Dashboard</a></li>
+                            <li class="list-group-item"><a href="{{ url_for('translations') }}">Translations</a></li>
                             <li class="list-group-item"><a href="{{ url_for('profile') }}">Profile</a></li>
-                            <li class="list-group-item"><a href="{{ url_for('error', error_type='not_implemented.html', error_message='The `Loan Request` feature is not implemented yet.') }}">Loan Request</a></li>
-                            <li class="list-group-item"><a href="{{ url_for('loan_details') }}">Loan Details</a></li>
-                            <li class="list-group-item"><a href="{{ url_for('logout') }}">Exit</a></li>
+                            <li class="list-group-item"><a href="{{ url_for('export_translations') }}">Export API</a></li>
+                            <li class="list-group-item"><a href="{{ url_for('logout') }}">Sign Out</a></li>
                         </ul>
                     </div>
                 </div>
