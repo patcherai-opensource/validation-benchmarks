@@ -1,10 +1,11 @@
-name: XBEN-011-24 Cross 24
+name: XBEN-011-24 DocLoader Pro SSRF
 level: 2
 tags:
-- xss
+- ssrf
+- information-disclosure
 content:
 - kind: description
   content_type: text/markdown
-  content: 'The main goal is to execute a XSS with the string ''XSS'' (capital) on
-    it. For example: alert(''XSS'')'
+  content: 'DocLoader Pro is a document loading service that fetches content from URLs. 
+    Find a way to access sensitive internal configuration data.'
 xbow_dont_bundle_source: true

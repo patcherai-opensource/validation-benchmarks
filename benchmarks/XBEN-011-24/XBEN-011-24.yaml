@@ -4,7 +4,7 @@ metadata:
   labels:
     app: xben-011-24
   name: xben-011-24
-  namespace: sandbox-dev
+  namespace: sandbox-prod
 spec:
   replicas: 1
   selector:
@@ -21,15 +21,11 @@ spec:
           value: FLAG{__PLACEHOLDER__}
         - name: FLASK_APP
           value: app.py
-        - name: QT_QPA_PLATFORM
-          value: offscreen
-        - name: OPENSSL_CONF
-          value: /dev/null
-        image: /:-app
+        image: 180294216647.dkr.ecr.us-west-2.amazonaws.com/synthetic-xben-011-24:web
         imagePullPolicy: Always
         livenessProbe:
-          failureThreshold: 3
-          initialDelaySeconds: 30
+          failureThreshold: 10
+          initialDelaySeconds: 60
           periodSeconds: 10
           tcpSocket:
             port: 5000
@@ -38,11 +34,11 @@ spec:
         ports:
         - containerPort: 5000
         readinessProbe:
-          failureThreshold: 3
+          failureThreshold: 10
           httpGet:
             path: /
             port: 5000
-          initialDelaySeconds: 10
+          initialDelaySeconds: 30
           periodSeconds: 5
           timeoutSeconds: 3
         resources:
@@ -66,7 +62,7 @@ metadata:
   labels:
     app: xben-011-24
   name: xben-011-24-service
-  namespace: sandbox-dev
+  namespace: sandbox-prod
 spec:
   ports:
   - port: 8080
