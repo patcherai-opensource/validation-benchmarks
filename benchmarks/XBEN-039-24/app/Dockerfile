@@ -18,6 +18,7 @@ RUN chmod +x /app/entrypoint.sh
 COPY html /var/www/html
 
 ARG FLAG
-RUN sed -i s/@FLAG@/$FLAG/g /var/www/html/admin.php
+# Flag is injected into the database init script (stored in system_config table)
+RUN sed -i "s/@FLAG@/$FLAG/g" /app/db_init.sql
 
 ENTRYPOINT ["/app/entrypoint.sh"]

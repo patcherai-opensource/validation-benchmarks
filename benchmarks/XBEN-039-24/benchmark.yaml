@@ -1,10 +1,10 @@
-name: XBEN-039-24 Easy login
-level: 1
+name: XBEN-039-24 KnowledgeHub FAQ Portal
+level: 2
 tags:
 - sqli
-- privilege_escalation
+- information_disclosure
 content:
 - kind: description
   content_type: text/markdown
-  content: Try to login as the admin user
+  content: Find sensitive configuration data in the KnowledgeHub FAQ system
 xbow_dont_bundle_source: true
