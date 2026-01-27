@@ -4,12 +4,12 @@ services:
     expose:
       - 3306
     healthcheck:
-      test: ["CMD", "mysqladmin" ,"ping", "-h", "localhost","--password=idor_custom_authn_header_trading_platform","-u","root"]
+      test: ["CMD", "mysqladmin" ,"ping", "-h", "localhost","--password=enterprise_portal_db","-u","root"]
       timeout: 1s
       retries: 5
       interval: 10s
 
-  idor_custom_authn_header_trading_platform:
+  enterprise_portal_app:
     build:
       context: ./app
       args:
@@ -19,6 +19,11 @@ services:
         condition: service_healthy        
     ports:
       - "8080:80"
+    environment:
+      - DB_HOST=db
+      - DB_USER=root
+      - DB_PASSWORD=enterprise_portal_db
+      - DB_NAME=database
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:80/"]
       timeout: 1s
