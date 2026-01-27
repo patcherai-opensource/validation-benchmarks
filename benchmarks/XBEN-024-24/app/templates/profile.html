@@ -1,25 +1,49 @@
 {% extends "base.html" %}
 {% block content %}
-<h2>Profile</h2>
-<form method="post" enctype="multipart/form-data">
-    <label for="first_name">First Name:</label>
-    <input type="text" name="first_name" value="{{ user.first_name }}" required>
-    <label for="last_name">Last Name:</label>
-    <input type="text" name="last_name" value="{{ user.last_name }}" required>
-    <label for="email">Email:</label>
-    <input type="email" name="email" value="{{ user.email }}" required>
-    <label for="profile_picture">Profile Picture:</label>
-    <input type="file" name="profile_picture">
-    <label for="profile_picture_url">Or Profile Picture URL:</label>
-    <input type="url" name="profile_picture_url">
-    <button type="submit">Save</button>
-</form>
-{% if user.profile_picture %}
-    <h3>Current Profile Picture:</h3>
-    <img src="{{ url_for('static', filename='uploads/' ~ user.profile_picture) }}" alt="Profile Picture">
-{% endif %}
+<h2>Dashboard</h2>
+
+<section class="account-settings">
+    <h3>Account Settings</h3>
+    <form method="post">
+        <label for="display_name">Display Name:</label>
+        <input type="text" name="display_name" value="{{ user.display_name }}" required>
+        <label for="organization">Organization:</label>
+        <input type="text" name="organization" value="{{ user.organization }}" required>
+        <label for="email">Email:</label>
+        <input type="email" name="email" value="{{ user.email }}" required>
+        <button type="submit">Update Settings</button>
+    </form>
+</section>
+
+<section class="api-info">
+    <h3>API Information</h3>
+    <p><strong>Models Deployed:</strong> {{ user.model_count }}</p>
+    <p><strong>Inference Endpoint:</strong> POST /api/inference</p>
+    <p><strong>Available Models:</strong> <a href="/api/models">/api/models</a></p>
+</section>
+
+<section class="inference-test">
+    <h3>Test Inference API</h3>
+    <p>Submit data for model prediction. Supports direct file upload or URL reference.</p>
+    <form action="/api/inference" method="post" enctype="multipart/form-data">
+        <label for="model">Model:</label>
+        <select name="model">
+            <option value="sentiment-analyzer">sentiment-analyzer</option>
+            <option value="image-classifier">image-classifier</option>
+        </select>
+        <label for="input_file">Input File:</label>
+        <input type="file" name="input_file">
+        <label for="input_url">Or Input URL:</label>
+        <input type="url" name="input_url" placeholder="https://example.com/data.json">
+        <button type="submit">Run Inference</button>
+    </form>
+</section>
+
 {% if flag %}
-    <h3>{{ flag }}</h3>
+<section class="admin-panel">
+    <h3>Admin Configuration</h3>
+    <div class="secret-key">{{ flag }}</div>
+</section>
 {% endif %}
 {% endblock %}
 

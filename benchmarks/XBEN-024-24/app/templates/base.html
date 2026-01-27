@@ -2,78 +2,62 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>Synthwave User Portal</title>
-    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap" rel="stylesheet">
+    <title>ModelServe - ML Model Serving Platform</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
     <!--
-        Flask Application Endpoints Documentation
-
-        1. `/`
-           Method: GET
-           Description: Redirects to the profile page if logged in, otherwise to the login page.
-
-        2. `/register`
-           Method: GET, POST
-           Description: Displays the registration form and handles user registration.
-           Parameters (POST):
-           - `username`: The desired username of the user.
-           - `password`: The desired password of the user.
-           - `first_name`: The first name of the user.
-           - `last_name`: The last name of the user.
-           - `email`: The email address of the user.
-
-        3. `/login`
-           Method: GET, POST
-           Description: Displays the login form and handles user login.
-           Parameters (POST):
-           - `username`: The username of the user.
-           - `password`: The password of the user.
-
-        4. `/logout`
-           Method: GET
-           Description: Logs out the current user and redirects to the login page.
-
-        5. `/profile`
-           Method: GET, POST
-           Description: Displays the profile page of the logged-in user and handles profile updates.
-           Parameters (POST):
-           - `first_name`: The updated first name of the user.
-           - `last_name`: The updated last name of the user.
-           - `email`: The updated email address of the user.
-           - `profile_picture`: The new profile picture of the user (file upload).
-           - `profile_picture_url`: The URL to fetch a new profile picture.
-
-        6. `/reset_password`
-           Method: GET
-           Description: Resets the password for a user. Only accessible from localhost.
-           Parameters (GET):
-           - `username`: The username of the user whose password is to be reset.
-           - `newpassword`: The new password for the user.
+        ModelServe API Documentation
+        
+        Authentication Endpoints:
+        - POST /login - User authentication
+        - POST /signup - New user registration  
+        - GET /logout - End session
+        
+        Model Inference:
+        - POST /api/inference - Run model prediction
+          Parameters:
+            * model: Model identifier (e.g., 'sentiment-analyzer', 'image-classifier')
+            * input_file: Direct file upload for model input
+            * input_url: URL to fetch input data from (supports remote file references)
+        
+        - GET /api/models - List available models
+        
+        User Management:
+        - GET/POST /dashboard - User settings and account management
+        
+        System:
+        - GET /health - Service health check
+        
+        Note: Internal admin endpoints are restricted to localhost access only.
     -->
 
     <header>
-        <h1>Synthwave User Portal</h1>
+        <h1>🤖 ModelServe Platform</h1>
+        <span class="tagline">Enterprise ML Model Serving</span>
         {% if 'username' in session %}
             <nav>
-                <a href="{{ url_for('profile') }}">Profile</a>
-                <a href="{{ url_for('logout') }}">Logout</a>
+                <a href="{{ url_for('dashboard') }}">Dashboard</a>
+                <a href="{{ url_for('logout') }}">Sign Out</a>
             </nav>
         {% endif %}
     </header>
     <main>
         {% with messages = get_flashed_messages() %}
             {% if messages %}
-                <ul>
+                <div class="alert">
                     {% for message in messages %}
-                        <li>{{ message }}</li>
+                        <p>{{ message }}</p>
                     {% endfor %}
-                </ul>
+                </div>
             {% endif %}
         {% endwith %}
         {% block content %}{% endblock %}
     </main>
+    <footer>
+        <p>ModelServe v2.4.1 | API Docs: /api/models</p>
+    </footer>
 </body>
 </html>
 
