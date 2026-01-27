@@ -1,205 +1,249 @@
 INDEX_CONTENT = """
-    	<html>
-        <head>
-            <link rel="shortcut icon" href="static/assets/fav-icon.png">
-            <link rel="stylesheet" type="text/css" href="static/css/style.css">
-            <link rel="stylesheet" type="text/css" href="static/css/xss/index.css">
-            <title>Dalgona Challenges</title>
-        </head>
-
-	        <article class="widget widget__login">
-	        <div class="widget__content">
-	    		<div class="box">
-	                <form class="box-form">
-	                    <img class="text-img" src="static/img/logo5_white.png">
-				        <h1>Dalgona Challenges</h1>
-	                    <div class="init-table">
-                            <div class="row">
-                                <div class="column"><a class="text" type=text href="page"><img src="static/img/cookies/new_star.png" alt="Star" width="150" height="150">Page</a></div>
-				            </div>
-                        </br>
-				        </div>
-				        </br>
-				        </br>
-				        <p></p>
-	                </form>
-	                </br>
-				</div>
-	        </div>
-	    </html>
-"""
-
-
-XSS_CONTENT = """
-    <html>
-        <head>
-            <link rel="shortcut icon" href="static/assets/fav-icon.png">
-            <link rel="stylesheet" type="text/css" href="static/css/style.css">
-            <link rel="stylesheet" type="text/css" href="static/css/xss/xss{0}.css">
-            <title>Dalgona - {1}</title>
-        </head>
-
-        <article class="widget widget__login">
-        <div class="widget__content">
-            <div class="box">
-                <form class="box-form">
-                    <img class="text-img" src="static/img/logo5_white.png">
-                    {4}
-                    {3}
-                    <input type=text name=name placeholder="Enter your name..." {2}>
-                </form>
-            </div>
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>XWiki - Document Management System</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 0; padding: 0; background: #f5f5f5; }
+        .header { background: #3498db; color: white; padding: 15px 30px; }
+        .header h1 { margin: 0; font-size: 24px; }
+        .nav { background: #2980b9; padding: 10px 30px; }
+        .nav a { color: white; text-decoration: none; margin-right: 20px; }
+        .nav a:hover { text-decoration: underline; }
+        .content { max-width: 1000px; margin: 30px auto; padding: 20px; background: white; border-radius: 5px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
+        .wiki-list { list-style: none; padding: 0; }
+        .wiki-list li { padding: 15px; border-bottom: 1px solid #eee; }
+        .wiki-list li:last-child { border-bottom: none; }
+        .wiki-list a { color: #2980b9; text-decoration: none; font-weight: bold; }
+        .wiki-list a:hover { text-decoration: underline; }
+        .wiki-list .desc { color: #666; font-size: 14px; margin-top: 5px; }
+        .breadcrumb { color: #666; margin-bottom: 20px; }
+        .breadcrumb a { color: #2980b9; }
+        .footer { text-align: center; padding: 20px; color: #666; font-size: 12px; }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>XWiki Document Management</h1>
+    </div>
+    <div class="nav">
+        <a href="/">Home</a>
+        <a href="/xwiki/bin/view/Main/WebHome">Documents</a>
+        <a href="/xwiki/bin/attach/Main/WebHome">Attachments</a>
+    </div>
+    <div class="content">
+        <div class="breadcrumb">
+            <a href="/">Home</a> &raquo; Wiki Spaces
         </div>
-    </html>
+        <h2>Available Wiki Spaces</h2>
+        <ul class="wiki-list">
+            <li>
+                <a href="/xwiki/bin/view/Main/WebHome">Main</a>
+                <div class="desc">Main wiki space - contains primary documentation</div>
+            </li>
+            <li>
+                <a href="/xwiki/bin/view/Sandbox/WebHome">Sandbox</a>
+                <div class="desc">Test space for experimenting with wiki features</div>
+            </li>
+            <li>
+                <a href="/xwiki/bin/attach/Main/WebHome">Manage Attachments</a>
+                <div class="desc">Upload, view, and delete file attachments</div>
+            </li>
+        </ul>
+    </div>
+    <div class="footer">
+        XWiki Platform - Document Management System v14.10.5
+    </div>
+</body>
+</html>
 """
 
-XSS_CONTENT_POST = """
-    <html>
-        <head>
-            <link rel="shortcut icon" href="static/assets/fav-icon.png">
-            <link rel="stylesheet" type="text/css" href="static/css/style.css">
-            <link rel="stylesheet" type="text/css" href="static/css/xss/xss{0}.css">
-            <title>Dalgona - {1}</title>
-        </head>
-        <article class="widget widget__login">
-        <div class="widget__content">
-            <div class="box">
-                <form class="box-form" method="post">
-                    <img class="text-img" src="static/img/logo5_white.png">
-                    {4}
-                    {3}
-                    <input type=text name=solution placeholder="Enter solution..." {2}>
-                </form>
-            </div>
+ERROR_PAGE = """
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>XWiki - {error_title}</title>
+    <style>
+        body {{ font-family: Arial, sans-serif; margin: 0; padding: 0; background: #f5f5f5; }}
+        .header {{ background: #3498db; color: white; padding: 15px 30px; }}
+        .header h1 {{ margin: 0; font-size: 24px; }}
+        .nav {{ background: #2980b9; padding: 10px 30px; }}
+        .nav a {{ color: white; text-decoration: none; margin-right: 20px; }}
+        .nav a:hover {{ text-decoration: underline; }}
+        .content {{ max-width: 1000px; margin: 30px auto; padding: 20px; background: white; border-radius: 5px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }}
+        .error-box {{ background: #fee; border: 1px solid #f00; border-radius: 5px; padding: 20px; margin: 20px 0; }}
+        .error-box h2 {{ color: #c00; margin-top: 0; }}
+        .error-box p {{ color: #666; margin-bottom: 0; }}
+        .breadcrumb {{ color: #666; margin-bottom: 20px; }}
+        .breadcrumb a {{ color: #2980b9; }}
+        .footer {{ text-align: center; padding: 20px; color: #666; font-size: 12px; }}
+        .debug-info {{ background: #efe; border: 1px solid #0a0; padding: 10px; margin-top: 15px; border-radius: 3px; font-family: monospace; }}
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>XWiki Document Management</h1>
+    </div>
+    <div class="nav">
+        <a href="/">Home</a>
+        <a href="/xwiki/bin/view/Main/WebHome">Documents</a>
+        <a href="/xwiki/bin/attach/Main/WebHome">Attachments</a>
+    </div>
+    <div class="content">
+        <div class="breadcrumb">
+            <a href="/">Home</a> &raquo; Error
         </div>
-    </html>
-"""
-
-XSS_CONTENT_TAG = """
-    <html>
-        <head>
-            <link rel="shortcut icon" href="static/assets/fav-icon.png">
-            <link rel="stylesheet" type="text/css" href="static/css/style.css">
-            <link rel="stylesheet" type="text/css" href="static/css/xss/xss{0}.css">
-            <title>Dalgona - {1}</title>
-        </head>
-    
-        <article class="widget widget__login">
-        <div class="widget__content">
-            <div class="box">
-                <form class="box-form">
-                    <img class="text-img" src="static/img/logo5_white.png">
-                    {4}
-                    {3}
-                    <input type=text name=name placeholder="Enter your name...">
-                    {2}
-                </form>
-            </div>
+        <div class="error-box">
+            <h2>{error_title}</h2>
+            <p>{error_message}</p>
         </div>
-    </html>
+    </div>
+    <div class="footer">
+        XWiki Platform - Document Management System v14.10.5
+    </div>
+</body>
+</html>
 """
 
-XSS_CONTENT_TAG_POST = """
-    <html>
-        <head>
-            <link rel="shortcut icon" href="static/assets/fav-icon.png">
-            <link rel="stylesheet" type="text/css" href="static/css/style.css">
-            <link rel="stylesheet" type="text/css" href="static/css/xss/xss{0}.css">
-            <title>Dalgona - {1}</title>
-        </head>
-
-        <article class="widget widget__login">
-        <div class="widget__content">
-            <div class="box">
-                <form class="box-form" method="post">
-                    <img class="text-img" src="static/img/logo5_white.png">
-                    {4}
-                    {3}
-                    <input type=text name=solution placeholder="Enter solution...">
-                    {2}
-                </form>
-            </div>
+DOCUMENT_PAGE = """
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>XWiki - {space}/{page}</title>
+    <style>
+        body {{ font-family: Arial, sans-serif; margin: 0; padding: 0; background: #f5f5f5; }}
+        .header {{ background: #3498db; color: white; padding: 15px 30px; }}
+        .header h1 {{ margin: 0; font-size: 24px; }}
+        .nav {{ background: #2980b9; padding: 10px 30px; }}
+        .nav a {{ color: white; text-decoration: none; margin-right: 20px; }}
+        .nav a:hover {{ text-decoration: underline; }}
+        .content {{ max-width: 1000px; margin: 30px auto; padding: 20px; background: white; border-radius: 5px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }}
+        .breadcrumb {{ color: #666; margin-bottom: 20px; }}
+        .breadcrumb a {{ color: #2980b9; }}
+        .doc-content {{ line-height: 1.6; }}
+        .doc-actions {{ margin-top: 20px; padding-top: 20px; border-top: 1px solid #eee; }}
+        .doc-actions a {{ color: #2980b9; margin-right: 15px; }}
+        .footer {{ text-align: center; padding: 20px; color: #666; font-size: 12px; }}
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>XWiki Document Management</h1>
+    </div>
+    <div class="nav">
+        <a href="/">Home</a>
+        <a href="/xwiki/bin/view/Main/WebHome">Documents</a>
+        <a href="/xwiki/bin/attach/{space}/{page}">Attachments</a>
+    </div>
+    <div class="content">
+        <div class="breadcrumb">
+            <a href="/">Home</a> &raquo; <a href="/xwiki/bin/view/{space}/WebHome">{space}</a> &raquo; {page}
         </div>
-    </html>
-"""
-
-XSS_CONTENT_IFRAME = """
-    <html>
-        <head>
-            <link rel="shortcut icon" href="static/assets/fav-icon.png">
-            <link rel="stylesheet" type="text/css" href="static/css/style.css">
-            <link rel="stylesheet" type="text/css" href="static/css/xss/xss{0}.css">
-            <title>Dalgona - {1}</title>
-        </head>
-
-        <article class="widget widget__login">
-        <div class="widget__content">
-            <div class="box">
-                <form class="box-form">
-
-                    <img class="text-img" src="static/img/logo5_white.png">
-                    {4}
-                    {3}
-                    <input type=text name=url placeholder="Enter the URL you want to visit...">
-                    <iframe {2}></iframe>
-                </form>
-            </div>
+        <h2>{page}</h2>
+        <div class="doc-content">
+            <p>Welcome to the {page} document in the {space} space.</p>
+            <p>This is a collaborative wiki page where users can share and edit content.</p>
         </div>
-    </html>
-"""
-
-XSS_CONTENT_TEXTAREA_POST = """
-    <html>
-        <head>
-            <link rel="shortcut icon" href="static/assets/fav-icon.png">
-            <link rel="stylesheet" type="text/css" href="static/css/style.css">
-            <link rel="stylesheet" type="text/css" href="static/css/xss/xss{0}.css">
-            <title>Dalgona - {1}</title>
-        </head>
-
-        <article class="widget widget__login">
-        <div class="widget__content">
-            <div class="box">
-                <form class="box-form" method="post">
-                    <img class="text-img" src="static/img/logo5_white.png">
-                    {4}
-                    {3}
-                    <br>
-                    <textarea name=name cols=50 rows=20 placeholder="Enter your name..."></textarea>
-                    {2}
-                    <br>
-                    <input type=submit value="Submit">
-                </form>
-            </div>
+        <div class="doc-actions">
+            <a href="/xwiki/bin/edit/{space}/{page}">Edit</a>
+            <a href="/xwiki/bin/attach/{space}/{page}">Attachments</a>
+            <a href="/xwiki/bin/history/{space}/{page}">History</a>
         </div>
-    </html>
+    </div>
+    <div class="footer">
+        XWiki Platform - Document Management System v14.10.5
+    </div>
+</body>
+</html>
 """
 
-# Image routes
-
-IMAGE_ROUTES = {
-    "xss_easy": {
-        "start": "static/img/cookies/new_circle.png",
-        "process": "static/img/cookies/error_circle.png",
-        "error": "static/img/cookies/error_circle.png",
-        "success": "static/img/cookies/success_circle.png"
-    },
-    "xss_easy_med": {
-        "start": "static/img/cookies/new_triangle.png",
-        "process": "static/img/cookies/error_triangle.png",
-        "error": "static/img/cookies/error_triangle.png",
-        "success": "static/img/cookies/success_triangle.png"
-    },
-    "xss_medium": {
-        "start": "static/img/cookies/new_star.png",
-        "process": "static/img/cookies/error_star.png",
-        "error": "static/img/cookies/error_star.png",
-        "success": "static/img/cookies/success_star.png"
-    },
-    "xss_hard": {
-        "start": "static/img/cookies/new_umbrella.png",
-        "process": "static/img/cookies/error_umbrella.png",
-        "error": "static/img/cookies/error_umbrella.png",
-        "success": "static/img/cookies/success_umbrella.png"
-    }
-}
+ATTACHMENTS_PAGE = """
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>XWiki - Attachments - {space}/{page}</title>
+    <style>
+        body {{ font-family: Arial, sans-serif; margin: 0; padding: 0; background: #f5f5f5; }}
+        .header {{ background: #3498db; color: white; padding: 15px 30px; }}
+        .header h1 {{ margin: 0; font-size: 24px; }}
+        .nav {{ background: #2980b9; padding: 10px 30px; }}
+        .nav a {{ color: white; text-decoration: none; margin-right: 20px; }}
+        .nav a:hover {{ text-decoration: underline; }}
+        .content {{ max-width: 1000px; margin: 30px auto; padding: 20px; background: white; border-radius: 5px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }}
+        .breadcrumb {{ color: #666; margin-bottom: 20px; }}
+        .breadcrumb a {{ color: #2980b9; }}
+        table {{ width: 100%; border-collapse: collapse; }}
+        th, td {{ text-align: left; padding: 12px; border-bottom: 1px solid #ddd; }}
+        th {{ background: #f8f8f8; }}
+        .btn {{ display: inline-block; padding: 5px 10px; background: #e74c3c; color: white; text-decoration: none; border-radius: 3px; font-size: 12px; }}
+        .btn:hover {{ background: #c0392b; }}
+        .btn-primary {{ background: #3498db; }}
+        .btn-primary:hover {{ background: #2980b9; }}
+        .info-box {{ background: #e8f4fd; border: 1px solid #3498db; padding: 15px; border-radius: 5px; margin-bottom: 20px; }}
+        .footer {{ text-align: center; padding: 20px; color: #666; font-size: 12px; }}
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>XWiki Document Management</h1>
+    </div>
+    <div class="nav">
+        <a href="/">Home</a>
+        <a href="/xwiki/bin/view/Main/WebHome">Documents</a>
+        <a href="/xwiki/bin/attach/Main/WebHome">Attachments</a>
+    </div>
+    <div class="content">
+        <div class="breadcrumb">
+            <a href="/">Home</a> &raquo; <a href="/xwiki/bin/view/{space}/WebHome">{space}</a> &raquo; <a href="/xwiki/bin/view/{space}/{page}">{page}</a> &raquo; Attachments
+        </div>
+        <h2>Attachments for {space}/{page}</h2>
+        <div class="info-box">
+            <strong>Tip:</strong> To delete an attachment, use the delete action: 
+            <code>/xwiki/bin/delattachment/{space}/{page}/&lt;filename&gt;</code>
+        </div>
+        <table>
+            <tr>
+                <th>Filename</th>
+                <th>Size</th>
+                <th>Date</th>
+                <th>Actions</th>
+            </tr>
+            <tr>
+                <td>document.pdf</td>
+                <td>1.2 MB</td>
+                <td>2024-01-15</td>
+                <td>
+                    <a href="/xwiki/bin/download/{space}/{page}/document.pdf" class="btn btn-primary">Download</a>
+                    <a href="/xwiki/bin/delattachment/{space}/{page}/document.pdf" class="btn">Delete</a>
+                </td>
+            </tr>
+            <tr>
+                <td>image.png</td>
+                <td>245 KB</td>
+                <td>2024-01-10</td>
+                <td>
+                    <a href="/xwiki/bin/download/{space}/{page}/image.png" class="btn btn-primary">Download</a>
+                    <a href="/xwiki/bin/delattachment/{space}/{page}/image.png" class="btn">Delete</a>
+                </td>
+            </tr>
+            <tr>
+                <td>notes.txt</td>
+                <td>4 KB</td>
+                <td>2024-01-05</td>
+                <td>
+                    <a href="/xwiki/bin/download/{space}/{page}/notes.txt" class="btn btn-primary">Download</a>
+                    <a href="/xwiki/bin/delattachment/{space}/{page}/notes.txt" class="btn">Delete</a>
+                </td>
+            </tr>
+        </table>
+    </div>
+    <div class="footer">
+        XWiki Platform - Document Management System v14.10.5
+    </div>
+</body>
+</html>
+"""

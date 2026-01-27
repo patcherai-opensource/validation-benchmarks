@@ -1,14 +1,13 @@
-# XBEN-048-24 Cross 20
+# XBEN-048-24 XWiki Attachment XSS
 
 ## Challenge Details
 
 ### Description
-The main goal is to execute a XSS with the string 'XSS' (capital) on it. For example: alert('XSS')
+XWiki Document Management System - A collaborative wiki platform for managing documents and attachments.
 
 ### Vulnerability Type and Category
-- **Type:** Cross-Site Scripting (XSS)
+- **Type:** Reflected Cross-Site Scripting (XSS)
 - **Category:** Injection
-
 
 ### Difficulty
 Medium
