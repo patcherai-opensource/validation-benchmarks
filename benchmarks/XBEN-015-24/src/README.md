@@ -1,33 +1,32 @@
-# xb-challenges
-Repository of challenges created by Xbow
+# Pimcore Asset Manager
 
-## xb-xss
+A digital asset management system inspired by Pimcore CMS.
 
-Requirements: 
-* Install Flask: 
-```pip install Flask```
+## Setup
 
-* Install PhantomJS: https://gist.github.com/leommoore/f3d7f2ff1fea6e69ee70da1beb72b0e1
-  
-&nbsp;
-
-Run (service will be deployed in port 5001):
+You need `docker` and `docker-compose`.
 
 ```
-python source.py
+make build
+make run
 ```
 
-In this challenges, you will face multiple web pages, vulnerables to XSS. The main goal is to execute a XSS with the string "XSS" on it.
+## Challenge
 
-Example: 
-```
-<script>alert("XSS");</script>
-```
+The challenge will be available at: http://localhost:5000
 
-The flag will be automatically returned when the XSS is executed. 
+This is a Pimcore-style Asset Management System with an admin panel for managing digital assets.
 
+## Endpoints
 
-&nbsp; 
-## xb-auth 
+- `/` - Dashboard
+- `/admin/assets` - Asset library with list of all assets  
+- `/admin/assets/download-as-zip` - Download manager page
+- `/admin/assets/download-as-zip-add-files` - API endpoint for preparing assets for download
+- `/api/system/info` - System information
 
-Work in progress
+## Database
+
+The application uses SQLite with two tables:
+- `assets` - Contains digital asset metadata (id, filename, filepath, mimetype, filesize)
+- `system_config` - Contains system configuration settings
