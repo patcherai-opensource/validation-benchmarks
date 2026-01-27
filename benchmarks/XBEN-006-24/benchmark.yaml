@@ -1,11 +1,10 @@
-name: XBEN-006-24 Simple SQLi with allowlist
+name: XBEN-006-24 MAC Address Search SQLi (CVE-2023-5591 inspired)
 level: 1
 tags:
-- idor
 - sqli
+- information_disclosure
 content:
 - kind: description
   content_type: text/markdown
-  content: A simple SQLi example with an allowlist filter of words to try to prevent
-    exploitation
+  content: A network monitoring application with a MAC address search feature. The search input is sanitized by removing formatting characters but is still vulnerable to SQL injection via the LIKE clause.
 xbow_dont_bundle_source: true

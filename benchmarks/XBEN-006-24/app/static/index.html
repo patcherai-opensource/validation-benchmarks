@@ -3,92 +3,79 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ultimate Job Aggregator</title>
+    <title>NetMonitor - Network Device Management</title>
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        .navbar-brand { font-weight: bold; }
+        .sidebar { background-color: #343a40; min-height: calc(100vh - 56px); }
+        .sidebar a { color: #fff; padding: 10px 15px; display: block; }
+        .sidebar a:hover { background-color: #495057; text-decoration: none; }
+        .status-up { color: #28a745; }
+        .status-down { color: #dc3545; }
+    </style>
 </head>
 <body>
-    <div class="container mt-5">
-        <h1 class="text-center">Ultimate Job Aggregator</h1>
-        <div class="row justify-content-center mt-4">
-            <div class="col-md-6">
-                <form id="filter-form">
-                    <div class="form-group">
-                        <label for="job-type">Filter by Job Type</label>
-                        <select id="job-type" class="form-control">
-                            <option value="">All</option>
-                            <option value="back-end">back-end</option>
-                            <option value="front-end">front-end</option>
-                            <option value="private">private</option>
-                        </select>
+    <nav class="navbar navbar-dark bg-dark">
+        <a class="navbar-brand" href="/">NetMonitor</a>
+        <span class="navbar-text">Network Device Management System v2.4.1</span>
+    </nav>
+    
+    <div class="container-fluid">
+        <div class="row">
+            <nav class="col-md-2 d-none d-md-block sidebar py-3">
+                <a href="/">Dashboard</a>
+                <a href="/api/devices">Devices</a>
+                <a href="/search/mac">MAC Address Search</a>
+            </nav>
+            
+            <main role="main" class="col-md-10 ml-sm-auto px-4 py-4">
+                <h2>Dashboard</h2>
+                <p class="lead">Welcome to NetMonitor - Your Network Monitoring Solution</p>
+                
+                <div class="card mt-4">
+                    <div class="card-header">
+                        <h5>Monitored Devices</h5>
                     </div>
-                    <button type="submit" class="btn btn-primary btn-block">Filter Jobs</button>
-                </form>
-                <div class="mt-4" id="result"></div>
-            </div>
+                    <div class="card-body">
+                        <div id="devices-list">Loading devices...</div>
+                    </div>
+                </div>
+                
+                <div class="card mt-4">
+                    <div class="card-header">
+                        <h5>Quick Search</h5>
+                    </div>
+                    <div class="card-body">
+                        <p>Use the <a href="/search/mac">MAC Address Search</a> to find interfaces by their physical address.</p>
+                    </div>
+                </div>
+            </main>
         </div>
     </div>
 
     <script>
-        document.getElementById('filter-form').addEventListener('submit', async function(event) {
-            event.preventDefault();
-            const jobType = document.getElementById('job-type').value;
-            const resultDiv = document.getElementById('result');
-            resultDiv.innerHTML = '';
-
+        async function loadDevices() {
             try {
-                const response = await fetch('/jobs', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({ job_type: jobType })
+                const response = await fetch('/api/devices');
+                const devices = await response.json();
+                
+                let html = '<table class="table table-striped"><thead><tr><th>Hostname</th><th>IP Address</th><th>Status</th></tr></thead><tbody>';
+                devices.forEach(device => {
+                    const statusClass = device.status === 'up' ? 'status-up' : 'status-down';
+                    html += `<tr>
+                        <td>${device.hostname}</td>
+                        <td>${device.ip_address}</td>
+                        <td class="${statusClass}">${device.status}</td>
+                    </tr>`;
                 });
-                if (response.ok) {
-                    const data = await response.json();
-                    if (data.length === 0) {
-                        resultDiv.innerHTML = '<div class="alert alert-warning" role="alert">No jobs found</div>';
-                    } else {
-                        let jobsTable = `
-                            <table class="table table-bordered mt-4">
-                                <thead>
-                                    <tr>
-                                        <th>ID</th>
-                                        <th>Name</th>
-                                        <th>Type</th>
-                                        <th>Description</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                        `;
-                        data.forEach(user => {
-                            jobsTable += `
-                                <tr>
-                                    <td>${user.id}</td>
-                                    <td>${user.name}</td>
-                                    <td>${user.type}</td>
-                                    <td>${user.description}</td>
-                                </tr>
-                            `;
-                        });
-                        jobsTable += '</tbody></table>';
-                        resultDiv.innerHTML = jobsTable;
-                    }
-                } else {
-                    const errorData = await response.json();
-                    resultDiv.innerHTML = `
-                        <div class="alert alert-danger" role="alert">
-                            Error: ${errorData.detail}
-                        </div>
-                    `;
-                }
+                html += '</tbody></table>';
+                document.getElementById('devices-list').innerHTML = html;
             } catch (error) {
-                resultDiv.innerHTML = `
-                    <div class="alert alert-danger" role="alert">
-                        Network error or server is down.
-                    </div>
-                `;
+                document.getElementById('devices-list').innerHTML = '<div class="alert alert-danger">Failed to load devices</div>';
             }
-        });
+        }
+        
+        loadDevices();
     </script>
 </body>
 </html>
