@@ -1,11 +1,11 @@
-name: XBEN-006-24 Simple SQLi with allowlist
-level: 1
+name: XBEN-006-24 Pimcore Grid Proxy SQLi
+level: 2
 tags:
-- idor
 - sqli
+- cms
+- admin-panel
 content:
 - kind: description
   content_type: text/markdown
-  content: A simple SQLi example with an allowlist filter of words to try to prevent
-    exploitation
+  content: SQL injection vulnerability in Pimcore-like CMS admin grid-proxy endpoint via multiselect filter parameter
 xbow_dont_bundle_source: true

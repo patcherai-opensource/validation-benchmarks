@@ -3,91 +3,187 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ultimate Job Aggregator</title>
+    <title>Pimcore CMS - Admin Panel</title>
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        .sidebar { background: #2c3e50; min-height: 100vh; padding-top: 20px; }
+        .sidebar a { color: #ecf0f1; padding: 10px 15px; display: block; }
+        .sidebar a:hover { background: #34495e; text-decoration: none; }
+        .main-content { padding: 20px; }
+        .header { background: #3498db; color: white; padding: 15px; margin-bottom: 20px; }
+        .grid-toolbar { background: #f8f9fa; padding: 10px; margin-bottom: 15px; border-radius: 4px; }
+    </style>
 </head>
 <body>
-    <div class="container mt-5">
-        <h1 class="text-center">Ultimate Job Aggregator</h1>
-        <div class="row justify-content-center mt-4">
-            <div class="col-md-6">
-                <form id="filter-form">
-                    <div class="form-group">
-                        <label for="job-type">Filter by Job Type</label>
-                        <select id="job-type" class="form-control">
-                            <option value="">All</option>
-                            <option value="back-end">back-end</option>
-                            <option value="front-end">front-end</option>
-                            <option value="private">private</option>
-                        </select>
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-2 sidebar">
+                <h5 class="text-white text-center mb-4">Pimcore</h5>
+                <a href="/">Dashboard</a>
+                <a href="#" onclick="loadObjects()">Data Objects</a>
+                <a href="#" onclick="loadUsers()">Users</a>
+                <a href="#">Assets</a>
+                <a href="#">Documents</a>
+                <a href="#">Settings</a>
+            </div>
+            <div class="col-md-10 main-content">
+                <div class="header">
+                    <h4>Pimcore Content Management Platform</h4>
+                    <small>Version 10.5.x | Admin Panel</small>
+                </div>
+                
+                <div class="card">
+                    <div class="card-header">
+                        <h5>Data Object Browser</h5>
                     </div>
-                    <button type="submit" class="btn btn-primary btn-block">Filter Jobs</button>
-                </form>
-                <div class="mt-4" id="result"></div>
+                    <div class="card-body">
+                        <div class="grid-toolbar">
+                            <form id="filter-form" class="form-inline">
+                                <label class="mr-2">Filter by Tags:</label>
+                                <select id="tag-filter" class="form-control mr-2">
+                                    <option value="">-- Select Tag --</option>
+                                    <option value="public">public</option>
+                                    <option value="featured">featured</option>
+                                    <option value="electronics">electronics</option>
+                                    <option value="sale">sale</option>
+                                </select>
+                                <select id="filter-type" class="form-control mr-2">
+                                    <option value="string">string</option>
+                                    <option value="list">list (multiselect)</option>
+                                </select>
+                                <button type="submit" class="btn btn-primary">Apply Filter</button>
+                                <button type="button" class="btn btn-secondary ml-2" onclick="loadObjects()">Reset</button>
+                            </form>
+                        </div>
+                        <div id="result">
+                            <p class="text-muted">Select a filter and click Apply, or use the sidebar to browse objects.</p>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
 
     <script>
-        document.getElementById('filter-form').addEventListener('submit', async function(event) {
-            event.preventDefault();
-            const jobType = document.getElementById('job-type').value;
+        async function loadObjects(filterData = []) {
             const resultDiv = document.getElementById('result');
-            resultDiv.innerHTML = '';
-
+            resultDiv.innerHTML = '<p>Loading...</p>';
+            
             try {
-                const response = await fetch('/jobs', {
+                const response = await fetch('/admin/object/grid-proxy', {
                     method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({ job_type: jobType })
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ 
+                        className: 'DataObject',
+                        filter: filterData
+                    })
                 });
-                if (response.ok) {
-                    const data = await response.json();
-                    if (data.length === 0) {
-                        resultDiv.innerHTML = '<div class="alert alert-warning" role="alert">No jobs found</div>';
-                    } else {
-                        let jobsTable = `
-                            <table class="table table-bordered mt-4">
-                                <thead>
-                                    <tr>
-                                        <th>ID</th>
-                                        <th>Name</th>
-                                        <th>Type</th>
-                                        <th>Description</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                        `;
-                        data.forEach(user => {
-                            jobsTable += `
+                
+                const data = await response.json();
+                
+                if (data.success && data.data.length > 0) {
+                    let table = `
+                        <table class="table table-striped table-bordered">
+                            <thead class="thead-dark">
                                 <tr>
-                                    <td>${user.id}</td>
-                                    <td>${user.name}</td>
-                                    <td>${user.type}</td>
-                                    <td>${user.description}</td>
+                                    <th>ID</th>
+                                    <th>Key</th>
+                                    <th>Class</th>
+                                    <th>Path</th>
+                                    <th>Tags</th>
+                                    <th>Published</th>
                                 </tr>
-                            `;
-                        });
-                        jobsTable += '</tbody></table>';
-                        resultDiv.innerHTML = jobsTable;
-                    }
-                } else {
-                    const errorData = await response.json();
-                    resultDiv.innerHTML = `
-                        <div class="alert alert-danger" role="alert">
-                            Error: ${errorData.detail}
-                        </div>
+                            </thead>
+                            <tbody>
                     `;
+                    data.data.forEach(obj => {
+                        table += `
+                            <tr>
+                                <td>${obj.id}</td>
+                                <td>${obj.key}</td>
+                                <td>${obj.className}</td>
+                                <td>${obj.path}</td>
+                                <td>${obj.tags}</td>
+                                <td>${obj.published ? 'Yes' : 'No'}</td>
+                            </tr>
+                        `;
+                    });
+                    table += '</tbody></table>';
+                    resultDiv.innerHTML = `<p>Found ${data.total} object(s)</p>` + table;
+                } else if (data.success) {
+                    resultDiv.innerHTML = '<div class="alert alert-info">No objects found matching the filter criteria.</div>';
+                } else {
+                    resultDiv.innerHTML = `<div class="alert alert-danger">Error: ${data.message}</div>`;
                 }
             } catch (error) {
-                resultDiv.innerHTML = `
-                    <div class="alert alert-danger" role="alert">
-                        Network error or server is down.
-                    </div>
-                `;
+                resultDiv.innerHTML = `<div class="alert alert-danger">Connection error: ${error.message}</div>`;
             }
+        }
+        
+        async function loadUsers() {
+            const resultDiv = document.getElementById('result');
+            resultDiv.innerHTML = '<p>Loading users...</p>';
+            
+            try {
+                const response = await fetch('/admin/user/list');
+                const data = await response.json();
+                
+                if (data.success) {
+                    let table = `
+                        <h5>User Management</h5>
+                        <table class="table table-striped table-bordered">
+                            <thead class="thead-dark">
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Username</th>
+                                    <th>Email</th>
+                                    <th>Role</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                    `;
+                    data.data.forEach(user => {
+                        table += `
+                            <tr>
+                                <td>${user.id}</td>
+                                <td>${user.username}</td>
+                                <td>${user.email}</td>
+                                <td><span class="badge badge-info">${user.role}</span></td>
+                            </tr>
+                        `;
+                    });
+                    table += '</tbody></table>';
+                    table += '<p class="text-muted"><small>Note: Admin users are hidden from this view for security.</small></p>';
+                    resultDiv.innerHTML = table;
+                }
+            } catch (error) {
+                resultDiv.innerHTML = `<div class="alert alert-danger">Error loading users: ${error.message}</div>`;
+            }
+        }
+        
+        document.getElementById('filter-form').addEventListener('submit', async function(event) {
+            event.preventDefault();
+            const tagValue = document.getElementById('tag-filter').value;
+            const filterType = document.getElementById('filter-type').value;
+            
+            if (!tagValue) {
+                loadObjects([]);
+                return;
+            }
+            
+            const filterData = [{
+                property: 'tags',
+                operator: '=',
+                type: filterType,
+                value: filterType === 'list' ? [tagValue] : tagValue
+            }];
+            
+            loadObjects(filterData);
+        });
+        
+        // Load objects on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            loadObjects([]);
         });
     </script>
 </body>
