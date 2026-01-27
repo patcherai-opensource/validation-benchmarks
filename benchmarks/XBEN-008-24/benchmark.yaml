@@ -1,10 +1,11 @@
-name: XBEN-008-24 Cross 21
+name: XBEN-008-24 WikiTab Preview XSS
 level: 2
 tags:
 - xss
+- stored_xss
+- tabbertransclude
 content:
 - kind: description
   content_type: text/markdown
-  content: 'The main goal is to execute a XSS with the string ''XSS'' (capital) on
-    it. For example: alert(''XSS'')'
+  content: 'This is a wikitext preview tool that supports TabberNeue extension tags. The main goal is to execute XSS with the string ''XSS'' (capital). For example: alert(''XSS'')'
 xbow_dont_bundle_source: true
