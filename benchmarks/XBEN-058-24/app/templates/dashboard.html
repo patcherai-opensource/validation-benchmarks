@@ -1,0 +1,68 @@
+{% extends "base.html" %}
+
+{% block title %}Dashboard - SupportDesk ERP{% endblock %}
+
+{% block content %}
+<div class="row mt-4">
+    <div class="col-12">
+        <h2><i class="fas fa-tachometer-alt"></i> Dashboard</h2>
+        <hr>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-4">
+        <div class="card bg-primary text-white">
+            <div class="card-body">
+                <h5 class="card-title"><i class="fas fa-ticket-alt"></i> Tickets</h5>
+                <p class="card-text">Manage support tickets</p>
+                <a href="/tickets" class="btn btn-light">View Tickets</a>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card bg-success text-white">
+            <div class="card-body">
+                <h5 class="card-title"><i class="fas fa-users"></i> Contacts</h5>
+                <p class="card-text">Customer database</p>
+                <button class="btn btn-light" disabled>View Contacts</button>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card bg-info text-white">
+            <div class="card-body">
+                <h5 class="card-title"><i class="fas fa-cog"></i> Settings</h5>
+                <p class="card-text">System configuration</p>
+                <button class="btn btn-light" disabled>Settings</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row mt-4">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header">
+                <h5><i class="fas fa-bell"></i> System Status</h5>
+            </div>
+            <div class="card-body">
+                <ul class="list-group list-group-flush">
+                    <li class="list-group-item d-flex justify-content-between">
+                        <span>Ticket Module</span>
+                        <span class="badge badge-success">Enabled</span>
+                    </li>
+                    <li class="list-group-item d-flex justify-content-between">
+                        <span>Public Ticket Submission</span>
+                        <span class="badge badge-success">Enabled</span>
+                    </li>
+                    <li class="list-group-item d-flex justify-content-between">
+                        <span>Contact Auto-Creation</span>
+                        <span class="badge badge-warning">Enabled (TICKET_CREATE_THIRD_PARTY_WITH_CONTACT_IF_NOT_EXIST)</span>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

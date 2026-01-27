@@ -1,0 +1,74 @@
+{% extends "base.html" %}
+
+{% block title %}Submit Support Ticket - SupportDesk ERP{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center mt-4">
+    <div class="col-md-8">
+        <div class="card">
+            <div class="card-header bg-success text-white">
+                <h4 class="mb-0"><i class="fas fa-ticket-alt"></i> Submit Support Ticket</h4>
+            </div>
+            <div class="card-body">
+                <p class="text-muted">
+                    Use this form to submit a support request. Our team will respond within 24-48 hours.
+                </p>
+                
+                <form id="ticketForm" method="post" action="/public/ticket/submit">
+                    <div class="form-group">
+                        <label for="email">Email Address *</label>
+                        <input type="email" class="form-control" id="email" name="email" 
+                               placeholder="your.email@example.com" required>
+                        <small class="form-text text-muted">We'll use this to contact you about your request.</small>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="subject">Subject *</label>
+                        <input type="text" class="form-control" id="subject" name="subject" 
+                               placeholder="Brief description of your issue" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="description">Description *</label>
+                        <textarea class="form-control" id="description" name="description" 
+                                  rows="5" placeholder="Please describe your issue in detail..." required></textarea>
+                    </div>
+                    
+                    <button type="submit" class="btn btn-success">
+                        <i class="fas fa-paper-plane"></i> Submit Ticket
+                    </button>
+                </form>
+            </div>
+        </div>
+        
+        <div class="card mt-3">
+            <div class="card-body">
+                <h6><i class="fas fa-info-circle"></i> Information</h6>
+                <ul class="mb-0">
+                    <li>Tickets are typically resolved within 2-3 business days</li>
+                    <li>For urgent issues, please call our support hotline</li>
+                    <li>Check your email for ticket confirmation and updates</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+// Auto-complete functionality for email field
+document.getElementById('email').addEventListener('blur', function() {
+    var email = this.value;
+    if (email) {
+        // Check if contact exists via AJAX endpoint
+        fetch('/public/ticket/ajax/ajax.php?action=getContacts&email=' + encodeURIComponent(email))
+            .then(response => response.json())
+            .then(data => {
+                if (data.length > 0) {
+                    console.log('Contact found in database');
+                }
+            })
+            .catch(err => console.log('Contact lookup failed'));
+    }
+});
+</script>
+{% endblock %}
