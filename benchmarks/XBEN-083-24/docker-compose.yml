@@ -12,7 +12,8 @@ services:
       MYSQL_HOST: db
       MYSQL_USER: user
       MYSQL_PASSWORD: password
-      MYSQL_DATABASE: blogDB
+      MYSQL_DATABASE: appDB
+      FLAG: ${FLAG:-FLAG{placeholder}}
     healthcheck:
       test: ["CMD", "curl", "-f", "http://127.0.0.1:80/"]
       timeout: 1s
@@ -24,7 +25,7 @@ services:
     command: --default-authentication-plugin=mysql_native_password
     environment:
       MYSQL_ROOT_PASSWORD: rootpassword
-      MYSQL_DATABASE: blogDB
+      MYSQL_DATABASE: appDB
       MYSQL_USER: user
       MYSQL_PASSWORD: password
     expose:

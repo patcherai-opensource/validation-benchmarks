@@ -1,27 +1,201 @@
+* {
+    box-sizing: border-box;
+}
 body {
-    font-family: Arial, sans-serif;
-    background-color: #f4f4f9;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #1a1d21;
+    color: #e0e0e0;
     margin: 0;
     padding: 20px;
 }
 .container {
-    width: 80%;
+    width: 90%;
+    max-width: 1200px;
     margin: auto;
-    background: white;
+    background: #2d3136;
+    padding: 30px;
+    border-radius: 12px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+}
+.header {
+    text-align: center;
+    margin-bottom: 20px;
+    border-bottom: 1px solid #444;
+    padding-bottom: 15px;
+}
+.header h1 {
+    color: #4da6ff;
+    margin: 0;
+}
+.subtitle {
+    color: #888;
+    font-size: 14px;
+}
+.nav-tabs {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 25px;
+}
+.tab {
+    padding: 10px 20px;
+    background: #3a3f44;
+    color: #e0e0e0;
+    text-decoration: none;
+    border-radius: 6px;
+    transition: background 0.2s;
+}
+.tab:hover, .tab.active {
+    background: #4da6ff;
+    color: #fff;
+}
+.editor-section {
+    background: #252830;
+    padding: 20px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+}
+.editor-section h2 {
+    color: #4da6ff;
+    margin-top: 0;
+}
+.db-selector {
+    margin-bottom: 15px;
+}
+.db-selector label {
+    margin-right: 10px;
+}
+.db-selector select {
+    background: #3a3f44;
+    color: #e0e0e0;
+    border: 1px solid #555;
+    padding: 8px 12px;
+    border-radius: 4px;
+}
+.query-area {
+    margin-bottom: 15px;
+}
+.query-area label {
+    display: block;
+    margin-bottom: 8px;
+    color: #aaa;
+}
+.query-area textarea {
+    width: 100%;
+    height: 120px;
+    background: #1a1d21;
+    color: #4da6ff;
+    border: 1px solid #555;
+    border-radius: 6px;
+    padding: 12px;
+    font-family: 'Consolas', 'Monaco', monospace;
+    font-size: 14px;
+    resize: vertical;
+}
+.run-button {
+    background: #28a745;
+    color: white;
+    border: none;
+    padding: 12px 24px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: bold;
+}
+.run-button:hover {
+    background: #218838;
+}
+.results-section {
+    margin-top: 20px;
+    background: #1a1d21;
+    padding: 15px;
+    border-radius: 6px;
+    border: 1px solid #333;
+}
+.results-section h3 {
+    color: #4da6ff;
+    margin-top: 0;
+}
+.results-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+}
+.results-table th {
+    background: #3a3f44;
+    padding: 10px;
+    text-align: left;
+    border: 1px solid #555;
+}
+.results-table td {
+    padding: 8px 10px;
+    border: 1px solid #444;
+    background: #252830;
+}
+.placeholder-text, .loading, .no-results {
+    color: #888;
+    font-style: italic;
+}
+.error {
+    color: #ff6b6b;
+    background: rgba(255,107,107,0.1);
+    padding: 10px;
+    border-radius: 4px;
+}
+.row-count {
+    color: #888;
+    font-size: 12px;
+    margin-top: 10px;
+}
+.info-section {
+    background: #252830;
     padding: 20px;
     border-radius: 8px;
 }
-.post {
-    border-bottom: 1px solid #ccc;
-    padding-bottom: 20px;
+.info-section h3 {
+    color: #4da6ff;
+    margin-top: 0;
+}
+.table-list {
+    list-style: none;
+    padding: 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+.table-list li {
+    background: #3a3f44;
+    padding: 6px 12px;
+    border-radius: 4px;
+}
+.table-list code {
+    color: #4da6ff;
+}
+.hint {
+    color: #888;
+    font-size: 13px;
+    margin-top: 15px;
+}
+.hint code {
+    background: #1a1d21;
+    padding: 2px 6px;
+    border-radius: 3px;
+    color: #4da6ff;
+}
+.api-endpoint {
+    background: #252830;
+    padding: 15px;
     margin-bottom: 20px;
+    border-radius: 8px;
+    border-left: 4px solid #4da6ff;
 }
-.post h2 a {
-    color: #333;
-    text-decoration: none;
+.api-endpoint h3 {
+    color: #28a745;
+    margin-top: 0;
 }
-.post img {
-    width: 100%;
-    height: auto;
-    border-radius: 5px;
+.api-endpoint pre {
+    background: #1a1d21;
+    padding: 12px;
+    border-radius: 4px;
+    overflow-x: auto;
+    color: #4da6ff;
 }

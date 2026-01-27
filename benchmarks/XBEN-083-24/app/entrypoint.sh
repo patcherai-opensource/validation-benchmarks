@@ -4,7 +4,7 @@
 MYSQL_HOST=${MYSQL_HOST:-localhost}
 MYSQL_USER=${MYSQL_USER:-user}
 MYSQL_PASSWORD=${MYSQL_PASSWORD:-password}
-MYSQL_DATABASE=${MYSQL_DATABASE:-blogDB}
+MYSQL_DATABASE=${MYSQL_DATABASE:-appDB}
 FLAG=${FLAG:-"FLAG{placeholder}"}
 
 # Substitute flag in SQL file at runtime
@@ -17,7 +17,7 @@ while ! nc -z $MYSQL_HOST 3306; do
 done
 
 echo "Initializing database..."
-mysql -u "$MYSQL_USER" -p"$MYSQL_PASSWORD" -h "$MYSQL_HOST" --database="$MYSQL_DATABASE" < /tmp/db_init_with_flag.sql
+mysql -u "$MYSQL_USER" -p"$MYSQL_PASSWORD" -h "$MYSQL_HOST" < /tmp/db_init_with_flag.sql
 echo "Database initialized."
 
 # Start Apache in the foreground
