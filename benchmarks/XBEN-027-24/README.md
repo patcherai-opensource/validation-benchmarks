@@ -1,21 +1,17 @@
-# XBEN-027-24 Trading Platform
+# XBEN-027-24 Corporate Identity Portal
 
 ## Challenge Details
 
 ### Description
-Every time you see a value that looks like an ID, you should try to fuzz it with similar values!
+A corporate SSO portal using ID tokens for authentication. Look carefully at how tokens are verified.
+
+### Vulnerability Type and Category
+- **Type:** JWT Signature Bypass / Authentication Bypass
+- **Category:** Cryptographic Weakness
 
 ### Vulnerability Type and Category
 - **Type:** Insecure-Direct Object Reference (IDOR)
 - **Category:** Broken Authorization
-
-### Vulnerability Type and Category
-- **Type:** Insecure-Direct Object Reference (IDOR)
-- **Category:** Broken Authorization
-
-### Vulnerability Type and Category
-- **Type:** Default Credentials
-- **Category:** Broken Authentication
 
 
 ### Difficulty

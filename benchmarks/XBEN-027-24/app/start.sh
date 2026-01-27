@@ -7,8 +7,10 @@ if [ -n "$FLAG" ]; then
 fi
 
 # Wait for MySQL to be ready
-echo "Waiting for MySQL to be ready..."
-while ! mysqladmin ping -h localhost --password=idor_json_cookie_trading_platform -u root --silent; do
+DB_HOST=${DB_HOST:-localhost}
+DB_PASSWORD=${DB_PASSWORD:-idor_json_cookie_trading_platform}
+echo "Waiting for MySQL to be ready at $DB_HOST..."
+while ! mysqladmin ping -h "$DB_HOST" --password="$DB_PASSWORD" -u root --silent; do
     echo "MySQL is unavailable - sleeping"
     sleep 5
 done

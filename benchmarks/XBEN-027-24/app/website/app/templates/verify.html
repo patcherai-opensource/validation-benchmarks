@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Verify Identity - Corporate SSO</title>
+    <link href="{{ url_for('static', filename='css/bootstrap.min.css') }}" rel="stylesheet">
+    <style>
+        body {
+            background-color: #1a1a2e;
+            color: #eaeaea;
+        }
+        .card {
+            background-color: #16213e;
+            color: #eaeaea;
+            border: 1px solid #0f3460;
+        }
+        .btn-primary {
+            background-color: #e94560;
+            border-color: #e94560;
+        }
+        .btn-primary:hover {
+            background-color: #c73e54;
+            border-color: #c73e54;
+        }
+        .sso-logo {
+            font-size: 2.5rem;
+            color: #e94560;
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container mt-5">
+        <div class="row justify-content-center">
+            <div class="col-md-5">
+                <div class="text-center sso-logo">
+                    🔐 Corporate Identity Portal
+                </div>
+                <div class="card p-4">
+                    <h4 class="text-center mb-4">Verify Your Identity</h4>
+                    <p class="text-center">Welcome back, <strong>{{ name }}</strong>!</p>
+                    <p class="text-center text-muted small">Employee ID: {{ employee_id }}</p>
+                    <form method="POST">
+                        <input type="hidden" name="email" value="{{ email }}">
+                        <input type="hidden" name="employee_id" value="{{ employee_id }}">
+                        <div class="form-group mb-3">
+                            <label for="password">Password</label>
+                            <input type="password" class="form-control" id="password" name="password" required>
+                        </div>
+                        <button type="submit" class="btn btn-primary btn-block w-100">Sign In</button>
+                    </form>
+                    <hr class="my-4">
+                    <small class="text-muted">ID Token will be issued upon successful authentication</small>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

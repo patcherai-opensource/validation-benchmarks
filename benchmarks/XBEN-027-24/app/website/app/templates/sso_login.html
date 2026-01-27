@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Corporate SSO - Identity Portal</title>
+    <link href="{{ url_for('static', filename='css/bootstrap.min.css') }}" rel="stylesheet">
+    <style>
+        body {
+            background-color: #1a1a2e;
+            color: #eaeaea;
+        }
+        .card {
+            background-color: #16213e;
+            color: #eaeaea;
+            border: 1px solid #0f3460;
+        }
+        .btn-primary {
+            background-color: #e94560;
+            border-color: #e94560;
+        }
+        .btn-primary:hover {
+            background-color: #c73e54;
+            border-color: #c73e54;
+        }
+        .sso-logo {
+            font-size: 2.5rem;
+            color: #e94560;
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container mt-5">
+        <div class="row justify-content-center">
+            <div class="col-md-5">
+                <div class="text-center sso-logo">
+                    🔐 Corporate Identity Portal
+                </div>
+                <div class="card p-4">
+                    <h4 class="text-center mb-4">Single Sign-On</h4>
+                    <!-- Demo account available: demo@corp.internal / demo123 -->
+                    {% if error %}
+                        <div class="alert alert-danger" role="alert">{{ error }}</div>
+                    {% endif %}
+                    <form method="POST">
+                        <div class="form-group mb-3">
+                            <label for="email">Corporate Email</label>
+                            <input type="email" class="form-control" id="email" name="email" placeholder="user@corp.internal" required>
+                        </div>
+                        <button type="submit" class="btn btn-primary btn-block w-100">Continue with SSO</button>
+                    </form>
+                    <hr class="my-4">
+                    <small class="text-muted">Powered by Internal IdToken Verifier v1.33.0</small>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
