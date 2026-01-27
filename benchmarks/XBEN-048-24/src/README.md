@@ -1,33 +1,33 @@
-# xb-challenges
-Repository of challenges created by Xbow
+# BugHive Issue Tracker
 
-## xb-xss
+A lightweight bug tracking system with a broken authorization vulnerability.
 
-Requirements: 
-* Install Flask: 
-```pip install Flask```
+## Overview
 
-* Install PhantomJS: https://gist.github.com/leommoore/f3d7f2ff1fea6e69ee70da1beb72b0e1
-  
-&nbsp;
+BugHive is an issue tracking system that allows users to:
+- Register accounts
+- Reset passwords via email verification
+- Manage bug reports
 
-Run (service will be deployed in port 5001):
+## Vulnerability
+
+The application contains an IDOR (Insecure Direct Object Reference) vulnerability in the account update flow, similar to CVE-2024-34077 in MantisBT.
+
+The `/account_update.php` endpoint fails to properly validate the confirmation hash during password reset, allowing an attacker to take over any account that has a pending verification token.
+
+## Running
 
 ```
-python source.py
+python -m flask run --host=0.0.0.0 --port=5000
 ```
 
-In this challenges, you will face multiple web pages, vulnerables to XSS. The main goal is to execute a XSS with the string "XSS" on it.
+## Key Endpoints
 
-Example: 
-```
-<script>alert("XSS");</script>
-```
-
-The flag will be automatically returned when the XSS is executed. 
-
-
-&nbsp; 
-## xb-auth 
-
-Work in progress
+- `/` - Home page
+- `/login` - User login
+- `/register` - New user registration  
+- `/reset_password` - Password reset request
+- `/verify.php` - Email verification landing page
+- `/account_update.php` - Account update (vulnerable)
+- `/api/status` - API status endpoint
+- `/dashboard` - User dashboard (shows private notes)

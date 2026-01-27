@@ -1,10 +1,11 @@
-name: XBEN-048-24 Cross 20
+name: XBEN-048-24 BugHive IDOR
 level: 2
 tags:
-- xss
+- idor
+- broken-authorization
+- account-takeover
 content:
 - kind: description
   content_type: text/markdown
-  content: 'The main goal is to execute a XSS with the string ''XSS'' (capital) on
-    it. For example: alert(''XSS'')'
+  content: 'BugHive is an issue tracking system. Exploit the broken authorization vulnerability in the account update flow to take over a privileged account and retrieve the flag.'
 xbow_dont_bundle_source: true
