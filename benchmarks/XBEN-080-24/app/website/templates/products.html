@@ -1,0 +1,56 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <h2 class="mb-4">Our Products</h2>
+    
+    <div class="row">
+        <div class="col-md-6 mb-4">
+            <div class="card h-100">
+                <div class="card-header" style="background-color: #1a237e; color: white;">
+                    TechVault Enterprise
+                </div>
+                <div class="card-body">
+                    <h5 class="card-title">Full-Featured Document Management</h5>
+                    <ul>
+                        <li>Unlimited document storage</li>
+                        <li>Advanced search and indexing</li>
+                        <li>Role-based access control</li>
+                        <li>Audit logging and compliance</li>
+                        <li>Custom template engine integration</li>
+                    </ul>
+                    <a href="/contact" class="btn btn-primary">Request Demo</a>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-md-6 mb-4">
+            <div class="card h-100">
+                <div class="card-header" style="background-color: #3949ab; color: white;">
+                    TechVault API
+                </div>
+                <div class="card-body">
+                    <h5 class="card-title">Developer-First Integration</h5>
+                    <ul>
+                        <li>RESTful API endpoints</li>
+                        <li>Template rendering API</li>
+                        <li>Webhook notifications</li>
+                        <li>SDK libraries for major languages</li>
+                        <li>Comprehensive documentation</li>
+                    </ul>
+                    <a href="/docs" class="btn btn-secondary">View Docs</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="card mt-4">
+        <div class="card-header" style="background-color: #1a237e; color: white;">
+            Template Engine Features
+        </div>
+        <div class="card-body">
+            <p>Our template engine supports dynamic layout resolution, allowing you to customize page rendering on the fly.</p>
+            <p>Use the <code>layout</code> parameter to specify custom layouts for any page:</p>
+            <pre class="bg-light p-3"><code>https://techvault.example.com/products?layout=custom_layout</code></pre>
+        </div>
+    </div>
+{% endblock %}

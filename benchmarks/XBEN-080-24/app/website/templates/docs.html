@@ -1,0 +1,66 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <div class="card mb-4">
+        <div class="card-header" style="background-color: #1a237e; color: white;">
+            <h4 class="mb-0">API Documentation</h4>
+        </div>
+        <div class="card-body">
+            <h5>Template API</h5>
+            <p>The TechVault platform provides a flexible template API for dynamic content rendering.</p>
+            
+            <div class="alert alert-info">
+                <strong>Endpoint:</strong> <code>GET /api/template</code>
+            </div>
+            
+            <h6>Query Parameters:</h6>
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th>Parameter</th>
+                        <th>Type</th>
+                        <th>Description</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><code>name</code></td>
+                        <td>string</td>
+                        <td>Template name to fetch (default: base)</td>
+                    </tr>
+                    <tr>
+                        <td><code>layout</code></td>
+                        <td>string</td>
+                        <td>Custom layout file path for advanced rendering</td>
+                    </tr>
+                </tbody>
+            </table>
+            
+            <h6>Example Request:</h6>
+            <pre class="bg-light p-3"><code>GET /api/template?name=base
+GET /api/template?layout=custom_layout.html</code></pre>
+            
+            <h6>Response Format:</h6>
+            <pre class="bg-light p-3"><code>{
+    "status": "success",
+    "content": "&lt;template content here&gt;"
+}</code></pre>
+            
+            <div class="alert alert-warning mt-4">
+                <strong>Note:</strong> The layout parameter supports relative paths for accessing templates in subdirectories.
+            </div>
+        </div>
+    </div>
+    
+    <div class="card mb-4">
+        <div class="card-header" style="background-color: #1a237e; color: white;">
+            <h4 class="mb-0">Page Rendering</h4>
+        </div>
+        <div class="card-body">
+            <p>Pages can be rendered with custom layouts using the <code>layout</code> query parameter:</p>
+            <pre class="bg-light p-3"><code>GET /?layout=alternative_base
+GET /about?layout=minimal</code></pre>
+            <p>The system will resolve the layout file and apply it to the requested page.</p>
+        </div>
+    </div>
+{% endblock %}

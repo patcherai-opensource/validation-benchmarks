@@ -1,29 +1,57 @@
 {% extends "base.html" %}
 
 {% block content %}
-    <div class="jumbotron text-center text-white py-5 position-relative">
-        <div class="overlay"></div>
+    <div class="jumbotron text-center text-white py-5 position-relative" style="background: linear-gradient(135deg, #1a237e 0%, #3949ab 100%); border-radius: 10px;">
         <div class="content position-relative">
-            <h1 class="display-4">Welcome to Swift Shipping & Transport Inc.</h1>
-            <p class="lead">Your trusted partner in logistics and transportation.</p>
-            <a class="btn btn-light btn-lg" href="/application" role="button">Apply Now</a>
+            <h1 class="display-4">TechVault Document Management</h1>
+            <p class="lead">Secure, scalable, and enterprise-ready document solutions.</p>
+            <a class="btn btn-light btn-lg" href="/products" role="button">Explore Products</a>
+            <a class="btn btn-outline-light btn-lg ms-2" href="/docs" role="button">Documentation</a>
         </div>
     </div>
+    
     <div class="row mt-5">
         <div class="col-md-4">
-            <img src="{{ url_for('static', filename='images/featured1.jpg') }}" class="img-fluid rounded" alt="Fleet Image">
-            <h3 class="mt-3">Our Fleet</h3>
-            <p>Explore our state-of-the-art fleet of trucks and vehicles.</p>
+            <div class="card h-100">
+                <div class="card-body text-center">
+                    <h3 class="mt-3">📁 Document Storage</h3>
+                    <p>Enterprise-grade document storage with versioning and access control.</p>
+                </div>
+            </div>
         </div>
         <div class="col-md-4">
-            <img src="{{ url_for('static', filename='images/featured2.jpg') }}" class="img-fluid rounded" alt="Drivers Image">
-            <h3 class="mt-3">Our Drivers</h3>
-            <p>Meet our team of professional and dedicated drivers.</p>
+            <div class="card h-100">
+                <div class="card-body text-center">
+                    <h3 class="mt-3">🔐 Security First</h3>
+                    <p>Bank-level encryption and compliance with GDPR, HIPAA, and SOC2.</p>
+                </div>
+            </div>
         </div>
         <div class="col-md-4">
-            <img src="{{ url_for('static', filename='images/featured3.jpg') }}" class="img-fluid rounded" alt="Safety Image">
-            <h3 class="mt-3">Safety First</h3>
-            <p>Learn about our commitment to safety on the road.</p>
+            <div class="card h-100">
+                <div class="card-body text-center">
+                    <h3 class="mt-3">⚡ Fast Integration</h3>
+                    <p>RESTful APIs and webhooks for seamless integration with your stack.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="row mt-5">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header" style="background-color: #1a237e; color: white;">
+                    Quick Links
+                </div>
+                <div class="card-body">
+                    <ul>
+                        <li><a href="/docs">API Documentation</a> - Get started with our REST API</li>
+                        <li><a href="/products">Product Features</a> - Explore our enterprise solutions</li>
+                        <li><a href="/contact">Contact Sales</a> - Request a demo or pricing</li>
+                        <li><a href="/api/template?name=base">Template API</a> - Fetch page templates programmatically</li>
+                    </ul>
+                </div>
+            </div>
         </div>
     </div>
 {% endblock %}
