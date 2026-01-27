@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>InfraCtl - Run Playbook</title>
+    <link href="{{ url_for('static', filename='css/bootstrap.min.css') }}" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <nav class="navbar navbar-dark bg-dark">
+        <div class="container-fluid">
+            <span class="navbar-brand">🔧 InfraCtl</span>
+        </div>
+    </nav>
+    <div class="container">
+        <div class="row justify-content-between mt-4">
+            <div class="col-md-9">
+                <h2>Run Playbook Task</h2>
+                <p>Configure and execute infrastructure tasks using our Jinja2-based template engine.</p>
+                
+                <div class="card mb-4">
+                    <div class="card-header">Task Configuration</div>
+                    <div class="card-body">
+                        <form id="taskForm">
+                            <div class="mb-3">
+                                <label for="task_name" class="form-label">Task Name:</label>
+                                <input type="text" class="form-control" id="task_name" name="task_name" value="deploy_app" required>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="mb-3">
+                                        <label for="host" class="form-label">Target Host:</label>
+                                        <input type="text" class="form-control" id="host" name="host" value="{{ default_host }}" required>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="mb-3">
+                                        <label for="port" class="form-label">SSH Port:</label>
+                                        <input type="number" class="form-control" id="port" name="port" value="{{ default_port }}" required>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="mb-3">
+                                <label for="extra_vars" class="form-label">Extra Variables (YAML format - multi-line supported):</label>
+                                <textarea class="form-control font-monospace" id="extra_vars" name="extra_vars" rows="5" placeholder="app_version: 1.0.0&#10;env: production&#10;debug: false"></textarea>
+                                <small class="text-muted">Define additional variables for your task. Supports multi-line YAML input. Variables will be processed through our templating engine.</small>
+                            </div>
+                            <button type="submit" class="btn btn-success">Execute Task</button>
+                        </form>
+                    </div>
+                </div>
+                
+                <div class="card">
+                    <div class="card-header">Task Output</div>
+                    <div class="card-body">
+                        <pre id="taskOutput" class="bg-dark text-light p-3" style="min-height: 150px; white-space: pre-wrap;">Waiting for task execution...</pre>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">Navigation</h5>
+                        <ul class="list-group">
+                            <li class="list-group-item"><a href="{{ url_for('dashboard') }}">Dashboard</a></li>
+                            <li class="list-group-item"><a href="{{ url_for('settings') }}">Settings</a></li>
+                            <li class="list-group-item"><a href="{{ url_for('playbooks') }}">Run Playbook</a></li>
+                            <li class="list-group-item"><a href="{{ url_for('logout') }}">Logout</a></li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="card mt-3">
+                    <div class="card-header">API Endpoint</div>
+                    <div class="card-body">
+                        <small>
+                            <code>POST /api/render_task</code><br><br>
+                            JSON body:<br>
+                            <pre class="bg-light p-2" style="font-size: 0.75rem;">{
+  "task_name": "...",
+  "host": "...",
+  "port": 22,
+  "extra_vars": "..."
+}</pre>
+                        </small>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap Bundle with Popper -->
+    <script src="{{ url_for('static', filename='js/bootstrap.bundle.min.js') }}"></script>
+
+    <!-- jQuery -->
+    <script src="{{ url_for('static', filename='js/jquery.min.js') }}"></script>
+
+    <script>
+        $(document).ready(function() {
+            $('#taskForm').submit(function(e) {
+                e.preventDefault();
+                
+                var taskData = {
+                    task_name: $('#task_name').val(),
+                    host: $('#host').val(),
+                    port: parseInt($('#port').val()),
+                    extra_vars: $('#extra_vars').val()
+                };
+                
+                $('#taskOutput').text('Executing task...');
+                
+                $.ajax({
+                    url: '/api/render_task',
+                    type: 'POST',
+                    contentType: 'application/json',
+                    data: JSON.stringify(taskData),
+                    success: function(data) {
+                        $('#taskOutput').text(JSON.stringify(data, null, 2));
+                    },
+                    error: function(xhr, status, error) {
+                        var errorMsg = 'Error: ' + error;
+                        try {
+                            var response = JSON.parse(xhr.responseText);
+                            errorMsg = 'Error: ' + (response.error || error);
+                        } catch(e) {}
+                        $('#taskOutput').text(errorMsg);
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>
