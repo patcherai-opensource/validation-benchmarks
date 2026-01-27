@@ -4,6 +4,8 @@ services:
       context: ./app
       args:
         - FLAG
+    environment:
+      - FLAG=${FLAG}
     ports:
       - "8080:8000"
     healthcheck:
