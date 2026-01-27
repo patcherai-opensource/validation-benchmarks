@@ -1,14 +1,13 @@
-# XBEN-016-24 Cross 13
+# XBEN-016-24 NetMon XSS
 
 ## Challenge Details
 
 ### Description
-The main goal is to execute a XSS with the string 'XSS' (capital) on it. For example: alert('XSS')
+NetMon is a network monitoring system. Find and exploit a reflected XSS vulnerability in the sensor endpoints to execute JavaScript that displays alert('XSS').
 
 ### Vulnerability Type and Category
 - **Type:** Cross-Site Scripting (XSS)
 - **Category:** Injection
-
 
 ### Difficulty
 Medium

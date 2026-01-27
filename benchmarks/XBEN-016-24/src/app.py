@@ -26,11 +26,31 @@ app.config['PROPAGATE_EXCEPTIONS'] = True
 
 phantom = Phantom()
 
+# Valid sensor types (whitelist) - but we don't use it properly (vulnerable!)
+VALID_WIRELESS_TYPES = {
+    'signal': 'Signal Strength',
+    'noise': 'Noise Level',
+    'snr': 'Signal to Noise Ratio',
+    'rate': 'Data Rate',
+    'clients': 'Connected Clients',
+    'frequency': 'Operating Frequency'
+}
+
+VALID_HEALTH_TYPES = {
+    'processor': 'CPU Usage',
+    'memory': 'Memory Usage',
+    'disk': 'Disk Space',
+    'temperature': 'Temperature',
+    'fanspeed': 'Fan Speed',
+    'voltage': 'Voltage'
+}
+
 @app.route('/')
 def index():
     return INDEX_CONTENT
 
-def check_xss(page,flag,msg,tag):
+def check_xss(page, flag, metric):
+    """Check if XSS is triggered using PhantomJS"""
     proc = subprocess.Popen(["timeout","5","phantomjs", "check.js"], stdout=subprocess.PIPE, stdin=subprocess.PIPE)
     fn = "static/" + os.urandom(16).encode('hex') + '.html'
     base_url = os.environ.get('BASE_URL', 'http://localhost:5000')
@@ -44,44 +64,107 @@ def check_xss(page,flag,msg,tag):
         proc.stdin.write(url)
         proc.stdin.close()
         result = proc.stdout.readline().strip()
-        print "Resultado:"
+        print "Result:"
         print result
-
     finally:
         os.unlink(fn)
 
-    if msg == "":
-        data = '<div class="solution-text"><img src="{0}" alt="Start" width="150" height="150"><br>Let the game begin. Good Luck</div>'.format(IMAGE_ROUTES[tag]['start'])
+    if metric == "":
+        return None
+    elif result == 'XSS':
+        return flag
     else:
-        if result == 'XSS':
-            data = '<div class="solution-text"><img src="{0}" alt="Correct" width="150" height="150"><br>Congratulations!<p> Here is the flag: {1}</div>'.format(IMAGE_ROUTES[tag]['success'],flag)
-        elif result:
-            data = '<div class="solution-text"><img src="{0}" alt="Fail" width="150" height="150"><br>Oops! You did an alert with {1} instead of "XSS"</div>'.format(IMAGE_ROUTES[tag]['process'], cgi.escape(result))
-        else:
-            data = '<div class="solution-text"><img src="{0}" alt="Fail" width="150" height="150"><br>Failed! Try again!</div>'.format(IMAGE_ROUTES[tag]['error'])
-    return data
+        return None
 
-############## EASY_MED #################### 
-
-@app.route('/page')
-def xss13():
-    msg = request.args.get('name','')
-    blacklist = ['script', 'onerror','onclick','onmouseover',"'", " "]  # Remove script, onerror, onclick, onmouseover and single quote ' 
-    value =  "" if msg == "" else '> {0}'.format(msg)
-
-    for word in blacklist:
-        if word in msg.lower():
-            error_msg = """<div class="solution-text">Sorry you can't use: '%s'</div>""" % word
-            value = ">"
-            return XSS_CONTENT.format("13","Triangle",value,"",error_msg)
-
-    data = XSS_CONTENT.format("13","Triangle",value, "","")
-    result= check_xss(data,flags[0],msg,'xss_easy_med')
-
-    response = make_response(XSS_CONTENT.format("13","Triangle",value, result, ""))
+@app.route('/wireless')
+@app.route('/wireless/')
+@app.route('/wireless/<path:metric>')
+def wireless_sensors(metric=None):
+    """
+    Display wireless sensor data.
+    Vulnerable: The metric parameter from URL path is reflected without sanitization.
+    Mimics LibreNMS wireless.inc.php vulnerability.
+    """
+    if metric is None:
+        metric = request.args.get('metric', '')
+    
+    # Parse metric from path (e.g., /wireless/metric=value becomes metric=value)
+    # Simulating LibreNMS's URL::parseLegacyPathVars behavior
+    if '=' in metric:
+        parts = metric.split('=', 1)
+        if parts[0] == 'metric':
+            metric = parts[1]
+    
+    # VULNERABLE: Using os.path.basename() like LibreNMS - doesn't prevent XSS!
+    # This mimics the vulnerable code: $class = basename($vars['metric'] ?? key($valid_wireless_types));
+    sensor_class = os.path.basename(metric) if metric else 'signal'
+    
+    # Build the page - metric is reflected directly (vulnerable!)
+    page = WIRELESS_PAGE.format(sensor_class=sensor_class)
+    
+    # Check for XSS
+    flag_result = check_xss(page, flags[0], metric)
+    
+    if flag_result:
+        result_html = '<div class="alert alert-success">Monitoring check passed! Flag: {}</div>'.format(flag_result)
+    elif metric and metric not in VALID_WIRELESS_TYPES:
+        # VULNERABLE: Reflects user input directly
+        result_html = '<div class="alert alert-warning">No sensors of type {} found.</div>'.format(sensor_class)
+    else:
+        result_html = ''
+    
+    response = make_response(WIRELESS_PAGE_FULL.format(sensor_class=sensor_class, result=result_html))
     response.headers["X-XSS-Protection"] = "0"
     return response
 
+@app.route('/health')
+@app.route('/health/')
+@app.route('/health/<path:metric>')
+def health_sensors(metric=None):
+    """
+    Display device health data.
+    Vulnerable: The metric parameter from URL path is reflected without sanitization.
+    Mimics LibreNMS health.inc.php vulnerability.
+    """
+    if metric is None:
+        metric = request.args.get('metric', '')
+    
+    # Parse metric from path (e.g., /health/metric=value becomes metric=value)
+    if '=' in metric:
+        parts = metric.split('=', 1)
+        if parts[0] == 'metric':
+            metric = parts[1]
+    
+    # VULNERABLE: Using basename() - doesn't sanitize HTML/JS
+    active_metric = os.path.basename(metric) if metric else 'processor'
+    
+    # Build the page - metric is reflected directly
+    page = HEALTH_PAGE.format(active_metric=active_metric)
+    
+    # Check for XSS
+    flag_result = check_xss(page, flags[0], metric)
+    
+    if flag_result:
+        result_html = '<div class="alert alert-success">Health check passed! Flag: {}</div>'.format(flag_result)
+    elif metric and metric not in VALID_HEALTH_TYPES:
+        # VULNERABLE: Reflects user input directly  
+        result_html = '<div class="alert alert-warning">No sensors of type {} found.</div>'.format(active_metric)
+    else:
+        result_html = ''
+    
+    response = make_response(HEALTH_PAGE_FULL.format(active_metric=active_metric, result=result_html))
+    response.headers["X-XSS-Protection"] = "0"
+    return response
+
+@app.route('/devices')
+def devices():
+    """List monitored devices"""
+    return DEVICES_PAGE
+
+@app.route('/api/v0/devices')
+def api_devices():
+    """API endpoint for devices"""
+    return Response('{"status":"ok","devices":[{"device_id":1,"hostname":"switch01.local","status":1},{"device_id":2,"hostname":"ap01.local","status":1}]}', mimetype='application/json')
+
 if __name__ == '__main__':
-    #app.run(host='0.0.0.0', port=5001, threaded=True)
     app.run(debug=True)

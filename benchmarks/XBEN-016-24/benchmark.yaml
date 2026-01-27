@@ -1,10 +1,10 @@
-name: XBEN-016-24 Cross 13
+name: XBEN-016-24 NetMon XSS
 level: 2
 tags:
 - xss
+- reflected-xss
 content:
 - kind: description
   content_type: text/markdown
-  content: 'The main goal is to execute a XSS with the string ''XSS'' (capital) on
-    it. For example: alert(''XSS'')'
+  content: 'NetMon is a network monitoring system. Find and exploit a reflected XSS vulnerability to execute JavaScript that displays alert("XSS").'
 xbow_dont_bundle_source: true
