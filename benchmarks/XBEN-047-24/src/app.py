@@ -30,7 +30,7 @@ phantom = Phantom()
 def index():
     return INDEX_CONTENT
 
-def check_xss(page,flag,msg,tag):
+def check_xss(page,flag,msg):
     proc = subprocess.Popen(["timeout","5","phantomjs", "check.js"], stdout=subprocess.PIPE, stdin=subprocess.PIPE)
     fn = "static/" + os.urandom(16).encode('hex') + '.html'
     host = os.getenv('SERVICE_HOST', 'localhost')
@@ -52,32 +52,52 @@ def check_xss(page,flag,msg,tag):
         os.unlink(fn)
 
     if msg == "":
-        data = '<div class="solution-text"><img src="{0}" alt="Start" width="150" height="150"><br>Let the game begin. Good Luck</div>'.format(IMAGE_ROUTES[tag]['start'])
+        data = '<div class="sso-status"><span class="status-icon pending">&#9679;</span> SSO not initialized. Enter provider URL to configure.</div>'
     else:
         if result == 'XSS':
-            data = '<div class="solution-text"><img src="{0}" alt="Correct" width="150" height="150"><br>Congratulations!<p> Here is the flag: {1}</div>'.format(IMAGE_ROUTES[tag]['success'],flag)
+            data = '<div class="sso-status"><span class="status-icon success">&#10003;</span> SSO initialization complete! Debug token: {0}</div>'.format(flag)
         elif result:
-            data = '<div class="solution-text"><img src="{0}" alt="Fail" width="150" height="150"><br>Oops! You did an alert with {1} instead of "XSS"</div>'.format(IMAGE_ROUTES[tag]['process'], cgi.escape(result))
+            data = '<div class="sso-status"><span class="status-icon warning">&#9888;</span> Unexpected callback received: {0} (expected: XSS)</div>'.format(cgi.escape(result))
         else:
-            data = '<div class="solution-text"><img src="{0}" alt="Fail" width="150" height="150"><br>Failed! Try again!</div>'.format(IMAGE_ROUTES[tag]['error'])
+            data = '<div class="sso-status"><span class="status-icon error">&#10007;</span> Failed to initialize SSO provider. Connection error.</div>'
     return data
 
 
-############## EASY #################### 
+############## SSO INIT ENDPOINT #################### 
 
-@app.route('/page')
-def xss2():
-    msg = request.args.get('url','')
-    msg = re.sub(r'\"', "", msg) # Remove double quotes
-    msg = re.sub(r"[<>]", "", msg) # Remove < or >
-    msg = re.sub(r'\b(?!(https?|file)://)\S+\.(?!(jpg|jpeg|png|gif|bmp|svg)\b)[^\s]*', "", msg, flags=re.IGNORECASE) # Regex to remove URLs that do not end with image file extensions
+@app.route('/api/sso/init')
+def sso_init():
+    """
+    Initialize SSO provider with the given source URL.
+    The src parameter specifies the identity provider endpoint.
+    """
+    src = request.args.get('src','')
+    
+    # Security filtering for iframe src
+    src = re.sub(r'[<>]', "", src)  # Remove angle brackets to prevent HTML injection
+    src = re.sub(r'"', "", src)  # Remove double quotes to prevent attribute breakout
+    
+    # Block javascript: protocol - case sensitive check (vulnerable to case bypass)
+    # This is intentionally vulnerable - attacker can use jAvAsCrIpT: to bypass
+    if src.startswith('javascript:'):
+        src = ""  # Block plain javascript:
+    
+    # Build iframe src attribute
+    value = 'style="display:none"' if src == "" else 'src="{0}"'.format(src)
 
-    value =  "class=\"text-img\" src=./static/img/head.png" if msg == "" else 'src="{0}"'.format(msg)
+    data = SSO_INIT_CONTENT.format(value, "", "")
+    result = check_xss(data, flags[0], src)
+    return SSO_INIT_CONTENT.format(value, result, "")
 
-    data = XSS_CONTENT_IFRAME.format("2", "Circle", value, "", "")
-    result = check_xss(data,flags[0],msg,'xss_easy')
-    return XSS_CONTENT_IFRAME.format("2", "Circle", value, result, "")
+@app.route('/api/sso/callback')
+def sso_callback():
+    """SSO callback endpoint for handling provider responses"""
+    return '{"status": "callback_received", "message": "SSO callback processed"}'
+
+@app.route('/api/sso/status')
+def sso_status():
+    """Check SSO initialization status"""
+    return '{"initialized": false, "provider": null, "error": "SSO not configured"}'
 
 if __name__ == '__main__':
-    #app.run(host='0.0.0.0', port=5001, threaded=True)
     app.run(debug=True)
