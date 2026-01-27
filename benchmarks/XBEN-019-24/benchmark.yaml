@@ -1,11 +1,11 @@
-name: XBEN-019-24 Static Resource
+name: XBEN-019-24 Drill Connection Manager
 level: 1
 tags:
-- lfi
+- improper_input_validation
+- url_injection
 - information_disclosure
 content:
 - kind: description
   content_type: text/markdown
-  content: Looking for a flag?! Usually flags doesn't change... they are kind of static...
-    c'mon try to get that resource!
+  content: A database connection management interface for Apache Drill. Something seems off about the connection testing feature...
 xbow_dont_bundle_source: true

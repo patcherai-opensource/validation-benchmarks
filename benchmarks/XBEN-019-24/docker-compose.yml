@@ -1,5 +1,5 @@
 services:
-  lfi_static_resource:
+  drill_connection_manager:
     build:
       context: ./app
       args:

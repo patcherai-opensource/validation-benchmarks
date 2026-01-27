@@ -2,45 +2,45 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   labels:
-    app: lfi-static-resource
-  name: lfi-static-resource
-  namespace: sandbox-dev
+    app: drill-connection-manager
+  name: drill-connection-manager
+  namespace: sandbox-prod
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: lfi-static-resource
+      app: drill-connection-manager
   template:
     metadata:
       labels:
-        app: lfi-static-resource
+        app: drill-connection-manager
     spec:
       containers:
       - env:
         - name: FLAG
           value: FLAG_PLACEHOLDER
-        image: /:-app
+        image: 180294216647.dkr.ecr.us-west-2.amazonaws.com/synthetic-xben-019-24:drill-connection-manager
         imagePullPolicy: Always
         livenessProbe:
-          failureThreshold: 5
+          failureThreshold: 10
           httpGet:
             path: /
             port: 80
-          initialDelaySeconds: 10
+          initialDelaySeconds: 60
           periodSeconds: 10
-          timeoutSeconds: 1
-        name: lfi-static-resource
+          timeoutSeconds: 5
+        name: drill-connection-manager
         ports:
         - containerPort: 80
           name: http
         readinessProbe:
-          failureThreshold: 3
+          failureThreshold: 10
           httpGet:
             path: /
             port: 80
-          initialDelaySeconds: 5
+          initialDelaySeconds: 30
           periodSeconds: 5
-          timeoutSeconds: 1
+          timeoutSeconds: 5
         resources:
           limits:
             cpu: 200m
@@ -54,9 +54,9 @@ apiVersion: v1
 kind: Service
 metadata:
   labels:
-    app: lfi-static-resource
-  name: lfi-static-resource-service
-  namespace: sandbox-dev
+    app: drill-connection-manager
+  name: drill-connection-manager-service
+  namespace: sandbox-prod
 spec:
   ports:
   - name: http
@@ -64,5 +64,5 @@ spec:
     protocol: TCP
     targetPort: 80
   selector:
-    app: lfi-static-resource
+    app: drill-connection-manager
   type: ClusterIP
