@@ -1,0 +1,71 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="docs">
+    <h2>API Documentation</h2>
+    
+    <div class="api-section">
+        <h3>POST /api/sink/save</h3>
+        <p>Creates a new data sink configuration for the data pipeline.</p>
+        <h4>Request Body (JSON):</h4>
+        <pre>{
+    "sinkType": "MYSQL",
+    "sinkName": "my_production_sink",
+    "jdbcUrl": "jdbc:mysql://localhost:3306/database?useSSL=false"
+}</pre>
+        <h4>Response:</h4>
+        <pre>{
+    "success": true,
+    "message": "Sink configuration saved",
+    "data": {
+        "id": 1,
+        "sinkName": "my_production_sink",
+        "sinkType": "MYSQL",
+        "jdbcUrl": "jdbc:mysql://localhost:3306/database?useSSL=false",
+        "status": "configured"
+    },
+    "security_note": "No dangerous parameters detected"
+}</pre>
+    </div>
+    
+    <div class="api-section">
+        <h3>POST /api/sink/test</h3>
+        <p>Tests connection to a data sink using the provided JDBC URL.</p>
+        <h4>Request Body (JSON):</h4>
+        <pre>{
+    "jdbcUrl": "jdbc:mysql://localhost:3306/database"
+}</pre>
+        <h4>Response:</h4>
+        <pre>{
+    "success": true,
+    "filteredUrl": "jdbc:mysql://localhost:3306/database",
+    "removedParams": [],
+    "testResult": {
+        "status": "connection_successful",
+        "message": "Database connection test completed"
+    }
+}</pre>
+    </div>
+    
+    <div class="api-section">
+        <h3>GET /api/sink/list</h3>
+        <p>Lists all configured data sinks.</p>
+    </div>
+    
+    <div class="api-section">
+        <h3>DELETE /api/sink/delete/&lt;id&gt;</h3>
+        <p>Deletes a data sink configuration by ID.</p>
+    </div>
+    
+    <div class="security-note">
+        <h3>⚠️ Security Notice</h3>
+        <p>For security purposes, certain JDBC URL parameters are automatically filtered:</p>
+        <ul>
+            <li><code>allowLoadLocalInfile</code> - Prevents local file loading</li>
+            <li><code>allowLoadLocalInfileInPath</code> - Prevents path-based file loading</li>
+            <li><code>autoDeserialize</code> - Prevents automatic deserialization</li>
+            <li><code>allowUrlInLocalInfile</code> - Prevents URL-based file inclusion</li>
+        </ul>
+        <p>These parameters are removed from JDBC URLs to prevent potential security issues.</p>
+    </div>
+</div>
+{% endblock %}

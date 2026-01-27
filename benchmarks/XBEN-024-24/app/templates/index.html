@@ -1,0 +1,112 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="dashboard">
+    <h2>Data Sink Management</h2>
+    
+    <div class="panel">
+        <h3>Configure New MySQL Sink</h3>
+        <form id="sink-form" class="sink-form">
+            <div class="form-group">
+                <label for="sinkName">Sink Name:</label>
+                <input type="text" id="sinkName" name="sinkName" placeholder="production_mysql" required>
+            </div>
+            <div class="form-group">
+                <label for="sinkType">Sink Type:</label>
+                <select id="sinkType" name="sinkType">
+                    <option value="MYSQL">MySQL</option>
+                    <option value="POSTGRESQL">PostgreSQL</option>
+                    <option value="ORACLE">Oracle</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="jdbcUrl">JDBC URL:</label>
+                <input type="text" id="jdbcUrl" name="jdbcUrl" 
+                       placeholder="jdbc:mysql://localhost:3306/mydb?useSSL=false" required>
+                <small class="hint">Example: jdbc:mysql://host:port/database?param=value</small>
+            </div>
+            <div class="button-group">
+                <button type="button" onclick="testConnection()">Test Connection</button>
+                <button type="submit">Save Configuration</button>
+            </div>
+        </form>
+        <div id="result" class="result-panel"></div>
+    </div>
+    
+    <div class="panel">
+        <h3>Configured Sinks</h3>
+        <div id="sink-list" class="sink-list">
+            <p>Loading...</p>
+        </div>
+    </div>
+</div>
+
+<script>
+    // Load sink list on page load
+    async function loadSinks() {
+        try {
+            const response = await fetch('/api/sink/list');
+            const data = await response.json();
+            const listDiv = document.getElementById('sink-list');
+            
+            if (data.data && data.data.length > 0) {
+                listDiv.innerHTML = data.data.map(sink => `
+                    <div class="sink-item">
+                        <strong>${sink.sinkName}</strong> (${sink.sinkType})
+                        <br><small>URL: ${sink.jdbcUrl}</small>
+                        <br><span class="status">${sink.status}</span>
+                    </div>
+                `).join('');
+            } else {
+                listDiv.innerHTML = '<p>No sinks configured yet.</p>';
+            }
+        } catch (e) {
+            document.getElementById('sink-list').innerHTML = '<p>Error loading sinks</p>';
+        }
+    }
+    
+    async function testConnection() {
+        const jdbcUrl = document.getElementById('jdbcUrl').value;
+        const resultDiv = document.getElementById('result');
+        
+        resultDiv.innerHTML = '<p>Testing connection...</p>';
+        
+        try {
+            const response = await fetch('/api/sink/test', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({jdbcUrl: jdbcUrl})
+            });
+            const data = await response.json();
+            resultDiv.innerHTML = '<pre>' + JSON.stringify(data, null, 2) + '</pre>';
+        } catch (e) {
+            resultDiv.innerHTML = '<p class="error">Test failed: ' + e.message + '</p>';
+        }
+    }
+    
+    document.getElementById('sink-form').addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const resultDiv = document.getElementById('result');
+        
+        const payload = {
+            sinkName: document.getElementById('sinkName').value,
+            sinkType: document.getElementById('sinkType').value,
+            jdbcUrl: document.getElementById('jdbcUrl').value
+        };
+        
+        try {
+            const response = await fetch('/api/sink/save', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify(payload)
+            });
+            const data = await response.json();
+            resultDiv.innerHTML = '<pre>' + JSON.stringify(data, null, 2) + '</pre>';
+            loadSinks();
+        } catch (e) {
+            resultDiv.innerHTML = '<p class="error">Save failed: ' + e.message + '</p>';
+        }
+    });
+    
+    loadSinks();
+</script>
+{% endblock %}

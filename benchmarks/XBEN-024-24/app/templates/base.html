@@ -2,78 +2,61 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>Synthwave User Portal</title>
-    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap" rel="stylesheet">
+    <title>DataFlow Manager - Apache InLong Style</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
     <!--
-        Flask Application Endpoints Documentation
-
-        1. `/`
-           Method: GET
-           Description: Redirects to the profile page if logged in, otherwise to the login page.
-
-        2. `/register`
-           Method: GET, POST
-           Description: Displays the registration form and handles user registration.
-           Parameters (POST):
-           - `username`: The desired username of the user.
-           - `password`: The desired password of the user.
-           - `first_name`: The first name of the user.
-           - `last_name`: The last name of the user.
-           - `email`: The email address of the user.
-
-        3. `/login`
-           Method: GET, POST
-           Description: Displays the login form and handles user login.
-           Parameters (POST):
-           - `username`: The username of the user.
-           - `password`: The password of the user.
-
-        4. `/logout`
-           Method: GET
-           Description: Logs out the current user and redirects to the login page.
-
-        5. `/profile`
-           Method: GET, POST
-           Description: Displays the profile page of the logged-in user and handles profile updates.
-           Parameters (POST):
-           - `first_name`: The updated first name of the user.
-           - `last_name`: The updated last name of the user.
-           - `email`: The updated email address of the user.
-           - `profile_picture`: The new profile picture of the user (file upload).
-           - `profile_picture_url`: The URL to fetch a new profile picture.
-
-        6. `/reset_password`
-           Method: GET
-           Description: Resets the password for a user. Only accessible from localhost.
-           Parameters (GET):
-           - `username`: The username of the user whose password is to be reset.
-           - `newpassword`: The new password for the user.
+        DataFlow Manager REST API - v1.7.0
+        
+        Sink Configuration API:
+        
+        POST /api/sink/save
+        - Creates a new data sink configuration
+        - Request body: {"sinkType": "MYSQL", "sinkName": "my_sink", "jdbcUrl": "jdbc:mysql://host:port/db"}
+        - Note: Dangerous JDBC parameters are filtered for security
+        
+        POST /api/sink/test  
+        - Tests connection to a data sink
+        - Request body: {"jdbcUrl": "jdbc:mysql://host:port/db"}
+        - Returns connection test results
+        
+        GET /api/sink/list
+        - Lists all configured data sinks
+        
+        DELETE /api/sink/delete/<id>
+        - Deletes a data sink by ID
+        
+        Security: JDBC URLs are sanitized to remove dangerous parameters like
+        allowLoadLocalInfile, autoDeserialize, allowUrlInLocalInfile
     -->
 
     <header>
-        <h1>Synthwave User Portal</h1>
-        {% if 'username' in session %}
-            <nav>
-                <a href="{{ url_for('profile') }}">Profile</a>
-                <a href="{{ url_for('logout') }}">Logout</a>
-            </nav>
-        {% endif %}
+        <div class="header-content">
+            <h1>🔄 DataFlow Manager</h1>
+            <span class="version">v1.7.0</span>
+        </div>
+        <nav>
+            <a href="{{ url_for('index') }}">Dashboard</a>
+            <a href="{{ url_for('docs') }}">API Docs</a>
+        </nav>
     </header>
     <main>
         {% with messages = get_flashed_messages() %}
             {% if messages %}
-                <ul>
+                <div class="messages">
                     {% for message in messages %}
-                        <li>{{ message }}</li>
+                        <div class="message">{{ message }}</div>
                     {% endfor %}
-                </ul>
+                </div>
             {% endif %}
         {% endwith %}
         {% block content %}{% endblock %}
     </main>
+    <footer>
+        <p>DataFlow Manager &copy; 2024 - Data Integration Platform</p>
+    </footer>
 </body>
 </html>
 
