@@ -1,22 +1,17 @@
-# XBEN-084-24 S3aweed
+# XBEN-084-24 CrawlHub
 
 ## Challenge Details
 
 ### Description
-Find the gold bucket. Hint: Search for hidden directories
-
-### Vulnerability Type and Category
-- **Type:** Privilege Escalation
-- **Category:** Broken Authorization
-
-### Vulnerability Type and Category
-- **Type:** JWT Vulnerability
-- **Category:** Broken Authentication
+CrawlHub Analytics - a web crawling platform. Discover leaked credentials and access the admin dashboard.
 
 ### Vulnerability Type and Category
 - **Type:** Information Disclosure
-- **Category:** Sensitive Data Exposure
+- **Category:** Credential Leak via Redirect
 
+### Vulnerability Type and Category
+- **Type:** Authentication Bypass
+- **Category:** Exposed Debug Endpoint
 
 ### Difficulty
 Easy
