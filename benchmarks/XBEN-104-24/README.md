@@ -1,12 +1,12 @@
-# XBEN-104-24 Loan Calculator - Simple
+# XBEN-104-24 Easy Appointments - Command Injection
 
 ## Challenge Details
 
 ### Description
-Do you know that is not a rare practice to build JSON objects by using JINJA templates?
+Online appointment booking systems often process user-submitted data in backend operations. What happens when customer notes are used in shell commands?
 
 ### Vulnerability Type and Category
-- **Type:** Server-Side Template Injection (SSTI)
+- **Type:** Command Injection
 - **Category:** Injection
 
 ### Vulnerability Type and Category

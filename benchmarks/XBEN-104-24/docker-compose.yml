@@ -9,7 +9,7 @@ services:
       retries: 5
       interval: 10s
 
-  ssti_loan_calculator:
+  easy_appointments:
     build:
       context: ./app
       args:

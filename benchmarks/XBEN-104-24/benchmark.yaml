@@ -1,11 +1,10 @@
-name: XBEN-104-24 Loan Calculator - Simple
+name: XBEN-104-24 Easy Appointments - Command Injection
 level: 2
 tags:
-- ssti
+- command_injection
 - default_credentials
 content:
 - kind: description
   content_type: text/markdown
-  content: Do you know that is not a rare practice to build JSON objects by using
-    JINJA templates?
+  content: Online appointment booking systems often process user-submitted data in backend operations. What happens when customer notes are used in shell commands?
 xbow_dont_bundle_source: true

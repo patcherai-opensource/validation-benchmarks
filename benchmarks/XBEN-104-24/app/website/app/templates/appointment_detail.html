@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Appointment Details - Easy!Appointments</title>
+    <link href="{{ url_for('static', filename='css/bootstrap.min.css') }}" rel="stylesheet">
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+        <div class="container">
+            <a class="navbar-brand" href="{{ url_for('dashboard') }}">Easy!Appointments Backend</a>
+            <div class="navbar-nav ms-auto">
+                <span class="navbar-text me-3">Welcome, {{ provider.name }}</span>
+                <a class="nav-link" href="{{ url_for('logout') }}">Logout</a>
+            </div>
+        </div>
+    </nav>
+    
+    <div class="container mt-4">
+        <div class="row">
+            <div class="col-md-3">
+                <div class="card">
+                    <div class="card-header">Navigation</div>
+                    <div class="list-group list-group-flush">
+                        <a href="{{ url_for('dashboard') }}" class="list-group-item list-group-item-action">Dashboard</a>
+                        <a href="{{ url_for('appointments') }}" class="list-group-item list-group-item-action">Appointments</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-9">
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item"><a href="{{ url_for('appointments') }}">Appointments</a></li>
+                        <li class="breadcrumb-item active">Appointment #{{ appointment.id }}</li>
+                    </ol>
+                </nav>
+                
+                <div class="card">
+                    <div class="card-header">
+                        <h5 class="mb-0">Appointment #{{ appointment.id }} Details</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <h6 class="text-muted">Customer Information</h6>
+                                <p><strong>Name:</strong> {{ appointment.customer_name }}</p>
+                                <p><strong>Email:</strong> {{ appointment.customer_email }}</p>
+                                <p><strong>Phone:</strong> {{ appointment.customer_phone or 'N/A' }}</p>
+                            </div>
+                            <div class="col-md-6">
+                                <h6 class="text-muted">Appointment Details</h6>
+                                <p><strong>Service:</strong> {{ appointment.service.name }}</p>
+                                <p><strong>Provider:</strong> {{ appointment.provider.name }}</p>
+                                <p><strong>Date:</strong> {{ appointment.appointment_date.strftime('%B %d, %Y at %H:%M') }}</p>
+                                <p><strong>Status:</strong> <span class="badge bg-{{ 'success' if appointment.status == 'confirmed' else 'warning' }}">{{ appointment.status }}</span></p>
+                            </div>
+                        </div>
+                        
+                        {% if appointment.customer_notes %}
+                        <hr>
+                        <h6 class="text-muted">Customer Notes</h6>
+                        <div class="bg-light p-3 rounded">
+                            {{ appointment.customer_notes }}
+                        </div>
+                        {% endif %}
+                        
+                        <hr>
+                        <div class="d-flex gap-2">
+                            <a href="{{ url_for('export_appointment', appointment_id=appointment.id) }}" class="btn btn-secondary">
+                                Export Report
+                            </a>
+                            <button class="btn btn-primary" onclick="sendNotification({{ appointment.id }})">
+                                Send Notification
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script src="{{ url_for('static', filename='js/bootstrap.bundle.min.js') }}"></script>
+    <script>
+    function sendNotification(appointmentId) {
+        fetch('/backend/send_notification/' + appointmentId, {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'}
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                alert('Notification sent successfully!');
+            } else {
+                alert('Error: ' + data.error);
+            }
+        })
+        .catch(err => alert('Failed to send notification'));
+    }
+    </script>
+</body>
+</html>

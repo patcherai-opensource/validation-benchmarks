@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Book Appointment - Easy!Appointments</title>
+    <link href="{{ url_for('static', filename='css/bootstrap.min.css') }}" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body class="bg-light">
+    <nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm">
+        <div class="container">
+            <a class="navbar-brand" href="{{ url_for('booking') }}">
+                <strong>Easy!Appointments</strong>
+            </a>
+            <span class="navbar-text">Online Booking System v1.4.3</span>
+        </div>
+    </nav>
+
+    <div class="container mt-5">
+        <div class="row justify-content-center">
+            <div class="col-lg-8">
+                <div class="card shadow">
+                    <div class="card-header bg-primary text-white">
+                        <h4 class="mb-0">Book Your Appointment</h4>
+                    </div>
+                    <div class="card-body">
+                        <form method="POST" action="{{ url_for('booking') }}">
+                            <h5 class="border-bottom pb-2 mb-3">Personal Information</h5>
+                            <div class="row mb-3">
+                                <div class="col-md-6">
+                                    <label for="customer_name" class="form-label">Full Name *</label>
+                                    <input type="text" class="form-control" id="customer_name" name="customer_name" required>
+                                </div>
+                                <div class="col-md-6">
+                                    <label for="customer_email" class="form-label">Email Address *</label>
+                                    <input type="email" class="form-control" id="customer_email" name="customer_email" required>
+                                </div>
+                            </div>
+                            <div class="mb-3">
+                                <label for="customer_phone" class="form-label">Phone Number</label>
+                                <input type="tel" class="form-control" id="customer_phone" name="customer_phone">
+                            </div>
+                            
+                            <h5 class="border-bottom pb-2 mb-3 mt-4">Appointment Details</h5>
+                            <div class="row mb-3">
+                                <div class="col-md-6">
+                                    <label for="service_id" class="form-label">Service *</label>
+                                    <select class="form-select" id="service_id" name="service_id" required>
+                                        <option value="">Select a service...</option>
+                                        {% for service in services %}
+                                        <option value="{{ service.id }}">{{ service.name }} - ${{ "%.2f"|format(service.price) }} ({{ service.duration_minutes }} min)</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                                <div class="col-md-6">
+                                    <label for="provider_id" class="form-label">Provider *</label>
+                                    <select class="form-select" id="provider_id" name="provider_id" required>
+                                        <option value="">Select a provider...</option>
+                                        {% for provider in providers %}
+                                        <option value="{{ provider.id }}">{{ provider.name }} - {{ provider.specialty }}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="mb-3">
+                                <label for="appointment_date" class="form-label">Preferred Date & Time *</label>
+                                <input type="datetime-local" class="form-control" id="appointment_date" name="appointment_date" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="customer_notes" class="form-label">Additional Notes</label>
+                                <textarea class="form-control" id="customer_notes" name="customer_notes" rows="3" placeholder="Any special requirements or information for your appointment..."></textarea>
+                            </div>
+                            
+                            <div class="d-grid">
+                                <button type="submit" class="btn btn-primary btn-lg">Book Appointment</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                
+                <div class="text-center mt-3">
+                    <a href="{{ url_for('login') }}" class="text-muted">Provider Login →</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <footer class="mt-5 py-3 bg-white border-top">
+        <div class="container text-center text-muted">
+            <small>Powered by Easy!Appointments &copy; 2023</small>
+        </div>
+    </footer>
+    
+    <script src="{{ url_for('static', filename='js/bootstrap.bundle.min.js') }}"></script>
+</body>
+</html>

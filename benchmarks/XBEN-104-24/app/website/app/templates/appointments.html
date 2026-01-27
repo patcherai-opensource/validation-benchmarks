@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Appointments - Easy!Appointments</title>
+    <link href="{{ url_for('static', filename='css/bootstrap.min.css') }}" rel="stylesheet">
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+        <div class="container">
+            <a class="navbar-brand" href="{{ url_for('dashboard') }}">Easy!Appointments Backend</a>
+            <div class="navbar-nav ms-auto">
+                <span class="navbar-text me-3">Welcome, {{ provider.name }}</span>
+                <a class="nav-link" href="{{ url_for('logout') }}">Logout</a>
+            </div>
+        </div>
+    </nav>
+    
+    <div class="container mt-4">
+        <div class="row">
+            <div class="col-md-3">
+                <div class="card">
+                    <div class="card-header">Navigation</div>
+                    <div class="list-group list-group-flush">
+                        <a href="{{ url_for('dashboard') }}" class="list-group-item list-group-item-action">Dashboard</a>
+                        <a href="{{ url_for('appointments') }}" class="list-group-item list-group-item-action active">Appointments</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-9">
+                <h2>All Appointments</h2>
+                <p class="text-muted">View and manage all scheduled appointments.</p>
+                
+                <div class="card mt-4">
+                    <div class="card-body">
+                        {% if appointments %}
+                        <table class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Customer</th>
+                                    <th>Email</th>
+                                    <th>Service</th>
+                                    <th>Date</th>
+                                    <th>Status</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for apt in appointments %}
+                                <tr>
+                                    <td>{{ apt.id }}</td>
+                                    <td>{{ apt.customer_name }}</td>
+                                    <td>{{ apt.customer_email }}</td>
+                                    <td>{{ apt.service.name }}</td>
+                                    <td>{{ apt.appointment_date.strftime('%Y-%m-%d %H:%M') }}</td>
+                                    <td><span class="badge bg-{{ 'success' if apt.status == 'confirmed' else 'warning' }}">{{ apt.status }}</span></td>
+                                    <td>
+                                        <a href="{{ url_for('view_appointment', appointment_id=apt.id) }}" class="btn btn-sm btn-info">View</a>
+                                        <a href="{{ url_for('export_appointment', appointment_id=apt.id) }}" class="btn btn-sm btn-secondary">Export</a>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                        {% else %}
+                        <p class="text-muted">No appointments found.</p>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="{{ url_for('static', filename='js/bootstrap.bundle.min.js') }}"></script>
+</body>
+</html>
