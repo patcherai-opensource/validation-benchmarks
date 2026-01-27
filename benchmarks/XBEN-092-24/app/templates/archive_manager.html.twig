@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Archive Manager - Asset Archive Manager</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 40px; background: #f5f5f5; }
+        .container { max-width: 900px; margin: 0 auto; background: white; padding: 30px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+        h1 { color: #2c3e50; border-bottom: 2px solid #3498db; padding-bottom: 10px; }
+        h2 { color: #34495e; margin-top: 30px; }
+        .form-section { background: #ecf0f1; padding: 20px; border-radius: 4px; margin: 20px 0; }
+        input[type="text"], input[type="file"] { padding: 8px; margin: 5px 0; width: 100%; box-sizing: border-box; }
+        input[type="submit"] { background: #3498db; color: white; padding: 10px 20px; border: none; border-radius: 4px; cursor: pointer; margin-top: 10px; }
+        input[type="submit"]:hover { background: #2980b9; }
+        .result { background: #d5f5e3; padding: 15px; border-radius: 4px; margin: 20px 0; white-space: pre-wrap; font-family: monospace; overflow-x: auto; }
+        .error { background: #fadbd8; padding: 15px; border-radius: 4px; margin: 20px 0; color: #c0392b; }
+        .info { background: #fdebd0; padding: 15px; border-radius: 4px; margin: 20px 0; }
+        .version { color: #7f8c8d; font-size: 12px; }
+        code { background: #eee; padding: 2px 6px; border-radius: 3px; }
+        a { color: #3498db; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Archive Manager</h1>
+        <p class="version">Powered by PEAR Archive_Tar 1.4.3</p>
+        
+        <p><a href="index.php">&larr; Back to Home</a></p>
+        
+        {% if error %}
+        <div class="error">{{ error }}</div>
+        {% endif %}
+        
+        {% if result %}
+        <div class="result">{{ result|json_encode(constant('JSON_PRETTY_PRINT'))|raw }}</div>
+        {% endif %}
+        
+        <h2>1. Upload Archive</h2>
+        <div class="form-section">
+            <form method="POST" enctype="multipart/form-data">
+                <input type="hidden" name="action" value="upload">
+                <label>Select archive file (TAR, PHAR, or other):</label>
+                <input type="file" name="archive" required>
+                <br>
+                <input type="submit" value="Upload Archive">
+            </form>
+        </div>
+        
+        <h2>2. Extract Archive</h2>
+        <div class="form-section">
+            <form method="POST">
+                <input type="hidden" name="action" value="extract">
+                <label>Archive path (from upload response):</label>
+                <input type="text" name="archive_path" placeholder="/tmp/abc123.asset" required>
+                <br>
+                <input type="submit" value="Extract Archive">
+            </form>
+        </div>
+        
+        <div class="info">
+            <h3>How it works:</h3>
+            <ol>
+                <li>Upload a TAR archive using the form above</li>
+                <li>Note the <code>asset_path</code> returned in the response</li>
+                <li>Use that path to extract the archive contents</li>
+            </ol>
+            <p><strong>Note:</strong> Archive extraction processes file entries and validates filenames to prevent directory traversal attacks.</p>
+        </div>
+        
+        <h2>Advanced: Direct API Access</h2>
+        <div class="form-section">
+            <p>For programmatic access, use the <a href="sku_url.php">API Gateway</a> to interact with the internal archive service at <code>skumodel:4455</code></p>
+            <p>Available endpoints:</p>
+            <ul>
+                <li><code>POST /asset_upload</code> - Upload base64-encoded archive (param: <code>data</code>)</li>
+                <li><code>POST /archive_extract</code> - Extract archive (param: <code>archive_path</code>)</li>
+            </ul>
+        </div>
+    </div>
+</body>
+</html>

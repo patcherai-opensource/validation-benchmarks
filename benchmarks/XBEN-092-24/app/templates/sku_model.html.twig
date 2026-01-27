@@ -1,26 +1,63 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>SKU Model</title>
+    <title>API Gateway - Asset Archive Manager</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 40px; background: #f5f5f5; }
+        .container { max-width: 900px; margin: 0 auto; background: white; padding: 30px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+        h1 { color: #2c3e50; border-bottom: 2px solid #3498db; padding-bottom: 10px; }
+        .form-section { background: #ecf0f1; padding: 20px; border-radius: 4px; margin: 20px 0; }
+        input[type="text"], textarea { padding: 8px; margin: 5px 0; width: 100%; box-sizing: border-box; }
+        textarea { font-family: monospace; min-height: 80px; }
+        input[type="submit"] { background: #3498db; color: white; padding: 10px 20px; border: none; border-radius: 4px; cursor: pointer; margin-top: 10px; }
+        .result { background: #d5f5e3; padding: 15px; border-radius: 4px; margin: 20px 0; white-space: pre-wrap; font-family: monospace; overflow-x: auto; }
+        .info { background: #fdebd0; padding: 15px; border-radius: 4px; margin: 10px 0; }
+        code { background: #eee; padding: 2px 6px; border-radius: 3px; }
+        a { color: #3498db; }
+        label { font-weight: bold; display: block; margin-top: 10px; }
+    </style>
 </head>
 <body>
-    <h1>SKU Model</h1>
-    
-    <form method="post" action="">
-        <label for="url">Enter URL:</label>
-        <input type="text" id="url" name="url" value="{{ url }}" size="100">
-        <input type="submit" value="Fetch SKU Model">
-    </form>
-    <p>Your IP address: {{ client_ip }}</p>
-    <p>SKU model API: skumodel:4455</p>
-<p><a href="index.php">Back</a></p>
-    {% if sku_model %}
-        <h2>Fetched SKU Model</h2>
-        <div>
-            {{ sku_model|raw }}
+    <div class="container">
+        <h1>API Gateway</h1>
+        <p>Proxy interface to internal archive processing service</p>
+        
+        <p><a href="index.php">&larr; Back to Home</a> | <a href="archive_manager.php">Archive Manager</a></p>
+        
+        <div class="form-section">
+            <form method="post" action="">
+                <label for="url">Internal Service URL:</label>
+                <input type="text" id="url" name="url" value="{{ url }}" placeholder="http://127.0.0.1:4455/asset_upload">
+                
+                <label for="data">Data (base64, for asset_upload):</label>
+                <textarea id="data" name="data" placeholder="Base64-encoded file content..."></textarea>
+                
+                <label for="archive_path">Archive Path (for archive_extract):</label>
+                <input type="text" id="archive_path" name="archive_path" placeholder="/tmp/abc123.asset">
+                
+                <input type="submit" value="Send Request">
+            </form>
         </div>
-    {% endif %}
-
-
+        
+        <div class="info">
+            <p><strong>Your IP:</strong> {{ client_ip }}</p>
+            <p><strong>Internal API:</strong> <code>skumodel:4455</code></p>
+            <p><strong>Note:</strong> Only connections to port 4455 are allowed. Use 127.0.0.1 or localhost as host.</p>
+        </div>
+        
+        {% if sku_model %}
+        <h2>Response</h2>
+        <div class="result">{{ sku_model|raw }}</div>
+        {% endif %}
+        
+        <div class="info">
+            <h3>Available Endpoints:</h3>
+            <ul>
+                <li><code>http://127.0.0.1:4455/</code> - Service info</li>
+                <li><code>http://127.0.0.1:4455/asset_upload</code> - Upload assets (POST: data=base64)</li>
+                <li><code>http://127.0.0.1:4455/archive_extract</code> - Extract TAR archives (POST: archive_path=/tmp/xxx.asset)</li>
+            </ul>
+        </div>
+    </div>
 </body>
 </html>

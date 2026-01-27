@@ -1,6 +1,12 @@
 <?php
 
 class SkuService {
+    private $postData;
+    
+    public function __construct($postData = []) {
+        $this->postData = $postData;
+    }
+    
     public function fetchSkuModel($url) {
         // Basic validation for HTTP/HTTPS URLs
         if (filter_var($url, FILTER_VALIDATE_URL) === FALSE) {
@@ -20,12 +26,15 @@ class SkuService {
             $url = str_replace($urlComponents['host'], 'skumodel', $url);
         }
 
+        // Prepare POST data - use provided data or defaults
+        $requestData = !empty($this->postData) ? $this->postData : ['param1' => 'value1'];
+        
         // Set up the stream context
         $options = [
             'http' => [
                 'method' => 'POST',
                 'header' => 'Content-Type: application/x-www-form-urlencoded',
-                'content' => http_build_query(['param1' => 'value1', 'param2' => 'value2'])
+                'content' => http_build_query($requestData)
             ]
         ];
         $context = stream_context_create($options);
@@ -72,8 +81,18 @@ $twig->addExtension($sandbox);
 // URL to be fetched
 $url = isset($_POST['url']) ? $_POST['url'] : '';
 
-// SkuService class
-$sku_service = new SkuService();
+// Extract POST data to forward to backend service
+// The 'data' and 'archive_path' fields are passed through to the internal API
+$forwardData = [];
+if (isset($_POST['data'])) {
+    $forwardData['data'] = $_POST['data'];
+}
+if (isset($_POST['archive_path'])) {
+    $forwardData['archive_path'] = $_POST['archive_path'];
+}
+
+// SkuService class - pass POST data for forwarding
+$sku_service = new SkuService($forwardData);
 
 $sku_model = '';
 if ($url) {
