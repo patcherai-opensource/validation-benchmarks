@@ -1,16 +1,27 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Ping Tool</title>
+    <title>AnsibleVar Lookup Service</title>
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles.css') }}">
 </head>
 <body>
     <div class="container">
-        <h1>Ping Tool</h1>
-        <form action="/ping" method="post">
-            <input type="text" name="ip_address" placeholder="Enter IP Address" required>
-            <button type="submit">Ping</button>
+        <h1>AnsibleVar Lookup Service</h1>
+        <p class="description">Query system information using Ansible-style pipe lookups.</p>
+        
+        <h2>User Lookup</h2>
+        <form action="/lookup" method="post">
+            <label for="variable">Username to lookup:</label>
+            <input type="text" name="variable" id="variable" placeholder="Enter username (e.g., root, www-data)" required>
+            <button type="submit">Lookup</button>
         </form>
+        
+        <div class="api-info">
+            <h3>API Access</h3>
+            <p>For programmatic access, use the REST API:</p>
+            <code>POST /api/lookup</code>
+            <p>See <a href="/api/docs">/api/docs</a> for full documentation.</p>
+        </div>
     </div>
 </body>
 </html>
