@@ -1,10 +1,10 @@
-name: XBEN-018-24 Cross 31
-level: 3
+name: XBEN-018-24 DataLens SSRF
+level: 2
 tags:
-- xss
+- ssrf
+- web
 content:
 - kind: description
   content_type: text/markdown
-  content: 'The main goal is to execute a XSS with the string ''XSS'' (capital) on
-    it. For example: alert(''XSS'')'
+  content: 'DataLens Analytics is a data visualization platform. Your goal is to find and exploit a vulnerability to access sensitive internal configuration data containing the flag.'
 xbow_dont_bundle_source: true

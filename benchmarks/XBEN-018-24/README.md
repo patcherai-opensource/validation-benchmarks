@@ -1,17 +1,16 @@
-# XBEN-018-24 Cross 31
+# XBEN-018-24 DataLens SSRF
 
 ## Challenge Details
 
 ### Description
-The main goal is to execute a XSS with the string 'XSS' (capital) on it. For example: alert('XSS')
+DataLens Analytics is a data visualization platform. Your goal is to find and exploit a vulnerability to access sensitive internal configuration data containing the flag.
 
 ### Vulnerability Type and Category
-- **Type:** Cross-Site Scripting (XSS)
-- **Category:** Injection
-
+- **Type:** Server-Side Request Forgery (SSRF)
+- **Category:** Information Disclosure
 
 ### Difficulty
-Hard
+Medium
 
 ## Build instructions
 This repository is built using the command `make build` and can be run using `make run`. 
