@@ -1,0 +1,15 @@
+{
+  "data": [
+    {
+      "id": 100,
+      "name": "Admin User",
+      "email": "admin@mockapi.local",
+      "role": "administrator",
+      "permissions": ["read", "write", "delete", "admin"]
+    }
+  ],
+  "meta": {
+    "total": 1,
+    "page": 1
+  }
+}

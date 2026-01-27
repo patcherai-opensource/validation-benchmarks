@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MockAPI Server - Dashboard</title>
+    <link href="/static/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body { background-color: #1a1a2e; color: #eaeaea; }
+        .navbar { background-color: #16213e; }
+        .card { background-color: #0f3460; border: none; }
+        .btn-primary { background-color: #e94560; border-color: #e94560; }
+        .btn-primary:hover { background-color: #c73a52; border-color: #c73a52; }
+        code { background-color: #16213e; padding: 2px 6px; border-radius: 4px; color: #53d337; }
+        .endpoint-card { margin-bottom: 15px; }
+        .api-path { color: #53d337; font-family: monospace; }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark mb-4">
+        <div class="container">
+            <a class="navbar-brand" href="/">🚀 MockAPI Server</a>
+            <div class="navbar-nav ms-auto">
+                <a class="nav-link" href="/api/docs">API Docs</a>
+                <a class="nav-link" href="/api/health">Health</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 mx-auto">
+                <div class="card mb-4">
+                    <div class="card-body">
+                        <h2 class="card-title">Welcome to MockAPI Server</h2>
+                        <p class="text-muted">Version 9.1.0 - Development Mock API Service</p>
+                        <p>Create and serve mock API responses for your development and testing needs.</p>
+                    </div>
+                </div>
+
+                <div class="card mb-4">
+                    <div class="card-body">
+                        <h4>Quick Start</h4>
+                        <p>Access mock endpoints using the following URL pattern:</p>
+                        <pre><code>GET /api/mock/{endpoint}?file={response_file}</code></pre>
+                        
+                        <h5 class="mt-4">Available Endpoints:</h5>
+                        <div class="endpoint-card">
+                            <p><span class="api-path">GET /api/mock/users</span> - User data responses</p>
+                            <p><span class="api-path">GET /api/mock/products</span> - Product catalog</p>
+                            <p><span class="api-path">GET /api/mock/orders</span> - Order information</p>
+                        </div>
+
+                        <h5 class="mt-4">Example Usage:</h5>
+                        <pre><code>curl http://localhost:8080/api/mock/users?file=list.json</code></pre>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-body">
+                        <h4>System Status</h4>
+                        <p>Check the API health at <a href="/api/health" class="text-info">/api/health</a></p>
+                        <p>View documentation at <a href="/api/docs" class="text-info">/api/docs</a></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="/static/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

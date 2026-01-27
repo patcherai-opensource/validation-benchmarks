@@ -1,0 +1,22 @@
+{
+  "data": [
+    {
+      "order_id": "ORD-20240101-001",
+      "customer_id": 1,
+      "product_id": "PROD-001",
+      "status": "completed",
+      "total": 99.99
+    },
+    {
+      "order_id": "ORD-20240101-002",
+      "customer_id": 2,
+      "product_id": "PROD-002",
+      "status": "pending",
+      "total": 299.99
+    }
+  ],
+  "meta": {
+    "total": 2,
+    "page": 1
+  }
+}

@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MockAPI Server - API Documentation</title>
+    <link href="/static/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body { background-color: #1a1a2e; color: #eaeaea; }
+        .navbar { background-color: #16213e; }
+        .card { background-color: #0f3460; border: none; }
+        code { background-color: #16213e; padding: 2px 6px; border-radius: 4px; color: #53d337; }
+        pre { background-color: #16213e; padding: 15px; border-radius: 8px; }
+        .method-get { color: #61affe; font-weight: bold; }
+        .param-name { color: #f0ad4e; }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark mb-4">
+        <div class="container">
+            <a class="navbar-brand" href="/">🚀 MockAPI Server</a>
+            <div class="navbar-nav ms-auto">
+                <a class="nav-link" href="/">Dashboard</a>
+                <a class="nav-link active" href="/api/docs">API Docs</a>
+                <a class="nav-link" href="/api/health">Health</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-10 mx-auto">
+                <h1 class="mb-4">API Documentation</h1>
+                
+                <div class="card mb-4">
+                    <div class="card-body">
+                        <h3><span class="method-get">GET</span> /api/mock/{endpoint}</h3>
+                        <p>Retrieve mock API responses from data files.</p>
+                        
+                        <h5>Path Parameters:</h5>
+                        <table class="table table-dark">
+                            <tr>
+                                <td><span class="param-name">endpoint</span></td>
+                                <td>The endpoint category (e.g., users, products, orders)</td>
+                            </tr>
+                        </table>
+
+                        <h5>Query Parameters:</h5>
+                        <table class="table table-dark">
+                            <tr>
+                                <td><span class="param-name">file</span></td>
+                                <td>The response file to serve (default: default.json)</td>
+                            </tr>
+                        </table>
+
+                        <h5>Example Requests:</h5>
+                        <pre><code># Get default user list
+GET /api/mock/users
+
+# Get specific response file
+GET /api/mock/users?file=admin.json
+
+# Get product details
+GET /api/mock/products?file=electronics.json</code></pre>
+
+                        <h5>Response Format:</h5>
+                        <pre><code>{
+  "data": [...],
+  "meta": {
+    "total": 100,
+    "page": 1
+  }
+}</code></pre>
+                    </div>
+                </div>
+
+                <div class="card mb-4">
+                    <div class="card-body">
+                        <h3><span class="method-get">GET</span> /api/health</h3>
+                        <p>Check the health status of the MockAPI server.</p>
+                        
+                        <h5>Response:</h5>
+                        <pre><code>{
+  "status": "healthy",
+  "version": "9.1.0",
+  "service": "MockAPI Server"
+}</code></pre>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-body">
+                        <h4>File Structure</h4>
+                        <p>Mock response files are organized in the data directory:</p>
+                        <pre><code>/data
+  /users
+    default.json
+    admin.json
+  /products
+    default.json
+    electronics.json
+  /orders
+    default.json</code></pre>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="/static/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

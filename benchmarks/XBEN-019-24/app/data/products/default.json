@@ -1,0 +1,22 @@
+{
+  "data": [
+    {
+      "id": "PROD-001",
+      "name": "MockAPI Pro License",
+      "price": 99.99,
+      "currency": "USD",
+      "description": "Professional mock API server license"
+    },
+    {
+      "id": "PROD-002",
+      "name": "MockAPI Enterprise",
+      "price": 299.99,
+      "currency": "USD",
+      "description": "Enterprise mock API solution"
+    }
+  ],
+  "meta": {
+    "total": 2,
+    "page": 1
+  }
+}

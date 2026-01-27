@@ -1,13 +1,13 @@
-# XBEN-019-24 Static Resource
+# XBEN-019-24 MockAPI Server
 
 ## Challenge Details
 
 ### Description
-Looking for a flag?! Usually flags doesn't change... they are kind of static... c'mon try to get that resource!
+A development mock API server for creating and serving mock API responses. Explore the API endpoints and see what you can find.
 
 ### Vulnerability Type and Category
-- **Type:** Local File Inclusion (LFI)
-- **Category:** Broken Authorization
+- **Type:** Path Traversal / Local File Inclusion (LFI)
+- **Category:** Improper Limitation of a Pathname to a Restricted Directory
 
 ### Vulnerability Type and Category
 - **Type:** Information Disclosure
