@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Templates - AutoConfig Manager</title>
+    <link href="{{ url_for('static', filename='css/bootstrap.min.css') }}" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <div class="row justify-content-between mt-5">
+            <div class="col-md-9">
+                <h2>Configuration Templates</h2>
+                <p>Available templates for rendering configuration files.</p>
+                
+                <div class="card mt-3">
+                    <div class="card-header">
+                        <strong>nginx</strong> - Nginx Reverse Proxy
+                    </div>
+                    <div class="card-body">
+                        <p>Required variables: <code>port</code>, <code>server_name</code>, <code>upstream_host</code>, <code>upstream_port</code></p>
+                        <pre class="bg-light p-2"># Example usage:
+POST /api/render_config
+{
+  "template_name": "nginx",
+  "variables": {
+    "port": 80,
+    "server_name": "example.com",
+    "upstream_host": "backend",
+    "upstream_port": 8080
+  }
+}</pre>
+                    </div>
+                </div>
+
+                <div class="card mt-3">
+                    <div class="card-header">
+                        <strong>hosts</strong> - Dynamic Host Inventory
+                    </div>
+                    <div class="card-body">
+                        <p>Required variables: <code>host_count</code>, <code>base_ip</code>, <code>base_port</code></p>
+                        <pre class="bg-light p-2"># Example usage:
+POST /api/render_config
+{
+  "template_name": "hosts",
+  "variables": {
+    "host_count": 3,
+    "base_ip": "192.168.1",
+    "base_port": 22
+  }
+}</pre>
+                    </div>
+                </div>
+
+                <div class="card mt-3">
+                    <div class="card-header">
+                        <strong>ansible_vars</strong> - Ansible Variables File
+                    </div>
+                    <div class="card-body">
+                        <p>Required variables: <code>app_name</code>, <code>environment</code>, <code>version</code>, <code>config_data</code></p>
+                        <pre class="bg-light p-2"># Example usage:
+POST /api/render_config
+{
+  "template_name": "ansible_vars",
+  "variables": {
+    "app_name": "myapp",
+    "environment": "production",
+    "version": "1.0.0",
+    "config_data": "{}"
+  }
+}</pre>
+                    </div>
+                </div>
+
+                <div class="card mt-4">
+                    <div class="card-header">
+                        <strong>Variable Preview API</strong>
+                    </div>
+                    <div class="card-body">
+                        <p>Test how variables will be rendered before using them in templates:</p>
+                        <pre class="bg-light p-2"># Preview a variable value:
+GET /api/preview_variable?name=myvar&value=test_value
+
+# Response:
+{
+  "status": "success",
+  "preview": "Variable Preview Report\n=======================\nVariable Name: myvar\nVariable Value: test_value\nType: string"
+}</pre>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">Navigation</h5>
+                        <ul class="list-group">
+                            <li class="list-group-item"><a href="{{ url_for('dashboard') }}">Dashboard</a></li>
+                            <li class="list-group-item"><a href="{{ url_for('settings') }}">Settings</a></li>
+                            <li class="list-group-item"><a href="{{ url_for('template_list') }}">Templates</a></li>
+                            <li class="list-group-item"><a href="{{ url_for('logout') }}">Logout</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap Bundle with Popper -->
+    <script src="{{ url_for('static', filename='js/bootstrap.bundle.min.js') }}"></script>
+</body>
+</html>

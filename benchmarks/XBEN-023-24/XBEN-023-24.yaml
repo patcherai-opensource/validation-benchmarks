@@ -2,18 +2,18 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   labels:
-    app: ssti-blind-loan-calculator
-  name: ssti-blind-loan-calculator
-  namespace: sandbox-dev
+    app: autoconfig-template-manager
+  name: autoconfig-template-manager
+  namespace: sandbox-prod
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: ssti-blind-loan-calculator
+      app: autoconfig-template-manager
   template:
     metadata:
       labels:
-        app: ssti-blind-loan-calculator
+        app: autoconfig-template-manager
     spec:
       containers:
       - env:
@@ -21,8 +21,9 @@ spec:
           value: ssti_blind_loan_calculator
         - name: MYSQL_DATABASE
           value: database
-        image: /:-mysql
-        imagePullPolicy: Always
+        image: 
+          180294216647.dkr.ecr.us-west-2.amazonaws.com/synthetic-xben-023-24:mysql
+        imagePullPolicy: IfNotPresent
         livenessProbe:
           exec:
             command:
@@ -33,9 +34,11 @@ spec:
             - --password=ssti_blind_loan_calculator
             - -u
             - root
-          initialDelaySeconds: 30
+          failureThreshold: 10
+          # Increased delay to account for slower startup under load
+          initialDelaySeconds: 120
           periodSeconds: 10
-          timeoutSeconds: 1
+          timeoutSeconds: 10
         name: mysql
         ports:
         - containerPort: 3306
@@ -49,32 +52,36 @@ spec:
             - --password=ssti_blind_loan_calculator
             - -u
             - root
-          initialDelaySeconds: 10
+          failureThreshold: 10
+          initialDelaySeconds: 30
           periodSeconds: 5
-          timeoutSeconds: 1
+          timeoutSeconds: 5
         resources:
           limits:
-            cpu: 500m
-            memory: 512Mi
+            cpu: 1000m
+            memory: 2Gi
           requests:
-            cpu: 250m
-            memory: 256Mi
+            cpu: 1000m
+            memory: 1Gi
       - env:
         - name: FLAG
           value: PLACEHOLDER_FLAG
-        image: /:-app
-        imagePullPolicy: Always
+        image: 
+          180294216647.dkr.ecr.us-west-2.amazonaws.com/synthetic-xben-023-24:app
+        imagePullPolicy: IfNotPresent
         livenessProbe:
+          failureThreshold: 10
           httpGet:
             path: /
             port: 80
           initialDelaySeconds: 60
           periodSeconds: 15
-          timeoutSeconds: 5
+          timeoutSeconds: 10
         name: app
         ports:
         - containerPort: 80
         readinessProbe:
+          failureThreshold: 10
           httpGet:
             path: /
             port: 80
@@ -83,20 +90,20 @@ spec:
           timeoutSeconds: 5
         resources:
           limits:
-            cpu: 500m
-            memory: 512Mi
+            cpu: 1000m
+            memory: 2Gi
           requests:
-            cpu: 250m
-            memory: 256Mi
+            cpu: 1000m
+            memory: 1Gi
       restartPolicy: Always
 ---
 apiVersion: v1
 kind: Service
 metadata:
   labels:
-    app: ssti-blind-loan-calculator
-  name: ssti-blind-loan-calculator-service
-  namespace: sandbox-dev
+    app: autoconfig-template-manager
+  name: autoconfig-template-manager-service
+  namespace: sandbox-prod
 spec:
   ports:
   - name: http
@@ -104,5 +111,5 @@ spec:
     protocol: TCP
     targetPort: 80
   selector:
-    app: ssti-blind-loan-calculator
+    app: autoconfig-template-manager
   type: ClusterIP

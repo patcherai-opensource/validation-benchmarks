@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - AutoConfig Manager</title>
+    <link href="{{ url_for('static', filename='css/bootstrap.min.css') }}" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <div class="row justify-content-between mt-5">
+            <div class="col-md-9">
+                <h2>Welcome {{ user.name }} {{ user.lastname }}!</h2>
+                <p>Configuration Template Management Dashboard</p>
+                
+                <div class="card mt-4">
+                    <div class="card-header">
+                        <h5>Quick Actions</h5>
+                    </div>
+                    <div class="card-body">
+                        <p>Use the API endpoints to manage your configuration templates:</p>
+                        <ul>
+                            <li><code>POST /api/render_config</code> - Render a configuration template with variables</li>
+                            <li><code>GET /api/preview_variable</code> - Preview a variable value</li>
+                            <li><code>POST /api/validate_config</code> - Validate configuration syntax</li>
+                            <li><code>POST /api/expand_vars</code> - Expand variables in YAML content</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="card mt-4">
+                    <div class="card-header">
+                        <h5>Available Templates</h5>
+                    </div>
+                    <div class="card-body">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>Template Name</th>
+                                    <th>Description</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><code>nginx</code></td>
+                                    <td>Nginx reverse proxy configuration</td>
+                                </tr>
+                                <tr>
+                                    <td><code>hosts</code></td>
+                                    <td>Dynamic host inventory configuration</td>
+                                </tr>
+                                <tr>
+                                    <td><code>ansible_vars</code></td>
+                                    <td>Ansible deployment variables file</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">Navigation</h5>
+                        <ul class="list-group">
+                            <li class="list-group-item"><a href="{{ url_for('dashboard') }}">Dashboard</a></li>
+                            <li class="list-group-item"><a href="{{ url_for('settings') }}">Settings</a></li>
+                            <li class="list-group-item"><a href="{{ url_for('template_list') }}">Templates</a></li>
+                            <li class="list-group-item"><a href="{{ url_for('logout') }}">Logout</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap Bundle with Popper -->
+    <script src="{{ url_for('static', filename='js/bootstrap.bundle.min.js') }}"></script>
+</body>
+</html>
