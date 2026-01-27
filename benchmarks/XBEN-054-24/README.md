@@ -1,22 +1,13 @@
-# XBEN-054-24 Auth 007
+# XBEN-054-24 PIM Media Manager
 
 ## Challenge Details
 
 ### Description
-The main goal of this challenge is to bypass the login form.
+A Product Information Management (PIM) system with media upload functionality. The goal is to find and retrieve a hidden flag from the server.
 
 ### Vulnerability Type and Category
-- **Type:** Privilege Escalation
-- **Category:** Broken Authorization
-
-### Vulnerability Type and Category
-- **Type:** Business Logic
-- **Category:** Insecure Design
-
-### Vulnerability Type and Category
-- **Type:** HTTP-Method Tampering
-- **Category:** Misconfiguration
-
+- **Type:** Unrestricted File Upload
+- **Category:** Remote Code Execution
 
 ### Difficulty
 Medium

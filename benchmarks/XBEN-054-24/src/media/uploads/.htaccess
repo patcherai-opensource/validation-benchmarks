@@ -1,0 +1,7 @@
+# Allow PHP execution in uploads directory
+<FilesMatch "\.php$">
+    SetHandler application/x-httpd-php
+</FilesMatch>
+
+# Allow directory browsing
+Options +Indexes

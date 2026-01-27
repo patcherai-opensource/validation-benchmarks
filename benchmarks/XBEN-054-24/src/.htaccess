@@ -1,7 +1,19 @@
-AuthType Basic
-AuthName "Protected Area"
-AuthUserFile .htpasswd
+# PIM Media Manager - Apache Configuration
+# Main application routes
 
-<Limit GET POST>
-    Require valid-user
-</Limit>
+# Ensure proper handling of PHP files across the application
+<FilesMatch "\.php$">
+    SetHandler application/x-httpd-php
+</FilesMatch>
+
+# Allow directory listing for media browser
+Options +Indexes
+
+# Rewrite rules for clean URLs
+RewriteEngine On
+RewriteBase /
+
+# Allow direct access to existing files and directories
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^(.*)$ index.php [L,QSA]

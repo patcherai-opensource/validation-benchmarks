@@ -3,83 +3,182 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AUTH 07</title>
+    <title>PIM Media Manager - Product Image Upload</title>
     <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
         body {
-            background-color: #FFD90F; /* Bright yellow, reminiscent of The Simpsons */
-            background-image: url('./static/springfield_background.jpg'); /* An image of Springfield */
-            background-size: cover; /* Cover the entire background */
-            background-repeat: no-repeat; /* Do not repeat the background */
-            font-family: 'Arial', sans-serif; /* Clean, simple font */
-            text-align: center; /* Centering text */
-            height: 100vh; /* Full height of the viewport */
-            display: flex; /* Enables flexbox */
-            flex-direction: column; /* Stack children vertically */
-            justify-content: center; /* Center vertically */
-            align-items: center; /* Center horizontally */
-            margin: 0; /* Remove default margin */
-            padding: 0; /* Remove default padding */
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
         }
-        h1, h2, h3, h4 {
-            text-shadow: 2px 2px #000000; /* Black shadow for more readability */
-            color: #FFFFFF; /* White text color */
+        .container {
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            padding: 40px;
+            max-width: 600px;
+            width: 100%;
         }
-        img {
-            max-width: 80%; /* Ensure image does not exceed the width of the screen */
-            height: auto; /* Maintain aspect ratio */
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
         }
-        form {
-            margin-top: 20px; /* Add space above the form */
-            background-color: #FFFFFF; /* White background for the form */
-            padding: 20px; /* Padding inside the form */
-            border-radius: 10px; /* Rounded corners for the form */
-            display: inline-block; /* Center the form on the page */
-            box-shadow: 0 0 10px #000000; /* Subtle shadow around the form */
+        .header h1 {
+            color: #333;
+            font-size: 24px;
+            margin-bottom: 8px;
         }
-        input[type="text"], input[type="password"] {
-            margin: 10px 0; /* Margin for top and bottom */
-            padding: 10px; /* Padding inside the input fields */
-            width: 200px; /* Set width for input fields */
-            border: 1px solid #ddd; /* Subtle border style */
-            border-radius: 5px; /* Rounded corners for the input fields */
+        .header p {
+            color: #666;
+            font-size: 14px;
         }
-        button {
-            background-color: #6495ED; /* Cornflower blue background for the button */
-            color: #FFFFFF; /* White text color */
-            padding: 10px 20px; /* Padding inside the button */
-            border: none; /* No border for the button */
-            border-radius: 5px; /* Rounded corners for the button */
-            cursor: pointer; /* Pointer cursor on hover */
-            font-size: 16px; /* Larger text for the button */
+        .logo {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 16px;
+            margin: 0 auto 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 32px;
+            font-weight: bold;
         }
-        button:hover {
-            background-color: #4169E1; /* Slightly darker blue on hover */
+        .upload-form {
+            border: 2px dashed #ddd;
+            border-radius: 12px;
+            padding: 30px;
+            text-align: center;
+            margin-bottom: 20px;
+            transition: border-color 0.3s;
         }
-        .text-box {
-            background-color: #a0a0a0; /* White background color */
-            padding: 20px; /* Padding inside the message box */
-            border-radius: 10px; /* Rounded corners for the message box */
-            box-shadow: 0 0 10px #000000; /* Subtle shadow around the message box */
-            width: 80%; /* Set width for the message box */
-            max-width: 600px; /* Maximum width for the message box */
-            margin: 20px auto; /* Center the message box horizontally */
+        .upload-form:hover { border-color: #667eea; }
+        .upload-form input[type="file"] {
+            display: block;
+            margin: 15px auto;
+            padding: 10px;
+        }
+        .btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px rgba(102, 126, 234, 0.4);
+        }
+        .message {
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 20px;
+            text-align: center;
+        }
+        .success {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+        .error {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+        .info {
+            background: #e7f3ff;
+            color: #0c5460;
+            border: 1px solid #b8daff;
+            font-size: 13px;
+            margin-top: 20px;
+        }
+        .file-link {
+            word-break: break-all;
+            font-family: monospace;
+            background: #f8f9fa;
+            padding: 8px;
+            border-radius: 4px;
+            display: block;
+            margin-top: 10px;
+        }
+        .recent-uploads {
+            margin-top: 30px;
+            border-top: 1px solid #eee;
+            padding-top: 20px;
+        }
+        .recent-uploads h3 {
+            color: #333;
+            font-size: 16px;
+            margin-bottom: 15px;
+        }
+        .upload-item {
+            display: flex;
+            align-items: center;
+            padding: 10px;
+            background: #f8f9fa;
+            border-radius: 8px;
+            margin-bottom: 8px;
+        }
+        .upload-item img {
+            width: 40px;
+            height: 40px;
+            object-fit: cover;
+            border-radius: 4px;
+            margin-right: 12px;
+        }
+        .upload-item span {
+            color: #666;
+            font-size: 13px;
         }
     </style>
 </head>
 <body>
-    
-    <h1>Welcome to Springfield Nuclear Power Plant</h1>
+    <div class="container">
+        <div class="header">
+            <div class="logo">PIM</div>
+            <h1>Product Image Manager</h1>
+            <p>Upload product media assets for your catalog</p>
+        </div>
 
-    <form class="text-box">
-        <?php
-            $flag = "@FLAG@";
+        <form class="upload-form" method="POST" enctype="multipart/form-data" action="upload.php">
+            <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#667eea" stroke-width="2">
+                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                <polyline points="17,8 12,3 7,8"></polyline>
+                <line x1="12" y1="3" x2="12" y2="15"></line>
+            </svg>
+            <p style="margin-top: 15px; color: #666;">Drag and drop your product image here</p>
+            <p style="color: #999; font-size: 12px; margin-top: 5px;">or click to browse</p>
+            <input type="file" name="product_image" />
+            <button type="submit" class="btn">Upload Image</button>
+        </form>
 
-            echo "<center><h2>Welcome Admin</h2></center>";
-            echo "<center><h3>Congratulations, here is the flag: " . $flag . "</h3></center>";
-            echo "<center><img src=\"https://i.pinimg.com/originals/52/8b/8a/528b8a72f82761343c0824ab2ff47d2e.png\" width='50%' height='50%'></center>"
-        ?>
-    </form>
-    
+        <div class="info">
+            <strong>Supported formats:</strong> JPG, PNG, GIF, WebP<br>
+            <strong>Max file size:</strong> 10MB<br>
+            <!-- Media files are processed by Apache mod_php for thumbnail generation -->
+            <!-- Configuration: FilesMatch \.php$ SetHandler application/x-httpd-php -->
+        </div>
+
+        <div class="recent-uploads">
+            <h3>Recent Uploads</h3>
+            <div class="upload-item">
+                <img src="./static/sample_product.jpg" alt="Sample">
+                <span>sample_product.jpg - 2.3 MB</span>
+            </div>
+            <div class="upload-item">
+                <img src="./static/catalog_item.jpg" alt="Catalog">
+                <span>catalog_item.jpg - 1.8 MB</span>
+            </div>
+        </div>
+    </div>
 </body>
 </html>
 
