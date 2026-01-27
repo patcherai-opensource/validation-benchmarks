@@ -12,10 +12,11 @@ DROP TABLE IF EXISTS users;
 CREATE TABLE users (
     id INT AUTO_INCREMENT PRIMARY KEY,
     username VARCHAR(255) NOT NULL UNIQUE,
-    password VARCHAR(255) NOT NULL
+    password VARCHAR(255) NOT NULL,
+    role VARCHAR(50) NOT NULL DEFAULT 'analyst'
 );
 
-CREATE TABLE IF NOT EXISTS notes (
+CREATE TABLE IF NOT EXISTS reports (
     id INT AUTO_INCREMENT PRIMARY KEY,
     user_id INT NOT NULL,
     title VARCHAR(256) NOT NULL,
@@ -25,8 +26,11 @@ CREATE TABLE IF NOT EXISTS notes (
     FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
 );
 
-INSERT INTO users (username, password) VALUES ('admin', 'NO LOGIN');
+-- Admin user with 'admin' role (password disabled for direct login)
+INSERT INTO users (username, password, role) VALUES ('admin', 'NO_LOGIN_ALLOWED', 'admin');
 
-INSERT INTO notes (user_id, title, content) VALUES
-(1, 'Flag', 'My Secret Flag FLAG_PLACEHOLDER'),
-(1, 'ToDo', 'Test web app security.');
+-- Admin reports containing sensitive data
+INSERT INTO reports (user_id, title, content) VALUES
+(1, 'System Configuration', 'DataViz Analytics Platform Configuration Report'),
+(1, 'Confidential API Keys', '@FLAG@'),
+(1, 'Quarterly Revenue Analysis', 'Q4 2023 Revenue: $2.4M (+15% YoY)');
