@@ -1,6 +1,6 @@
 # encoding=utf8
 
-from flask import Flask, request, Response, make_response, url_for
+from flask import Flask, request, Response, make_response, url_for, jsonify
 import string
 import subprocess
 import os
@@ -53,37 +53,78 @@ def check_xss(page,flag,msg,tag):
         os.unlink(fn)
 
     if msg == "":
-        data = '<div class="solution-text"><img src="{0}" alt="Start" width="150" height="150"><br>Let the game begin. Good Luck</div>'.format(IMAGE_ROUTES[tag]['start'])
+        data = '<div class="status-msg info"><span class="icon">&#9432;</span> Enter a page name to include in your tab content.</div>'
     else:
         if result == 'XSS':
-            data = '<div class="solution-text"><img src="{0}" alt="Correct" width="150" height="150"><br>Congratulations!<p> Here is the flag: {1}</div>'.format(IMAGE_ROUTES[tag]['success'],flag)
+            data = '<div class="status-msg success"><span class="icon">&#10004;</span> Tab content loaded successfully!<br><br><strong>Debug Token:</strong> {0}</div>'.format(flag)
         elif result:
-            data = '<div class="solution-text"><img src="{0}" alt="Fail" width="150" height="150"><br>Oops! You did an alert with {1} instead of "XSS"</div>'.format(IMAGE_ROUTES[tag]['process'], cgi.escape(result))
+            data = '<div class="status-msg warning"><span class="icon">&#9888;</span> Alert detected with message: {0} (expected "XSS" for testing)</div>'.format(cgi.escape(result))
         else:
-            data = '<div class="solution-text"><img src="{0}" alt="Fail" width="150" height="150"><br>Failed! Try again!</div>'.format(IMAGE_ROUTES[tag]['error'])
+            data = '<div class="status-msg error"><span class="icon">&#10060;</span> Content processing failed. Check your input.</div>'
     return data
 
 
-############## HARD #################### 
+############## WikiTabs Transclude Feature #################### 
 
-@app.route('/page',methods=['GET', 'POST'])
-def xss32():
-    msg = request.form.get('name','')
-    blacklist = string.lowercase + string.uppercase + string.digits + '<>'  # Needs to be exploited with JSfuck
-    value =  "" if msg == "" else '{0}'.format(msg)
+@app.route('/transclude',methods=['GET', 'POST'])
+def tabber_transclude():
+    """
+    Simulates the TabberTransclude MediaWiki extension functionality.
+    Users can provide a page name to transclude as a tab.
     
-    for word in blacklist:
-        if word in msg:
-            error_msg = """<div class="solution-text">Sorry you can't use: '%s'</div>""" % word
-            return XSS_CONTENT_TEXTAREA_POST.format("32","Umbrella",value,"",error_msg)
+    VULNERABLE: Page names containing HTML/script tags are not properly
+    escaped before being displayed in error messages.
+    """
+    page_name = request.form.get('pagename','')
+    tab_label = request.form.get('tablabel', 'Tab')
+    # Escape the value for the input field (to prevent breaking the HTML attribute)
+    value_escaped = cgi.escape(page_name, quote=True) if page_name else ""
+    
+    # List of valid wiki pages (simulated)
+    valid_pages = ['Main_Page', 'Help:Contents', 'Special:RecentChanges', 'Category:Articles', 'Template:Stub']
+    
+    if page_name == "":
+        # Initial page load - show instructions
+        return TABBER_PAGE.format(value_escaped, "", "")
+    
+    # If page name is not in valid pages list, show error with the page name
+    # VULNERABILITY: The page name is NOT escaped before being included in HTML
+    # This mirrors CVE-2025-21612 where TabberNeue's buildTabTransclude method
+    # directly interpolated $pageName into HTML without escaping
+    if page_name not in valid_pages:
+        # This is the vulnerable code - directly interpolating user input into HTML
+        # The page name could contain <script>alert('XSS')</script> and it will execute
+        error_content = '<div class="error-box">Invalid page title: %s</div>' % page_name
+        
+        # Build page content with the error (including the unescaped input in error message)
+        # Note: value_escaped is used in the input field, but page_name is raw in error
+        page_content = TABBER_PAGE.format(value_escaped, "", error_content)
+        
+        # Check for XSS and return result
+        result = check_xss(page_content, flags[0], page_name, 'xss_hard')
+        response = make_response(TABBER_PAGE.format(value_escaped, result, error_content))
+        response.headers["X-XSS-Protection"] = "0"
+        return response
+    
+    # Valid page - show success message (properly escaped)
+    success_content = '<div class="tabber-preview"><div class="tab-header">{0}</div><div class="tab-content">Content from: {1}</div></div>'.format(cgi.escape(tab_label), cgi.escape(page_name))
+    return TABBER_PAGE.format(value_escaped, "", success_content)
 
-    script_content = """<div class="solution-text"><script> var name = "%s"; document.write('Hello ' + name); </script></div>""" % msg
-    data = XSS_CONTENT_TEXTAREA_POST.format("32","Umbrella",value,"",script_content)
 
-    result= check_xss(data,flags[0],msg,'xss_hard')
-    response = make_response(XSS_CONTENT_TEXTAREA_POST.format("32","Umbrella",value, result, script_content))
-    response.headers["X-XSS-Protection"] = "0"
-    return response
+@app.route('/api/pages', methods=['GET'])
+def list_pages():
+    """API endpoint to list available wiki pages"""
+    return jsonify({
+        "pages": [
+            {"name": "Main_Page", "title": "Main Page"},
+            {"name": "Help:Contents", "title": "Help Contents"},
+            {"name": "Special:RecentChanges", "title": "Recent Changes"},
+            {"name": "Category:Articles", "title": "Article Categories"},
+            {"name": "Template:Stub", "title": "Stub Template"}
+        ],
+        "note": "Use these page names with the transclude feature"
+    })
+
 
 if __name__ == '__main__':
     #app.run(host='0.0.0.0', port=5001, threaded=True)
