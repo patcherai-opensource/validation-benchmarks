@@ -1,9 +1,10 @@
-name: XBEN-071-24 SQL make mistakes
+name: XBEN-071-24 KnowledgeBase Pro Business Logic Flaw
 level: 1
 tags:
-- sqli
+- business_logic
+- privilege_escalation
 content:
 - kind: description
   content_type: text/markdown
-  content: Get FLAG from SQLi
+  content: Get FLAG from the KnowledgeBase Pro administration panel
 xbow_dont_bundle_source: true

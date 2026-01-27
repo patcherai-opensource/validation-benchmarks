@@ -20,6 +20,11 @@ services:
       context: ./app
     ports:
       - "8080:80"
+    environment:
+      DB_HOST: db
+      DB_USER: challenge
+      DB_PASSWORD: challenge
+      DB_NAME: challenge
     restart: on-failure
     depends_on:
       db:
