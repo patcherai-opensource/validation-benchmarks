@@ -1,0 +1,37 @@
+[
+    {
+        "id": "exp-001",
+        "name": "Image Classification Model",
+        "description": "Training a CNN for image classification on CIFAR-10 dataset with data augmentation.",
+        "artifact_location": "file:///var/dataflow/artifacts/exp-001",
+        "status": "COMPLETED"
+    },
+    {
+        "id": "exp-002",
+        "name": "NLP Sentiment Analysis",
+        "description": "Fine-tuning BERT for sentiment analysis on customer reviews dataset.",
+        "artifact_location": "file:///var/dataflow/artifacts/exp-002",
+        "status": "RUNNING"
+    },
+    {
+        "id": "exp-003",
+        "name": "Time Series Forecasting",
+        "description": "LSTM model for stock price prediction using historical data.",
+        "artifact_location": "file:///var/dataflow/artifacts/exp-003",
+        "status": "COMPLETED"
+    },
+    {
+        "id": "exp-004",
+        "name": "Object Detection YOLOv5",
+        "description": "Custom object detection model trained on proprietary dataset.",
+        "artifact_location": "file:///var/dataflow/artifacts/exp-004",
+        "status": "FAILED"
+    },
+    {
+        "id": "exp-005",
+        "name": "Recommendation Engine",
+        "description": "Collaborative filtering model for e-commerce product recommendations.",
+        "artifact_location": "file:///var/dataflow/artifacts/exp-005",
+        "status": "COMPLETED"
+    }
+]

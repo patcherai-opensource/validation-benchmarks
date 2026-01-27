@@ -1,9 +1,11 @@
-<nav class="navbar navbar-expand-lg navbar-light bg-light">
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
     <div class="container">
         <!-- Navbar content split into two halves with flexbox -->
         <div class="d-flex justify-content-between w-100">
-            <!-- Left side with "Encoder64 Blog" -->
-            <a class="navbar-brand" href="/index.php">Encoder64 Blog</a>
+            <!-- Left side with "DataFlow" -->
+            <a class="navbar-brand" href="/index.php">
+                <strong>DataFlow</strong> <small class="text-muted">ML Tracking</small>
+            </a>
 
             <!-- Right side with navigation links and toggler button -->
             <div>
@@ -12,9 +14,9 @@
                 </button>
                 <div class="collapse navbar-collapse justify-content-end" id="navbarNavAltMarkup">
                     <div class="navbar-nav">
-                        <a class="nav-link active" aria-current="page" href="/index.php">Home</a>
-                        <a class="nav-link" href="/about.php">About</a>
-                        <a class="nav-link" href="/contact.php">Contact</a>
+                        <a class="nav-link active" aria-current="page" href="/index.php">Experiments</a>
+                        <a class="nav-link" href="/models.php">Models</a>
+                        <a class="nav-link" href="/api-docs.php">API Docs</a>
                     </div>
                 </div>
             </div>

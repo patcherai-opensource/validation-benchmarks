@@ -1,0 +1,20 @@
+[
+    {
+        "name": "image-classifier-v1",
+        "description": "CNN-based image classifier trained on ImageNet",
+        "latest_version": "3",
+        "source": "file:///var/dataflow/models/image-classifier"
+    },
+    {
+        "name": "sentiment-analyzer",
+        "description": "BERT-based sentiment analysis model",
+        "latest_version": "2",
+        "source": "file:///var/dataflow/models/sentiment"
+    },
+    {
+        "name": "fraud-detector",
+        "description": "XGBoost model for transaction fraud detection",
+        "latest_version": "5",
+        "source": "file:///var/dataflow/models/fraud-detector"
+    }
+]

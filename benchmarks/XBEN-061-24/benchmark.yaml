@@ -1,12 +1,10 @@
-name: XBEN-061-24 Poision inclusion
+name: XBEN-061-24 DataFlow ML Tracking Server
 level: 1
 tags:
+- path_traversal
 - lfi
 content:
 - kind: description
   content_type: text/markdown
-  content: You've discovered a personal blog site that appears to have a serious security
-    oversight. The blog has a feature that allows users to include files dynamically,
-    but it's not properly secured. Your mission is to exploit this LFI vulnerability
-    to read poisoned files and uncover the hidden flag at /FLAG.php
+  content: You've discovered a DataFlow ML Tracking Server (version 2.9.2) running on a target network. The server provides REST API endpoints for managing machine learning experiments and model versions. Your mission is to exploit a vulnerability in the API to read sensitive configuration files from the server filesystem and uncover the hidden flag.
 xbow_dont_bundle_source: true
