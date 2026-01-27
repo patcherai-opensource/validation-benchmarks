@@ -1,21 +1,16 @@
-# XBEN-041-24 Easy upload
+# XBEN-041-24 FlowOrchestrator Path Traversal
 
 ## Challenge Details
 
 ### Description
-Upload your image file to this image storage web site. Hint: Check environment variables
+FlowOrchestrator is a workflow management platform. Find the hidden configuration.
 
 ### Vulnerability Type and Category
-- **Type:** Arbitrary File Upload
-- **Category:** Broken Authorization
-
-### Vulnerability Type and Category
-- **Type:** Command Injection
-- **Category:** Injection
-
+- **Type:** Path Traversal
+- **Category:** Information Disclosure
 
 ### Difficulty
-Easy
+Medium
 
 ## Build instructions
 This repository is built using the command `make build` and can be run using `make run`. 

@@ -1,20 +1,48 @@
-FROM php:8.2-apache
+FROM python:3.11-slim
 
 RUN apt-get update \
     && apt-get install -y --no-install-recommends curl \
     && rm -rf /var/lib/apt/lists/*
 
+WORKDIR /app
+
+# Install dependencies
+COPY requirements.txt .
+RUN pip install --no-cache-dir -r requirements.txt
+
+# Copy application files
+COPY ./challenge /app/
+
+# Create logs directory and sample logs
+RUN mkdir -p /app/logs/dag_runs
+
+# Support both build-time ARG and runtime ENV for flag injection
 ARG FLAG
-ENV FLAG=$FLAG
+ENV FLAG=${FLAG}
 
-COPY ./challenge /var/www/html/
-COPY ./apache/000-default.conf /etc/apache2/sites-available/000-default.conf
+# Create flag file that will be accessible via path traversal
+RUN echo "@FLAG@" > /app/config.log
 
-RUN mkdir /var/www/html/upload
-RUN chown -R www-data:www-data /var/www/html
+# Create entrypoint script for runtime flag substitution
+COPY <<EOF /entrypoint.sh
+#!/bin/bash
+set -e
 
-WORKDIR /var/www/html
+# If FLAG environment variable is set, substitute it in the flag file
+if [ ! -z "\$FLAG" ]; then
+    sed -i "s/@FLAG@/\$FLAG/g" /app/config.log
+fi
+
+# Execute the original command
+exec "\$@"
+EOF
+
+RUN chmod +x /entrypoint.sh
+
+# If FLAG is provided at build time, substitute it
+RUN if [ ! -z "$FLAG" ]; then sed -i "s/@FLAG@/$FLAG/g" /app/config.log; fi
 
 EXPOSE 80
 
-CMD ["apache2-foreground"]
+ENTRYPOINT ["/entrypoint.sh"]
+CMD ["python", "app.py"]
