@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PNG Metadata Analyzer</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            color: #eee;
+            min-height: 100vh;
+            margin: 0;
+            padding: 20px;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        h1 {
+            text-align: center;
+            color: #00d4ff;
+            margin-bottom: 10px;
+        }
+        .subtitle {
+            text-align: center;
+            color: #888;
+            margin-bottom: 30px;
+        }
+        .upload-box {
+            background: #252a40;
+            border: 2px dashed #00d4ff;
+            border-radius: 10px;
+            padding: 40px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .upload-box:hover {
+            border-color: #00ff88;
+            background: #2a3050;
+        }
+        .upload-box input[type="file"] {
+            display: none;
+        }
+        .upload-icon {
+            font-size: 48px;
+            margin-bottom: 10px;
+        }
+        button {
+            background: linear-gradient(135deg, #00d4ff 0%, #00ff88 100%);
+            color: #1a1a2e;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 25px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            margin-top: 20px;
+            transition: transform 0.2s ease;
+        }
+        button:hover {
+            transform: scale(1.05);
+        }
+        button:disabled {
+            background: #555;
+            cursor: not-allowed;
+        }
+        .result {
+            background: #252a40;
+            border-radius: 10px;
+            padding: 20px;
+            margin-top: 30px;
+            display: none;
+        }
+        .result.show {
+            display: block;
+        }
+        .result h3 {
+            color: #00d4ff;
+            margin-top: 0;
+        }
+        .chunk {
+            background: #1a1a2e;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 10px 0;
+            font-family: monospace;
+            font-size: 12px;
+            overflow-x: auto;
+        }
+        .warning {
+            background: #3d2020;
+            border-left: 4px solid #ff4444;
+        }
+        .error {
+            color: #ff4444;
+        }
+        .info-panel {
+            background: #1e2235;
+            padding: 20px;
+            border-radius: 10px;
+            margin-top: 30px;
+        }
+        .info-panel h3 {
+            color: #00ff88;
+            margin-top: 0;
+        }
+        .info-panel ul {
+            color: #aaa;
+        }
+        .api-docs {
+            background: #1e2235;
+            padding: 20px;
+            border-radius: 10px;
+            margin-top: 20px;
+        }
+        .api-docs h3 {
+            color: #ffaa00;
+            margin-top: 0;
+        }
+        code {
+            background: #0a0a15;
+            padding: 2px 6px;
+            border-radius: 3px;
+            color: #00d4ff;
+        }
+        pre {
+            background: #0a0a15;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+        }
+        .loading {
+            display: none;
+            text-align: center;
+            padding: 20px;
+        }
+        .loading.show {
+            display: block;
+        }
+        .spinner {
+            border: 3px solid #333;
+            border-top: 3px solid #00d4ff;
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🖼️ PNG Metadata Analyzer</h1>
+        <p class="subtitle">Enterprise-grade image metadata extraction service v1.0</p>
+        
+        <form id="uploadForm" enctype="multipart/form-data">
+            <div class="upload-box" onclick="document.getElementById('imageInput').click()">
+                <div class="upload-icon">📁</div>
+                <p>Click to select a PNG image or drag and drop</p>
+                <input type="file" id="imageInput" name="image" accept=".png">
+                <p id="fileName" style="color: #00d4ff;"></p>
+            </div>
+            <div style="text-align: center;">
+                <button type="submit" id="analyzeBtn" disabled>Analyze Image</button>
+            </div>
+        </form>
+        
+        <div class="loading" id="loading">
+            <div class="spinner"></div>
+            <p>Processing image chunks...</p>
+        </div>
+        
+        <div class="result" id="result">
+            <h3>Analysis Results</h3>
+            <div id="resultContent"></div>
+        </div>
+        
+        <div class="info-panel">
+            <h3>About This Service</h3>
+            <p>This analyzer extracts and displays metadata from PNG image files, including:</p>
+            <ul>
+                <li><strong>IHDR</strong> - Image dimensions and color type</li>
+                <li><strong>tEXt</strong> - Uncompressed text metadata</li>
+                <li><strong>zTXt</strong> - Compressed text metadata (zlib deflate)</li>
+                <li><strong>iTXt</strong> - International text metadata</li>
+                <li><strong>iCCP</strong> - ICC color profile data</li>
+            </ul>
+            <p style="color: #888;">Note: Compressed chunks are automatically decompressed for analysis. 
+            Large metadata blocks may trigger security warnings.</p>
+        </div>
+        
+        <div class="api-docs">
+            <h3>API Documentation</h3>
+            <p><strong>POST /upload</strong> - Upload a PNG file for analysis</p>
+            <pre>curl -X POST -F "image=@photo.png" http://host/upload</pre>
+            
+            <p><strong>POST /api/analyze</strong> - Send raw PNG data</p>
+            <pre>curl -X POST -H "Content-Type: image/png" --data-binary @photo.png http://host/api/analyze</pre>
+        </div>
+    </div>
+    
+    <script>
+        const imageInput = document.getElementById('imageInput');
+        const fileName = document.getElementById('fileName');
+        const analyzeBtn = document.getElementById('analyzeBtn');
+        const uploadForm = document.getElementById('uploadForm');
+        const result = document.getElementById('result');
+        const resultContent = document.getElementById('resultContent');
+        const loading = document.getElementById('loading');
+        
+        imageInput.addEventListener('change', function() {
+            if (this.files.length > 0) {
+                fileName.textContent = this.files[0].name;
+                analyzeBtn.disabled = false;
+            }
+        });
+        
+        uploadForm.addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const formData = new FormData();
+            formData.append('image', imageInput.files[0]);
+            
+            result.classList.remove('show');
+            loading.classList.add('show');
+            analyzeBtn.disabled = true;
+            
+            try {
+                const response = await fetch('/upload', {
+                    method: 'POST',
+                    body: formData
+                });
+                
+                const data = await response.json();
+                displayResult(data);
+            } catch (error) {
+                resultContent.innerHTML = `<div class="error">Error: ${error.message}</div>`;
+                result.classList.add('show');
+            } finally {
+                loading.classList.remove('show');
+                analyzeBtn.disabled = false;
+            }
+        });
+        
+        function displayResult(data) {
+            let html = '';
+            
+            if (data.error) {
+                html = `<div class="error">Error: ${data.error}</div>`;
+            } else {
+                html = `
+                    <p><strong>File:</strong> ${data.filename || 'N/A'}</p>
+                    <p><strong>Size:</strong> ${data.file_size} bytes</p>
+                    <p><strong>Total Decompressed Metadata:</strong> ${data.total_decompressed_metadata} bytes</p>
+                `;
+                
+                if (data.security_warning) {
+                    html += `
+                        <div class="chunk warning">
+                            <strong>⚠️ Security Warning</strong>
+                            <pre>${JSON.stringify(data.security_warning, null, 2)}</pre>
+                        </div>
+                    `;
+                }
+                
+                html += '<h4>Chunks Found:</h4>';
+                
+                for (const chunk of data.chunks) {
+                    const hasWarning = chunk.warning || chunk.debug_context;
+                    html += `
+                        <div class="chunk ${hasWarning ? 'warning' : ''}">
+                            <strong>${chunk.type}</strong> (${chunk.length} bytes at offset ${chunk.offset})
+                            ${chunk.warning ? `<br><span style="color:#ff6666">Warning: ${chunk.warning}</span>` : ''}
+                            ${chunk.keyword ? `<br>Keyword: ${chunk.keyword}` : ''}
+                            ${chunk.text ? `<br>Text: ${chunk.text.substring(0, 200)}${chunk.text.length > 200 ? '...' : ''}` : ''}
+                            ${chunk.decompressed_size ? `<br>Decompressed size: ${chunk.decompressed_size} bytes` : ''}
+                            ${chunk.debug_context ? `<pre>${JSON.stringify(chunk.debug_context, null, 2)}</pre>` : ''}
+                            ${chunk.error ? `<br><span class="error">Error: ${chunk.error}</span>` : ''}
+                        </div>
+                    `;
+                }
+            }
+            
+            resultContent.innerHTML = html;
+            result.classList.add('show');
+        }
+    </script>
+</body>
+</html>

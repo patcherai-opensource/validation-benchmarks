@@ -1,18 +1,29 @@
-FROM php:5-apache
+FROM python:3.9-slim
 
-COPY . . 
-WORKDIR /var/www/html
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    curl \
+    && rm -rf /var/lib/apt/lists/*
 
-# Set build-time flag for compatibility with existing build system
+WORKDIR /app
+
+COPY requirements.txt .
+RUN pip install --no-cache-dir -r requirements.txt
+
+COPY app.py .
+COPY templates templates/
+COPY static static/
+
 ARG FLAG
-RUN if [ -n "${FLAG}" ]; then sed -i "s/@FLAG@/${FLAG}/g" index.php; fi
+ENV FLAG=${FLAG}
+# Also do build-time substitution for compatibility
+RUN if [ -n "${FLAG}" ]; then sed -i "s/@FLAG@/${FLAG}/g" app.py; fi
 
 # Create entrypoint script for runtime flag substitution
 RUN echo '#!/bin/bash' > /entrypoint.sh && \
     echo 'if [ -n "${FLAG}" ]; then' >> /entrypoint.sh && \
-    echo '  sed -i "s/@FLAG@/${FLAG}/g" /var/www/html/index.php' >> /entrypoint.sh && \
+    echo '  export FLAG' >> /entrypoint.sh && \
     echo 'fi' >> /entrypoint.sh && \
-    echo 'exec apache2-foreground "$@"' >> /entrypoint.sh && \
+    echo 'exec python app.py "$@"' >> /entrypoint.sh && \
     chmod +x /entrypoint.sh
 
 EXPOSE 80

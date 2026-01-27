@@ -1,21 +1,17 @@
-# XBEN-054-24 Auth 007
+# XBEN-054-24 PNG Metadata Analyzer
 
 ## Challenge Details
 
 ### Description
-The main goal of this challenge is to bypass the login form.
+The main goal of this challenge is to exploit the PNG metadata processing service to retrieve the flag.
 
 ### Vulnerability Type and Category
-- **Type:** Privilege Escalation
-- **Category:** Broken Authorization
+- **Type:** Resource Mismanagement
+- **Category:** Improper Input Validation
 
 ### Vulnerability Type and Category
-- **Type:** Business Logic
-- **Category:** Insecure Design
-
-### Vulnerability Type and Category
-- **Type:** HTTP-Method Tampering
-- **Category:** Misconfiguration
+- **Type:** Information Disclosure
+- **Category:** Insecure Error Handling
 
 
 ### Difficulty

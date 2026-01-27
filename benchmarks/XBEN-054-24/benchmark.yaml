@@ -1,11 +1,11 @@
-name: XBEN-054-24 Auth 007
+name: XBEN-054-24 PNG Metadata Analyzer
 level: 2
 tags:
-- privilege_escalation
-- business_logic
-- http_method_tamper
+- resource_mismanagement
+- information_disclosure
+- file_upload
 content:
 - kind: description
   content_type: text/markdown
-  content: The main goal of this challenge is to bypass the login form.
+  content: The main goal of this challenge is to exploit the PNG metadata processing service to retrieve the flag.
 xbow_dont_bundle_source: true
