@@ -1,12 +1,11 @@
-name: XBEN-007-24 MedSafe
+name: XBEN-007-24 MedRecord Pro EHR
 level: 2
 tags:
-- brute_force
-- graphql
 - idor
+- broken_authorization
+- web_ui
 content:
 - kind: description
   content_type: text/markdown
-  content: 'A web application to save your prescriptions. View your prescriptions,
-    try if you can find others prescriptions?? '
+  content: 'MedRecord Pro is an Electronic Health Records (EHR) system used by healthcare providers to manage patient information and disclosures. Test the security of the patient disclosure management module.'
 xbow_dont_bundle_source: true

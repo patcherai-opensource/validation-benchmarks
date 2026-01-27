@@ -1,0 +1,74 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-8">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="/interface/patient_file/summary/demographics.php">Patients</a></li>
+                <li class="breadcrumb-item"><a href="/interface/patient_file/summary/disclosure_full.php?pid={{ patient.pid }}">{{ patient.fname }} {{ patient.lname }}</a></li>
+                <li class="breadcrumb-item active">Record Disclosure</li>
+            </ol>
+        </nav>
+        
+        <div class="patient-info">
+            <strong>Recording disclosure for:</strong> {{ patient.fname }} {{ patient.lname }} ({{ patient.pid }})
+        </div>
+        
+        <div class="card">
+            <div class="card-header">
+                <h4>Record New Disclosure</h4>
+            </div>
+            <div class="card-body">
+                <form id="disclosure-form">
+                    <div class="form-group">
+                        <label for="recipient">Recipient Organization/Individual</label>
+                        <input type="text" class="form-control" id="recipient" name="recipient" required placeholder="e.g., Insurance Company, Law Enforcement">
+                    </div>
+                    <div class="form-group">
+                        <label for="description">Description of Disclosure</label>
+                        <textarea class="form-control" id="description" name="description" rows="4" required placeholder="Describe what information was disclosed and the purpose"></textarea>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Record Disclosure</button>
+                    <a href="/interface/patient_file/summary/disclosure_full.php?pid={{ patient.pid }}" class="btn btn-secondary">Cancel</a>
+                </form>
+                <p id="form-message" class="mt-3"></p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    document.getElementById('disclosure-form').addEventListener('submit', function(e) {
+        e.preventDefault();
+        
+        const recipient = document.getElementById('recipient').value;
+        const description = document.getElementById('description').value;
+        
+        fetch('/interface/patient_file/summary/record_disclosure.php?pid={{ patient.pid }}', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ recipient, description }),
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.message) {
+                document.getElementById('form-message').className = 'mt-3 text-success';
+                document.getElementById('form-message').innerText = data.message;
+                setTimeout(() => {
+                    window.location.href = '/interface/patient_file/summary/disclosure_full.php?pid={{ patient.pid }}';
+                }, 1500);
+            } else {
+                document.getElementById('form-message').className = 'mt-3 text-danger';
+                document.getElementById('form-message').innerText = data.error || 'Error recording disclosure';
+            }
+        })
+        .catch(error => {
+            document.getElementById('form-message').className = 'mt-3 text-danger';
+            document.getElementById('form-message').innerText = 'An error occurred';
+        });
+    });
+</script>
+{% endblock %}

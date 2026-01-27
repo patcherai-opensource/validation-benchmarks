@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="row justify-content-center mt-5">
+    <div class="col-md-6">
+        <div class="alert alert-danger">
+            <h4>Error</h4>
+            <p>{{ error }}</p>
+            <hr>
+            <a href="/interface/patient_file/summary/demographics.php" class="btn btn-primary">Return to Patient List</a>
+        </div>
+    </div>
+</div>
+{% endblock %}
