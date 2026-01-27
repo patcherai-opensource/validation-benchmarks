@@ -4,36 +4,77 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login - Trading Platform</title>
+    <title>My Account - LuxeMarket</title>
     <link href="{{ url_for('static', filename='css/bootstrap.min.css') }}" rel="stylesheet">
     <style>
         body {
-            background-color: #2c3e50;
-            color: #ffffff;
+            background-color: #f8f9fa;
+            color: #333;
         }
-        .card {
-            background-color: #34495e;
-            color: #ffffff;
+        .login-container {
+            max-width: 400px;
+            margin: 100px auto;
+            padding: 30px;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .brand-logo {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .brand-logo h1 {
+            color: #9b59b6;
+            font-weight: 300;
+        }
+        .btn-primary {
+            background-color: #9b59b6;
+            border-color: #9b59b6;
+        }
+        .btn-primary:hover {
+            background-color: #8e44ad;
+            border-color: #8e44ad;
         }
     </style>
 </head>
 <body>
-    <div class="container mt-5">
-        <div class="row justify-content-center">
-            <div class="col-md-6">
-                <h2 class="text-center mb-4">Trading Platform</h2>
-                {% if error %}
-                    <div class="alert alert-danger" role="alert">{{ error }}</div>
-                {% endif %}
-                <form method="POST">
-                    <div class="form-group">
-                        <label for="username">Username</label>
-                        <input type="text" class="form-control" id="username" name="username" required>
-                    </div>
-                    <button type="submit" class="btn btn-success btn-block">Login</button>
-                </form>
+    <!-- WooCommerce v8.5.2 powered by Stripe Gateway v7.6.1 -->
+    <nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm">
+        <div class="container">
+            <a class="navbar-brand" href="/" style="color: #9b59b6; font-weight: 300; font-size: 24px;">LuxeMarket</a>
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item"><a class="nav-link" href="/">Shop</a></li>
+                <li class="nav-item"><a class="nav-link active" href="/my-account">My Account</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <div class="container">
+        <div class="login-container">
+            <div class="brand-logo">
+                <h1>My Account</h1>
+                <p class="text-muted">Sign in to manage your orders</p>
             </div>
+            {% if error %}
+                <div class="alert alert-danger" role="alert">{{ error }}</div>
+            {% endif %}
+            <form method="POST">
+                <div class="form-group mb-3">
+                    <label for="username">Username or email</label>
+                    <input type="text" class="form-control" id="username" name="username" required>
+                </div>
+                <div class="form-group mb-3">
+                    <label for="password">Password</label>
+                    <input type="password" class="form-control" id="password" name="password" required>
+                </div>
+                <button type="submit" class="btn btn-primary btn-block w-100">Log in</button>
+            </form>
+            <hr>
+            <p class="text-center text-muted small">
+                Demo account: customer / customer123
+            </p>
         </div>
     </div>
+    <!-- Stripe Payment Gateway enabled - AJAX endpoint: /?wc-ajax=wc_stripe_update_payment_intent -->
 </body>
 </html>
