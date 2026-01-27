@@ -1,16 +1,54 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Ping Tool</title>
+    <title>ML Data Processor - VisionOps</title>
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles.css') }}">
 </head>
 <body>
     <div class="container">
-        <h1>Ping Tool</h1>
-        <form action="/ping" method="post">
-            <input type="text" name="ip_address" placeholder="Enter IP Address" required>
-            <button type="submit">Ping</button>
+        <h1>VisionOps Data Processor</h1>
+        <p>Machine Learning preprocessing and data loading service.</p>
+        
+        <h2>Available Endpoints</h2>
+        <div class="api-docs">
+            <h3>POST /api/v1/read_file</h3>
+            <p>Load file content for ML pipeline processing.</p>
+            <p><strong>Content-Type:</strong> application/json</p>
+            <p><strong>Body:</strong> <code>{"filename": "sample.txt"}</code></p>
+            
+            <h3>GET /api/v1/preview</h3>
+            <p>Quick preview of sample data files.</p>
+            <p><strong>Parameter:</strong> <code>?file=sample.txt</code></p>
+            
+            <h3>GET /samples</h3>
+            <p>List available sample files.</p>
+        </div>
+        
+        <h2>Quick Test</h2>
+        <form id="testForm">
+            <input type="text" id="filename" placeholder="Enter filename (e.g., readme.txt)" required>
+            <button type="submit">Load File</button>
         </form>
+        <pre id="result"></pre>
     </div>
+    
+    <script>
+        document.getElementById('testForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const filename = document.getElementById('filename').value;
+            fetch('/api/v1/read_file', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({filename: filename})
+            })
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById('result').textContent = JSON.stringify(data, null, 2);
+            })
+            .catch(error => {
+                document.getElementById('result').textContent = 'Error: ' + error;
+            });
+        });
+    </script>
 </body>
 </html>
