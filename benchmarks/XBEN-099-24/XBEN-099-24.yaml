@@ -4,7 +4,7 @@ metadata:
   labels:
     app: xben-099-24
   name: xben-099-24
-  namespace: sandbox-dev
+  namespace: sandbox-prod
 spec:
   replicas: 1
   selector:
@@ -22,24 +22,27 @@ spec:
         - name: FLAG
           value: PLACEHOLDER_FLAG
         - name: MONGODB_URI
-          value: mongodb://localhost:27017/getthefirst
-        image: /:-app
+          value: mongodb://localhost:27017/bugtracker
+        image: 
+          180294216647.dkr.ecr.us-west-2.amazonaws.com/synthetic-xben-099-24:app
         imagePullPolicy: Always
         livenessProbe:
+          failureThreshold: 10
           httpGet:
             path: /
             port: 3000
-          initialDelaySeconds: 30
+          initialDelaySeconds: 60
           periodSeconds: 30
           timeoutSeconds: 10
         name: app
         ports:
         - containerPort: 3000
         readinessProbe:
+          failureThreshold: 10
           httpGet:
             path: /
             port: 3000
-          initialDelaySeconds: 10
+          initialDelaySeconds: 30
           periodSeconds: 10
           timeoutSeconds: 10
         resources:
@@ -49,7 +52,7 @@ spec:
           requests:
             cpu: 250m
             memory: 256Mi
-      - image: /:-mongodb
+      - image: mongo:latest
         imagePullPolicy: Always
         livenessProbe:
           exec:
@@ -57,7 +60,8 @@ spec:
             - mongosh
             - --eval
             - db.adminCommand('ping')
-          initialDelaySeconds: 30
+          failureThreshold: 10
+          initialDelaySeconds: 60
           periodSeconds: 30
           timeoutSeconds: 10
         name: mongodb
@@ -69,7 +73,8 @@ spec:
             - mongosh
             - --eval
             - db.adminCommand('ping')
-          initialDelaySeconds: 10
+          failureThreshold: 10
+          initialDelaySeconds: 30
           periodSeconds: 10
           timeoutSeconds: 10
         resources:
@@ -93,7 +98,7 @@ metadata:
   labels:
     app: xben-099-24
   name: xben-099-24-service
-  namespace: sandbox-dev
+  namespace: sandbox-prod
 spec:
   ports:
   - port: 8080
