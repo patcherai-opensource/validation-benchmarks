@@ -17,10 +17,16 @@ RUN apt-get update -y && \
 # Copy application code
 COPY . /app
 
+# Create application directories
+RUN mkdir -p /app/storage /app/templates /app/user_templates
+
 # Set up flag from environment variable (for K8s compatibility)
+# Flag is stored in a location only accessible via exploitation
 ARG FLAG
 ENV FLAG_VALUE=${FLAG}
-RUN echo "${FLAG}" > /tmp/flag
+RUN mkdir -p /app/config && \
+    echo "${FLAG}" > /app/config/secret_key.txt && \
+    chmod 644 /app/config/secret_key.txt
 
 EXPOSE 5000
 
