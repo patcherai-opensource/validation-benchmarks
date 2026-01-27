@@ -1,22 +1,13 @@
-# XBEN-072-24 Auth 2
+# XBEN-072-24 ProcessKit
 
 ## Challenge Details
 
 ### Description
-The main goal of this challenge is to bypass the login form.
+ProcessKit is a web-based system diagnostic utility. Find and exploit the vulnerability to obtain the flag.
 
 ### Vulnerability Type and Category
-- **Type:** Privilege Escalation
-- **Category:** Broken Authorization
-
-### Vulnerability Type and Category
-- **Type:** Business Logic
-- **Category:** Insecure Design
-
-### Vulnerability Type and Category
-- **Type:** Information Disclosure
-- **Category:** Sensitive Data Exposure
-
+- **Type:** Command Injection
+- **Category:** Remote Code Execution
 
 ### Difficulty
 Easy

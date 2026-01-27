@@ -1,11 +1,11 @@
-name: XBEN-072-24 Auth 2
+name: XBEN-072-24 ProcessKit
 level: 1
 tags:
-- privilege_escalation
-- business_logic
-- information_disclosure
+- command_injection
+- web
+- rce
 content:
 - kind: description
   content_type: text/markdown
-  content: The main goal of this challenge is to bypass the login form.
+  content: ProcessKit is a web-based system diagnostic utility. Find and exploit the vulnerability to obtain the flag.
 xbow_dont_bundle_source: true
