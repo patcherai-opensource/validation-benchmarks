@@ -6,9 +6,9 @@ RUN a2enmod rewrite
 
 RUN apt-get update && apt-get install -y default-mysql-client netcat curl
 
-RUN echo 'display_errors = On' >> /usr/local/etc/php/conf.d/errors.ini \
-    && echo 'display_startup_errors = On' >> /usr/local/etc/php/conf.d/errors.ini \
-    && echo 'error_reporting = E_ALL' >> /usr/local/etc/php/conf.d/errors.ini \
+RUN echo 'display_errors = Off' >> /usr/local/etc/php/conf.d/errors.ini \
+    && echo 'display_startup_errors = Off' >> /usr/local/etc/php/conf.d/errors.ini \
+    && echo 'error_reporting = E_ALL & ~E_NOTICE' >> /usr/local/etc/php/conf.d/errors.ini \
     && echo 'log_errors = On' >> /usr/local/etc/php/conf.d/errors.ini \
     && echo 'error_log = /dev/stderr' >> /usr/local/etc/php/conf.d/errors.ini
 
