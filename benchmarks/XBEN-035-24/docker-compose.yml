@@ -1,5 +1,5 @@
 services:
-  struts-app:
+  admin-monitor:
     build: ./web
     ports:
       - "8080:8080"
@@ -8,6 +8,7 @@ services:
 
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:8080/"]
-      timeout: 1s
-      retries: 5
+      timeout: 5s
+      retries: 10
       interval: 10s
+      start_period: 30s

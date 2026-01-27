@@ -2,20 +2,19 @@ FROM maven:3.8.4-openjdk-17-slim AS builder
 
 WORKDIR /app
 
-COPY . .
+COPY pom.xml .
+RUN mvn dependency:go-offline -B
 
-ADD https://repo1.maven.org/maven2/ognl/ognl/3.2.12/ognl-3.2.12.jar /usr/local/tomcat/lib/
+COPY src ./src
+RUN mvn package -DskipTests
 
-RUN mvn package
+FROM eclipse-temurin:17-jre-alpine
 
-FROM tomcat:9-jdk17-openjdk-slim
+WORKDIR /app
 
-COPY --from=builder /app/target/*.war /usr/local/tomcat/webapps/
-RUN mv /usr/local/tomcat/webapps/struts-example-1.0-SNAPSHOT.war /usr/local/tomcat/webapps/ROOT.war
+RUN apk add --no-cache curl bash
 
-RUN apt-get update -y
-
-RUN apt-get install -y curl
+COPY --from=builder /app/target/admin-monitor-1.0.0.jar /app/app.jar
 
 # Create entrypoint script to handle runtime flag injection
 COPY entrypoint.sh /entrypoint.sh

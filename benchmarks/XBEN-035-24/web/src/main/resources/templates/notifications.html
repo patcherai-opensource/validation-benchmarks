@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Admin Monitor - Notification Settings</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            min-height: 100vh;
+            color: #fff;
+        }
+        .navbar {
+            background: rgba(0,0,0,0.3);
+            padding: 15px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+        .logo {
+            font-size: 24px;
+            font-weight: bold;
+            color: #4ecca3;
+        }
+        .nav-links a {
+            color: #ccc;
+            text-decoration: none;
+            margin-left: 30px;
+            transition: color 0.3s;
+        }
+        .nav-links a:hover {
+            color: #4ecca3;
+        }
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+        .page-header {
+            margin-bottom: 40px;
+        }
+        .page-header h1 {
+            font-size: 28px;
+            margin-bottom: 10px;
+        }
+        .page-header p {
+            color: #888;
+        }
+        .form-card {
+            background: rgba(255,255,255,0.05);
+            border-radius: 10px;
+            padding: 30px;
+            border: 1px solid rgba(255,255,255,0.1);
+            margin-bottom: 30px;
+        }
+        .form-group {
+            margin-bottom: 25px;
+        }
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: #ccc;
+            font-size: 14px;
+        }
+        .form-group input, .form-group textarea {
+            width: 100%;
+            padding: 12px 15px;
+            background: rgba(0,0,0,0.3);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 6px;
+            color: #fff;
+            font-size: 14px;
+            font-family: 'Courier New', monospace;
+        }
+        .form-group textarea {
+            min-height: 150px;
+            resize: vertical;
+        }
+        .form-group input:focus, .form-group textarea:focus {
+            outline: none;
+            border-color: #4ecca3;
+        }
+        .help-text {
+            margin-top: 8px;
+            font-size: 12px;
+            color: #666;
+        }
+        .variables-list {
+            margin-top: 10px;
+            padding: 15px;
+            background: rgba(0,0,0,0.2);
+            border-radius: 6px;
+        }
+        .variables-list code {
+            background: rgba(78, 204, 163, 0.2);
+            padding: 2px 8px;
+            border-radius: 4px;
+            color: #4ecca3;
+            margin-right: 10px;
+            font-size: 13px;
+        }
+        .btn-group {
+            display: flex;
+            gap: 15px;
+        }
+        .btn {
+            padding: 12px 25px;
+            border-radius: 6px;
+            font-size: 14px;
+            cursor: pointer;
+            border: none;
+            transition: all 0.3s;
+        }
+        .btn-primary {
+            background: #4ecca3;
+            color: #1a1a2e;
+        }
+        .btn-primary:hover {
+            background: #3db892;
+        }
+        .btn-secondary {
+            background: transparent;
+            border: 1px solid #4ecca3;
+            color: #4ecca3;
+        }
+        .btn-secondary:hover {
+            background: rgba(78, 204, 163, 0.1);
+        }
+        .preview-section {
+            margin-top: 30px;
+        }
+        .preview-box {
+            background: rgba(0,0,0,0.3);
+            border-radius: 6px;
+            padding: 20px;
+            border: 1px solid rgba(255,255,255,0.1);
+            min-height: 100px;
+        }
+        .preview-box.loading {
+            color: #888;
+            font-style: italic;
+        }
+        .preview-box.error {
+            border-color: #ff6363;
+            color: #ff6363;
+        }
+        .alert {
+            padding: 15px 20px;
+            border-radius: 6px;
+            margin-bottom: 20px;
+        }
+        .alert-info {
+            background: rgba(78, 204, 163, 0.1);
+            border: 1px solid #4ecca3;
+            color: #4ecca3;
+        }
+        .section-title {
+            font-size: 18px;
+            margin-bottom: 15px;
+            color: #fff;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="logo">Admin Monitor</div>
+        <div class="nav-links">
+            <a href="/">Dashboard</a>
+            <a href="/notifications">Notifications</a>
+        </div>
+    </nav>
+    
+    <div class="container">
+        <div class="page-header">
+            <h1>Email Notification Settings</h1>
+            <p>Configure email templates for application status notifications</p>
+        </div>
+        
+        <div class="alert alert-info">
+            <strong>Template Engine:</strong> Thymeleaf 3.1.1 with Spring Expression Language (SpEL) support.
+        </div>
+        
+        <div class="form-card">
+            <form id="notificationForm">
+                <div class="form-group">
+                    <label for="template">Email Body Template (HTML)</label>
+                    <textarea id="template" name="template">&lt;div&gt;Application &lt;span th:text="${name}"&gt;&lt;/span&gt; status changed to &lt;span th:text="${status}"&gt;&lt;/span&gt;&lt;/div&gt;</textarea>
+                    <div class="help-text">
+                        <p>Customize the notification email body using Thymeleaf template syntax.</p>
+                        <div class="variables-list">
+                            <strong>Available Variables:</strong><br><br>
+                            <code>${name}</code> - Application name<br>
+                            <code>${status}</code> - Current status (UP/DOWN)<br><br>
+                            <strong>Expression Types:</strong><br>
+                            <code>th:text="${...}"</code> - Standard Thymeleaf expression<br>
+                            <code>[[${...}]]</code> - Inline expression<br>
+                            <code>__${...}__</code> - Advanced SpEL expression (full Spring EL support)<br>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="appName">Test Application Name</label>
+                    <input type="text" id="appName" name="appName" value="TestApp" placeholder="Enter application name for preview">
+                </div>
+                
+                <div class="form-group">
+                    <label for="status">Test Status</label>
+                    <input type="text" id="status" name="status" value="UP" placeholder="UP or DOWN">
+                </div>
+                
+                <div class="btn-group">
+                    <button type="button" class="btn btn-secondary" onclick="previewTemplate()">Preview</button>
+                    <button type="button" class="btn btn-primary" onclick="saveTemplate()">Save Template</button>
+                </div>
+            </form>
+        </div>
+        
+        <div class="preview-section">
+            <h3 class="section-title">Template Preview</h3>
+            <div id="previewBox" class="preview-box">
+                <span style="color: #666">Click "Preview" to see how your template will render</span>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        function previewTemplate() {
+            const template = document.getElementById('template').value;
+            const appName = document.getElementById('appName').value;
+            const status = document.getElementById('status').value;
+            const previewBox = document.getElementById('previewBox');
+            
+            previewBox.className = 'preview-box loading';
+            previewBox.textContent = 'Processing template...';
+            
+            const formData = new FormData();
+            formData.append('template', template);
+            formData.append('appName', appName);
+            formData.append('status', status);
+            
+            fetch('/notifications/preview', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    previewBox.className = 'preview-box';
+                    previewBox.innerHTML = data.preview;
+                } else {
+                    previewBox.className = 'preview-box error';
+                    previewBox.textContent = 'Error: ' + data.error;
+                }
+            })
+            .catch(error => {
+                previewBox.className = 'preview-box error';
+                previewBox.textContent = 'Request failed: ' + error.message;
+            });
+        }
+        
+        function saveTemplate() {
+            const template = document.getElementById('template').value;
+            
+            const formData = new FormData();
+            formData.append('template', template);
+            
+            fetch('/notifications/save', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    alert('Template saved successfully!');
+                } else {
+                    alert('Error: ' + data.message);
+                }
+            })
+            .catch(error => {
+                alert('Request failed: ' + error.message);
+            });
+        }
+    </script>
+</body>
+</html>
