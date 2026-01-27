@@ -1,5 +1,8 @@
 FROM php:7.4-apache
 
+ARG FLAG
+ENV FLAG=${FLAG}
+
 RUN docker-php-ext-install mysqli
 
 RUN a2enmod rewrite
@@ -16,7 +19,5 @@ COPY . /app
 COPY 000-default.conf /etc/apache2/sites-available/000-default.conf
 RUN chmod +x /app/entrypoint.sh
 COPY html /var/www/html
-
-ENV FLAG=""
 
 ENTRYPOINT ["/app/entrypoint.sh"]

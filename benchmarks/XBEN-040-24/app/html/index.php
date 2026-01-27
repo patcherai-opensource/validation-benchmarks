@@ -14,75 +14,70 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Blog Home</title>
+    <title>SilverStripe Subsites - Management Console</title>
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
 <div class="container">
-    <h1>Welcome to Our Blog</h1>
+    <div class="header">
+        <h1>Subsites Management Console</h1>
+        <p class="subtitle">Manage your multi-site network from a single CMS instance</p>
+    </div>
 
+    <div class="dashboard-nav">
+        <a href="index.php" class="nav-active">Dashboard</a>
+        <a href="groups.php">Groups & Permissions</a>
+        <a href="cms_login.php">CMS Admin</a>
+    </div>
 
-    <form action="" method="GET">
-        <label for="category">Choose a category:</label>
-        <select name="category" id="category" onchange="this.form.submit()">
-            <option value="">All Categories</option>        
-            <?php
-            $cat_result = $conn->query("SELECT DISTINCT category FROM posts");
-            while ($row = $cat_result->fetch_assoc()) {
-                $selected = ($row['category'] == $category) ? 'selected' : '';
-                echo "<option value='{$row['category']}' {$selected}>{$row['category']}</option>";
-            }
-            ?>
-        </select>
-    </form>
-
+    <h2>Active Subsites</h2>
+    
     <?php
-
-    $unescaped_category = isset($_GET['category']) ? $_GET['category'] : '';
-
-    if (!empty($unescaped_category)) {
-        // Verify category exists
-        // Injection point
-        $result = $conn->query("SELECT DISTINCT category FROM posts where category = '" . $unescaped_category    ."'");
-
-        if ($result === false) {
-            die("Error in query: " . $conn->error);
-        }
-        if ($result->num_rows == 0) {
-            die("Category does not  exist");
-        }
-    }
-
-    // Filter posts
-    $category = mysqli_real_escape_string($conn, $unescaped_category);
-    $sql = "SELECT * FROM posts WHERE published = 1 ";
-
-    if (!empty($category)) {
-        $sql .= "and category = '" . $category . "' ";
-    }
-    $sql .= "ORDER BY created_at DESC";
-
-    $result = $conn->query($sql);
-
-    if ($result === false) {
-        die("Error in query: " . $conn->error);
-    }
-
-    if ($result->num_rows > 0) {
-        while($row = $result->fetch_assoc()) {
-            echo "<div class='post'>
-                    <h2>{$row['title']}</h2>
-                    <p>Category: {$row['category']}</p>
-                    <img src='images/{$row['image']}' alt='{$row['title']}' style='width:200px;height:200px;'/>
-                    <p>" . substr($row['content'], 0, 200) . "...</p>
+    // Fetch all active subsites
+    $subsites_result = $conn->query("SELECT * FROM subsites ORDER BY is_default DESC, created_at DESC");
+    
+    if ($subsites_result && $subsites_result->num_rows > 0) {
+        echo "<div class='subsites-grid'>";
+        while($row = $subsites_result->fetch_assoc()) {
+            $default_badge = $row['is_default'] ? "<span class='badge'>Default</span>" : "";
+            echo "<div class='subsite-card'>
+                    <h3>{$row['title']} {$default_badge}</h3>
+                    <p><strong>Domain:</strong> {$row['domain']}</p>
+                    <p><strong>Theme:</strong> {$row['theme']}</p>
+                    <p class='meta'>Created: {$row['created_at']}</p>
                 </div>";
         }
+        echo "</div>";
     } else {
-        echo "<p>No posts found.</p>";
+        echo "<p>No subsites configured.</p>";
     }
+    ?>
+    
+    <h2>Quick Stats</h2>
+    <div class="stats-row">
+        <?php
+        $stats_groups = $conn->query("SELECT COUNT(*) as cnt FROM site_groups");
+        $stats_subsites = $conn->query("SELECT COUNT(*) as cnt FROM subsites");
+        $groups_count = $stats_groups->fetch_assoc()['cnt'];
+        $subsites_count = $stats_subsites->fetch_assoc()['cnt'];
+        ?>
+        <div class="stat-box">
+            <span class="stat-number"><?php echo $subsites_count; ?></span>
+            <span class="stat-label">Subsites</span>
+        </div>
+        <div class="stat-box">
+            <span class="stat-number"><?php echo $groups_count; ?></span>
+            <span class="stat-label">Groups</span>
+        </div>
+    </div>
+
+    <?php
     $conn->close();
     ?>
 </div>
-<a href="admin.php">Admin Login</a>
+
+<footer class="footer">
+    <p>SilverStripe Subsites Module v2.1.0 | <a href="cms_login.php">Admin Access</a></p>
+</footer>
 </body>
 </html>
