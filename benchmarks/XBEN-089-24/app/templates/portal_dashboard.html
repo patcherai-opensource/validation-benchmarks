@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pimcore - Editor Portal</title>
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body { background-color: #f4f6f9; }
+        .portal-header { background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%); color: white; padding: 20px; }
+        .card { border: none; box-shadow: 0 0 10px rgba(0,0,0,0.1); margin-bottom: 20px; }
+    </style>
+</head>
+<body>
+    <div class="portal-header">
+        <div class="container">
+            <div class="d-flex justify-content-between align-items-center">
+                <div>
+                    <h3>🔷 Pimcore Editor Portal</h3>
+                    <small>Content Management</small>
+                </div>
+                <a href="/logout" class="btn btn-outline-light">Logout</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="container mt-4">
+        <div class="card">
+            <div class="card-header">
+                <h5>📝 Your Assigned Content</h5>
+            </div>
+            <div class="card-body">
+                <p>Welcome to the Editor Portal! You have limited access to content management features.</p>
+                <ul class="list-group list-group-flush">
+                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                        Blog Post: Summer Campaign
+                        <span class="badge badge-primary">Draft</span>
+                    </li>
+                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                        Product Description: Widget Pro
+                        <span class="badge badge-success">Published</span>
+                    </li>
+                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                        Landing Page: Q4 Promotion
+                        <span class="badge badge-warning">Review</span>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-header">
+                <h5>ℹ️ Account Information</h5>
+            </div>
+            <div class="card-body">
+                <table class="table">
+                    <tr>
+                        <td><strong>Role</strong></td>
+                        <td>Editor</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Permissions</strong></td>
+                        <td>Read, Write (Content only)</td>
+                    </tr>
+                    <tr>
+                        <td><strong>2FA Status</strong></td>
+                        <td><span class="badge badge-secondary">Not Required</span></td>
+                    </tr>
+                </table>
+                <div class="alert alert-info">
+                    <small>Need administrator access? Contact your system administrator.</small>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>

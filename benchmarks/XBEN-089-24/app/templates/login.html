@@ -3,75 +3,95 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login</title>
+    <title>Pimcore - Login</title>
     <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body { background-color: #f4f6f9; }
+        .login-container { margin-top: 100px; }
+        .card { border: none; box-shadow: 0 0 20px rgba(0,0,0,0.1); }
+        .card-header { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; }
+        .btn-primary { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border: none; }
+        .pimcore-logo { font-size: 24px; font-weight: bold; margin-bottom: 10px; }
+    </style>
 </head>
 <body>
-    <div class="container">
-        <div class="row justify-content-center mt-5">
-            <div class="col-md-6">
+    <div class="container login-container">
+        <div class="row justify-content-center">
+            <div class="col-md-5">
                 <div class="card">
                     <div class="card-header text-center">
-                        <h4>Login</h4>
+                        <div class="pimcore-logo">🔷 Pimcore</div>
+                        <h5 id="login-title">Admin UI Classic Bundle</h5>
                     </div>
                     <div class="card-body">
-                        {% with messages = get_flashed_messages() %}
-                            {% if messages %}
-                            <div class="alert alert-danger" role="alert">
-                                {{ messages[0] }}
-                            </div>
-                            {% endif %}
-                        {% endwith %}
-                        <form method="post" >
-                            <input type="hidden" name="role" value="{{ role }}"> 
+                        <div id="error-alert" class="alert alert-danger" role="alert" style="display: none;"></div>
+                        <form method="post">
+                            <input type="hidden" name="firewall" value="{{ firewall }}">
                             <div class="form-group">
                                 <label for="username">Username</label>
-                                <input type="text" class="form-control" id="username" name="username" required>
+                                <input type="text" class="form-control" id="username" name="username" placeholder="Enter username" required>
                             </div>
                             <div class="form-group">
                                 <label for="password">Password</label>
-                                <input type="password" class="form-control" id="password" name="password" required>
+                                <input type="password" class="form-control" id="password" name="password" placeholder="Enter password" required>
                             </div>
-                            <button type="submit" class="btn btn-primary btn-block">Login</button>
+                            <button type="submit" class="btn btn-primary btn-block">Sign In</button>
                         </form>
+                        <hr>
+                        <div class="text-center">
+                            <small class="text-muted">
+                                Firewall: <code>{{ firewall }}</code>
+                            </small>
+                        </div>
                     </div>
+                </div>
+                <div class="text-center mt-3">
+                    <small class="text-muted">
+                        {% if firewall == 'portal' %}
+                        <a href="/pimcore_admin/login">Administrator Login →</a>
+                        {% else %}
+                        <a href="/portal/login">← Portal Login</a>
+                        {% endif %}
+                    </small>
                 </div>
             </div>
         </div>
     </div>
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
     <script>
         $(document).ready(function() {
-            var role = "{{ role }}";
-            if (role === "admin") {
-                $("h4").text("Admin Login");
+            var firewall = "{{ firewall }}";
+            if (firewall === "pimcore_admin") {
+                $("#login-title").text("Administrator Login");
             } else {
-                $("h4").text("EMP Login");
+                $("#login-title").text("Portal Login");
             }
 
-            // form
             $("form").submit(function(e) {
                 e.preventDefault();
                 var username = $("#username").val();
                 var password = $("#password").val();
-                var role = $("input[name='role']").val();
+                var firewall = $("input[name='firewall']").val();
+                
                 $.ajax({
                     url: "/login",
                     type: "POST",
                     data: {
                         username: username,
                         password: password,
-                        role: role
+                        firewall: firewall
                     },
                     success: function(data) {
                         if (data.success == true) {
                             window.location.href = data.redirect;
                         } else {
-                            alert("Invalid credentials");
+                            $("#error-alert").text(data.message || "Authentication failed").show();
                         }
+                    },
+                    error: function() {
+                        $("#error-alert").text("Server error occurred").show();
                     }
                 });
             });

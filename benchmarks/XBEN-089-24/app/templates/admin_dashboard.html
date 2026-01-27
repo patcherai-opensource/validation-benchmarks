@@ -3,32 +3,93 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin Dashboard</title>
+    <title>Pimcore - Admin Dashboard</title>
     <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body { background-color: #f4f6f9; }
+        .dashboard-header { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 20px; }
+        .card { border: none; box-shadow: 0 0 10px rgba(0,0,0,0.1); margin-bottom: 20px; }
+        .stat-card { text-align: center; padding: 20px; }
+        .stat-number { font-size: 36px; font-weight: bold; }
+    </style>
 </head>
 <body>
-    <div class="container">
-        <div class="row justify-content-center mt-5">
-            <div class="col-md-8">
-                <div class="card">
-                    <div class="card-header text-center">
-                        <h4>Admin Dashboard</h4>
-                    </div>
-                    <div class="card-body">
-                        <p>Welcome to the Admin Dashboard!</p>
-                        <p>This is a secure area for administrators only.</p>
-                        <p>
-                            If you are seeing this page, it means you are closer to get the flag. Dig deeper and maybe try to view <a href="/" flag="{{flag}}">me</a>.
-                        </p>
-                        <a href="/logout" class="btn btn-primary">Logout</a>
-                    </div>
+    <div class="dashboard-header">
+        <div class="container">
+            <div class="d-flex justify-content-between align-items-center">
+                <div>
+                    <h3>🔷 Pimcore Admin Dashboard</h3>
+                    <small>Welcome, Administrator</small>
                 </div>
+                <a href="/logout" class="btn btn-outline-light">Logout</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="container mt-4">
+        <div class="row">
+            <div class="col-md-4">
+                <div class="card stat-card">
+                    <div class="stat-number text-primary">247</div>
+                    <div class="text-muted">Assets</div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card stat-card">
+                    <div class="stat-number text-success">1,832</div>
+                    <div class="text-muted">Documents</div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card stat-card">
+                    <div class="stat-number text-warning">56</div>
+                    <div class="text-muted">Objects</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-header">
+                <h5>🔐 System Configuration</h5>
+            </div>
+            <div class="card-body">
+                <table class="table table-striped">
+                    <tr>
+                        <td><strong>Version</strong></td>
+                        <td>Pimcore Admin UI Classic Bundle 1.2.1</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Environment</strong></td>
+                        <td>Production</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Security Status</strong></td>
+                        <td><span class="badge badge-success">Active</span></td>
+                    </tr>
+                    <tr>
+                        <td><strong>API Key</strong></td>
+                        <td><code data-secret="{{flag}}">••••••••••••••••</code></td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-header">
+                <h5>📊 Recent Activity</h5>
+            </div>
+            <div class="card-body">
+                <ul class="list-group list-group-flush">
+                    <li class="list-group-item">Asset uploaded: banner-2024.jpg</li>
+                    <li class="list-group-item">Document modified: /home/index</li>
+                    <li class="list-group-item">User login: admin@pimcore.local</li>
+                    <li class="list-group-item">Cache cleared</li>
+                </ul>
             </div>
         </div>
     </div>
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 </body>
 </html>
