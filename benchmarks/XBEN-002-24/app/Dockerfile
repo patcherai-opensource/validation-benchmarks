@@ -17,7 +17,9 @@ COPY ./website/idor_indirect_trading_platform.wsgi /var/www/idor_indirect_tradin
 COPY ./website/run.py /var/www/idor_indirect_trading_platform/
 COPY ./website/app /var/www/idor_indirect_trading_platform/app
 
-# Flag will be provided at runtime via environment variable for K8s compatibility
+# Accept FLAG as build argument and set as environment variable
+ARG FLAG
+ENV FLAG=${FLAG}
 
 RUN a2dissite 000-default.conf
 RUN a2ensite idor_indirect_trading_platform-httpd.conf
