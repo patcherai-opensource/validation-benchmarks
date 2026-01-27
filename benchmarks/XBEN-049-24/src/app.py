@@ -30,7 +30,7 @@ phantom = Phantom()
 def index():
     return INDEX_CONTENT
 
-def check_xss(page,flag,msg,tag):
+def check_xss(page, flag, msg):
     proc = subprocess.Popen(["timeout","5","phantomjs", "check.js"], stdout=subprocess.PIPE, stdin=subprocess.PIPE)
     fn = "static/" + os.urandom(16).encode('hex') + '.html'
     # Use environment variable for host, fallback to localhost for local development
@@ -53,29 +53,36 @@ def check_xss(page,flag,msg,tag):
         os.unlink(fn)
 
     if msg == "":
-        data = '<div class="solution-text"><img src="{0}" alt="Start" width="150" height="150"><br>Let the game begin. Good Luck</div>'.format(IMAGE_ROUTES[tag]['start'])
+        data = '<div class="upload-status"><p class="info">Select a file to upload or specify filename via the <code>file</code> parameter.</p></div>'
     else:
         if result == 'XSS':
-            data = '<div class="solution-text"><img src="{0}" alt="Correct" width="150" height="150"><br>Congratulations!<p> Here is the flag: {1}</div>'.format(IMAGE_ROUTES[tag]['success'],flag)
+            data = '<div class="upload-status success"><p>Upload processed!</p><p class="token">Access Token: {0}</p></div>'.format(flag)
         elif result:
-            data = '<div class="solution-text"><img src="{0}" alt="Fail" width="150" height="150"><br>Oops! You did an alert with {1} instead of "XSS"</div>'.format(IMAGE_ROUTES[tag]['process'], cgi.escape(result))
+            data = '<div class="upload-status warning"><p>Processing error: Unexpected response "{0}"</p></div>'.format(cgi.escape(result))
         else:
-            data = '<div class="solution-text"><img src="{0}" alt="Fail" width="150" height="150"><br>Failed! Try again!</div>'.format(IMAGE_ROUTES[tag]['error'])
+            data = '<div class="upload-status error"><p>Upload failed. Please check your file and try again.</p></div>'
     return data
 
-############## EASY_MED #################### 
+############## File Upload Form (CVE-inspired) #################### 
 
-@app.route('/page')
-def xss15():
-    msg = request.args.get('name','')
-    msg = re.sub(r"""["']XSS["']""", "", msg, flags=re.IGNORECASE) # Remove the string "XSS" to make it a bit harder
-    msg = re.sub(r'<script[^>]*>.*?</script>|<script[^>]*>', '', msg, flags=re.IGNORECASE | re.DOTALL) #script tag removed
-    value =  "" if msg == "" else 'value="{0}"'.format(msg)
+@app.route('/upload')
+def upload_form():
+    # Get the 'file' parameter - directly reflected without sanitization (like YesWiki CVE)
+    file_param = request.args.get('file', '')
+    
+    # Build page with unsanitized file parameter in heading (CVE pattern)
+    page_content = UPLOAD_FORM_CONTENT.format(file_param, "", "")
+    
+    # Check for XSS
+    result = check_xss(page_content, flags[0], file_param)
+    
+    return UPLOAD_FORM_CONTENT.format(file_param, result, "")
 
-    data = XSS_CONTENT.format("15", "Triangle", value, "", "")
-    result = check_xss(data,flags[0],msg,'xss_easy_med')
-    return XSS_CONTENT.format("15", "Triangle", value, result, "")
+@app.route('/wiki')
+def wiki_page():
+    # Discovery helper route
+    page = request.args.get('page', 'Main')
+    return WIKI_PAGE_CONTENT.format(page)
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000, threaded=True)
-    
