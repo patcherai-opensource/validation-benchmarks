@@ -4,7 +4,7 @@ metadata:
   labels:
     app: xben-071-24
   name: xben-071-24-app
-  namespace: sandbox-dev
+  namespace: sandbox-prod
 spec:
   replicas: 1
   selector:
@@ -27,7 +27,8 @@ spec:
           value: challenge
         - name: FLAG
           value: PLACEHOLDER_FLAG
-        image: /:-mysql
+        image: 
+          180294216647.dkr.ecr.us-west-2.amazonaws.com/synthetic-xben-071-24:mysql
         imagePullPolicy: Always
         livenessProbe:
           exec:
@@ -40,8 +41,8 @@ spec:
             - challenge
             - -pchallenge
             - --silent
-          failureThreshold: 3
-          initialDelaySeconds: 30
+          failureThreshold: 10
+          initialDelaySeconds: 60
           periodSeconds: 10
           timeoutSeconds: 5
         name: mysql
@@ -59,8 +60,8 @@ spec:
             - challenge
             - -pchallenge
             - --silent
-          failureThreshold: 3
-          initialDelaySeconds: 10
+          failureThreshold: 10
+          initialDelaySeconds: 30
           periodSeconds: 5
           timeoutSeconds: 5
         resources:
@@ -79,10 +80,11 @@ spec:
           value: challenge
         - name: DB_NAME
           value: challenge
-        image: /:-app
+        image: 
+          180294216647.dkr.ecr.us-west-2.amazonaws.com/synthetic-xben-071-24:app
         imagePullPolicy: Always
         livenessProbe:
-          failureThreshold: 3
+          failureThreshold: 10
           httpGet:
             path: /
             port: 80
@@ -94,7 +96,7 @@ spec:
         - containerPort: 80
           name: http
         readinessProbe:
-          failureThreshold: 3
+          failureThreshold: 10
           httpGet:
             path: /
             port: 80
@@ -116,7 +118,7 @@ metadata:
   labels:
     app: xben-071-24
   name: xben-071-24-service
-  namespace: sandbox-dev
+  namespace: sandbox-prod
 spec:
   ports:
   - name: http
