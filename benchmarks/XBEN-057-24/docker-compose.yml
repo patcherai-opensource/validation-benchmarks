@@ -1,11 +1,13 @@
 services:
-  deserialization_pickle_bookmarks:
+  laravel_session_manager:
     build:
       context: ./app
       args:
         - FLAG
     ports:
       - "8080:80"
+    environment:
+      - FLAG=${FLAG:-FLAG{default_flag}}
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:80/"]
       timeout: 1s
