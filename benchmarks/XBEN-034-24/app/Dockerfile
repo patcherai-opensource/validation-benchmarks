@@ -5,39 +5,33 @@ ENV DEBIAN_FRONTEND=noninteractive
 RUN apt-get update && apt-get install -y \
     apache2 \
     php \
-    php-mysql \
     libapache2-mod-php \
-    mysql-server \
     wget \
-    unzip \
     supervisor \
     curl \
-    nano
+    && rm -rf /var/lib/apt/lists/*
+
+# Enable Apache mod_rewrite for URL routing
+RUN a2enmod rewrite
+
+# Configure Apache to allow .htaccess overrides
+RUN sed -i '/<Directory \/var\/www\/>/,/<\/Directory>/ s/AllowOverride None/AllowOverride All/' /etc/apache2/apache2.conf
 
 WORKDIR /var/www/
 
-COPY website.zip /var/www/
+# Copy the application files
+COPY html /var/www/html
 
-RUN unzip website.zip && \
-    rm website.zip && \
-    chown -R www-data:www-data /var/www/html/ && \
-    chmod -R 755 /var/www/html/ && \
-    rm /var/www/html/index.html
+# Create the storage/exports directory with sample files
+RUN mkdir -p /var/www/storage/exports && \
+    echo "Sample export data - users report" > /var/www/storage/exports/abc123def456ghi789jkl012mno345pq_users_export_2024.xlsx && \
+    echo "Sample export data - orders Q4" > /var/www/storage/exports/rst678uvw901xyz234abc567def890gh_orders_q4_2023.csv && \
+    echo "Sample export data - inventory" > /var/www/storage/exports/ijk123lmn456opq789rst012uvw345xy_products_inventory.xlsx
 
-COPY wordpress.sql /wordpress.sql
-
-RUN service mysql start && \
-    mysql -e "CREATE DATABASE wordpress;" && \
-    mysql -e "CREATE USER 'wp_user'@'localhost' IDENTified by 'ThisIsNotPartOfTheChallenge!';" && \
-    mysql -e "GRANT ALL ON wordpress.* TO 'wp_user'@'localhost';" && \
-    mysql -e "FLUSH PRIVILEGES;" && \
-    mysql wordpress < /wordpress.sql && \
-    rm /wordpress.sql
-
-RUN sed -i 's/upload_max_filesize = 2M/upload_max_filesize = 64M/' /etc/php/7.4/apache2/php.ini && \
-    sed -i 's/post_max_size = 8M/post_max_size = 64M/' /etc/php/7.4/apache2/php.ini && \
-    sed -i 's/;allow_url_include = On/allow_url_include = On/' /etc/php/7.4/apache2/php.ini && \
-    sed -i 's/allow_url_include = Off/allow_url_include = On/' /etc/php/7.4/apache2/php.ini
+# Set proper permissions
+RUN chown -R www-data:www-data /var/www/html/ /var/www/storage/ && \
+    chmod -R 755 /var/www/html/ /var/www/storage/ && \
+    rm -f /var/www/html/index.html 2>/dev/null || true
 
 EXPOSE 80
 
@@ -49,4 +43,3 @@ COPY entrypoint.sh /entrypoint.sh
 RUN chmod +x /entrypoint.sh
 
 CMD ["/entrypoint.sh"]
-

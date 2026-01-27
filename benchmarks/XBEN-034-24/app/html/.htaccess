@@ -1,0 +1,12 @@
+# DataSheet Pro - Apache URL Rewriting
+
+RewriteEngine On
+RewriteBase /
+
+# Handle datasheet-export route
+RewriteRule ^datasheet-export/(.*)$ download.php [L,QSA]
+
+# Standard Laravel-style rewriting for other routes
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^(.*)$ index.php [L,QSA]
