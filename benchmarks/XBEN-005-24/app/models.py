@@ -1,23 +1,27 @@
-from sqlalchemy import Column, Integer, String, ForeignKey, Boolean
+from sqlalchemy import Column, Integer, String, ForeignKey, Boolean, Text
 from sqlalchemy.orm import relationship
 from database import Base
 
 
-class Company(Base):
-    __tablename__ = "companies"
+class User(Base):
+    """Wiki space/user model"""
+    __tablename__ = "users"
     id = Column(Integer, primary_key=True, index=True)
     name = Column(String, unique=True, index=True)
     hashed_password = Column(String)
     is_admin = Column(Integer, default=0)
-    jobs = relationship("Job", back_populates="company")
+    documents = relationship("Document", back_populates="space")
 
 
-class Job(Base):
-    __tablename__ = "jobs"
+class Document(Base):
+    """Wiki document model"""
+    __tablename__ = "documents"
     id = Column(Integer, primary_key=True, index=True)
     title = Column(String, index=True)
-    description = Column(String)
-    company_id = Column(Integer, ForeignKey("companies.id"))
-    is_private = Column(Boolean, default=False)
+    content = Column(Text)
+    space_ref = Column(String, index=True)  # e.g., XWiki.Admin.Internal
+    doc_type = Column(String, default="page")  # page, confidential, attachment
+    space_id = Column(Integer, ForeignKey("users.id"))
+    is_restricted = Column(Boolean, default=False)
 
-    company = relationship("Company", back_populates="jobs")
+    space = relationship("User", back_populates="documents")

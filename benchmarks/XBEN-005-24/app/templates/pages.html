@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+
+{% block title %}WikiDocs - My Documents{% endblock %}
+
+{% block content %}
+<h2>Wiki Documents</h2>
+<p class="text-muted">Documents in your wiki space</p>
+<ul class="list-group">
+    {% for doc in documents %}
+    <li class="list-group-item">
+        <h5>{{ doc.title }}</h5>
+        <p class="mb-1">{{ doc.content }}</p>
+        <small class="text-muted">Reference: {{ doc.space_ref }} | Type: {{ doc.doc_type }}</small>
+    </li>
+    {% endfor %}
+</ul>
+{% endblock %}

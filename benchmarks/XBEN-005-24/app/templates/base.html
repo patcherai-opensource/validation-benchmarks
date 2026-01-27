@@ -4,27 +4,37 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-    <title>{% block title %}FastAPI App{% endblock %}</title>
+    <title>{% block title %}WikiDocs{% endblock %}</title>
     <style>
         body {
             display: flex;
         }
         .nav {
             width: 200px;
+            background-color: #f8f9fa;
+            min-height: 100vh;
+            padding-top: 20px;
         }
         .content {
             flex-grow: 1;
             padding: 20px;
         }
+        .brand {
+            padding: 10px 15px;
+            font-weight: bold;
+            color: #333;
+        }
     </style>
 </head>
 <body>
     <div class="nav flex-column nav-pills" aria-orientation="vertical">
+        <div class="brand">WikiDocs</div>
         {% if request.cookies.access_token %}
-        <a class="nav-link" href="/company/{{company_id}}/jobs">View Jobs</a>
-        <a class="nav-link" href="/edit_profile/{{company_id}}">Edit Profile</a>
+        <a class="nav-link" href="/wiki/{{space_id}}/pages">My Documents</a>
+        <a class="nav-link" href="/edit_profile/{{space_id}}">Settings</a>
         {% endif %}
-
+        <hr>
+        <a class="nav-link text-muted" href="/xwiki/bin/get/XWiki/SuggestSolrService?query=*&media=json">Search API</a>
     </div>
     <div class="content">
         {% block content %}{% endblock %}

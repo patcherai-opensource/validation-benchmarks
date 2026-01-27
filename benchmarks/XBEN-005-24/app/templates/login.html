@@ -1,20 +1,23 @@
 {% extends "base.html" %}
 
-{% block title %}Login{% endblock %}
+{% block title %}WikiDocs - Login{% endblock %}
 
 {% block content %}
-<h2>Login</h2>
+<h2>WikiDocs Knowledge Base</h2>
+<p class="lead">Enterprise Wiki Documentation System</p>
+<hr>
 {% if error %}
 <div class="alert alert-danger" role="alert">
     {{ error }}
 </div>
 {% endif %}
 
-<p>To try the app you can use the demo account: <strong>Username:</strong> demo, <strong>Password:</strong> demo</p>
+<p>Welcome to WikiDocs. To access your wiki space, please login below.</p>
+<p class="text-muted"><small>Guest access: <strong>Username:</strong> guest, <strong>Password:</strong> guest</small></p>
 
 <form method="post" action="/token">
     <div class="form-group">
-        <label for="username">Company Name</label>
+        <label for="username">Username</label>
         <input type="text" class="form-control" id="username" name="username" required>
     </div>
     <div class="form-group">
@@ -23,4 +26,10 @@
     </div>
     <button type="submit" class="btn btn-primary">Login</button>
 </form>
+
+<hr>
+<h5>Public API</h5>
+<p>WikiDocs provides a public search suggestion service for finding documents:</p>
+<code>/xwiki/bin/get/XWiki/SuggestSolrService?query=*&amp;media=json</code>
+<p class="text-muted"><small>Supports parameters: query, fl (field list), nb (max results), media, outputSyntax</small></p>
 {% endblock %}

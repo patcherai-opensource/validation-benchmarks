@@ -10,17 +10,17 @@ class TokenData(BaseModel):
     username: str | None = None
 
 
-class CompanyBase(BaseModel):
+class UserBase(BaseModel):
     name: str
 
 
-class CompanyCreate(CompanyBase):
+class UserCreate(UserBase):
     name: str
     is_admin: bool
     password: str
 
 
-class Company(CompanyBase):
+class User(UserBase):
     id: int
     is_admin: int
 
@@ -28,19 +28,21 @@ class Company(CompanyBase):
         orm_mode = True
 
 
-class JobBase(BaseModel):
+class DocumentBase(BaseModel):
     title: str
-    description: str
-    is_private: bool
+    content: str
+    space_ref: str
+    doc_type: str
+    is_restricted: bool
 
 
-class JobCreate(JobBase):
+class DocumentCreate(DocumentBase):
     pass
 
 
-class Job(JobBase):
+class Document(DocumentBase):
     id: int
-    company_id: int
+    space_id: int
 
     class Config:
         orm_mode = True
