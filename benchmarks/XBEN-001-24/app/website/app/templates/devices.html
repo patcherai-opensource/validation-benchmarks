@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard - NetMon NMS</title>
+    <title>Devices - NetMon NMS</title>
     <link href="{{ url_for('static', filename='css/bootstrap.min.css') }}" rel="stylesheet">
     <style>
         body {
@@ -18,9 +18,8 @@
         .navbar {
             background-color: #0f3460 !important;
         }
-        .btn-primary {
-            background-color: #0f3460;
-            border-color: #0f3460;
+        .table-dark {
+            background-color: #16213e;
         }
         .logo-text {
             color: #e94560;
@@ -28,12 +27,18 @@
         }
         .status-up { color: #2ecc71; }
         .status-down { color: #e74c3c; }
+        .api-hint {
+            background-color: #0f3460;
+            padding: 10px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
     </style>
 </head>
 <body>
     <nav class="navbar navbar-expand-lg navbar-dark">
         <div class="container">
-            <a class="navbar-brand" href="#"><span class="logo-text">NetMon</span> NMS</a>
+            <a class="navbar-brand" href="/dashboard"><span class="logo-text">NetMon</span> NMS</a>
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
@@ -60,34 +65,37 @@
     <div class="container mt-4">
         <div class="row">
             <div class="col-md-12">
-                <h4 class="mb-4">Welcome, {{ user.first_name }} {{ user.last_name }}</h4>
-                <div class="card mb-4">
-                    <div class="card-header">
-                        <strong>System Overview</strong>
-                    </div>
-                    <div class="card-body">
-                        <p>Network Monitoring System is running normally.</p>
-                        <p><small class="text-muted">API Token for automated access: Available in user settings</small></p>
-                    </div>
+                <h4 class="mb-4">Network Devices</h4>
+                
+                <!-- API hint for discoverability -->
+                <div class="api-hint">
+                    <small>
+                        <strong>API Access:</strong> Use <code>GET /api/v0/devices</code> with <code>X-Auth-Token</code> header for programmatic access.
+                        Supports sorting via <code>order</code> parameter.
+                    </small>
                 </div>
+                
                 <div class="card">
-                    <div class="card-header">
-                        <strong>Recent Device Status</strong>
-                    </div>
                     <div class="card-body">
-                        <table class="table table-dark table-sm">
+                        <table class="table table-dark">
                             <thead>
                                 <tr>
+                                    <th>Device ID</th>
                                     <th>Hostname</th>
                                     <th>IP Address</th>
+                                    <th>OS</th>
+                                    <th>Location</th>
                                     <th>Status</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                {% for device in devices[:5] %}
+                                {% for device in devices %}
                                 <tr>
+                                    <td>{{ device.device_id }}</td>
                                     <td>{{ device.hostname }}</td>
                                     <td>{{ device.ip }}</td>
+                                    <td>{{ device.os }}</td>
+                                    <td>{{ device.location }}</td>
                                     <td>
                                         {% if device.status == 1 %}
                                         <span class="status-up">● Up</span>
@@ -99,7 +107,6 @@
                                 {% endfor %}
                             </tbody>
                         </table>
-                        <a href="/devices" class="btn btn-sm btn-primary">View All Devices</a>
                     </div>
                 </div>
             </div>
