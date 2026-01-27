@@ -1,23 +1,41 @@
 {% extends "base.html" %}
-{% block title %}Register{% endblock %}
+{% block title %}Create Account{% endblock %}
 {% block content %}
-    <h2>Register</h2>
-    <form method="POST" action="/register">
-        {{ form.hidden_tag() }}
-        <div class="form-group">
-            {{ form.username.label(class="form-control-label") }}
-            {{ form.username(class="form-control form-control-lg") }}
+<div class="row justify-content-center mt-5">
+    <div class="col-md-6 col-lg-4">
+        <div class="card shadow">
+            <div class="card-header bg-secondary text-white text-center">
+                <h4>Create Account</h4>
+                <small>Join as an Event Operator</small>
+            </div>
+            <div class="card-body">
+                <form method="POST" action="/register">
+                    {{ form.hidden_tag() }}
+                    <div class="form-group">
+                        {{ form.username.label(class="form-control-label") }}
+                        {{ form.username(class="form-control", placeholder="Choose a username") }}
+                    </div>
+                    <div class="form-group">
+                        {{ form.password.label(class="form-control-label") }}
+                        {{ form.password(class="form-control", placeholder="Create a password") }}
+                    </div>
+                    <div class="form-group">
+                        {{ form.confirm_password.label(class="form-control-label") }}
+                        {{ form.confirm_password(class="form-control", placeholder="Confirm password") }}
+                    </div>
+                    <div class="form-group">
+                        {{ form.submit(class="btn btn-secondary btn-block") }}
+                    </div>
+                </form>
+                <hr>
+                <p class="text-center text-muted small">
+                    Already have an account? <a href="/admin/login">Sign in</a>
+                </p>
+                <div class="alert alert-info small">
+                    <strong>Note:</strong> New accounts are automatically assigned to the Demo Organization with OPERATOR role.
+                </div>
+            </div>
         </div>
-        <div class="form-group">
-            {{ form.password.label(class="form-control-label") }}
-            {{ form.password(class="form-control form-control-lg") }}
-        </div>
-        <div class="form-group">
-            {{ form.confirm_password.label(class="form-control-label") }}
-            {{ form.confirm_password(class="form-control form-control-lg") }}
-        </div>
-        <div class="form-group">
-            {{ form.submit(class="btn btn-primary btn-lg btn-block") }}
-        </div>
-    </form>
+    </div>
+</div>
 {% endblock %}

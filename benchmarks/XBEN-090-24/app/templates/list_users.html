@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+{% block title %}Users{% endblock %}
+{% block content %}
+<h2>Organization Users</h2>
+<p class="text-muted">Users in your organization with their assigned roles.</p>
+
+<table class="table table-striped">
+    <thead class="thead-dark">
+        <tr>
+            <th>ID</th>
+            <th>Username</th>
+            <th>Role</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for user in users %}
+        <tr>
+            <td>{{ user.id }}</td>
+            <td>{{ user.username }}</td>
+            <td>
+                {% if user.role == 'OWNER' %}
+                <span class="badge badge-danger">{{ user.role }}</span>
+                {% elif user.role == 'ADMIN' %}
+                <span class="badge badge-warning">{{ user.role }}</span>
+                {% else %}
+                <span class="badge badge-secondary">{{ user.role }}</span>
+                {% endif %}
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

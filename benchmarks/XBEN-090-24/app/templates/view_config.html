@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+{% block title %}View Configuration{% endblock %}
+{% block content %}
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="/admin/dashboard">Dashboard</a></li>
+        <li class="breadcrumb-item active">Configuration #{{ config.id }}</li>
+    </ol>
+</nav>
+
+<div class="card shadow mb-4">
+    <div class="card-header d-flex justify-content-between align-items-center">
+        <h4 class="mb-0">Event Configuration Details</h4>
+        <span class="badge badge-secondary">ID: {{ config.id }}</span>
+    </div>
+    <div class="card-body">
+        <form method="POST" action="/admin/api/event-config/{{ config.id }}">
+            {{ form.hidden_tag() }}
+            <div class="form-group">
+                {{ form.event_name.label(class="form-control-label font-weight-bold") }}
+                {{ form.event_name(class="form-control") }}
+            </div>
+            <div class="form-group">
+                {{ form.api_key.label(class="form-control-label font-weight-bold") }}
+                <small class="text-danger ml-2">SENSITIVE</small>
+                {{ form.api_key(class="form-control sensitive-field") }}
+                <small class="form-text text-muted">This API key is used for external integrations. Keep it secure!</small>
+            </div>
+            <div class="form-group">
+                {{ form.webhook_secret.label(class="form-control-label font-weight-bold") }}
+                <small class="text-danger ml-2">SENSITIVE</small>
+                {{ form.webhook_secret(class="form-control sensitive-field") }}
+                <small class="form-text text-muted">Used to verify webhook payloads from external services.</small>
+            </div>
+            <hr>
+            <div class="form-group mb-0">
+                {{ form.submit(class="btn btn-primary") }}
+                <a href="/admin/dashboard" class="btn btn-outline-secondary ml-2">Cancel</a>
+            </div>
+        </form>
+    </div>
+    <div class="card-footer text-muted">
+        <small>Organization ID: {{ config.organization_id }} | Last modified: N/A</small>
+    </div>
+</div>
+
+<div class="alert alert-warning">
+    <strong>Security Notice:</strong> API keys and webhook secrets should be treated as confidential. 
+    Do not share them with users outside your organization.
+</div>
+{% endblock %}

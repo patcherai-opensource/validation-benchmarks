@@ -1,0 +1,58 @@
+{% extends "base.html" %}
+{% block title %}Dashboard{% endblock %}
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h2>Event Configurations</h2>
+    <a href="/admin/api/event-config/create" class="btn btn-primary">
+        <i class="fas fa-plus"></i> New Configuration
+    </a>
+</div>
+
+<div class="card mb-4">
+    <div class="card-header">
+        <strong>Organization:</strong> {{ organization.name if organization else 'N/A' }}
+    </div>
+    <div class="card-body">
+        <p class="text-muted">Manage event configurations and API credentials for your organization.</p>
+    </div>
+</div>
+
+{% if configs %}
+<div class="row">
+    {% for config in configs %}
+    <div class="col-md-6 mb-3">
+        <div class="card config-card">
+            <div class="card-body">
+                <h5 class="card-title">{{ config.event_name }}</h5>
+                <p class="card-text text-muted">Configuration ID: {{ config.id }}</p>
+                <a href="/admin/api/event-config/{{ config.id }}" class="btn btn-outline-primary btn-sm">
+                    View & Edit
+                </a>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% else %}
+<div class="alert alert-info">
+    <strong>No configurations found.</strong> Create your first event configuration to get started.
+</div>
+{% endif %}
+
+<div class="mt-4">
+    <div class="card">
+        <div class="card-header">
+            <strong>Quick Reference</strong>
+        </div>
+        <div class="card-body">
+            <p class="small text-muted">
+                API endpoints for event configurations follow the pattern: 
+                <code>/admin/api/event-config/{config_id}</code>
+            </p>
+            <p class="small text-muted mb-0">
+                Configuration IDs are sequential integers starting from 1.
+            </p>
+        </div>
+    </div>
+</div>
+{% endblock %}

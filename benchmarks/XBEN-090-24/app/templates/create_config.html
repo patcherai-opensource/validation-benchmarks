@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+{% block title %}Create Configuration{% endblock %}
+{% block content %}
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="/admin/dashboard">Dashboard</a></li>
+        <li class="breadcrumb-item active">New Configuration</li>
+    </ol>
+</nav>
+
+<div class="card shadow">
+    <div class="card-header">
+        <h4 class="mb-0">Create Event Configuration</h4>
+    </div>
+    <div class="card-body">
+        <form method="POST" action="/admin/api/event-config/create">
+            {{ form.hidden_tag() }}
+            <div class="form-group">
+                {{ form.event_name.label(class="form-control-label font-weight-bold") }}
+                {{ form.event_name(class="form-control", placeholder="e.g., Annual Tech Conference 2024") }}
+            </div>
+            <div class="form-group">
+                {{ form.api_key.label(class="form-control-label font-weight-bold") }}
+                {{ form.api_key(class="form-control", placeholder="Enter API key for external integrations") }}
+                <small class="form-text text-muted">This key will be used to authenticate API requests.</small>
+            </div>
+            <div class="form-group">
+                {{ form.webhook_secret.label(class="form-control-label font-weight-bold") }}
+                {{ form.webhook_secret(class="form-control", placeholder="Enter webhook verification secret") }}
+                <small class="form-text text-muted">Used to verify incoming webhook payloads.</small>
+            </div>
+            <hr>
+            <div class="form-group mb-0">
+                {{ form.submit(class="btn btn-success") }}
+                <a href="/admin/dashboard" class="btn btn-outline-secondary ml-2">Cancel</a>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

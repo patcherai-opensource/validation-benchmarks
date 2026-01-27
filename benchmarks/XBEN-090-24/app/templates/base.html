@@ -3,44 +3,84 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{% block title %}{% endblock %}</title>
+    <title>{% block title %}{% endblock %} - alf.io Backoffice</title>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+    <style>
+        .navbar-brand { font-weight: bold; color: #5a67d8 !important; }
+        .sidebar { background-color: #f8f9fa; min-height: calc(100vh - 56px); padding-top: 20px; }
+        .config-card { border-left: 4px solid #5a67d8; }
+        .sensitive-field { font-family: monospace; background-color: #f8f9fa; }
+    </style>
 </head>
 <body>
-    <nav class="navbar navbar-expand-lg navbar-light bg-light">
-        <a class="navbar-brand"  >Blog Raider</a>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <a class="navbar-brand" href="/">alf.io Backoffice</a>
+        <span class="navbar-text text-muted ml-2">v2.0-M4-2303</span>
         <div class="collapse navbar-collapse">
             <ul class="navbar-nav ml-auto">
                 {% if current_user.is_authenticated %}
                     <li class="nav-item">
-                        <a class="nav-link" href="/create_draft">Create Draft</a>
+                        <span class="nav-link text-light">
+                            <i class="fas fa-user"></i> {{ current_user.username }} 
+                            ({{ current_user.role }})
+                        </span>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="/dashboard">My Drafts</a>
+                        <a class="nav-link" href="/admin/dashboard">Dashboard</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="/logout">Logout</a>
+                        <a class="nav-link" href="/admin/api/event-config/create">New Config</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/logout">Sign Out</a>
                     </li>
                 {% else %}
                     <li class="nav-item">
                         <a class="nav-link" href="/register">Register</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="/login">Login</a>
+                        <a class="nav-link" href="/admin/login">Sign In</a>
                     </li>
                 {% endif %}
             </ul>
         </div>
     </nav>
-    <div class="container">
-        {% with messages = get_flashed_messages(with_categories=true) %}
-            {% if messages %}
-                {% for category, message in messages %}
-                    <div class="alert alert-{{ category }}">{{ message }}</div>
-                {% endfor %}
+    <div class="container-fluid">
+        <div class="row">
+            {% if current_user.is_authenticated %}
+            <div class="col-md-2 sidebar">
+                <h6 class="text-muted">ORGANIZATION</h6>
+                <p class="font-weight-bold">{{ current_user.organization.name if current_user.organization else 'N/A' }}</p>
+                <hr>
+                <h6 class="text-muted">NAVIGATION</h6>
+                <ul class="nav flex-column">
+                    <li class="nav-item">
+                        <a class="nav-link" href="/admin/dashboard">Event Configurations</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/admin/api/users">Users</a>
+                    </li>
+                </ul>
+            </div>
+            <div class="col-md-10 py-4">
+            {% else %}
+            <div class="col-12 py-4">
             {% endif %}
-        {% endwith %}
-        {% block content %}{% endblock %}
+                {% with messages = get_flashed_messages(with_categories=true) %}
+                    {% if messages %}
+                        {% for category, message in messages %}
+                            <div class="alert alert-{{ category }} alert-dismissible fade show">
+                                {{ message }}
+                                <button type="button" class="close" data-dismiss="alert">&times;</button>
+                            </div>
+                        {% endfor %}
+                    {% endif %}
+                {% endwith %}
+                {% block content %}{% endblock %}
+            </div>
+        </div>
     </div>
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
 </body>
 </html>
