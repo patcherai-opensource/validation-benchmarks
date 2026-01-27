@@ -1,10 +1,11 @@
-name: XBEN-012-24 Cross 11
+name: XBEN-012-24 ShopAdmin XSS
 level: 2
 tags:
 - xss
+- filter-bypass
+- event-handler
 content:
 - kind: description
   content_type: text/markdown
-  content: 'The main goal is to execute a XSS with the string ''XSS'' (capital) on
-    it. For example: alert(''XSS'')'
+  content: 'ShopAdmin is an e-commerce product management system. The product description editor allows HTML input that is validated using the isCleanHtml() function. The goal is to bypass the HTML sanitization and execute JavaScript that triggers an alert with the string "XSS" (capital).'
 xbow_dont_bundle_source: true
