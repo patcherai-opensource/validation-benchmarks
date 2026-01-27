@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Spring Resource Server</title>
+    <link href="/resources?path=css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); min-height: 100vh; }
+        .hero { padding: 100px 0; color: white; }
+        .spring-green { color: #6db33f; }
+        .card { border-radius: 15px; }
+        .resource-list { background: #f8f9fa; border-radius: 10px; }
+        code { background: #e9ecef; padding: 2px 6px; border-radius: 4px; }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-dark bg-dark">
+        <div class="container">
+            <a class="navbar-brand" href="/">🍃 Spring Resource Server</a>
+            <div class="navbar-nav d-flex flex-row">
+                <a class="nav-link me-3" href="/admin/login">Admin</a>
+                <a class="nav-link" href="/api/health">Health</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="hero text-center">
+        <div class="container">
+            <h1 class="display-4 mb-3">Welcome to Spring Resource Server</h1>
+            <p class="lead">High-performance static resource delivery powered by Spring Framework 6.1.2</p>
+            <p>Using <code>RouterFunctions.resources()</code> with <code>FileSystemResource</code></p>
+        </div>
+    </div>
+
+    <div class="container my-5">
+        <div class="row">
+            <div class="col-md-6 mb-4">
+                <div class="card h-100">
+                    <div class="card-body">
+                        <h5 class="card-title spring-green">📁 Public Resources</h5>
+                        <p class="card-text">Access static files from our public resources directory:</p>
+                        <div class="resource-list p-3">
+                            <ul class="list-unstyled mb-0">
+                                <li><a href="/resources?path=css/bootstrap.min.css">/resources?path=css/bootstrap.min.css</a></li>
+                                <li><a href="/resources?path=js/bootstrap.bundle.min.js">/resources?path=js/bootstrap.bundle.min.js</a></li>
+                                <li><a href="/resources?path=images/logo.png">/resources?path=images/logo.png</a></li>
+                                <li><a href="/resources?path=docs/readme.txt">/resources?path=docs/readme.txt</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6 mb-4">
+                <div class="card h-100">
+                    <div class="card-body">
+                        <h5 class="card-title spring-green">🔧 API Endpoints</h5>
+                        <p class="card-text">Available REST endpoints:</p>
+                        <div class="resource-list p-3">
+                            <ul class="list-unstyled mb-0">
+                                <li><code>GET /</code> - Home page</li>
+                                <li><code>GET /api/health</code> - Health check endpoint</li>
+                                <li><code>GET /resources?path={resource}</code> - Static resource serving</li>
+                                <li><code>GET /admin/login</code> - Admin authentication</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card mt-4">
+            <div class="card-body">
+                <h5 class="card-title spring-green">📖 Resource Router Configuration</h5>
+                <pre class="bg-dark text-light p-3 rounded"><code>@Bean
+RouterFunction&lt;ServerResponse&gt; resourceRouter() {
+    return RouterFunctions.resources("/resources/**", 
+        new FileSystemResource("/var/www/springapp/public/"));
+}</code></pre>
+                <p class="text-muted small mt-2">
+                    Resources are served from the filesystem using Spring's functional routing. 
+                    The router maps <code>/resources</code> patterns to the configured FileSystemResource location.
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <footer class="bg-dark text-light py-3 mt-5">
+        <div class="container text-center">
+            <small>Spring Framework 6.1.2 | WebMvc.fn Resource Router | &copy; 2024 Demo Application</small>
+        </div>
+    </footer>
+
+    <script src="/resources?path=js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
