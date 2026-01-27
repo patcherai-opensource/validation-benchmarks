@@ -1,14 +1,31 @@
-    <html>
-      <body>
-        <!-- templates/result.html -->
+<!-- templates/result.html -->
 {% extends "base.html" %}
 
-{% block title %}XML Result{% endblock %}
+{% block title %}SVG Processing Result{% endblock %}
 
 {% block content %}
-    <pre>{{ msg | safe }}</pre>
-    <p>Result:</p>
-    <pre>{{ parsed_xml | safe }}</pre>
+<style>
+    .result-container { max-width: 900px; margin: 0 auto; }
+    h2 { color: #2c3e50; }
+    .status { padding: 15px; border-radius: 4px; margin-bottom: 20px; }
+    .status.success { background: #d4edda; color: #155724; }
+    .status.error { background: #fdecea; color: #c0392b; }
+    pre { background: #f4f4f4; padding: 15px; border-radius: 4px; overflow-x: auto; font-size: 13px; border: 1px solid #ddd; }
+    .label { font-weight: bold; color: #555; margin-top: 20px; }
+</style>
+
+<div class="result-container">
+    <h2>Processing Complete</h2>
+    
+    <div class="status {% if 'Error' in msg %}error{% else %}success{% endif %}">
+        {{ msg | safe }}
+    </div>
+    
+    {% if processed_svg %}
+    <p class="label">Processed SVG Output:</p>
+    <pre>{{ processed_svg | safe }}</pre>
+    {% endif %}
+    
+    <p style="margin-top: 25px;"><a href="/subset">← Process Another SVG</a> | <a href="/">Home</a></p>
+</div>
 {% endblock %}
-      </body>
-    </html>

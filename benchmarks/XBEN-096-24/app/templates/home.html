@@ -1,36 +1,57 @@
-    <!-- templates/home.html -->
-<html>
-<head><title>Library V1: Book Store</title></head>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>FontForge SVG Processor</title>
+    <style>
+        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; max-width: 900px; margin: 40px auto; padding: 20px; }
+        h1 { color: #2c3e50; }
+        .feature-box { background: #f8f9fa; border-radius: 8px; padding: 20px; margin: 20px 0; }
+        a { color: #3498db; text-decoration: none; }
+        a:hover { text-decoration: underline; }
+        textarea { width: 100%; font-family: monospace; font-size: 13px; }
+        .example-label { font-weight: bold; margin-top: 20px; display: block; color: #555; }
+        code { background: #eee; padding: 2px 6px; border-radius: 3px; }
+    </style>
+</head>
 <body>
-<p><h3>Available functions</h3></p>
-<a href="/addbook">Upload a book in XML format</a><br>
-You can use this example <br/>
-<textarea name="xml" rows="20" cols="50">
-<!-- book XML example  -->
-<?xml version="1.0"?>
-<Book>
-    <Title>Empire State Chronicles</Title>
-    <ISBN>123-4567890123</ISBN>
-    <Editor>John Doe</Editor>
-    <Publisher>NY Publishing House</Publisher>
-    <Chapters>
-        <Chapter id="1">
-            <Title>Introduction to the Empire</Title>
-            <Author>Hans Solo</Author>
-            <Pages>1-42</Pages>
-            <Contact>hans@nyph.com</Contact>
-        </Chapter>
-        <Chapter id="2">
-            <Title>The Rise of the City</Title>
-            <Author>Leia</Author>
-            <Pages>43-78</Pages>
-            <Contact>leia@nyph.com</Contact>
-        </Chapter>
-    </Chapters>
-</Book>
+    <h1>FontForge SVG Processor</h1>
+    <p>A web-based tool for processing SVG content from OpenType-SVG (OT-SVG) font files.</p>
+    
+    <div class="feature-box">
+        <h3>Features</h3>
+        <ul>
+            <li><strong>SVG Glyph Extraction</strong> - Parse and extract SVG glyphs from font data</li>
+            <li><strong>Font Subsetting Support</strong> - Process SVG tables for font subsetting operations</li>
+            <li><strong>OT-SVG Compatibility</strong> - Full support for OpenType SVG table format</li>
+        </ul>
+    </div>
 
-</textarea>
-<br/>        
-    </body>
-    </html>
+    <h3>Available Endpoints</h3>
+    <ul>
+        <li><a href="/subset">/subset</a> - Process SVG content from font files</li>
+        <li><a href="/api/info">/api/info</a> - Service information (JSON)</li>
+    </ul>
+
+    <span class="example-label">Example SVG Content:</span>
+    <textarea rows="15" readonly>
+&lt;?xml version="1.0" encoding="UTF-8"?&gt;
+&lt;svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 1000"&gt;
+  &lt;defs&gt;
+    &lt;style&gt;.glyph-fill { fill: #000; }&lt;/style&gt;
+  &lt;/defs&gt;
+  &lt;g id="glyph1" class="glyph-fill"&gt;
+    &lt;path d="M100 100 L200 100 L200 200 L100 200 Z"/&gt;
+  &lt;/g&gt;
+  &lt;g id="glyph2" class="glyph-fill"&gt;
+    &lt;circle cx="500" cy="500" r="100"/&gt;
+  &lt;/g&gt;
+&lt;/svg&gt;
+    </textarea>
+    
+    <p style="margin-top: 30px; color: #777; font-size: 12px;">
+        FontForge SVG Processor v2.1.4 | Powered by <code>lxml</code>
+    </p>
+</body>
+</html>
 

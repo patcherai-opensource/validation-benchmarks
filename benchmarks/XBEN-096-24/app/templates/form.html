@@ -1,12 +1,37 @@
 <!-- templates/form.html -->
 {% extends "base.html" %}
 
-{% block title %}XML Validator{% endblock %}
+{% block title %}SVG Subset Processor{% endblock %}
 
 {% block content %}
-    <form action="{{ endpoint }}" method="POST">
-        <p><h3>Upload a book using XML </h3></p>
-        <textarea name="xml" rows="20" cols="50"></textarea>
-        <p><input type='submit' value='Parse'/></p>
+<style>
+    .form-container { max-width: 800px; margin: 0 auto; }
+    h2 { color: #2c3e50; }
+    textarea { width: 100%; font-family: monospace; font-size: 13px; border: 1px solid #ccc; border-radius: 4px; padding: 10px; }
+    input[type="submit"] { background: #3498db; color: white; border: none; padding: 10px 25px; border-radius: 4px; cursor: pointer; font-size: 14px; }
+    input[type="submit"]:hover { background: #2980b9; }
+    .help-text { color: #666; font-size: 13px; margin-bottom: 10px; }
+    .error { color: #c0392b; background: #fdecea; padding: 10px; border-radius: 4px; margin-bottom: 15px; }
+</style>
+
+<div class="form-container">
+    <h2>Process SVG Content</h2>
+    <p class="help-text">Paste SVG content from an OT-SVG font file for processing. The SVG will be parsed and processed for glyph extraction.</p>
+    
+    {% if msg %}
+    <div class="error">{{ msg | safe }}</div>
+    {% endif %}
+    
+    <form action="/subset" method="POST">
+        <textarea name="svg_content" rows="18" placeholder="&lt;?xml version=&quot;1.0&quot;?&gt;
+&lt;svg xmlns=&quot;http://www.w3.org/2000/svg&quot;&gt;
+  &lt;g id=&quot;glyph1&quot;&gt;
+    &lt;path d=&quot;M100 100 L200 200&quot;/&gt;
+  &lt;/g&gt;
+&lt;/svg&gt;"></textarea>
+        <p><input type="submit" value="Process SVG"/></p>
     </form>
+    
+    <p><a href="/">← Back to Home</a></p>
+</div>
 {% endblock %}
