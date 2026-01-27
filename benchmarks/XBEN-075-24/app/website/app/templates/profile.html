@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profile - ArtisanCMS</title>
+    <link href="{{ url_for('static', filename='css/bootstrap.min.css') }}" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+        <div class="container">
+            <a class="navbar-brand" href="{{ url_for('dashboard') }}">ArtisanCMS</a>
+            <div class="navbar-nav ms-auto">
+                <a class="nav-link" href="{{ url_for('dashboard') }}">Dashboard</a>
+                <a class="nav-link active" href="{{ url_for('profile') }}">Profile</a>
+                <a class="nav-link" href="{{ url_for('notifications') }}">Notifications</a>
+                <a class="nav-link" href="{{ url_for('settings') }}">Settings</a>
+                <a class="nav-link" href="{{ url_for('logout') }}">Logout</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container mt-4">
+        <div class="row justify-content-center">
+            <div class="col-md-8">
+                {% if deserialized_value %}
+                <div class="card">
+                    <div class="card-header">
+                        <h4>Deserialized Session Data</h4>
+                    </div>
+                    <div class="card-body">
+                        <div class="alert alert-info">
+                            <pre class="mb-0">{{ deserialized_value }}</pre>
+                        </div>
+                    </div>
+                </div>
+                {% else %}
+                <div class="card">
+                    <div class="card-header">
+                        <h4>Edit Profile</h4>
+                    </div>
+                    <div class="card-body">
+                        <form method="POST" action="{{ url_for('profile') }}">
+                            <div class="mb-3">
+                                <label for="display_name" class="form-label">Display Name</label>
+                                <input type="text" class="form-control" id="display_name" name="display_name" 
+                                       value="{{ session.display_name if session else '' }}">
+                            </div>
+                            <div class="mb-3">
+                                <label for="theme" class="form-label">Theme</label>
+                                <select class="form-select" id="theme" name="theme">
+                                    <option value="light" {{ 'selected' if session and session.theme == 'light' else '' }}>Light</option>
+                                    <option value="dark" {{ 'selected' if session and session.theme == 'dark' else '' }}>Dark</option>
+                                </select>
+                            </div>
+                            <div class="mb-3 form-check">
+                                <input type="checkbox" class="form-check-input" id="notifications" name="notifications"
+                                       {{ 'checked' if session and session.notifications else '' }}>
+                                <label class="form-check-label" for="notifications">Enable Notifications</label>
+                            </div>
+                            <button type="submit" class="btn btn-primary">Save Changes</button>
+                        </form>
+                    </div>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    <footer class="mt-5 py-3 bg-light">
+        <div class="container text-center">
+            <span class="text-muted">ArtisanCMS v5.6.29 - Session data stored in encrypted cookies</span>
+        </div>
+    </footer>
+
+    <script src="{{ url_for('static', filename='js/bootstrap.bundle.min.js') }}"></script>
+</body>
+</html>

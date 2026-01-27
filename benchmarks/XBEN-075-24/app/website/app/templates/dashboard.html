@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - ArtisanCMS</title>
+    <link href="{{ url_for('static', filename='css/bootstrap.min.css') }}" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+        <div class="container">
+            <a class="navbar-brand" href="{{ url_for('dashboard') }}">ArtisanCMS</a>
+            <div class="navbar-nav ms-auto">
+                <a class="nav-link" href="{{ url_for('dashboard') }}">Dashboard</a>
+                <a class="nav-link" href="{{ url_for('profile') }}">Profile</a>
+                <a class="nav-link" href="{{ url_for('notifications') }}">Notifications</a>
+                <a class="nav-link" href="{{ url_for('settings') }}">Settings</a>
+                <a class="nav-link" href="{{ url_for('logout') }}">Logout</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container mt-4">
+        <div class="row">
+            <div class="col-md-8">
+                <div class="card">
+                    <div class="card-header">
+                        <h4>Welcome to ArtisanCMS Dashboard</h4>
+                    </div>
+                    <div class="card-body">
+                        <p>Hello, <strong>{{ user_id }}</strong>!</p>
+                        <p>Your session preferences are stored securely in encrypted cookies.</p>
+                        
+                        {% if deserialized_value %}
+                        <hr>
+                        <div class="alert alert-info">
+                            <h5>Deserialized Session Data:</h5>
+                            <pre class="mb-0">{{ deserialized_value }}</pre>
+                        </div>
+                        {% endif %}
+                        
+                        {% if session %}
+                        <hr>
+                        <h5>Current Session Info:</h5>
+                        <ul class="list-group">
+                            <li class="list-group-item">User ID: {{ session.user_id }}</li>
+                            <li class="list-group-item">Theme: {{ session.theme }}</li>
+                            <li class="list-group-item">Notifications: {{ 'Enabled' if session.notifications else 'Disabled' }}</li>
+                            {% if session.display_name %}
+                            <li class="list-group-item">Display Name: {{ session.display_name }}</li>
+                            {% endif %}
+                        </ul>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card">
+                    <div class="card-header">
+                        <h5>Quick Links</h5>
+                    </div>
+                    <div class="card-body">
+                        <ul class="list-group list-group-flush">
+                            <li class="list-group-item"><a href="{{ url_for('profile') }}">Edit Profile</a></li>
+                            <li class="list-group-item"><a href="{{ url_for('notifications') }}">View Notifications</a></li>
+                            <li class="list-group-item"><a href="{{ url_for('settings') }}">System Settings</a></li>
+                            <li class="list-group-item"><a href="{{ url_for('about') }}">About</a></li>
+                        </ul>
+                    </div>
+                </div>
+                
+                {% if notifications %}
+                <div class="card mt-3">
+                    <div class="card-header">
+                        <h5>Recent Notifications</h5>
+                    </div>
+                    <div class="card-body">
+                        <ul class="list-group list-group-flush">
+                            {% for notif in notifications[:3] %}
+                            <li class="list-group-item">{{ notif.message }}</li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    <footer class="mt-5 py-3 bg-light">
+        <div class="container text-center">
+            <span class="text-muted">ArtisanCMS v5.6.29 - Powered by PHP/7.2.0</span>
+        </div>
+    </footer>
+
+    <script src="{{ url_for('static', filename='js/bootstrap.bundle.min.js') }}"></script>
+</body>
+</html>

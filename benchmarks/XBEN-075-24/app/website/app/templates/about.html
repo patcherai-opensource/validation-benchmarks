@@ -3,33 +3,69 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>About us</title>
+    <title>About - ArtisanCMS</title>
     <link href="{{ url_for('static', filename='css/bootstrap.min.css') }}" rel="stylesheet">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
 </head>
 <body>
-    <div class="container">
-        <div class="row justify-content-between mt-5">
-            <div class="col-md-9">
-                <h2>Welcome to the best URL bookmarks application ever seen.</h2>
-                <p>Here you can check and add new URLs to this online bookmark app</p>
-                <p>If you believe this application is useful, please share it</p>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+        <div class="container">
+            <a class="navbar-brand" href="{{ url_for('dashboard') }}">ArtisanCMS</a>
+            <div class="navbar-nav ms-auto">
+                <a class="nav-link" href="{{ url_for('dashboard') }}">Dashboard</a>
+                <a class="nav-link" href="{{ url_for('profile') }}">Profile</a>
+                <a class="nav-link" href="{{ url_for('notifications') }}">Notifications</a>
+                <a class="nav-link" href="{{ url_for('settings') }}">Settings</a>
+                <a class="nav-link" href="{{ url_for('logout') }}">Logout</a>
             </div>
-            <div class="col-md-3">
+        </div>
+    </nav>
+
+    <div class="container mt-4">
+        <div class="row">
+            <div class="col-md-12">
                 <div class="card">
+                    <div class="card-header">
+                        <h4>About ArtisanCMS</h4>
+                    </div>
                     <div class="card-body">
-                        <h5 class="card-title">Navigation</h5>
-                        <ul class="list-group">
-                            <li class="list-group-item"><a href="/list">Home</a></li>
-                            <li class="list-group-item"><a href="{{ url_for('add') }}">Bookmark URL</a></li>
+                        <h5>Enterprise Content Management System</h5>
+                        <p>ArtisanCMS is a modern content management system built with security in mind.</p>
+                        
+                        <h6>Features:</h6>
+                        <ul>
+                            <li>Encrypted session cookies using AES-256-CBC</li>
+                            <li>Secure CSRF token handling</li>
+                            <li>User preference management</li>
+                            <li>Real-time notifications</li>
                         </ul>
+                        
+                        <h6>Technical Details:</h6>
+                        <ul>
+                            <li>Framework: ArtisanCMS v5.6.29</li>
+                            <li>Runtime: PHP 7.2.0</li>
+                            <li>Session Storage: Encrypted Cookies</li>
+                            <li>Encryption: AES-256-CBC with HMAC verification</li>
+                        </ul>
+                        
+                        <div class="alert alert-secondary mt-3">
+                            <p class="mb-0">
+                                <strong>Cookie-based Sessions:</strong> All session data is serialized, encrypted, and stored 
+                                in browser cookies. This allows for stateless server operation and easy horizontal scaling.
+                            </p>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- Bootstrap Bundle with Popper -->
+    <footer class="mt-5 py-3 bg-light">
+        <div class="container text-center">
+            <span class="text-muted">ArtisanCMS v5.6.29 - &copy; 2024 Artisan Software Inc.</span>
+        </div>
+    </footer>
+
     <script src="{{ url_for('static', filename='js/bootstrap.bundle.min.js') }}"></script>
 </body>
 </html>

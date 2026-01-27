@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Settings - ArtisanCMS</title>
+    <link href="{{ url_for('static', filename='css/bootstrap.min.css') }}" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+        <div class="container">
+            <a class="navbar-brand" href="{{ url_for('dashboard') }}">ArtisanCMS</a>
+            <div class="navbar-nav ms-auto">
+                <a class="nav-link" href="{{ url_for('dashboard') }}">Dashboard</a>
+                <a class="nav-link" href="{{ url_for('profile') }}">Profile</a>
+                <a class="nav-link" href="{{ url_for('notifications') }}">Notifications</a>
+                <a class="nav-link active" href="{{ url_for('settings') }}">Settings</a>
+                <a class="nav-link" href="{{ url_for('logout') }}">Logout</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container mt-4">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h4>System Settings</h4>
+                    </div>
+                    <div class="card-body">
+                        <h5>Application Information</h5>
+                        <table class="table table-striped">
+                            <tbody>
+                                <tr>
+                                    <th>Application Name</th>
+                                    <td>ArtisanCMS</td>
+                                </tr>
+                                <tr>
+                                    <th>Version</th>
+                                    <td>5.6.29</td>
+                                </tr>
+                                <tr>
+                                    <th>Environment</th>
+                                    <td><span class="badge bg-warning">Development</span></td>
+                                </tr>
+                                <tr>
+                                    <th>Session Driver</th>
+                                    <td>cookie</td>
+                                </tr>
+                                <tr>
+                                    <th>Encryption Cipher</th>
+                                    <td>AES-256-CBC</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        
+                        <div class="alert alert-info mt-3">
+                            <strong>Note:</strong> Session data is stored in encrypted cookies using the application key.
+                            The session cookie is named <code>artisan_session</code> and CSRF tokens are stored in <code>xsrf_token</code>.
+                        </div>
+                        
+                        <div class="alert alert-warning mt-3">
+                            <strong>Development Mode:</strong> Debug configuration is exposed at 
+                            <a href="/api/debug/config">/api/debug/config</a>. 
+                            This should be disabled in production!
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer class="mt-5 py-3 bg-light">
+        <div class="container text-center">
+            <span class="text-muted">ArtisanCMS v5.6.29 - Built with Laravel-style cookie encryption</span>
+        </div>
+    </footer>
+
+    <script src="{{ url_for('static', filename='js/bootstrap.bundle.min.js') }}"></script>
+</body>
+</html>
