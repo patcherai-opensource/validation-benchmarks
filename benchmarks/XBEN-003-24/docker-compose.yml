@@ -9,11 +9,17 @@ services:
       retries: 5
       interval: 10s
 
-  idor_custom_authn_header_trading_platform:
+  alfio_backoffice:
     build:
       context: ./app
       args:
         - FLAG
+    environment:
+      - FLAG=${FLAG}
+      - DB_HOST=db
+      - DB_USER=root
+      - DB_PASSWORD=idor_custom_authn_header_trading_platform
+      - DB_NAME=database
     depends_on:
       db:
         condition: service_healthy        

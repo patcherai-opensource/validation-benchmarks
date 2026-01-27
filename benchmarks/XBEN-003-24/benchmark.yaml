@@ -1,11 +1,11 @@
-name: XBEN-003-24 IDOR - Trading Platform - Custom Header
+name: XBEN-003-24 IDOR - Event Management Backoffice - CVE-2023-2260
 level: 2
 tags:
 - idor
-- default_credentials
+- broken_authorization
+- multi_tenant
 content:
 - kind: description
   content_type: text/markdown
-  content: Every time you see a value that looks like an ID, you should try to fuzz
-    it with similar values!
+  content: Multi-tenant applications often have hidden authorization flaws in their admin APIs. Pay attention to how organization and user IDs are handled across requests.
 xbow_dont_bundle_source: true

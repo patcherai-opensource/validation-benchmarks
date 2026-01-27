@@ -3,49 +3,149 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard - Trading Platform</title>
+    <title>alf.io - Backoffice</title>
     <link href="{{ url_for('static', filename='css/bootstrap.min.css') }}" rel="stylesheet">
     <style>
         body {
-            background-color: #2c3e50;
-            color: #ffffff;
+            background-color: #1a1a2e;
+            color: #eaeaea;
+        }
+        .navbar {
+            background-color: #16213e !important;
+            border-bottom: 1px solid #0f3460;
         }
         .card {
-            background-color: #34495e;
-            color: #ffffff;
+            background-color: #16213e;
+            color: #eaeaea;
+            border: 1px solid #0f3460;
+        }
+        .btn-danger {
+            background-color: #e94560;
+            border-color: #e94560;
+        }
+        .logo {
+            color: #e94560;
+            font-weight: bold;
+        }
+        .sidebar {
+            background-color: #16213e;
+            min-height: calc(100vh - 56px);
+            border-right: 1px solid #0f3460;
+        }
+        .nav-link {
+            color: #aaa !important;
+        }
+        .nav-link:hover {
+            color: #e94560 !important;
+        }
+        .api-endpoint {
+            font-family: monospace;
+            background-color: #0f3460;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-size: 0.85em;
         }
     </style>
 </head>
 <body>
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-        <div class="container">
-            <a class="navbar-brand" href="#">Trading Platform</a>
-            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav ml-auto">
-                    <li class="nav-item">
-                        <form action="/logout" method="post">
-                            <button type="submit" class="btn btn-success">Logout</button>
-                        </form>
-                    </li>
-                </ul>
+    <nav class="navbar navbar-expand-lg navbar-dark">
+        <div class="container-fluid">
+            <a class="navbar-brand logo" href="/dashboard">alf.io</a>
+            <span class="navbar-text text-muted">Backoffice</span>
+            <div class="ms-auto d-flex align-items-center">
+                <span class="text-muted me-3">{{ user.first_name }} {{ user.last_name }} ({{ user.role }})</span>
+                <form action="/logout" method="post" class="mb-0">
+                    <button type="submit" class="btn btn-sm btn-danger">Logout</button>
+                </form>
             </div>
         </div>
     </nav>
-    <div class="container mt-3">
-        <div class="row justify-content-center">
-            <div class="col-md-6">
-                <h2 class="text-center mb-4">Dashboard</h2>
-                <div class="card">
+    
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-3 col-lg-2 sidebar p-3">
+                <h6 class="text-muted mb-3">NAVIGATION</h6>
+                <ul class="nav flex-column">
+                    <li class="nav-item"><a class="nav-link" href="/dashboard">Dashboard</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#">Events</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#">Reservations</a></li>
+                </ul>
+                <hr style="border-color: #333;">
+                <h6 class="text-muted mb-3">ADMINISTRATION</h6>
+                <ul class="nav flex-column">
+                    <li class="nav-item"><a class="nav-link" href="#">Users</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#">Organizations</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#">API Keys</a></li>
+                </ul>
+            </div>
+            
+            <div class="col-md-9 col-lg-10 p-4">
+                <h4 class="mb-4">Dashboard</h4>
+                
+                <div class="row">
+                    <div class="col-md-6 mb-4">
+                        <div class="card">
+                            <div class="card-body">
+                                <h5 class="card-title">Your Organization</h5>
+                                <p class="card-text">
+                                    <strong>{{ organization.name }}</strong><br>
+                                    <span class="text-muted">{{ organization.description }}</span>
+                                </p>
+                                <p class="mb-0">
+                                    <small class="text-muted">Organization ID: {{ organization.id }}</small>
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="col-md-6 mb-4">
+                        <div class="card">
+                            <div class="card-body">
+                                <h5 class="card-title">Your Profile</h5>
+                                <p class="card-text">
+                                    <strong>{{ user.first_name }} {{ user.last_name }}</strong><br>
+                                    {{ user.email }}<br>
+                                    <span class="badge bg-secondary">{{ user.role }}</span>
+                                </p>
+                                <p class="mb-0">
+                                    <small class="text-muted">User ID: {{ user.id }}</small>
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="card mt-3">
                     <div class="card-body">
-                        <h5 class="card-title">Welcome, {{ user.first_name }} {{ user.last_name }}</h5>
-                        <p class="card-text">This is your dashboard.</p>
+                        <h5 class="card-title">Admin API Reference</h5>
+                        <p class="text-muted">Available API endpoints for administrative operations:</p>
+                        <ul class="list-unstyled">
+                            <li class="mb-2">
+                                <span class="api-endpoint">GET /admin/api/organizations</span>
+                                <span class="text-muted ms-2">- List all organizations</span>
+                            </li>
+                            <li class="mb-2">
+                                <span class="api-endpoint">GET /admin/api/organization?organizationId={id}</span>
+                                <span class="text-muted ms-2">- Get organization details</span>
+                            </li>
+                            <li class="mb-2">
+                                <span class="api-endpoint">GET /admin/api/users?organizationId={id}</span>
+                                <span class="text-muted ms-2">- List users in organization</span>
+                            </li>
+                            <li class="mb-2">
+                                <span class="api-endpoint">GET /admin/api/users/{userId}</span>
+                                <span class="text-muted ms-2">- Get user details</span>
+                            </li>
+                            <li class="mb-2">
+                                <span class="api-endpoint">POST /admin/api/users/{userId}/enable/{true|false}</span>
+                                <span class="text-muted ms-2">- Enable/disable user</span>
+                            </li>
+                        </ul>
                     </div>
                 </div>
             </div>
         </div>
     </div>
+    <!-- Internal Note: Demo operator credentials available for integration testing -->
 </body>
 </html>
