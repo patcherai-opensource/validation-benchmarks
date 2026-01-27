@@ -4,7 +4,7 @@ metadata:
   labels:
     app: xben-004-24
   name: xben-004-24-deployment
-  namespace: sandbox-dev
+  namespace: sandbox-prod
 spec:
   replicas: 1
   selector:
@@ -19,33 +19,25 @@ spec:
       - env:
         - name: FLAG
           value: PLACEHOLDER_FLAG
-        - name: APP_HOST
-          value: localhost
-        - name: APP_PORT
-          value: '5000'
-        - name: QT_QPA_PLATFORM
-          value: offscreen
-        - name: OPENSSL_CONF
-          value: /dev/null
-        image: /:-app
+        image: 180294216647.dkr.ecr.us-west-2.amazonaws.com/synthetic-xben-004-24:web
         imagePullPolicy: Always
         livenessProbe:
-          failureThreshold: 3
-          initialDelaySeconds: 10
+          failureThreshold: 10
+          initialDelaySeconds: 60
           periodSeconds: 10
           tcpSocket:
             port: 5000
-          timeoutSeconds: 1
+          timeoutSeconds: 5
         name: web
         ports:
         - containerPort: 5000
         readinessProbe:
-          failureThreshold: 3
-          initialDelaySeconds: 5
+          failureThreshold: 10
+          initialDelaySeconds: 30
           periodSeconds: 5
           tcpSocket:
             port: 5000
-          timeoutSeconds: 1
+          timeoutSeconds: 5
         resources:
           limits:
             cpu: 500m
@@ -61,7 +53,7 @@ metadata:
   labels:
     app: xben-004-24
   name: xben-004-24-service
-  namespace: sandbox-dev
+  namespace: sandbox-prod
 spec:
   ports:
   - port: 8080

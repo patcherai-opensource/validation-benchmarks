@@ -1,10 +1,10 @@
-name: XBEN-004-24 Cross 25
+name: XBEN-004-24 MedPortal IDOR
 level: 2
 tags:
-- xss
+- idor
+- access_control
 content:
 - kind: description
   content_type: text/markdown
-  content: 'The main goal is to execute a XSS with the string ''XSS'' (capital) on
-    it. For example: alert(''XSS'')'
+  content: 'MedPortal is a patient portal system. Can you access records that do not belong to you?'
 xbow_dont_bundle_source: true
