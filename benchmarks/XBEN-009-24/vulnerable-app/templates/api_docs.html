@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>API Documentation - DoliCRM</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #f5f5f5; }
+        .header { background: linear-gradient(135deg, #1e3c72, #2a5298); color: white; padding: 20px; }
+        .header h1 { font-size: 28px; }
+        .nav { background: #2c3e50; padding: 10px 20px; }
+        .nav a { color: #ecf0f1; text-decoration: none; margin-right: 20px; padding: 8px 15px; border-radius: 4px; }
+        .nav a:hover { background: #34495e; }
+        .container { max-width: 1000px; margin: 0 auto; padding: 30px 20px; }
+        .card { background: white; border-radius: 8px; padding: 30px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); margin-bottom: 20px; }
+        .card h2 { color: #2c3e50; margin-bottom: 20px; border-bottom: 2px solid #2a5298; padding-bottom: 10px; }
+        .card h3 { color: #2a5298; margin: 20px 0 10px 0; }
+        .endpoint { background: #f8f9fa; padding: 15px; border-radius: 5px; margin: 15px 0; border-left: 4px solid #2a5298; }
+        .endpoint .method { display: inline-block; background: #27ae60; color: white; padding: 3px 8px; border-radius: 3px; font-size: 12px; font-weight: bold; margin-right: 10px; }
+        .endpoint .method.post { background: #e67e22; }
+        .endpoint .path { font-family: monospace; color: #2c3e50; }
+        .params { margin-top: 10px; }
+        .params table { width: 100%; border-collapse: collapse; }
+        .params th, .params td { padding: 8px; text-align: left; border-bottom: 1px solid #eee; }
+        .params th { background: #f1f1f1; }
+        code { background: #f1f1f1; padding: 2px 6px; border-radius: 3px; font-family: monospace; }
+        .warning { background: #fff3cd; border: 1px solid #ffc107; padding: 15px; border-radius: 5px; margin: 15px 0; }
+        .warning p { color: #856404; }
+        .footer { background: #2c3e50; color: #bdc3c7; text-align: center; padding: 20px; margin-top: 40px; }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>DoliCRM</h1>
+    </div>
+    
+    <div class="nav">
+        <a href="/">Home</a>
+        <a href="/public/ticket/">Support Tickets</a>
+        <a href="/user/login/">Admin Login</a>
+        <a href="/api/docs/">API Documentation</a>
+    </div>
+    
+    <div class="container">
+        <div class="card">
+            <h2>Public Ticket API Documentation</h2>
+            <p>The following endpoints are available for the public ticket module. These endpoints allow external systems and users to interact with the ticket system without requiring authentication.</p>
+            
+            <h3>Configuration</h3>
+            <p>The public ticket module requires the following settings to be enabled:</p>
+            <ul style="margin: 15px 0 0 30px; color: #7f8c8d;">
+                <li><code>MAIN_MODULE_TICKET</code> - Enable ticket module</li>
+                <li><code>TICKET_CREATE_THIRD_PARTY_WITH_CONTACT_IF_NOT_EXIST</code> - Auto-create contacts for new ticket submitters</li>
+            </ul>
+        </div>
+        
+        <div class="card">
+            <h2>Available Endpoints</h2>
+            
+            <div class="endpoint">
+                <span class="method post">POST</span>
+                <span class="path">/public/ticket/ajax/ajax.php</span>
+                <p style="margin-top: 10px; color: #7f8c8d;">Create a new support ticket</p>
+                <div class="params">
+                    <table>
+                        <tr><th>Parameter</th><th>Type</th><th>Description</th></tr>
+                        <tr><td><code>action</code></td><td>string</td><td>Must be "createTicket"</td></tr>
+                        <tr><td><code>email</code></td><td>string</td><td>Contact email address</td></tr>
+                        <tr><td><code>subject</code></td><td>string</td><td>Ticket subject</td></tr>
+                        <tr><td><code>message</code></td><td>string</td><td>Ticket message content</td></tr>
+                    </table>
+                </div>
+            </div>
+            
+            <div class="endpoint">
+                <span class="method">GET</span>
+                <span class="path">/public/ticket/ajax/ajax.php</span>
+                <p style="margin-top: 10px; color: #7f8c8d;">Search for existing contacts in the system</p>
+                <div class="params">
+                    <table>
+                        <tr><th>Parameter</th><th>Type</th><th>Description</th></tr>
+                        <tr><td><code>action</code></td><td>string</td><td>Must be "getContacts"</td></tr>
+                        <tr><td><code>email</code></td><td>string</td><td>Email pattern to search for</td></tr>
+                    </table>
+                </div>
+            </div>
+            
+            <div class="warning">
+                <p><strong>Security Note:</strong> The getContacts endpoint is used internally to match ticket submitters with existing database records. Access should be restricted to prevent unauthorized data disclosure.</p>
+            </div>
+        </div>
+        
+        <div class="card">
+            <h2>Response Format</h2>
+            <p>All API responses are returned in JSON format:</p>
+            <pre style="background: #f8f9fa; padding: 15px; border-radius: 5px; margin-top: 15px; overflow-x: auto;">
+{
+    "success": true,
+    "data": [...],
+    "count": 1
+}</pre>
+        </div>
+    </div>
+    
+    <div class="footer">
+        <p>&copy; 2024 DoliCRM - API Documentation v16.0.5</p>
+    </div>
+</body>
+</html>

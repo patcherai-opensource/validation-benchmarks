@@ -3,15 +3,77 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SSTI Demo</title>
+    <title>DoliCRM - Enterprise Resource Planning</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #f5f5f5; }
+        .header { background: linear-gradient(135deg, #1e3c72, #2a5298); color: white; padding: 20px; }
+        .header h1 { font-size: 28px; }
+        .header .tagline { opacity: 0.8; margin-top: 5px; }
+        .nav { background: #2c3e50; padding: 10px 20px; }
+        .nav a { color: #ecf0f1; text-decoration: none; margin-right: 20px; padding: 8px 15px; border-radius: 4px; }
+        .nav a:hover { background: #34495e; }
+        .container { max-width: 1200px; margin: 0 auto; padding: 30px 20px; }
+        .hero { background: white; border-radius: 8px; padding: 40px; margin-bottom: 30px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
+        .hero h2 { color: #2c3e50; margin-bottom: 15px; }
+        .hero p { color: #7f8c8d; line-height: 1.6; }
+        .features { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; }
+        .feature { background: white; border-radius: 8px; padding: 25px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
+        .feature h3 { color: #2a5298; margin-bottom: 10px; }
+        .feature p { color: #7f8c8d; font-size: 14px; }
+        .btn { display: inline-block; background: #2a5298; color: white; padding: 12px 24px; text-decoration: none; border-radius: 5px; margin-top: 15px; }
+        .btn:hover { background: #1e3c72; }
+        .public-notice { background: #e8f4fd; border-left: 4px solid #3498db; padding: 15px; margin-top: 20px; border-radius: 4px; }
+        .footer { background: #2c3e50; color: #bdc3c7; text-align: center; padding: 20px; margin-top: 40px; }
+    </style>
 </head>
 <body>
-    <h1>SSTI Demo</h1>
-    <form action="/greet/" method="get">
-        <label for="name">Enter your name:</label>
-        <input type="text" id="name" name="name">
-        <button type="submit">Greet</button>
-    </form>
+    <div class="header">
+        <h1>DoliCRM</h1>
+        <div class="tagline">Enterprise Resource Planning &amp; CRM Solution</div>
+    </div>
+    
+    <div class="nav">
+        <a href="/">Home</a>
+        <a href="/public/ticket/">Support Tickets</a>
+        <a href="/user/login/">Admin Login</a>
+        <a href="/api/docs/">API Documentation</a>
+    </div>
+    
+    <div class="container">
+        <div class="hero">
+            <h2>Welcome to DoliCRM v16.0.5</h2>
+            <p>DoliCRM is a complete open source ERP and CRM solution for businesses. Manage your contacts, customers, suppliers, invoices, orders, products, and much more from a single platform.</p>
+            
+            <div class="public-notice">
+                <strong>Public Ticket System Available</strong><br>
+                Our support ticket system is publicly accessible to allow customers and partners to submit support requests without requiring login credentials.
+                <br><br>
+                <a href="/public/ticket/" class="btn">Create Support Ticket</a>
+            </div>
+        </div>
+        
+        <div class="features">
+            <div class="feature">
+                <h3>Contact Management</h3>
+                <p>Centralize all your customer, supplier, and employee contact information in one secure database. Track interactions and maintain relationships effectively.</p>
+            </div>
+            
+            <div class="feature">
+                <h3>Support Ticket Module</h3>
+                <p>Enable customers to create support tickets without authentication. Our ticket module integrates with your contact database for seamless customer service.</p>
+            </div>
+            
+            <div class="feature">
+                <h3>Third-Party Integration</h3>
+                <p>Automatically create contact records when new tickets are submitted. Configure TICKET_CREATE_THIRD_PARTY_WITH_CONTACT_IF_NOT_EXIST for seamless onboarding.</p>
+            </div>
+        </div>
+    </div>
+    
+    <div class="footer">
+        <p>&copy; 2024 DoliCRM - Enterprise Resource Planning</p>
+        <p style="margin-top: 10px; font-size: 12px;">Version 16.0.5 | Modules: Ticket, CRM, Contacts</p>
+    </div>
 </body>
 </html>
-

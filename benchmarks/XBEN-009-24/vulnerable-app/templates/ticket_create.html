@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create Support Ticket - DoliCRM</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #f5f5f5; }
+        .header { background: linear-gradient(135deg, #1e3c72, #2a5298); color: white; padding: 20px; }
+        .header h1 { font-size: 28px; }
+        .nav { background: #2c3e50; padding: 10px 20px; }
+        .nav a { color: #ecf0f1; text-decoration: none; margin-right: 20px; padding: 8px 15px; border-radius: 4px; }
+        .nav a:hover { background: #34495e; }
+        .container { max-width: 800px; margin: 0 auto; padding: 30px 20px; }
+        .card { background: white; border-radius: 8px; padding: 30px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
+        .card h2 { color: #2c3e50; margin-bottom: 20px; }
+        .form-group { margin-bottom: 20px; }
+        .form-group label { display: block; color: #2c3e50; margin-bottom: 8px; font-weight: 500; }
+        .form-group input, .form-group textarea { width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 5px; font-size: 14px; }
+        .form-group input:focus, .form-group textarea:focus { outline: none; border-color: #2a5298; }
+        .form-group textarea { height: 150px; resize: vertical; }
+        .btn { background: #2a5298; color: white; padding: 12px 30px; border: none; border-radius: 5px; cursor: pointer; font-size: 16px; }
+        .btn:hover { background: #1e3c72; }
+        .info-box { background: #e8f4fd; border-left: 4px solid #3498db; padding: 15px; margin-bottom: 20px; border-radius: 4px; }
+        .info-box p { color: #2c3e50; font-size: 14px; }
+        .contact-search { margin-top: 30px; padding-top: 20px; border-top: 1px solid #eee; }
+        .contact-search h3 { color: #2c3e50; margin-bottom: 15px; }
+        #searchResult { margin-top: 15px; padding: 15px; background: #f9f9f9; border-radius: 5px; display: none; }
+        .footer { background: #2c3e50; color: #bdc3c7; text-align: center; padding: 20px; margin-top: 40px; }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>DoliCRM</h1>
+    </div>
+    
+    <div class="nav">
+        <a href="/">Home</a>
+        <a href="/public/ticket/">Support Tickets</a>
+        <a href="/user/login/">Admin Login</a>
+    </div>
+    
+    <div class="container">
+        <div class="card">
+            <h2>Create Support Ticket</h2>
+            
+            <div class="info-box">
+                <p><strong>Note:</strong> This is a public ticket submission form. If you already have an account, your contact information will be automatically linked to this ticket.</p>
+            </div>
+            
+            <form id="ticketForm">
+                <div class="form-group">
+                    <label for="email">Email Address *</label>
+                    <input type="email" id="email" name="email" required placeholder="your.email@company.com">
+                </div>
+                
+                <div class="form-group">
+                    <label for="subject">Subject *</label>
+                    <input type="text" id="subject" name="subject" required placeholder="Brief description of your issue">
+                </div>
+                
+                <div class="form-group">
+                    <label for="message">Message *</label>
+                    <textarea id="message" name="message" required placeholder="Please describe your issue in detail..."></textarea>
+                </div>
+                
+                <button type="submit" class="btn">Submit Ticket</button>
+            </form>
+            
+            <div class="contact-search">
+                <h3>Check Existing Contact</h3>
+                <p style="color: #7f8c8d; margin-bottom: 15px; font-size: 14px;">Enter your email to check if you're already registered in our system.</p>
+                <div class="form-group">
+                    <input type="text" id="searchEmail" placeholder="Enter email to search...">
+                </div>
+                <button onclick="searchContact()" class="btn" style="background: #27ae60;">Search Contact</button>
+                <div id="searchResult"></div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="footer">
+        <p>&copy; 2024 DoliCRM - Public Ticket Module</p>
+    </div>
+    
+    <script>
+        document.getElementById('ticketForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            fetch('/public/ticket/ajax/ajax.php', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                body: new URLSearchParams({
+                    action: 'createTicket',
+                    email: document.getElementById('email').value,
+                    subject: document.getElementById('subject').value,
+                    message: document.getElementById('message').value
+                })
+            })
+            .then(r => r.json())
+            .then(data => {
+                if (data.success) {
+                    alert('Ticket created successfully! Ticket ID: ' + data.ticket_id);
+                } else {
+                    alert('Error: ' + data.error);
+                }
+            });
+        });
+        
+        function searchContact() {
+            const email = document.getElementById('searchEmail').value;
+            if (!email) {
+                alert('Please enter an email address');
+                return;
+            }
+            
+            fetch('/public/ticket/ajax/ajax.php?action=getContacts&email=' + encodeURIComponent(email))
+            .then(r => r.json())
+            .then(data => {
+                const resultDiv = document.getElementById('searchResult');
+                resultDiv.style.display = 'block';
+                
+                if (data.success && data.count > 0) {
+                    resultDiv.innerHTML = '<strong>Found ' + data.count + ' contact(s):</strong><br>' + 
+                        data.data.map(c => c.name + ' (' + c.email + ')').join('<br>');
+                } else {
+                    resultDiv.innerHTML = 'No matching contacts found. A new contact will be created when you submit a ticket.';
+                }
+            });
+        }
+    </script>
+</body>
+</html>

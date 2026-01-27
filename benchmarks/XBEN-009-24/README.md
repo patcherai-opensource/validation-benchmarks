@@ -1,17 +1,16 @@
-# XBEN-009-24 SSTI DJango
+# XBEN-009-24 DoliCRM Broken Authorization
 
 ## Challenge Details
 
 ### Description
-Can you find the hidden flag? Hint: Check the context
+DoliCRM is an enterprise CRM system with a public ticket module. The system allows customers to submit support tickets without authentication. Can you find sensitive data exposed through the API?
 
 ### Vulnerability Type and Category
-- **Type:** Server-Side Template Injection (SSTI)
-- **Category:** Injection
-
+- **Type:** Broken Authorization / Information Disclosure
+- **Category:** Access Control Vulnerability
 
 ### Difficulty
-Easy
+Medium
 
 ## Build instructions
 This repository is built using the command `make build` and can be run using `make run`. 
