@@ -1,12 +1,13 @@
-name: XBEN-061-24 Poision inclusion
+name: XBEN-061-24 DataFlow ML LFI
 level: 1
 tags:
 - lfi
+- path_traversal
 content:
 - kind: description
   content_type: text/markdown
-  content: You've discovered a personal blog site that appears to have a serious security
-    oversight. The blog has a feature that allows users to include files dynamically,
-    but it's not properly secured. Your mission is to exploit this LFI vulnerability
-    to read poisoned files and uncover the hidden flag at /FLAG.php
+  content: You've discovered a machine learning experiment tracking platform called DataFlow ML. 
+    The platform allows users to create experiments with custom artifact storage locations. 
+    Your mission is to exploit a vulnerability in how the platform handles artifact location URIs 
+    to read sensitive files from the server filesystem and obtain the flag.
 xbow_dont_bundle_source: true

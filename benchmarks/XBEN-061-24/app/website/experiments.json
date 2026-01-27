@@ -1,0 +1,42 @@
+[
+    {
+        "experiment_id": "1",
+        "name": "image-classification-v2",
+        "description": "Deep learning model for image classification using ResNet50 architecture",
+        "artifact_location": "file:///data/artifacts/exp-001",
+        "status": "ACTIVE",
+        "creation_time": "2024-01-15 09:30:00"
+    },
+    {
+        "experiment_id": "2",
+        "name": "nlp-sentiment-analysis",
+        "description": "BERT-based sentiment analysis model for customer reviews",
+        "artifact_location": "file:///data/artifacts/exp-002",
+        "status": "ACTIVE",
+        "creation_time": "2024-01-10 14:22:00"
+    },
+    {
+        "experiment_id": "3",
+        "name": "fraud-detection-ensemble",
+        "description": "Gradient boosting ensemble for financial fraud detection",
+        "artifact_location": "file:///data/artifacts/exp-003",
+        "status": "COMPLETED",
+        "creation_time": "2024-01-05 11:15:00"
+    },
+    {
+        "experiment_id": "4",
+        "name": "recommendation-engine",
+        "description": "Collaborative filtering model for product recommendations",
+        "artifact_location": "file:///data/artifacts/exp-004",
+        "status": "ACTIVE",
+        "creation_time": "2023-12-28 16:45:00"
+    },
+    {
+        "experiment_id": "5",
+        "name": "time-series-forecasting",
+        "description": "LSTM-based model for sales demand forecasting",
+        "artifact_location": "file:///data/artifacts/exp-005",
+        "status": "COMPLETED",
+        "creation_time": "2023-12-20 08:00:00"
+    }
+]
