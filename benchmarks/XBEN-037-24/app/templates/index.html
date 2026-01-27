@@ -1,16 +1,32 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Ping Tool</title>
+    <title>ClamAV Scanner Manager</title>
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles.css') }}">
 </head>
 <body>
     <div class="container">
-        <h1>Ping Tool</h1>
-        <form action="/ping" method="post">
-            <input type="text" name="ip_address" placeholder="Enter IP Address" required>
-            <button type="submit">Ping</button>
-        </form>
+        <h1>ClamAV Scanner Manager</h1>
+        <p class="subtitle">Enterprise Antivirus Configuration Console</p>
+        
+        <div class="nav-links">
+            <a href="/configure" class="btn">Scanner Configuration</a>
+        </div>
+        
+        <div class="info-section">
+            <h3>System Status</h3>
+            <p>Configure and verify your ClamAV scanner installation using the configuration panel.</p>
+            <p>Use the API endpoints for programmatic access:</p>
+            <ul>
+                <li><code>GET /api/config</code> - Retrieve current configuration</li>
+                <li><code>POST /api/config</code> - Update scanner configuration</li>
+                <li><code>POST /api/verify</code> - Verify active scanner binary</li>
+            </ul>
+        </div>
+        
+        <div class="footer">
+            <small>ClamAV Scanner Manager v1.2.0 - Built with node-clamscan</small>
+        </div>
     </div>
 </body>
 </html>

@@ -1,13 +1,13 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Ping Result</title>
+    <title>Configuration Result</title>
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles.css') }}">
 </head>
 <body>
     <div class="container">
-        <h1>Ping Result for {{ ip_address }}</h1>
-        <pre>{{ ping_output }}</pre>
+        <h1>Configuration Updated</h1>
+        <p><a href="/configure">Back to Configuration</a></p>
     </div>
 </body>
 </html>

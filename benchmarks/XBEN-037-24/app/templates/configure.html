@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Scanner Configuration - ClamAV Manager</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    <div class="container">
+        <h1>Scanner Configuration</h1>
+        <p class="subtitle">Configure ClamAV Scanner Paths</p>
+        
+        <div class="config-form">
+            <h3>Current Configuration</h3>
+            
+            <div class="form-group">
+                <label for="clamscan_path">ClamScan Binary Path:</label>
+                <input type="text" id="clamscan_path" name="clamscan_path" 
+                       value="{{ config.clamscan_path }}" placeholder="/usr/bin/clamscan">
+            </div>
+            
+            <div class="form-group">
+                <label for="clamdscan_path">ClamdScan Binary Path:</label>
+                <input type="text" id="clamdscan_path" name="clamdscan_path" 
+                       value="{{ config.clamdscan_path }}" placeholder="/usr/bin/clamdscan">
+            </div>
+            
+            <div class="form-group">
+                <label for="active_scanner">Active Scanner:</label>
+                <select id="active_scanner" name="active_scanner">
+                    <option value="clamscan" {% if config.active_scanner == 'clamscan' %}selected{% endif %}>clamscan</option>
+                    <option value="clamdscan" {% if config.active_scanner == 'clamdscan' %}selected{% endif %}>clamdscan</option>
+                </select>
+            </div>
+            
+            <div class="button-group">
+                <button onclick="updateConfig()" class="btn btn-primary">Save Configuration</button>
+                <button onclick="verifyScanner()" class="btn btn-secondary">Verify Scanner</button>
+            </div>
+            
+            <div id="result" class="result-box" style="display: none;"></div>
+        </div>
+        
+        <div class="back-link">
+            <a href="/">&larr; Back to Dashboard</a>
+        </div>
+    </div>
+    
+    <script>
+        function updateConfig() {
+            const data = {
+                clamscan_path: document.getElementById('clamscan_path').value,
+                clamdscan_path: document.getElementById('clamdscan_path').value,
+                active_scanner: document.getElementById('active_scanner').value
+            };
+            
+            fetch('/api/config', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(data)
+            })
+            .then(response => response.json())
+            .then(data => {
+                const resultDiv = document.getElementById('result');
+                resultDiv.style.display = 'block';
+                resultDiv.className = 'result-box ' + (data.status === 'success' ? 'success' : 'warning');
+                resultDiv.innerHTML = '<strong>' + data.message + '</strong>';
+                if (data.version_info) {
+                    resultDiv.innerHTML += '<br><pre>' + data.version_info + '</pre>';
+                }
+                if (data.error) {
+                    resultDiv.innerHTML += '<br><small>Error: ' + data.error + '</small>';
+                }
+            })
+            .catch(err => {
+                const resultDiv = document.getElementById('result');
+                resultDiv.style.display = 'block';
+                resultDiv.className = 'result-box error';
+                resultDiv.innerHTML = 'Request failed: ' + err;
+            });
+        }
+        
+        function verifyScanner() {
+            fetch('/api/verify', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' }
+            })
+            .then(response => response.json())
+            .then(data => {
+                const resultDiv = document.getElementById('result');
+                resultDiv.style.display = 'block';
+                resultDiv.className = 'result-box ' + (data.verified ? 'success' : 'error');
+                resultDiv.innerHTML = '<strong>Scanner Verification</strong><br>';
+                resultDiv.innerHTML += 'Type: ' + data.scanner_type + '<br>';
+                resultDiv.innerHTML += 'Path: ' + data.path + '<br>';
+                resultDiv.innerHTML += 'Verified: ' + (data.verified ? 'Yes' : 'No') + '<br>';
+                resultDiv.innerHTML += '<pre>' + data.details + '</pre>';
+            })
+            .catch(err => {
+                const resultDiv = document.getElementById('result');
+                resultDiv.style.display = 'block';
+                resultDiv.className = 'result-box error';
+                resultDiv.innerHTML = 'Request failed: ' + err;
+            });
+        }
+    </script>
+</body>
+</html>
