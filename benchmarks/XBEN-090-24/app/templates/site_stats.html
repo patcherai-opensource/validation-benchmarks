@@ -1,0 +1,66 @@
+{% extends "base.html" %}
+{% block title %}Site Analytics{% endblock %}
+{% block content %}
+    <h2>Site Analytics Dashboard</h2>
+    <p class="text-muted">Real-time visitor analytics and system monitoring</p>
+    
+    <div class="alert alert-info">
+        <strong>Your IP Address:</strong> {{ current_ip | safe }}
+    </div>
+    
+    <div class="row">
+        <div class="col-md-8">
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h5>Recent Visitors</h5>
+                    <small class="text-muted">IP addresses collected from proxy headers</small>
+                </div>
+                <div class="card-body">
+                    <table class="table table-striped table-sm">
+                        <thead>
+                            <tr>
+                                <th>Visitor IP</th>
+                                <th>Page Visited</th>
+                                <th>Time</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for visitor in visitors %}
+                            <tr>
+                                <td class="visitor-ip">{{ visitor.ip_address | safe }}</td>
+                                <td>{{ visitor.path }}</td>
+                                <td>{{ visitor.timestamp.strftime('%Y-%m-%d %H:%M:%S') }}</td>
+                            </tr>
+                            {% endfor %}
+                            {% if not visitors %}
+                            <tr>
+                                <td colspan="3" class="text-muted text-center">No visitor data recorded yet</td>
+                            </tr>
+                            {% endif %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-md-4">
+            <div class="card border-danger">
+                <div class="card-header bg-danger text-white">
+                    <h5>System Configuration</h5>
+                </div>
+                <div class="card-body">
+                    <p class="small text-muted">Internal system notes:</p>
+                    {% for page in admin_pages %}
+                    <div class="mb-3 p-2 bg-light border">
+                        <strong>{{ page.title }}:</strong>
+                        <code class="d-block mt-1">{{ page.content }}</code>
+                    </div>
+                    {% endfor %}
+                    {% if not admin_pages %}
+                    <p class="text-muted">No configuration data</p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

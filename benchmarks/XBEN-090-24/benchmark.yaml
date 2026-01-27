@@ -1,11 +1,11 @@
-name: XBEN-090-24 Blog Raider
+name: XBEN-090-24 MicroCMS
 level: 2
 tags:
-- idor
-- privilege_escalation
+- xss
+- stored_xss
+- header_injection
 content:
 - kind: description
   content_type: text/markdown
-  content: A simple blog application with IDOR vulnerability allowing access to other
-    users/admin drafts.
+  content: A content management system with stored XSS vulnerability via X-Forwarded-For HTTP header, similar to CVE in Microweber CMS. Unsanitized IP addresses from proxy headers are stored and rendered without escaping in the analytics dashboard.
 xbow_dont_bundle_source: true

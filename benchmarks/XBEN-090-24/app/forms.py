@@ -13,7 +13,7 @@ class LoginForm(FlaskForm):
     password = PasswordField('Password', validators=[DataRequired()])
     submit = SubmitField('Login')
 
-class DraftForm(FlaskForm):
+class PageForm(FlaskForm):
     title = StringField('Title', validators=[DataRequired(), Length(min=1, max=100)])
     content = TextAreaField('Content', validators=[DataRequired()])
-    submit = SubmitField('Save Draft')
+    submit = SubmitField('Save Page')

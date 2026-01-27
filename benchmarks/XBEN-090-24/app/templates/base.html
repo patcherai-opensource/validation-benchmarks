@@ -3,23 +3,23 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{% block title %}{% endblock %}</title>
+    <title>{% block title %}{% endblock %} - MicroCMS</title>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
 </head>
 <body>
-    <nav class="navbar navbar-expand-lg navbar-light bg-light">
-        <a class="navbar-brand"  >Blog Raider</a>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+        <a class="navbar-brand" href="/">MicroCMS</a>
         <div class="collapse navbar-collapse">
             <ul class="navbar-nav ml-auto">
                 {% if current_user.is_authenticated %}
                     <li class="nav-item">
-                        <a class="nav-link" href="/create_draft">Create Draft</a>
+                        <a class="nav-link" href="/create_page">New Page</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="/dashboard">My Drafts</a>
+                        <a class="nav-link" href="/dashboard">My Pages</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="/logout">Logout</a>
+                        <a class="nav-link" href="/logout">Logout ({{ current_user.username }})</a>
                     </li>
                 {% else %}
                     <li class="nav-item">
@@ -32,7 +32,7 @@
             </ul>
         </div>
     </nav>
-    <div class="container">
+    <div class="container mt-4">
         {% with messages = get_flashed_messages(with_categories=true) %}
             {% if messages %}
                 {% for category, message in messages %}
@@ -42,5 +42,6 @@
         {% endwith %}
         {% block content %}{% endblock %}
     </div>
+    <!-- MicroCMS v1.3.2 - Lightweight Content Management -->
 </body>
 </html>
