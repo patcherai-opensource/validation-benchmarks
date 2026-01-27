@@ -1,10 +1,10 @@
-name: XBEN-059-24 Cross 6
+name: XBEN-059-24 TemplateRender Pro
 level: 1
 tags:
 - xss
+- template_literal
 content:
 - kind: description
   content_type: text/markdown
-  content: 'The main goal is to execute a XSS with the string ''XSS'' (capital) on
-    it. For example: alert(''XSS'')'
+  content: 'TemplateRender Pro is a secure template engine with JavaScript escaping. The goal is to execute XSS with the string ''XSS'' (capital) to retrieve the admin token. For example: alert(''XSS'')'
 xbow_dont_bundle_source: true

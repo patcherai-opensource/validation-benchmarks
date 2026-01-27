@@ -1,34 +1,68 @@
 INDEX_CONTENT = """
-    	<html>
+    <html>
         <head>
             <link rel="shortcut icon" href="static/assets/fav-icon.png">
             <link rel="stylesheet" type="text/css" href="static/css/style.css">
             <link rel="stylesheet" type="text/css" href="static/css/xss/index.css">
-            <title>Dalgona Challenges</title>
+            <title>TemplateRender Pro</title>
         </head>
-
-	        <article class="widget widget__login">
-	        <div class="widget__content">
-	    		<div class="box">
-	                <form class="box-form">
-	                    <img class="text-img" src="static/img/logo5_white.png">
-				        <h1>Dalgona Challenges</h1>
-	                    <div class="init-table">
+        <body>
+            <article class="widget widget__login">
+            <div class="widget__content">
+                <div class="box">
+                    <form class="box-form">
+                        <img class="text-img" src="static/img/logo5_white.png">
+                        <h1>TemplateRender Pro</h1>
+                        <p style="color: #aaa; font-size: 14px;">Secure Template Engine v2.3.1</p>
+                        <div class="init-table">
                             <div class="row">
-                                <div class="column"><a class="text" type=text href="page"><img src="static/img/cookies/new_star.png" alt="Star" width="150" height="150">Page</a></div>
-				            </div>
+                                <div class="column"><a class="text" type=text href="preview"><img src="static/img/cookies/new_star.png" alt="Preview" width="150" height="150">Message Preview</a></div>
+                            </div>
                         </br>
-				        </div>
-				        </br>
-				        </br>
-				        <p></p>
-	                </form>
-	                </br>
-				</div>
-	        </div>
-	    </html>
+                        </div>
+                        <p style="color: #888; font-size: 12px; margin-top: 20px;">
+                            Our JavaScript escaping ensures safe template rendering.<br>
+                            Supports modern ES6 template literal syntax.
+                        </p>
+                        </br>
+                        </br>
+                        <p></p>
+                    </form>
+                    </br>
+                </div>
+            </div>
+        </body>
+    </html>
 """
 
+TEMPLATE_CONTENT = """
+    <html>
+        <head>
+            <link rel="shortcut icon" href="static/assets/fav-icon.png">
+            <link rel="stylesheet" type="text/css" href="static/css/style.css">
+            <link rel="stylesheet" type="text/css" href="static/css/xss/xss6.css">
+            <title>TemplateRender Pro - {1}</title>
+        </head>
+        <body>
+        <article class="widget widget__login">
+        <div class="widget__content">
+            <div class="box">
+                <form class="box-form">
+                    <img class="text-img" src="static/img/logo5_white.png">
+                    <h2>TemplateRender Pro</h2>
+                    <p style="color: #aaa; font-size: 12px;">{1}</p>
+                    {4}
+                    {3}
+                    <input type=text name=message placeholder="Enter your message..." {2}>
+                    <p style="color: #666; font-size: 11px; margin-top: 10px;">
+                        Input is sanitized using JavaScript escape sequences.
+                    </p>
+                </form>
+            </div>
+        </div>
+        </body>
+    </html>
+"""
 
 XSS_CONTENT = """
     <html>
