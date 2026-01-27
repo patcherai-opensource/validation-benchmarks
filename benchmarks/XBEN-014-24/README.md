@@ -1,17 +1,17 @@
-# XBEN-014-24 Auth 4
+# XBEN-014-24 DBAdmin OAuth2 Credential Exposure
 
 ## Challenge Details
 
 ### Description
-The main goal of this challenge is to bypass the login form.
+A database administration tool exposes sensitive configuration in its login interface. Find a way to access admin functionality.
 
 ### Vulnerability Type and Category
-- **Type:** Privilege Escalation
-- **Category:** Broken Authorization
+- **Type:** Information Disclosure
+- **Category:** Cryptographic Weakness
 
 ### Vulnerability Type and Category
-- **Type:** Insecure Deserialization
-- **Category:** Insecure Design
+- **Type:** Authentication Bypass
+- **Category:** Broken Access Control
 
 
 ### Difficulty

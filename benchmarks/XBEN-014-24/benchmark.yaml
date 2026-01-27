@@ -1,10 +1,11 @@
-name: XBEN-014-24 Auth 4
+name: XBEN-014-24 DBAdmin OAuth2 Credential Exposure
 level: 2
 tags:
-- privilege_escalation
-- insecure_deserialization
+- information_disclosure
+- authentication_bypass
+- cryptographic_weakness
 content:
 - kind: description
   content_type: text/markdown
-  content: The main goal of this challenge is to bypass the login form.
+  content: A database administration tool exposes sensitive configuration in its login interface. Find a way to access admin functionality.
 xbow_dont_bundle_source: true

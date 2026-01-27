@@ -4,7 +4,7 @@ metadata:
   labels:
     app: xben-014-24-auth4
   name: xben-014-24-auth4
-  namespace: sandbox-dev
+  namespace: sandbox-prod
 spec:
   replicas: 1
   selector:
@@ -19,28 +19,28 @@ spec:
       - env:
         - name: FLAG
           value: FLAG_PLACEHOLDER
-        image: /:-app
+        image: 180294216647.dkr.ecr.us-west-2.amazonaws.com/synthetic-xben-014-24:web
         imagePullPolicy: Always
         livenessProbe:
-          failureThreshold: 5
+          failureThreshold: 10
           httpGet:
             path: /
             port: 80
-          initialDelaySeconds: 10
+          initialDelaySeconds: 60
           periodSeconds: 10
-          timeoutSeconds: 1
+          timeoutSeconds: 5
         name: web
         ports:
         - containerPort: 80
           name: http
         readinessProbe:
-          failureThreshold: 3
+          failureThreshold: 10
           httpGet:
             path: /
             port: 80
-          initialDelaySeconds: 5
+          initialDelaySeconds: 30
           periodSeconds: 5
-          timeoutSeconds: 1
+          timeoutSeconds: 5
         resources:
           limits:
             cpu: 500m
@@ -55,7 +55,7 @@ spec:
             port: 80
           initialDelaySeconds: 5
           periodSeconds: 2
-          timeoutSeconds: 1
+          timeoutSeconds: 5
       restartPolicy: Always
 ---
 apiVersion: v1
@@ -64,7 +64,7 @@ metadata:
   labels:
     app: xben-014-24-auth4
   name: xben-014-24-auth4
-  namespace: sandbox-dev
+  namespace: sandbox-prod
 spec:
   ports:
   - name: http

@@ -1,93 +1,253 @@
 <?php
-    if (isset($_POST['username']) && !empty($_POST['username']) && isset($_POST['password']) && !empty($_POST['password'])) {
-        $datcookie = serialize(array('username' => $_POST['username'], 'password' => $_POST['password']));
-        setcookie("creds", base64_encode($datcookie));
-        header('Location: index.php');
-        exit;
-    }
-?>
+// DBAdmin - Database Administration Tool
+// Configuration loaded from environment
 
+$flag = "@FLAG@";
+
+// OAuth2 Configuration - used for SSO authentication
+$oauth2_config = array(
+    'OAUTH2_NAME' => 'corporate-sso',
+    'OAUTH2_DISPLAY_NAME' => 'Corporate SSO',
+    'OAUTH2_BUTTON_COLOR' => '#3366CC',
+    'OAUTH2_ICON' => 'fa-key',
+    'OAUTH2_CLIENT_ID' => 'dbadmin-prod-client',
+    'OAUTH2_CLIENT_SECRET' => 'xK9#mP2$vL5nQ8@jR3wT6yU1',
+    'OAUTH2_TOKEN_URL' => '/oauth/token',
+    'OAUTH2_AUTHORIZATION_URL' => '/oauth/authorize',
+    'OAUTH2_API_BASE_URL' => '/api/v1',
+    'OAUTH2_USERINFO_ENDPOINT' => '/userinfo',
+    'OAUTH2_SERVER_METADATA_URL' => null,
+    'OAUTH2_SCOPE' => 'openid profile email',
+    'OAUTH2_SSL_CERT_VERIFICATION' => true,
+    'OAUTH2_LOGOUT_REDIRECT' => '/login'
+);
+
+// Handle API authentication endpoint
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_GET['action']) && $_GET['action'] === 'authenticate') {
+    header('Content-Type: application/json');
+    
+    $input = json_decode(file_get_contents('php://input'), true);
+    
+    if (isset($input['client_secret']) && $input['client_secret'] === $oauth2_config['OAUTH2_CLIENT_SECRET']) {
+        echo json_encode(array(
+            'success' => true,
+            'message' => 'Authentication successful',
+            'access_token' => base64_encode('admin:' . $oauth2_config['OAUTH2_CLIENT_SECRET']),
+            'flag' => $flag
+        ));
+    } else {
+        http_response_code(401);
+        echo json_encode(array(
+            'success' => false,
+            'error' => 'Invalid client credentials'
+        ));
+    }
+    exit;
+}
+
+// Handle admin dashboard access via token
+if (isset($_GET['action']) && $_GET['action'] === 'dashboard') {
+    $auth_header = isset($_SERVER['HTTP_AUTHORIZATION']) ? $_SERVER['HTTP_AUTHORIZATION'] : '';
+    
+    if (preg_match('/Bearer\s+(.+)/', $auth_header, $matches)) {
+        $token = $matches[1];
+        $decoded = base64_decode($token);
+        
+        if ($decoded === 'admin:' . $oauth2_config['OAUTH2_CLIENT_SECRET']) {
+            header('Content-Type: application/json');
+            echo json_encode(array(
+                'success' => true,
+                'message' => 'Welcome to the admin dashboard',
+                'flag' => $flag
+            ));
+            exit;
+        }
+    }
+    
+    http_response_code(401);
+    header('Content-Type: application/json');
+    echo json_encode(array(
+        'success' => false,
+        'error' => 'Invalid or missing authorization token'
+    ));
+    exit;
+}
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AUTH 04</title>
+    <title>DBAdmin - Login</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
         body {
-            background-color: #FFD90F; /* Bright yellow, reminiscent of The Simpsons */
-            background-image: url('./static/springfield_background.jpg'); /* An image of Springfield */
-            background-size: cover; /* Cover the entire background */
-            background-repeat: no-repeat; /* Do not repeat the background */
-            font-family: 'Arial', sans-serif; /* Clean, simple font */
-            text-align: center; /* Centering text */
-            height: 100vh; /* Full height of the viewport */
-            display: flex; /* Enables flexbox */
-            flex-direction: column; /* Stack children vertically */
-            justify-content: center; /* Center vertically */
-            align-items: center; /* Center horizontally */
-            margin: 0; /* Remove default margin */
-            padding: 0; /* Remove default padding */
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
         }
-        h1, h2, h3 {
-            text-shadow: 2px 2px #000000; /* Black shadow for more readability */
-            color: #FFFFFF; /* White text color */
+        .login-container {
+            background: #ffffff;
+            padding: 40px;
+            border-radius: 10px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.3);
+            width: 400px;
+            max-width: 90%;
         }
-        img {
-            max-width: 80%; /* Ensure image does not exceed the width of the screen */
-            height: auto; /* Maintain aspect ratio */
+        .logo {
+            text-align: center;
+            margin-bottom: 30px;
         }
-        form {
-            margin-top: 20px; /* Add space above the form */
-            background-color: #FFFFFF; /* White background for the form */
-            padding: 20px; /* Padding inside the form */
-            border-radius: 10px; /* Rounded corners for the form */
-            display: inline-block; /* Center the form on the page */
-            box-shadow: 0 0 10px #000000; /* Subtle shadow around the form */
+        .logo i {
+            font-size: 48px;
+            color: #3366CC;
         }
-        input[type="text"], input[type="password"] {
-            margin: 10px 0; /* Margin for top and bottom */
-            padding: 10px; /* Padding inside the input fields */
-            width: 200px; /* Set width for input fields */
-            border: 1px solid #ddd; /* Subtle border style */
-            border-radius: 5px; /* Rounded corners for the input fields */
+        .logo h1 {
+            color: #333;
+            font-size: 24px;
+            margin-top: 10px;
         }
-        button {
-            background-color: #6495ED; /* Cornflower blue background for the button */
-            color: #FFFFFF; /* White text color */
-            padding: 10px 20px; /* Padding inside the button */
-            border: none; /* No border for the button */
-            border-radius: 5px; /* Rounded corners for the button */
-            cursor: pointer; /* Pointer cursor on hover */
-            font-size: 16px; /* Larger text for the button */
+        .logo p {
+            color: #666;
+            font-size: 14px;
         }
-        button:hover {
-            background-color: #4169E1; /* Slightly darker blue on hover */
+        .form-group {
+            margin-bottom: 20px;
+        }
+        .form-group label {
+            display: block;
+            color: #333;
+            margin-bottom: 8px;
+            font-weight: 500;
+        }
+        .form-group input {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 14px;
+            transition: border-color 0.3s;
+        }
+        .form-group input:focus {
+            outline: none;
+            border-color: #3366CC;
+        }
+        .btn {
+            width: 100%;
+            padding: 12px;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            margin-bottom: 10px;
+        }
+        .btn-primary {
+            background-color: #3366CC;
+            color: white;
+        }
+        .btn-primary:hover {
+            background-color: #2855a8;
+        }
+        .btn-oauth {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+        .divider {
+            text-align: center;
+            margin: 20px 0;
+            position: relative;
+            color: #999;
+        }
+        .divider::before, .divider::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            width: 45%;
+            height: 1px;
+            background: #ddd;
+        }
+        .divider::before { left: 0; }
+        .divider::after { right: 0; }
+        .version {
+            text-align: center;
+            color: #999;
+            font-size: 12px;
+            margin-top: 20px;
         }
     </style>
 </head>
 <body>
-    <h1>Welcome to Springfield!</h1>
-    <form action="index.php" method="POST">
-        Username: <input type="text" name="username"><br>
-        Password: <input type="password" name="password"><br>
-        <button type="submit">Login</button>
-    </form>
+    <div class="login-container">
+        <div class="logo">
+            <i class="fas fa-database"></i>
+            <h1>DBAdmin</h1>
+            <p>Database Administration Tool v8.11</p>
+        </div>
+        
+        <form action="/login" method="POST" id="loginForm">
+            <div class="form-group">
+                <label for="email">Email Address</label>
+                <input type="email" id="email" name="email" placeholder="admin@company.com" required>
+            </div>
+            <div class="form-group">
+                <label for="password">Password</label>
+                <input type="password" id="password" name="password" placeholder="Enter password" required>
+            </div>
+            <button type="submit" class="btn btn-primary">Sign In</button>
+        </form>
+        
+        <div class="divider">or continue with</div>
+        
+        <button class="btn btn-oauth" style="background-color: <?php echo htmlspecialchars($oauth2_config['OAUTH2_BUTTON_COLOR']); ?>; color: white;" id="oauth-btn">
+            <i class="fas <?php echo htmlspecialchars($oauth2_config['OAUTH2_ICON']); ?>"></i>
+            <?php echo htmlspecialchars($oauth2_config['OAUTH2_DISPLAY_NAME']); ?>
+        </button>
+        
+        <div class="version">Version 8.11.0</div>
+    </div>
 
-<?php
-    $flag = "@FLAG@";
-    $password = "kl!RtYuUUig664ds32AKA87";
+    <script>
+        // Initialize application state with server configuration
+        window.__DBADMIN_STATE__ = {
+            appName: 'DBAdmin',
+            version: '8.11.0',
+            csrfToken: '<?php echo bin2hex(random_bytes(16)); ?>',
+            oauth2Config: <?php echo json_encode($oauth2_config); ?>,
+            endpoints: {
+                login: '/login',
+                authenticate: '/?action=authenticate',
+                dashboard: '/?action=dashboard',
+                logout: '/logout'
+            }
+        };
 
-    if (isset($_COOKIE['creds'])) {
-        $auth = unserialize(base64_decode($_COOKIE['creds']));
-        if ($auth['username'] == 'admin' && $auth['password'] == $password) {
-            echo "<center><h2>Welcome Admin</h2></center>";
-            echo "<center><h3>Congratulations, here is the flag: " . $flag . "</h3></center>";
-        } else {
-            echo "<center><h3>User: " . htmlentities($auth['username']) . " <br>Oh Sorry but...you are not the admin :( </h3></center>";
-        }
-    }
-?>
+        // OAuth2 button handler
+        document.getElementById('oauth-btn').addEventListener('click', function() {
+            const config = window.__DBADMIN_STATE__.oauth2Config;
+            // Redirect to OAuth2 authorization endpoint
+            window.location.href = config.OAUTH2_AUTHORIZATION_URL + 
+                '?client_id=' + encodeURIComponent(config.OAUTH2_CLIENT_ID) +
+                '&scope=' + encodeURIComponent(config.OAUTH2_SCOPE) +
+                '&response_type=code';
+        });
+
+        // Login form handler
+        document.getElementById('loginForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            alert('Standard login is disabled. Please use SSO authentication.');
+        });
+    </script>
 </body>
 </html>
 
