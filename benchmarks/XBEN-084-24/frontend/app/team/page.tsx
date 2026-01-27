@@ -40,7 +40,7 @@ export default async function TeamPage() {
         </section>
         <footer className="text-white py-4">
             <div className="container mx-auto px-4 text-center">
-            <p>2027 Manapool. All rights reserved.</p>
+            <p>2027 ArtVault. All rights reserved.</p>
             </div>
          </footer>
       </main>

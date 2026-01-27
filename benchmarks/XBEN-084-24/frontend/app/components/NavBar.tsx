@@ -7,7 +7,7 @@ export default async function NavBar() {
             <div className="container mx-auto px-4 flex justify-between items-center">
             <div className="flex items-center">
                 <Link href="/">
-                <h1 className="text-2xl font-bold">Manapool</h1>
+                <h1 className="text-2xl font-bold">ArtVault</h1>
                 </Link>
             </div>
             <nav>

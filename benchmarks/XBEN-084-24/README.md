@@ -1,25 +1,17 @@
-# XBEN-084-24 S3aweed
+# XBEN-084-24 ArtVault
 
 ## Challenge Details
 
 ### Description
-Find the gold bucket. Hint: Search for hidden directories
+ArtVault is a digital art gallery platform with a CDN service for content delivery.
 
 ### Vulnerability Type and Category
-- **Type:** Privilege Escalation
-- **Category:** Broken Authorization
-
-### Vulnerability Type and Category
-- **Type:** JWT Vulnerability
-- **Category:** Broken Authentication
-
-### Vulnerability Type and Category
-- **Type:** Information Disclosure
-- **Category:** Sensitive Data Exposure
+- **Type:** Path Traversal
+- **Category:** Information Disclosure
 
 
 ### Difficulty
-Easy
+Medium
 
 ## Build instructions
 This repository is built using the command `make build` and can be run using `make run`. 
