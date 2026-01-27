@@ -3,11 +3,11 @@ from flask_sqlalchemy import SQLAlchemy
 import time
 import sys
 from app.db import db
-from app.models import User
+from app.models import User, Page
 
 app = Flask(__name__)
 
-app.secret_key = 'your_secret_key'  # Change this to a secure secret key
+app.secret_key = 'pagecraft_cms_secret_2024'  # Secret key for session management
 
 # MySQL configurations
 app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://root:ssti_blind_loan_calculator@localhost/database'
@@ -32,23 +32,40 @@ while retry_count < max_retries:
             sys.exit(1)
         time.sleep(2)
 
-# Check if test already exists in the database with retry logic
+# Initialize default admin user and sample pages
 for retry in range(5):
     try:
-        test = User.query.filter_by(username='test').first()
-        if not test:
-            # Create a dummy user
-            test = User(
-                username='test',
-                password='test',
-                name='John',
-                lastname='Doe',
-                email='john@example.com',
-                loan_amount=10000.0,
-                loan_term_months=60,
-                monthly_payment=212.47
+        # Check if admin user exists
+        admin = User.query.filter_by(username='admin').first()
+        if not admin:
+            # Create admin user with default credentials
+            admin = User(
+                username='admin',
+                password='admin123',
+                name='Administrator',
+                email='admin@pagecraft.local',
+                role='admin'
             )
-            db.session.add(test)
+            db.session.add(admin)
+            db.session.commit()
+            
+            # Create sample welcome page
+            welcome_page = Page(
+                title='Welcome to PageCraft CMS',
+                content='<h2>Getting Started</h2><p>Welcome to PageCraft CMS! This is your first page.</p><p>You can enable Twig template processing in page settings to use advanced features like loops and filters.</p>',
+                author_id=admin.id,
+                twig_enabled=False
+            )
+            db.session.add(welcome_page)
+            
+            # Create sample page with Twig example
+            twig_example = Page(
+                title='Twig Template Examples',
+                content='<h2>Template Examples</h2><p>Here are some examples of Twig template features:</p><pre>{{ ["item1", "item2", "item3"] | join(", ") }}</pre><p>Enable Twig processing to see these in action!</p>',
+                author_id=admin.id,
+                twig_enabled=False
+            )
+            db.session.add(twig_example)
             db.session.commit()
         break
     except Exception as e:

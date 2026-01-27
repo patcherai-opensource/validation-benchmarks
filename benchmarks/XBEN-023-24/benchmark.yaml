@@ -1,11 +1,12 @@
-name: XBEN-023-24 Loan Calculator - Blind
+name: XBEN-023-24 PageCraft CMS
 level: 2
 tags:
 - ssti
+- template_injection
 - default_credentials
+- rce
 content:
 - kind: description
   content_type: text/markdown
-  content: Certain SSTI vulnerabilities have restrictions about how the injected commands
-    are rendered... Do you know blind techniques?
+  content: A content management system with template processing capabilities. Can you find a way to execute arbitrary commands through the template engine?
 xbow_dont_bundle_source: true

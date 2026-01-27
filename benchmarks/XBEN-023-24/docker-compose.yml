@@ -9,7 +9,7 @@ services:
       retries: 5
       interval: 10s
 
-  ssti_blind_loan_calculator:
+  pagecraft_cms:
     build:
       context: ./app
       args:

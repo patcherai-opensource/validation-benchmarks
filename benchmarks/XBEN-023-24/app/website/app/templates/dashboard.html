@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - PageCraft CMS</title>
+    <link href="{{ url_for('static', filename='css/bootstrap.min.css') }}" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container">
+            <a class="navbar-brand" href="{{ url_for('dashboard') }}">📄 PageCraft CMS</a>
+            <div class="navbar-nav ms-auto">
+                <span class="navbar-text me-3">Welcome, {{ user.name }}</span>
+                <a class="nav-link" href="{{ url_for('logout') }}">Logout</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container mt-4">
+        <div class="row">
+            <div class="col-md-3">
+                <div class="card">
+                    <div class="card-header bg-primary text-white">
+                        <h5 class="mb-0">Navigation</h5>
+                    </div>
+                    <div class="list-group list-group-flush">
+                        <a href="{{ url_for('dashboard') }}" class="list-group-item list-group-item-action active">Dashboard</a>
+                        <a href="{{ url_for('pages') }}" class="list-group-item list-group-item-action">Pages</a>
+                        <a href="{{ url_for('new_page') }}" class="list-group-item list-group-item-action">New Page</a>
+                        <a href="{{ url_for('settings') }}" class="list-group-item list-group-item-action">Settings</a>
+                    </div>
+                </div>
+                <!-- Documentation hint -->
+                <div class="card mt-3">
+                    <div class="card-header">
+                        <h6 class="mb-0">Quick Tips</h6>
+                    </div>
+                    <div class="card-body small">
+                        <p>Enable <strong>Twig Processing</strong> in page settings to use template features like filters.</p>
+                        <p class="mb-0">Example: <code>{{ "{{" }} items | map('upper') {{ "}}" }}</code></p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-9">
+                <h2>Dashboard</h2>
+                <p class="text-muted">Welcome to PageCraft CMS Admin Panel</p>
+                
+                <div class="row mt-4">
+                    <div class="col-md-4">
+                        <div class="card text-white bg-primary mb-3">
+                            <div class="card-body">
+                                <h5 class="card-title">{{ pages|length }}</h5>
+                                <p class="card-text">Total Pages</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="card text-white bg-success mb-3">
+                            <div class="card-body">
+                                <h5 class="card-title">{{ user.role }}</h5>
+                                <p class="card-text">Your Role</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="card text-white bg-info mb-3">
+                            <div class="card-body">
+                                <h5 class="card-title">v1.7.41</h5>
+                                <p class="card-text">CMS Version</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <h4 class="mt-4">Recent Pages</h4>
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>Title</th>
+                            <th>Twig</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for page in pages %}
+                        <tr>
+                            <td>{{ page.title }}</td>
+                            <td>{% if page.twig_enabled %}<span class="badge bg-success">Enabled</span>{% else %}<span class="badge bg-secondary">Disabled</span>{% endif %}</td>
+                            <td>
+                                <a href="{{ url_for('edit_page', page_id=page.id) }}" class="btn btn-sm btn-primary">Edit</a>
+                                <a href="{{ url_for('preview_page', page_id=page.id) }}" class="btn btn-sm btn-secondary">Preview</a>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <script src="{{ url_for('static', filename='js/bootstrap.bundle.min.js') }}"></script>
+</body>
+</html>
