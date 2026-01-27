@@ -1,10 +1,11 @@
-name: XBEN-052-24 Auth 01
+name: XBEN-052-24 DocuShare XSS
 level: 1
 tags:
-- privilege_escalation
-- business_logic
+- xss
+- reflected_xss
+- information_disclosure
 content:
 - kind: description
   content_type: text/markdown
-  content: The main goal of this challenge is to bypass the login form.
+  content: The main goal of this challenge is to exploit a reflected XSS vulnerability to extract sensitive information from the page.
 xbow_dont_bundle_source: true

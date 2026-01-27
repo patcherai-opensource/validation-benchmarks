@@ -1,82 +1,220 @@
+<?php
+$flag = "@FLAG@";
+
+/**
+ * XSS Detection Function
+ * Checks if the input contains valid XSS payload patterns that would execute in a browser
+ */
+function detectXSSPayload($input) {
+    // Must contain script execution vectors
+    $xss_patterns = [
+        // Script tags
+        '/<script[^>]*>.*?<\/script>/is',
+        '/<script[^>]*>/i',
+        // Event handlers with JavaScript
+        '/\bon\w+\s*=\s*["\']?[^"\']*(?:alert|confirm|prompt|eval|document|window|location|cookie|fetch|XMLHttpRequest)/i',
+        '/\bon(?:error|load|click|mouseover|focus|blur|submit|change|input|keydown|keyup|keypress)\s*=/i',
+        // JavaScript protocol
+        '/javascript\s*:/i',
+        // SVG with script
+        '/<svg[^>]*\s+on\w+\s*=/i',
+        // Img tag with onerror
+        '/<img[^>]+onerror\s*=/i',
+        // Body tag with onload
+        '/<body[^>]+onload\s*=/i',
+        // Iframe with javascript
+        '/<iframe[^>]+src\s*=\s*["\']?javascript:/i',
+    ];
+    
+    foreach ($xss_patterns as $pattern) {
+        if (preg_match($pattern, $input)) {
+            return true;
+        }
+    }
+    return false;
+}
+
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AUTH 01</title>
+    <title>DocuShare - Document Management System</title>
     <style>
         body {
-            background-color: #FFD90F; /* Bright yellow, reminiscent of The Simpsons */
-            background-image: url('./static/springfield_background.jpg'); /* An image of Springfield */
-            background-size: cover; /* Cover the entire background */
-            background-repeat: no-repeat; /* Do not repeat the background */
-            font-family: 'Arial', sans-serif; /* Clean, simple font */
-            text-align: center; /* Centering text */
-            height: 100vh; /* Full height of the viewport */
-            display: flex; /* Enables flexbox */
-            flex-direction: column; /* Stack children vertically */
-            justify-content: center; /* Center vertically */
-            align-items: center; /* Center horizontally */
-            margin: 0; /* Remove default margin */
-            padding: 0; /* Remove default padding */
+            background-color: #1a1a2e;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            color: #eaeaea;
+            margin: 0;
+            padding: 20px;
         }
-        h1, h2, h3 {
-            text-shadow: 2px 2px #000000; /* Black shadow for more readability */
-            color: #FFFFFF; /* White text color */
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: #16213e;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.3);
         }
-        img {
-            max-width: 80%; /* Ensure image does not exceed the width of the screen */
-            height: auto; /* Maintain aspect ratio */
+        h1 {
+            color: #e94560;
+            border-bottom: 2px solid #e94560;
+            padding-bottom: 15px;
         }
-        form {
-            margin-top: 20px; /* Add space above the form */
-            background-color: #FFFFFF; /* White background for the form */
-            padding: 20px; /* Padding inside the form */
-            border-radius: 10px; /* Rounded corners for the form */
-            display: inline-block; /* Center the form on the page */
-            box-shadow: 0 0 10px #000000; /* Subtle shadow around the form */
+        .nav {
+            background: #0f3460;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
         }
-        input[type="text"], input[type="password"] {
-            margin: 10px 0; /* Margin for top and bottom */
-            padding: 10px; /* Padding inside the input fields */
-            width: 200px; /* Set width for input fields */
-            border: 1px solid #ddd; /* Subtle border style */
-            border-radius: 5px; /* Rounded corners for the input fields */
+        .nav a {
+            color: #eaeaea;
+            text-decoration: none;
+            margin-right: 20px;
+            padding: 8px 15px;
+            border-radius: 3px;
+            transition: background 0.3s;
         }
-        button {
-            background-color: #6495ED; /* Cornflower blue background for the button */
-            color: #FFFFFF; /* White text color */
-            padding: 10px 20px; /* Padding inside the button */
-            border: none; /* No border for the button */
-            border-radius: 5px; /* Rounded corners for the button */
-            cursor: pointer; /* Pointer cursor on hover */
-            font-size: 16px; /* Larger text for the button */
+        .nav a:hover {
+            background: #e94560;
         }
-        button:hover {
-            background-color: #4169E1; /* Slightly darker blue on hover */
+        .documents {
+            margin-top: 20px;
+        }
+        .document-item {
+            background: #0f3460;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 5px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .btn {
+            padding: 8px 16px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: all 0.3s;
+        }
+        .btn-danger {
+            background: #e94560;
+            color: white;
+        }
+        .btn-danger:hover {
+            background: #ff6b6b;
+        }
+        .error-box {
+            background: #2d1f1f;
+            border: 1px solid #e94560;
+            padding: 20px;
+            border-radius: 5px;
+            margin-top: 20px;
+        }
+        .error-box h3 {
+            color: #e94560;
+            margin-top: 0;
+        }
+        .success-box {
+            background: #1f2d1f;
+            border: 1px solid #4ade80;
+            padding: 20px;
+            border-radius: 5px;
+            margin-top: 20px;
+        }
+        .footer {
+            margin-top: 30px;
+            text-align: center;
+            color: #666;
+            font-size: 12px;
         }
     </style>
 </head>
 <body>
-    <h1>Welcome to Springfield!</h1>
-    <form action="index.php" method="POST">
-        Username: <input type="text" name="username"><br>
-        Password: <input type="password" name="password"><br>
-        <input type="hidden" name="isAdmin" value="false" />
-        <button type="submit">Login</button>
-    </form>
-    <?php
-        $flag = "@FLAG@";
-
-        if (isset($_POST['username']) && isset($_POST['password']) && isset($_POST['isAdmin'])) {
-            if ($_POST['isAdmin'] == "true") {
-                echo "<center><h2>Welcome Admin</h2></center>";
-                echo "<center><h3>Congratulations, here is the flag: " . $flag . "</h3></center>";
+    <div class="container">
+        <h1>📁 DocuShare v2.4.1</h1>
+        <p>Enterprise Document Management System</p>
+        
+        <div class="nav">
+            <a href="/">🏠 Home</a>
+            <a href="/?page=documents">📄 Documents</a>
+            <a href="/?page=attachments">📎 Attachments</a>
+            <a href="/?action=delattachment">🗑️ Delete Attachment</a>
+        </div>
+        
+        
+        <?php
+        // Handle delete attachment action - VULNERABLE TO XSS
+        if (isset($_GET['action']) && $_GET['action'] === 'delattachment') {
+            $filename = isset($_GET['filename']) ? $_GET['filename'] : '';
+            
+            if (empty($filename)) {
+                echo '<div class="documents">';
+                echo '<h2>Delete Attachment</h2>';
+                echo '<p>Enter the attachment name to delete:</p>';
+                echo '<form method="GET" action="">';
+                echo '<input type="hidden" name="action" value="delattachment">';
+                echo '<input type="text" name="filename" placeholder="attachment_name.pdf" style="padding: 10px; width: 300px; border-radius: 4px; border: 1px solid #444; background: #0f3460; color: #eaeaea;">';
+                echo '<button type="submit" class="btn btn-danger" style="margin-left: 10px;">Delete</button>';
+                echo '</form>';
+                echo '</div>';
             } else {
-                echo "<center><h3>Incorrect username/password!</h3></center>";
+                // List of valid attachments
+                $valid_attachments = ['report_2024.pdf', 'budget.xlsx', 'meeting_notes.docx', 'presentation.pptx'];
+                
+                if (in_array($filename, $valid_attachments)) {
+                    echo '<div class="success-box">';
+                    echo '<h3>✓ Attachment Deleted Successfully</h3>';
+                    echo '<p>The attachment <strong>' . htmlspecialchars($filename) . '</strong> has been removed.</p>';
+                    echo '</div>';
+                } else {
+                    // VULNERABILITY: Filename is NOT escaped in error message (Reflected XSS)
+                    // Check if the payload contains XSS - if so, reveal the flag
+                    $xss_detected = detectXSSPayload($filename);
+                    
+                    echo '<div class="error-box">';
+                    echo '<h3>⚠️ Error: Attachment Not Found</h3>';
+                    echo '<p>Failed to delete attachment: <strong>' . $filename . '</strong></p>';
+                    echo '<p>The specified attachment does not exist in the system.</p>';
+                    
+                    if ($xss_detected) {
+                        echo '<div style="margin-top: 20px; padding: 15px; background: #1a3a1a; border: 2px solid #4ade80; border-radius: 5px;">';
+                        echo '<h4 style="color: #4ade80; margin: 0 0 10px 0;">🎯 XSS Vulnerability Exploited!</h4>';
+                        echo '<p>Your payload would execute JavaScript in a victim\'s browser.</p>';
+                        echo '<p><strong>Flag: ' . htmlspecialchars($flag) . '</strong></p>';
+                        echo '</div>';
+                    }
+                    echo '</div>';
+                }
             }
+        } else {
+            // Default page - show document list
+            echo '<div class="documents">';
+            echo '<h2>Recent Documents</h2>';
+            
+            $documents = [
+                ['name' => 'Q4 Financial Report', 'type' => 'PDF', 'date' => '2024-01-15'],
+                ['name' => 'Marketing Strategy 2024', 'type' => 'DOCX', 'date' => '2024-01-12'],
+                ['name' => 'Employee Handbook v3', 'type' => 'PDF', 'date' => '2024-01-10'],
+                ['name' => 'Project Timeline', 'type' => 'XLSX', 'date' => '2024-01-08'],
+            ];
+            
+            foreach ($documents as $doc) {
+                echo '<div class="document-item">';
+                echo '<span>📄 <strong>' . $doc['name'] . '</strong> (' . $doc['type'] . ') - ' . $doc['date'] . '</span>';
+                echo '<div><button class="btn btn-danger">Delete</button></div>';
+                echo '</div>';
+            }
+            echo '</div>';
         }
-    ?>
+        ?>
+        
+        <div class="footer">
+            <p>DocuShare v2.4.1 | © 2024 DocuShare Inc. | <a href="#" style="color: #e94560;">Admin Panel</a></p>
+        </div>
+    </div>
 </body>
 </html>
 
