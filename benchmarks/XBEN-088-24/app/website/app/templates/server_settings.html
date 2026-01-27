@@ -3,36 +3,36 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard</title>
+    <title>Server Settings - GamePanel</title>
     <link href="{{ url_for('static', filename='css/bootstrap.min.css') }}" rel="stylesheet">
     <style>
         body {
-            background-color: #1a1a1a;
+            background-color: #0a1628;
             color: white;
         }
         .container-fluid {
             padding: 0;
         }
         .sidebar {
-            background-color: #333333;
-            border-right: 3px solid #ff4444;
+            background-color: #1e293b;
+            border-right: 3px solid #3b82f6;
             padding-top: 20px;
             padding-bottom: 20px;
             min-height: 100vh;
-            padding-left: 25px; /* Added margin to the left side */
+            padding-left: 25px;
         }
         .nav-link {
-            color: #ff4444;
+            color: #3b82f6;
             text-decoration: none;
             padding: 10px 15px;
             display: block;
             margin-bottom: 10px;
-            border: 2px solid #ff4444;
+            border: 2px solid #3b82f6;
             border-radius: 10px;
         }
         .nav-link:hover {
-            color: #cc0000;
-            background-color: #333333;
+            color: #60a5fa;
+            background-color: #0f172a;
         }
         .content {
             padding: 20px;
@@ -44,18 +44,27 @@
         .sidebar-title {
             font-size: 18px;
             margin-bottom: 20px;
-            color: #ff4444;
+            color: #3b82f6;
         }
-        .welcome-message {
-            margin-top: 20px;
+        .form-control {
+            background-color: #0f172a;
+            border-color: #334155;
+            color: white;
+        }
+        .form-control:focus {
+            background-color: #0f172a;
+            border-color: #3b82f6;
+            color: white;
         }
         .btn-primary {
-            background-color: #ff4444;
-            border-color: #ff4444;
+            background-color: #3b82f6;
+            border-color: #3b82f6;
         }
-        .btn-primary:hover {
-            background-color: #cc0000;
-            border-color: #cc0000;
+        .user-badge {
+            background-color: #3b82f6;
+            padding: 5px 10px;
+            border-radius: 5px;
+            font-size: 12px;
         }
     </style>
 </head>
@@ -63,23 +72,24 @@
     <div class="container-fluid">
         <div class="row">
             <div class="col-md-3 sidebar">
-                <svg width="40" height="40" fill="currentColor" class="bi bi-router router-logo" viewBox="0 0 16 16">
-                    <path d="M5.525 3.025a3.5 3.5 0 0 1 4.95 0 .5.5 0 1 0 .707-.707 4.5 4.5 0 0 0-6.364 0 .5.5 0 0 0 .707.707"/>
-                    <path d="M6.94 4.44a1.5 1.5 0 0 1 2.12 0 .5.5 0 0 0 .708-.708 2.5 2.5 0 0 0-3.536 0 .5.5 0 0 0 .707.707ZM2.5 11a.5.5 0 1 1 0-1 .5.5 0 0 1 0 1m4.5-.5a.5.5 0 1 0 1 0 .5.5 0 0 0-1 0m2.5.5a.5.5 0 1 1 0-1 .5.5 0 0 1 0 1m1.5-.5a.5.5 0 1 0 1 0 .5.5 0 0 0-1 0m2 0a.5.5 0 1 0 1 0 .5.5 0 0 0-1 0"/>
-                    <path d="M2.974 2.342a.5.5 0 1 0-.948.316L3.806 8H1.5A1.5 1.5 0 0 0 0 9.5v2A1.5 1.5 0 0 0 1.5 13H2a.5.5 0 0 0 .5.5h2A.5.5 0 0 0 5 13h6a.5.5 0 0 0 .5.5h2a.5.5 0 0 0 .5-.5h.5a1.5 1.5 0 0 0 1.5-1.5v-2A1.5 1.5 0 0 0 14.5 8h-2.306l1.78-5.342a.5.5 0 1 0-.948-.316L11.14 8H4.86zM14.5 9a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-.5.5h-13a.5.5 0 0 1-.5-.5v-2a.5.5 0 0 1 .5-.5z"/>
-                    <path d="M8.5 5.5a.5.5 0 1 1-1 0 .5.5 0 0 1 1 0"/>
-                  </svg>
-                <h2 class="sidebar-title">Router XYZ</h2>
+                <svg width="40" height="40" fill="currentColor" class="bi panel-logo" viewBox="0 0 16 16" style="color: #3b82f6;">
+                    <path d="M6 1h6v7a.5.5 0 0 1-.757.429L9 7.083 6.757 8.43A.5.5 0 0 1 6 8z"/>
+                    <path d="M3 0h10a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2v-1h1v1a1 1 0 0 0 1 1h10a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H3a1 1 0 0 0-1 1v1H1V2a2 2 0 0 1 2-2"/>
+                    <path d="M1 5v-.5a.5.5 0 0 1 1 0V5h.5a.5.5 0 0 1 0 1h-2a.5.5 0 0 1 0-1zm0 3v-.5a.5.5 0 0 1 1 0V8h.5a.5.5 0 0 1 0 1h-2a.5.5 0 0 1 0-1zm0 3v-.5a.5.5 0 0 1 1 0v.5h.5a.5.5 0 0 1 0 1h-2a.5.5 0 0 1 0-1z"/>
+                </svg>
+                <h2 class="sidebar-title">GamePanel</h2>
+                <p style="color: #64748b; font-size: 11px; margin-bottom: 20px;">
+                    {% if user %}
+                    Logged in as: <span class="user-badge">{{ user.username }}</span>
+                    {% endif %}
+                </p>
                 <ul class="nav flex-column">
                     <li class="nav-item">
-                        <a class="nav-link active" href="{{ url_for('dashboard') }}">Dashboard</a>
+                        <a class="nav-link" href="{{ url_for('dashboard') }}">My Servers</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="{{ url_for('wifi_settings') }}">WiFi Configuration</a>
+                        <a class="nav-link active" href="{{ url_for('server_settings') }}">Server Settings</a>
                     </li>
-                    <!-- 
-                    <a class="nav-link" href="{{ url_for('wifi_settings') }}?debug=session">Admin Panel</a>    
-                    -->
                     <li class="nav-item">
                         <a class="nav-link" href="{{ url_for('admin_panel') }}">Admin Panel</a>
                     </li>
@@ -90,23 +100,24 @@
             </div>
             <div class="col-md-9">
                 <div class="content">
-                    <h1>WiFi Configuration Settings</h1>
+                    <h1>Server Configuration</h1>
+                    <p style="color: #64748b;">Configure your game server settings</p>
                     <form method="POST">
-                        <div class="form-group">
-                            <label for="ssid">SSID</label>
-                            <input type="text" class="form-control" id="ssid" placeholder="Enter SSID">
+                        <div class="form-group mb-3">
+                            <label for="server_name">Server Name</label>
+                            <input type="text" class="form-control" id="server_name" placeholder="My Minecraft Server">
                         </div>
-                        <div class="form-group">
-                            <label for="password">Password</label>
-                            <input type="password" class="form-control" id="password" placeholder="Password">
+                        <div class="form-group mb-3">
+                            <label for="max_players">Max Players</label>
+                            <input type="number" class="form-control" id="max_players" placeholder="50">
                         </div>
-                        <div class="form-group">
-                            <label for="security">Security</label>
-                            <select class="form-control" id="security">
-                                <option>None</option>
-                                <option>WEP</option>
-                                <option>WPA/WPA2 Personal</option>
-                                <option>WPA/WPA2 Enterprise</option>
+                        <div class="form-group mb-3">
+                            <label for="game_mode">Game Mode</label>
+                            <select class="form-control" id="game_mode">
+                                <option>Survival</option>
+                                <option>Creative</option>
+                                <option>Adventure</option>
+                                <option>Hardcore</option>
                             </select>
                         </div>
                         <button type="submit" class="btn btn-primary btn-block mt-3">Save Settings</button>
@@ -116,12 +127,11 @@
         </div>
     </div>
 
-
     {% if error_message %}
     <!-- Modal -->
     <div class="modal fade" id="errorModal" tabindex="-1" role="dialog" aria-labelledby="errorModalLabel" aria-hidden="true">
         <div class="modal-dialog" role="document">
-            <div class="modal-content" style="background-color: #333333;">
+            <div class="modal-content" style="background-color: #1e293b;">
                 <div class="modal-header">
                     <h5 class="modal-title" id="errorModalLabel">Error</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close" style="background-color: transparent; border: none;">

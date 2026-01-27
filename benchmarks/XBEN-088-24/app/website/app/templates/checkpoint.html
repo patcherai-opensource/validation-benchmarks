@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Two-Factor Authentication - GamePanel</title>
+    <link href="{{ url_for('static', filename='css/bootstrap.min.css') }}" rel="stylesheet">
+    <style>
+        body {
+            background-color: #0a1628;
+            color: white;
+        }
+        .container {
+            margin-top: 100px;
+        }
+        .form-group label {
+            color: white;
+        }
+        .btn-primary {
+            background-color: #3b82f6;
+            border-color: #3b82f6;
+        }
+        .btn-primary:hover {
+            background-color: #2563eb;
+            border-color: #2563eb;
+        }
+        .checkpoint-form {
+            max-width: 400px;
+            margin: auto;
+            text-align: center;
+            border: 1px solid #3b82f6;
+            border-radius: 10px;
+            padding: 30px;
+            background-color: #1e293b;
+        }
+        .panel-logo {
+            width: 60px;
+            margin-bottom: 20px;
+            color: #3b82f6;
+        }
+        .panel-title {
+            font-size: 20px;
+            margin-bottom: 10px;
+            color: #3b82f6;
+        }
+        .error-message {
+            color: #ef4444;
+            margin-top: 10px;
+            padding: 10px;
+            background-color: rgba(239, 68, 68, 0.1);
+            border-radius: 5px;
+        }
+        .success-message {
+            color: #22c55e;
+            margin-top: 10px;
+            padding: 10px;
+            background-color: rgba(34, 197, 94, 0.1);
+            border-radius: 5px;
+        }
+        .form-control {
+            background-color: #0f172a;
+            border-color: #334155;
+            color: white;
+            text-align: center;
+            font-size: 24px;
+            letter-spacing: 8px;
+        }
+        .form-control:focus {
+            background-color: #0f172a;
+            border-color: #3b82f6;
+            color: white;
+        }
+        .token-info {
+            font-size: 11px;
+            color: #64748b;
+            margin-top: 15px;
+            padding: 10px;
+            background-color: #0f172a;
+            border-radius: 5px;
+            word-break: break-all;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="checkpoint-form">
+            <svg width="60" height="60" fill="currentColor" class="panel-logo" viewBox="0 0 16 16">
+                <path d="M8 1a2 2 0 0 1 2 2v4H6V3a2 2 0 0 1 2-2m3 6V3a3 3 0 0 0-6 0v4a2 2 0 0 0-2 2v5a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2"/>
+            </svg>
+            <h2 class="panel-title">Two-Factor Authentication</h2>
+            <p style="color: #64748b; font-size: 13px; margin-bottom: 20px;">Enter the 6-digit code from your authenticator app</p>
+            
+            {% if message %}
+                <div class="success-message">{{ message }}</div>
+            {% endif %}
+            {% if error %}
+                <div class="error-message">{{ error }}</div>
+            {% endif %}
+            
+            <form method="POST" action="/auth/login/checkpoint">
+                <!-- The confirmation_token identifies which user is completing 2FA -->
+                <input type="hidden" name="confirmation_token" value="{{ confirmation_token }}">
+                
+                <div class="form-group mb-3">
+                    <label for="authentication_code">Authentication Code</label>
+                    <input type="text" class="form-control" id="authentication_code" name="authentication_code" 
+                           maxlength="6" pattern="[0-9]{6}" required placeholder="000000" autocomplete="off">
+                </div>
+                
+                <button type="submit" class="btn btn-primary btn-block mt-3 w-100">Verify</button>
+            </form>
+            
+            <div class="token-info">
+                <strong>Session Token:</strong> {{ confirmation_token[:16] if confirmation_token else 'N/A' }}...
+            </div>
+            
+            <p style="color: #64748b; font-size: 11px; margin-top: 15px;">
+                <a href="/auth/login" style="color: #3b82f6;">← Back to login</a>
+            </p>
+        </div>
+    </div>
+</body>
+</html>

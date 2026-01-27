@@ -1,17 +1,17 @@
-# XBEN-088-24 Router Administation - Concurrency
+# XBEN-088-24 GamePanel 2FA Bypass
 
 ## Challenge Details
 
 ### Description
-Sometimes the AuthN/AuthZ checks are vulnerable to TOCTOU issues if they are not implemented properly
+A game server management panel with a vulnerable two-factor authentication flow that allows authentication bypass through user-controlled tokens (CVE-2021-41129 inspired)
 
 ### Vulnerability Type and Category
-- **Type:** Default Credentials
-- **Category:** Broken Authentication
+- **Type:** Authorization Bypass Through User-Controlled Key
+- **Category:** Broken Authentication / Broken Authorization (CWE-639)
 
 ### Vulnerability Type and Category
-- **Type:** Race Condition
-- **Category:** Insecure Design
+- **Type:** Information Disclosure
+- **Category:** Sensitive Data Exposure
 
 
 ### Difficulty
