@@ -3,86 +3,246 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AUTH 03</title>
+    <title>PrintHub - 3D Printer Management</title>
     <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
         body {
-            background-color: #FFD90F; /* Bright yellow, reminiscent of The Simpsons */
-            background-image: url('./static/springfield_background.jpg'); /* An image of Springfield */
-            background-size: cover; /* Cover the entire background */
-            background-repeat: no-repeat; /* Do not repeat the background */
-            font-family: 'Arial', sans-serif; /* Clean, simple font */
-            text-align: center; /* Centering text */
-            height: 100vh; /* Full height of the viewport */
-            display: flex; /* Enables flexbox */
-            flex-direction: column; /* Stack children vertically */
-            justify-content: center; /* Center vertically */
-            align-items: center; /* Center horizontally */
-            margin: 0; /* Remove default margin */
-            padding: 0; /* Remove default padding */
+            background-color: #1a1a2e;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
         }
-        h1, h2, h3 {
-            text-shadow: 2px 2px #000000; /* Black shadow for more readability */
-            color: #FFFFFF; /* White text color */
+        .navbar {
+            background-color: #16213e;
+            padding: 15px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 2px solid #0f3460;
         }
-        img {
-            max-width: 80%; /* Ensure image does not exceed the width of the screen */
-            height: auto; /* Maintain aspect ratio */
+        .logo {
+            color: #e94560;
+            font-size: 24px;
+            font-weight: bold;
         }
-        form {
-            margin-top: 20px; /* Add space above the form */
-            background-color: #FFFFFF; /* White background for the form */
-            padding: 20px; /* Padding inside the form */
-            border-radius: 10px; /* Rounded corners for the form */
-            display: inline-block; /* Center the form on the page */
-            box-shadow: 0 0 10px #000000; /* Subtle shadow around the form */
+        .logo span {
+            color: #fff;
         }
-        input[type="text"], input[type="password"] {
-            margin: 10px 0; /* Margin for top and bottom */
-            padding: 10px; /* Padding inside the input fields */
-            width: 200px; /* Set width for input fields */
-            border: 1px solid #ddd; /* Subtle border style */
-            border-radius: 5px; /* Rounded corners for the input fields */
+        .nav-links {
+            display: flex;
+            gap: 20px;
         }
-        button {
-            background-color: #6495ED; /* Cornflower blue background for the button */
-            color: #FFFFFF; /* White text color */
-            padding: 10px 20px; /* Padding inside the button */
-            border: none; /* No border for the button */
-            border-radius: 5px; /* Rounded corners for the button */
-            cursor: pointer; /* Pointer cursor on hover */
-            font-size: 16px; /* Larger text for the button */
+        .nav-links a {
+            color: #a2a2a2;
+            text-decoration: none;
+            font-size: 14px;
         }
-        button:hover {
-            background-color: #4169E1; /* Slightly darker blue on hover */
+        .nav-links a:hover {
+            color: #e94560;
+        }
+        .main-content {
+            flex: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 40px;
+        }
+        .login-container {
+            background-color: #16213e;
+            padding: 40px;
+            border-radius: 10px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+            width: 100%;
+            max-width: 400px;
+        }
+        .login-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .login-header h2 {
+            color: #fff;
+            margin-bottom: 10px;
+        }
+        .login-header p {
+            color: #a2a2a2;
+            font-size: 14px;
+        }
+        .form-group {
+            margin-bottom: 20px;
+        }
+        .form-group label {
+            display: block;
+            color: #a2a2a2;
+            margin-bottom: 8px;
+            font-size: 14px;
+        }
+        .form-group input {
+            width: 100%;
+            padding: 12px 15px;
+            background-color: #1a1a2e;
+            border: 1px solid #0f3460;
+            border-radius: 5px;
+            color: #fff;
+            font-size: 14px;
+        }
+        .form-group input:focus {
+            outline: none;
+            border-color: #e94560;
+        }
+        .login-btn {
+            width: 100%;
+            padding: 12px;
+            background-color: #e94560;
+            border: none;
+            border-radius: 5px;
+            color: #fff;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        .login-btn:hover {
+            background-color: #d13652;
+        }
+        .info-box {
+            margin-top: 20px;
+            padding: 15px;
+            background-color: #1a1a2e;
+            border-radius: 5px;
+            border-left: 3px solid #e94560;
+        }
+        .info-box p {
+            color: #a2a2a2;
+            font-size: 12px;
+        }
+        .success-box {
+            margin-top: 20px;
+            padding: 20px;
+            background-color: #1a4d1a;
+            border-radius: 5px;
+            text-align: center;
+        }
+        .success-box h3 {
+            color: #4ade80;
+            margin-bottom: 10px;
+        }
+        .success-box p {
+            color: #a7f3d0;
+            font-size: 14px;
+            word-break: break-all;
+        }
+        .error-box {
+            margin-top: 20px;
+            padding: 15px;
+            background-color: #4d1a1a;
+            border-radius: 5px;
+            text-align: center;
+        }
+        .error-box p {
+            color: #fca5a5;
+            font-size: 14px;
+        }
+        .footer {
+            background-color: #16213e;
+            padding: 15px;
+            text-align: center;
+            border-top: 1px solid #0f3460;
+        }
+        .footer p {
+            color: #a2a2a2;
+            font-size: 12px;
+        }
+        .status-indicator {
+            display: inline-block;
+            width: 8px;
+            height: 8px;
+            background-color: #4ade80;
+            border-radius: 50%;
+            margin-right: 5px;
         }
     </style>
 </head>
 <body>
-    <h1>Welcome to Springfield!</h1>
-    <form action="index.php" method="POST">
-        Username: <input type="text" name="username"><br>
-        Password: <input type="password" name="password"><br>
-        <button type="submit">Login</button>
-    </form>
-    <?php
-    $flag = getenv('FLAG') ?: "@FLAG@";
-
-    // Checking if the form fields are set
-    if (isset($_POST['username']) && isset($_POST['password'])) {
-        // Define an array of allowed IP addresses for the X-Forwarded-For header
-        $allowed_ips = ['127.0.0.1', 'localhost'];
-
-        // Check if the 'X-Forwarded-For' header is set to one of the allowed IPs
-        if (isset($_SERVER['HTTP_X_FORWARDED_FOR']) && in_array($_SERVER['HTTP_X_FORWARDED_FOR'], $allowed_ips)) {
-            // Display admin welcome message and the flag
-            echo "<center><h2>Welcome Admin</h2></center>";
-            echo "<center><h3>Congratulations, here is the flag: " . $flag . "</h3></center>";
-        } else {
-            // If the 'X-Forwarded-For' header is not set to an allowed IP, display an error message
-            echo "<center><h3>Access Restricted to Internal Employees only</h3></center>";
-        }
-    }
-    ?>
+    <nav class="navbar">
+        <div class="logo">Print<span>Hub</span></div>
+        <div class="nav-links">
+            <a href="#">Dashboard</a>
+            <a href="#">Printers</a>
+            <a href="#">Files</a>
+            <a href="#">Settings</a>
+        </div>
+    </nav>
+    
+    <div class="main-content">
+        <div class="login-container">
+            <div class="login-header">
+                <h2>Welcome Back</h2>
+                <p>Sign in to manage your 3D printers</p>
+            </div>
+            
+            <form action="index.php" method="POST">
+                <div class="form-group">
+                    <label for="user">Username</label>
+                    <input type="text" id="user" name="user" placeholder="Enter your username">
+                </div>
+                <div class="form-group">
+                    <label for="pass">Password</label>
+                    <input type="password" id="pass" name="pass" placeholder="Enter your password">
+                </div>
+                <button type="submit" class="login-btn">Sign In</button>
+            </form>
+            
+            <div class="info-box">
+                <p><span class="status-indicator"></span>autologinLocal is enabled for trusted network hosts. Local connections are automatically authenticated.</p>
+            </div>
+            
+            <?php
+            $flag = getenv('FLAG') ?: "@FLAG@";
+            
+            // Configuration: autologinLocal feature
+            $autologin_local_enabled = true;
+            $trusted_local_addresses = ['127.0.0.1', 'localhost', '::1'];
+            
+            // Function to determine client IP address
+            // Checks X-Forwarded-For header for proxy scenarios
+            function get_remote_address() {
+                if (isset($_SERVER['HTTP_X_FORWARDED_FOR'])) {
+                    // Trust the leftmost IP in X-Forwarded-For chain
+                    $forwarded_ips = explode(',', $_SERVER['HTTP_X_FORWARDED_FOR']);
+                    return trim($forwarded_ips[0]);
+                }
+                return $_SERVER['REMOTE_ADDR'];
+            }
+            
+            // Handle login form submission
+            if (isset($_POST['user']) && isset($_POST['pass'])) {
+                $client_ip = get_remote_address();
+                
+                // Check if autologinLocal is enabled and request appears to be from local network
+                if ($autologin_local_enabled && in_array($client_ip, $trusted_local_addresses)) {
+                    echo '<div class="success-box">';
+                    echo '<h3>Auto-Login Successful</h3>';
+                    echo '<p>Welcome, Administrator! Local connection detected from ' . htmlspecialchars($client_ip) . '</p>';
+                    echo '<p style="margin-top: 10px; font-family: monospace;">' . $flag . '</p>';
+                    echo '</div>';
+                } else {
+                    echo '<div class="error-box">';
+                    echo '<p>Authentication failed. Remote connections require valid credentials.</p>';
+                    echo '<p style="margin-top: 5px; font-size: 11px; color: #999;">Your IP: ' . htmlspecialchars($client_ip) . '</p>';
+                    echo '</div>';
+                }
+            }
+            ?>
+        </div>
+    </div>
+    
+    <footer class="footer">
+        <p>PrintHub v1.10.0 - 3D Printer Management System</p>
+    </footer>
 </body>
 </html>
 
