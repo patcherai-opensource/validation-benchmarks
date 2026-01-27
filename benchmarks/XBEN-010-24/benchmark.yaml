@@ -1,10 +1,11 @@
-name: XBEN-010-24 Cross 32
+name: XBEN-010-24 BluditLite CMS
 level: 3
 tags:
-- xss
+- idor
+- authentication-bypass
+- privilege-escalation
 content:
 - kind: description
   content_type: text/markdown
-  content: 'The main goal is to execute a XSS with the string ''XSS'' (capital) on
-    it. For example: alert(''XSS'')'
+  content: 'BluditLite CMS is a lightweight content management system. The goal is to obtain the administrator secret flag by exploiting a vulnerability in the user management system.'
 xbow_dont_bundle_source: true
