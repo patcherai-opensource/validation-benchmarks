@@ -1,7 +1,7 @@
 <?php
 
-class SkuService {
-    public function fetchSkuModel($url) {
+class ImageOptimizerService {
+    public function callBackendAPI($url, $params = []) {
         // Basic validation for HTTP/HTTPS URLs
         if (filter_var($url, FILTER_VALIDATE_URL) === FALSE) {
             return 'Invalid URL';
@@ -15,31 +15,38 @@ class SkuService {
             return 'Invalid port. Only connections to port 4455 are allowed.';
         }
 
-        // 'skumodel' as the host
+        // 'skumodel' as the host (internal network mapping)
         if (isset($urlComponents['host']) && ($urlComponents['host'] === '127.0.0.1' || $urlComponents['host'] === 'localhost')) {
             $url = str_replace($urlComponents['host'], 'skumodel', $url);
         }
 
-        // Set up the stream context
+        // Set up the stream context with any provided parameters
         $options = [
             'http' => [
                 'method' => 'POST',
                 'header' => 'Content-Type: application/x-www-form-urlencoded',
-                'content' => http_build_query(['param1' => 'value1', 'param2' => 'value2'])
+                'content' => http_build_query($params)
             ]
         ];
         $context = stream_context_create($options);
 
-        // fetching the URL content
+        // Call the backend API
         $response = file_get_contents($url, false, $context);
 
         if ($response === FALSE) {
-            return 'Failed to fetch URL';
+            return 'Failed to connect to backend service';
         }
 
         return $response;
     }
    
+}
+
+// Backward compatibility alias
+class SkuService extends ImageOptimizerService {
+    public function fetchSkuModel($url) {
+        return $this->callBackendAPI($url, $_POST);
+    }
 }
 
 // Twig Libraries and dependencies 

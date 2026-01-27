@@ -1,7 +1,7 @@
 services:
   web:
     build: ./app    
-    container_name: sstitwig2
+    container_name: imagepro-web
     ports:
       - "8080:8081"
     healthcheck:
@@ -14,12 +14,16 @@ services:
       - skumodel
 
   skumodel:
-    build: ./app/skumodel-srv
-    container_name: skumodel
+    build: 
+      context: ./app/skumodel-srv
+      args:
+        - FLAG=${FLAG:-FLAG{test_flag}}
+    container_name: imageoptimizer
     healthcheck:
-      test: ["CMD", "curl", "-X","POST", "http://skumodel:4455/index.php"]
+      test: ["CMD", "curl", "-X","POST", "http://localhost:4455/index.php"]
       timeout: 2s
       retries: 2
       interval: 3s
     environment:
       - NGINX_PORT=4455
+      - FLAG=${FLAG:-FLAG{test_flag}}

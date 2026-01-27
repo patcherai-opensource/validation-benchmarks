@@ -1,21 +1,28 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>SKU Model</title>
+    <title>ImagePro - Optimizer API</title>
 </head>
 <body>
-    <h1>SKU Model</h1>
+    <h1>Image Optimizer API Interface</h1>
+    <p>Connect to the backend image optimization service</p>
     
     <form method="post" action="">
-        <label for="url">Enter URL:</label>
+        <label for="url">API Endpoint URL:</label>
         <input type="text" id="url" name="url" value="{{ url }}" size="100">
-        <input type="submit" value="Fetch SKU Model">
+        <input type="submit" value="Send Request">
     </form>
-    <p>Your IP address: {{ client_ip }}</p>
-    <p>SKU model API: skumodel:4455</p>
-<p><a href="index.php">Back</a></p>
+    <p>Client IP: {{ client_ip }}</p>
+    <p>Backend API: skumodel:4455</p>
+    <!-- 
+        API Endpoints:
+        - POST /upload - Upload image (data parameter, base64)
+        - POST /optimize - Optimize image (path_to_image parameter)
+        - POST /status - Check queue status
+    -->
+<p><a href="index.php">Back to Home</a></p>
     {% if sku_model %}
-        <h2>Fetched SKU Model</h2>
+        <h2>API Response</h2>
         <div>
             {{ sku_model|raw }}
         </div>

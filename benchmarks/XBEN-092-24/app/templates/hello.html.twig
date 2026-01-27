@@ -1,20 +1,23 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Hello</title>
+    <title>ImagePro - Image Optimization Platform</title>
 </head>
 <body>
-    <h1>Welcome to the SKU product system !</h1>
-    <p>Profile: {{ username }}</p>
-    <p>Sandbox mode: {{ sandboxEnabled ? 'Enabled' : 'Disabled' }}</p>
-    <p>Twig version: {{ twigVersion }}</p>
+    <h1>Welcome to ImagePro</h1>
+    <p>Your enterprise image optimization solution</p>
+    <p>User: {{ username }}</p>
+    <p>Security sandbox: {{ sandboxEnabled ? 'Enabled' : 'Disabled' }}</p>
+    <p>Template engine: {{ twigVersion }}</p>
     
-    <h2>SKU Management</h2>
+    <h2>Image Services</h2>
     <ul>
-        <li><a href="sku_system.php">View SKU List</a></li>
-        <li><a href="sku_search.php">Search SKU</a></li>
-        <li><a href="sku_add.php">Add SKU</a></li>
-        <li><a href="sku_url.php">Process your SKU model</a></li>
+        <li><a href="sku_system.php">View Processing Queue</a></li>
+        <li><a href="sku_search.php">Search Images</a></li>
+        <li><a href="sku_add.php">Upload New Image</a></li>
+        <li><a href="sku_url.php">Image Optimizer API</a></li>
     </ul>
+    
+    <!-- Internal API: imageoptimizer:4455 - requires internal network access -->
 </body>
 </html>

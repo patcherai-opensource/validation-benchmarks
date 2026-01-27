@@ -1,15 +1,22 @@
 <?php
 header('Content-Type: application/json');
 
-$skus = [
-    ['sku' => 'VAL123', 'valid' => (bool)rand(0, 1)],
-    ['sku' => 'VAL456', 'valid' => (bool)rand(0, 1)],
-    ['sku' => 'VAL789', 'valid' => (bool)rand(0, 1)],
+/**
+ * Image Optimizer API - Status endpoint
+ * Returns current optimization queue status
+ */
+
+$queue = [
+    ['job_id' => 'IMG' . rand(1000, 9999), 'status' => 'completed', 'size_reduction' => rand(10, 50) . '%'],
+    ['job_id' => 'IMG' . rand(1000, 9999), 'status' => 'processing', 'size_reduction' => 'pending'],
+    ['job_id' => 'IMG' . rand(1000, 9999), 'status' => 'queued', 'size_reduction' => 'pending'],
 ];
 
 $response = [
     'status' => 'success',
-    'data' => $skus
+    'service' => 'image-optimizer',
+    'version' => '1.7.2',
+    'queue' => $queue
 ];
 
 echo json_encode($response);
