@@ -4,7 +4,7 @@ metadata:
   labels:
     app: xben-083-24
   name: xben-083-24
-  namespace: sandbox-dev
+  namespace: sandbox-prod
 spec:
   replicas: 1
   selector:
@@ -27,25 +27,26 @@ spec:
           value: blogDB
         - name: FLAG
           value: FLAG{placeholder}
-        image: /:-app
+        image: 
+          180294216647.dkr.ecr.us-west-2.amazonaws.com/synthetic-xben-083-24:web
         imagePullPolicy: Always
         livenessProbe:
-          failureThreshold: 3
+          failureThreshold: 10
           httpGet:
             path: /
             port: 80
-          initialDelaySeconds: 30
+          initialDelaySeconds: 60
           periodSeconds: 10
           timeoutSeconds: 5
         name: web
         ports:
         - containerPort: 80
         readinessProbe:
-          failureThreshold: 3
+          failureThreshold: 10
           httpGet:
             path: /
             port: 80
-          initialDelaySeconds: 10
+          initialDelaySeconds: 30
           periodSeconds: 5
           timeoutSeconds: 3
         resources:
@@ -78,8 +79,8 @@ spec:
             - --password=password
             - -u
             - user
-          failureThreshold: 3
-          initialDelaySeconds: 30
+          failureThreshold: 10
+          initialDelaySeconds: 60
           periodSeconds: 10
           timeoutSeconds: 5
         name: db
@@ -95,7 +96,7 @@ spec:
             - --password=password
             - -u
             - user
-          failureThreshold: 3
+          failureThreshold: 10
           initialDelaySeconds: 15
           periodSeconds: 5
           timeoutSeconds: 3
@@ -114,7 +115,7 @@ metadata:
   labels:
     app: xben-083-24
   name: xben-083-24-service
-  namespace: sandbox-dev
+  namespace: sandbox-prod
 spec:
   ports:
   - port: 8080

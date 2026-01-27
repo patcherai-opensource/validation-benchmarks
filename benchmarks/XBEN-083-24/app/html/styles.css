@@ -1,27 +1,230 @@
+* {
+    box-sizing: border-box;
+}
+
 body {
-    font-family: Arial, sans-serif;
-    background-color: #f4f4f9;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
     margin: 0;
     padding: 20px;
+    min-height: 100vh;
 }
+
 .container {
-    width: 80%;
+    max-width: 900px;
     margin: auto;
     background: white;
+    padding: 30px;
+    border-radius: 12px;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+}
+
+.header {
+    text-align: center;
+    border-bottom: 2px solid #667eea;
+    padding-bottom: 20px;
+    margin-bottom: 30px;
+}
+
+.header h1 {
+    color: #333;
+    margin-bottom: 5px;
+}
+
+.version {
+    color: #888;
+    font-size: 0.9em;
+}
+
+.description {
+    background: #f8f9fa;
+    padding: 15px;
+    border-radius: 8px;
+    margin-bottom: 25px;
+    border-left: 4px solid #667eea;
+}
+
+.demo-section {
+    background: #fff;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
     padding: 20px;
+    margin-bottom: 25px;
+}
+
+.demo-section h2 {
+    color: #333;
+    margin-top: 0;
+}
+
+.lookup-form {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.lookup-form label {
+    font-weight: 600;
+    color: #555;
+}
+
+.lookup-form input {
+    flex: 1;
+    min-width: 200px;
+    padding: 10px 15px;
+    border: 2px solid #ddd;
+    border-radius: 6px;
+    font-size: 1em;
+    transition: border-color 0.3s;
+}
+
+.lookup-form input:focus {
+    outline: none;
+    border-color: #667eea;
+}
+
+.lookup-form button {
+    padding: 10px 25px;
+    background: #667eea;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 1em;
+    transition: background 0.3s;
+}
+
+.lookup-form button:hover {
+    background: #5a67d8;
+}
+
+.result-section {
+    margin-top: 20px;
+    padding: 15px;
+    background: #f8f9fa;
     border-radius: 8px;
 }
-.post {
-    border-bottom: 1px solid #ccc;
-    padding-bottom: 20px;
+
+.result-section h3 {
+    margin-top: 0;
+    color: #333;
+}
+
+.result-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.result-table th,
+.result-table td {
+    padding: 10px;
+    text-align: left;
+    border-bottom: 1px solid #e0e0e0;
+}
+
+.result-table th {
+    background: #667eea;
+    color: white;
+    width: 150px;
+}
+
+.result-table td {
+    background: white;
+}
+
+.error-box {
+    background: #fee;
+    border: 1px solid #fcc;
+    color: #c00;
+    padding: 15px;
+    border-radius: 6px;
+    font-family: monospace;
+    white-space: pre-wrap;
+    word-break: break-all;
+}
+
+.api-docs {
+    background: #1a1a2e;
+    color: #eee;
+    padding: 25px;
+    border-radius: 8px;
+    margin-bottom: 25px;
+}
+
+.api-docs h2 {
+    color: #fff;
+    margin-top: 0;
+    border-bottom: 1px solid #444;
+    padding-bottom: 10px;
+}
+
+.api-docs h3 {
+    color: #667eea;
+    margin-bottom: 10px;
+}
+
+.api-docs code {
+    background: #2d2d44;
+    padding: 8px 12px;
+    border-radius: 4px;
+    display: block;
+    color: #7bed9f;
+    font-size: 0.95em;
+}
+
+.api-docs .note {
+    color: #aaa;
+    font-size: 0.9em;
+    margin-top: 8px;
+}
+
+.code-block {
+    background: #2d2d44;
+    padding: 15px;
+    border-radius: 6px;
+    overflow-x: auto;
+    color: #7bed9f;
+    font-family: 'Courier New', monospace;
+    font-size: 0.9em;
+}
+
+.endpoint {
     margin-bottom: 20px;
 }
-.post h2 a {
-    color: #333;
-    text-decoration: none;
+
+.supported-countries {
+    margin-bottom: 25px;
 }
-.post img {
-    width: 100%;
-    height: auto;
-    border-radius: 5px;
+
+.supported-countries h2 {
+    color: #333;
+    margin-bottom: 15px;
+}
+
+.country-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.country-tag {
+    background: #e8eaf6;
+    color: #3f51b5;
+    padding: 5px 12px;
+    border-radius: 20px;
+    font-size: 0.85em;
+    font-weight: 500;
+}
+
+.footer {
+    text-align: center;
+    padding-top: 20px;
+    border-top: 1px solid #e0e0e0;
+    color: #666;
+}
+
+.footer .small {
+    font-size: 0.8em;
+    color: #999;
 }
