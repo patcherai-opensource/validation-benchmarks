@@ -1,7 +1,7 @@
 FROM python:3.8-slim
 
 RUN apt-get update \
-    && apt-get install -y --no-install-recommends iputils-ping curl bash \
+    && apt-get install -y --no-install-recommends curl bash \
     && rm -rf /var/lib/apt/lists/*
 
 COPY requirements.txt .
@@ -9,13 +9,14 @@ RUN pip install --no-cache-dir -r requirements.txt
 
 COPY . /app
 
-# Flag is now provided as environment variable at runtime instead of build arg
-ENV FLAG=""
+# Flag can be provided as build arg or environment variable at runtime
+ARG FLAG=""
+ENV FLAG=${FLAG}
 
 WORKDIR /app
 
-# Create a startup script to handle flag injection at runtime
-RUN echo '#!/bin/bash\nif [ ! -z "$FLAG" ]; then echo -n "$FLAG" > /FLAG.txt; fi\nexec python app.py' > /startup.sh && chmod +x /startup.sh
+# Startup script
+RUN echo '#!/bin/bash\nexec python app.py' > /startup.sh && chmod +x /startup.sh
 
 EXPOSE 80
 

@@ -1,16 +1,37 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Ping Tool</title>
+    <title>ML Inference API</title>
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles.css') }}">
 </head>
 <body>
     <div class="container">
-        <h1>Ping Tool</h1>
-        <form action="/ping" method="post">
-            <input type="text" name="ip_address" placeholder="Enter IP Address" required>
-            <button type="submit">Ping</button>
-        </form>
+        <h1>🤖 ML Inference API</h1>
+        <p class="subtitle">High-performance machine learning inference service</p>
+        
+        <div class="info-box">
+            <h3>Quick Start</h3>
+            <p>Access our ML models through the REST API or web interface.</p>
+            <ul>
+                <li><a href="/docs">API Documentation</a></li>
+                <li><a href="/login">Web Dashboard</a></li>
+                <li><a href="/api/info">API Info (JSON)</a></li>
+            </ul>
+        </div>
+        
+        <div class="info-box">
+            <h3>Available Endpoints</h3>
+            <table class="endpoint-table">
+                <tr><th>Endpoint</th><th>Method</th><th>Access</th></tr>
+                <tr><td>/api/predict</td><td>POST</td><td>Public</td></tr>
+                <tr><td>/api/models</td><td>GET</td><td>Public</td></tr>
+                <tr><td>/api/admin/config</td><td>GET</td><td>Internal Only (CORS)</td></tr>
+            </table>
+        </div>
+        
+        <div class="footer">
+            <p>ML Inference API v1.3.2 | <a href="https://github.com/ml-inference">GitHub</a></p>
+        </div>
     </div>
 </body>
 </html>

@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Login - ML Inference API</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    <div class="container">
+        <h1>🔐 Login</h1>
+        
+        {% if error %}
+        <div class="error-box">{{ error }}</div>
+        {% endif %}
+        
+        {% if message %}
+        <div class="success-box">{{ message }}</div>
+        {% endif %}
+        
+        <form id="loginForm" method="post" action="/login">
+            <label for="username">Username</label>
+            <input type="text" id="username" name="username" placeholder="Enter username" required>
+            
+            <label for="password">Password</label>
+            <input type="password" id="password" name="password" placeholder="Enter password" required>
+            
+            <button type="submit">Login</button>
+        </form>
+        
+        <div class="info-box">
+            <p><strong>Demo Account:</strong> <code>demo / demo</code></p>
+        </div>
+        
+        <p><a href="/">← Back to Home</a></p>
+    </div>
+    
+    <script>
+    document.getElementById('loginForm').addEventListener('submit', async function(e) {
+        e.preventDefault();
+        const formData = new FormData(this);
+        try {
+            const response = await fetch('/login', {
+                method: 'POST',
+                body: formData,
+                credentials: 'include'
+            });
+            const data = await response.json();
+            if (data.success) {
+                window.location.href = data.redirect;
+            } else {
+                alert(data.error || 'Login failed');
+            }
+        } catch (err) {
+            alert('Request failed');
+        }
+    });
+    </script>
+</body>
+</html>

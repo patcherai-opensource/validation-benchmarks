@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>API Documentation - ML Inference</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    <div class="container">
+        <h1>📚 API Documentation</h1>
+        <p>Welcome to the ML Inference API documentation.</p>
+        
+        <div class="info-box">
+            <h3>Public Endpoints</h3>
+            <p>These endpoints are accessible from any origin without authentication:</p>
+            
+            <h4>POST /api/predict</h4>
+            <p>Run inference on provided data.</p>
+            <pre>
+curl -X POST http://localhost/api/predict \
+  -H "Content-Type: application/json" \
+  -d '{"model": "image-classifier-v2", "input": [...]}'
+            </pre>
+            
+            <h4>GET /api/models</h4>
+            <p>List available ML models.</p>
+        </div>
+        
+        <div class="info-box">
+            <h3>Internal Endpoints</h3>
+            <p>These endpoints are protected by CORS origin validation:</p>
+            
+            <h4>GET /api/admin/config</h4>
+            <p>Get system configuration including sensitive admin tokens.</p>
+            <p class="note">Access restricted to trusted internal origins only.</p>
+        </div>
+        
+        <div class="info-box">
+            <h3>CORS Policy</h3>
+            <p>Cross-origin requests to internal endpoints are validated using a custom CORS middleware.</p>
+            <p>The middleware checks the <code>Origin</code> header against a list of approved internal domains.</p>
+            <p>Allowed origins include:</p>
+            <ul>
+                <li><code>http://localhost:7860</code></li>
+                <li><code>http://127.0.0.1:7860</code></li>
+                <li><code>https://ml-inference.internal</code></li>
+            </ul>
+            <!-- Note: CORS validation ensures only trusted origins can access internal APIs -->
+        </div>
+        
+        <p><a href="/">← Back to Home</a></p>
+    </div>
+</body>
+</html>

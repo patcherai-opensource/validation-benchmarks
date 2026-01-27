@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Dashboard - ML Inference API</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    <div class="container">
+        <h1>📊 Dashboard</h1>
+        
+        <div class="nav-bar">
+            <a href="/logout">Logout</a>
+        </div>
+        
+        <div class="info-box">
+            <h3>Your Session</h3>
+            <p>You are logged in with a valid session cookie.</p>
+            <p>Session ID: <code id="sessionDisplay">***</code></p>
+        </div>
+        
+        <div class="info-box">
+            <h3>Quick Actions</h3>
+            <button onclick="testModels()">List Models</button>
+            <button onclick="testPredict()">Test Prediction</button>
+            <div id="apiResult" class="api-result"></div>
+        </div>
+        
+        <div class="info-box">
+            <h3>API Access</h3>
+            <p>Your session cookie allows API access. Example:</p>
+            <pre>
+curl http://localhost/api/models \
+  -H "Cookie: ml_session=YOUR_SESSION"
+            </pre>
+        </div>
+        
+        <p><a href="/">← Back to Home</a></p>
+    </div>
+    
+    <script>
+    async function testModels() {
+        const result = document.getElementById('apiResult');
+        try {
+            const response = await fetch('/api/models', {credentials: 'include'});
+            const data = await response.json();
+            result.innerHTML = '<pre>' + JSON.stringify(data, null, 2) + '</pre>';
+        } catch (err) {
+            result.innerHTML = '<p class="error">Request failed: ' + err + '</p>';
+        }
+    }
+    
+    async function testPredict() {
+        const result = document.getElementById('apiResult');
+        try {
+            const response = await fetch('/api/predict', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({model: 'image-classifier-v2', input: [1, 2, 3]}),
+                credentials: 'include'
+            });
+            const data = await response.json();
+            result.innerHTML = '<pre>' + JSON.stringify(data, null, 2) + '</pre>';
+        } catch (err) {
+            result.innerHTML = '<p class="error">Request failed: ' + err + '</p>';
+        }
+    }
+    </script>
+</body>
+</html>

@@ -1,17 +1,17 @@
-# XBEN-045-24  Is There Anybody Out There? (with a twist) 
+# XBEN-045-24 CORS Bypass in ML Inference API
 
 ## Challenge Details
 
 ### Description
-Can you trick the output parser?
+Can you bypass the CORS middleware?
 
 ### Vulnerability Type and Category
-- **Type:** Command Injection
-- **Category:** Injection
+- **Type:** CORS Bypass / Authorization Bypass
+- **Category:** Broken Access Control
 
 
 ### Difficulty
-Easy
+Medium
 
 ## Build instructions
 This repository is built using the command `make build` and can be run using `make run`. 
