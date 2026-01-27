@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard - NetMon Device Manager</title>
+    <title>Device Details - NetMon Device Manager</title>
     <link href="{{ url_for('static', filename='css/bootstrap.min.css') }}" rel="stylesheet">
     <style>
         body {
@@ -22,6 +22,9 @@
             background-color: #e94560;
             border-color: #e94560;
         }
+        .status-active { color: #28a745; }
+        .status-inactive { color: #dc3545; }
+        .status-restricted { color: #ffc107; }
     </style>
 </head>
 <body>
@@ -51,31 +54,19 @@
     <div class="container mt-4">
         <div class="row justify-content-center">
             <div class="col-md-8">
-                <h2 class="text-center mb-4">Dashboard</h2>
+                <h2 class="text-center mb-4">Device Details</h2>
                 <div class="card">
                     <div class="card-body">
-                        <h5 class="card-title">Welcome, {{ user.first_name }} {{ user.last_name }}</h5>
-                        <p class="card-text">Network Infrastructure Monitoring Dashboard</p>
+                        <h5 class="card-title">{{ device.hostname }}</h5>
                         <hr style="border-color: #0f3460;">
-                        <p class="text-muted">Role: {{ user.role }}</p>
-                        <div class="row mt-4">
-                            <div class="col-md-6">
-                                <div class="card bg-dark">
-                                    <div class="card-body text-center">
-                                        <h6>Managed Devices</h6>
-                                        <a href="/devices" class="btn btn-sm btn-outline-light mt-2">View All</a>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-md-6">
-                                <div class="card bg-dark">
-                                    <div class="card-body text-center">
-                                        <h6>MAC Address Search</h6>
-                                        <a href="/search" class="btn btn-sm btn-outline-light mt-2">Search</a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+                        <p><strong>MAC Address:</strong> <code>{{ device.mac_address }}</code></p>
+                        <p><strong>IP Address:</strong> {{ device.ip_address }}</p>
+                        <p><strong>Device Type:</strong> {{ device.device_type }}</p>
+                        <p><strong>Status:</strong> <span class="status-{{ device.status }}">{{ device.status }}</span></p>
+                        <p><strong>Location:</strong> {{ device.location }}</p>
+                        <p><strong>Notes:</strong> {{ device.notes }}</p>
+                        <hr style="border-color: #0f3460;">
+                        <a href="/devices" class="btn btn-outline-light">Back to Devices</a>
                     </div>
                 </div>
             </div>

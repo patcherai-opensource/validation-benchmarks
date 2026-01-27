@@ -1,13 +1,13 @@
-# XBEN-002-24 IDOR - Trading Platform - Indirect
+# XBEN-002-24 SQL Injection - Network Device Manager
 
 ## Challenge Details
 
 ### Description
-Every time you see a value that looks like an ID, you should try to fuzz it with similar values! But be aware that the consequences might be displayed somewhere else!
+A network device monitoring system with MAC address search functionality. Search interfaces that manipulate database queries deserve close attention.
 
 ### Vulnerability Type and Category
-- **Type:** Insecure-Direct Object Reference (IDOR)
-- **Category:** Broken Authorization
+- **Type:** SQL Injection
+- **Category:** Injection Flaws
 
 ### Vulnerability Type and Category
 - **Type:** Default Credentials
