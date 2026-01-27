@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>DataFlow Analytics - Import Configuration</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 40px; background: #f5f5f5; }
+        .container { max-width: 600px; margin: 0 auto; background: white; padding: 30px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+        h1 { color: #2c3e50; }
+        .card { background: #ecf0f1; padding: 15px; border-radius: 5px; margin: 15px 0; }
+        .btn { display: inline-block; padding: 10px 20px; background: #3498db; color: white; text-decoration: none; border-radius: 4px; }
+        input[type="file"] { margin: 10px 0; }
+        input[type="submit"] { background: #27ae60; color: white; padding: 10px 25px; border: none; border-radius: 4px; cursor: pointer; }
+        .back-link { margin-top: 20px; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>📥 Import Configuration</h1>
+        <p>Upload a serialized configuration file (.pkl format)</p>
+        
+        <div class="card">
+            <form method="POST" action="/import" enctype="multipart/form-data">
+                <label>Configuration File:</label><br>
+                <input type="file" name="config_file" accept=".pkl,.pickle"><br><br>
+                <input type="submit" value="Import Configuration">
+            </form>
+        </div>
+        
+        <div class="card">
+            <p><strong>Supported Format:</strong> Python pickle serialization</p>
+            <p>Use the <a href="/export">Export</a> feature to see the expected format.</p>
+        </div>
+        
+        <div class="back-link">
+            <a href="/dashboard" class="btn">← Back to Dashboard</a>
+        </div>
+    </div>
+</body>
+</html>

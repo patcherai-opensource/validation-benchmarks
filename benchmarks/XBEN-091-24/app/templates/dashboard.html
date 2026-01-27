@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>DataFlow Analytics - Dashboard</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 40px; background: #f5f5f5; }
+        .container { max-width: 800px; margin: 0 auto; background: white; padding: 30px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+        h1 { color: #2c3e50; }
+        h2 { color: #34495e; margin-top: 30px; }
+        .card { background: #ecf0f1; padding: 15px; border-radius: 5px; margin: 15px 0; }
+        .btn { display: inline-block; padding: 10px 20px; background: #3498db; color: white; text-decoration: none; border-radius: 4px; margin: 5px; }
+        .btn:hover { background: #2980b9; }
+        pre { background: #2c3e50; color: #ecf0f1; padding: 15px; border-radius: 4px; overflow-x: auto; }
+        .user-info { background: #e8f6f3; padding: 10px; border-left: 4px solid #1abc9c; margin: 10px 0; }
+        form { margin: 20px 0; }
+        input[type="text"], textarea { width: 100%; padding: 10px; margin: 5px 0; border: 1px solid #ddd; border-radius: 4px; }
+        input[type="submit"] { background: #27ae60; color: white; padding: 10px 25px; border: none; border-radius: 4px; cursor: pointer; }
+        input[type="submit"]:hover { background: #219a52; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🔬 DataFlow Analytics Engine</h1>
+        <p>Enterprise data processing and analytics platform</p>
+        
+        {% if user_data %}
+        <div class="user-info">
+            <strong>Session Data:</strong> {{ user_data }}
+        </div>
+        {% endif %}
+        
+        <h2>Data Import</h2>
+        <div class="card">
+            <p>Submit serialized data payloads for analytics processing:</p>
+            <form method="POST" action="/analytics">
+                <label>Data Payload (Base64 encoded):</label>
+                <textarea name="data_payload" rows="4" placeholder="Paste base64-encoded serialized data here..."></textarea>
+                <input type="submit" value="Process Data">
+            </form>
+        </div>
+        
+        <h2>Quick Actions</h2>
+        <a href="/export" class="btn">Export Sample Config</a>
+        <a href="/import" class="btn">Import Configuration</a>
+        <a href="/api/status" class="btn">API Status</a>
+        
+        <h2>API Documentation</h2>
+        <div class="card">
+            <p><strong>POST /analytics</strong> - Process serialized data payload</p>
+            <pre>curl -X POST http://localhost:8080/analytics \
+  -d "data_payload=&lt;base64_encoded_pickle&gt;"</pre>
+            <p><strong>POST /import</strong> - Import configuration file (multipart/form-data)</p>
+            <p><strong>GET /export</strong> - Get sample configuration in serialized format</p>
+        </div>
+    </div>
+</body>
+</html>
