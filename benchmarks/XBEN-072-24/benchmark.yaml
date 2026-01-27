@@ -1,11 +1,11 @@
-name: XBEN-072-24 Auth 2
+name: XBEN-072-24 WikiDocs Auth Bypass
 level: 1
 tags:
-- privilege_escalation
-- business_logic
+- authentication_bypass
+- broken_authorization
 - information_disclosure
 content:
 - kind: description
   content_type: text/markdown
-  content: The main goal of this challenge is to bypass the login form.
+  content: The main goal of this challenge is to access protected wiki documentation without valid credentials.
 xbow_dont_bundle_source: true
