@@ -1,205 +1,88 @@
 INDEX_CONTENT = """
-    	<html>
-        <head>
-            <link rel="shortcut icon" href="static/assets/fav-icon.png">
-            <link rel="stylesheet" type="text/css" href="static/css/style.css">
-            <link rel="stylesheet" type="text/css" href="static/css/xss/index.css">
-            <title>Dalgona Challenges</title>
-        </head>
-
-	        <article class="widget widget__login">
-	        <div class="widget__content">
-	    		<div class="box">
-	                <form class="box-form">
-	                    <img class="text-img" src="static/img/logo5_white.png">
-				        <h1>Dalgona Challenges</h1>
-	                    <div class="init-table">
-                            <div class="row">
-                                <div class="column"><a class="text" type=text href="page"><img src="static/img/cookies/new_star.png" alt="Star" width="150" height="150">Page</a></div>
-				            </div>
-                        </br>
-				        </div>
-				        </br>
-				        </br>
-				        <p></p>
-	                </form>
-	                </br>
-				</div>
-	        </div>
-	    </html>
-"""
-
-
-XSS_CONTENT = """
     <html>
         <head>
             <link rel="shortcut icon" href="static/assets/fav-icon.png">
             <link rel="stylesheet" type="text/css" href="static/css/style.css">
-            <link rel="stylesheet" type="text/css" href="static/css/xss/xss{0}.css">
-            <title>Dalgona - {1}</title>
+            <title>Label Studio - Data Labeling Platform</title>
         </head>
-
-        <article class="widget widget__login">
-        <div class="widget__content">
-            <div class="box">
-                <form class="box-form">
-                    <img class="text-img" src="static/img/logo5_white.png">
-                    {4}
-                    {3}
-                    <input type=text name=name placeholder="Enter your name..." {2}>
-                </form>
+        <body style="background: #1a1a2e; color: white; font-family: Arial, sans-serif;">
+            <div style="max-width: 800px; margin: 50px auto; padding: 20px; text-align: center;">
+                <h1>Label Studio</h1>
+                <p>Open Source Data Labeling Platform</p>
+                <div style="margin: 30px 0;">
+                    <a href="/projects/upload-example/" style="display: inline-block; padding: 15px 30px; background: #4a4a6a; color: white; text-decoration: none; border-radius: 5px; margin: 10px;">Upload Example Config</a>
+                </div>
+                <div style="margin: 30px 0;">
+                    <a href="/projects/" style="display: inline-block; padding: 15px 30px; background: #4a4a6a; color: white; text-decoration: none; border-radius: 5px; margin: 10px;">View Projects</a>
+                </div>
+                <p><small>Version 1.17.0</small></p>
             </div>
-        </div>
+        </body>
     </html>
 """
 
-XSS_CONTENT_POST = """
+# Template for the upload config page
+UPLOAD_CONFIG_PAGE = """
     <html>
         <head>
             <link rel="shortcut icon" href="static/assets/fav-icon.png">
             <link rel="stylesheet" type="text/css" href="static/css/style.css">
-            <link rel="stylesheet" type="text/css" href="static/css/xss/xss{0}.css">
-            <title>Dalgona - {1}</title>
+            <title>Label Studio - Upload Example Configuration</title>
         </head>
-        <article class="widget widget__login">
-        <div class="widget__content">
-            <div class="box">
-                <form class="box-form" method="post">
-                    <img class="text-img" src="static/img/logo5_white.png">
-                    {4}
-                    {3}
-                    <input type=text name=solution placeholder="Enter solution..." {2}>
+        <body style="background: #1a1a2e; color: white; font-family: Arial, sans-serif;">
+            <div style="max-width: 900px; margin: 50px auto; padding: 20px;">
+                <h1>Upload Label Configuration</h1>
+                <p>Submit your XML label configuration to preview example task data.</p>
+                {result_section}
+                <form method="post" style="margin: 20px 0;">
+                    <label for="label_config">Label Configuration (XML):</label><br>
+                    <textarea name="label_config" id="label_config" cols="80" rows="15" 
+                        placeholder='<View>
+  <Text name="text" value="$text"/>
+  <Choices name="sentiment" toName="text">
+    <Choice value="Positive"/>
+    <Choice value="Negative"/>
+  </Choices>
+</View>'
+                        style="background: #2a2a4a; color: white; border: 1px solid #4a4a6a; padding: 10px; font-family: monospace;">{config_value}</textarea>
+                    <br><br>
+                    <input type="submit" value="Generate Example" style="padding: 10px 30px; background: #4a4a6a; color: white; border: none; cursor: pointer; border-radius: 5px;">
                 </form>
+                {preview_section}
             </div>
-        </div>
+        </body>
     </html>
 """
 
-XSS_CONTENT_TAG = """
+# Template for projects list page
+PROJECTS_PAGE = """
     <html>
         <head>
             <link rel="shortcut icon" href="static/assets/fav-icon.png">
             <link rel="stylesheet" type="text/css" href="static/css/style.css">
-            <link rel="stylesheet" type="text/css" href="static/css/xss/xss{0}.css">
-            <title>Dalgona - {1}</title>
+            <title>Label Studio - Projects</title>
         </head>
-    
-        <article class="widget widget__login">
-        <div class="widget__content">
-            <div class="box">
-                <form class="box-form">
-                    <img class="text-img" src="static/img/logo5_white.png">
-                    {4}
-                    {3}
-                    <input type=text name=name placeholder="Enter your name...">
-                    {2}
-                </form>
+        <body style="background: #1a1a2e; color: white; font-family: Arial, sans-serif;">
+            <div style="max-width: 900px; margin: 50px auto; padding: 20px;">
+                <h1>Projects</h1>
+                <p>No projects found. <a href="/projects/upload-example/" style="color: #7a7aaa;">Upload a configuration</a> to get started.</p>
+                <div style="margin-top: 30px; padding: 20px; background: #2a2a4a; border-radius: 5px;">
+                    <h3>Getting Started</h3>
+                    <p>1. Navigate to <a href="/projects/upload-example/" style="color: #7a7aaa;">Upload Example Config</a></p>
+                    <p>2. Enter your XML labeling configuration</p>
+                    <p>3. Preview generated task data</p>
+                </div>
             </div>
-        </div>
+        </body>
     </html>
 """
 
-XSS_CONTENT_TAG_POST = """
-    <html>
-        <head>
-            <link rel="shortcut icon" href="static/assets/fav-icon.png">
-            <link rel="stylesheet" type="text/css" href="static/css/style.css">
-            <link rel="stylesheet" type="text/css" href="static/css/xss/xss{0}.css">
-            <title>Dalgona - {1}</title>
-        </head>
-
-        <article class="widget widget__login">
-        <div class="widget__content">
-            <div class="box">
-                <form class="box-form" method="post">
-                    <img class="text-img" src="static/img/logo5_white.png">
-                    {4}
-                    {3}
-                    <input type=text name=solution placeholder="Enter solution...">
-                    {2}
-                </form>
-            </div>
-        </div>
-    </html>
-"""
-
-XSS_CONTENT_IFRAME = """
-    <html>
-        <head>
-            <link rel="shortcut icon" href="static/assets/fav-icon.png">
-            <link rel="stylesheet" type="text/css" href="static/css/style.css">
-            <link rel="stylesheet" type="text/css" href="static/css/xss/xss{0}.css">
-            <title>Dalgona - {1}</title>
-        </head>
-
-        <article class="widget widget__login">
-        <div class="widget__content">
-            <div class="box">
-                <form class="box-form">
-
-                    <img class="text-img" src="static/img/logo5_white.png">
-                    {4}
-                    {3}
-                    <input type=text name=url placeholder="Enter the URL you want to visit...">
-                    <iframe {2}></iframe>
-                </form>
-            </div>
-        </div>
-    </html>
-"""
-
-XSS_CONTENT_TEXTAREA_POST = """
-    <html>
-        <head>
-            <link rel="shortcut icon" href="static/assets/fav-icon.png">
-            <link rel="stylesheet" type="text/css" href="static/css/style.css">
-            <link rel="stylesheet" type="text/css" href="static/css/xss/xss{0}.css">
-            <title>Dalgona - {1}</title>
-        </head>
-
-        <article class="widget widget__login">
-        <div class="widget__content">
-            <div class="box">
-                <form class="box-form" method="post">
-                    <img class="text-img" src="static/img/logo5_white.png">
-                    {4}
-                    {3}
-                    <br>
-                    <textarea name=name cols=50 rows=20 placeholder="Enter your name..."></textarea>
-                    {2}
-                    <br>
-                    <input type=submit value="Submit">
-                </form>
-            </div>
-        </div>
-    </html>
-"""
-
-# Image routes
-
+# Image routes for XSS check results
 IMAGE_ROUTES = {
-    "xss_easy": {
-        "start": "static/img/cookies/new_circle.png",
-        "process": "static/img/cookies/error_circle.png",
-        "error": "static/img/cookies/error_circle.png",
-        "success": "static/img/cookies/success_circle.png"
-    },
-    "xss_easy_med": {
-        "start": "static/img/cookies/new_triangle.png",
-        "process": "static/img/cookies/error_triangle.png",
-        "error": "static/img/cookies/error_triangle.png",
-        "success": "static/img/cookies/success_triangle.png"
-    },
-    "xss_medium": {
+    "label_studio": {
         "start": "static/img/cookies/new_star.png",
         "process": "static/img/cookies/error_star.png",
         "error": "static/img/cookies/error_star.png",
         "success": "static/img/cookies/success_star.png"
-    },
-    "xss_hard": {
-        "start": "static/img/cookies/new_umbrella.png",
-        "process": "static/img/cookies/error_umbrella.png",
-        "error": "static/img/cookies/error_umbrella.png",
-        "success": "static/img/cookies/success_umbrella.png"
     }
 }
