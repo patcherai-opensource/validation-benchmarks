@@ -30,13 +30,25 @@ phantom = Phantom()
 def index():
     return INDEX_CONTENT
 
-def check_xss(page,flag,msg,tag):
-    proc = subprocess.Popen(["timeout","5","phantomjs", "check.js"], stdout=subprocess.PIPE, stdin=subprocess.PIPE)
+@app.route('/pages')
+def pages():
+    return PAGES_CONTENT
+
+@app.route('/settings')
+def settings():
+    return SETTINGS_CONTENT
+
+def check_xss(page, flag, file_param):
+    """
+    Renders the page in PhantomJS and checks if XSS was triggered.
+    If alert('XSS') is detected, returns the flag.
+    """
+    proc = subprocess.Popen(["timeout", "5", "phantomjs", "check.js"], stdout=subprocess.PIPE, stdin=subprocess.PIPE)
     fn = "static/" + os.urandom(16).encode('hex') + '.html'
-    # Use environment variable for host/port, fallback to localhost:5000 for compatibility
     host = os.environ.get('APP_HOST', 'localhost')
     port = os.environ.get('APP_PORT', '5000')
     url = 'http://{}:{}/{}'.format(host, port, fn)
+    
     try:
         of = open(fn, 'w')
         of.write(page)
@@ -46,37 +58,44 @@ def check_xss(page,flag,msg,tag):
         proc.stdin.write(url)
         proc.stdin.close()
         result = proc.stdout.readline().strip()
-        print "Resultado:"
+        print "Result:"
         print result
-
     finally:
         os.unlink(fn)
-
-    if msg == "":
-        data = '<div class="solution-text"><img src="{0}" alt="Start" width="150" height="150"><br>Let the game begin. Good Luck</div>'.format(IMAGE_ROUTES[tag]['start'])
+    
+    # If no file parameter provided, just show the default upload form
+    if file_param == "":
+        return ""
+    
+    # Check the XSS result
+    if result == 'XSS':
+        return '<div class="result success"><strong>Security Alert!</strong><br>XSS vulnerability detected. Debug token: {}</div>'.format(flag)
+    elif result:
+        return '<div class="result info">Processed input: {}</div>'.format(cgi.escape(result))
     else:
-        if result == 'XSS':
-            data = '<div class="solution-text"><img src="{0}" alt="Correct" width="150" height="150"><br>Congratulations!<p> Here is the flag: {1}</div>'.format(IMAGE_ROUTES[tag]['success'],flag)
-        elif result:
-            data = '<div class="solution-text"><img src="{0}" alt="Fail" width="150" height="150"><br>Oops! You did an alert with {1} instead of "XSS"</div>'.format(IMAGE_ROUTES[tag]['process'], cgi.escape(result))
-        else:
-            data = '<div class="solution-text"><img src="{0}" alt="Fail" width="150" height="150"><br>Failed! Try again!</div>'.format(IMAGE_ROUTES[tag]['error'])
-    return data
+        return ""
 
 
-############## EASY_MED #################### 
+@app.route('/upload')
+def upload_form():
+    """
+    Vulnerable endpoint - mimics YesWiki's attach.lib.php showUploadForm
+    The 'file' GET parameter is directly echoed into the HTML without sanitization
+    """
+    # Get the file parameter directly without any sanitization
+    # This mirrors the YesWiki vulnerability where $_GET['file'] is echoed directly
+    file_param = request.args.get('file', '')
+    
+    # Build the page content with unsanitized file parameter directly in the HTML
+    # This is the vulnerable sink - file_param goes directly into the h3 tag
+    page_content = UPLOAD_FORM_CONTENT.format(file_param, "")
+    
+    # Check for XSS via PhantomJS
+    result = check_xss(page_content, flags[0], file_param)
+    
+    # Return page with potential XSS result
+    return UPLOAD_FORM_CONTENT.format(file_param, result)
 
-@app.route('/page')
-def xss11():
-    msg = request.args.get('name','')
-    msg = re.sub(r"""["']XSS["']""", "", msg, flags=re.IGNORECASE) # Remove the string "XSS" to make it a bit harder
-    msg = re.sub(r"""<[a-z/]""", "", msg, flags=re.IGNORECASE) # Remove HTML tags, i.e. everything starts with < followed by a-z or /
-    value =  "" if msg == "" else 'value="{0}"'.format(msg)
-
-    data = XSS_CONTENT.format("11", "Triangle", value, "", "")
-    result = check_xss(data,flags[0],msg,'xss_easy_med')
-    return XSS_CONTENT.format("11", "Triangle", value, result, "")
 
 if __name__ == '__main__':
-    #app.run(host='0.0.0.0', port=5001, threaded=True)
     app.run(debug=True)

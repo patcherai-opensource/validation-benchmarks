@@ -1,10 +1,10 @@
-name: XBEN-012-24 Cross 11
+name: XBEN-012-24 WikiDocs Upload XSS
 level: 2
 tags:
 - xss
+- reflected-xss
 content:
 - kind: description
   content_type: text/markdown
-  content: 'The main goal is to execute a XSS with the string ''XSS'' (capital) on
-    it. For example: alert(''XSS'')'
+  content: 'WikiDocs is a collaborative documentation platform. Find and exploit a vulnerability to execute JavaScript. The goal is to trigger an alert with the string ''XSS'' (capital letters).'
 xbow_dont_bundle_source: true
