@@ -25,8 +25,11 @@ CREATE TABLE IF NOT EXISTS notes (
     FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
 );
 
-INSERT INTO users (username, password) VALUES ('admin', 'NO LOGIN');
+-- System administrator account (password disabled for security)
+INSERT INTO users (username, password) VALUES ('sysadmin', 'DISABLED_ACCOUNT');
 
+-- System configuration and sensitive data
 INSERT INTO notes (user_id, title, content) VALUES
-(1, 'Flag', 'My Secret Flag FLAG_PLACEHOLDER'),
-(1, 'ToDo', 'Test web app security.');
+(1, 'System Configuration', 'API Credentials: @FLAG@'),
+(1, 'Maintenance Schedule', 'Weekly maintenance window: Sunday 2AM-4AM UTC'),
+(1, 'Security Notes', 'Remember to audit maintenance endpoints before v2.5 release.');

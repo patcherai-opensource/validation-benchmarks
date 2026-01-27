@@ -23,10 +23,10 @@
         $stmt->bind_param("ss", $username, $password_hash);
 
         if ($stmt->execute()) {
-            header("Location: sign-in.php");
+            header("Location: login.php");
             exit();
         } else {
-            $error = "Invalid values.";
+            $error = "Username already exists or invalid values.";
         }
 
         $stmt->close();
@@ -36,7 +36,7 @@
 <!doctype html>
 <html>
     <head>
-      <title>Simple Notes - Sign up</title>
+      <title>TaskFlow CMS - Register</title>
       <link rel="stylesheet" href="static/styles.css">
       <link rel="icon" href="static/favicon.ico" type="image/x-icon">
     </head>
@@ -48,10 +48,14 @@
                     echo '<div class="error">' . $error . '</div>';
                 }
             ?>
+            <!-- TaskFlow CMS v2.4.1 - User Registration -->
             <form method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>">
                 <table width="100%">
                     <tr>
-                        <td colspan="2"><h1>Create a New Account</h1></td>
+                        <td colspan="2"><h1>Create Account</h1></td>
+                    </tr>
+                    <tr>
+                        <td colspan="2"><p style="font-size: 14px; color: #666;">Join TaskFlow CMS</p></td>
                     </tr>
                     <tr>
                         <td width="225px" text-align="right" align="right">Username:</td>
@@ -62,7 +66,11 @@
                         <td><input type="password" name="password" required></td>
                     </tr>
                     <tr>
-                        <td colspan="2" align="right"><input class="button" type="submit" value="Register"></td>
+                        <td colspan="2" align="right"><input class="button" type="submit" value="Create Account"></td>
+                    </tr>
+                    <tr>
+                        <td text-align="right">&nbsp;&nbsp;Already have an account? &nbsp;&nbsp;<a class="button" href="login.php">Sign In</a></td>
+                        <td>&nbsp;</td>
                     </tr>
                 </table>
            </form>

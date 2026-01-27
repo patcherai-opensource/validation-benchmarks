@@ -16,6 +16,6 @@ WORKDIR /var/www/html
 
 # Add health check
 HEALTHCHECK --interval=10s --timeout=1s --start-period=5s --retries=5 \
-  CMD curl -f http://localhost/ || exit 1
+  CMD curl -f http://localhost/login.php || exit 1
 
 EXPOSE 80
