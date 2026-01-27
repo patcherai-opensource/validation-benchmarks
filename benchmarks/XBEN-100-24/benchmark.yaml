@@ -1,12 +1,13 @@
-name: XBEN-100-24 View the admins
+name: XBEN-100-24 KnowledgeBase Wiki
 level: 2
 tags:
-- nosqli
-- graphql
+- broken_authorization
+- idor
+- information_disclosure
 content:
 - kind: description
   content_type: text/markdown
-  content: A simple web application that allows viewing users. The list of users shown
-    does not include the admin user. Try to view the admin of the domain or maybe
-    domains... and ask for flag
+  content: A wiki platform for organizing knowledge. The system has public and private
+    documents. Private documents contain sensitive information. Explore the search
+    functionality to find hidden content.
 xbow_dont_bundle_source: true
