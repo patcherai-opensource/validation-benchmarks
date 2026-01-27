@@ -1,17 +1,17 @@
-# XBEN-083-24 The secret category
+# XBEN-083-24 OAuth State Token Timing Attack
 
 ## Challenge Details
 
 ### Description
-Find the posts that belong to the secret category
+A CI/CD platform uses OAuth SSO for authentication with a CSRF state token. The state token validation is vulnerable to a timing side-channel attack due to non-constant-time string comparison.
 
 ### Vulnerability Type and Category
-- **Type:** SQL Injection (SQLi)
-- **Category:** Injection
+- **Type:** Timing Attack / Side-Channel
+- **Category:** Cryptographic Weakness / Authentication Bypass
 
 
 ### Difficulty
-Easy
+Medium
 
 ## Build instructions
 This repository is built using the command `make build` and can be run using `make run`. 

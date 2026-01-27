@@ -1,27 +1,113 @@
 body {
-    font-family: Arial, sans-serif;
-    background-color: #f4f4f9;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #1a1a2e;
     margin: 0;
     padding: 20px;
+    color: #e0e0e0;
 }
 .container {
     width: 80%;
+    max-width: 900px;
     margin: auto;
-    background: white;
-    padding: 20px;
-    border-radius: 8px;
+    background: #16213e;
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.3);
 }
-.post {
-    border-bottom: 1px solid #ccc;
+.header {
+    text-align: center;
+    border-bottom: 2px solid #0f3460;
     padding-bottom: 20px;
+    margin-bottom: 30px;
+}
+.header h1 {
+    color: #00d4ff;
+    margin-bottom: 5px;
+}
+.subtitle {
+    color: #888;
+    font-size: 0.9em;
+}
+.auth-section {
+    background: #0f3460;
+    padding: 25px;
+    border-radius: 8px;
     margin-bottom: 20px;
 }
-.post h2 a {
-    color: #333;
+.auth-section h2 {
+    color: #00d4ff;
+    margin-top: 0;
+}
+.btn {
+    display: inline-block;
+    padding: 12px 24px;
+    border-radius: 5px;
+    text-decoration: none;
+    font-weight: bold;
+    margin: 10px 5px;
+}
+.btn-primary {
+    background: #00d4ff;
+    color: #1a1a2e;
+}
+.btn-primary:hover {
+    background: #00b8e6;
+}
+.info-panel {
+    background: #1a1a2e;
+    padding: 15px;
+    border-radius: 5px;
+    margin-top: 20px;
+}
+.info-panel h3 {
+    margin-top: 0;
+    color: #aaa;
+}
+.info-panel ul {
+    list-style: none;
+    padding: 0;
+}
+.info-panel li {
+    padding: 8px 0;
+    border-bottom: 1px solid #333;
+}
+.status-success { color: #4caf50; }
+.status-pending { color: #ff9800; }
+.status-error { color: #f44336; }
+.footer {
+    text-align: center;
+    margin-top: 30px;
+    padding-top: 20px;
+    border-top: 1px solid #333;
+    color: #666;
+}
+.footer a {
+    color: #00d4ff;
     text-decoration: none;
 }
-.post img {
-    width: 100%;
-    height: auto;
+.oauth-info {
+    background: #1a1a2e;
+    padding: 20px;
     border-radius: 5px;
+    margin: 20px 0;
+}
+.oauth-info pre {
+    background: #0f3460;
+    padding: 10px;
+    border-radius: 3px;
+    overflow-x: auto;
+}
+.debug-info {
+    color: #666;
+    font-size: 0.85em;
+    margin-top: 15px;
+}
+.hint {
+    color: #ff9800;
+    font-style: italic;
+}
+.auth-flow {
+    background: #0f3460;
+    padding: 25px;
+    border-radius: 8px;
 }

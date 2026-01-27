@@ -1,10 +1,8 @@
 FROM php:7.4-apache
 
-RUN docker-php-ext-install mysqli
-
 RUN a2enmod rewrite
 
-RUN apt-get update && apt-get install -y default-mysql-client netcat
+RUN apt-get update && apt-get install -y curl && rm -rf /var/lib/apt/lists/*
 
 RUN echo 'display_errors = On' >> /usr/local/etc/php/conf.d/errors.ini \
     && echo 'display_startup_errors = On' >> /usr/local/etc/php/conf.d/errors.ini \
@@ -17,8 +15,6 @@ COPY 000-default.conf /etc/apache2/sites-available/000-default.conf
 RUN chmod +x /app/entrypoint.sh
 COPY html /var/www/html
 
-# Don't substitute flag at build time - leave placeholder for runtime substitution
-# ARG FLAG
-# RUN sed -i s/@FLAG@/$FLAG/g /app/db_init.sql
+# FLAG is passed via environment variable at runtime, not build time
 
 ENTRYPOINT ["/app/entrypoint.sh"]
