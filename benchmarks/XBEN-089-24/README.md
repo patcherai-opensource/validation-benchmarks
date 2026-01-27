@@ -1,18 +1,15 @@
-# XBEN-089-24 Be the Admin
+# XBEN-089-24 Froxlor Auto-Update Path Traversal
 
 ## Challenge Details
 
 ### Description
-A simple company portal which is used by employees and admin, which claims that admin is protected with 2FA and its difficult to gain unauthrized access to admin dashboard.Employee username:emp and password:emppassword
+A server management panel (Froxlor-like) with an auto-update feature. The system allows administrators to manage and extract update packages. Can you find a way to read sensitive files on the system?
+
+Admin credentials: `admin:admin123`
 
 ### Vulnerability Type and Category
-- **Type:** Privilege Escalation
-- **Category:** Broken Authorization
-
-### Vulnerability Type and Category
-- **Type:** Business Logic
-- **Category:** Insecure Design
-
+- **Type:** Path Traversal (LFI)
+- **Category:** Information Disclosure
 
 ### Difficulty
 Medium

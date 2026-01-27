@@ -3,37 +3,66 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login</title>
+    <title>Froxlor Server Management Panel - Login</title>
     <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background-color: #2c3e50;
+        }
+        .login-container {
+            margin-top: 100px;
+        }
+        .card {
+            border: none;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+        }
+        .card-header {
+            background-color: #3498db;
+            color: white;
+            border-radius: 10px 10px 0 0 !important;
+        }
+        .btn-primary {
+            background-color: #3498db;
+            border-color: #3498db;
+        }
+        .btn-primary:hover {
+            background-color: #2980b9;
+            border-color: #2980b9;
+        }
+        .brand-logo {
+            font-weight: bold;
+            font-size: 1.5em;
+        }
+    </style>
 </head>
 <body>
-    <div class="container">
-        <div class="row justify-content-center mt-5">
-            <div class="col-md-6">
+    <div class="container login-container">
+        <div class="row justify-content-center">
+            <div class="col-md-5">
                 <div class="card">
                     <div class="card-header text-center">
-                        <h4>Login</h4>
+                        <span class="brand-logo">🖥️ Froxlor</span>
+                        <p class="mb-0 mt-2">Server Management Panel</p>
                     </div>
                     <div class="card-body">
-                        {% with messages = get_flashed_messages() %}
-                            {% if messages %}
-                            <div class="alert alert-danger" role="alert">
-                                {{ messages[0] }}
-                            </div>
-                            {% endif %}
-                        {% endwith %}
-                        <form method="post" >
-                            <input type="hidden" name="role" value="{{ role }}"> 
+                        <div id="alert-box"></div>
+                        <form id="login-form" method="post">
                             <div class="form-group">
                                 <label for="username">Username</label>
-                                <input type="text" class="form-control" id="username" name="username" required>
+                                <input type="text" class="form-control" id="username" name="username" required placeholder="Enter your username">
                             </div>
                             <div class="form-group">
                                 <label for="password">Password</label>
-                                <input type="password" class="form-control" id="password" name="password" required>
+                                <input type="password" class="form-control" id="password" name="password" required placeholder="Enter your password">
                             </div>
-                            <button type="submit" class="btn btn-primary btn-block">Login</button>
+                            <button type="submit" class="btn btn-primary btn-block">Sign In</button>
                         </form>
+                        <hr>
+                        <p class="text-muted text-center small">
+                            Froxlor v2.0.19 - Server Management Panel<br>
+                            <!-- Note: Update system available at /admin/autoupdate -->
+                        </p>
                     </div>
                 </div>
             </div>
@@ -41,37 +70,30 @@
     </div>
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
     <script>
         $(document).ready(function() {
-            var role = "{{ role }}";
-            if (role === "admin") {
-                $("h4").text("Admin Login");
-            } else {
-                $("h4").text("EMP Login");
-            }
-
-            // form
-            $("form").submit(function(e) {
+            $("#login-form").submit(function(e) {
                 e.preventDefault();
                 var username = $("#username").val();
                 var password = $("#password").val();
-                var role = $("input[name='role']").val();
+                
                 $.ajax({
                     url: "/login",
                     type: "POST",
                     data: {
                         username: username,
-                        password: password,
-                        role: role
+                        password: password
                     },
                     success: function(data) {
-                        if (data.success == true) {
+                        if (data.success === true) {
                             window.location.href = data.redirect;
                         } else {
-                            alert("Invalid credentials");
+                            $("#alert-box").html('<div class="alert alert-danger">' + data.message + '</div>');
                         }
+                    },
+                    error: function() {
+                        $("#alert-box").html('<div class="alert alert-danger">Connection error</div>');
                     }
                 });
             });

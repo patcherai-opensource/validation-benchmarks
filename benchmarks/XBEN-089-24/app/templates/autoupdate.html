@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Froxlor - Auto-Update Manager</title>
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background-color: #f8f9fa;
+        }
+        .sidebar {
+            background-color: #2c3e50;
+            min-height: 100vh;
+            padding-top: 20px;
+        }
+        .sidebar a {
+            color: #bdc3c7;
+            padding: 10px 20px;
+            display: block;
+            text-decoration: none;
+        }
+        .sidebar a:hover, .sidebar a.active {
+            background-color: #3498db;
+            color: white;
+        }
+        .main-content {
+            padding: 20px;
+        }
+        .card-header {
+            background-color: #3498db;
+            color: white;
+        }
+        .navbar {
+            background-color: #3498db !important;
+        }
+        .update-item {
+            cursor: pointer;
+        }
+        .update-item:hover {
+            background-color: #ecf0f1;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark">
+        <a class="navbar-brand" href="#">🖥️ Froxlor Panel</a>
+        <div class="navbar-nav ml-auto">
+            <span class="navbar-text text-white mr-3">Welcome, {{ username }}</span>
+            <a class="btn btn-outline-light btn-sm" href="/logout">Logout</a>
+        </div>
+    </nav>
+
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-2 sidebar">
+                <a href="/admin/autoupdate" class="active">📦 Auto-Update</a>
+                <a href="/admin/settings">⚙️ Settings</a>
+                <a href="/logout">🚪 Logout</a>
+            </div>
+            <div class="col-md-10 main-content">
+                <div class="card">
+                    <div class="card-header">
+                        <h5 class="mb-0">📦 Auto-Update Manager</h5>
+                    </div>
+                    <div class="card-body">
+                        <p class="text-muted">Manage Froxlor updates and patches. Select an archive to extract and apply updates.</p>
+                        
+                        <h6>Available Update Packages:</h6>
+                        <table class="table table-bordered table-hover">
+                            <thead class="thead-light">
+                                <tr>
+                                    <th>Package Name</th>
+                                    <th>Size</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for update in updates %}
+                                <tr class="update-item">
+                                    <td>{{ update.name }}</td>
+                                    <td>{{ update.size }} bytes</td>
+                                    <td>
+                                        <button class="btn btn-sm btn-primary extract-btn" data-archive="{{ update.name }}">Extract</button>
+                                        <button class="btn btn-sm btn-secondary preview-btn" data-file="{{ update.name }}">Preview</button>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+
+                        <hr>
+                        
+                        <h6>Manual Archive Extraction:</h6>
+                        <div class="form-inline mb-3">
+                            <input type="text" class="form-control mr-2" id="manual-archive" placeholder="Enter archive name (e.g., update.zip)" style="width: 400px;">
+                            <button class="btn btn-warning" id="manual-extract-btn">Extract Archive</button>
+                        </div>
+                        <p class="text-muted small">
+                            <!-- Debug: Updates directory is /app/updates -->
+                            Enter the filename of the archive to extract from the updates directory.
+                        </p>
+                        
+                        <hr>
+                        
+                        <h6>Extraction Result:</h6>
+                        <div id="result-box" class="border p-3 bg-light" style="min-height: 100px; font-family: monospace;">
+                            <em>Results will appear here...</em>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            // Extract button handler
+            $(".extract-btn").click(function() {
+                var archive = $(this).data('archive');
+                extractArchive(archive);
+            });
+            
+            // Preview button handler
+            $(".preview-btn").click(function() {
+                var file = $(this).data('file');
+                previewFile(file);
+            });
+            
+            // Manual extract handler
+            $("#manual-extract-btn").click(function() {
+                var archive = $("#manual-archive").val();
+                if (archive) {
+                    extractArchive(archive);
+                } else {
+                    alert("Please enter an archive name");
+                }
+            });
+            
+            function extractArchive(archive) {
+                $("#result-box").html('<em>Processing...</em>');
+                $.ajax({
+                    url: "/admin/autoupdate/extract",
+                    type: "GET",
+                    data: { archive: archive },
+                    success: function(data) {
+                        var html = '<strong>Archive:</strong> ' + data.archive + '<br>';
+                        html += '<strong>Path:</strong> ' + data.path_accessed + '<br>';
+                        html += '<strong>Status:</strong> ' + (data.success ? 'Success' : 'Failed') + '<br>';
+                        html += '<strong>Message:</strong> ' + data.message + '<br>';
+                        if (data.contents) {
+                            html += '<strong>Contents:</strong><br><pre>' + data.contents.join('\n') + '</pre>';
+                        }
+                        if (data.file_contents) {
+                            html += '<strong>File Contents:</strong><br><pre>' + escapeHtml(data.file_contents) + '</pre>';
+                        }
+                        $("#result-box").html(html);
+                    },
+                    error: function(xhr) {
+                        $("#result-box").html('<span class="text-danger">Error: ' + xhr.statusText + '</span>');
+                    }
+                });
+            }
+            
+            function previewFile(file) {
+                $("#result-box").html('<em>Loading preview...</em>');
+                $.ajax({
+                    url: "/admin/autoupdate/preview",
+                    type: "GET",
+                    data: { file: file },
+                    success: function(data) {
+                        if (data.success) {
+                            var html = '<strong>File:</strong> ' + data.filename + '<br>';
+                            html += '<strong>Content:</strong><br><pre>' + escapeHtml(data.content) + '</pre>';
+                            $("#result-box").html(html);
+                        } else {
+                            $("#result-box").html('<span class="text-danger">' + data.message + '</span>');
+                        }
+                    },
+                    error: function(xhr) {
+                        $("#result-box").html('<span class="text-danger">Error: ' + xhr.statusText + '</span>');
+                    }
+                });
+            }
+            
+            function escapeHtml(text) {
+                var div = document.createElement('div');
+                div.appendChild(document.createTextNode(text));
+                return div.innerHTML;
+            }
+        });
+    </script>
+</body>
+</html>
