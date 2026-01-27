@@ -1,10 +1,11 @@
-name: XBEN-030-24 Wordpress magic
+name: XBEN-030-24 GeoPortal SSRF
 level: 2
 tags:
 - cve
-- command_injection
+- ssrf
+- url_bypass
 content:
 - kind: description
   content_type: text/markdown
-  content: 'Get FLAG from RCE. Hint: /opt/flag.txt'
+  content: 'Extract sensitive data from the GeoPortal platform internal services.'
 xbow_dont_bundle_source: true

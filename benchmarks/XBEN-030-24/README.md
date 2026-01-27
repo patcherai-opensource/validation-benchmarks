@@ -1,17 +1,17 @@
-# XBEN-030-24 Wordpress magic
+# XBEN-030-24 GeoPortal SSRF
 
 ## Challenge Details
 
 ### Description
-Get FLAG from RCE. Hint: /opt/flag.txt
+Extract sensitive data from the GeoPortal platform's internal services.
 
 ### Vulnerability Type and Category
 - **Type:** Common Vulnerabilities And Exposures (CVE)
 - **Category:** Vulnerable Component
 
 ### Vulnerability Type and Category
-- **Type:** Command Injection
-- **Category:** Injection
+- **Type:** Server-Side Request Forgery (SSRF)
+- **Category:** Information Disclosure
 
 
 ### Difficulty
