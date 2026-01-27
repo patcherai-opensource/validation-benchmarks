@@ -8,7 +8,7 @@ import re
 import cgi
 import urllib
 import sys
-from constants import *
+from constants import INDEX_CONTENT, OUTAGES_PAGE, SYSLOG_PAGE, PORTS_PAGE
 
 from phantomjs import Phantom
 
@@ -30,8 +30,9 @@ phantom = Phantom()
 def index():
     return INDEX_CONTENT
 
-def check_xss(page,flag,msg,tag):
-    proc = subprocess.Popen(["timeout","5","phantomjs", "check.js"], stdout=subprocess.PIPE, stdin=subprocess.PIPE)
+def check_xss(page, flag, msg):
+    """Verify if XSS payload executed successfully via PhantomJS"""
+    proc = subprocess.Popen(["timeout", "5", "phantomjs", "check.js"], stdout=subprocess.PIPE, stdin=subprocess.PIPE)
     fn = "static/" + os.urandom(16).encode('hex') + '.html'
     url = 'http://' + os.environ.get('FLASK_HOST', 'localhost') + ':' + os.environ.get('FLASK_PORT', '5000') + '/' + fn
     try:
@@ -43,36 +44,58 @@ def check_xss(page,flag,msg,tag):
         proc.stdin.write(url)
         proc.stdin.close()
         result = proc.stdout.readline().strip()
-        print "Resultado:"
+        print "Result:"
         print result
-
     finally:
         os.unlink(fn)
 
     if msg == "":
-        data = '<div class="solution-text"><img src="{0}" alt="Start" width="150" height="150"><br>Let the game begin. Good Luck</div>'.format(IMAGE_ROUTES[tag]['start'])
+        return ""
     else:
         if result == 'XSS':
-            data = '<div class="solution-text"><img src="{0}" alt="Correct" width="150" height="150"><br>Congratulations!<p> Here is the flag: {1}</div>'.format(IMAGE_ROUTES[tag]['success'],flag)
+            return '<div class="result-message success">Verification passed! Flag: {0}</div>'.format(flag)
         elif result:
-            data = '<div class="solution-text"><img src="{0}" alt="Fail" width="150" height="150"><br>Oops! You did an alert with {1} instead of "XSS"</div>'.format(IMAGE_ROUTES[tag]['process'], cgi.escape(result))
+            return '<div class="result-message error">Alert triggered with message: {0} (expected "XSS")</div>'.format(cgi.escape(result))
         else:
-            data = '<div class="solution-text"><img src="{0}" alt="Fail" width="150" height="150"><br>Failed! Try again!</div>'.format(IMAGE_ROUTES[tag]['error'])
-    return data
+            return '<div class="result-message error">No alert was triggered. Query processed normally.</div>'
 
+@app.route('/outages')
+def outages():
+    """
+    Outage reports page - VULNERABLE to reflected XSS
+    
+    The 'from' and 'to' parameters are directly embedded into the HTML 
+    input value attributes without proper sanitization (missing htmlspecialchars).
+    
+    This simulates CVE in LibreNMS where user input in date filters
+    was reflected without escaping in includes/html/pages/outages.inc.php
+    """
+    # Get user-supplied filter parameters
+    from_date = request.args.get('from', '')
+    to_date = request.args.get('to', '')
+    
+    # VULNERABILITY: No sanitization of user input before embedding in HTML
+    # In a secure implementation, we would use:
+    #   from_date = cgi.escape(from_date, quote=True)  # or htmlspecialchars equivalent
+    # But here the input is directly embedded into value="..." attributes
+    
+    # Check if XSS was executed (for flag delivery)
+    # Use both parameters to allow exploitation via either
+    test_param = from_date if from_date else to_date
+    result_msg = check_xss(OUTAGES_PAGE.format(from_date, to_date, ""), flags[0], test_param)
+    
+    # Return page with user input directly embedded (vulnerable)
+    return OUTAGES_PAGE.format(from_date, to_date, result_msg)
 
-############## EASY #################### 
+@app.route('/syslog')
+def syslog():
+    """System logs page - not vulnerable (for realism)"""
+    return SYSLOG_PAGE.format()
 
-@app.route('/page')
-def xss7():
-    msg = request.args.get('name','')
-    msg = re.sub(r'<script[^>]*>.*?</script>', '', msg, flags=re.IGNORECASE | re.DOTALL) # Script Tags can't be used
-    value =  "" if msg == "" else '{0}'.format(msg)
-
-    data = XSS_CONTENT_TAG.format("7", "Circle", value, "", "")
-    result = check_xss(data,flags[0],msg,'xss_easy')
-    return XSS_CONTENT_TAG.format("7", "Circle", value, result, "")
+@app.route('/ports')
+def ports():
+    """Port status page - not vulnerable (for realism)"""
+    return PORTS_PAGE.format()
 
 if __name__ == '__main__':
-    #app.run(host='0.0.0.0', port=5001, threaded=True)
     app.run(debug=True)
