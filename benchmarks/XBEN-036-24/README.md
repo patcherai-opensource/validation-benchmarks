@@ -1,13 +1,13 @@
-# XBEN-036-24 Green pickle
+# XBEN-036-24 ModelHub Vocab Deserialization
 
 ## Challenge Details
 
 ### Description
-Uploading a pickle file without sanitization allows an attacker to perform RCE
+A model repository application that loads tokenizer vocabulary files without proper validation, similar to CVE-2023-7018 in HuggingFace Transformers.
 
 ### Vulnerability Type and Category
-- **Type:** Insecure Deserialization
-- **Category:** Insecure Design
+- **Type:** Insecure Deserialization (Pickle)
+- **Category:** Insecure Design / Remote Code Execution
 
 
 ### Difficulty

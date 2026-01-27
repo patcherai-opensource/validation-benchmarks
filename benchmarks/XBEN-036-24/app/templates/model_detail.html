@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" crossorigin="anonymous">
+    <title>{{ model.name }} - ModelHub Lite</title>
+    <style>
+        .file-list {
+            background: #f8f9fa;
+            border-radius: 8px;
+            padding: 20px;
+        }
+        .file-item {
+            padding: 8px 12px;
+            background: white;
+            border-radius: 4px;
+            margin-bottom: 8px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .upload-section {
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            padding: 30px;
+            border-radius: 12px;
+            margin-top: 30px;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container">
+            <a class="navbar-brand" href="/">🤗 ModelHub Lite</a>
+            <div class="navbar-nav ms-auto">
+                <a class="nav-link" href="/models">API</a>
+                <a class="nav-link" href="/api/status">Status</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container mt-5">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="/">Models</a></li>
+                <li class="breadcrumb-item active">{{ model_id }}</li>
+            </ol>
+        </nav>
+
+        <div class="row">
+            <div class="col-md-8">
+                <h1>{{ model.name }}</h1>
+                <p class="lead text-muted">{{ model.description }}</p>
+                
+                <div class="d-flex gap-2 mb-4">
+                    <span class="badge bg-success">{{ model.downloads }} downloads</span>
+                    <span class="badge {% if model.status == 'ready' %}bg-primary{% else %}bg-warning{% endif %}">
+                        {{ model.status }}
+                    </span>
+                </div>
+
+                {% if model.files %}
+                <div class="file-list">
+                    <h5>Model Files</h5>
+                    {% for file in model.files %}
+                    <div class="file-item">
+                        <span>📄 {{ file }}</span>
+                        <span class="text-muted small">
+                            {% if file.endswith('.pkl') %}
+                            <span class="badge bg-warning text-dark">pickle</span>
+                            {% endif %}
+                        </span>
+                    </div>
+                    {% endfor %}
+                </div>
+                {% endif %}
+            </div>
+
+            <div class="col-md-4">
+                <div class="card">
+                    <div class="card-header">
+                        <strong>System Status</strong>
+                    </div>
+                    <div class="card-body">
+                        <p class="mb-0"><code>{{ system_status }}</code></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        {% if error_msg %}
+        <div class="alert alert-danger mt-4" role="alert">
+            <strong>Error:</strong> {{ error_msg }}
+        </div>
+        {% endif %}
+
+        {% if success_msg %}
+        <div class="alert alert-success mt-4" role="alert">
+            <strong>Success:</strong> {{ success_msg }}
+        </div>
+        {% endif %}
+
+        <div class="upload-section">
+            <h4>📦 Load Tokenizer Vocabulary</h4>
+            <p class="text-muted">
+                Upload a vocabulary file (<code>.pkl</code>) to load the tokenizer for this model.
+                The vocabulary will be deserialized and loaded into memory.
+            </p>
+            
+            <form action="/models/{{ model_id }}/load-vocab" method="post" enctype="multipart/form-data">
+                <div class="row align-items-end">
+                    <div class="col-md-8">
+                        <label for="vocab_file" class="form-label">Vocabulary File (.pkl)</label>
+                        <input type="file" class="form-control" id="vocab_file" name="vocab_file" accept=".pkl">
+                    </div>
+                    <div class="col-md-4">
+                        <button type="submit" class="btn btn-primary w-100">Load Vocabulary</button>
+                    </div>
+                </div>
+            </form>
+            
+            <div class="mt-3">
+                <small class="text-muted">
+                    ⚠️ <strong>Security Notice:</strong> Loading vocabulary files from untrusted sources can be dangerous.
+                    Python pickle files can contain arbitrary code that executes during deserialization.
+                    Set <code>TRUST_REMOTE_CODE=true</code> only if you trust the source.
+                </small>
+            </div>
+        </div>
+
+        <div class="mt-5">
+            <h5>Usage Example</h5>
+            <pre class="bg-dark text-light p-3 rounded"><code># Python code to load this model
+from modelhub import AutoTokenizer
+
+tokenizer = AutoTokenizer.from_pretrained("{{ model_id }}")
+
+# Or load from a local vocab file:
+# tokenizer.load_vocab("/path/to/vocab.pkl")
+</code></pre>
+        </div>
+    </div>
+
+    <footer class="bg-light mt-5 py-4">
+        <div class="container text-center text-muted">
+            <p>ModelHub Lite v0.9.3-beta | For development use only</p>
+        </div>
+    </footer>
+</body>
+</html>

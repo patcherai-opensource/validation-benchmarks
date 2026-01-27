@@ -1,1 +1,1 @@
-this is just the decoy
+MODEL_STATUS: initialized | vocab_loaded: false | cache_ready: true
