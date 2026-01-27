@@ -1,16 +1,68 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Ping Tool</title>
+    <title>RaspAP - WireGuard Configuration</title>
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles.css') }}">
 </head>
 <body>
-    <div class="container">
-        <h1>Ping Tool</h1>
-        <form action="/ping" method="post">
-            <input type="text" name="ip_address" placeholder="Enter IP Address" required>
-            <button type="submit">Ping</button>
-        </form>
+    <div class="header">
+        <div class="logo">RaspAP</div>
+        <div class="nav">
+            <a href="#" class="active">WireGuard</a>
+            <a href="#">Hotspot</a>
+            <a href="#">DHCP Server</a>
+            <a href="#">Networking</a>
+            <a href="#">System</a>
+        </div>
     </div>
+    <div class="container">
+        <div class="card">
+            <h2><span class="icon">🔐</span> WireGuard Key Generator</h2>
+            <p class="description">Generate WireGuard keypairs for VPN tunnel configuration. Enter the interface entity name to generate public/private keypairs.</p>
+            
+            <form id="wgKeyForm" action="/ajax/networking/get_wgkey" method="post">
+                <div class="form-group">
+                    <label for="entity">Interface Entity Name:</label>
+                    <input type="text" name="entity" id="entity" placeholder="e.g., wg0, client1, peer0" required>
+                    <small>Specify the WireGuard interface or peer identifier</small>
+                </div>
+                <button type="submit" class="btn-primary">Generate Keys</button>
+            </form>
+        </div>
+        
+        <div class="card info-card">
+            <h3>ℹ️ WireGuard Configuration</h3>
+            <ul>
+                <li><strong>Public Key:</strong> Share with peers for tunnel establishment</li>
+                <li><strong>Private Key:</strong> Keep secure, never share</li>
+                <li><strong>Entity:</strong> Interface identifier (wg0, wg1, etc.)</li>
+            </ul>
+            <p class="version-info">RaspAP v2.8.0 | WireGuard Tools</p>
+        </div>
+    </div>
+    
+    <script>
+        // Client-side form handling
+        document.getElementById('wgKeyForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const formData = new FormData(this);
+            
+            fetch('/ajax/networking/get_wgkey', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.status === 'success') {
+                    alert('Keys generated for entity: ' + data.entity + '\n\nPublic Key: ' + data.public_key + '\n\nPrivate Key: ' + data.private_key);
+                } else {
+                    alert('Error: ' + data.message);
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+        });
+    </script>
 </body>
 </html>
