@@ -3,111 +3,432 @@
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-    font-family: 'Arial', sans-serif;
+    font-family: 'Segoe UI', 'Arial', sans-serif;
 }
 
 /* Body styling */
 body {
-    background-color: #f4f4f4;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    height: 100vh;
+    background-color: #f5f5f5;
+    min-height: 100vh;
     margin: 0;
 }
 
-/* Container styling */
-.container, .dashboard-container {
-    max-width: 800px;
-    width: 100%;
-    margin: 20px auto;
-    padding: 20px;
-    background: #fff;
-    box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
-    border-radius: 8px;
-    text-align: center;
+body.login-page {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(135deg, #1a237e 0%, #3f51b5 100%);
 }
 
-/* Headings */
-h2, h3 {
-    color: #444;
+body.dashboard-page {
+    display: flex;
+    flex-direction: column;
+}
+
+/* Login Styles */
+.login-container {
+    width: 100%;
+    max-width: 420px;
+    padding: 20px;
+}
+
+.logo-section {
+    text-align: center;
+    margin-bottom: 30px;
+    color: white;
+}
+
+.brand {
+    font-size: 32px;
+    font-weight: 300;
+    letter-spacing: 2px;
+}
+
+.tagline {
+    font-size: 14px;
+    opacity: 0.8;
+    margin-top: 5px;
+}
+
+.login-box {
+    background: white;
+    padding: 40px;
+    border-radius: 8px;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+}
+
+.login-box h2 {
+    color: #333;
+    margin-bottom: 5px;
+    font-weight: 500;
+}
+
+.login-subtitle {
+    color: #666;
+    font-size: 14px;
+    margin-bottom: 25px;
+}
+
+.error-message {
+    background: #ffebee;
+    color: #c62828;
+    padding: 12px;
+    border-radius: 4px;
+    margin-bottom: 20px;
+    font-size: 14px;
+    border-left: 4px solid #c62828;
+}
+
+.form-group {
     margin-bottom: 20px;
 }
 
-/* Form styling */
-form {
-    display: flex;
-    flex-direction: column;
-    gap: 15px;
-}
-
-label {
+.form-group label {
     display: block;
-    margin-bottom: 5px;
-    font-weight: bold;
+    margin-bottom: 8px;
+    color: #555;
+    font-weight: 500;
+    font-size: 14px;
 }
 
-input[type="text"],
-input[type="password"] {
+.form-group input {
     width: 100%;
-    padding: 10px;
-    border: 1px solid #ccc;
+    padding: 12px 15px;
+    border: 1px solid #ddd;
     border-radius: 4px;
+    font-size: 14px;
+    transition: border-color 0.3s;
 }
 
-button {
+.form-group input:focus {
+    outline: none;
+    border-color: #3f51b5;
+}
+
+.btn-login {
     width: 100%;
-    padding: 10px;
-    background: #007bff;
+    padding: 14px;
+    background: #3f51b5;
     border: none;
     color: white;
     font-size: 16px;
     border-radius: 4px;
     cursor: pointer;
-    transition: background 0.3s ease;
+    transition: background 0.3s;
+    font-weight: 500;
 }
 
-button:hover {
-    background: #0056b3;
+.btn-login:hover {
+    background: #303f9f;
 }
 
-/* Info boxes */
-.info-box {
-    background: #f9f9f9;
-    padding: 20px;
+.login-footer {
+    margin-top: 25px;
+    text-align: center;
+}
+
+.version-info {
+    color: #999;
+    font-size: 12px;
+}
+
+/* Admin Header */
+.admin-header {
+    background: #1a237e;
+    color: white;
+    padding: 0 20px;
+    height: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.header-brand h1 {
+    font-size: 20px;
+    font-weight: 400;
+    letter-spacing: 1px;
+}
+
+.header-nav {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+.user-info {
+    font-size: 14px;
+    opacity: 0.9;
+}
+
+.logout-link {
+    color: white;
+    text-decoration: none;
+    font-size: 14px;
+    opacity: 0.8;
+    transition: opacity 0.3s;
+}
+
+.logout-link:hover {
+    opacity: 1;
+}
+
+/* Admin Container */
+.admin-container {
+    display: flex;
+    flex: 1;
+    min-height: calc(100vh - 110px);
+}
+
+/* Sidebar */
+.sidebar {
+    width: 220px;
+    background: #263238;
+    padding: 20px 0;
+}
+
+.sidebar-nav {
+    display: flex;
+    flex-direction: column;
+}
+
+.nav-item {
+    color: #b0bec5;
+    text-decoration: none;
+    padding: 12px 25px;
+    font-size: 14px;
+    transition: all 0.3s;
+    display: block;
+}
+
+.nav-item:hover, .nav-item.active {
+    background: #37474f;
+    color: white;
+}
+
+/* Content Area */
+.content-area {
+    flex: 1;
+    padding: 25px;
+    background: #fafafa;
+}
+
+.content-header h2 {
+    color: #333;
+    font-weight: 500;
+    margin-bottom: 5px;
+}
+
+.breadcrumb {
+    color: #888;
+    font-size: 13px;
     margin-bottom: 20px;
+}
+
+.content-toolbar {
+    margin-bottom: 20px;
+    display: flex;
+    gap: 10px;
+}
+
+.btn {
+    padding: 10px 20px;
+    border: 1px solid #ddd;
+    background: white;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: all 0.3s;
+}
+
+.btn:hover {
+    background: #f5f5f5;
+}
+
+.btn-primary {
+    background: #3f51b5;
+    color: white;
+    border-color: #3f51b5;
+}
+
+.btn-primary:hover {
+    background: #303f9f;
+}
+
+.btn-small {
+    padding: 5px 10px;
+    font-size: 12px;
+    border: 1px solid #ddd;
+    background: white;
+    border-radius: 3px;
+    cursor: pointer;
+    margin-right: 5px;
+}
+
+.btn-small:hover {
+    background: #f5f5f5;
+}
+
+/* Content Table */
+.content-table {
+    width: 100%;
+    background: white;
+    border-collapse: collapse;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+}
+
+.content-table th, .content-table td {
+    padding: 14px 16px;
+    text-align: left;
+    border-bottom: 1px solid #eee;
+}
+
+.content-table th {
+    background: #f5f5f5;
+    font-weight: 600;
+    color: #555;
+    font-size: 13px;
+    text-transform: uppercase;
+}
+
+.content-table td {
+    color: #333;
+    font-size: 14px;
+}
+
+.status-badge {
+    padding: 4px 10px;
+    border-radius: 12px;
+    font-size: 12px;
+    font-weight: 500;
+}
+
+.status-published {
+    background: #e8f5e9;
+    color: #2e7d32;
+}
+
+.status-draft {
+    background: #fff3e0;
+    color: #ef6c00;
+}
+
+/* Modal */
+.modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+}
+
+.modal-content {
+    background: white;
+    width: 90%;
+    max-width: 700px;
+    border-radius: 8px;
+    overflow: hidden;
+    max-height: 90vh;
+    overflow-y: auto;
+}
+
+.modal-header {
+    padding: 20px;
+    background: #f5f5f5;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid #ddd;
+}
+
+.modal-header h3 {
+    margin: 0;
+    color: #333;
+}
+
+.close-btn {
+    background: none;
+    border: none;
+    font-size: 24px;
+    cursor: pointer;
+    color: #666;
+    width: auto;
+    padding: 0;
+}
+
+.modal-body {
+    padding: 20px;
+}
+
+.modal-footer {
+    padding: 15px 20px;
+    background: #f5f5f5;
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    border-top: 1px solid #ddd;
+}
+
+.richtext-editor {
+    width: 100%;
+    font-family: 'Consolas', 'Monaco', monospace;
+    font-size: 13px;
+    padding: 12px;
     border: 1px solid #ddd;
     border-radius: 4px;
-    text-align: left;
+    resize: vertical;
 }
 
-.info-box h3 {
+.help-text {
+    color: #888;
+    font-size: 12px;
+    margin-top: 8px;
+}
+
+.processing-result {
+    margin-top: 15px;
+    padding: 15px;
+    background: #f5f5f5;
+    border-radius: 4px;
+}
+
+.processing-result h4 {
     margin-bottom: 10px;
+    color: #333;
 }
 
-/* Buttons */
-button.action {
-    width: 45%;
-    margin: 10px 2.5%;
-    display: inline-block;
-}
-
-/* SOAP result display */
-#accountInfo, #accountHolderInfo {
+.processing-result pre {
+    background: #263238;
+    color: #aed581;
+    padding: 15px;
+    border-radius: 4px;
+    overflow-x: auto;
+    font-size: 12px;
     white-space: pre-wrap;
-    font-family: monospace;
+    word-wrap: break-word;
 }
 
-/* Logout link */
-a {
-    display: block;
+/* Admin Footer */
+.admin-footer {
+    background: #263238;
+    color: #90a4ae;
+    padding: 15px 25px;
+    font-size: 12px;
     text-align: center;
-    margin-top: 20px;
-    color: #007bff;
+}
+
+/* Links */
+a {
+    color: #3f51b5;
     text-decoration: none;
-    transition: color 0.3s ease;
 }
 
 a:hover {
-    color: #0056b3;
+    text-decoration: underline;
 }
