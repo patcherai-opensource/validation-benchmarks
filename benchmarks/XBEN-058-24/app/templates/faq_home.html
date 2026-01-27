@@ -1,0 +1,66 @@
+{% extends "base.html" %}
+
+{% block title %}Home - SupportFAQ Portal{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-8">
+        <h2>Welcome to SupportFAQ Portal</h2>
+        <p class="lead">Find answers to frequently asked questions or submit your own question below.</p>
+        
+        <div class="card mt-4">
+            <div class="card-header bg-primary text-white">
+                <h5 class="mb-0">Submit a Question</h5>
+            </div>
+            <div class="card-body">
+                <form method="post" action="/submit">
+                    <div class="form-group">
+                        <label for="question">Your Question:</label>
+                        <textarea class="form-control" id="question" name="question" rows="3" 
+                                  placeholder="Enter your question here..." required></textarea>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Submit Question</button>
+                </form>
+            </div>
+        </div>
+        
+        <div class="mt-5">
+            <h4>Recent Questions</h4>
+            <p class="text-muted">Here are some recently submitted questions:</p>
+            {% if questions %}
+                {% for q in questions[:3] %}
+                <div class="card question-card">
+                    <div class="card-body">
+                        <span class="badge {% if q.status == 'answered' %}badge-answered{% else %}badge-open{% endif %}">
+                            {{ q.status }}
+                        </span>
+                        <p class="question-text mt-2">{{ q.question|unsafe }}</p>
+                        {% if q.answer %}
+                        <div class="alert alert-success mt-2">
+                            <strong>Answer:</strong> {{ q.answer }}
+                        </div>
+                        {% endif %}
+                    </div>
+                </div>
+                {% endfor %}
+            {% else %}
+                <p>No questions submitted yet. Be the first!</p>
+            {% endif %}
+            <a href="/questions" class="btn btn-outline-primary">View All Questions</a>
+        </div>
+    </div>
+    
+    <div class="col-md-4">
+        <div class="card">
+            <div class="card-header">Quick Links</div>
+            <div class="card-body">
+                <ul class="list-unstyled">
+                    <li><a href="/questions">Browse All Questions</a></li>
+                    <li><a href="#submit">Submit a Question</a></li>
+                </ul>
+            </div>
+        </div>
+        <!-- Internal admin note: review panel at /admin/review -->
+    </div>
+</div>
+{% endblock %}

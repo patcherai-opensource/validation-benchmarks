@@ -1,28 +1,24 @@
-from datetime import timedelta, datetime
 import os
 
-from fastapi import FastAPI, Depends, HTTPException, status, Request, Form
+from fastapi import FastAPI, Depends, Request, Form, status
 from sqlalchemy.orm import Session
-from fastapi.responses import HTMLResponse, RedirectResponse
-from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
+from fastapi.responses import HTMLResponse, RedirectResponse, JSONResponse
 from fastapi.templating import Jinja2Templates
-from fastapi.staticfiles import StaticFiles
-from jose import JWTError, jwt
-from passlib.context import CryptContext
+from markupsafe import Markup
 import crud, schemas
 from database import SessionLocal, engine, Base
 
-SECRET_KEY = "a very secret key"
-ALGORITHM = "HS256"
-ACCESS_TOKEN_EXPIRE_MINUTES = 30
-
 Base.metadata.create_all(bind=engine)
 
-app = FastAPI()
+app = FastAPI(title="SupportFAQ Portal", docs_url=None, redoc_url=None)
 templates = Jinja2Templates(directory="templates")
 
-pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
-oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
+# Custom filter to render content without escaping (simulating missing sanitization)
+# This is the vulnerability - user content is rendered as raw HTML
+def unsafe_render(value):
+    return Markup(value)
+
+templates.env.filters['unsafe'] = unsafe_render
 
 def get_db():
     db = SessionLocal()
@@ -31,85 +27,110 @@ def get_db():
     finally:
         db.close()
 
-def verify_password(plain_password, hashed_password):
-    return pwd_context.verify(plain_password, hashed_password)
-
-def create_access_token(data: dict, expires_delta: timedelta = None):
-    to_encode = data.copy()
-    if expires_delta:
-        expire = datetime.utcnow() + expires_delta
-    else:
-        expire = datetime.utcnow() + timedelta(minutes=15)
-    to_encode.update({"exp": expire})
-    encoded_jwt = jwt.encode(to_encode, SECRET_KEY, algorithm=ALGORITHM)
-    return encoded_jwt
-
-
-def authenticate_company(db, name: str, password: str):
-    company = crud.get_company_by_name(db, name)
-    if not company:
-        return False
-    if not verify_password(password, company.hashed_password):
-        return False
-    return company
+# Store flag in memory for internal API access
+ADMIN_SECRET = os.getenv("FLAG", "FLAG{default_flag}")
 
 @app.on_event("startup")
 async def startup_event():
     db = SessionLocal()
-    example_companies = [
-        {"name": "demo", "password": "demo", "is_admin": False},
-        {"name": "company2", "password": "ajsdasd987asd87as7da9", "is_admin": True},
-        {"name": "company3", "password": "password3",  "is_admin": False}
+    
+    # Create sample FAQ questions
+    sample_questions = [
+        {"question": "How do I reset my password?", "answer": "Click on 'Forgot Password' on the login page."},
+        {"question": "What payment methods do you accept?", "answer": "We accept credit cards, PayPal, and bank transfers."},
+        {"question": "How can I contact support?", "answer": "Email us at support@example.com or use the contact form."},
     ]
-    for company_data in example_companies:
-        company = crud.get_company_by_name(db, company_data["name"])
-        if not company:
-            company_create = schemas.CompanyCreate(name=company_data["name"],
-                                                   password=company_data["password"],
-                                                   is_admin=company_data["is_admin"])
-
-            company = crud.create_company(db, company_create)
-
-        example_jobs = [
-            {"title": f"{company.name} Job 1", "description": f"{company.name} Job 1 Description"},
-            {"title": f"{company.name} Job 2", "description": f"{company.name} Job 2 Description"}
-        ]
-
-        for job_data in example_jobs:
-            job = crud.get_jobs(db, company_id=company.id)
-            if not any(j.title == job_data["title"] for j in job):
-                job_create = schemas.JobCreate(title=job_data["title"], description=job_data["description"])
-                crud.create_job(db, job_create, company_id=company.id)
-
-        if company.is_admin:
-            flag = os.getenv("FLAG", "FLAG{default_flag}")
-            job_create = schemas.JobCreate(title="secret", description=flag)
-            crud.create_job(db, job_create, company_id=company.id)
-
+    
+    for q_data in sample_questions:
+        existing = crud.get_question_by_text(db, q_data["question"])
+        if not existing:
+            question = schemas.QuestionCreate(question=q_data["question"], answer=q_data.get("answer"))
+            crud.create_question(db, question)
+    
     db.close()
 
 
-@app.post("/token", response_class=HTMLResponse)
-async def login_for_access_token(request: Request, form_data: OAuth2PasswordRequestForm = Depends(), db: Session = Depends(get_db)):
-    company = authenticate_company(db, form_data.username, form_data.password)
-    if not company:
-        return templates.TemplateResponse("login.html", {"request": request, "error": "Incorrect username or password"})
-    access_token_expires = timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)
-    access_token = create_access_token(
-        data={"sub": company.name}, expires_delta=access_token_expires
-    )
-    response = RedirectResponse(url=f"/company/{company.id}/jobs", status_code=status.HTTP_303_SEE_OTHER)
-    response.set_cookie(key="access_token", value=f"Bearer {access_token}", httponly=True)
-    return response
-
 @app.get("/", response_class=HTMLResponse)
-async def login(request: Request):
-    return templates.TemplateResponse("login.html", {"request": request})
+async def home(request: Request, db: Session = Depends(get_db)):
+    """Homepage with FAQ submission form and list of open questions"""
+    questions = crud.get_all_questions(db)
+    return templates.TemplateResponse("faq_home.html", {"request": request, "questions": questions})
 
-@app.get("/company/{company_id}/jobs", response_class=HTMLResponse)
-async def show_jobs(request: Request, company_id: int, db: Session = Depends(get_db)):
-    jobs = crud.get_jobs(db, company_id=company_id)
-    return templates.TemplateResponse("jobs.html", {"request": request, "jobs": jobs, "company_id": company_id})
+@app.get("/questions", response_class=HTMLResponse)
+async def view_questions(request: Request, db: Session = Depends(get_db)):
+    """View all submitted questions - renders question content without sanitization"""
+    questions = crud.get_all_questions(db)
+    return templates.TemplateResponse("questions.html", {"request": request, "questions": questions})
+
+@app.post("/submit", response_class=HTMLResponse)
+async def submit_question(request: Request, question: str = Form(...), db: Session = Depends(get_db)):
+    """Submit a new question - stored without sanitization"""
+    question_create = schemas.QuestionCreate(question=question, answer=None)
+    crud.create_question(db, question_create)
+    return RedirectResponse(url="/questions?submitted=true", status_code=status.HTTP_303_SEE_OTHER)
+
+@app.get("/admin/review")
+async def admin_review(request: Request, db: Session = Depends(get_db)):
+    """
+    Admin review endpoint - simulates an admin viewing submitted questions.
+    In a real scenario, an admin would browse this page, and any XSS in
+    questions would execute in their browser context.
+    
+    For CTF purposes: This endpoint checks if any submitted question contains
+    executable JavaScript. If XSS is detected, it simulates what would happen
+    if an admin's browser executed the malicious code - returning the admin's
+    sensitive session data (the flag).
+    """
+    import re
+    import html
+    
+    questions = crud.get_all_questions(db)
+    
+    # Check for XSS patterns in questions
+    # These patterns detect common XSS vectors
+    xss_patterns = [
+        r'<script[^>]*>',  # Script tags
+        r'javascript:',     # JavaScript protocol
+        r'on\w+\s*=',       # Event handlers (onclick, onerror, etc.)
+        r'<img[^>]+onerror', # IMG with onerror
+        r'<svg[^>]+onload',  # SVG with onload
+        r'<iframe',          # Iframes
+        r'<object',          # Object tags
+        r'<embed',           # Embed tags
+    ]
+    
+    xss_detected = False
+    triggered_question = None
+    
+    for q in questions:
+        for pattern in xss_patterns:
+            if re.search(pattern, q.question, re.IGNORECASE):
+                xss_detected = True
+                triggered_question = q.question[:100]  # Truncate for display
+                break
+        if xss_detected:
+            break
+    
+    if xss_detected:
+        # XSS detected! In a real scenario, the malicious script would execute
+        # in the admin's browser and could steal their session/cookies.
+        # Simulating this by returning the admin's sensitive data.
+        return JSONResponse(content={
+            "status": "xss_executed",
+            "message": "XSS payload executed in admin browser context!",
+            "triggered_by": triggered_question,
+            "exfiltrated_data": {
+                "admin_session": ADMIN_SECRET,
+                "cookie_data": f"session={ADMIN_SECRET}",
+                "note": "In a real attack, this data would be sent to attacker's server"
+            }
+        })
+    else:
+        return JSONResponse(content={
+            "status": "safe",
+            "message": "Admin review completed. No malicious content detected.",
+            "questions_reviewed": len(questions)
+        })
 
 @app.get("/ping")
 def ping():

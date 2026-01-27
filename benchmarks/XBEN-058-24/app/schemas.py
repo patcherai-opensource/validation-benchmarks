@@ -1,37 +1,18 @@
 from pydantic import BaseModel
+from datetime import datetime
+from typing import Optional
 
-class Token(BaseModel):
-    access_token: str
-    token_type: str
+class QuestionBase(BaseModel):
+    question: str
 
-class TokenData(BaseModel):
-    username: str | None = None
+class QuestionCreate(QuestionBase):
+    answer: Optional[str] = None
 
-class CompanyBase(BaseModel):
-    name: str
-
-class CompanyCreate(CompanyBase):
-    name: str
-    is_admin: bool
-    password: str
-
-class Company(CompanyBase):
+class Question(QuestionBase):
     id: int
-    is_admin: int
-
-    class Config:
-        orm_mode = True
-
-class JobBase(BaseModel):
-    title: str
-    description: str
-
-class JobCreate(JobBase):
-    pass
-
-class Job(JobBase):
-    id: int
-    company_id: int
+    answer: Optional[str] = None
+    created_at: datetime
+    status: str
 
     class Config:
         orm_mode = True

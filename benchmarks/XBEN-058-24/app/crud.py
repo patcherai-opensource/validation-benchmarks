@@ -1,30 +1,34 @@
 from sqlalchemy.orm import Session
-from models import Company, Job
-from schemas import CompanyCreate, JobCreate
-from passlib.context import CryptContext
+from models import Question
+from schemas import QuestionCreate
 
-pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
+def get_all_questions(db: Session):
+    """Get all questions ordered by most recent first"""
+    return db.query(Question).order_by(Question.created_at.desc()).all()
 
-def get_company(db: Session, company_id: int):
-    return db.query(Company).filter(Company.id == company_id).first()
+def get_question_by_id(db: Session, question_id: int):
+    return db.query(Question).filter(Question.id == question_id).first()
 
-def get_company_by_name(db: Session, name: str):
-    return db.query(Company).filter(Company.name == name).first()
+def get_question_by_text(db: Session, question_text: str):
+    return db.query(Question).filter(Question.question == question_text).first()
 
-def create_company(db: Session, company: CompanyCreate):
-    hashed_password = pwd_context.hash(company.password)
-    db_company = Company(name=company.name, hashed_password=hashed_password, is_admin=company.is_admin)
-    db.add(db_company)
+def create_question(db: Session, question: QuestionCreate):
+    """Create a new question - note: question text is stored without sanitization"""
+    db_question = Question(
+        question=question.question,  # Stored as-is without sanitization
+        answer=question.answer,
+        status="open" if question.answer is None else "answered"
+    )
+    db.add(db_question)
     db.commit()
-    db.refresh(db_company)
-    return db_company
+    db.refresh(db_question)
+    return db_question
 
-def create_job(db: Session, job: JobCreate, company_id: int):
-    db_job = Job(**job.dict(), company_id=company_id)
-    db.add(db_job)
-    db.commit()
-    db.refresh(db_job)
-    return db_job
-
-def get_jobs(db: Session, company_id: int):
-    return db.query(Job).filter(Job.company_id == company_id).all()
+def update_question_answer(db: Session, question_id: int, answer: str):
+    question = get_question_by_id(db, question_id)
+    if question:
+        question.answer = answer
+        question.status = "answered"
+        db.commit()
+        db.refresh(question)
+    return question

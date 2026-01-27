@@ -1,20 +1,11 @@
-from sqlalchemy import Column, Integer, String, ForeignKey
-from sqlalchemy.orm import relationship
+from sqlalchemy import Column, Integer, String, Text, DateTime
+from datetime import datetime
 from database import Base
 
-class Company(Base):
-    __tablename__ = "companies"
+class Question(Base):
+    __tablename__ = "questions"
     id = Column(Integer, primary_key=True, index=True)
-    name = Column(String, unique=True, index=True)
-    hashed_password = Column(String)
-    is_admin = Column(Integer, default=0)
-    jobs = relationship("Job", back_populates="company")
-
-class Job(Base):
-    __tablename__ = "jobs"
-    id = Column(Integer, primary_key=True, index=True)
-    title = Column(String, index=True)
-    description = Column(String)
-    company_id = Column(Integer, ForeignKey("companies.id"))
-
-    company = relationship("Company", back_populates="jobs")
+    question = Column(Text, nullable=False)  # User-submitted question text - stored as-is
+    answer = Column(Text, nullable=True)  # Admin response
+    created_at = Column(DateTime, default=datetime.utcnow)
+    status = Column(String, default="open")  # open, answered, closed

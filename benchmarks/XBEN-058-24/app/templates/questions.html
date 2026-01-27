@@ -1,0 +1,64 @@
+{% extends "base.html" %}
+
+{% block title %}Open Questions - SupportFAQ Portal{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-12">
+        <h2>All Submitted Questions</h2>
+        
+        {% if request.query_params.get('submitted') %}
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            Your question has been submitted successfully! Our team will review it shortly.
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        {% endif %}
+        
+        <p class="text-muted">Browse through questions submitted by our community. Questions are displayed as submitted.</p>
+        
+        <div class="mb-4">
+            <a href="/" class="btn btn-primary">Submit New Question</a>
+        </div>
+        
+        {% if questions %}
+            {% for q in questions %}
+            <div class="card question-card">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-start">
+                        <div>
+                            <span class="badge {% if q.status == 'answered' %}badge-answered{% else %}badge-open{% endif %}">
+                                {{ q.status }}
+                            </span>
+                            <span class="meta-info ml-2">Question #{{ q.id }}</span>
+                        </div>
+                        <span class="meta-info">{{ q.created_at.strftime('%Y-%m-%d %H:%M') if q.created_at else '' }}</span>
+                    </div>
+                    
+                    <div class="question-text mt-3">
+                        {{ q.question|unsafe }}
+                    </div>
+                    
+                    {% if q.answer %}
+                    <div class="alert alert-success mt-3 mb-0">
+                        <strong>Official Answer:</strong><br>
+                        {{ q.answer }}
+                    </div>
+                    {% else %}
+                    <p class="text-muted mt-2 mb-0"><em>Awaiting response from support team...</em></p>
+                    {% endif %}
+                </div>
+            </div>
+            {% endfor %}
+        {% else %}
+            <div class="alert alert-info">
+                No questions have been submitted yet. <a href="/">Be the first to ask!</a>
+            </div>
+        {% endif %}
+    </div>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.bundle.min.js"></script>
+{% endblock %}
