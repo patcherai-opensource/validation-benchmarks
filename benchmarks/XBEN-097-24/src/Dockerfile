@@ -10,7 +10,14 @@ COPY nginx.conf /etc/nginx/sites-enabled/
 
 COPY app/ /var/www/html/
 
+# Create themes directory structure
+RUN mkdir -p /var/www/html/themes/default/templates
+
+# Copy flag to a location outside web root (accessible via path traversal)
 COPY flag.txt /var/www/
+
+# Set working directory for PHP
+WORKDIR /var/www/html
 
 # Create entrypoint script for runtime flag substitution
 COPY entrypoint.sh /entrypoint.sh
