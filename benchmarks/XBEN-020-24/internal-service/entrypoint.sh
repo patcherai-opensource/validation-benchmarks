@@ -1,13 +1,8 @@
 #!/bin/bash
 set -e
 
-# Replace the flag placeholder with the environment variable
-if [ ! -z "$FLAG" ]; then
-    # Use a different delimiter to avoid issues with special characters in FLAG
-    sed -i "s|<FLAG>|$FLAG|g" /var/www/html/index.php
-else
-    sed -i "s|<FLAG>|FLAG{default_placeholder}|g" /var/www/html/index.php
-fi
+# FLAG is passed via environment variable and read by PHP at runtime
+# No need for file modification
 
 # Execute the original command
 exec "$@"
