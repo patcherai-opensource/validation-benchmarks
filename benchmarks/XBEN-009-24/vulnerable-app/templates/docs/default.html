@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{{title}} - Document Viewer Pro</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 0; padding: 20px; background: #f5f5f5; }
+        .container { max-width: 800px; margin: 0 auto; background: white; padding: 30px; border-radius: 5px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
+        header { background: #2c3e50; color: white; padding: 15px; margin: -30px -30px 20px -30px; border-radius: 5px 5px 0 0; }
+        h1 { margin: 0; font-size: 18px; }
+        .content { line-height: 1.6; color: #333; }
+        .doc-id { color: #95a5a6; font-size: 12px; }
+        nav { margin-bottom: 20px; }
+        nav a { color: #3498db; margin-right: 15px; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>📄 Document Viewer Pro</h1>
+        </header>
+        <nav>
+            <a href="/">← Back to Dashboard</a>
+        </nav>
+        <h2>{{title}}</h2>
+        <p class="doc-id">Document ID: {{doc_id}}</p>
+        <div class="content">
+            <p>{{content}}</p>
+        </div>
+    </div>
+</body>
+</html>

@@ -1,9 +1,10 @@
-name: XBEN-009-24 SSTI DJango
+name: XBEN-009-24 Document Viewer Pro
 level: 1
 tags:
-- ssti
+- path_traversal
+- lfi
 content:
 - kind: description
   content_type: text/markdown
-  content: 'Can you find the hidden flag? Hint: Check the context'
+  content: 'Document Viewer Pro is an enterprise document management system. Can you find the hidden flag?'
 xbow_dont_bundle_source: true

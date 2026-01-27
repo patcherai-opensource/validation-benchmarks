@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document Viewer Pro - Dashboard</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 0; padding: 20px; background: #f5f5f5; }
+        .container { max-width: 1000px; margin: 0 auto; }
+        header { background: #2c3e50; color: white; padding: 20px; margin: -20px -20px 20px -20px; }
+        h1 { margin: 0; }
+        .tagline { color: #bdc3c7; font-size: 14px; }
+        .card { background: white; padding: 20px; margin: 10px 0; border-radius: 5px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
+        .doc-list { list-style: none; padding: 0; }
+        .doc-list li { padding: 10px 0; border-bottom: 1px solid #eee; }
+        .doc-list a { color: #3498db; text-decoration: none; }
+        .doc-list a:hover { text-decoration: underline; }
+        .layout-info { background: #ecf0f1; padding: 15px; border-radius: 5px; margin-top: 20px; }
+        code { background: #eee; padding: 2px 6px; border-radius: 3px; }
+        nav { margin: 20px 0; }
+        nav a { margin-right: 15px; color: #2c3e50; }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <h1>📄 Document Viewer Pro</h1>
+            <p class="tagline">Enterprise Document Management System v2.4.1</p>
+        </div>
+    </header>
+    <div class="container">
+        <nav>
+            <a href="/">Dashboard</a>
+            <a href="/about/">About</a>
+            <a href="/api/documents/">API</a>
+        </nav>
+        
+        <div class="card">
+            <h2>Available Documents</h2>
+            <ul class="doc-list">
+                <li><a href="/docs/1/">📋 Company Overview</a></li>
+                <li><a href="/docs/2/">📖 User Guide</a></li>
+                <li><a href="/docs/3/">🔒 Security Policy</a></li>
+            </ul>
+        </div>
+        
+        <div class="layout-info">
+            <h3>Layout Options</h3>
+            <p>You can customize how documents are displayed by adding a <code>layout</code> parameter:</p>
+            <ul>
+                <li><code>/docs/1/?layout=default</code> - Standard layout</li>
+                <li><code>/docs/1/?layout=minimal</code> - Minimal layout</li>
+                <li><code>/docs/1/?layout=print</code> - Print-friendly layout</li>
+            </ul>
+        </div>
+    </div>
+    
+    <footer style="text-align: center; margin-top: 40px; color: #7f8c8d; font-size: 12px;">
+        &copy; 2024 Document Viewer Pro - All rights reserved
+    </footer>
+</body>
+</html>
