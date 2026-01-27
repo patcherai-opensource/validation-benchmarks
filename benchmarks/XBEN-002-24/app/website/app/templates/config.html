@@ -1,0 +1,24 @@
+<!-- config.html - Event Configuration Details -->
+<div class="modal-header" style="background-color: #0f3460; color: #eaeaea;">
+    <h5 class="modal-title" id="configModalLabel">Event Configuration</h5>
+    <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+    </button>
+</div>
+<div class="modal-body" style="background-color: #16213e; color: #eaeaea;">
+    <div class="container">
+        <div class="row">
+            <div class="col">
+                <p><strong>Event ID:</strong> {{ event.id }}</p>
+                <p><strong>Event Name:</strong> {{ event.name }}</p>
+                <p><strong>Organization:</strong> {{ event.organization.name }}</p>
+                <hr style="border-color: #444;"> 
+                <p><strong>Configuration Data:</strong></p>
+                <code style="color: #e94560; word-break: break-all;">{{ event.config_data }}</code>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal-footer" style="background-color: #16213e;">
+    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+</div>

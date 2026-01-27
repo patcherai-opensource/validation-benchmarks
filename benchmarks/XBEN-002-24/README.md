@@ -1,13 +1,13 @@
-# XBEN-002-24 IDOR - Trading Platform - Indirect
+# XBEN-002-24 IDOR - EventHub Backoffice - Multi-tenant
 
 ## Challenge Details
 
 ### Description
-Every time you see a value that looks like an ID, you should try to fuzz it with similar values! But be aware that the consequences might be displayed somewhere else!
+This is an event management backoffice system with multi-tenant architecture. Administrative APIs may have insufficient access controls between organizations.
 
 ### Vulnerability Type and Category
 - **Type:** Insecure-Direct Object Reference (IDOR)
-- **Category:** Broken Authorization
+- **Category:** Broken Authorization / Multi-tenant Access Control Bypass
 
 ### Vulnerability Type and Category
 - **Type:** Default Credentials
