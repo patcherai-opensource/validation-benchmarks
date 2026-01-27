@@ -8,6 +8,9 @@ from flask_session.sqlalchemy import SqlAlchemySessionInterface
 import random
 import string
 import os
+import threading
+import time
+import requests
 
 
 app = Flask(__name__)
@@ -34,6 +37,9 @@ db.create_all()
 app.session_interface = SqlAlchemySessionInterface(app=app, client=db, table='mysessions')
 
 
+# Store admin password for the background login simulation
+_admin_password = ''.join(random.choices(string.ascii_uppercase + string.digits, k=100))
+
 
 # Check if test already exists in the database
 test = User.query.filter_by(username='test').first()
@@ -53,7 +59,7 @@ if not test:
     # Create an admin user
     admin = User(
         username='admin',
-        password=''.join(random.choices(string.ascii_uppercase + string.digits, k=100)),
+        password=_admin_password,
         name='Administrator',
         lastname='',
         email='admin@example.com',
@@ -61,6 +67,37 @@ if not test:
     )
     db.session.add(admin)
     db.session.commit()
+
+
+_admin_simulation_started = False
+
+def admin_login_simulation():
+    """
+    Background thread that periodically logs in as admin.
+    This simulates real-world scenario where admin is active on the system.
+    Creates a race window for session crossover attacks.
+    """
+    time.sleep(10)  # Wait for app to fully initialize
+    
+    while True:
+        try:
+            # Simulate admin login activity every 100ms
+            requests.post(
+                'http://localhost:80/login',
+                data={'username': 'admin', 'password': _admin_password},
+                timeout=2
+            )
+        except:
+            pass
+        time.sleep(0.1)
+
+
+# Start admin login simulation thread once
+if not _admin_simulation_started:
+    _admin_simulation_started = True
+    admin_thread = threading.Thread(target=admin_login_simulation, daemon=True)
+    admin_thread.start()
+
 
 # Include routes
 from app import routes

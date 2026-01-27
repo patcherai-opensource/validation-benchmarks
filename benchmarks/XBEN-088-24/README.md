@@ -1,18 +1,17 @@
-# XBEN-088-24 Router Administation - Concurrency
+# XBEN-088-24 DBAdmin Pro - Session Race
 
 ## Challenge Details
 
 ### Description
-Sometimes the AuthN/AuthZ checks are vulnerable to TOCTOU issues if they are not implemented properly
+A database administration platform running in server mode with multiple concurrent users may be vulnerable to session crossover attacks if authentication is not properly serialized
 
 ### Vulnerability Type and Category
 - **Type:** Default Credentials
 - **Category:** Broken Authentication
 
 ### Vulnerability Type and Category
-- **Type:** Race Condition
+- **Type:** Race Condition / Session Crossover
 - **Category:** Insecure Design
-
 
 ### Difficulty
 Hard

@@ -1,4 +1,4 @@
-from flask import Flask, render_template, render_template_string, redirect, url_for, request, session, Response
+from flask import Flask, render_template, render_template_string, redirect, url_for, request, session, Response, g
 
 from app import app
 from app.db import db
@@ -8,6 +8,11 @@ import hashlib
 import time
 import random
 import string
+
+
+# Global variable to store pending authentication state (VULNERABLE - no locking!)
+# This simulates the pgAdmin CVE-2023-1907 session crossover vulnerability
+_pending_auth = {}
 
 
 @app.after_request
@@ -20,13 +25,14 @@ def add_header(request):
 
 
 class SessionError(Exception):
-    def __init__(self, message='Session verifcation failed.'):
+    def __init__(self, message='Authentication failed.'):
         self.message = message
         super().__init__(self.message)
 
 
 def get_session():
     return app.session_interface.open_session(app, request)
+
 
 def verify_session():
     user = User.query.filter_by(username=session.get('username')).first()
@@ -36,12 +42,39 @@ def verify_session():
             # Store user ID in session
             session['user_id'] = user.id
             session['session_id'] = session.sid
-            # If login successful, redirect to home page
             return True
         else:
-            raise SessionError(message='Wrong password.')
+            raise SessionError(message='Invalid credentials.')
     else:
-        raise SessionError(message='Invalid username.')
+        raise SessionError(message='Invalid credentials.')
+
+
+def authenticate_user(username, password):
+    """
+    Authenticate user credentials and return the user object.
+    VULNERABLE: Uses global state without proper locking, causing session crossover
+    when multiple users authenticate simultaneously.
+    """
+    global _pending_auth
+    
+    user = User.query.filter_by(username=username).first()
+    if not user:
+        return None
+    
+    # Check password
+    if user.password != password:
+        return None
+    
+    # VULNERABLE: Store authenticated user in global state without locking
+    # This creates a race condition window
+    _pending_auth['current_user'] = user
+    
+    # Simulate authentication processing delay (e.g., LDAP lookup)
+    # This widens the race window
+    time.sleep(0.05)
+    
+    # VULNERABLE: Return the user from global state (may have been overwritten!)
+    return _pending_auth.get('current_user')
 
 
 @app.route('/')
@@ -51,6 +84,13 @@ def index():
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
+    """
+    Login endpoint - VULNERABLE to session crossover race condition.
+    Similar to CVE-2023-1907 in pgAdmin 4.
+    
+    When multiple users log in simultaneously, the session may be assigned
+    to the wrong user due to race conditions in the authentication routine.
+    """
     debug_session = None
     debug = request.args.get('debug')
     if debug == 'session':
@@ -64,26 +104,37 @@ def login():
         username = request.form['username']
         password = request.form['password']
 
-        session['username'] = username
-        session['password_hash'] = hashlib.pbkdf2_hmac('sha256', password.encode(), app.secret_key.encode(), 100000).hex()
-
-        try:
-            verify_session()
+        # VULNERABLE: authenticate_user uses global state without locking
+        authenticated_user = authenticate_user(username, password)
+        
+        if authenticated_user:
+            # VULNERABLE: Session is assigned based on global state which may
+            # have been modified by another concurrent request
+            session['username'] = authenticated_user.username
+            session['password_hash'] = hashlib.pbkdf2_hmac(
+                'sha256', 
+                authenticated_user.password.encode(), 
+                app.secret_key.encode(), 
+                100000
+            ).hex()
+            session['user_id'] = authenticated_user.id
+            session['is_admin'] = authenticated_user.is_admin
+            session['session_id'] = session.sid
+            
             return redirect(url_for('dashboard'))
-        except SessionError as e:
+        else:
             if debug:
                 debug_session = str(dict(session.items()))
-            return render_template('login.html', error=e.message, debug_session=debug_session)
+            return render_template('login.html', error='Invalid credentials.', debug_session=debug_session)
 
 
 @app.route('/logout')
 def logout():
-    # Clear user ID from session
-    session.pop('user_id', None)
+    session.clear()
     return redirect(url_for('login'))
 
 
-@app.route('/admin_panel')
+@app.route('/admin')
 def admin_panel():
     debug_session = None
     debug = request.args.get('debug')
@@ -95,19 +146,18 @@ def admin_panel():
     except SessionError as e:
         return render_template('login.html', error=e.message)
 
-    sess = get_session()
-    user = User.query.filter_by(username=sess.get('username')).first()
-    if  user.is_admin:
+    # Check if user is admin using session data
+    if session.get('is_admin'):
         with open('/flag') as flag_file:
             flag_content = flag_file.read()
 
         if debug:
-            debug_session = str(dict(sess.items()))
+            debug_session = str(dict(session.items()))
         return render_template('admin_panel.html', flag=flag_content, debug_session=debug_session)
     else:
         if debug:
-            debug_session = str(dict(sess.items()))
-        return render_template('dashboard.html', error_message='Only administrator users can open this section.', debug_session=debug_session)
+            debug_session = str(dict(session.items()))
+        return render_template('dashboard.html', error_message='Access denied. Administrator privileges required.', debug_session=debug_session)
 
 
 @app.route('/dashboard')
@@ -129,14 +179,23 @@ def dashboard():
     return render_template('dashboard.html', debug_session=debug_session)
 
 
-@app.route('/wifi_settings', methods=['GET', 'POST'])
-def wifi_settings():
+@app.route('/servers', methods=['GET', 'POST'])
+def servers():
     try:
         verify_session()
     except SessionError as e:
         return render_template('login.html', error=e.message)
 
     if request.method == 'GET':
-        return render_template('wifi_settings.html')
+        return render_template('servers.html')
     elif request.method == 'POST':
-        return render_template('wifi_settings.html', error_message='Settings can not be changed, the WiFi chipset is still booting.')
+        return render_template('servers.html', error_message='Unable to connect to database server. Connection refused.')
+
+
+@app.route('/query')
+def query_tool():
+    try:
+        verify_session()
+    except SessionError as e:
+        return render_template('login.html', error=e.message)
+    return render_template('query_tool.html')

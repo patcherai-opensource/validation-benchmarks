@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>DBAdmin Pro - Administration</title>
+    <title>DBAdmin Pro - Servers</title>
     <link href="{{ url_for('static', filename='css/bootstrap.min.css') }}" rel="stylesheet">
     <style>
         body {
@@ -48,19 +48,16 @@
             margin-bottom: 20px;
             color: #0984e3;
         }
-        .config-section {
+        .server-form {
             background-color: #363d40;
             border: 1px solid #0984e3;
             border-radius: 8px;
             padding: 20px;
-            margin-top: 20px;
+            max-width: 500px;
         }
-        .config-key {
-            background-color: #2d3436;
-            padding: 10px 15px;
-            border-radius: 4px;
-            font-family: monospace;
-            word-break: break-all;
+        .btn-primary {
+            background-color: #0984e3;
+            border-color: #0984e3;
         }
     </style>
 </head>
@@ -78,13 +75,13 @@
                         <a class="nav-link" href="{{ url_for('dashboard') }}">Dashboard</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="{{ url_for('servers') }}">Servers</a>
+                        <a class="nav-link active" href="{{ url_for('servers') }}">Servers</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="{{ url_for('query_tool') }}">Query Tool</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link active" href="{{ url_for('admin_panel') }}">Admin</a>
+                        <a class="nav-link" href="{{ url_for('admin_panel') }}">Admin</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="{{ url_for('logout') }}">Logout</a>
@@ -93,31 +90,42 @@
             </div>
             <div class="col-md-10">
                 <div class="content">
-                    <h1>System Administration</h1>
-                    <p>Manage system configuration and access sensitive settings.</p>
+                    <h1>Server Connections</h1>
+                    <p>Manage your database server connections.</p>
                     
-                    <div class="config-section">
-                        <h5>System Configuration Key</h5>
-                        <p class="text-muted">Master encryption key for database connections:</p>
-                        <div class="config-key">
-                            <code>{{ flag }}</code>
-                        </div>
+                    <div class="server-form mt-4">
+                        <h5>Add New Server</h5>
+                        <form method="POST" action="{{ url_for('servers') }}">
+                            <div class="form-group">
+                                <label>Server Name</label>
+                                <input type="text" class="form-control" name="name" placeholder="My PostgreSQL Server">
+                            </div>
+                            <div class="form-group mt-2">
+                                <label>Host</label>
+                                <input type="text" class="form-control" name="host" placeholder="localhost">
+                            </div>
+                            <div class="form-group mt-2">
+                                <label>Port</label>
+                                <input type="text" class="form-control" name="port" placeholder="5432">
+                            </div>
+                            <div class="form-group mt-2">
+                                <label>Database</label>
+                                <input type="text" class="form-control" name="database" placeholder="postgres">
+                            </div>
+                            <button type="submit" class="btn btn-primary mt-3">Connect</button>
+                        </form>
                     </div>
                 </div>
             </div>
         </div>
     </div>
 
-
     {% if error_message %}
-    <div class="modal fade" id="errorModal" tabindex="-1" role="dialog" aria-labelledby="errorModalLabel" aria-hidden="true">
+    <div class="modal fade" id="errorModal" tabindex="-1" role="dialog">
         <div class="modal-dialog" role="document">
             <div class="modal-content" style="background-color: #363d40;">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="errorModalLabel">Access Denied</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close" style="background-color: transparent; border: none;">
-                        <span aria-hidden="true" style="color: white;">&times;</span>
-                    </button>
+                    <h5 class="modal-title">Connection Error</h5>
                 </div>
                 <div class="modal-body">
                     {{ error_message }}
@@ -125,23 +133,9 @@
             </div>
         </div>
     </div>
-
     <script src="{{ url_for('static', filename='js/jquery-3.5.1.min.js') }}"></script>
     <script src="{{ url_for('static', filename='js/bootstrap.min.js') }}"></script>
-
-    <script>
-        $(document).ready(function(){
-            $('#errorModal').modal('show');
-        });
-    </script>
+    <script>$(document).ready(function(){ $('#errorModal').modal('show'); });</script>
     {% endif %}
-
 </body>
 </html>
-
-{% if debug_session %}
-<!--
-Session State:    
-{{ debug_session }}
--->
-{% endif %}
