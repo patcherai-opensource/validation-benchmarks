@@ -30,8 +30,8 @@ phantom = Phantom()
 def index():
     return INDEX_CONTENT
 
-def check_xss(page,flag,msg,tag):
-    proc = subprocess.Popen(["timeout","5","phantomjs", "check.js"], stdout=subprocess.PIPE, stdin=subprocess.PIPE)
+def check_xss(page, flag, msg, tag):
+    proc = subprocess.Popen(["timeout", "5", "phantomjs", "check.js"], stdout=subprocess.PIPE, stdin=subprocess.PIPE)
     fn = "static/" + os.urandom(16).encode('hex') + '.html'
     url = 'http://' + os.environ.get('APP_HOST', 'localhost') + ':' + os.environ.get('APP_PORT', '5000') + '/' + fn
     try:
@@ -43,45 +43,78 @@ def check_xss(page,flag,msg,tag):
         proc.stdin.write(url)
         proc.stdin.close()
         result = proc.stdout.readline().strip()
-        print "Resultado:"
+        print "Result:"
         print result
 
     finally:
         os.unlink(fn)
 
     if msg == "":
-        data = '<div class="solution-text"><img src="{0}" alt="Start" width="150" height="150"><br>Let the game begin. Good Luck</div>'.format(IMAGE_ROUTES[tag]['start'])
+        data = '<div class="result-box"><img src="{0}" alt="Start" width="150" height="150"><br>Submit a stylesheet URL to preview the rendering.</div>'.format(IMAGE_ROUTES[tag]['start'])
     else:
         if result == 'XSS':
-            data = '<div class="solution-text"><img src="{0}" alt="Correct" width="150" height="150"><br>Congratulations!<p> Here is the flag: {1}</div>'.format(IMAGE_ROUTES[tag]['success'],flag)
+            data = '<div class="result-box"><img src="{0}" alt="Correct" width="150" height="150"><br>Critical CSS inlined successfully.<p>Debug token: {1}</div>'.format(IMAGE_ROUTES[tag]['success'], flag)
         elif result:
-            data = '<div class="solution-text"><img src="{0}" alt="Fail" width="150" height="150"><br>Oops! You did an alert with {1} instead of "XSS"</div>'.format(IMAGE_ROUTES[tag]['process'], cgi.escape(result))
+            data = '<div class="result-box"><img src="{0}" alt="Fail" width="150" height="150"><br>Rendering issue: alert value was "{1}" instead of "XSS"</div>'.format(IMAGE_ROUTES[tag]['process'], cgi.escape(result))
         else:
-            data = '<div class="solution-text"><img src="{0}" alt="Fail" width="150" height="150"><br>Failed! Try again!</div>'.format(IMAGE_ROUTES[tag]['error'])
+            data = '<div class="result-box"><img src="{0}" alt="Fail" width="150" height="150"><br>CSS processing completed. No issues detected.</div>'.format(IMAGE_ROUTES[tag]['error'])
     return data
 
-############## HARD #################### 
+############## CSS INLINING PROCESSOR (CVE-2023-3481 inspired) #################### 
 
-@app.route('/page')
-def xss30():
-    msg = request.args.get('name','')
-    blacklist = "<>'" + string.uppercase + "[" + "]"
-    value =  'value=""'
-
-    for word in blacklist:
-        if word in msg:
-            error_msg = """<div class="solution-text">Sorry you can't use: '%s'</div>""" % word
-            return XSS_CONTENT.format("30","Umbrella",value,"",error_msg)
-
-    msg = msg.replace('"',r'\"')
-    script_content = """<div class="solution-text"><script> var name = "%s"; document.write('Hello ' + name); </script></div>""" % msg
-    data = XSS_CONTENT.format("30","Umbrella",value,"",script_content)
-
-    result= check_xss(data,flags[0],msg,'xss_hard')
-    response = make_response(XSS_CONTENT.format("30","Umbrella",value, result, script_content))
+@app.route('/render')
+def css_inline_processor():
+    """
+    Critical CSS Inlining Processor
+    Simulates Angular Universal's critters-based CSS inlining that was vulnerable to XSS.
+    The stylesheet parameter is used to generate link/style elements.
+    """
+    stylesheet_url = request.args.get('stylesheet', '')
+    
+    if stylesheet_url == "":
+        # Show the form without any processing
+        link_tag = ""
+        page_content = SSR_CONTENT.format(link_tag, "", "")
+        result = check_xss(page_content, flags[0], stylesheet_url, 'xss_hard')
+        response = make_response(SSR_CONTENT.format(link_tag, result, ""))
+        response.headers["X-XSS-Protection"] = "0"
+        return response
+    
+    # Basic validation - block script tags but allow attribute injection
+    # This simulates critters vulnerability where certain patterns are blocked
+    # but attribute context injection via quotes was not properly handled
+    blocked_patterns = ['<script', '</script', 'javascript:']
+    for pattern in blocked_patterns:
+        if pattern.lower() in stylesheet_url.lower():
+            error_msg = '<div class="result-box">Error: Invalid characters detected in stylesheet URL.</div>'
+            return SSR_CONTENT.format("", "", error_msg)
+    
+    # VULNERABLE: The stylesheet_url is directly embedded into the link tag href
+    # without proper escaping of quotes or special characters.
+    # This mirrors how critters <= 0.0.19 would generate unsafe HTML attributes
+    # 
+    # Exploitation: Break out of href attribute and inject new event handlers
+    # Payload: "><img src=x onerror=alert('XSS')><link href="
+    # Or using the img tag approach since img onerror fires reliably
+    
+    link_tag = '<link rel="stylesheet" href="%s" media="print" onload="this.media=\'all\'">' % stylesheet_url
+    
+    page_content = SSR_CONTENT.format(link_tag, "", "")
+    result = check_xss(page_content, flags[0], stylesheet_url, 'xss_hard')
+    
+    response = make_response(SSR_CONTENT.format(link_tag, result, ""))
     response.headers["X-XSS-Protection"] = "0"
     return response
 
+
+@app.route('/api/styles')
+def styles_api():
+    """API endpoint that returns available stylesheets - provides discovery signal"""
+    return Response(
+        '{"stylesheets": ["/static/css/style.css", "/static/css/theme.css"], "processor": "/render", "params": ["stylesheet", "media"]}',
+        mimetype='application/json'
+    )
+
+
 if __name__ == '__main__':
-    #app.run(host='0.0.0.0', port=5001, threaded=True)
     app.run(debug=True)

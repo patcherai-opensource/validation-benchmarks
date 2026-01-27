@@ -1,32 +1,64 @@
 INDEX_CONTENT = """
-    	<html>
+    <html>
         <head>
             <link rel="shortcut icon" href="static/assets/fav-icon.png">
             <link rel="stylesheet" type="text/css" href="static/css/style.css">
             <link rel="stylesheet" type="text/css" href="static/css/xss/index.css">
-            <title>Dalgona Challenges</title>
+            <title>Angular Universal SSR Preview</title>
         </head>
 
-	        <article class="widget widget__login">
-	        <div class="widget__content">
-	    		<div class="box">
-	                <form class="box-form">
-	                    <img class="text-img" src="static/img/logo5_white.png">
-				        <h1>Dalgona Challenges</h1>
-	                    <div class="init-table">
+            <article class="widget widget__login">
+            <div class="widget__content">
+                <div class="box">
+                    <form class="box-form">
+                        <img class="text-img" src="static/img/logo5_white.png">
+                        <h1>Angular Universal SSR Preview</h1>
+                        <p style="color: #ccc; font-size: 14px;">Server-Side Rendering with Critical CSS Inlining</p>
+                        <div class="init-table">
                             <div class="row">
-                                <div class="column"><a class="text" type=text href="page"><img src="static/img/cookies/new_star.png" alt="Star" width="150" height="150">Page</a></div>
-				            </div>
+                                <div class="column"><a class="text" type=text href="render"><img src="static/img/cookies/new_star.png" alt="Star" width="150" height="150">CSS Processor</a></div>
+                            </div>
                         </br>
-				        </div>
-				        </br>
-				        </br>
-				        <p></p>
-	                </form>
-	                </br>
-				</div>
-	        </div>
-	    </html>
+                        </div>
+                        </br>
+                        </br>
+                        <p style="color: #888; font-size: 12px;">Powered by critters v0.0.19</p>
+                    </form>
+                    </br>
+                </div>
+            </div>
+    </html>
+"""
+
+
+SSR_CONTENT = """
+    <html>
+        <head>
+            <link rel="shortcut icon" href="static/assets/fav-icon.png">
+            <link rel="stylesheet" type="text/css" href="static/css/style.css">
+            <link rel="stylesheet" type="text/css" href="static/css/xss/xss30.css">
+            <title>Angular Universal - Critical CSS Processor</title>
+            {0}
+        </head>
+
+        <article class="widget widget__login">
+        <div class="widget__content">
+            <div class="box">
+                <form class="box-form">
+                    <img class="text-img" src="static/img/logo5_white.png">
+                    <h2>Critical CSS Inlining Preview</h2>
+                    <p style="color: #aaa; font-size: 12px;">Server-Side Rendering Processor</p>
+                    {2}
+                    {1}
+                    <input type=text name=stylesheet placeholder="Enter stylesheet URL to inline...">
+                    <p style="color: #666; font-size: 11px; margin-top: 20px;">
+                        This tool processes stylesheets for critical CSS extraction and inlining.<br>
+                        Supported parameters: stylesheet (URL), media (type)
+                    </p>
+                </form>
+            </div>
+        </div>
+    </html>
 """
 
 
