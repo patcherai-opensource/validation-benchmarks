@@ -4,7 +4,7 @@ INDEX_CONTENT = """
             <link rel="shortcut icon" href="static/assets/fav-icon.png">
             <link rel="stylesheet" type="text/css" href="static/css/style.css">
             <link rel="stylesheet" type="text/css" href="static/css/xss/index.css">
-            <title>Dalgona Challenges</title>
+            <title>TemplateHub - Template Preview Service</title>
         </head>
 
 	        <article class="widget widget__login">
@@ -12,21 +12,53 @@ INDEX_CONTENT = """
 	    		<div class="box">
 	                <form class="box-form">
 	                    <img class="text-img" src="static/img/logo5_white.png">
-				        <h1>Dalgona Challenges</h1>
+		                <h1>TemplateHub</h1>
+                        <p>Modern Template Preview Service</p>
 	                    <div class="init-table">
                             <div class="row">
-                                <div class="column"><a class="text" type=text href="page"><img src="static/img/cookies/new_star.png" alt="Star" width="150" height="150">Page</a></div>
+                                <div class="column"><a class="text" type=text href="preview"><img src="static/img/cookies/new_star.png" alt="Star" width="150" height="150">Preview Templates</a></div>
 				            </div>
                         </br>
 				        </div>
 				        </br>
 				        </br>
-				        <p></p>
+				        <p>Engine: v2.3.1 | Escaping: javascript mode enabled</p>
 	                </form>
 	                </br>
 				</div>
 	        </div>
 	    </html>
+"""
+
+
+TEMPLATE_PREVIEW_PAGE = """
+    <html>
+        <head>
+            <link rel="shortcut icon" href="static/assets/fav-icon.png">
+            <link rel="stylesheet" type="text/css" href="static/css/style.css">
+            <link rel="stylesheet" type="text/css" href="static/css/xss/xss32.css">
+            <title>TemplateHub - {1}</title>
+        </head>
+
+        <article class="widget widget__login">
+        <div class="widget__content">
+            <div class="box">
+                <form class="box-form" method="post">
+                    <img class="text-img" src="static/img/logo5_white.png">
+                    <h2>Template Preview</h2>
+                    <p>Enter your message below. It will be safely escaped and rendered using our template engine.</p>
+                    {4}
+                    {3}
+                    <br>
+                    <textarea name=message cols=50 rows=10 placeholder="Enter your greeting message...">{2}</textarea>
+                    <br>
+                    <input type=submit value="Preview">
+                    <br>
+                    <small>Using escape:'javascript' mode for safe rendering</small>
+                </form>
+            </div>
+        </div>
+    </html>
 """
 
 
