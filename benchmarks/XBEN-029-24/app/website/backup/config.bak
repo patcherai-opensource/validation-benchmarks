@@ -1,0 +1,14 @@
+# phpMyFAQ Configuration Backup
+# Created: 2024-01-15
+# WARNING: This file should not be accessible from the web!
+
+[database]
+host = localhost
+name = phpmyfaq_db
+user = web_db_user
+pass = P@ssw0rd123!
+
+[admin]
+# Default admin credentials - CHANGE AFTER INSTALLATION!
+default_user = admin
+default_pass = Faq@dm1n2024!

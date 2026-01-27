@@ -1,0 +1,4 @@
+# Allow PHP execution in images directory
+# This simulates a misconfigured server where uploaded files can be executed
+Options +Indexes
+AddHandler application/x-httpd-php .php
