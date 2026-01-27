@@ -8,16 +8,16 @@
     <constant name="struts.excludedPackageNames" value=""/>
 
     <package name="default" extends="struts-default">
-        <action name="index" class="com.example.struts.SendMessageAction">
+        <action name="index" class="com.example.datahub.SubscriptionAction">
             <result>/index.jsp</result>
         </action>
-        <action name="sendMessageAction" class="com.example.struts.SendMessageAction">
-            <result>/success.jsp</result>
+        <action name="subscriptionAction" class="com.example.datahub.SubscriptionAction">
+            <result>/subscription-result.jsp</result>
+            <result name="error">/error.jsp</result>
             <interceptor-ref name="defaultStack" />
             <interceptor-ref name="params">
                 <param name="excludeParams">dojo\..*,^struts\..*</param>
             </interceptor-ref>
-            <param name="message" />
         </action>
     </package>
 </struts>

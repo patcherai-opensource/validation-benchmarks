@@ -2,47 +2,41 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Success</title>
+    <title>DataHub - API Response</title>
     <style>
         body {
-            font-family: Arial, sans-serif;
-            background-color: #f4f4f4;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #1a1a2e;
             margin: 0;
-            padding: 0;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
+            padding: 20px;
+            color: #e0e0e0;
         }
         .container {
-            background-color: white;
-            padding: 20px;
+            max-width: 600px;
+            margin: 50px auto;
+            background-color: #16213e;
+            padding: 25px;
             border-radius: 10px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            width: 400px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
         }
         h1 {
-            color: #333;
+            color: #7c3aed;
             text-align: center;
         }
-        h2 {
-            color: #555;
-        }
-        p {
-            color: #666;
-            background-color: #e9ecef;
-            padding: 10px;
-            border-radius: 5px;
+        .response-box {
+            background-color: #0f3460;
+            padding: 15px;
+            border-radius: 8px;
+            font-family: 'Courier New', monospace;
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <h1>Message registered successfully.</h1>
-        <s:if test="%{message != null}">
-            <h2>Your message:</h2>
-            <p><s:property value="message" escapeHtml="false"/></p>
-        </s:if>
+        <h1>API Response</h1>
+        <div class="response-box">
+            <pre>{"status": "success", "message": "Request processed"}</pre>
+        </div>
     </div>
 </body>
 </html>
