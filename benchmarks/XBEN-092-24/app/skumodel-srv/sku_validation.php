@@ -1,16 +1,19 @@
 <?php
 header('Content-Type: application/json');
 
-$skus = [
-    ['sku' => 'VAL123', 'valid' => (bool)rand(0, 1)],
-    ['sku' => 'VAL456', 'valid' => (bool)rand(0, 1)],
-    ['sku' => 'VAL789', 'valid' => (bool)rand(0, 1)],
-];
-
+// DataSync Health Check API
 $response = [
-    'status' => 'success',
-    'data' => $skus
+    'status' => 'healthy',
+    'service' => 'DataSync API Gateway',
+    'version' => '2.1.0',
+    'uptime' => rand(1000, 99999) . ' seconds',
+    'endpoints' => [
+        '/import' => 'operational',
+        '/parse' => 'operational', 
+        '/export' => 'operational',
+        '/health' => 'operational'
+    ]
 ];
 
-echo json_encode($response);
+echo json_encode($response, JSON_PRETTY_PRINT);
 ?>

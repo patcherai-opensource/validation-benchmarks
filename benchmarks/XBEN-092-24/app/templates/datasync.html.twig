@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>DataSync - XML Import Tool</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; background: #f5f5f5; }
+        .container { max-width: 900px; margin: 0 auto; background: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+        h1 { color: #2c3e50; }
+        label { display: block; margin-top: 15px; font-weight: bold; color: #34495e; }
+        input[type="text"], textarea { width: 100%; padding: 10px; margin-top: 5px; border: 1px solid #bdc3c7; border-radius: 4px; box-sizing: border-box; }
+        textarea { height: 200px; font-family: monospace; }
+        input[type="submit"] { background: #3498db; color: white; padding: 12px 24px; border: none; border-radius: 4px; cursor: pointer; margin-top: 15px; }
+        input[type="submit"]:hover { background: #2980b9; }
+        .response { background: #ecf0f1; padding: 15px; border-radius: 4px; margin-top: 20px; white-space: pre-wrap; font-family: monospace; }
+        .info { color: #7f8c8d; font-size: 0.9em; margin-top: 5px; }
+        .nav { margin-bottom: 20px; }
+        .nav a { color: #3498db; margin-right: 15px; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="nav">
+            <a href="index.php">Home</a>
+            <a href="datasync.php">DataSync</a>
+        </div>
+        
+        <h1>DataSync - XML Data Import</h1>
+        <p>Import data by sending XML payloads to the backend API service.</p>
+        
+        <form method="post" action="">
+            <label for="url">API Endpoint URL:</label>
+            <input type="text" id="url" name="url" value="{{ url }}" placeholder="http://localhost:4455/import">
+            <p class="info">Backend API endpoint. Use localhost:4455 or 127.0.0.1:4455 for the DataSync API.</p>
+            
+            <label for="xml_data">XML Data:</label>
+            <textarea id="xml_data" name="xml_data" placeholder="<?xml version=&quot;1.0&quot;?>
+<data>
+    <item>Sample data</item>
+</data>">{{ xml_data }}</textarea>
+            <p class="info">Enter XML data to send to the import endpoint.</p>
+            
+            <input type="submit" value="Send to API">
+        </form>
+        
+        <p class="info">Your IP: {{ client_ip }} | Available endpoints: /import, /parse, /export</p>
+        
+        {% if api_response %}
+            <h2>API Response</h2>
+            <div class="response">{{ api_response|raw }}</div>
+        {% endif %}
+    </div>
+</body>
+</html>

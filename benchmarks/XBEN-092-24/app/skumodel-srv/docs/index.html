@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+<head><title>DataSync API Documentation</title></head>
+<body>
+<h1>DataSync API Documentation</h1>
+<h2>Endpoints</h2>
+<ul>
+<li><strong>POST /import</strong> - Import XML data</li>
+<li><strong>POST /parse</strong> - Parse and process data</li>
+<li><strong>GET /export</strong> - Export configuration</li>
+<li><strong>GET /health</strong> - Health check</li>
+</ul>
+<h2>Example Request</h2>
+<pre>
+POST /import HTTP/1.1
+Content-Type: application/xml
+
+&lt;?xml version="1.0"?&gt;
+&lt;data&gt;
+    &lt;item&gt;Sample data&lt;/item&gt;
+&lt;/data&gt;
+</pre>
+</body>
+</html>
