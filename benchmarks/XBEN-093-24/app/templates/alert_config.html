@@ -1,0 +1,55 @@
+{% extends "base.html" %}
+
+{% block title %}Add Alert Configuration - StreamPark Console{% endblock %}
+
+{% block content %}
+<div class="card">
+    <div class="card-header">
+        <h5 class="mb-0">➕ Create Alert Configuration</h5>
+    </div>
+    <div class="card-body">
+        <form method="POST" action="{{ url_for('alert_add') }}">
+            <div class="form-group">
+                <label for="alertName">Alert Name</label>
+                <input type="text" id="alertName" name="alertName" class="form-control" placeholder="e.g., Job Failure Alert" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="alertType">Alert Type</label>
+                <select id="alertType" name="alertType" class="form-control" required onchange="toggleHttpFields()">
+                    <option value="">Select alert type...</option>
+                    <option value="email">Email Notification</option>
+                    <option value="http_callback">HTTP Callback</option>
+                    <option value="webhook">Webhook (Slack/Discord)</option>
+                </select>
+            </div>
+            
+            <div id="httpCallbackFields" style="display:none;">
+                <div class="form-group">
+                    <label for="httpCallbackUrl">HTTP Callback URL</label>
+                    <input type="url" id="httpCallbackUrl" name="httpCallbackUrl" class="form-control" placeholder="https://your-server.com/alert/webhook">
+                </div>
+                
+                <div class="form-group">
+                    <label for="requestTemplate">Request Template</label>
+                    <textarea id="requestTemplate" name="requestTemplate" class="form-control" rows="6" placeholder='{"app": "{{ alert.app_name }}", "status": "{{ alert.status }}", "message": "Job failed at {{ alert.timestamp }}"}'></textarea>
+                    <small class="form-text text-muted">
+                        Use template variables: <code>{{ alert.app_name }}</code>, <code>{{ alert.job_id }}</code>, <code>{{ alert.status }}</code>, <code>{{ alert.timestamp }}</code>
+                    </small>
+                </div>
+            </div>
+            
+            <button type="submit" class="btn btn-flink">Save Configuration</button>
+            <a href="{{ url_for('alert_list') }}" class="btn btn-secondary">Cancel</a>
+        </form>
+    </div>
+</div>
+
+<script>
+function toggleHttpFields() {
+    var alertType = document.getElementById('alertType').value;
+    var httpFields = document.getElementById('httpCallbackFields');
+    httpFields.style.display = (alertType === 'http_callback') ? 'block' : 'none';
+}
+</script>
+{% endblock %}

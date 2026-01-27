@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+
+{% block title %}Add Application - StreamPark Console{% endblock %}
+
+{% block content %}
+<div class="card">
+    <div class="card-header">
+        <h5 class="mb-0">➕ Create New Flink Application</h5>
+    </div>
+    <div class="card-body">
+        <form method="POST" action="{{ url_for('add_app') }}">
+            <div class="form-group">
+                <label for="app_name">Application Name</label>
+                <input type="text" id="app_name" name="app_name" class="form-control" placeholder="e.g., WordCount Job" required>
+            </div>
+            <div class="form-group">
+                <label for="job_type">Job Type</label>
+                <select id="job_type" name="job_type" class="form-control" required>
+                    <option value="">Select job type...</option>
+                    <option value="JAR">JAR Application</option>
+                    <option value="SQL">Flink SQL</option>
+                    <option value="PYFLINK">PyFlink</option>
+                    <option value="CUSTOM">Custom Code</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="parallelism">Parallelism</label>
+                <input type="number" id="parallelism" name="parallelism" class="form-control" value="1" min="1">
+            </div>
+            <button type="submit" class="btn btn-flink">Create Application</button>
+            <a href="{{ url_for('dashboard') }}" class="btn btn-secondary">Cancel</a>
+        </form>
+    </div>
+</div>
+{% endblock %}

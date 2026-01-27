@@ -1,0 +1,66 @@
+{% extends "base.html" %}
+
+{% block title %}Test Alert Template - StreamPark Console{% endblock %}
+
+{% block content %}
+<div class="card">
+    <div class="card-header">
+        <h5 class="mb-0">🧪 Alert Template Tester</h5>
+    </div>
+    <div class="card-body">
+        <p class="text-muted">Test your alert template rendering before saving. The template will be processed with sample alert data.</p>
+        
+        <form method="GET" action="{{ url_for('alert_test') }}">
+            <div class="form-group">
+                <label for="template">Template String</label>
+                <textarea id="template" name="template" class="form-control" rows="4" placeholder='{"app": "{{ alert.app_name }}", "status": "{{ alert.status }}"}'>{{ template if template else '' }}</textarea>
+                <small class="form-text text-muted">
+                    Available variables: <code>{{ alert.app_name }}</code>, <code>{{ alert.job_id }}</code>, <code>{{ alert.status }}</code>, <code>{{ alert.timestamp }}</code>
+                </small>
+            </div>
+            <button type="submit" class="btn btn-flink">Render Template</button>
+        </form>
+        
+        {% if result is not none %}
+        <div class="mt-4">
+            <h6>✅ Rendered Output:</h6>
+            <div class="alert alert-success">
+                <pre class="mb-0">{{ result }}</pre>
+            </div>
+        </div>
+        {% endif %}
+        
+        {% if error %}
+        <div class="mt-4">
+            <h6>❌ Template Error:</h6>
+            <div class="alert alert-danger">
+                <pre class="mb-0">{{ error }}</pre>
+            </div>
+        </div>
+        {% endif %}
+    </div>
+</div>
+
+<div class="card mt-4">
+    <div class="card-header">
+        <h5 class="mb-0">📚 Template Syntax Reference</h5>
+    </div>
+    <div class="card-body">
+        <p>StreamPark uses a template engine for rendering alert messages. You can use the following syntax:</p>
+        <table class="table table-sm">
+            <tr>
+                <td><code>{{ "{{ variable }}" }}</code></td>
+                <td>Output a variable value</td>
+            </tr>
+            <tr>
+                <td><code>{{ "{% if condition %}...{% endif %}" }}</code></td>
+                <td>Conditional rendering</td>
+            </tr>
+            <tr>
+                <td><code>{{ "{% for item in list %}...{% endfor %}" }}</code></td>
+                <td>Loop iteration</td>
+            </tr>
+        </table>
+    </div>
+</div>
+{% endblock %}

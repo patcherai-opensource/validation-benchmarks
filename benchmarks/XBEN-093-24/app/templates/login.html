@@ -1,29 +1,41 @@
 {% extends "base.html" %}
 
-{% block title %}Login - PayMeBack{% endblock %}
+{% block title %}Login - StreamPark Console{% endblock %}
 
 {% block content %}
-<h2>Login</h2>
-<form method="POST" action="{{ url_for('login') }}">
-    <div class="form-group">
-        <label for="username">Username:</label>
-        <input type="text" id="username" name="username" class="form-control" required>
-    </div>
-    <div class="form-group">
-        <label for="password">Password:</label>
-        <input type="password" id="password" name="password" class="form-control" required>
-    </div>
-    <button type="submit" class="btn btn-primary">Login</button>
-</form>
-{% with messages = get_flashed_messages() %}
-    {% if messages %}
-        <div class="alert alert-danger mt-3">
-            <ul class="mb-0">
-                {% for message in messages %}
-                    <li>{{ message }}</li>
-                {% endfor %}
-            </ul>
+<div class="row justify-content-center mt-5">
+    <div class="col-md-5">
+        <div class="card shadow">
+            <div class="card-header text-center">
+                <h4>🚀 StreamPark Console</h4>
+                <small>Apache Flink & Spark Job Management Platform</small>
+            </div>
+            <div class="card-body">
+                <form method="POST" action="{{ url_for('login') }}">
+                    <div class="form-group">
+                        <label for="username">Username</label>
+                        <input type="text" id="username" name="username" class="form-control" placeholder="Enter username" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="password">Password</label>
+                        <input type="password" id="password" name="password" class="form-control" placeholder="Enter password" required>
+                    </div>
+                    <button type="submit" class="btn btn-flink btn-block">Sign In</button>
+                </form>
+                {% with messages = get_flashed_messages() %}
+                    {% if messages %}
+                        <div class="alert alert-danger mt-3">
+                            {% for message in messages %}
+                                {{ message }}
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+                {% endwith %}
+            </div>
+            <div class="card-footer text-center text-muted">
+                <small>StreamPark Console v2.1.3 | Powered by Apache Flink</small>
+            </div>
         </div>
-    {% endif %}
-{% endwith %}
+    </div>
+</div>
 {% endblock %}

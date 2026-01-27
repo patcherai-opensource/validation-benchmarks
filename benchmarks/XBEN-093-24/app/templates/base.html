@@ -3,34 +3,82 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{% block title %}PayMeBack{% endblock %}</title>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"> 
+    <title>{% block title %}StreamPark Console{% endblock %}</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        .navbar { background: linear-gradient(135deg, #1e3a5f 0%, #2d5a87 100%) !important; }
+        .sidebar { background-color: #f8f9fa; min-height: calc(100vh - 56px); padding-top: 20px; }
+        .sidebar .nav-link { color: #333; padding: 10px 15px; }
+        .sidebar .nav-link:hover { background-color: #e9ecef; }
+        .sidebar .nav-link.active { background-color: #007bff; color: white; }
+        .main-content { padding: 20px; }
+        .card-header { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; }
+        .btn-flink { background: linear-gradient(135deg, #e73c7e 0%, #ee7752 100%); border: none; color: white; }
+        .btn-flink:hover { background: linear-gradient(135deg, #d62b6b 0%, #dd6641 100%); color: white; }
+        .version-info { font-size: 0.8em; color: #aaa; }
+    </style>
 </head>
 <body>
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-        <a class="navbar-brand" href="{{ url_for('transactions') }}">PayMeBack</a>
+    <nav class="navbar navbar-expand-lg navbar-dark">
+        <a class="navbar-brand" href="{% if current_user.is_authenticated %}{{ url_for('dashboard') }}{% else %}{{ url_for('login') }}{% endif %}">
+            <strong>🚀 StreamPark</strong> <span class="version-info">v2.1.3</span>
+        </a>
         <div class="collapse navbar-collapse" id="navbarNav">
-            <ul class="navbar-nav">
+            <ul class="navbar-nav ml-auto">
                 {% if current_user.is_authenticated %}
                 <li class="nav-item">
-                    <a class="nav-link" href="{{ url_for('transactions') }}">Transactions</a>
+                    <span class="nav-link text-light">Welcome, {{ current_user.username }}</span>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="{{ url_for('add_transaction') }}">Add Transaction</a>
+                    <a class="nav-link" href="{{ url_for('logout') }}">Sign Out</a>
                 </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="{{ url_for('logout') }}">Logout</a>
-                </li>
-                {% else %}
-                <li class="nav-item">
-                    <a class="nav-link" href="{{ url_for('login') }}">Login</a>
-                </li> 
                 {% endif %}
             </ul>
         </div>
     </nav>
-    <div class="container mt-4">
-        {% block content %}{% endblock %}
+    
+    <div class="container-fluid">
+        <div class="row">
+            {% if current_user.is_authenticated %}
+            <nav class="col-md-2 sidebar">
+                <div class="sidebar-sticky">
+                    <h6 class="text-muted px-3">FLINK MANAGEMENT</h6>
+                    <ul class="nav flex-column">
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ url_for('dashboard') }}">📊 Dashboard</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ url_for('add_app') }}">➕ Add Application</a>
+                        </li>
+                    </ul>
+                    <h6 class="text-muted px-3 mt-4">SETTINGS</h6>
+                    <ul class="nav flex-column">
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ url_for('alert_list') }}">🔔 Alert Settings</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ url_for('alert_test') }}">🧪 Test Alert</a>
+                        </li>
+                    </ul>
+                </div>
+            </nav>
+            <main class="col-md-10 main-content">
+            {% else %}
+            <main class="col-12 main-content">
+            {% endif %}
+                {% with messages = get_flashed_messages() %}
+                    {% if messages %}
+                        <div class="alert alert-info alert-dismissible fade show" role="alert">
+                            {% for message in messages %}
+                                {{ message }}<br>
+                            {% endfor %}
+                            <button type="button" class="close" data-dismiss="alert">&times;</button>
+                        </div>
+                    {% endif %}
+                {% endwith %}
+                {% block content %}{% endblock %}
+            </main>
+        </div>
     </div>
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>

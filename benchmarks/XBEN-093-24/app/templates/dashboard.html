@@ -1,0 +1,94 @@
+{% extends "base.html" %}
+
+{% block title %}Dashboard - StreamPark Console{% endblock %}
+
+{% block content %}
+<div class="card">
+    <div class="card-header">
+        <h5 class="mb-0">📊 Flink Applications</h5>
+    </div>
+    <div class="card-body">
+        {% if apps %}
+        <table class="table table-hover">
+            <thead class="thead-light">
+                <tr>
+                    <th>Application Name</th>
+                    <th>Job Type</th>
+                    <th>Status</th>
+                    <th>Created</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for app in apps %}
+                <tr>
+                    <td><strong>{{ app.app_name }}</strong></td>
+                    <td><span class="badge badge-info">{{ app.job_type }}</span></td>
+                    <td>
+                        {% if app.status == 'RUNNING' %}
+                        <span class="badge badge-success">{{ app.status }}</span>
+                        {% elif app.status == 'FAILED' %}
+                        <span class="badge badge-danger">{{ app.status }}</span>
+                        {% else %}
+                        <span class="badge badge-secondary">{{ app.status }}</span>
+                        {% endif %}
+                    </td>
+                    <td>{{ app.created_at.strftime('%Y-%m-%d %H:%M') if app.created_at else 'N/A' }}</td>
+                    <td>
+                        <button class="btn btn-sm btn-outline-primary">Start</button>
+                        <button class="btn btn-sm btn-outline-danger">Stop</button>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        {% else %}
+        <div class="alert alert-info">
+            <p>No Flink applications found. <a href="{{ url_for('add_app') }}">Create your first application</a></p>
+        </div>
+        {% endif %}
+    </div>
+</div>
+
+<div class="card mt-4">
+    <div class="card-header">
+        <h5 class="mb-0">📈 Quick Stats</h5>
+    </div>
+    <div class="card-body">
+        <div class="row">
+            <div class="col-md-3">
+                <div class="card bg-primary text-white">
+                    <div class="card-body text-center">
+                        <h3>{{ apps|length }}</h3>
+                        <p class="mb-0">Total Apps</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card bg-success text-white">
+                    <div class="card-body text-center">
+                        <h3>{{ apps|selectattr('status', 'equalto', 'RUNNING')|list|length }}</h3>
+                        <p class="mb-0">Running</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card bg-danger text-white">
+                    <div class="card-body text-center">
+                        <h3>{{ apps|selectattr('status', 'equalto', 'FAILED')|list|length }}</h3>
+                        <p class="mb-0">Failed</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card bg-info text-white">
+                    <div class="card-body text-center">
+                        <h3>0</h3>
+                        <p class="mb-0">Alerts Today</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

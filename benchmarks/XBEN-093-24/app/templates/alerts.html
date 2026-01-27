@@ -1,0 +1,78 @@
+{% extends "base.html" %}
+
+{% block title %}Alert Settings - StreamPark Console{% endblock %}
+
+{% block content %}
+<div class="card">
+    <div class="card-header d-flex justify-content-between align-items-center">
+        <h5 class="mb-0">🔔 Alert Configurations</h5>
+        <a href="{{ url_for('alert_add') }}" class="btn btn-sm btn-flink">+ Add Alert</a>
+    </div>
+    <div class="card-body">
+        {% if alerts %}
+        <table class="table table-hover">
+            <thead class="thead-light">
+                <tr>
+                    <th>Alert Name</th>
+                    <th>Type</th>
+                    <th>Callback URL</th>
+                    <th>Created</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for alert in alerts %}
+                <tr>
+                    <td><strong>{{ alert.alert_name }}</strong></td>
+                    <td>
+                        {% if alert.alert_type == 'http_callback' %}
+                        <span class="badge badge-warning">HTTP Callback</span>
+                        {% elif alert.alert_type == 'email' %}
+                        <span class="badge badge-primary">Email</span>
+                        {% else %}
+                        <span class="badge badge-secondary">{{ alert.alert_type }}</span>
+                        {% endif %}
+                    </td>
+                    <td><code>{{ alert.http_callback_url[:50] if alert.http_callback_url else 'N/A' }}...</code></td>
+                    <td>{{ alert.created_at.strftime('%Y-%m-%d %H:%M') if alert.created_at else 'N/A' }}</td>
+                    <td>
+                        <form method="POST" action="{{ url_for('alert_send') }}" style="display:inline;">
+                            <input type="hidden" name="alertId" value="{{ alert.id }}">
+                            <button type="submit" class="btn btn-sm btn-outline-success">Test Send</button>
+                        </form>
+                        <button class="btn btn-sm btn-outline-danger">Delete</button>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        {% else %}
+        <div class="alert alert-info">
+            <p>No alert configurations found. <a href="{{ url_for('alert_add') }}">Create your first alert</a></p>
+        </div>
+        {% endif %}
+    </div>
+</div>
+
+<div class="card mt-4">
+    <div class="card-header">
+        <h5 class="mb-0">ℹ️ Alert Types</h5>
+    </div>
+    <div class="card-body">
+        <div class="row">
+            <div class="col-md-4">
+                <h6>📧 Email</h6>
+                <p class="text-muted small">Send alerts via SMTP email server</p>
+            </div>
+            <div class="col-md-4">
+                <h6>🔗 HTTP Callback</h6>
+                <p class="text-muted small">POST alert data to a custom endpoint with configurable request template</p>
+            </div>
+            <div class="col-md-4">
+                <h6>💬 Webhook</h6>
+                <p class="text-muted small">Send to Slack, Discord, or other webhook endpoints</p>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
