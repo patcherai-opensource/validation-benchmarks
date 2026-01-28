@@ -1,0 +1,71 @@
+{% extends "base.html" %}
+
+{% block title %}Dashboard - StreamFlow{% endblock %}
+
+{% block content %}
+<h3>Dashboard</h3>
+<p class="text-muted">Real-time overview of your streaming jobs</p>
+
+<div class="row mb-4">
+    <div class="col-md-3">
+        <div class="card bg-success text-white card-counter">
+            <div class="count">{{ running }}</div>
+            <div>Running Jobs</div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card bg-secondary text-white card-counter">
+            <div class="count">{{ stopped }}</div>
+            <div>Stopped Jobs</div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card bg-danger text-white card-counter">
+            <div class="count">{{ failed }}</div>
+            <div>Failed Jobs</div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card bg-primary text-white card-counter">
+            <div class="count">{{ jobs|length }}</div>
+            <div>Total Jobs</div>
+        </div>
+    </div>
+</div>
+
+<div class="card">
+    <div class="card-header">
+        <strong>Recent Jobs</strong>
+    </div>
+    <div class="card-body">
+        <table class="table table-hover mb-0">
+            <thead>
+                <tr>
+                    <th>Job Name</th>
+                    <th>Type</th>
+                    <th>Status</th>
+                    <th>Created</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for job in jobs[:5] %}
+                <tr>
+                    <td>{{ job.job_name }}</td>
+                    <td><span class="badge badge-info">{{ job.job_type }}</span></td>
+                    <td>
+                        {% if job.status == 'RUNNING' %}
+                        <span class="badge badge-success">RUNNING</span>
+                        {% elif job.status == 'STOPPED' %}
+                        <span class="badge badge-secondary">STOPPED</span>
+                        {% else %}
+                        <span class="badge badge-danger">FAILED</span>
+                        {% endif %}
+                    </td>
+                    <td>{{ job.created_at.strftime('%Y-%m-%d %H:%M') if job.created_at else 'N/A' }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

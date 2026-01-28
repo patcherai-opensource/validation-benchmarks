@@ -1,0 +1,58 @@
+{% extends "base.html" %}
+
+{% block title %}Settings - StreamFlow{% endblock %}
+
+{% block content %}
+<h3>System Settings</h3>
+<p class="text-muted">Configure StreamFlow platform settings</p>
+
+<div class="row">
+    <div class="col-md-6">
+        <div class="card mb-3">
+            <div class="card-header">
+                <strong>Flink Configuration</strong>
+            </div>
+            <div class="card-body">
+                <p><strong>Flink Home:</strong> <code>/opt/flink</code></p>
+                <p><strong>Version:</strong> 1.17.1</p>
+                <p><strong>Execution Mode:</strong> Streaming</p>
+                <p><strong>Checkpoint Interval:</strong> 60000ms</p>
+            </div>
+        </div>
+        
+        <div class="card mb-3">
+            <div class="card-header">
+                <strong>Cluster Settings</strong>
+            </div>
+            <div class="card-body">
+                <p><strong>Job Manager:</strong> localhost:8081</p>
+                <p><strong>Task Managers:</strong> 2</p>
+                <p><strong>Total Task Slots:</strong> 8</p>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-6">
+        <div class="card mb-3">
+            <div class="card-header">
+                <strong>Database Configuration</strong>
+            </div>
+            <div class="card-body">
+                <p><strong>Type:</strong> SQLite (Development)</p>
+                <p><strong>Connection Pool:</strong> 10</p>
+            </div>
+        </div>
+        
+        <div class="card mb-3">
+            <div class="card-header">
+                <strong>Security</strong>
+            </div>
+            <div class="card-body">
+                <p><strong>Authentication:</strong> Local Database</p>
+                <p><strong>Session Timeout:</strong> 30 minutes</p>
+                <p><strong>LDAP:</strong> Disabled</p>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

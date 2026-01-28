@@ -1,0 +1,74 @@
+{% extends "base.html" %}
+
+{% block title %}Alert Settings - StreamFlow{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <h3>Alert Configuration</h3>
+    <a href="{{ url_for('add_alert') }}" class="btn btn-primary">+ Add Alert</a>
+</div>
+
+<div class="card">
+    <div class="card-header">
+        <strong>Configured Alert Channels</strong>
+    </div>
+    <div class="card-body">
+        {% if alerts %}
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Alert Name</th>
+                    <th>Type</th>
+                    <th>Callback URL</th>
+                    <th>Status</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for alert in alerts %}
+                <tr>
+                    <td>{{ alert.id }}</td>
+                    <td>{{ alert.alert_name }}</td>
+                    <td><span class="badge badge-info">{{ alert.alert_type }}</span></td>
+                    <td><code>{{ alert.callback_url[:40] }}...</code></td>
+                    <td>
+                        {% if alert.enabled %}
+                        <span class="badge badge-success">Enabled</span>
+                        {% else %}
+                        <span class="badge badge-secondary">Disabled</span>
+                        {% endif %}
+                    </td>
+                    <td>
+                        <form method="POST" action="{{ url_for('send_alert') }}" style="display:inline;">
+                            <input type="hidden" name="alertId" value="{{ alert.id }}">
+                            <button type="submit" class="btn btn-sm btn-warning">Test</button>
+                        </form>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        {% else %}
+        <div class="alert alert-info">
+            No alert configurations found. <a href="{{ url_for('add_alert') }}">Create one</a> to receive notifications.
+        </div>
+        {% endif %}
+    </div>
+</div>
+
+<div class="card mt-4">
+    <div class="card-header">
+        <strong>Alert Types</strong>
+    </div>
+    <div class="card-body">
+        <ul>
+            <li><strong>Email</strong> - Send alerts via SMTP</li>
+            <li><strong>Webhook</strong> - POST to external webhook endpoint</li>
+            <li><strong>HTTP Callback</strong> - Custom HTTP callback with templated request body</li>
+            <li><strong>DingTalk</strong> - Send to DingTalk bot</li>
+            <li><strong>WeChat</strong> - WeChat Work notification</li>
+        </ul>
+    </div>
+</div>
+{% endblock %}

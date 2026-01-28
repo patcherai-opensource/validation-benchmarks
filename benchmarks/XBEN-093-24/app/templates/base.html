@@ -3,35 +3,95 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{% block title %}PayMeBack{% endblock %}</title>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"> 
+    <title>{% block title %}StreamFlow Console{% endblock %}</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        .sidebar { min-height: calc(100vh - 56px); background: #343a40; }
+        .sidebar .nav-link { color: #adb5bd; padding: 0.75rem 1rem; }
+        .sidebar .nav-link:hover { color: #fff; background: #495057; }
+        .sidebar .nav-link.active { color: #fff; background: #007bff; }
+        .main-content { padding: 20px; }
+        .status-running { color: #28a745; }
+        .status-stopped { color: #6c757d; }
+        .status-failed { color: #dc3545; }
+        .card-counter { text-align: center; padding: 20px; }
+        .card-counter .count { font-size: 2rem; font-weight: bold; }
+    </style>
 </head>
 <body>
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-        <a class="navbar-brand" href="{{ url_for('transactions') }}">PayMeBack</a>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+        <a class="navbar-brand" href="#">
+            <strong>StreamFlow</strong> <small class="text-light">v2.1.3</small>
+        </a>
         <div class="collapse navbar-collapse" id="navbarNav">
-            <ul class="navbar-nav">
+            <ul class="navbar-nav ml-auto">
                 {% if current_user.is_authenticated %}
                 <li class="nav-item">
-                    <a class="nav-link" href="{{ url_for('transactions') }}">Transactions</a>
+                    <span class="nav-link text-light">{{ current_user.username }} ({{ current_user.role }})</span>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="{{ url_for('add_transaction') }}">Add Transaction</a>
+                    <a class="nav-link" href="{{ url_for('logout') }}">Sign Out</a>
                 </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="{{ url_for('logout') }}">Logout</a>
-                </li>
-                {% else %}
-                <li class="nav-item">
-                    <a class="nav-link" href="{{ url_for('login') }}">Login</a>
-                </li> 
                 {% endif %}
             </ul>
         </div>
     </nav>
-    <div class="container mt-4">
-        {% block content %}{% endblock %}
+    
+    {% if current_user.is_authenticated %}
+    <div class="container-fluid">
+        <div class="row">
+            <nav class="col-md-2 d-none d-md-block sidebar py-3">
+                <ul class="nav flex-column">
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('dashboard') }}">Dashboard</a>
+                    </li>
+                    <li class="nav-item">
+                        <span class="nav-link text-muted small">FLINK JOBS</span>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('job_list') }}">Job Overview</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('add_job') }}">Create Job</a>
+                    </li>
+                    <li class="nav-item">
+                        <span class="nav-link text-muted small">MONITORING</span>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('alert_list') }}">Alert Settings</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('system_logs') }}">System Logs</a>
+                    </li>
+                    <li class="nav-item">
+                        <span class="nav-link text-muted small">ADMIN</span>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('system_settings') }}">Settings</a>
+                    </li>
+                </ul>
+            </nav>
+            <main role="main" class="col-md-10 ml-sm-auto main-content">
+                {% with messages = get_flashed_messages() %}
+                    {% if messages %}
+                        {% for message in messages %}
+                        <div class="alert alert-info alert-dismissible fade show" role="alert">
+                            {{ message }}
+                            <button type="button" class="close" data-dismiss="alert">&times;</button>
+                        </div>
+                        {% endfor %}
+                    {% endif %}
+                {% endwith %}
+                {% block content %}{% endblock %}
+            </main>
+        </div>
     </div>
+    {% else %}
+    <div class="container mt-5">
+        {% block content_guest %}{% endblock %}
+    </div>
+    {% endif %}
+    
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>

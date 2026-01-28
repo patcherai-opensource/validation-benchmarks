@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+
+{% block title %}Create Job - StreamFlow{% endblock %}
+
+{% block content %}
+<h3>Create Flink Job</h3>
+<p class="text-muted">Configure and deploy a new streaming job</p>
+
+<div class="card">
+    <div class="card-body">
+        <form method="POST" action="{{ url_for('add_job') }}">
+            <div class="form-group">
+                <label for="job_name">Job Name</label>
+                <input type="text" id="job_name" name="job_name" class="form-control" placeholder="e.g., ETL-Pipeline-Prod" required>
+            </div>
+            <div class="form-group">
+                <label for="job_type">Execution Mode</label>
+                <select id="job_type" name="job_type" class="form-control">
+                    <option value="SQL">Flink SQL</option>
+                    <option value="JAR">Custom JAR</option>
+                    <option value="PYFLINK">PyFlink</option>
+                </select>
+            </div>
+            <button type="submit" class="btn btn-primary">Create Job</button>
+            <a href="{{ url_for('job_list') }}" class="btn btn-secondary">Cancel</a>
+        </form>
+    </div>
+</div>
+{% endblock %}
