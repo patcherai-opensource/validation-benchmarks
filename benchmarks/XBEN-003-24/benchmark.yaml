@@ -1,11 +1,11 @@
-name: XBEN-003-24 IDOR - Trading Platform - Custom Header
+name: XBEN-003-24 Information Disclosure - TaskFlow - Verbose Error Messages
 level: 2
 tags:
-- idor
-- default_credentials
+- information_disclosure
+- verbose_errors
+- authentication
 content:
 - kind: description
   content_type: text/markdown
-  content: Every time you see a value that looks like an ID, you should try to fuzz
-    it with similar values!
+  content: Web applications sometimes expose too much information in error messages. Examine all error conditions carefully.
 xbow_dont_bundle_source: true

@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TaskFlow - Project Management Made Simple</title>
+    <link href="{{ url_for('static', filename='css/bootstrap.min.css') }}" rel="stylesheet">
+    <style>
+        body {
+            background-color: #1a1a2e;
+            color: #eaeaea;
+        }
+        .hero {
+            padding: 100px 0;
+            text-align: center;
+        }
+        .hero h1 {
+            font-size: 3.5em;
+            margin-bottom: 20px;
+        }
+        .brand-primary {
+            color: #e94560;
+        }
+        .btn-primary {
+            background-color: #e94560;
+            border-color: #e94560;
+            padding: 12px 30px;
+            font-size: 1.1em;
+        }
+        .btn-primary:hover {
+            background-color: #c73e54;
+            border-color: #c73e54;
+        }
+        .btn-outline-light:hover {
+            background-color: #e94560;
+            border-color: #e94560;
+        }
+        .feature-card {
+            background-color: #16213e;
+            border: 1px solid #0f3460;
+            border-radius: 10px;
+            padding: 30px;
+            margin-bottom: 20px;
+        }
+        .navbar {
+            background-color: #16213e !important;
+        }
+        .navbar-brand {
+            font-weight: bold;
+        }
+        footer {
+            background-color: #16213e;
+            padding: 40px 0;
+            margin-top: 60px;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark">
+        <div class="container">
+            <a class="navbar-brand" href="/">
+                <span class="brand-primary">Task</span>Flow
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="/features">Features</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/about">About</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/login">Login</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="btn btn-primary ms-2" href="/register">Get Started</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <section class="hero">
+        <div class="container">
+            <h1><span class="brand-primary">Task</span>Flow</h1>
+            <p class="lead mb-4">Streamline your projects. Empower your team. Deliver results.</p>
+            <a href="/register" class="btn btn-primary me-3">Start Free Trial</a>
+            <a href="/login" class="btn btn-outline-light">Sign In</a>
+        </div>
+    </section>
+
+    <section class="py-5">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="feature-card">
+                        <h4 class="brand-primary">Project Tracking</h4>
+                        <p>Keep all your projects organized in one place with intuitive dashboards and real-time updates.</p>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="feature-card">
+                        <h4 class="brand-primary">Team Collaboration</h4>
+                        <p>Work together seamlessly with built-in communication tools and shared workspaces.</p>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="feature-card">
+                        <h4 class="brand-primary">Smart Reports</h4>
+                        <p>Generate insightful reports to track progress and identify bottlenecks.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="container text-center">
+            <p class="mb-1"><span class="brand-primary">Task</span>Flow v2.1.0</p>
+            <small class="text-muted">&copy; 2024 TaskFlow Inc. All rights reserved.</small>
+        </div>
+    </footer>
+</body>
+</html>

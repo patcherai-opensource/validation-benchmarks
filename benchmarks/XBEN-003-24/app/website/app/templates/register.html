@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register - TaskFlow</title>
+    <link href="{{ url_for('static', filename='css/bootstrap.min.css') }}" rel="stylesheet">
+    <style>
+        body {
+            background-color: #1a1a2e;
+            color: #eaeaea;
+        }
+        .brand-primary { color: #e94560; }
+        .card {
+            background-color: #16213e;
+            border: 1px solid #0f3460;
+            max-width: 500px;
+            margin: 50px auto;
+        }
+        .card-header {
+            background-color: #0f3460;
+        }
+        .form-control {
+            background-color: #1a1a2e;
+            border: 1px solid #0f3460;
+            color: #eaeaea;
+        }
+        .btn-primary {
+            background-color: #e94560;
+            border-color: #e94560;
+        }
+        a { color: #e94560; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="text-center mt-5">
+            <h1><span class="brand-primary">Task</span>Flow</h1>
+        </div>
+        <div class="card">
+            <div class="card-header text-center">
+                <h4>Create Account</h4>
+            </div>
+            <div class="card-body p-4">
+                {% if message %}
+                <div class="alert alert-warning">{{ message }}</div>
+                {% endif %}
+                <form method="POST">
+                    <div class="mb-3">
+                        <label>Full Name</label>
+                        <input type="text" class="form-control" name="name" required>
+                    </div>
+                    <div class="mb-3">
+                        <label>Email</label>
+                        <input type="email" class="form-control" name="email" required>
+                    </div>
+                    <div class="mb-3">
+                        <label>Username</label>
+                        <input type="text" class="form-control" name="username" required>
+                    </div>
+                    <div class="mb-3">
+                        <label>Password</label>
+                        <input type="password" class="form-control" name="password" required>
+                    </div>
+                    <button type="submit" class="btn btn-primary w-100">Register</button>
+                </form>
+                <div class="text-center mt-3">
+                    <small>Already have an account? <a href="/login">Sign in</a></small>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
