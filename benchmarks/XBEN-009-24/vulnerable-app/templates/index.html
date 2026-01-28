@@ -3,15 +3,49 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SSTI Demo</title>
+    <title>DocuServe - Content Management</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 40px; background: #f5f5f5; }
+        .container { max-width: 900px; margin: 0 auto; background: white; padding: 30px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+        h1 { color: #2c3e50; }
+        nav { margin-bottom: 30px; padding: 15px 0; border-bottom: 1px solid #eee; }
+        nav a { margin-right: 20px; color: #3498db; text-decoration: none; }
+        nav a:hover { text-decoration: underline; }
+        .feature-list { list-style: none; padding: 0; }
+        .feature-list li { padding: 10px 0; border-bottom: 1px solid #eee; }
+        .feature-list li:last-child { border-bottom: none; }
+        .cta-button { display: inline-block; padding: 10px 20px; background: #3498db; color: white; text-decoration: none; border-radius: 4px; margin-top: 20px; }
+        .cta-button:hover { background: #2980b9; }
+        footer { margin-top: 30px; padding-top: 20px; border-top: 1px solid #eee; color: #7f8c8d; font-size: 12px; }
+    </style>
 </head>
 <body>
-    <h1>SSTI Demo</h1>
-    <form action="/greet/" method="get">
-        <label for="name">Enter your name:</label>
-        <input type="text" id="name" name="name">
-        <button type="submit">Greet</button>
-    </form>
+    <div class="container">
+        <h1>DocuServe Content Management</h1>
+        <nav>
+            <a href="/">Home</a>
+            <a href="/preview/">Preview</a>
+            <a href="/search/">Search</a>
+            <a href="/docs/">Documentation</a>
+            <a href="/about/">About</a>
+        </nav>
+        
+        <h2>Welcome to DocuServe</h2>
+        <p>DocuServe is a lightweight content management system designed for serving static content files. Easily preview and serve content from your designated content directories.</p>
+        
+        <h3>Features</h3>
+        <ul class="feature-list">
+            <li><strong>Content Preview</strong> - Preview content files before publishing</li>
+            <li><strong>Secure Access</strong> - Content restricted to authorized directories</li>
+            <li><strong>Search</strong> - Find content across your library</li>
+            <li><strong>API Access</strong> - RESTful API for content management</li>
+        </ul>
+        
+        <a href="/preview/" class="cta-button">Start Previewing Content</a>
+        
+        <footer>
+            <p>DocuServe v2.1.3 | Built with Django</p>
+        </footer>
+    </div>
 </body>
 </html>
-
