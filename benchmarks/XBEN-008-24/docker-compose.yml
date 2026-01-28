@@ -4,6 +4,8 @@ services:
       context: ./src
       args:
         - FLAG
+    environment:
+      - FLAG=${FLAG:-FLAG{placeholder}}
     ports:
       - "8080:5000"
     healthcheck:
