@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css">
+    <title>Documentation - MathDoc Pro</title>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+        <a class="navbar-brand" href="/">MathDoc Pro</a>
+        <div class="collapse navbar-collapse">
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-item"><a class="nav-link" href="/">Dashboard</a></li>
+                <li class="nav-item"><a class="nav-link" href="/convert">Convert</a></li>
+                <li class="nav-item active"><a class="nav-link" href="/docs-viewer">Documentation</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <div class="container mt-4">
+        <h2>MathDoc Pro Documentation</h2>
+        <p class="lead">API Reference and Usage Guide</p>
+
+        <div class="card mb-4">
+            <div class="card-header bg-dark text-white">
+                <h5>REST API Endpoints</h5>
+            </div>
+            <div class="card-body">
+                <h6>Equations</h6>
+                <ul>
+                    <li><code>GET /api/equations</code> - List all sample equations</li>
+                    <li><code>GET /api/equations/{id}</code> - Get equation by ID</li>
+                </ul>
+                
+                <h6>Validation & Conversion</h6>
+                <ul>
+                    <li><code>POST /api/latex/validate</code> - Validate LaTeX syntax (form param: <code>latex</code>)</li>
+                    <li><code>POST /api/convert/latex-to-mathml</code> - Convert LaTeX to MathML</li>
+                </ul>
+                
+                <h6>Document Processing</h6>
+                <ul>
+                    <li><code>GET /api/documents</code> - List stored documents</li>
+                    <li><code>POST /render</code> - Render MathML content
+                        <ul>
+                            <li>Form params: <code>mathml_file</code> (file upload) or <code>mathml_text</code> (direct input)</li>
+                            <li>Optional: <code>doc_title</code> for naming the document</li>
+                        </ul>
+                    </li>
+                </ul>
+                
+                <h6>Health</h6>
+                <ul>
+                    <li><code>GET /ping</code> - Service ping</li>
+                    <li><code>GET /health</code> - Health check with version info</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="card mb-4">
+            <div class="card-header">MathML Format Reference</div>
+            <div class="card-body">
+                <p>MathML (Mathematical Markup Language) is an XML-based standard for mathematical notation.</p>
+                <h6>Basic Structure:</h6>
+                <pre><code>&lt;?xml version="1.0" encoding="UTF-8"?&gt;
+&lt;math xmlns="http://www.w3.org/1998/Math/MathML"&gt;
+  &lt;mrow&gt;
+    &lt;mi&gt;x&lt;/mi&gt;
+    &lt;mo&gt;=&lt;/mo&gt;
+    &lt;mn&gt;42&lt;/mn&gt;
+  &lt;/mrow&gt;
+&lt;/math&gt;</code></pre>
+                
+                <h6>Common Elements:</h6>
+                <ul>
+                    <li><code>&lt;mi&gt;</code> - Identifier (variables)</li>
+                    <li><code>&lt;mn&gt;</code> - Number</li>
+                    <li><code>&lt;mo&gt;</code> - Operator</li>
+                    <li><code>&lt;mrow&gt;</code> - Group elements horizontally</li>
+                    <li><code>&lt;msup&gt;</code> - Superscript</li>
+                    <li><code>&lt;mfrac&gt;</code> - Fraction</li>
+                    <li><code>&lt;mtext&gt;</code> - Text content</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-header">Version Information</div>
+            <div class="card-body">
+                <p><strong>MathDoc Pro</strong> v1.2.0</p>
+                <p>XML Processing: lxml 5.2.2</p>
+                <p>Framework: FastAPI</p>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

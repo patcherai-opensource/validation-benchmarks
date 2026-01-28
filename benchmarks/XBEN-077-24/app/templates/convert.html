@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css">
+    <title>Conversion Tools - MathDoc Pro</title>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+        <a class="navbar-brand" href="/">MathDoc Pro</a>
+        <div class="collapse navbar-collapse">
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-item"><a class="nav-link" href="/">Dashboard</a></li>
+                <li class="nav-item active"><a class="nav-link" href="/convert">Convert</a></li>
+                <li class="nav-item"><a class="nav-link" href="/docs-viewer">Documentation</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <div class="container mt-4">
+        <h2>Conversion Tools</h2>
+        
+        <div class="row">
+            <div class="col-md-6">
+                <div class="card mb-4">
+                    <div class="card-header bg-info text-white">LaTeX to MathML</div>
+                    <div class="card-body">
+                        <form action="/api/convert/latex-to-mathml" method="post">
+                            <div class="form-group">
+                                <label>Enter LaTeX Expression</label>
+                                <textarea class="form-control" name="latex" rows="4" placeholder="e.g., \frac{-b \pm \sqrt{b^2-4ac}}{2a}"></textarea>
+                            </div>
+                            <button type="submit" class="btn btn-info">Convert to MathML</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-md-6">
+                <div class="card mb-4">
+                    <div class="card-header bg-warning">MathML Renderer</div>
+                    <div class="card-body">
+                        <p>For MathML rendering, use the dedicated render endpoint:</p>
+                        <a href="/render" class="btn btn-warning">Go to Renderer</a>
+                        <hr>
+                        <small class="text-muted">The renderer supports file uploads and direct text input for MathML content processing.</small>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-header">Supported Formats</div>
+            <div class="card-body">
+                <table class="table table-bordered">
+                    <thead>
+                        <tr><th>Input Format</th><th>Output Format</th><th>Endpoint</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr><td>LaTeX</td><td>MathML</td><td><code>POST /api/convert/latex-to-mathml</code></td></tr>
+                        <tr><td>MathML (file/text)</td><td>Rendered HTML</td><td><code>POST /render</code></td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

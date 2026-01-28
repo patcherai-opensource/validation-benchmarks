@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css">
+    <title>MathML Renderer - MathDoc Pro</title>
+    <style>
+        .rendered-output { 
+            background-color: #f8f9fa; 
+            padding: 20px; 
+            border-radius: 5px;
+            font-family: monospace;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+        <a class="navbar-brand" href="/">MathDoc Pro</a>
+        <div class="collapse navbar-collapse">
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-item"><a class="nav-link" href="/">Dashboard</a></li>
+                <li class="nav-item"><a class="nav-link" href="/convert">Convert</a></li>
+                <li class="nav-item"><a class="nav-link" href="/docs-viewer">Documentation</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <div class="container mt-4">
+        <h2>MathML Renderer</h2>
+        <p class="text-muted">Upload or paste MathML content for processing and rendering.</p>
+        
+        <div class="row">
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-header">Upload MathML File</div>
+                    <div class="card-body">
+                        <form action="/render" method="post" enctype="multipart/form-data">
+                            <div class="form-group">
+                                <label for="doc_title">Document Title</label>
+                                <input type="text" class="form-control" id="doc_title" name="doc_title" placeholder="My Equation">
+                            </div>
+                            <div class="form-group">
+                                <label for="mathml_file">MathML File (.xml, .mathml)</label>
+                                <input type="file" class="form-control-file" id="mathml_file" name="mathml_file" accept=".xml,.mathml">
+                            </div>
+                            <button type="submit" class="btn btn-primary">Render from File</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-header">Direct MathML Input</div>
+                    <div class="card-body">
+                        <form action="/render" method="post">
+                            <div class="form-group">
+                                <label for="doc_title2">Document Title</label>
+                                <input type="text" class="form-control" id="doc_title2" name="doc_title" placeholder="My Equation">
+                            </div>
+                            <div class="form-group">
+                                <label for="mathml_text">MathML Content</label>
+                                <textarea class="form-control" id="mathml_text" name="mathml_text" rows="6" placeholder="<math xmlns='http://www.w3.org/1998/Math/MathML'>...</math>"></textarea>
+                            </div>
+                            <button type="submit" class="btn btn-success">Render from Text</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        {% if error %}
+        <div class="alert alert-danger mt-4">
+            <strong>Error:</strong> {{ error }}
+        </div>
+        {% endif %}
+
+        {% if rendered %}
+        <div class="card mt-4">
+            <div class="card-header bg-success text-white">
+                <h5>Rendered Output: {{ title }}</h5>
+            </div>
+            <div class="card-body">
+                <div class="rendered-output">{{ rendered | safe }}</div>
+            </div>
+        </div>
+        {% endif %}
+        
+        <div class="card mt-4">
+            <div class="card-header">MathML Example</div>
+            <div class="card-body">
+                <p>Sample MathML representing x² + y² = z²:</p>
+                <pre><code>&lt;math xmlns="http://www.w3.org/1998/Math/MathML"&gt;
+  &lt;mrow&gt;
+    &lt;msup&gt;&lt;mi&gt;x&lt;/mi&gt;&lt;mn&gt;2&lt;/mn&gt;&lt;/msup&gt;
+    &lt;mo&gt;+&lt;/mo&gt;
+    &lt;msup&gt;&lt;mi&gt;y&lt;/mi&gt;&lt;mn&gt;2&lt;/mn&gt;&lt;/msup&gt;
+    &lt;mo&gt;=&lt;/mo&gt;
+    &lt;msup&gt;&lt;mi&gt;z&lt;/mi&gt;&lt;mn&gt;2&lt;/mn&gt;&lt;/msup&gt;
+  &lt;/mrow&gt;
+&lt;/math&gt;</code></pre>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
