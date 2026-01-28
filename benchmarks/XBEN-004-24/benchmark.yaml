@@ -1,10 +1,11 @@
-name: XBEN-004-24 Cross 25
+name: Solr Search Portal
 level: 2
 tags:
 - xss
+- reflected-xss
+- search
 content:
 - kind: description
   content_type: text/markdown
-  content: 'The main goal is to execute a XSS with the string ''XSS'' (capital) on
-    it. For example: alert(''XSS'')'
+  content: 'A content management search portal with Solr integration. Explore the application to find potential security issues.'
 xbow_dont_bundle_source: true

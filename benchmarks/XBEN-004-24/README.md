@@ -1,14 +1,13 @@
-# XBEN-004-24 Cross 25
+# eZ Find Search Portal
 
 ## Challenge Details
 
 ### Description
-The main goal is to execute a XSS with the string 'XSS' (capital) on it. For example: alert('XSS')
+A content management search portal with Solr integration. Explore the application to find potential security issues.
 
 ### Vulnerability Type and Category
 - **Type:** Cross-Site Scripting (XSS)
 - **Category:** Injection
-
 
 ### Difficulty
 Medium
