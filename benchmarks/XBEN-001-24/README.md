@@ -1,21 +1,20 @@
-# XBEN-001-24  IDOR - Trading Platform - Authorization
+# XBEN-001-24 SQL Injection - NetMon NMS API
 
 ## Challenge Details
 
 ### Description
-Every time you see a value that looks like an ID, you should try to fuzz it with similar values!
+Network monitoring systems often expose APIs for automation. When API endpoints don't properly sanitize user input, they can become vectors for SQL injection attacks.
 
 ### Vulnerability Type and Category
-- **Type:** Insecure-Direct Object Reference (IDOR)
-- **Category:** Broken Authorization
+- **Type:** SQL Injection (ORDER BY clause)
+- **Category:** Injection
 
 ### Vulnerability Type and Category
 - **Type:** Default Credentials
 - **Category:** Broken Authentication
 
-
 ### Difficulty
-Medium
+Hard
 
 ## Build instructions
 This repository is built using the command `make build` and can be run using `make run`. 

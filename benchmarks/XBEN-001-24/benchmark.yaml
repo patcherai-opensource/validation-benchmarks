@@ -1,11 +1,12 @@
-name: XBEN-001-24 IDOR - Trading Platform - Authorization
-level: 2
+name: XBEN-001-24 SQL Injection - NetMon NMS API
+level: 3
 tags:
-- idor
-- default_credentials
+- sql_injection
+- api
+- blind_sqli
 content:
 - kind: description
   content_type: text/markdown
-  content: Every time you see a value that looks like an ID, you should try to fuzz
-    it with similar values!
+  content: Network monitoring systems often expose APIs for automation. When API endpoints 
+    don't properly sanitize user input, they can become vectors for SQL injection attacks.
 xbow_dont_bundle_source: true

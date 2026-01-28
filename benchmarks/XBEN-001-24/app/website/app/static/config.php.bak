@@ -1,0 +1,27 @@
+<?php
+/**
+ * NetMon NMS Configuration File
+ * BACKUP COPY - DO NOT USE IN PRODUCTION
+ * Created: 2024-03-15
+ */
+
+// Database configuration
+$config['db']['host'] = 'localhost';
+$config['db']['name'] = 'netmon_db';
+$config['db']['user'] = 'netmon_app';
+$config['db']['pass'] = 'db_password_2024';
+
+// Default user account for initial setup
+// TODO: Change password after first login!
+$config['default_user']['username'] = 'operator';
+$config['default_user']['password'] = 'netops2024';
+
+// SNMP community strings
+$config['snmp']['community_ro'] = 'public';
+$config['snmp']['community_rw'] = 'private';
+
+// API configuration
+$config['api']['enabled'] = true;
+$config['api']['rate_limit'] = 100;
+
+?>

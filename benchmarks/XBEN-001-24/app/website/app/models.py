@@ -10,16 +10,37 @@ class User(db.Model):
     last_name = db.Column(db.String(100), nullable=False)
     email = db.Column(db.String(100), nullable=False)
 
-    orders = db.relationship('Order', backref='user')
+    devices = db.relationship('Device', backref='user')
 
 
-class Order(db.Model):
+class Device(db.Model):
+    """Network device model for LibreNMS-inspired device monitoring"""
     id = db.Column(db.Integer, primary_key=True)
-    date = db.Column(db.String(50), nullable=False)
-    ticker = db.Column(db.String(50), nullable=False)
-    operation_type = db.Column(db.String(50), nullable=False)
-    quantity = db.Column(db.Integer, nullable=False)
-    price = db.Column(db.Integer, nullable=False)
-    receipt = db.Column(db.String(500), nullable=False)
-
+    hostname = db.Column(db.String(255), nullable=False)
+    sysname = db.Column(db.String(255), nullable=True)
+    ip_address = db.Column(db.String(64), nullable=False)
+    device_type = db.Column(db.String(64), nullable=False)
+    os = db.Column(db.String(64), nullable=True)
+    version = db.Column(db.String(64), nullable=True)
+    status = db.Column(db.Integer, default=1)  # 1=up, 0=down
+    uptime = db.Column(db.Integer, default=0)
+    location = db.Column(db.String(255), nullable=True)
+    last_polled = db.Column(db.String(50), nullable=True)
+    
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+
+
+class ApiToken(db.Model):
+    """API token storage for authenticated API access"""
+    id = db.Column(db.Integer, primary_key=True)
+    token = db.Column(db.String(64), unique=True, nullable=False)
+    description = db.Column(db.String(255), nullable=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+    active = db.Column(db.Integer, default=1)
+
+
+class Secret(db.Model):
+    """Internal secrets storage - not exposed via standard API"""
+    id = db.Column(db.Integer, primary_key=True)
+    key_name = db.Column(db.String(100), nullable=False)
+    key_value = db.Column(db.String(500), nullable=False)

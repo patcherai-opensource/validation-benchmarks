@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ device.hostname }} - NetMon NMS</title>
+    <link href="{{ url_for('static', filename='css/bootstrap.min.css') }}" rel="stylesheet">
+    <style>
+        body {
+            background-color: #1a1a2e;
+            color: #eaeaea;
+        }
+        .card {
+            background-color: #16213e;
+            color: #eaeaea;
+            border: 1px solid #0f3460;
+        }
+        .navbar {
+            background-color: #0f3460 !important;
+        }
+        .status-up {
+            color: #00ff00;
+        }
+        .status-down {
+            color: #ff4444;
+        }
+        .detail-label {
+            color: #888;
+            font-size: 0.9rem;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark">
+        <div class="container">
+            <a class="navbar-brand" href="/dashboard">&#x1F4E1; NetMon NMS</a>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="/dashboard">Dashboard</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/devices">Devices</a>
+                    </li>
+                </ul>
+                <ul class="navbar-nav">
+                    <li class="nav-item">
+                        <form action="/logout" method="post" class="d-inline">
+                            <button type="submit" class="btn btn-outline-light btn-sm">Logout</button>
+                        </form>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+    <div class="container mt-4">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb" style="background-color: #16213e;">
+                <li class="breadcrumb-item"><a href="/devices" class="text-info">Devices</a></li>
+                <li class="breadcrumb-item active" aria-current="page">{{ device.hostname }}</li>
+            </ol>
+        </nav>
+        
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h2>{{ device.hostname }}</h2>
+            {% if device.status == 1 %}
+                <span class="badge bg-success">● Up</span>
+            {% else %}
+                <span class="badge bg-danger">● Down</span>
+            {% endif %}
+        </div>
+        
+        <div class="row">
+            <div class="col-md-6">
+                <div class="card mb-4">
+                    <div class="card-header">
+                        <h5>Device Information</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="row mb-2">
+                            <div class="col-4 detail-label">Device ID</div>
+                            <div class="col-8">{{ device.id }}</div>
+                        </div>
+                        <div class="row mb-2">
+                            <div class="col-4 detail-label">Hostname</div>
+                            <div class="col-8">{{ device.hostname }}</div>
+                        </div>
+                        <div class="row mb-2">
+                            <div class="col-4 detail-label">System Name</div>
+                            <div class="col-8">{{ device.sysname }}</div>
+                        </div>
+                        <div class="row mb-2">
+                            <div class="col-4 detail-label">IP Address</div>
+                            <div class="col-8">{{ device.ip_address }}</div>
+                        </div>
+                        <div class="row mb-2">
+                            <div class="col-4 detail-label">Device Type</div>
+                            <div class="col-8">{{ device.device_type }}</div>
+                        </div>
+                        <div class="row mb-2">
+                            <div class="col-4 detail-label">Operating System</div>
+                            <div class="col-8">{{ device.os }}</div>
+                        </div>
+                        <div class="row mb-2">
+                            <div class="col-4 detail-label">Version</div>
+                            <div class="col-8">{{ device.version }}</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="card mb-4">
+                    <div class="card-header">
+                        <h5>Status & Location</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="row mb-2">
+                            <div class="col-4 detail-label">Status</div>
+                            <div class="col-8">
+                                {% if device.status == 1 %}
+                                    <span class="status-up">● Up</span>
+                                {% else %}
+                                    <span class="status-down">● Down</span>
+                                {% endif %}
+                            </div>
+                        </div>
+                        <div class="row mb-2">
+                            <div class="col-4 detail-label">Uptime</div>
+                            <div class="col-8">{{ device.uptime // 86400 }} days</div>
+                        </div>
+                        <div class="row mb-2">
+                            <div class="col-4 detail-label">Location</div>
+                            <div class="col-8">{{ device.location }}</div>
+                        </div>
+                        <div class="row mb-2">
+                            <div class="col-4 detail-label">Last Polled</div>
+                            <div class="col-8">{{ device.last_polled }}</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <a href="/devices" class="btn btn-outline-info">&larr; Back to Devices</a>
+    </div>
+</body>
+</html>

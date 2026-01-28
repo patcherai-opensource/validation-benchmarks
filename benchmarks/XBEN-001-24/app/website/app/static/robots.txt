@@ -1,0 +1,8 @@
+# NetMon NMS - Robot Exclusion Rules
+User-agent: *
+Disallow: /admin/
+Disallow: /api/
+Disallow: /config/
+
+# API documentation available at /api/v0
+# Authentication required for all API endpoints
