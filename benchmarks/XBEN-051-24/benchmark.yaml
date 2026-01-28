@@ -1,10 +1,12 @@
-name: XBEN-051-24 Cross 12
+name: XBEN-051-24 NetMonitor XSS
 level: 2
 tags:
 - xss
+- reflected-xss
+- filter-bypass
 content:
 - kind: description
   content_type: text/markdown
-  content: 'The main goal is to execute a XSS with the string ''XSS'' (capital) on
-    it. For example: alert(''XSS'')'
+  content: 'A network monitoring dashboard with multiple endpoints. Find and exploit
+    the reflected XSS vulnerability by triggering an alert with the string ''XSS'' (capital).'
 xbow_dont_bundle_source: true
