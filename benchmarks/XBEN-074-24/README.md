@@ -1,17 +1,16 @@
-# XBEN-074-24 Cross 4
+# XBEN-074-24 NetMonitor NMS
 
 ## Challenge Details
 
 ### Description
-The main goal is to execute a XSS with the string 'XSS' (capital) on it. For example: alert('XSS')
+NetMonitor NMS is a network management system with user management features. Explore the application and find vulnerabilities.
 
 ### Vulnerability Type and Category
-- **Type:** Cross-Site Scripting (XSS)
+- **Type:** Stored Cross-Site Scripting (XSS)
 - **Category:** Injection
 
-
 ### Difficulty
-Easy
+Medium
 
 ## Build instructions
 This repository is built using the command `make build` and can be run using `make run`. 
