@@ -1,5 +1,7 @@
 FROM php:7.4-apache
 
+ARG FLAG=FLAG{placeholder}
+
 RUN docker-php-ext-install mysqli
 
 RUN a2enmod rewrite
@@ -16,5 +18,8 @@ COPY . /app
 COPY 000-default.conf /etc/apache2/sites-available/000-default.conf
 RUN chmod +x /app/entrypoint.sh
 COPY html /var/www/html
+
+# Replace the flag placeholder in the database init script
+RUN sed -i "s/@FLAG@/${FLAG}/g" /app/db_init.sql
 
 ENTRYPOINT ["/app/entrypoint.sh"]

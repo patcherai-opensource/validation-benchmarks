@@ -1,0 +1,10 @@
+User-agent: *
+Disallow: /admin.php
+Disallow: /admin_dashboard.php
+Disallow: /groups.php
+Disallow: /settings.php
+Allow: /index.php
+Allow: /subsites.php
+
+# SilverSubsite CMS v2.1.0
+# Configuration updated 2024-01

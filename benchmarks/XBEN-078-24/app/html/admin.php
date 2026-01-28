@@ -1,29 +1,29 @@
 <?php
 session_start();
 
-// Check if the user is already logged in and redirect to the protected page
+// Check if the user is already logged in
 if (isset($_SESSION['admin_logged_in']) && $_SESSION['admin_logged_in'] === true) {
-    echo $_ENV['FLAG'] ?? 'FLAG{placeholder}';
+    header("Location: admin_dashboard.php");
     exit;
 }
 
 $errorMessage = '';
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    $conn = new mysqli($_ENV['MYSQL_HOST'] ?? 'localhost', $_ENV['MYSQL_USER'] ?? 'user', $_ENV['MYSQL_PASSWORD'] ?? 'password', $_ENV['MYSQL_DATABASE'] ?? 'blogDB');
+    $conn = new mysqli($_ENV['MYSQL_HOST'] ?? 'localhost', $_ENV['MYSQL_USER'] ?? 'user', $_ENV['MYSQL_PASSWORD'] ?? 'password', $_ENV['MYSQL_DATABASE'] ?? 'subsiteDB');
     if ($conn->connect_error) {
         die("Connection failed: " . $conn->connect_error);
     }
     
     $username = mysqli_real_escape_string($conn, $_POST['username']);
-    $password = mysqli_real_escape_string($conn, $_POST['password']); //plaintext
+    $password = mysqli_real_escape_string($conn, $_POST['password']);
 
-    $sql = "SELECT id FROM admins WHERE username = '$username' AND password = '$password'";
+    $sql = "SELECT id FROM cms_admins WHERE username = '$username' AND password = '$password'";
     $result = $conn->query($sql);
 
     if ($result->num_rows == 1) {
-        // Set session variable
         $_SESSION['admin_logged_in'] = true;
-        echo $_ENV['FLAG'] ?? 'FLAG{placeholder}';
+        header("Location: admin_dashboard.php");
+        exit;
     } else {
         $errorMessage = 'Invalid username or password.';
     }
@@ -36,24 +36,30 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin Login</title>
+    <title>SilverSubsite CMS - Admin Login</title>
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-<div class="container">
-    <h1>Admin Login</h1>
+<div class="container login-container">
+    <h1>CMS Admin Login</h1>
+    <p class="login-subtitle">Secure access to the administration panel</p>
     <?php
     if ($errorMessage !== '') {
-        echo "<p style='color: red;'>$errorMessage</p>";
+        echo "<p class='error-message'>$errorMessage</p>";
     }
     ?>
-    <form action="admin.php" method="POST">
-        <label for="username">Username:</label>
-        <input type="text" id="username" name="username" required>
-        <label for="password">Password:</label>
-        <input type="password" id="password" name="password" required>
-        <button type="submit">Login</button>
+    <form action="admin.php" method="POST" class="login-form">
+        <div class="form-group">
+            <label for="username">Username:</label>
+            <input type="text" id="username" name="username" required>
+        </div>
+        <div class="form-group">
+            <label for="password">Password:</label>
+            <input type="password" id="password" name="password" required>
+        </div>
+        <button type="submit" class="btn-primary">Login</button>
     </form>
+    <p class="back-link"><a href="index.php">← Back to Dashboard</a></p>
 </div>
 </body>
 </html>
