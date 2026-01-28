@@ -1,0 +1,17 @@
+# TimeTracker Pro Configuration Backup
+# Created: 2024-01-10
+
+[database]
+host = localhost
+port = 5432
+name = timetracker_db
+
+[auth]
+# Default test accounts for development
+# admin:kimai2023! - Full access
+# manager:tr4ck3r! - Invoice management  
+# user:timekeep - Basic access
+
+[features]
+invoice_upload_twig = true
+sandbox_mode = false

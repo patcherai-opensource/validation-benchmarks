@@ -1,8 +1,10 @@
-
 FROM tiangolo/uvicorn-gunicorn-fastapi:python3.9
 
 # Install required packages
 RUN apt-get update && apt-get install -y curl && rm -rf /var/lib/apt/lists/*
+
+# Install python-multipart for file uploads
+RUN pip install python-multipart
 
 COPY . /app
 
