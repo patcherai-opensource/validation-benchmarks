@@ -1,0 +1,9 @@
+User-agent: *
+Disallow: /cms-admin.php
+Disallow: /api.php
+Disallow: /settings.php
+Disallow: /backup/
+Disallow: /.git/
+
+# SubSite Manager v3.2.1
+# For API documentation, see /docs.php
