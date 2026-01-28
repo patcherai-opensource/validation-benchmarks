@@ -1,0 +1,7 @@
+User-agent: *
+Disallow: /admin/
+Disallow: /api/
+Disallow: /upload/
+Allow: /docs/
+
+# Development note: API documentation at /api/media
