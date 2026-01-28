@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="row">
+    <div class="col-12">
+        <h2 class="mb-4">Services Overview</h2>
+    </div>
+</div>
+
+<div class="row">
+    {% for service in services %}
+    <div class="col-md-4 mb-4">
+        <div class="card">
+            <div class="card-header {% if service.status == 'UP' %}bg-success{% else %}bg-danger{% endif %} text-white">
+                <h5 class="mb-0">{{ service.name }}</h5>
+            </div>
+            <div class="card-body">
+                <p><strong>Status:</strong> 
+                    <span class="status-badge {% if service.status == 'UP' %}status-up{% else %}status-down{% endif %}">
+                        {{ service.status }}
+                    </span>
+                </p>
+                <p><strong>Instances:</strong> {{ service.instances }}</p>
+                <p><strong>Memory:</strong> {{ service.memory }}</p>
+                <p><strong>ID:</strong> {{ service.id }}</p>
+                <a href="/api/service/{{ service.id }}" class="btn btn-sm btn-outline-primary">View Details</a>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% endblock %}

@@ -1,29 +1,103 @@
 {% extends "base.html" %}
 
 {% block content %}
-    <div class="jumbotron text-center text-white py-5 position-relative">
-        <div class="overlay"></div>
-        <div class="content position-relative">
-            <h1 class="display-4">Welcome to Swift Shipping & Transport Inc.</h1>
-            <p class="lead">Your trusted partner in logistics and transportation.</p>
-            <a class="btn btn-light btn-lg" href="/application" role="button">Apply Now</a>
+<div class="row">
+    <div class="col-12">
+        <h2 class="mb-4">Service Dashboard</h2>
+    </div>
+</div>
+
+<div class="row mb-4">
+    <div class="col-md-3">
+        <div class="card bg-success text-white">
+            <div class="card-body">
+                <h5 class="card-title">Services UP</h5>
+                <h2>{{ services|selectattr('status', 'equalto', 'UP')|list|length }}</h2>
+            </div>
         </div>
     </div>
-    <div class="row mt-5">
-        <div class="col-md-4">
-            <img src="{{ url_for('static', filename='images/featured1.jpg') }}" class="img-fluid rounded" alt="Fleet Image">
-            <h3 class="mt-3">Our Fleet</h3>
-            <p>Explore our state-of-the-art fleet of trucks and vehicles.</p>
-        </div>
-        <div class="col-md-4">
-            <img src="{{ url_for('static', filename='images/featured2.jpg') }}" class="img-fluid rounded" alt="Drivers Image">
-            <h3 class="mt-3">Our Drivers</h3>
-            <p>Meet our team of professional and dedicated drivers.</p>
-        </div>
-        <div class="col-md-4">
-            <img src="{{ url_for('static', filename='images/featured3.jpg') }}" class="img-fluid rounded" alt="Safety Image">
-            <h3 class="mt-3">Safety First</h3>
-            <p>Learn about our commitment to safety on the road.</p>
+    <div class="col-md-3">
+        <div class="card bg-danger text-white">
+            <div class="card-body">
+                <h5 class="card-title">Services DOWN</h5>
+                <h2>{{ services|selectattr('status', 'equalto', 'DOWN')|list|length }}</h2>
+            </div>
         </div>
     </div>
+    <div class="col-md-3">
+        <div class="card bg-info text-white">
+            <div class="card-body">
+                <h5 class="card-title">Total Instances</h5>
+                <h2>{{ services|sum(attribute='instances') }}</h2>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card bg-secondary text-white">
+            <div class="card-body">
+                <h5 class="card-title">Total Services</h5>
+                <h2>{{ services|length }}</h2>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header bg-dark text-white">
+                <h5 class="mb-0">Registered Services</h5>
+            </div>
+            <div class="card-body">
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>Service Name</th>
+                            <th>Status</th>
+                            <th>Instances</th>
+                            <th>Memory</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for service in services %}
+                        <tr>
+                            <td>{{ service.name }}</td>
+                            <td>
+                                <span class="status-badge {% if service.status == 'UP' %}status-up{% else %}status-down{% endif %}">
+                                    {{ service.status }}
+                                </span>
+                            </td>
+                            <td>{{ service.instances }}</td>
+                            <td>{{ service.memory }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row mt-4">
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header bg-dark text-white">Quick Actions</div>
+            <div class="card-body">
+                <a href="/notifications" class="btn btn-outline-primary me-2">View Notifications</a>
+                <a href="/settings/templates" class="btn btn-outline-secondary me-2">Configure Templates</a>
+                <a href="/api/health" class="btn btn-outline-info">Health Check</a>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header bg-dark text-white">System Info</div>
+            <div class="card-body">
+                <p><strong>Version:</strong> 2.8.1</p>
+                <p><strong>Build:</strong> 2024.01.15</p>
+                <p><strong>Template Engine:</strong> Jinja2 3.1.2</p>
+            </div>
+        </div>
+    </div>
+</div>
 {% endblock %}

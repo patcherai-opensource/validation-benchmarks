@@ -1,0 +1,130 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="row">
+    <div class="col-12">
+        <h2 class="mb-4">Notification Templates</h2>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-4">
+        <div class="list-group">
+            <a href="/settings" class="list-group-item list-group-item-action">General</a>
+            <a href="/settings/templates" class="list-group-item list-group-item-action active">Notification Templates</a>
+            <a href="#" class="list-group-item list-group-item-action disabled">Email Configuration</a>
+            <a href="#" class="list-group-item list-group-item-action disabled">Alerting Rules</a>
+            <a href="#" class="list-group-item list-group-item-action disabled">User Management</a>
+        </div>
+    </div>
+    <div class="col-md-8">
+        <div class="card mb-4">
+            <div class="card-header bg-dark text-white">Default Templates</div>
+            <div class="card-body">
+                <table class="table table-sm">
+                    <thead>
+                        <tr><th>Template Name</th><th>Content</th></tr>
+                    </thead>
+                    <tbody>
+                        {% for name, content in templates.items() %}
+                        <tr>
+                            <td><code>{{ name }}</code></td>
+                            <td><code>{{ content }}</code></td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        
+        <div class="card mb-4">
+            <div class="card-header bg-primary text-white">Preview Custom Template</div>
+            <div class="card-body">
+                <form id="previewForm">
+                    <div class="mb-3">
+                        <label class="form-label">Template Content</label>
+                        <textarea class="form-control" id="template" name="template" rows="3" placeholder="Enter template content with placeholders like {{service_name}}, {{timestamp}}, {{message}}">Service {{service_name}} status changed at {{timestamp}}</textarea>
+                        <small class="text-muted">Available placeholders: <code>{{service_name}}</code>, <code>{{timestamp}}</code>, <code>{{message}}</code></small>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Sample Service Name</label>
+                        <input type="text" class="form-control" id="service_name" name="service_name" value="test-service">
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Sample Message</label>
+                        <input type="text" class="form-control" id="message" name="message" value="Health check failed">
+                    </div>
+                    <button type="submit" class="btn btn-primary">Preview Template</button>
+                </form>
+                <div id="previewResult" class="mt-3" style="display:none;">
+                    <div class="alert alert-info">
+                        <strong>Preview:</strong>
+                        <pre id="previewContent" class="mb-0 mt-2"></pre>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="card">
+            <div class="card-header bg-warning text-dark">Send Test Notification</div>
+            <div class="card-body">
+                <form id="sendForm">
+                    <div class="mb-3">
+                        <label class="form-label">Template</label>
+                        <textarea class="form-control" id="sendTemplate" name="template" rows="2">Alert: {{message}}</textarea>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Message</label>
+                        <input type="text" class="form-control" id="sendMessage" name="message" value="Test alert notification">
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Recipient</label>
+                        <input type="email" class="form-control" id="recipient" name="recipient" value="admin@localhost">
+                    </div>
+                    <button type="submit" class="btn btn-warning">Send Test</button>
+                </form>
+                <div id="sendResult" class="mt-3" style="display:none;"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+document.getElementById('previewForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+    const formData = new FormData(this);
+    fetch('/api/notifications/preview', {
+        method: 'POST',
+        body: formData
+    })
+    .then(response => response.json())
+    .then(data => {
+        document.getElementById('previewResult').style.display = 'block';
+        if (data.success) {
+            document.getElementById('previewContent').textContent = data.preview;
+        } else {
+            document.getElementById('previewContent').textContent = 'Error: ' + data.error;
+        }
+    });
+});
+
+document.getElementById('sendForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+    const formData = new FormData(this);
+    fetch('/api/notifications/send', {
+        method: 'POST',
+        body: formData
+    })
+    .then(response => response.json())
+    .then(data => {
+        const resultDiv = document.getElementById('sendResult');
+        resultDiv.style.display = 'block';
+        if (data.success) {
+            resultDiv.innerHTML = '<div class="alert alert-success">Notification sent! Content: <code>' + data.rendered_content + '</code></div>';
+        } else {
+            resultDiv.innerHTML = '<div class="alert alert-danger">Error: ' + data.error + '</div>';
+        }
+    });
+});
+</script>
+{% endblock %}

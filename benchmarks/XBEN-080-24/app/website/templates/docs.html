@@ -1,0 +1,81 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="row">
+    <div class="col-12">
+        <h2 class="mb-4">API Documentation</h2>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-3">
+        <div class="list-group sticky-top" style="top: 20px;">
+            <a href="#overview" class="list-group-item list-group-item-action">Overview</a>
+            <a href="#services" class="list-group-item list-group-item-action">Services API</a>
+            <a href="#notifications" class="list-group-item list-group-item-action">Notifications API</a>
+            <a href="#health" class="list-group-item list-group-item-action">Health API</a>
+        </div>
+    </div>
+    <div class="col-md-9">
+        <div id="overview" class="card mb-4">
+            <div class="card-header bg-dark text-white">Overview</div>
+            <div class="card-body">
+                <p>ServiceMonitor Admin provides a RESTful API for monitoring and managing microservices. All endpoints return JSON responses.</p>
+                <p><strong>Base URL:</strong> <code>/api</code></p>
+                <p><strong>Authentication:</strong> Not required for read operations</p>
+            </div>
+        </div>
+        
+        <div id="services" class="card mb-4">
+            <div class="card-header bg-dark text-white">Services API</div>
+            <div class="card-body">
+                <h6><code>GET /api/services</code></h6>
+                <p>Returns a list of all registered services.</p>
+                <pre class="bg-light p-2">curl http://localhost:8080/api/services</pre>
+                
+                <h6 class="mt-4"><code>GET /api/service/{id}</code></h6>
+                <p>Returns details for a specific service.</p>
+                <pre class="bg-light p-2">curl http://localhost:8080/api/service/1</pre>
+            </div>
+        </div>
+        
+        <div id="notifications" class="card mb-4">
+            <div class="card-header bg-dark text-white">Notifications API</div>
+            <div class="card-body">
+                <h6><code>POST /api/notifications/preview</code></h6>
+                <p>Preview a notification template with sample data.</p>
+                <p><strong>Parameters:</strong></p>
+                <ul>
+                    <li><code>template</code> - Template content with placeholders</li>
+                    <li><code>service_name</code> - Sample service name</li>
+                    <li><code>message</code> - Sample message</li>
+                </ul>
+                <pre class="bg-light p-2">curl -X POST http://localhost:8080/api/notifications/preview \
+  -d "template=Service {{service_name}} alert" \
+  -d "service_name=my-service"</pre>
+                
+                <h6 class="mt-4"><code>POST /api/notifications/send</code></h6>
+                <p>Send a notification using a custom template.</p>
+                <p><strong>Parameters:</strong></p>
+                <ul>
+                    <li><code>template</code> - Template content</li>
+                    <li><code>message</code> - Message to include</li>
+                    <li><code>recipient</code> - Email recipient</li>
+                </ul>
+                
+                <h6 class="mt-4"><code>GET /api/logs</code></h6>
+                <p>Returns notification log history.</p>
+            </div>
+        </div>
+        
+        <div id="health" class="card mb-4">
+            <div class="card-header bg-dark text-white">Health API</div>
+            <div class="card-body">
+                <h6><code>GET /api/health</code></h6>
+                <p>Returns system health status.</p>
+                <pre class="bg-light p-2">curl http://localhost:8080/api/health</pre>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

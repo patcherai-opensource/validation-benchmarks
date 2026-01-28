@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="row">
+    <div class="col-12">
+        <h2 class="mb-4">Settings</h2>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-4">
+        <div class="list-group">
+            <a href="/settings" class="list-group-item list-group-item-action active">General</a>
+            <a href="/settings/templates" class="list-group-item list-group-item-action">Notification Templates</a>
+            <a href="#" class="list-group-item list-group-item-action disabled">Email Configuration</a>
+            <a href="#" class="list-group-item list-group-item-action disabled">Alerting Rules</a>
+            <a href="#" class="list-group-item list-group-item-action disabled">User Management</a>
+        </div>
+    </div>
+    <div class="col-md-8">
+        <div class="card">
+            <div class="card-header bg-dark text-white">General Settings</div>
+            <div class="card-body">
+                <form>
+                    <div class="mb-3">
+                        <label class="form-label">Instance Name</label>
+                        <input type="text" class="form-control" value="ServiceMonitor-Production" disabled>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Refresh Interval (seconds)</label>
+                        <input type="number" class="form-control" value="30" disabled>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Retention Period (days)</label>
+                        <input type="number" class="form-control" value="30" disabled>
+                    </div>
+                    <p class="text-muted"><small>Settings are read-only in this demo instance.</small></p>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

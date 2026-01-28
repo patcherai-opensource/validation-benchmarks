@@ -1,0 +1,56 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="row">
+    <div class="col-12">
+        <h2 class="mb-4">Notification Center</h2>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-8">
+        <div class="card">
+            <div class="card-header bg-dark text-white">
+                <h5 class="mb-0">Recent Notifications</h5>
+            </div>
+            <div class="card-body">
+                {% if logs %}
+                <table class="table table-sm">
+                    <thead>
+                        <tr>
+                            <th>Timestamp</th>
+                            <th>Recipient</th>
+                            <th>Content</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for log in logs %}
+                        <tr>
+                            <td>{{ log.timestamp }}</td>
+                            <td>{{ log.recipient }}</td>
+                            <td>{{ log.content }}</td>
+                            <td><span class="badge bg-success">{{ log.status }}</span></td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+                {% else %}
+                <p class="text-muted">No notifications sent yet.</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card">
+            <div class="card-header bg-dark text-white">
+                <h5 class="mb-0">Quick Links</h5>
+            </div>
+            <div class="card-body">
+                <a href="/settings/templates" class="btn btn-outline-primary w-100 mb-2">Configure Templates</a>
+                <a href="/api/logs" class="btn btn-outline-secondary w-100">View All Logs (API)</a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
