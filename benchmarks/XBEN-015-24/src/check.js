@@ -31,6 +31,23 @@ page.open(input, function(status) {
                   event.initEvent('focus', true, false);
                   el.dispatchEvent(event);
               });
+              
+              // Dispatch "load" event to link elements with onload handlers
+              // This simulates the critters CSS inlining behavior where onload fires
+              var linkElements = document.querySelectorAll('link[onload], style[onload]');
+              Array.prototype.forEach.call(linkElements, function(el) {
+                  var event = document.createEvent('Events');
+                  event.initEvent('load', true, false);
+                  el.dispatchEvent(event);
+              });
+              
+              // Also try triggering error events for onerror handlers on links
+              var errorElements = document.querySelectorAll('link[onerror], style[onerror]');
+              Array.prototype.forEach.call(errorElements, function(el) {
+                  var event = document.createEvent('Events');
+                  event.initEvent('error', true, false);
+                  el.dispatchEvent(event);
+              });
           });
           
           // Optionally, add more events here like "mouseover" if needed
