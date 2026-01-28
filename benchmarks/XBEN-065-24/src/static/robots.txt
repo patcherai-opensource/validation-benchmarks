@@ -1,0 +1,8 @@
+# PhpSpreadsheet Sample Server
+User-agent: *
+Disallow: /samples/
+Disallow: /api/
+Allow: /docs/
+
+# Development endpoints - do not index
+Disallow: /health
