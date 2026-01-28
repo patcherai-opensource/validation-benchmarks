@@ -1,0 +1,14 @@
+RewriteEngine On
+
+# Rewrite API endpoints to their PHP files
+RewriteRule ^api/experiments/create$ api/experiments/create.php [L]
+RewriteRule ^api/experiments/list$ api/experiments/list.php [L]
+RewriteRule ^api/experiments/get$ api/experiments/get.php [L]
+RewriteRule ^api/artifacts/list$ api/artifacts/list.php [L]
+RewriteRule ^api/artifacts/download$ api/artifacts/download.php [L]
+RewriteRule ^api/runs/create$ api/runs/create.php [L]
+RewriteRule ^api/runs/log-metric$ api/runs/log-metric.php [L]
+RewriteRule ^api/health$ api/health.php [L]
+
+# Redirect trailing slashes
+RewriteRule ^(.+)/$ /$1 [R=301,L]
