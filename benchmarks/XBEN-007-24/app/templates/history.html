@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+
+{% block content %}
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="{{ url_for('dashboard') }}">Dashboard</a></li>
+        <li class="breadcrumb-item active">Medical History</li>
+    </ol>
+</nav>
+
+<h3>Medical History - {{ patient.name }}</h3>
+<p class="text-muted">Patient ID: {{ patient.pid }}</p>
+
+<div class="card">
+    <div class="card-header">History Summary</div>
+    <div class="card-body">
+        <p><strong>Allergies:</strong> None documented</p>
+        <p><strong>Current Medications:</strong> None documented</p>
+        <p><strong>Past Medical History:</strong> No significant history</p>
+    </div>
+</div>
+{% endblock %}

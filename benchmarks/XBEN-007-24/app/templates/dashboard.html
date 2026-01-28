@@ -1,0 +1,74 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="row">
+    <div class="col-12">
+        <h2>Patient Dashboard</h2>
+        <p class="text-muted">Welcome, {{ user.username }} ({{ user.role }})</p>
+        <hr>
+    </div>
+</div>
+
+<div class="row mb-4">
+    <div class="col-md-4">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">My Patients</h5>
+                <p class="card-text">{{ patients|length }} patient(s) assigned</p>
+                <a href="{{ url_for('api_patients') }}" class="btn btn-outline-primary btn-sm">View All</a>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">Reports</h5>
+                <p class="card-text">Generate patient reports</p>
+                <a href="{{ url_for('reports') }}" class="btn btn-outline-primary btn-sm">Reports</a>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">Quick Access</h5>
+                <p class="card-text">Access patient by PID</p>
+                <form action="{{ url_for('patient_demographics') }}" method="get" class="form-inline">
+                    <input type="text" name="pid" class="form-control form-control-sm mr-2" placeholder="Patient ID">
+                    <button type="submit" class="btn btn-sm btn-primary">Go</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<h4>Assigned Patients</h4>
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>PID</th>
+            <th>Name</th>
+            <th>DOB</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for patient in patients %}
+        <tr>
+            <td>{{ patient.pid }}</td>
+            <td>{{ patient.name }}</td>
+            <td>{{ patient.dob }}</td>
+            <td>
+                <a href="{{ url_for('patient_demographics', pid=patient.pid) }}" class="btn btn-sm btn-info">Demographics</a>
+                <a href="{{ url_for('disclosure_full', pid=patient.pid) }}" class="btn btn-sm btn-warning">Disclosures</a>
+                <a href="{{ url_for('encounter_summary', pid=patient.pid) }}" class="btn btn-sm btn-secondary">Encounters</a>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+{% if not patients %}
+<div class="alert alert-info">No patients currently assigned to your account.</div>
+{% endif %}
+{% endblock %}

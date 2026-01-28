@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+
+{% block content %}
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="{{ url_for('dashboard') }}">Dashboard</a></li>
+        <li class="breadcrumb-item active">Patient Demographics</li>
+    </ol>
+</nav>
+
+<div class="card">
+    <div class="card-header">
+        <h4>Patient Demographics - {{ patient.name }}</h4>
+    </div>
+    <div class="card-body">
+        <div class="row">
+            <div class="col-md-6">
+                <p><strong>Patient ID (PID):</strong> {{ patient.pid }}</p>
+                <p><strong>Full Name:</strong> {{ patient.name }}</p>
+                <p><strong>Date of Birth:</strong> {{ patient.dob }}</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="mt-4">
+    <h5>Patient Actions</h5>
+    <a href="{{ url_for('disclosure_full', pid=patient.pid) }}" class="btn btn-warning">View Disclosures</a>
+    <a href="{{ url_for('encounter_summary', pid=patient.pid) }}" class="btn btn-secondary">View Encounters</a>
+    <a href="{{ url_for('history_full', pid=patient.pid) }}" class="btn btn-info">Medical History</a>
+</div>
+{% endblock %}

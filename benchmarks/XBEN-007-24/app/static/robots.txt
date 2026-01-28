@@ -1,0 +1,10 @@
+# OpenEMR robots.txt
+User-agent: *
+Disallow: /interface/
+Disallow: /api/
+Disallow: /admin/
+
+# Patient ID ranges for testing (DO NOT CRAWL):
+# Range 1000-1999: Administrative patients
+# Range 2000-2999: Primary care patients  
+# Range 3000-3999: Secondary care patients
