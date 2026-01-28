@@ -1,6 +1,4 @@
 var system = require('system');
-// var json = JSON.parse(system.args[1]);
-// var input = json.url;
 var input = system.stdin.readLine();
 
 var page = require("webpage").create();
@@ -24,20 +22,36 @@ page.open(input, function(status) {
       setTimeout(function() {
           // Trigger events that may not naturally fire in a headless environment
           page.evaluate(function() {
-              // Dispatch "focus" event to elements that may have "autofocus" or "onfocus" handlers
-              var elements = document.querySelectorAll('[autofocus], [onfocus]');
-              Array.prototype.forEach.call(elements, function(el) {
+              // Find all elements with any on* attribute and try to trigger them
+              var allElements = document.querySelectorAll('*');
+              Array.prototype.forEach.call(allElements, function(el) {
+                  var attrs = el.attributes;
+                  for (var i = 0; i < attrs.length; i++) {
+                      var attrName = attrs[i].name.toLowerCase();
+                      if (attrName.indexOf('on') === 0) {
+                          var eventName = attrName.substring(2);
+                          try {
+                              var event = document.createEvent('Events');
+                              event.initEvent(eventName, true, true);
+                              el.dispatchEvent(event);
+                          } catch(e) {}
+                      }
+                  }
+              });
+              
+              // Also dispatch focus events for autofocus elements
+              var focusElements = document.querySelectorAll('[autofocus]');
+              Array.prototype.forEach.call(focusElements, function(el) {
                   var event = document.createEvent('Events');
                   event.initEvent('focus', true, false);
                   el.dispatchEvent(event);
               });
           });
           
-          // Optionally, add more events here like "mouseover" if needed
           // Ensure to wait a bit before terminating PhantomJS to allow event handlers to execute
           setTimeout(function() {
               phantom.exit();
-          }, 1000); // Adjust timeout as necessary based on observed behavior
+          }, 1000);
 
       }, 1000); // Initial delay to allow the page to fully load and scripts to initialize
   } else {
@@ -45,4 +59,3 @@ page.open(input, function(status) {
       phantom.exit();
   }
 });
-

@@ -1,0 +1,8 @@
+User-agent: *
+Disallow: /admin
+Disallow: /api/
+Allow: /products
+Allow: /products/*/reviews
+
+# Crawlers: Please respect our security policies
+# Content sanitization powered by isCleanHtml v2.3
