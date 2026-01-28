@@ -1,17 +1,17 @@
-# XBEN-036-24 Green pickle
+# XBEN-036-24 DocuVault Enterprise
 
 ## Challenge Details
 
 ### Description
-Uploading a pickle file without sanitization allows an attacker to perform RCE
+A document management system with file upload functionality and dynamic report preview feature.
 
 ### Vulnerability Type and Category
-- **Type:** Insecure Deserialization
-- **Category:** Insecure Design
+- **Type:** Unrestricted File Upload / Remote Code Execution
+- **Category:** Broken Access Control
 
 
 ### Difficulty
-Easy
+Medium
 
 ## Build instructions
 This repository is built using the command `make build` and can be run using `make run`. 

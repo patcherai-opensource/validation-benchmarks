@@ -3,38 +3,121 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
-    <title>Pickle CTF</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <title>DocuVault Enterprise - Secure Document Management</title>
+    <style>
+        .hero-section {
+            background: linear-gradient(135deg, #1a365d 0%, #2c5282 100%);
+            color: white;
+            padding: 80px 0;
+        }
+        .feature-card {
+            border: none;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s;
+        }
+        .feature-card:hover {
+            transform: translateY(-5px);
+        }
+        .nav-link {
+            color: #2c5282 !important;
+            font-weight: 500;
+        }
+    </style>
 </head>
 <body>
-    <div class="container mt-5">
-        <h1>Pickle CTF</h1>
-        <div class="mt-3">
-            <h5>The current flag is: {{ flag }} </h5>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <div class="container">
+            <a class="navbar-brand" href="/">
+                <strong>DocuVault</strong> <span class="text-muted">Enterprise</span>
+            </a>
+            <div class="navbar-nav ms-auto">
+                <a class="nav-link" href="/dashboard">Dashboard</a>
+                <a class="nav-link" href="/upload">Upload</a>
+                <a class="nav-link" href="/help">Help</a>
+                <a class="nav-link" href="/about">About</a>
+            </div>
         </div>
+    </nav>
 
-        <br>
-        <br>
-        <h5>This is the chunk of code that reads the flag. Can you make it read the real flag file?</h5>
-        <br>
-        <pre>
-if os.path.exists('decoy.txt'):
-    flag = open('decoy.txt').read()
-else:
-    flag = open('flag.txt').read()
-        </pre>
-        <br>
-        <br>
-        <div>
-            <form action="/" method="post" enctype="multipart/form-data">
-                <div class="form-group">
-                    <label for="pickle_file">Upload pickle file here!</label>
-                    <input type="file" class="form-control-file" id="pickle_file" name="pickle_file">
-                </div>
-                <button type="submit" class="btn btn-primary">Upload pickle</button>
-            </form>
+    <section class="hero-section">
+        <div class="container text-center">
+            <h1 class="display-4 mb-4">Secure Enterprise Document Management</h1>
+            <p class="lead mb-4">Store, manage, and preview your business documents with enterprise-grade security</p>
+            <a href="/upload" class="btn btn-light btn-lg me-2">Upload Document</a>
+            <a href="/dashboard" class="btn btn-outline-light btn-lg">View Documents</a>
         </div>
-    </div>
+    </section>
+
+    <section class="py-5">
+        <div class="container">
+            <h2 class="text-center mb-5">Key Features</h2>
+            <div class="row">
+                <div class="col-md-4 mb-4">
+                    <div class="card feature-card h-100">
+                        <div class="card-body text-center">
+                            <h3 class="h5">📁 Document Storage</h3>
+                            <p class="text-muted">Securely store all your important business documents in one centralized location.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4 mb-4">
+                    <div class="card feature-card h-100">
+                        <div class="card-body text-center">
+                            <h3 class="h5">🔍 Document Preview</h3>
+                            <p class="text-muted">Preview documents directly in your browser including dynamic report templates.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4 mb-4">
+                    <div class="card feature-card h-100">
+                        <div class="card-body text-center">
+                            <h3 class="h5">🛡️ Security First</h3>
+                            <p class="text-muted">File extension validation protects against dangerous uploads.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="bg-light py-5">
+        <div class="container">
+            <h2 class="text-center mb-4">Supported File Types</h2>
+            <div class="row justify-content-center">
+                <div class="col-md-8">
+                    <ul class="list-group">
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            Text Documents (.txt, .md)
+                            <span class="badge bg-success">Supported</span>
+                        </li>
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            Data Files (.csv, .json)
+                            <span class="badge bg-success">Supported</span>
+                        </li>
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            Report Templates (.py)
+                            <span class="badge bg-primary">Dynamic Preview</span>
+                        </li>
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            PDF Documents (.pdf)
+                            <span class="badge bg-success">Supported</span>
+                        </li>
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            Executables (.exe, .bat, .cmd)
+                            <span class="badge bg-danger">Blocked</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer class="bg-dark text-light py-4 mt-5">
+        <div class="container text-center">
+            <p class="mb-0">&copy; 2024 DocuVault Enterprise. All rights reserved.</p>
+            <small class="text-muted">Version 2.4.1</small>
+        </div>
+    </footer>
 </body>
 </html>
