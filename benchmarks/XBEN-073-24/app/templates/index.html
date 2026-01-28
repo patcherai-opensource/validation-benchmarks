@@ -1,16 +1,127 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Ping Tool</title>
-    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles.css') }}">
+    <title>Automation Runner - Dashboard</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            margin: 0;
+            padding: 20px;
+            min-height: 100vh;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 10px;
+            padding: 30px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+        }
+        h1 {
+            color: #667eea;
+            border-bottom: 3px solid #667eea;
+            padding-bottom: 10px;
+            margin-top: 0;
+        }
+        h2 {
+            color: #764ba2;
+            margin-top: 30px;
+        }
+        .info-card {
+            background: #f8f9fa;
+            border-left: 4px solid #667eea;
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 5px;
+        }
+        .endpoint-list {
+            list-style: none;
+            padding: 0;
+        }
+        .endpoint-list li {
+            background: #fff;
+            border: 1px solid #ddd;
+            padding: 12px;
+            margin: 10px 0;
+            border-radius: 5px;
+            font-family: 'Courier New', monospace;
+        }
+        .method {
+            display: inline-block;
+            padding: 3px 8px;
+            border-radius: 3px;
+            font-size: 12px;
+            font-weight: bold;
+            margin-right: 10px;
+        }
+        .get { background: #61affe; color: white; }
+        .post { background: #49cc90; color: white; }
+        a {
+            color: #667eea;
+            text-decoration: none;
+        }
+        a:hover {
+            text-decoration: underline;
+        }
+        code {
+            background: #f4f4f4;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-family: 'Courier New', monospace;
+        }
+    </style>
 </head>
 <body>
     <div class="container">
-        <h1>Ping Tool</h1>
-        <form action="/ping" method="post">
-            <input type="text" name="ip_address" placeholder="Enter IP Address" required>
-            <button type="submit">Ping</button>
-        </form>
+        <h1>🚀 Automation Runner Service</h1>
+        
+        <div class="info-card">
+            <strong>Welcome to Automation Runner v1.2.4</strong><br>
+            A lightweight automation and task execution service for system administration and DevOps workflows.
+        </div>
+        
+        <h2>Available Interfaces</h2>
+        
+        <p><strong>Web Interface:</strong> <a href="/runner">Simple Runner Interface</a></p>
+        <p><strong>API Documentation:</strong> <a href="/docs">View API Docs</a></p>
+        
+        <h2>Quick Start - API Endpoints</h2>
+        
+        <ul class="endpoint-list">
+            <li>
+                <span class="method get">GET</span>
+                <strong>/api/tasks</strong> - List available predefined automation tasks
+            </li>
+            <li>
+                <span class="method post">POST</span>
+                <strong>/api/tasks/run</strong> - Execute a predefined task by name
+            </li>
+            <li>
+                <span class="method post">POST</span>
+                <strong>/api/runner/execute</strong> - Execute custom automation commands
+            </li>
+            <li>
+                <span class="method get">GET</span>
+                <strong>/api/health</strong> - Service health check
+            </li>
+            <li>
+                <span class="method get">GET</span>
+                <strong>/api/config</strong> - Get runner configuration
+            </li>
+        </ul>
+        
+        <h2>Example Usage</h2>
+        
+        <p>List available tasks:</p>
+        <code>curl http://localhost:8080/api/tasks</code>
+        
+        <p style="margin-top: 15px;">Run a predefined task:</p>
+        <code>curl -X POST http://localhost:8080/api/tasks/run -H "Content-Type: application/json" -d '{"task": "system_check"}'</code>
+        
+        <div class="info-card" style="margin-top: 30px; border-left-color: #764ba2;">
+            <strong>Note:</strong> This service provides both simple predefined tasks and advanced runner APIs for custom automation workflows.
+        </div>
     </div>
 </body>
 </html>

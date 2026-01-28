@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>API Documentation - Automation Runner</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            margin: 0;
+            padding: 20px;
+            min-height: 100vh;
+        }
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 10px;
+            padding: 30px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+        }
+        h1 { color: #667eea; border-bottom: 3px solid #667eea; padding-bottom: 10px; }
+        h2 { color: #764ba2; margin-top: 30px; }
+        h3 { color: #333; }
+        .endpoint {
+            background: #f8f9fa;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+        .method {
+            display: inline-block;
+            padding: 5px 12px;
+            border-radius: 3px;
+            font-size: 14px;
+            font-weight: bold;
+            margin-right: 10px;
+        }
+        .get { background: #61affe; color: white; }
+        .post { background: #49cc90; color: white; }
+        .path {
+            font-family: 'Courier New', monospace;
+            font-size: 16px;
+            font-weight: bold;
+        }
+        code {
+            background: #f4f4f4;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-family: 'Courier New', monospace;
+        }
+        pre {
+            background: #1e1e1e;
+            color: #d4d4d4;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+        }
+        .params {
+            margin-top: 15px;
+        }
+        .params table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        .params th, .params td {
+            text-align: left;
+            padding: 8px;
+            border-bottom: 1px solid #ddd;
+        }
+        .params th {
+            background: #f4f4f4;
+        }
+        a { color: #667eea; text-decoration: none; }
+        .nav { margin-bottom: 20px; }
+        .badge {
+            display: inline-block;
+            padding: 2px 8px;
+            border-radius: 3px;
+            font-size: 11px;
+            margin-left: 10px;
+        }
+        .required { background: #dc3545; color: white; }
+        .optional { background: #6c757d; color: white; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="nav">
+            <a href="/">← Back to Dashboard</a>
+        </div>
+        
+        <h1>📚 API Documentation</h1>
+        
+        <p>The Automation Runner API provides programmatic access to task execution and system automation capabilities.</p>
+        
+        <h2>Task Management</h2>
+        
+        <div class="endpoint">
+            <span class="method get">GET</span>
+            <span class="path">/api/tasks</span>
+            <p>List all available predefined automation tasks.</p>
+            
+            <h4>Response</h4>
+            <pre>{
+  "status": "success",
+  "tasks": {
+    "system_check": "Check system information",
+    "disk_usage": "Check disk space usage",
+    "memory_info": "Display memory usage",
+    "list_processes": "List running processes",
+    "network_stats": "Network statistics"
+  }
+}</pre>
+        </div>
+        
+        <div class="endpoint">
+            <span class="method post">POST</span>
+            <span class="path">/api/tasks/run</span>
+            <p>Execute a predefined automation task.</p>
+            
+            <div class="params">
+                <h4>Request Body (JSON)</h4>
+                <table>
+                    <tr><th>Parameter</th><th>Type</th><th>Description</th></tr>
+                    <tr><td>task <span class="badge required">required</span></td><td>string</td><td>Name of the task to execute</td></tr>
+                </table>
+            </div>
+            
+            <h4>Example</h4>
+            <pre>curl -X POST http://localhost:8080/api/tasks/run \
+  -H "Content-Type: application/json" \
+  -d '{"task": "system_check"}'</pre>
+        </div>
+        
+        <h2>Command Execution</h2>
+        
+        <div class="endpoint">
+            <span class="method post">POST</span>
+            <span class="path">/api/runner/execute</span>
+            <p>Execute custom automation commands with arguments. Similar to ansible-runner's <code>run_command</code> interface.</p>
+            
+            <div class="params">
+                <h4>Request Body (JSON)</h4>
+                <table>
+                    <tr><th>Parameter</th><th>Type</th><th>Description</th></tr>
+                    <tr><td>executable_cmd <span class="badge required">required</span></td><td>string</td><td>The command/executable to run</td></tr>
+                    <tr><td>cmdline_args <span class="badge optional">optional</span></td><td>array</td><td>List of command-line arguments</td></tr>
+                    <tr><td>runner_mode <span class="badge optional">optional</span></td><td>string</td><td>Execution mode: "subprocess" (default) or "pexpect"</td></tr>
+                </table>
+            </div>
+            
+            <h4>Example</h4>
+            <pre>curl -X POST http://localhost:8080/api/runner/execute \
+  -H "Content-Type: application/json" \
+  -d '{
+    "executable_cmd": "ls",
+    "cmdline_args": ["-la", "/tmp"],
+    "runner_mode": "subprocess"
+  }'</pre>
+            
+            <h4>Response</h4>
+            <pre>{
+  "status": "completed",
+  "command": "ls",
+  "exit_code": 0,
+  "stdout": "...",
+  "stderr": ""
+}</pre>
+        </div>
+        
+        <h2>System Endpoints</h2>
+        
+        <div class="endpoint">
+            <span class="method get">GET</span>
+            <span class="path">/api/health</span>
+            <p>Health check endpoint for monitoring and load balancers.</p>
+        </div>
+        
+        <div class="endpoint">
+            <span class="method get">GET</span>
+            <span class="path">/api/config</span>
+            <p>Get current runner configuration settings.</p>
+        </div>
+        
+        <h2>Web Interfaces</h2>
+        
+        <p><strong><a href="/runner">Simple Runner</a></strong> - Web-based interface for quick command execution.</p>
+        
+    </div>
+</body>
+</html>
