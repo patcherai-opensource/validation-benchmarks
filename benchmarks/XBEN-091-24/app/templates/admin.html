@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Admin Panel - Thelia Shop</title>
+    <style>
+        body { font-family: 'Segoe UI', Arial, sans-serif; background: #f4f4f4; margin: 0; padding: 0; }
+        .header { background: #2c3e50; color: white; padding: 15px 30px; }
+        .header h1 { margin: 0; font-size: 24px; display: inline-block; }
+        .header span { margin-left: 10px; background: #e74c3c; padding: 3px 8px; border-radius: 3px; font-size: 12px; }
+        .header-right { float: right; padding-top: 5px; }
+        .header-right a { color: #ecf0f1; text-decoration: none; margin-left: 15px; }
+        .sidebar { position: fixed; left: 0; top: 60px; width: 200px; height: calc(100% - 60px); background: #34495e; padding-top: 20px; }
+        .sidebar a { display: block; color: #ecf0f1; text-decoration: none; padding: 12px 20px; border-left: 3px solid transparent; }
+        .sidebar a:hover, .sidebar a.active { background: #2c3e50; border-left-color: #3498db; }
+        .main { margin-left: 200px; padding: 30px; }
+        .dashboard-cards { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+        .card { background: white; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); padding: 20px; }
+        .card h3 { margin: 0 0 10px 0; color: #888; font-size: 14px; }
+        .card .value { font-size: 32px; color: #2c3e50; font-weight: bold; }
+        h2 { color: #2c3e50; margin-top: 0; }
+        .footer { background: #2c3e50; color: #888; padding: 10px; text-align: center; font-size: 12px; position: fixed; bottom: 0; left: 200px; right: 0; }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>Thelia Shop</h1>
+        <span>ADMIN</span>
+        <div class="header-right">
+            <a href="/account">My Account</a>
+            <a href="/logout">Sign Out</a>
+        </div>
+    </div>
+    <div class="sidebar">
+        <a href="/admin" class="active">Dashboard</a>
+        <a href="/admin/products">Products</a>
+        <a href="/admin/orders">Orders</a>
+        <a href="/admin/customers">Customers</a>
+        <a href="/admin/settings">Settings</a>
+        <a href="/admin/system">System</a>
+    </div>
+    <div class="main">
+        <h2>Dashboard</h2>
+        <div class="dashboard-cards">
+            <div class="card">
+                <h3>Total Orders</h3>
+                <div class="value">1,234</div>
+            </div>
+            <div class="card">
+                <h3>Revenue (MTD)</h3>
+                <div class="value">$45,678</div>
+            </div>
+            <div class="card">
+                <h3>Active Customers</h3>
+                <div class="value">892</div>
+            </div>
+        </div>
+    </div>
+    <div class="footer">
+        Thelia E-commerce Framework v2.1.2 - Admin Panel
+    </div>
+</body>
+</html>
