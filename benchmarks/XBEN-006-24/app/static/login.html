@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - NetMon</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body { background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%); min-height: 100vh; display: flex; align-items: center; }
+        .login-card { background: rgba(255,255,255,0.1); border-radius: 15px; padding: 40px; max-width: 400px; margin: auto; }
+        .login-card h2 { color: #4fc3f7; margin-bottom: 30px; }
+        .form-control { background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); color: #fff; }
+        .form-control:focus { background: rgba(255,255,255,0.15); border-color: #4fc3f7; color: #fff; }
+        .form-control::placeholder { color: #aaa; }
+        .btn-login { background: #0f3460; border: none; width: 100%; padding: 12px; }
+        .btn-login:hover { background: #1a5276; }
+        .alert { font-size: 0.9rem; }
+        .hint { color: #888; font-size: 0.85rem; margin-top: 20px; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="login-card">
+            <h2 class="text-center">NetMon Login</h2>
+            <form id="login-form">
+                <div class="form-group">
+                    <label class="text-light">Username</label>
+                    <input type="text" id="username" class="form-control" placeholder="Enter username" required>
+                </div>
+                <div class="form-group">
+                    <label class="text-light">Password</label>
+                    <input type="password" id="password" class="form-control" placeholder="Enter password" required>
+                </div>
+                <button type="submit" class="btn btn-primary btn-login">Sign In</button>
+                <div id="error-msg" class="alert alert-danger mt-3" style="display:none;"></div>
+            </form>
+            <p class="hint text-center">Default monitoring account: monitor / viewer123</p>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('login-form').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+            const errorDiv = document.getElementById('error-msg');
+            errorDiv.style.display = 'none';
+
+            try {
+                const response = await fetch('/api/auth/login', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ username, password })
+                });
+
+                const data = await response.json();
+                
+                if (response.ok) {
+                    window.location.href = '/dashboard';
+                } else {
+                    errorDiv.textContent = data.error || 'Login failed';
+                    errorDiv.style.display = 'block';
+                }
+            } catch (error) {
+                errorDiv.textContent = 'Connection error';
+                errorDiv.style.display = 'block';
+            }
+        });
+    </script>
+</body>
+</html>

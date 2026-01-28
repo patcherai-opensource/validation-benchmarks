@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - NetMon</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body { background: #1a1a2e; color: #fff; }
+        .navbar { background: #16213e; }
+        .sidebar { background: #0f3460; min-height: calc(100vh - 56px); padding: 20px 0; }
+        .sidebar a { color: #aaa; display: block; padding: 10px 20px; text-decoration: none; }
+        .sidebar a:hover, .sidebar a.active { color: #4fc3f7; background: rgba(255,255,255,0.05); }
+        .main-content { padding: 30px; }
+        .stat-card { background: rgba(255,255,255,0.1); border-radius: 10px; padding: 20px; margin-bottom: 20px; }
+        .stat-card h3 { font-size: 2rem; margin: 0; }
+        .stat-card p { color: #aaa; margin: 0; }
+        .stat-card.active h3 { color: #4caf50; }
+        .stat-card.warning h3 { color: #ff9800; }
+        .stat-card.offline h3 { color: #f44336; }
+        .device-table { background: rgba(255,255,255,0.05); border-radius: 10px; }
+        .device-table th { border-top: none; color: #4fc3f7; }
+        .device-table td { border-color: rgba(255,255,255,0.1); }
+        .status-badge { padding: 3px 10px; border-radius: 20px; font-size: 0.8rem; }
+        .status-active { background: #4caf50; }
+        .status-warning { background: #ff9800; }
+        .status-offline { background: #f44336; }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="/dashboard"><strong>NetMon</strong></a>
+            <div class="navbar-nav ml-auto">
+                <span class="navbar-text mr-3" id="user-info"></span>
+                <a class="nav-link" href="#" id="logout-btn">Logout</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-2 sidebar">
+                <a href="/dashboard" class="active">Dashboard</a>
+                <a href="/search/mac">MAC Search</a>
+                <a href="/settings">Settings</a>
+            </div>
+            <div class="col-md-10 main-content">
+                <h2 class="mb-4">Network Overview</h2>
+                
+                <div class="row" id="stats-row">
+                    <div class="col-md-3">
+                        <div class="stat-card">
+                            <h3 id="stat-total">-</h3>
+                            <p>Total Devices</p>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="stat-card active">
+                            <h3 id="stat-active">-</h3>
+                            <p>Active</p>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="stat-card warning">
+                            <h3 id="stat-warning">-</h3>
+                            <p>Warning</p>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="stat-card offline">
+                            <h3 id="stat-offline">-</h3>
+                            <p>Offline</p>
+                        </div>
+                    </div>
+                </div>
+
+                <h4 class="mt-4 mb-3">Monitored Devices</h4>
+                <div class="device-table p-3">
+                    <table class="table table-dark table-borderless">
+                        <thead>
+                            <tr>
+                                <th>Hostname</th>
+                                <th>IP Address</th>
+                                <th>MAC Address</th>
+                                <th>Type</th>
+                                <th>Location</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody id="devices-table">
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        async function loadStats() {
+            const response = await fetch('/api/stats');
+            if (response.ok) {
+                const data = await response.json();
+                document.getElementById('stat-total').textContent = data.total_devices;
+                document.getElementById('stat-active').textContent = data.active;
+                document.getElementById('stat-warning').textContent = data.warning;
+                document.getElementById('stat-offline').textContent = data.offline;
+            }
+        }
+
+        async function loadDevices() {
+            const response = await fetch('/api/devices');
+            if (response.ok) {
+                const devices = await response.json();
+                const tbody = document.getElementById('devices-table');
+                tbody.innerHTML = '';
+                devices.forEach(d => {
+                    tbody.innerHTML += `
+                        <tr>
+                            <td><a href="/api/devices/${d.id}" class="text-info">${d.hostname}</a></td>
+                            <td>${d.ip_address}</td>
+                            <td><code>${d.mac_address}</code></td>
+                            <td>${d.device_type}</td>
+                            <td>${d.location}</td>
+                            <td><span class="status-badge status-${d.status}">${d.status}</span></td>
+                        </tr>
+                    `;
+                });
+            } else if (response.status === 401) {
+                window.location.href = '/login';
+            }
+        }
+
+        document.getElementById('logout-btn').addEventListener('click', async function(e) {
+            e.preventDefault();
+            await fetch('/api/auth/logout', { method: 'POST' });
+            window.location.href = '/login';
+        });
+
+        loadStats();
+        loadDevices();
+    </script>
+</body>
+</html>

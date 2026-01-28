@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Settings - NetMon</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body { background: #1a1a2e; color: #fff; }
+        .navbar { background: #16213e; }
+        .sidebar { background: #0f3460; min-height: calc(100vh - 56px); padding: 20px 0; }
+        .sidebar a { color: #aaa; display: block; padding: 10px 20px; text-decoration: none; }
+        .sidebar a:hover, .sidebar a.active { color: #4fc3f7; background: rgba(255,255,255,0.05); }
+        .main-content { padding: 30px; }
+        .config-card { background: rgba(255,255,255,0.1); border-radius: 10px; padding: 20px; margin-bottom: 20px; }
+        .config-card h5 { color: #4fc3f7; }
+        .config-item { display: flex; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid rgba(255,255,255,0.1); }
+        .config-item:last-child { border-bottom: none; }
+        .config-key { color: #aaa; }
+        .config-value { color: #fff; font-family: monospace; }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="/dashboard"><strong>NetMon</strong></a>
+            <div class="navbar-nav ml-auto">
+                <a class="nav-link" href="#" id="logout-btn">Logout</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-2 sidebar">
+                <a href="/dashboard">Dashboard</a>
+                <a href="/search/mac">MAC Search</a>
+                <a href="/settings" class="active">Settings</a>
+            </div>
+            <div class="col-md-10 main-content">
+                <h2 class="mb-4">System Settings</h2>
+                
+                <div class="config-card">
+                    <h5>General Configuration</h5>
+                    <div id="config-list">
+                        <p class="text-muted">Loading configuration...</p>
+                    </div>
+                </div>
+
+                <div class="config-card">
+                    <h5>Recent Alerts</h5>
+                    <div id="alerts-list">
+                        <p class="text-muted">Loading alerts...</p>
+                    </div>
+                </div>
+
+                <div class="config-card">
+                    <h5>System Information</h5>
+                    <div class="config-item">
+                        <span class="config-key">Version</span>
+                        <span class="config-value">2.4.1</span>
+                    </div>
+                    <div class="config-item">
+                        <span class="config-key">Database</span>
+                        <span class="config-value">SQLite 3.x</span>
+                    </div>
+                    <div class="config-item">
+                        <span class="config-key">API Endpoint</span>
+                        <span class="config-value">/api/*</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        async function loadConfig() {
+            const response = await fetch('/api/config');
+            if (response.ok) {
+                const config = await response.json();
+                const container = document.getElementById('config-list');
+                container.innerHTML = '';
+                for (const [key, value] of Object.entries(config)) {
+                    container.innerHTML += `
+                        <div class="config-item">
+                            <span class="config-key">${key}</span>
+                            <span class="config-value">${value}</span>
+                        </div>
+                    `;
+                }
+            }
+        }
+
+        async function loadAlerts() {
+            const response = await fetch('/api/alerts');
+            if (response.ok) {
+                const data = await response.json();
+                const container = document.getElementById('alerts-list');
+                container.innerHTML = '';
+                data.alerts.forEach(alert => {
+                    const badgeClass = alert.severity === 'critical' ? 'danger' : 
+                                      alert.severity === 'warning' ? 'warning' : 'info';
+                    container.innerHTML += `
+                        <div class="config-item">
+                            <span><span class="badge badge-${badgeClass}">${alert.severity}</span> ${alert.message}</span>
+                            <span class="config-key">${alert.timestamp}</span>
+                        </div>
+                    `;
+                });
+            }
+        }
+
+        document.getElementById('logout-btn').addEventListener('click', async function(e) {
+            e.preventDefault();
+            await fetch('/api/auth/logout', { method: 'POST' });
+            window.location.href = '/login';
+        });
+
+        loadConfig();
+        loadAlerts();
+    </script>
+</body>
+</html>
