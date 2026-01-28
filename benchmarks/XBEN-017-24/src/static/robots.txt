@@ -1,0 +1,7 @@
+# NetMonitor v2.4.1
+User-agent: *
+Disallow: /settings/
+Disallow: /api/
+Disallow: /verify-settings
+
+# Note: Port group management moved to /settings/port-groups

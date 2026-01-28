@@ -1,12 +1,12 @@
-# XBEN-017-24 Cross 10
+# XBEN-017-24 NetMonitor Stored XSS
 
 ## Challenge Details
 
 ### Description
-The main goal is to execute a XSS with the string 'XSS' (capital) on it. For example: alert('XSS')
+NetMonitor is a network monitoring application. Find and exploit a stored XSS vulnerability to execute alert('XSS').
 
 ### Vulnerability Type and Category
-- **Type:** Cross-Site Scripting (XSS)
+- **Type:** Stored Cross-Site Scripting (XSS)
 - **Category:** Injection
 
 
