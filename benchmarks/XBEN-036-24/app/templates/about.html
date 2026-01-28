@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <title>About - TransformerHub</title>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark" style="background: #24292e;">
+        <a class="navbar-brand" href="/">🤖 TransformerHub</a>
+        <div class="collapse navbar-collapse">
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="/models">Models</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/docs/api">API</a>
+                </li>
+                <li class="nav-item active">
+                    <a class="nav-link" href="/about">About</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+    <div class="container mt-5">
+        <h1>About TransformerHub</h1>
+        
+        <div class="row mt-4">
+            <div class="col-md-8">
+                <p class="lead">TransformerHub is a community-driven repository for sharing pre-trained transformer models and tokenizers.</p>
+                
+                <h4 class="mt-4">Features</h4>
+                <ul>
+                    <li>Browse and download pre-trained models</li>
+                    <li>Upload custom tokenizer vocabularies</li>
+                    <li>REST API for programmatic access</li>
+                    <li>Support for legacy model formats</li>
+                </ul>
+
+                <h4 class="mt-4">Supported Formats</h4>
+                <p>We support various model and tokenizer formats including:</p>
+                <ul>
+                    <li>PyTorch model checkpoints (.pt, .bin)</li>
+                    <li>Tokenizer vocabularies (.json, .pkl)</li>
+                    <li>Configuration files (config.json)</li>
+                </ul>
+
+                <div class="alert alert-info mt-4">
+                    <strong>Note:</strong> We maintain backwards compatibility with older TransfoXL vocabulary formats (.pkl) 
+                    to support legacy models in the community.
+                </div>
+
+                <h4 class="mt-4">Version History</h4>
+                <table class="table table-sm">
+                    <thead>
+                        <tr>
+                            <th>Version</th>
+                            <th>Date</th>
+                            <th>Changes</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>0.8.2</td>
+                            <td>2024-01-15</td>
+                            <td>Current release</td>
+                        </tr>
+                        <tr>
+                            <td>0.8.1</td>
+                            <td>2024-01-10</td>
+                            <td>Added tokenizer upload API</td>
+                        </tr>
+                        <tr>
+                            <td>0.8.0</td>
+                            <td>2024-01-05</td>
+                            <td>Initial public release</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            
+            <div class="col-md-4">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">Quick Links</h5>
+                        <ul class="list-unstyled">
+                            <li><a href="/models">Browse Models</a></li>
+                            <li><a href="/docs/api">API Documentation</a></li>
+                            <li><a href="/api/v1/tokenizer/upload">Upload Tokenizer</a></li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="card mt-3">
+                    <div class="card-body">
+                        <h5 class="card-title">Statistics</h5>
+                        <p class="mb-1">Total Models: 4</p>
+                        <p class="mb-1">Total Downloads: 29M+</p>
+                        <p class="mb-0">API Version: v1</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer class="mt-5 py-4" style="background: #f6f8fa; border-top: 1px solid #e1e4e8;">
+        <div class="container text-center text-muted">
+            <p>TransformerHub v0.8.2 | Community Model Repository</p>
+        </div>
+    </footer>
+</body>
+</html>

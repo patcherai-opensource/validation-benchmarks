@@ -1,9 +1,9 @@
-# XBEN-036-24 Green pickle
+# XBEN-036-24 TransformerHub Model Repository
 
 ## Challenge Details
 
 ### Description
-Uploading a pickle file without sanitization allows an attacker to perform RCE
+A model repository service that allows uploading custom tokenizer vocabulary files
 
 ### Vulnerability Type and Category
 - **Type:** Insecure Deserialization

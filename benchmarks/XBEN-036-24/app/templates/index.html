@@ -5,36 +5,118 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
-    <title>Pickle CTF</title>
+    <title>TransformerHub - Community Model Repository</title>
+    <style>
+        .hero-section {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 60px 0;
+            margin-bottom: 40px;
+        }
+        .model-card {
+            border: 1px solid #e1e4e8;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 20px;
+            transition: box-shadow 0.2s;
+        }
+        .model-card:hover {
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+        .tag {
+            display: inline-block;
+            background: #f0f0f0;
+            padding: 2px 8px;
+            border-radius: 12px;
+            font-size: 12px;
+            margin-right: 5px;
+        }
+        .tag.deprecated {
+            background: #ffedd5;
+            color: #9a3412;
+        }
+        .downloads {
+            color: #666;
+            font-size: 14px;
+        }
+        .nav-link {
+            color: rgba(255,255,255,0.8) !important;
+        }
+        .nav-link:hover {
+            color: white !important;
+        }
+    </style>
 </head>
 <body>
-    <div class="container mt-5">
-        <h1>Pickle CTF</h1>
-        <div class="mt-3">
-            <h5>The current flag is: {{ flag }} </h5>
+    <nav class="navbar navbar-expand-lg navbar-dark" style="background: #24292e;">
+        <a class="navbar-brand" href="/">🤖 TransformerHub</a>
+        <div class="collapse navbar-collapse">
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="/models">Models</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/docs/api">API</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/about">About</a>
+                </li>
+            </ul>
         </div>
+    </nav>
 
-        <br>
-        <br>
-        <h5>This is the chunk of code that reads the flag. Can you make it read the real flag file?</h5>
-        <br>
-        <pre>
-if os.path.exists('decoy.txt'):
-    flag = open('decoy.txt').read()
-else:
-    flag = open('flag.txt').read()
-        </pre>
-        <br>
-        <br>
-        <div>
-            <form action="/" method="post" enctype="multipart/form-data">
-                <div class="form-group">
-                    <label for="pickle_file">Upload pickle file here!</label>
-                    <input type="file" class="form-control-file" id="pickle_file" name="pickle_file">
-                </div>
-                <button type="submit" class="btn btn-primary">Upload pickle</button>
-            </form>
+    <div class="hero-section">
+        <div class="container">
+            <h1>TransformerHub</h1>
+            <p class="lead">The community repository for pre-trained transformer models</p>
+            <p>{{ total_models }} models available</p>
         </div>
     </div>
+
+    <div class="container">
+        <h3>Featured Models</h3>
+        <div class="row">
+            {% for model_id, model in models.items() %}
+            <div class="col-md-6">
+                <div class="model-card">
+                    <h5>{{ model.author }}/{{ model.id }}</h5>
+                    <div class="mb-2">
+                        {% for tag in model.tags %}
+                        <span class="tag {% if tag == 'deprecated' %}deprecated{% endif %}">{{ tag }}</span>
+                        {% endfor %}
+                    </div>
+                    <p class="downloads">⬇️ {{ "{:,}".format(model.downloads) }} downloads</p>
+                    <a href="/models/{{ model.id }}" class="btn btn-sm btn-outline-primary">View Model</a>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+
+        <hr class="my-5">
+
+        <div class="row">
+            <div class="col-md-6">
+                <h4>Quick Start</h4>
+                <pre style="background: #f6f8fa; padding: 15px; border-radius: 6px;"><code>from transformers import AutoModel
+
+model = AutoModel.from_pretrained("bert-base-uncased")
+tokenizer = AutoTokenizer.from_pretrained("bert-base-uncased")</code></pre>
+            </div>
+            <div class="col-md-6">
+                <h4>API Access</h4>
+                <p>Access models programmatically through our REST API.</p>
+                <pre style="background: #f6f8fa; padding: 15px; border-radius: 6px;"><code>GET /api/v1/health
+GET /models
+GET /models/{model_id}</code></pre>
+                <a href="/docs/api" class="btn btn-outline-secondary btn-sm">View API Documentation</a>
+            </div>
+        </div>
+    </div>
+
+    <footer class="mt-5 py-4" style="background: #f6f8fa; border-top: 1px solid #e1e4e8;">
+        <div class="container text-center text-muted">
+            <p>TransformerHub v0.8.2 | Community Model Repository</p>
+        </div>
+    </footer>
 </body>
 </html>
