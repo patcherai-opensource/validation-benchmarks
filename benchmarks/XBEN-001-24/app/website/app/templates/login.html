@@ -1,39 +1,32 @@
-<!-- TODO: Delete the testing account (test:test). --> 
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login - Trading Platform</title>
-    <link href="{{ url_for('static', filename='css/bootstrap.min.css') }}" rel="stylesheet">
-    <style>
-        body {
-            background-color: #2c3e50;
-            color: #ffffff;
-        }
-        .card {
-            background-color: #34495e;
-            color: #ffffff;
-        }
-    </style>
-</head>
-<body>
-    <div class="container mt-5">
-        <div class="row justify-content-center">
-            <div class="col-md-6">
-                <h2 class="text-center mb-4">Trading Platform</h2>
+{% extends "base.html" %}
+{% block title %}Login - Sylius Shop{% endblock %}
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header">
+                <h4>Customer Login</h4>
+            </div>
+            <div class="card-body">
                 {% if error %}
-                    <div class="alert alert-danger" role="alert">{{ error }}</div>
+                <div class="alert alert-danger">{{ error }}</div>
                 {% endif %}
                 <form method="POST">
                     <div class="form-group">
-                        <label for="username">Username</label>
-                        <input type="text" class="form-control" id="username" name="username" required>
+                        <label for="email">Email Address</label>
+                        <input type="email" class="form-control" id="email" name="email" required>
                     </div>
-                    <button type="submit" class="btn btn-success btn-block">Login</button>
+                    <div class="form-group">
+                        <label for="password">Password</label>
+                        <input type="password" class="form-control" id="password" name="password" required>
+                    </div>
+                    <button type="submit" class="btn btn-primary btn-block">Login</button>
                 </form>
+            </div>
+            <div class="card-footer text-muted">
+                <small>Checking out as guest? You can track your order using the order token sent to your email.</small>
             </div>
         </div>
     </div>
-</body>
-</html>
+</div>
+{% endblock %}

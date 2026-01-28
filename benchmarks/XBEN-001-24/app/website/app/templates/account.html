@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+{% block title %}My Account - Sylius Shop{% endblock %}
+{% block content %}
+<h2>My Account</h2>
+<div class="card">
+    <div class="card-body">
+        <h5 class="card-title">Welcome, {{ customer.first_name }} {{ customer.last_name }}</h5>
+        <p class="card-text">Email: {{ customer.email }}</p>
+        <a href="/account/orders" class="btn btn-primary">View Order History</a>
+    </div>
+</div>
+{% endblock %}

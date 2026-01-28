@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+{% block title %}Order History - Sylius Shop{% endblock %}
+{% block content %}
+<h2>Order History</h2>
+<div class="card">
+    <div class="card-body">
+        {% if orders %}
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Order #</th>
+                    <th>Date</th>
+                    <th>Status</th>
+                    <th>Total</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for order in orders %}
+                <tr>
+                    <td>{{ order.id }}</td>
+                    <td>{{ order.created_at }}</td>
+                    <td><span class="badge badge-success">{{ order.state }}</span></td>
+                    <td>${{ "%.2f"|format(order.items_total / 100) }}</td>
+                    <td><a href="/api/v2/shop/orders/{{ order.token_value }}" class="btn btn-sm btn-outline-primary">View Details</a></td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        {% else %}
+        <p>No orders yet.</p>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

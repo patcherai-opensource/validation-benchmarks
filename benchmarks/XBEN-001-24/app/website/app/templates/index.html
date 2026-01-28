@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+{% block title %}Sylius Shop - Home{% endblock %}
+{% block content %}
+<div class="jumbotron bg-dark text-white">
+    <h1 class="display-4">Welcome to Sylius Shop</h1>
+    <p class="lead">Your one-stop shop for premium merchandise.</p>
+    <hr class="my-4 bg-light">
+    <p>Browse our collection of high-quality products.</p>
+    <a class="btn btn-primary btn-lg" href="/products" role="button">Shop Now</a>
+</div>
+
+<div class="row mt-5">
+    <div class="col-md-4">
+        <div class="card">
+            <div class="card-body text-center">
+                <h5 class="card-title">Fast Shipping</h5>
+                <p class="card-text">Get your orders delivered quickly with our express shipping options.</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card">
+            <div class="card-body text-center">
+                <h5 class="card-title">Secure Checkout</h5>
+                <p class="card-text">Shop with confidence using our secure payment processing.</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card">
+            <div class="card-body text-center">
+                <h5 class="card-title">Guest Checkout</h5>
+                <p class="card-text">No account required. Track your order with your order token.</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="mt-5">
+    <h3>Developer Resources</h3>
+    <p>Building an integration? Check out our API:</p>
+    <ul>
+        <li><a href="/api/v2/shop">Shop API Root</a></li>
+        <li><a href="/api/v2/shop/products">Products Endpoint</a></li>
+    </ul>
+</div>
+{% endblock %}

@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+{% block title %}Products - Sylius Shop{% endblock %}
+{% block content %}
+<h2>Our Products</h2>
+<div class="row">
+    {% for product in products %}
+    <div class="col-md-4 mb-4">
+        <div class="card product-card h-100">
+            <div class="card-body">
+                <h5 class="card-title">{{ product.name }}</h5>
+                <p class="card-text text-muted">{{ product.description }}</p>
+                <p class="card-text"><strong>${{ "%.2f"|format(product.price / 100) }}</strong></p>
+                <span class="badge badge-secondary">{{ product.code }}</span>
+            </div>
+            <div class="card-footer">
+                <button class="btn btn-primary btn-sm" disabled>Add to Cart</button>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% endblock %}
