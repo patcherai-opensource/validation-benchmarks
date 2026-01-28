@@ -1,56 +1,60 @@
 <div class="col-md-4">
     <!-- Search Widget -->
     <div class="card my-4">
-        <h5 class="card-header">Search</h5>
+        <h5 class="card-header">Content Search</h5>
         <div class="card-body">
             <div class="input-group">
-                <input type="text" class="form-control" placeholder="Search for...">
+                <input type="text" class="form-control" placeholder="Search content...">
                 <span class="input-group-append">
-                    <button class="btn btn-secondary" type="button">Go!</button>
+                    <button class="btn btn-secondary" type="button">Search</button>
                 </span>
             </div>
         </div>
     </div>
 
-    <!-- Categories Widget -->
+    <!-- Content Types Widget -->
     <div class="card my-4">
-        <h5 class="card-header">Categories</h5>
+        <h5 class="card-header">Content Types</h5>
         <div class="card-body">
             <div class="row">
                 <div class="col-lg-6">
                     <ul class="list-unstyled mb-0">
-                        <li><a href="#">Web Design</a></li>
-                        <li><a href="#">HTML</a></li>
-                        <li><a href="#">Freebies</a></li>
+                        <li><a href="#">Articles</a></li>
+                        <li><a href="#">Blog Posts</a></li>
+                        <li><a href="#">Landing Pages</a></li>
                     </ul>
                 </div>
                 <div class="col-lg-6">
                     <ul class="list-unstyled mb-0">
-                        <li><a href="#">JavaScript</a></li>
-                        <li><a href="#">CSS</a></li>
-                        <li><a href="#">Tutorials</a></li>
+                        <li><a href="#">Media Files</a></li>
+                        <li><a href="#">Documents</a></li>
+                        <li><a href="#">Images</a></li>
                     </ul>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- Side Widget -->
+    <!-- System Info Widget -->
     <div class="card my-4">
-        <h5 class="card-header">Live Visitors</h5>
+        <h5 class="card-header">Platform Status</h5>
         <div class="card-body">
-            <h6>Current Live Visitors: <span id="visitorCount">0</span></h6>
-            <p>Top Countries:</p>
+            <h6>Active Sessions: <span id="visitorCount">0</span></h6>
+            <p>Connected Nodes:</p>
             <ul id="visitorCountries">
             </ul>
         </div>
     </div>
 
     <div class="card my-4">
-        <h5 class="card-header">Help wanted!</h5>
+        <h5 class="card-header">Quick Actions</h5>
         <div class="card-body">
-            <h6>Help us improving the articles of the blog</h6>
-            <p>Submit yours <a href="posts/upload-article.php">here!</a></p>
+            <h6>Content Management</h6>
+            <ul class="list-unstyled">
+                <li><a href="/posts/upload-article.php">Upload Media</a></li>
+                <li><a href="/api/content/list">Content API</a></li>
+                <li><a href="/admin/dashboard.php">Dashboard</a></li>
+            </ul>
         </div>
     </div>
 </div>

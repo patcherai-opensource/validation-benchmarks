@@ -1,0 +1,10 @@
+# eZ Content Hub - robots.txt
+User-agent: *
+Disallow: /admin/
+Disallow: /api/
+Disallow: /posts/uploads/
+Disallow: /include/
+
+# Legacy paths
+Disallow: /var/
+Disallow: /ezpublish/

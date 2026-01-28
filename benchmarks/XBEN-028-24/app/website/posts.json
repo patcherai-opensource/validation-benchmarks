@@ -1,57 +1,57 @@
 [
     {
         "id": 1,
-        "title": "Script Kiddie Strikes Back: But Not for Long!",
-        "content": "Another chapter in the ongoing saga of thwarting cyber nuisances, complete with an upgrade in our digital armor.",
+        "title": "Migrating to eZ Content Hub 3.0",
+        "content": "Learn about the upcoming migration path from our legacy 2.3.x platform to the modern eZ Content Hub 3.0.",
         "image_url": "static/images/script_kiddie-v2.jpg",
         "post_url": "ScriptKiddie-v2"
     },
     {
         "id": 2,
-        "title": "How a Script Kiddie Tried to Hack the Unhackable",
-        "content": "A humorous recount of a failed attempt to exploit my blog with a simple LFI vulnerability.",
+        "title": "File Upload Best Practices",
+        "content": "Understanding secure file upload implementation with FileExtensionBlackListValidator and content type validation.",
         "image_url": "static/images/script_kiddie.jpg",
         "post_url": "ScriptKiddie"
     },
     {
         "id": 3,
-        "title": "EternalBlue: Understanding the Exploit",
-        "content": "Exploring the NSA-developed cyberattack exploit known as EternalBlue, which targets Microsoft's SMB protocol.",
+        "title": "Content API Reference Guide",
+        "content": "Complete documentation for the eZ Content Hub REST API including authentication and content management endpoints.",
         "image_url": "static/images/EternalBlue.webp",
         "post_url": "EternalBlue"
     },
     {
         "id": 4,
-        "title": "Introduction to Machine Learning",
-        "content": "A primer on machine learning, highlighting its role in data prediction without explicit programming.",
+        "title": "Understanding Content Types",
+        "content": "A comprehensive guide to content type modeling including field types, validators, and the ezbinaryfile field.",
         "image_url": "static/images/ML.webp",
         "post_url": "Introduction-to-Machine-Learning"
     },
     {
         "id": 5,
-        "title": "The Importance of Cybersecurity",
-        "content": "Discussing the critical importance of protecting digital information in an increasingly interconnected world.",
+        "title": "Security Configuration Guide",
+        "content": "Best practices for securing your eZ Content Hub installation including file upload restrictions and access control.",
         "image_url": "static/images/Cybersecurity.webp",
         "post_url": "The-Importance-of-Cybersecurity"
     },
     {
         "id": 6,
-        "title": "Advances in Renewable Energy",
-        "content": "Reviewing the latest advances in renewable energy technologies and their impact on global energy consumption.",
+        "title": "Media Library Management",
+        "content": "Learn how to effectively manage your media assets including images, documents, and binary files in the content repository.",
         "image_url": "static/images/Renew.webp",
         "post_url": "Advances-in-Renewable-Energy"
     },
     {
         "id": 7,
-        "title": "Blockchain Technology Explained",
-        "content": "Explaining the foundational technology behind cryptocurrencies and its potential beyond financial transactions.",
+        "title": "Workflow and Publishing",
+        "content": "Configure editorial workflows, content staging, and publishing mechanisms for enterprise content delivery.",
         "image_url": "static/images/Blockchain.webp",
         "post_url": "Blockchain-Technology"
     },
     {
         "id": 8,
-        "title": "Future of Artificial Intelligence",
-        "content": "Speculating on future developments in AI and its potential to transform industries and daily life.",
+        "title": "Platform Scalability",
+        "content": "Architecture patterns for scaling eZ Content Hub in high-traffic enterprise environments.",
         "image_url": "static/images/AI.webp",
         "post_url": "Future-of-AI"
     }

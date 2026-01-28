@@ -37,18 +37,18 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
 <html lang="en">
 <head>
     <meta charset="UTF8">
-    <title>Encoder64 Blog | Contact</title>
+    <title>eZ Content Hub | Support</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
 <body>
     <!-- Navigation Bar -->
     <? include("include/navigation-bar.php") ?>
 
-    <!-- Header with Featured Post -->
-    <header class="py-5 bg-light border-bottom mb-4">
+    <!-- Header -->
+    <header class="py-5 bg-dark text-white border-bottom mb-4">
         <div class="container">
             <div class="text-center my-5">
-                <h1 class="fw-bolder">Contact Me!</h1>
+                <h1 class="fw-bolder">Technical Support</h1>
             </div>
         </div>
     </header>

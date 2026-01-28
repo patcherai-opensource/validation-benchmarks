@@ -21,7 +21,7 @@ $display_posts = array_slice($posts, $start, $limit);
 <html lang="en">
 <head>
     <meta charset="UTF8">
-    <title>Encoder64 Blog</title>
+    <title>eZ Content Hub - Enterprise Content Platform</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
 <body>
@@ -29,11 +29,12 @@ $display_posts = array_slice($posts, $start, $limit);
     <? include("include/navigation-bar.php") ?>
 
     <!-- Header with Featured Post -->
-    <header class="py-5 bg-light border-bottom mb-4">
+    <header class="py-5 bg-dark text-white border-bottom mb-4">
         <div class="container">
             <div class="text-center my-5">
-                <h1 class="fw-bolder">Welcome to Encoder64 Blog!</h1>
-                <p class="lead mb-0">e0knbV9hX1NjcmlwdF9LaWRkaWV9</p>
+                <h1 class="fw-bolder">eZ Content Hub</h1>
+                <p class="lead mb-0">Enterprise Content Management Platform</p>
+                <small class="text-muted">v2.3.1-legacy</small>
             </div>
         </div>
     </header>

@@ -2,18 +2,18 @@
 <html lang="en">
 <head>
     <meta charset="UTF8">
-    <title>Encoder64 Blog | About</title>
+    <title>eZ Content Hub | Platform Overview</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
 <body>
     <!-- Navigation Bar -->
     <? include("include/navigation-bar.php") ?>
 
-    <!-- Header with Featured Post -->
-    <header class="py-5 bg-light border-bottom mb-4">
+    <!-- Header -->
+    <header class="py-5 bg-dark text-white border-bottom mb-4">
         <div class="container">
             <div class="text-center my-5">
-                <h1 class="fw-bolder">About me!</h1>
+                <h1 class="fw-bolder">Platform Overview</h1>
             </div>
         </div>
     </header>
@@ -23,30 +23,32 @@
         <div class="row">
             <div class="col-md-8">
                 <div class="container mt-5">
-                    <h1>Meet Encoder64: Master of Digital Realms</h1>
+                    <h1>eZ Content Hub Platform</h1>
                     <p>
-                        In the shadows of the digital world, there exists a figure both revered and feared. Known only as Encoder64, this enigmatic entity commands the cyber landscape with unparalleled skill. With a knack for breaking through digital barriers that seem impregnable to most, Encoder64 has shaped the contours of cyber security and ethical hacking.
+                        eZ Content Hub is an enterprise-grade content management platform designed for modern digital experiences. Built on proven technology and trusted by organizations worldwide, it provides the tools needed to create, manage, and publish content at scale.
                     </p>
 
-                    <h2>The Myth, The Legend</h2>
+                    <h2>Key Features</h2>
                     <p>
-                        Encoder64's journey began in the early days of internet exploration. Known for utilizing advanced encryption techniques and sophisticated algorithms, Encoder64 can infiltrate seemingly secure networks with the grace of a digital phantom. This mystic skill set not only showcases an extraordinary proficiency in programming but also an inventive approach to problem-solving in the cybernetic world.
+                        Our platform offers comprehensive content management capabilities including multi-language support, advanced workflows, granular permissions, and flexible content modeling. The media library supports various file types including images, documents, and binary files through our ezbinaryfile field type.
                     </p>
 
-                    <h2>Philosophy of a Hacker</h2>
+                    <h2>Technical Architecture</h2>
                     <p>
-                        Far from the nefarious deeds often associated with hackers, Encoder64 operates under a strict code of ethics, advocating for transparency and privacy. This philosophy is driven by a belief that information should be free and that privacy is a fundamental right, not a privilege.
+                        Built on a robust PHP foundation with a modular architecture, eZ Content Hub integrates seamlessly with existing infrastructure. The platform uses a repository pattern for content storage and provides both REST API and traditional web interfaces for content management.
                     </p>
 
-                    <h2>Techniques and Triumphs</h2>
+                    <h2>Security</h2>
                     <p>
-                        Encoder64 is a master of both offensive and defensive cyber strategies. From deploying intricate DDoS defenses to unmasking vulnerabilities in popular software, Encoder64's exploits are a testament to their deep understanding of the digital domain. Their work has prevented numerous cyber attacks, saving countless data from potential exploitation.
+                        Security is paramount in enterprise content management. Our platform implements multiple layers of protection including role-based access control, content validation, and file upload filtering. The FileExtensionBlackListValidator ensures that potentially dangerous file types are blocked from upload.
                     </p>
 
-                    <h2>Legacy and Future</h2>
-                    <p>
-                        As digital landscapes evolve, so too does the legend of Encoder64. Constantly adapting and learning, Encoder64 remains at the forefront of cybersecurity discussions, inspiring both fear and admiration. Their ongoing mission: to challenge the status quo and push the boundaries of what is possible in cybersecurity.
-                    </p>
+                    <h2>Version Information</h2>
+                    <div class="alert alert-info">
+                        <strong>Current Version:</strong> 2.3.1-legacy<br>
+                        <strong>PHP Version:</strong> <?php echo phpversion(); ?><br>
+                        <strong>Server:</strong> <?php echo $_SERVER['SERVER_SOFTWARE'] ?? 'Apache'; ?>
+                    </div>
                 </div>
             </div>
             <!-- Sidebar Widgets Column -->

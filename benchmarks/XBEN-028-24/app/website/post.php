@@ -24,7 +24,7 @@ else {
 <html lang="en">
 <head>
     <meta charset="UTF8">
-    <title>Encoder64 Blog | <?= isset($post_title) ? htmlspecialchars($post_title) : "Post not found"; ?></title>
+    <title>eZ Content Hub | <?= isset($post_title) ? htmlspecialchars($post_title) : "Content not found"; ?></title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
 <body>
