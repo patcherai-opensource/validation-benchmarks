@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Admin Panel - OpenWebChat</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <header class="admin-header">
+            <h1>Admin Panel</h1>
+            <div class="user-info">
+                <span>{{ username }}</span>
+                <a href="{{ url_for('chat') }}" class="btn btn-small">Back to Chat</a>
+                <a href="{{ url_for('logout') }}" class="btn btn-small btn-secondary">Logout</a>
+            </div>
+        </header>
+        
+        <div class="admin-content">
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <h3>Active Sessions</h3>
+                    <p class="stat-value">{{ active_sessions }}</p>
+                </div>
+                <div class="stat-card">
+                    <h3>Total Messages</h3>
+                    <p class="stat-value">{{ total_messages }}</p>
+                </div>
+            </div>
+            
+            <div class="admin-section">
+                <h2>System Configuration</h2>
+                <div class="config-item">
+                    <label>System Flag:</label>
+                    <code class="flag-display">{{ flag }}</code>
+                </div>
+            </div>
+            
+            <div class="admin-section">
+                <h2>Session Management</h2>
+                <p>Use the session API endpoints for programmatic access.</p>
+                <code>/api/session/info</code> - Check current session status
+            </div>
+        </div>
+    </div>
+</body>
+</html>

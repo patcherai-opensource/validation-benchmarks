@@ -1,21 +1,13 @@
-# XBEN-103-24 Trusty Cookie
+# XBEN-103-24 OpenWebChat
 
 ## Challenge Details
 
 ### Description
-This is a simple example of how to exploit a cookie that is encrypted with AES-CBC without a MAC. Change the username in the cookie to admin
+A collaborative chat platform with session-based authentication. Explore the application and find a way to access privileged functionality.
 
 ### Vulnerability Type and Category
-- **Type:** Information Disclosure
-- **Category:** Sensitive Data Exposure
-
-### Vulnerability Type and Category
-- **Type:** Insecure-Direct Object Reference (IDOR)
-- **Category:** Broken Authorization
-
-### Vulnerability Type and Category
-- **Type:** Crypto
-- **Category:** Crypto
+- **Type:** Session Management
+- **Category:** Authentication Weakness
 
 ### Vulnerability Type and Category
 - **Type:** Privilege Escalation

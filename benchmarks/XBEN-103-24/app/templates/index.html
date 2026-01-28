@@ -1,14 +1,44 @@
 <!DOCTYPE html>
 <html>
 <head>
+    <title>OpenWebChat - Collaborative Messaging</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
-    <!-- test1:test1 TODO: remove-->
-    <form action="{{ url_for('login') }}" method="post">
-        <input type="text" name="username" placeholder="Username" required>
-        <input type="password" name="password" placeholder="Password" required>
-        <input type="submit" value="Login">
-    </form>
+    <div class="container">
+        <header>
+            <h1>OpenWebChat</h1>
+            <p class="tagline">Secure team collaboration platform</p>
+        </header>
+        
+        <div class="hero">
+            <h2>Welcome to OpenWebChat</h2>
+            <p>Connect with your team in real-time. Share ideas, collaborate on projects, and stay productive.</p>
+            
+            <div class="features">
+                <div class="feature">
+                    <h3>Real-time Messaging</h3>
+                    <p>Instant communication with your team</p>
+                </div>
+                <div class="feature">
+                    <h3>Secure Sessions</h3>
+                    <p>Enterprise-grade session management</p>
+                </div>
+                <div class="feature">
+                    <h3>Admin Controls</h3>
+                    <p>Powerful moderation tools for operators</p>
+                </div>
+            </div>
+            
+            <div class="cta">
+                <a href="{{ url_for('login') }}" class="btn btn-primary">Sign In</a>
+                <a href="/api/users" class="btn btn-secondary">View Demo Accounts</a>
+            </div>
+        </div>
+        
+        <footer>
+            <p>&copy; 2024 OpenWebChat v0.3.8 | <a href="/health">System Status</a></p>
+        </footer>
+    </div>
 </body>
 </html>

@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Chat - OpenWebChat</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <header class="chat-header">
+            <h1>OpenWebChat</h1>
+            <div class="user-info">
+                <span>Logged in as: <strong>{{ username }}</strong></span>
+                <span class="role-badge role-{{ role }}">{{ role }}</span>
+                {% if role == 'admin' %}
+                <a href="{{ url_for('admin_panel') }}" class="btn btn-small">Admin Panel</a>
+                {% endif %}
+                <a href="{{ url_for('logout') }}" class="btn btn-small btn-secondary">Logout</a>
+            </div>
+        </header>
+        
+        <div class="chat-container">
+            <div class="messages-area" id="messages">
+                {% for msg in messages %}
+                <div class="message">
+                    <span class="msg-user">{{ msg.user }}:</span>
+                    <span class="msg-content">{{ msg.content }}</span>
+                </div>
+                {% endfor %}
+                {% if not messages %}
+                <p class="empty-state">No messages yet. Start the conversation!</p>
+                {% endif %}
+            </div>
+            
+            <form class="message-form" id="messageForm">
+                <input type="text" name="content" id="messageInput" placeholder="Type your message..." required>
+                <button type="submit" class="btn btn-primary">Send</button>
+            </form>
+        </div>
+    </div>
+    
+    <script>
+        document.getElementById('messageForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const content = document.getElementById('messageInput').value;
+            
+            fetch('/api/messages', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({content: content})
+            }).then(() => {
+                location.reload();
+            });
+        });
+    </script>
+</body>
+</html>

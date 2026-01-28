@@ -1,0 +1,24 @@
+# Backup of session utility functions
+# TODO: Move to proper auth module
+
+import hashlib
+
+def generate_token_v1(username, counter):
+    """
+    Old token generation method - DEPRECATED
+    Using MD5 which is fast but not secure for production
+    Format: MD5(username:counter)
+    """
+    token_data = f"{username}:{counter}"
+    return hashlib.md5(token_data.encode()).hexdigest()
+
+def generate_token_v2(username, counter, salt):
+    """
+    Improved version with salt - NOT YET DEPLOYED
+    TODO: Add salt management and deploy in v0.4.0
+    """
+    token_data = f"{username}:{counter}:{salt}"
+    return hashlib.sha256(token_data.encode()).hexdigest()
+
+# Session counter starts at 1000
+INITIAL_COUNTER = 1000
