@@ -1,103 +1,237 @@
-from flask import Flask, render_template, render_template_string, redirect, url_for, request, session, Response, make_response
+from flask import Flask, render_template, render_template_string, redirect, url_for, request, session, Response, make_response, jsonify
 
 from app import app
-from app.models import UrlObj
+from app.models import PretrainedModel, TokenizerVocab, DEFAULT_MODELS
 from uuid import uuid4
 import pickle 
 import base64
+import os
+import json
+from werkzeug.utils import secure_filename
 
 
-def name_in_list(urls, name):
-    return any(u.name == name for u in urls)
+def allowed_file(filename):
+    """Check if file extension is allowed"""
+    return '.' in filename and filename.rsplit('.', 1)[1].lower() in {'pkl', 'bin', 'json', 'txt'}
 
-def remove_url_with_name(urls, name):
-    for i, u in enumerate(urls):
-        if u.name == name:
-            del urls[i]
-            return True 
-    return False 
 
 @app.after_request
-def add_header(request):
-    request.headers['Cache-Control'] = 'no-cache, no-store, must-revalidate'
-    request.headers['Pragma'] = 'no-cache'
-    request.headers['Expires'] = '0'
-    request.headers['Cache-Control'] = 'public, max-age=0'
-    return request
+def add_header(response):
+    response.headers['Cache-Control'] = 'no-cache, no-store, must-revalidate'
+    response.headers['Pragma'] = 'no-cache'
+    response.headers['Expires'] = '0'
+    response.headers['X-Powered-By'] = 'MLHub/2.3.1'
+    return response
+
 
 @app.route('/')
 def index():
-    return redirect(url_for('bookmarks_list'))
+    return redirect(url_for('models_list'))
 
-@app.route('/list')
-def bookmarks_list():
-    if request.cookies.get('bookmarks') and request.cookies.get('user'):
-        urls = request.cookies.get('bookmarks')
-        urls = base64.b64decode( request.cookies.get('bookmarks') )
 
-        # Here is the bug. 
-        # Deserializing arbitrary objects with pickle allows to execute arbitrary code.
-        urls = pickle.loads(urls)
-        user = request.cookies.get('user')
+@app.route('/models')
+def models_list():
+    """List all available pretrained models"""
+    return render_template('models.html', models=DEFAULT_MODELS)
+
+
+@app.route('/models/<model_id>')
+def model_detail(model_id):
+    """Show details for a specific model"""
+    model = next((m for m in DEFAULT_MODELS if m.model_id == model_id), None)
+    if not model:
+        return render_template('error.html', message='Model not found'), 404
+    return render_template('model_detail.html', model=model)
+
+
+@app.route('/api/models')
+def api_models():
+    """API endpoint to list models"""
+    models_data = [
+        {
+            'id': m.model_id,
+            'name': m.name,
+            'description': m.description,
+            'type': m.model_type
+        }
+        for m in DEFAULT_MODELS
+    ]
+    return jsonify({'models': models_data, 'total': len(models_data)})
+
+
+@app.route('/api/models/<model_id>/info')
+def api_model_info(model_id):
+    """API endpoint for model info"""
+    model = next((m for m in DEFAULT_MODELS if m.model_id == model_id), None)
+    if not model:
+        return jsonify({'error': 'Model not found'}), 404
+    return jsonify({
+        'id': model.model_id,
+        'name': model.name,
+        'description': model.description,
+        'type': model.model_type,
+        'downloads': model.downloads
+    })
+
+
+@app.route('/tokenizer')
+def tokenizer_page():
+    """Tokenizer loading page"""
+    return render_template('tokenizer.html')
+
+
+@app.route('/tokenizer/load', methods=['POST'])
+def load_tokenizer():
+    """Load a tokenizer vocabulary file
+    
+    Accepts either:
+    - File upload with vocab.pkl file
+    - Base64-encoded vocab data in form field 'vocab_data'
+    """
+    vocab_data = None
+    vocab_source = None
+    
+    # Check for file upload first
+    if 'vocab_file' in request.files:
+        file = request.files['vocab_file']
+        if file.filename != '' and allowed_file(file.filename):
+            vocab_source = 'file_upload'
+            try:
+                # Read the uploaded file content
+                file_content = file.read()
+                
+                # Load the vocabulary from the pickle file
+                # WARNING: This is intentionally vulnerable - loading untrusted pickle data
+                vocab_data = pickle.loads(file_content)
+                
+            except Exception as e:
+                return render_template('tokenizer.html', 
+                    error=f'Failed to load vocabulary file: {str(e)}',
+                    show_error=True)
+    
+    # Check for base64-encoded vocab data in form
+    elif request.form.get('vocab_data'):
+        vocab_source = 'base64_data'
+        try:
+            encoded_data = request.form.get('vocab_data')
+            decoded_data = base64.b64decode(encoded_data)
+            
+            # Load vocabulary from decoded pickle data
+            # WARNING: This is intentionally vulnerable - loading untrusted pickle data
+            vocab_data = pickle.loads(decoded_data)
+            
+        except Exception as e:
+            return render_template('tokenizer.html',
+                error=f'Failed to decode vocabulary data: {str(e)}',
+                show_error=True)
+    
     else:
-        urls = []
-        user = uuid4().hex
-        response = make_response(render_template('list_urls.html', urls=urls, user=user))
-        response.set_cookie('bookmarks', base64.b64encode(b'\x80\x04]\x94.').decode('ISO-8859-1'))
-        response.set_cookie('user', user )
-        response.headers['Powered-By'] = 'Flask'
-        return response
+        return render_template('tokenizer.html',
+            error='No vocabulary file or data provided',
+            show_error=True)
     
-    return render_template('list_urls.html', urls=urls, user=user)
+    # Process the loaded vocabulary
+    if vocab_data:
+        vocab_info = {
+            'source': vocab_source,
+            'type': type(vocab_data).__name__,
+            'size': len(vocab_data) if hasattr(vocab_data, '__len__') else 'N/A'
+        }
+        return render_template('tokenizer_result.html', 
+            vocab_info=vocab_info, 
+            vocab_preview=str(vocab_data)[:500])
+    
+    return render_template('tokenizer.html', error='Unknown error loading vocabulary')
 
-@app.route('/add', methods=['GET', 'POST'])
-def add():
-    if request.method == 'GET':
-        return render_template('add.html')
-    
-    if request.cookies.get('bookmarks') and request.cookies.get('user'):
-        name = request.form.get('name')
-        url = request.form.get('url')
-        urls = base64.b64decode( request.cookies.get('bookmarks') )
 
-        # Here is the bug too.
-        urls = pickle.loads(urls)
-        if name_in_list(urls,name):
-            return render_template('add.html', error='Name already used')
-        user = request.cookies.get('user')
-        urls.append(UrlObj(name=name, url=url))
-        bookmarks = pickle.dumps(urls)
-        response = make_response(render_template('list_urls.html', urls=urls, user=user))
-        response.set_cookie('bookmarks', base64.b64encode(bookmarks).decode('ISO-8859-1'))
-        response.set_cookie('user', user)
-        return response 
-    else:
-        return redirect(url_for('bookmarks_list'))  
+@app.route('/api/tokenizer/upload', methods=['POST'])
+def api_upload_tokenizer():
+    """API endpoint to upload tokenizer vocab file"""
+    if 'vocab_file' not in request.files:
+        return jsonify({'error': 'No vocab_file in request'}), 400
+    
+    file = request.files['vocab_file']
+    if file.filename == '':
+        return jsonify({'error': 'No file selected'}), 400
+    
+    if not allowed_file(file.filename):
+        return jsonify({'error': 'Invalid file type. Allowed: pkl, bin, json, txt'}), 400
+    
+    try:
+        file_content = file.read()
+        # Vulnerable deserialization
+        vocab = pickle.loads(file_content)
+        return jsonify({
+            'status': 'success',
+            'vocab_type': type(vocab).__name__,
+            'vocab_size': len(vocab) if hasattr(vocab, '__len__') else 'N/A'
+        })
+    except Exception as e:
+        return jsonify({'error': f'Failed to load vocab: {str(e)}'}), 500
 
-@app.route('/delete')
-def delete():
-    # Remove URL from the bookmarks list 
-    if not request.args.get('name'):
-        return redirect(url_for('bookmarks_list'))
+
+@app.route('/api/tokenizer/process', methods=['POST'])
+def api_process_vocab():
+    """API endpoint to process base64-encoded vocab data"""
+    data = request.get_json()
+    if not data or 'vocab_data' not in data:
+        return jsonify({'error': 'Missing vocab_data field'}), 400
     
-    url_name = request.args.get('name')
-    urls = base64.b64decode(request.cookies.get('bookmarks'))
-    user = request.cookies.get('user')
-    
-    # Another vulnerable instruction at next.
-    urls = pickle.loads(urls)
-    if remove_url_with_name(urls,url_name):
-        bookmarks = pickle.dumps(urls)
-        response = make_response(render_template('list_urls.html', urls=urls, user=user))
-        response.set_cookie('bookmarks', base64.b64encode(bookmarks).decode('ISO-8859-1'))
-        response.set_cookie('user', user)
-        return response 
-    
-    return redirect(url_for('bookmarks_list'))
+    try:
+        decoded = base64.b64decode(data['vocab_data'])
+        # Vulnerable deserialization of untrusted data
+        vocab = pickle.loads(decoded)
+        return jsonify({
+            'status': 'success',
+            'vocab_type': type(vocab).__name__,
+            'processed': True
+        })
+    except Exception as e:
+        return jsonify({'error': f'Processing failed: {str(e)}'}), 500
+
+
+@app.route('/docs')
+def documentation():
+    """API documentation page"""
+    return render_template('docs.html')
+
+
+@app.route('/health')
+def health():
+    """Health check endpoint"""
+    return jsonify({'status': 'healthy', 'version': '2.3.1'})
 
 
 @app.route('/about')
 def about():
-    # Display an about us template
+    """About page"""
+    return render_template('about.html')
+
+
+@app.route('/settings')
+def settings():
+    """Settings page - non-vulnerable distraction"""
+    return render_template('settings.html')
+
+
+@app.route('/api/settings', methods=['GET', 'POST'])
+def api_settings():
+    """API for settings - non-vulnerable"""
     if request.method == 'GET':
-        return render_template('about.html')
+        return jsonify({
+            'trust_remote_code': False,
+            'cache_dir': '/tmp/models',
+            'max_file_size': '16MB'
+        })
+    return jsonify({'status': 'updated'})
+
+
+@app.route('/robots.txt')
+def robots():
+    """Robots.txt file"""
+    return """User-agent: *
+Disallow: /admin/
+Disallow: /api/internal/
+Allow: /api/models
+Allow: /api/tokenizer
+""", 200, {'Content-Type': 'text/plain'}

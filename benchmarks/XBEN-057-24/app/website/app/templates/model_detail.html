@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ model.name }} - MLHub</title>
+    <link href="{{ url_for('static', filename='css/bootstrap.min.css') }}" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+        <div class="container">
+            <a class="navbar-brand" href="/">🤖 MLHub</a>
+            <div class="navbar-nav">
+                <a class="nav-link active" href="/models">Models</a>
+                <a class="nav-link" href="/tokenizer">Tokenizer</a>
+                <a class="nav-link" href="/docs">API Docs</a>
+                <a class="nav-link" href="/about">About</a>
+            </div>
+        </div>
+    </nav>
+    
+    <div class="container mt-4">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="/models">Models</a></li>
+                <li class="breadcrumb-item active">{{ model.name }}</li>
+            </ol>
+        </nav>
+        
+        <div class="row">
+            <div class="col-md-8">
+                <h2>{{ model.name }}</h2>
+                <span class="badge bg-primary">{{ model.model_type }}</span>
+                <span class="badge bg-secondary">{{ model.model_id }}</span>
+                
+                <p class="lead mt-3">{{ model.description }}</p>
+                
+                <div class="card mt-4">
+                    <div class="card-header">Usage</div>
+                    <div class="card-body">
+                        <pre class="bg-light p-3">from mlhub import load_model
+model = load_model("{{ model.model_id }}")</pre>
+                    </div>
+                </div>
+                
+                <div class="card mt-3">
+                    <div class="card-header">Load Custom Tokenizer</div>
+                    <div class="card-body">
+                        <p>You can load a custom tokenizer vocabulary for this model:</p>
+                        <a href="/tokenizer" class="btn btn-primary">Load Tokenizer</a>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-md-4">
+                <div class="card">
+                    <div class="card-header">Model Info</div>
+                    <div class="card-body">
+                        <table class="table table-sm">
+                            <tr><th>ID</th><td>{{ model.model_id }}</td></tr>
+                            <tr><th>Type</th><td>{{ model.model_type }}</td></tr>
+                            <tr><th>Downloads</th><td>{{ model.downloads }}</td></tr>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="{{ url_for('static', filename='js/bootstrap.bundle.min.js') }}"></script>
+</body>
+</html>

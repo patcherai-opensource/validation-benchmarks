@@ -1,0 +1,5 @@
+User-agent: *
+Disallow: /admin/
+Disallow: /api/internal/
+Allow: /api/models
+Allow: /api/tokenizer

@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Error - MLHub</title>
+    <link href="{{ url_for('static', filename='css/bootstrap.min.css') }}" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+        <div class="container">
+            <a class="navbar-brand" href="/">🤖 MLHub</a>
+            <div class="navbar-nav">
+                <a class="nav-link" href="/models">Models</a>
+                <a class="nav-link" href="/tokenizer">Tokenizer</a>
+                <a class="nav-link" href="/docs">API Docs</a>
+                <a class="nav-link" href="/about">About</a>
+            </div>
+        </div>
+    </nav>
+    
+    <div class="container mt-5 text-center">
+        <h1 class="display-4">Error</h1>
+        <p class="lead text-muted">{{ message }}</p>
+        <a href="/" class="btn btn-primary">Return Home</a>
+    </div>
+
+    <script src="{{ url_for('static', filename='js/bootstrap.bundle.min.js') }}"></script>
+</body>
+</html>

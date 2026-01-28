@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>API Documentation - MLHub</title>
+    <link href="{{ url_for('static', filename='css/bootstrap.min.css') }}" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+        <div class="container">
+            <a class="navbar-brand" href="/">🤖 MLHub</a>
+            <div class="navbar-nav">
+                <a class="nav-link" href="/models">Models</a>
+                <a class="nav-link" href="/tokenizer">Tokenizer</a>
+                <a class="nav-link active" href="/docs">API Docs</a>
+                <a class="nav-link" href="/about">About</a>
+            </div>
+        </div>
+    </nav>
+    
+    <div class="container mt-4">
+        <h2>API Documentation</h2>
+        <p class="lead">REST API endpoints for MLHub integration</p>
+        
+        <div class="card mt-4">
+            <div class="card-header">GET /api/models</div>
+            <div class="card-body">
+                <p>List all available pretrained models</p>
+                <h6>Response:</h6>
+                <pre class="bg-light p-2">{"models": [...], "total": 3}</pre>
+            </div>
+        </div>
+        
+        <div class="card mt-3">
+            <div class="card-header">GET /api/models/&lt;model_id&gt;/info</div>
+            <div class="card-body">
+                <p>Get detailed information about a specific model</p>
+                <h6>Parameters:</h6>
+                <ul>
+                    <li><code>model_id</code> - The model identifier (e.g., bert-base)</li>
+                </ul>
+            </div>
+        </div>
+        
+        <div class="card mt-3">
+            <div class="card-header">POST /api/tokenizer/upload</div>
+            <div class="card-body">
+                <p>Upload a tokenizer vocabulary file</p>
+                <h6>Request:</h6>
+                <ul>
+                    <li>Content-Type: multipart/form-data</li>
+                    <li>Field: <code>vocab_file</code> - The vocabulary file (.pkl, .bin)</li>
+                </ul>
+                <h6>Response:</h6>
+                <pre class="bg-light p-2">{"status": "success", "vocab_type": "dict", "vocab_size": 30522}</pre>
+            </div>
+        </div>
+        
+        <div class="card mt-3">
+            <div class="card-header">POST /api/tokenizer/process</div>
+            <div class="card-body">
+                <p>Process base64-encoded vocabulary data</p>
+                <h6>Request:</h6>
+                <pre class="bg-light p-2">{"vocab_data": "base64_encoded_pickle_data"}</pre>
+                <h6>Response:</h6>
+                <pre class="bg-light p-2">{"status": "success", "vocab_type": "TokenizerVocab", "processed": true}</pre>
+            </div>
+        </div>
+        
+        <div class="card mt-3">
+            <div class="card-header">GET /api/settings</div>
+            <div class="card-body">
+                <p>Get current MLHub settings</p>
+                <h6>Response:</h6>
+                <pre class="bg-light p-2">{"trust_remote_code": false, "cache_dir": "/tmp/models", "max_file_size": "16MB"}</pre>
+            </div>
+        </div>
+        
+        <div class="card mt-3">
+            <div class="card-header">GET /health</div>
+            <div class="card-body">
+                <p>Health check endpoint</p>
+                <h6>Response:</h6>
+                <pre class="bg-light p-2">{"status": "healthy", "version": "2.3.1"}</pre>
+            </div>
+        </div>
+    </div>
+
+    <script src="{{ url_for('static', filename='js/bootstrap.bundle.min.js') }}"></script>
+</body>
+</html>

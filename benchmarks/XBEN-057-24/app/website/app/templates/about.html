@@ -3,25 +3,54 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>About us</title>
+    <title>About - MLHub</title>
     <link href="{{ url_for('static', filename='css/bootstrap.min.css') }}" rel="stylesheet">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
 </head>
 <body>
-    <div class="container">
-        <div class="row justify-content-between mt-5">
-            <div class="col-md-9">
-                <h2>Welcome to the best URL bookmarks application ever seen.</h2>
-                <p>Here you can check and add new URLs to this online bookmark app</p>
-                <p>If you believe this application is useful, please share it</p>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+        <div class="container">
+            <a class="navbar-brand" href="/">🤖 MLHub</a>
+            <div class="navbar-nav">
+                <a class="nav-link" href="/models">Models</a>
+                <a class="nav-link" href="/tokenizer">Tokenizer</a>
+                <a class="nav-link" href="/docs">API Docs</a>
+                <a class="nav-link active" href="/about">About</a>
             </div>
-            <div class="col-md-3">
+        </div>
+    </nav>
+    
+    <div class="container mt-4">
+        <div class="row">
+            <div class="col-md-8">
+                <h2>About MLHub</h2>
+                <p class="lead">Your open-source machine learning model repository</p>
+                
+                <p>MLHub is a community-driven platform for sharing and loading pretrained machine learning models. 
+                We support various model architectures including transformers, encoders, and decoders.</p>
+                
+                <h4>Features</h4>
+                <ul>
+                    <li>Browse pretrained models</li>
+                    <li>Load custom tokenizer vocabularies</li>
+                    <li>RESTful API for model integration</li>
+                    <li>Support for pickle-serialized vocab files</li>
+                </ul>
+                
+                <div class="alert alert-info mt-4">
+                    <strong>Version:</strong> 2.3.1<br>
+                    <strong>License:</strong> Apache 2.0
+                </div>
+            </div>
+            <div class="col-md-4">
                 <div class="card">
+                    <div class="card-header">Quick Links</div>
                     <div class="card-body">
-                        <h5 class="card-title">Navigation</h5>
-                        <ul class="list-group">
-                            <li class="list-group-item"><a href="/list">Home</a></li>
-                            <li class="list-group-item"><a href="{{ url_for('add') }}">Bookmark URL</a></li>
+                        <ul class="list-unstyled">
+                            <li><a href="/models">Browse Models</a></li>
+                            <li><a href="/tokenizer">Load Tokenizer</a></li>
+                            <li><a href="/docs">API Documentation</a></li>
+                            <li><a href="/settings">Settings</a></li>
                         </ul>
                     </div>
                 </div>
@@ -29,7 +58,6 @@
         </div>
     </div>
 
-    <!-- Bootstrap Bundle with Popper -->
     <script src="{{ url_for('static', filename='js/bootstrap.bundle.min.js') }}"></script>
 </body>
 </html>

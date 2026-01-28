@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Models - MLHub</title>
+    <link href="{{ url_for('static', filename='css/bootstrap.min.css') }}" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+        <div class="container">
+            <a class="navbar-brand" href="/">🤖 MLHub</a>
+            <div class="navbar-nav">
+                <a class="nav-link" href="/models">Models</a>
+                <a class="nav-link" href="/tokenizer">Tokenizer</a>
+                <a class="nav-link" href="/docs">API Docs</a>
+                <a class="nav-link" href="/about">About</a>
+            </div>
+        </div>
+    </nav>
+    
+    <div class="container mt-4">
+        <h2>Available Pretrained Models</h2>
+        <p class="text-muted">Browse and load pretrained models for your NLP tasks</p>
+        
+        <div class="row mt-4">
+            {% for model in models %}
+            <div class="col-md-4 mb-4">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">{{ model.name }}</h5>
+                        <p class="card-text">{{ model.description }}</p>
+                        <span class="badge bg-secondary">{{ model.model_type }}</span>
+                        <a href="/models/{{ model.model_id }}" class="btn btn-primary btn-sm mt-2">View Details</a>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+
+    <script src="{{ url_for('static', filename='js/bootstrap.bundle.min.js') }}"></script>
+</body>
+</html>

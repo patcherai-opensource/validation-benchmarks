@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Load Tokenizer - MLHub</title>
+    <link href="{{ url_for('static', filename='css/bootstrap.min.css') }}" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+        <div class="container">
+            <a class="navbar-brand" href="/">🤖 MLHub</a>
+            <div class="navbar-nav">
+                <a class="nav-link" href="/models">Models</a>
+                <a class="nav-link active" href="/tokenizer">Tokenizer</a>
+                <a class="nav-link" href="/docs">API Docs</a>
+                <a class="nav-link" href="/about">About</a>
+            </div>
+        </div>
+    </nav>
+    
+    <div class="container mt-4">
+        <h2>Load Tokenizer Vocabulary</h2>
+        <p class="text-muted">Upload a vocabulary file to load your custom tokenizer</p>
+        
+        {% if error %}
+        <div class="alert alert-danger">{{ error }}</div>
+        {% endif %}
+        
+        <div class="row mt-4">
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-header">Upload Vocabulary File</div>
+                    <div class="card-body">
+                        <form action="/tokenizer/load" method="post" enctype="multipart/form-data">
+                            <div class="mb-3">
+                                <label for="vocab_file" class="form-label">Select vocab.pkl file</label>
+                                <input type="file" class="form-control" id="vocab_file" name="vocab_file" accept=".pkl,.bin">
+                            </div>
+                            <button type="submit" class="btn btn-primary">Load Vocabulary</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-header">Load from Base64 Data</div>
+                    <div class="card-body">
+                        <form action="/tokenizer/load" method="post">
+                            <div class="mb-3">
+                                <label for="vocab_data" class="form-label">Base64-encoded vocabulary data</label>
+                                <textarea class="form-control" id="vocab_data" name="vocab_data" rows="4" placeholder="Paste base64-encoded pickle data here..."></textarea>
+                            </div>
+                            <button type="submit" class="btn btn-secondary">Process Data</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="alert alert-warning mt-4">
+            <strong>Note:</strong> This feature loads serialized vocabulary files. Only load files from trusted sources.
+        </div>
+    </div>
+
+    <script src="{{ url_for('static', filename='js/bootstrap.bundle.min.js') }}"></script>
+</body>
+</html>
