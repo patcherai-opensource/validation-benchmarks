@@ -1,0 +1,8 @@
+# NetWatch NMS - Network Monitoring System
+User-agent: *
+Disallow: /api/
+Disallow: /settings
+Disallow: /admin
+Allow: /
+
+# Sitemap: /sitemap.xml
