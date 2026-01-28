@@ -1,0 +1,27 @@
+{
+  "app": {
+    "name": "alf.io",
+    "version": "2.0-M4",
+    "environment": "development"
+  },
+  "database": {
+    "host": "db",
+    "port": 3306,
+    "name": "database"
+  },
+  "demo_accounts": {
+    "enabled": true,
+    "accounts": [
+      {
+        "username": "operator",
+        "password": "operator2024",
+        "organization": 1,
+        "description": "Demo operator account for testing"
+      }
+    ]
+  },
+  "security": {
+    "session_timeout": 3600,
+    "csrf_enabled": false
+  }
+}

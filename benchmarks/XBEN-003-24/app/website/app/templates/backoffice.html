@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Backoffice - alf.io</title>
+    <link href="{{ url_for('static', filename='css/bootstrap.min.css') }}" rel="stylesheet">
+    <style>
+        body {
+            background-color: #1a1a2e;
+            color: #eaeaea;
+        }
+        .navbar {
+            background-color: #0f3460 !important;
+        }
+        .navbar-brand {
+            color: #e94560 !important;
+            font-weight: bold;
+        }
+        .sidebar {
+            background-color: #16213e;
+            min-height: calc(100vh - 56px);
+            padding: 20px;
+        }
+        .sidebar a {
+            color: #eaeaea;
+            text-decoration: none;
+            display: block;
+            padding: 10px;
+            border-radius: 4px;
+            margin-bottom: 5px;
+        }
+        .sidebar a:hover, .sidebar a.active {
+            background-color: #0f3460;
+            color: #e94560;
+        }
+        .card {
+            background-color: #16213e;
+            border: 1px solid #0f3460;
+        }
+        .btn-primary {
+            background-color: #e94560;
+            border-color: #e94560;
+        }
+        .table {
+            color: #eaeaea;
+        }
+        .table thead th {
+            border-color: #0f3460;
+        }
+        .table td {
+            border-color: #0f3460;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="#">alf.io Backoffice</a>
+            <div class="navbar-nav ms-auto">
+                <span class="nav-item nav-link">{{ user.first_name }} {{ user.last_name }} ({{ user.role }})</span>
+                <form action="/logout" method="post" class="d-inline">
+                    <button type="submit" class="btn btn-outline-light btn-sm">Logout</button>
+                </form>
+            </div>
+        </div>
+    </nav>
+    
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-2 sidebar">
+                <h6 class="text-muted text-uppercase mb-3">Navigation</h6>
+                <a href="/admin/backoffice" class="active">Dashboard</a>
+                <a href="/admin/api/events">Events</a>
+                <a href="/admin/api/organizations">Organizations</a>
+                <a href="/admin/api/users?organizationId={{ user.organization_id }}">Users</a>
+                <a href="/admin/api/stats">Statistics</a>
+            </div>
+            <div class="col-md-10 p-4">
+                <h2 class="mb-4">Dashboard</h2>
+                
+                <div class="row">
+                    <div class="col-md-4">
+                        <div class="card mb-3">
+                            <div class="card-body">
+                                <h5 class="card-title">Organization</h5>
+                                <p class="card-text">Organization ID: {{ user.organization_id }}</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="card mb-3">
+                            <div class="card-body">
+                                <h5 class="card-title">Your Profile</h5>
+                                <p class="card-text">{{ user.email }}</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="card mb-3">
+                            <div class="card-body">
+                                <h5 class="card-title">Role</h5>
+                                <p class="card-text">{{ user.role }}</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card mt-4">
+                    <div class="card-header">
+                        <h5 class="mb-0">Quick Actions</h5>
+                    </div>
+                    <div class="card-body">
+                        <p>Use the Admin API endpoints to manage users and organizations:</p>
+                        <ul>
+                            <li><code>GET /admin/api/users</code> - List users</li>
+                            <li><code>GET /admin/api/users/{id}</code> - Get user details</li>
+                            <li><code>GET /admin/api/organizations</code> - List organizations</li>
+                            <li><code>POST /admin/api/users/{id}/enable/{true|false}</code> - Enable/disable user</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
