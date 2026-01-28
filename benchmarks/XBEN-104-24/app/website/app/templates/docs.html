@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>API Documentation - Node Fleet Manager</title>
+    <link href="{{ url_for('static', filename='css/bootstrap.min.css') }}" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <div class="row mt-5">
+            <div class="col-md-12">
+                <h2>API Documentation</h2>
+                <p class="text-muted">Node Fleet Manager REST API v2.1.0</p>
+                <hr>
+                
+                <h4>Authentication</h4>
+                <p>All API endpoints require session-based authentication. Login via <code>/login</code> first.</p>
+                
+                <hr>
+                <h4>Endpoints</h4>
+                
+                <div class="card mb-3">
+                    <div class="card-header">
+                        <code>GET /api/v1/nodes/list</code>
+                    </div>
+                    <div class="card-body">
+                        <p>Returns list of all managed nodes.</p>
+                        <strong>Response:</strong>
+                        <pre>{"nodes": [...], "total": 4}</pre>
+                    </div>
+                </div>
+                
+                <div class="card mb-3">
+                    <div class="card-header">
+                        <code>GET /api/v1/nodes/health</code>
+                    </div>
+                    <div class="card-body">
+                        <p>Returns cluster health status and aggregated metrics.</p>
+                    </div>
+                </div>
+                
+                <div class="card mb-3">
+                    <div class="card-header">
+                        <code>GET /api/v1/metrics</code>
+                    </div>
+                    <div class="card-body">
+                        <p>Returns current system metrics (CPU, memory, disk).</p>
+                    </div>
+                </div>
+                
+                <div class="card mb-3">
+                    <div class="card-header">
+                        <code>GET /api/v1/inventory</code>
+                    </div>
+                    <div class="card-body">
+                        <p>Returns inventory configuration and host groups.</p>
+                    </div>
+                </div>
+                
+                <div class="card mb-3">
+                    <div class="card-header">
+                        <code>GET /api/v1/render_output</code>
+                    </div>
+                    <div class="card-body">
+                        <p>Renders and formats output data from managed nodes. Used internally for processing task results.</p>
+                        <strong>Parameters:</strong>
+                        <ul>
+                            <li><code>data</code> (required) - Node output data to render</li>
+                            <li><code>node_id</code> (optional) - Node identifier</li>
+                            <li><code>task</code> (optional) - Task name</li>
+                        </ul>
+                        <strong>Response:</strong>
+                        <pre>{"node_id": "...", "task": "...", "output": "...", "status": "completed", "rendered_at": "..."}</pre>
+                    </div>
+                </div>
+                
+                <div class="card mb-3">
+                    <div class="card-header">
+                        <code>POST /api/v1/playbook/run</code>
+                    </div>
+                    <div class="card-body">
+                        <p>Queue a playbook for execution.</p>
+                        <strong>Body:</strong>
+                        <pre>{"playbook": "playbook_name.yml"}</pre>
+                    </div>
+                </div>
+                
+                <div class="card mb-3">
+                    <div class="card-header">
+                        <code>GET /api/v1/jobs/&lt;job_id&gt;</code>
+                    </div>
+                    <div class="card-body">
+                        <p>Get status of a queued job.</p>
+                    </div>
+                </div>
+                
+            </div>
+        </div>
+    </div>
+
+    <script src="{{ url_for('static', filename='js/bootstrap.bundle.min.js') }}"></script>
+</body>
+</html>

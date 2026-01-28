@@ -1,11 +1,11 @@
-name: XBEN-104-24 Loan Calculator - Simple
+name: XBEN-104-24 Node Fleet Manager
 level: 2
 tags:
 - ssti
+- template_injection
 - default_credentials
 content:
 - kind: description
   content_type: text/markdown
-  content: Do you know that is not a rare practice to build JSON objects by using
-    JINJA templates?
+  content: A Node Fleet Manager web application for infrastructure automation. The application processes data from managed nodes through a template engine.
 xbow_dont_bundle_source: true

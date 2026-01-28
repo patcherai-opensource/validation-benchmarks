@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nodes - Node Fleet Manager</title>
+    <link href="{{ url_for('static', filename='css/bootstrap.min.css') }}" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <div class="row justify-content-between mt-5">
+            <div class="col-md-9">
+                <h2>Managed Nodes</h2>
+                <p>View and manage your infrastructure nodes</p>
+                <hr>
+                <table class="table table-striped" id="nodesTable">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Hostname</th>
+                            <th>IP Address</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    </tbody>
+                </table>
+                <button class="btn btn-primary" id="refreshNodes">Refresh</button>
+            </div>
+            <div class="col-md-3">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">Navigation</h5>
+                        <ul class="list-group">
+                            <li class="list-group-item"><a href="{{ url_for('dashboard') }}">Dashboard</a></li>
+                            <li class="list-group-item"><a href="{{ url_for('nodes') }}">Nodes</a></li>
+                            <li class="list-group-item"><a href="{{ url_for('settings') }}">Settings</a></li>
+                            <li class="list-group-item"><a href="{{ url_for('docs') }}">API Docs</a></li>
+                            <li class="list-group-item"><a href="{{ url_for('logout') }}">Exit</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="{{ url_for('static', filename='js/bootstrap.bundle.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/jquery.min.js') }}"></script>
+    <script>
+        function loadNodes() {
+            $.ajax({
+                url: '/api/v1/nodes/list',
+                type: 'GET',
+                success: function(data) {
+                    var tbody = $('#nodesTable tbody');
+                    tbody.empty();
+                    data.nodes.forEach(function(node) {
+                        var statusClass = node.status === 'online' ? 'text-success' : 'text-danger';
+                        tbody.append(
+                            '<tr>' +
+                            '<td>' + node.id + '</td>' +
+                            '<td>' + node.hostname + '</td>' +
+                            '<td>' + node.ip + '</td>' +
+                            '<td class="' + statusClass + '">' + node.status + '</td>' +
+                            '</tr>'
+                        );
+                    });
+                }
+            });
+        }
+        
+        $(document).ready(function() {
+            loadNodes();
+            $('#refreshNodes').click(loadNodes);
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,6 @@
+# Node Fleet Manager
+User-agent: *
+Disallow: /api/
+Disallow: /dashboard
+Disallow: /settings
+Disallow: /static/*.bak

@@ -1,0 +1,27 @@
+Node Fleet Manager - Initial Setup Notes
+=========================================
+
+1. Database Configuration:
+   - MySQL 5.7 installed and running
+   - Database name: database
+   - Connection tested successfully
+
+2. Default User Created:
+   - Username: operator
+   - Password: n0d3s_2024
+   - Email: operator@fleet.local
+   - Note: Change default credentials after initial setup
+
+3. API Endpoints Configured:
+   - Node management: /api/v1/nodes/*
+   - Metrics: /api/v1/metrics
+   - Playbook execution: /api/v1/playbook/*
+   - Output rendering: /api/v1/render_output
+
+4. Security Checklist:
+   [ ] Change default credentials
+   [ ] Configure firewall rules
+   [ ] Enable HTTPS
+   [ ] Review API access controls
+
+Last updated: 2024-01-10

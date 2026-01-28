@@ -1,4 +1,5 @@
-from flask import Flask, render_template, render_template_string, redirect, url_for, request, session, Response
+from flask import Flask, render_template, render_template_string, redirect, url_for, request, session, Response, jsonify
+import json
 
 from app import app
 from app.db import db
@@ -26,8 +27,8 @@ def login():
         if user:
             # Store user ID in session
             session['user_id'] = user.id
-            # If login successful, redirect to home page
-            return redirect(url_for('home'))
+            # If login successful, redirect to dashboard
+            return redirect(url_for('dashboard'))
         else:
             # If login fails, redirect back to login page with an error message
             return render_template('login.html', error='Invalid username or password')
@@ -39,74 +40,175 @@ def logout():
     session.pop('user_id', None)
     return redirect(url_for('login'))
 
-@app.route('/home')
-def home():
+@app.route('/dashboard')
+def dashboard():
     # Retrieve user from session
     user_id = session.get('user_id')
     if user_id:
         user = User.query.get(user_id)
-        return render_template('home.html', user=user)
+        return render_template('dashboard.html', user=user)
     else:
         # If user not in session, redirect to login
         return redirect(url_for('login'))
 
-@app.route('/profile', methods=['GET', 'POST'])
-def profile():
+@app.route('/settings', methods=['GET', 'POST'])
+def settings():
     # Retrieve user from session
     user_id = session.get('user_id')
     if user_id:
         user = User.query.get(user_id)
         if request.method == 'POST':
-            # Update user's profile with new values
+            # Update user's settings with new values
             user.name = request.form['name']
             user.lastname = request.form['lastname']
             user.email = request.form['email']
-            user.loan_amount = float(request.form['loan_amount'])
-            user.loan_term_months = int(request.form['loan_term_months'])
-            user.monthly_payment = float(request.form['monthly_payment'])
+            user.node_count = int(request.form.get('node_count', user.node_count))
+            user.cpu_threshold = float(request.form.get('cpu_threshold', user.cpu_threshold))
+            user.memory_threshold = float(request.form.get('memory_threshold', user.memory_threshold))
             db.session.commit()
-            return redirect(url_for('home'))  # Redirect to home page after profile update
+            return redirect(url_for('dashboard'))
         else:
-            # Render profile template with user's information for GET request
-            return render_template('profile.html', user=user)
+            return render_template('settings.html', user=user)
     else:
-        # If user not in session, redirect to login
         return redirect(url_for('login'))
 
-@app.route('/loan_details')
-def loan_details():
+@app.route('/nodes')
+def nodes():
     # Retrieve user from session
     user_id = session.get('user_id')
     if user_id:
         user = User.query.get(user_id)
-        return render_template('loan_details.html', loan_amount=user.loan_amount, 
-            loan_term_months=user.loan_term_months, monthly_payment=user.monthly_payment)
+        return render_template('nodes.html', user=user)
     else:
-        # If user not in session, redirect to login
         return redirect(url_for('login'))
 
-@app.route('/total_loan_payments')
-def total_loan_payments():
-    # Retrieve user from session
+# API endpoint to list available nodes (benign)
+@app.route('/api/v1/nodes/list')
+def api_nodes_list():
     user_id = session.get('user_id')
     if user_id:
-        # Get payment and term from query parameters
-        principal = request.args.get('principal', type=str)
-        payment = request.args.get('payment', type=float)
-        term = request.args.get('term', type=int)
-
-        # Check if parameters are provided
-        if principal is None or payment is None or term is None:
-            return Response('Missing principal, payment or term parameters', status=400)
-
-        # JSON template as a string variable (vulnerable to SSTI)
-        json_template = f"""
-        {{ "loan_principal": "{principal}" ,"monthly_payment": "{{{{ payment }}}}", "loan_term_amount": "{{{{ term }}}}", "total_loan_payments": "{{{{ payment*term }}}}" }}
-        """
-
-        # Render JSON template
-        return render_template_string(json_template, payment=payment, term=term, content_type='application/json')
-
+        nodes = [
+            {"id": 1, "hostname": "node-alpha-01", "ip": "10.0.1.10", "status": "online"},
+            {"id": 2, "hostname": "node-beta-02", "ip": "10.0.1.11", "status": "online"},
+            {"id": 3, "hostname": "node-gamma-03", "ip": "10.0.1.12", "status": "offline"},
+            {"id": 4, "hostname": "node-delta-04", "ip": "10.0.1.13", "status": "online"},
+        ]
+        return jsonify({"nodes": nodes, "total": len(nodes)})
     else:
-        # If user not in session, redirect to login
-        return redirect(url_for('login'))
+        return jsonify({"error": "Unauthorized"}), 401
+
+# API endpoint to get node health (benign)
+@app.route('/api/v1/nodes/health')
+def api_nodes_health():
+    user_id = session.get('user_id')
+    if user_id:
+        return jsonify({
+            "cluster_health": "good",
+            "nodes_online": 3,
+            "nodes_offline": 1,
+            "cpu_average": 45.2,
+            "memory_average": 62.8
+        })
+    else:
+        return jsonify({"error": "Unauthorized"}), 401
+
+# API endpoint to get system metrics (benign)
+@app.route('/api/v1/metrics')
+def api_metrics():
+    user_id = session.get('user_id')
+    if user_id:
+        return jsonify({
+            "timestamp": "2024-01-15T10:30:00Z",
+            "cpu": {"usage": 42.5, "cores": 8},
+            "memory": {"used": 8192, "total": 16384, "percentage": 50.0},
+            "disk": {"used": 120, "total": 500, "percentage": 24.0}
+        })
+    else:
+        return jsonify({"error": "Unauthorized"}), 401
+
+# API endpoint to get inventory details (benign)
+@app.route('/api/v1/inventory')
+def api_inventory():
+    user_id = session.get('user_id')
+    if user_id:
+        return jsonify({
+            "version": "2.1.0",
+            "inventory_type": "static",
+            "groups": ["webservers", "databases", "loadbalancers"],
+            "hosts_count": 4
+        })
+    else:
+        return jsonify({"error": "Unauthorized"}), 401
+
+# Render remote data - processes node output through template engine
+# This simulates how Ansible processes remote node output through Jinja2
+@app.route('/api/v1/render_output')
+def render_output():
+    user_id = session.get('user_id')
+    if user_id:
+        # Get remote node data from query parameter
+        # In a real system, this would come from a managed node
+        node_output = request.args.get('data', type=str)
+        node_id = request.args.get('node_id', default='unknown', type=str)
+        task = request.args.get('task', default='gather_facts', type=str)
+        
+        if node_output is None:
+            return Response('Missing data parameter', status=400)
+        
+        # Template for rendering node output - VULNERABLE
+        # The node_output is directly interpolated into the template
+        # This mirrors CVE-2014-3498 where remote node output containing
+        # template tags would be processed by Jinja2 on the controller
+        output_template = f'''
+        {{"node_id": "{node_id}", "task": "{task}", "output": "{node_output}", "status": "completed", "rendered_at": "{{{{ timestamp }}}}"}}
+        '''
+        
+        from datetime import datetime
+        timestamp = datetime.now().isoformat()
+        
+        return render_template_string(output_template, timestamp=timestamp)
+    else:
+        return jsonify({"error": "Unauthorized"}), 401
+
+# Execute playbook - simplified endpoint (benign)
+@app.route('/api/v1/playbook/run', methods=['POST'])
+def run_playbook():
+    user_id = session.get('user_id')
+    if user_id:
+        data = request.get_json() or {}
+        playbook_name = data.get('playbook', 'default.yml')
+        return jsonify({
+            "job_id": "job-2024-001",
+            "playbook": playbook_name,
+            "status": "queued",
+            "message": "Playbook execution queued"
+        })
+    else:
+        return jsonify({"error": "Unauthorized"}), 401
+
+# Get job status (benign)
+@app.route('/api/v1/jobs/<job_id>')
+def get_job_status(job_id):
+    user_id = session.get('user_id')
+    if user_id:
+        return jsonify({
+            "job_id": job_id,
+            "status": "completed",
+            "started_at": "2024-01-15T10:25:00Z",
+            "completed_at": "2024-01-15T10:27:30Z",
+            "tasks_total": 5,
+            "tasks_ok": 4,
+            "tasks_failed": 1
+        })
+    else:
+        return jsonify({"error": "Unauthorized"}), 401
+
+# Documentation endpoint
+@app.route('/docs')
+def docs():
+    return render_template('docs.html')
+
+# Serve robots.txt
+@app.route('/robots.txt')
+def robots():
+    return app.send_static_file('robots.txt')
