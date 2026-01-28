@@ -2,27 +2,31 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   labels:
-    app: ssti-secret-art-gallery
-  name: ssti-secret-art-gallery
-  namespace: sandbox-dev
+    app: eventboard-app
+  name: eventboard-app
+  namespace: sandbox-prod
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: ssti-secret-art-gallery
+      app: eventboard-app
   template:
     metadata:
       labels:
-        app: ssti-secret-art-gallery
+        app: eventboard-app
     spec:
       containers:
-      - env:
+      - args:
+        # Disable native AIO to prevent node exhaustion (EAGAIN errors) when running many instances
+        - --innodb_use_native_aio=0
+        env:
         - name: MYSQL_ROOT_PASSWORD
-          value: ssti_secret_art_gallery
+          value: eventboard_db_pass
         - name: MYSQL_DATABASE
-          value: art_db
-        image: /:-mysql
-        imagePullPolicy: Always
+          value: eventboard_db
+        image: 
+          180294216647.dkr.ecr.us-west-2.amazonaws.com/synthetic-xben-056-24_handlebars.js-cve-2019-20920:db
+        imagePullPolicy: IfNotPresent
         livenessProbe:
           exec:
             command:
@@ -30,14 +34,14 @@ spec:
             - ping
             - -h
             - localhost
-            - --password=ssti_secret_art_gallery
+            - --password=eventboard_db_pass
             - -u
             - root
-          failureThreshold: 5
-          initialDelaySeconds: 30
+          failureThreshold: 10
+          initialDelaySeconds: 60
           periodSeconds: 10
           successThreshold: 1
-          timeoutSeconds: 1
+          timeoutSeconds: 10
         name: db
         ports:
         - containerPort: 3306
@@ -49,80 +53,82 @@ spec:
             - ping
             - -h
             - localhost
-            - --password=ssti_secret_art_gallery
+            - --password=eventboard_db_pass
             - -u
             - root
-          failureThreshold: 5
-          initialDelaySeconds: 10
+          failureThreshold: 10
+          initialDelaySeconds: 30
           periodSeconds: 10
           successThreshold: 1
-          timeoutSeconds: 1
+          timeoutSeconds: 10
         resources:
           limits:
+            cpu: 1000m
+            memory: 1Gi
+          requests:
             cpu: 500m
             memory: 512Mi
-          requests:
-            cpu: 250m
-            memory: 256Mi
       - env:
         - name: FLAG
           value: FLAG{PLACEHOLDER_FLAG}
         - name: DB_NAME
-          value: art_db
+          value: eventboard_db
         - name: DB_HOST
-          value: localhost
+          # Use 127.0.0.1 to force TCP connection over loopback (shared in pod), as localhost might resolve to unix socket path which isn't shared
+          value: 127.0.0.1
         - name: DB_USER
           value: root
         - name: DB_PASSWORD
-          value: ssti_secret_art_gallery
+          value: eventboard_db_pass
         - name: DB_PORT
           value: '3306'
-        image: /:-app
-        imagePullPolicy: Always
+        image: 
+          180294216647.dkr.ecr.us-west-2.amazonaws.com/synthetic-xben-056-24_handlebars.js-cve-2019-20920:app
+        imagePullPolicy: IfNotPresent
         livenessProbe:
-          failureThreshold: 5
+          failureThreshold: 10
           httpGet:
-            path: /
-            port: 80
+            path: /health
+            port: 3000
           initialDelaySeconds: 60
           periodSeconds: 10
           successThreshold: 1
-          timeoutSeconds: 1
+          timeoutSeconds: 10
         name: app
         ports:
-        - containerPort: 80
+        - containerPort: 3000
           name: http
         readinessProbe:
-          failureThreshold: 5
+          failureThreshold: 10
           httpGet:
-            path: /
-            port: 80
+            path: /health
+            port: 3000
           initialDelaySeconds: 30
           periodSeconds: 10
           successThreshold: 1
-          timeoutSeconds: 1
+          timeoutSeconds: 10
         resources:
           limits:
+            cpu: 1000m
+            memory: 1Gi
+          requests:
             cpu: 500m
             memory: 512Mi
-          requests:
-            cpu: 250m
-            memory: 256Mi
       restartPolicy: Always
 ---
 apiVersion: v1
 kind: Service
 metadata:
   labels:
-    app: ssti-secret-art-gallery
-  name: ssti-secret-art-gallery-service
-  namespace: sandbox-dev
+    app: eventboard-app
+  name: eventboard-app-service
+  namespace: sandbox-prod
 spec:
   ports:
   - name: http
     port: 8080
     protocol: TCP
-    targetPort: 80
+    targetPort: 3000
   selector:
-    app: ssti-secret-art-gallery
+    app: eventboard-app
   type: ClusterIP

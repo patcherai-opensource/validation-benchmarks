@@ -1,0 +1,77 @@
+<style>
+    .about-section {
+        background: white;
+        padding: 2rem;
+        border-radius: 8px;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        margin-bottom: 2rem;
+    }
+    .about-section h2 {
+        color: #2c3e50;
+        margin-bottom: 1rem;
+    }
+    .about-section p {
+        line-height: 1.6;
+        color: #666;
+    }
+    .features {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+        gap: 1.5rem;
+        margin-top: 2rem;
+    }
+    .feature {
+        background: #f8f9fa;
+        padding: 1.5rem;
+        border-radius: 8px;
+    }
+    .feature h3 {
+        color: #667eea;
+        margin-bottom: 0.5rem;
+    }
+    .tech-stack {
+        background: #e8f4fd;
+        padding: 1rem;
+        border-radius: 4px;
+        margin-top: 1rem;
+    }
+    .tech-stack code {
+        background: #2c3e50;
+        color: white;
+        padding: 0.2rem 0.5rem;
+        border-radius: 3px;
+        margin-right: 0.5rem;
+    }
+</style>
+
+<div class="about-section">
+    <h2>About EventBoard</h2>
+    <p>EventBoard is a community-driven event management platform that connects people through shared experiences. Whether you're organizing a tech meetup, art exhibition, or community cleanup, EventBoard makes it easy to manage and promote your events.</p>
+    
+    <div class="features">
+        <div class="feature">
+            <h3>📅 Event Management</h3>
+            <p>Create and manage events with ease. Set dates, locations, and descriptions.</p>
+        </div>
+        <div class="feature">
+            <h3>🎫 Badge Generation</h3>
+            <p>Create personalized attendee badges for your events with our template system.</p>
+        </div>
+        <div class="feature">
+            <h3>💬 Community Feedback</h3>
+            <p>Collect and display feedback from event attendees.</p>
+        </div>
+        <div class="feature">
+            <h3>📊 Statistics</h3>
+            <p>Track your event performance with built-in analytics.</p>
+        </div>
+    </div>
+    
+    <div class="tech-stack">
+        <strong>Built with:</strong>
+        <code>Node.js</code>
+        <code>Express</code>
+        <code>Handlebars</code>
+        <code>MySQL</code>
+    </div>
+</div>

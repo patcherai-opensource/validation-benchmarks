@@ -1,0 +1,54 @@
+<style>
+    .events-list {
+        background: white;
+        border-radius: 8px;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+    .event-row {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 1rem 1.5rem;
+        border-bottom: 1px solid #eee;
+    }
+    .event-row:last-child {
+        border-bottom: none;
+    }
+    .event-info h3 {
+        color: #2c3e50;
+        margin-bottom: 0.25rem;
+    }
+    .event-info p {
+        color: #666;
+        font-size: 0.9rem;
+    }
+    .event-date {
+        color: #667eea;
+        font-weight: bold;
+    }
+    .btn {
+        background: #667eea;
+        color: white;
+        padding: 0.5rem 1rem;
+        border-radius: 4px;
+        text-decoration: none;
+    }
+    .page-title {
+        margin-bottom: 2rem;
+    }
+</style>
+
+<h1 class="page-title">All Events</h1>
+
+<div class="events-list">
+    {{#each events}}
+    <div class="event-row">
+        <div class="event-info">
+            <h3>{{this.title}}</h3>
+            <p>📍 {{this.location}}</p>
+        </div>
+        <span class="event-date">{{this.event_date}}</span>
+        <a href="/event/{{this.id}}" class="btn">View</a>
+    </div>
+    {{/each}}
+</div>

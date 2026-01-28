@@ -1,0 +1,137 @@
+<style>
+    .event-header {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        padding: 2rem;
+        border-radius: 8px;
+        margin-bottom: 2rem;
+    }
+    .event-header h1 {
+        margin-bottom: 1rem;
+    }
+    .event-meta {
+        display: flex;
+        gap: 2rem;
+        opacity: 0.9;
+    }
+    .event-description {
+        background: white;
+        padding: 2rem;
+        border-radius: 8px;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        margin-bottom: 2rem;
+    }
+    .badge-section {
+        background: #e8f4fd;
+        padding: 1.5rem;
+        border-radius: 8px;
+        margin-bottom: 2rem;
+    }
+    .badge-section h3 {
+        color: #2c3e50;
+        margin-bottom: 1rem;
+    }
+    .badge-form {
+        display: flex;
+        gap: 1rem;
+        align-items: center;
+    }
+    .badge-form input {
+        padding: 0.5rem 1rem;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        flex: 1;
+    }
+    .badge-form button {
+        background: #667eea;
+        color: white;
+        padding: 0.5rem 1.5rem;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+    }
+    .feedback-section {
+        background: white;
+        padding: 2rem;
+        border-radius: 8px;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+    .feedback-section h3 {
+        margin-bottom: 1rem;
+        color: #2c3e50;
+    }
+    .feedback-form {
+        margin-bottom: 2rem;
+    }
+    .feedback-form input, .feedback-form textarea {
+        width: 100%;
+        padding: 0.75rem;
+        margin-bottom: 1rem;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+    }
+    .feedback-form button {
+        background: #28a745;
+        color: white;
+        padding: 0.75rem 1.5rem;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+    }
+    .feedback-list {
+        margin-top: 1.5rem;
+    }
+    .feedback-item {
+        padding: 1rem;
+        border-bottom: 1px solid #eee;
+    }
+    .feedback-item .name {
+        font-weight: bold;
+        color: #2c3e50;
+    }
+    .feedback-item .message {
+        margin-top: 0.5rem;
+        color: #666;
+    }
+</style>
+
+<div class="event-header">
+    <h1>{{event.title}}</h1>
+    <div class="event-meta">
+        <span>📅 {{event.event_date}}</span>
+        <span>📍 {{event.location}}</span>
+    </div>
+</div>
+
+<div class="event-description">
+    <h2>About this event</h2>
+    <p>{{event.description}}</p>
+</div>
+
+<div class="badge-section">
+    <h3>🎫 Generate Event Badge</h3>
+    <p>Create a personalized badge for this event:</p>
+    <form class="badge-form" action="/badge/preview" method="GET">
+        <input type="hidden" name="event_id" value="{{event.id}}">
+        <input type="text" name="name" placeholder="Enter your name" required>
+        <button type="submit">Preview Badge</button>
+    </form>
+</div>
+
+<div class="feedback-section">
+    <h3>💬 Event Feedback</h3>
+    <form class="feedback-form" action="/event/{{event.id}}/feedback" method="POST">
+        <input type="text" name="user_name" placeholder="Your name" required>
+        <textarea name="message" rows="3" placeholder="Share your thoughts about this event..." required></textarea>
+        <button type="submit">Submit Feedback</button>
+    </form>
+    
+    <div class="feedback-list">
+        {{#each feedback}}
+        <div class="feedback-item">
+            <span class="name">{{this.user_name}}</span>
+            <p class="message">{{this.message}}</p>
+        </div>
+        {{/each}}
+    </div>
+</div>
