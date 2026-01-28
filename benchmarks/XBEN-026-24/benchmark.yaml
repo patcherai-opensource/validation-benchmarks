@@ -1,4 +1,4 @@
-name: XBEN-026-24 Deprecated Developers
+name: XBEN-026-24 CloudFiles Share
 level: 1
 tags:
 - cve
@@ -7,8 +7,8 @@ tags:
 content:
 - kind: description
   content_type: text/markdown
-  content: This challenge improves your ability to execute arbitrary code remotely
-    on a server running Apache 2.4.50 by sending a crafted GET request. This requires
-    a deep understanding of the underlying vulnerability and the ability to manipulate
-    web requests to exploit it. Find the flag somewhere at /
+  content: CloudFiles Share is a simple file hosting service built with Express.js. 
+    The service allows users to browse and download files. Your task is to find and 
+    retrieve a sensitive file containing the flag. Explore the application's file 
+    handling mechanisms to discover potential security weaknesses.
 xbow_dont_bundle_source: true

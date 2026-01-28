@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CloudFiles Share - Simple File Hosting</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <header class="bg-primary text-white text-center py-4">
+        <div class="container">
+            <h1><i class="fas fa-cloud-upload-alt"></i> CloudFiles Share</h1>
+            <p class="lead mb-0">Simple, Fast, Secure File Sharing</p>
+        </div>
+    </header>
+
+    <nav class="navbar navbar-expand-md navbar-dark bg-dark">
+        <div class="container">
+            <a class="navbar-brand" href="/">CloudFiles</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ml-auto">
+                    <li class="nav-item"><a class="nav-link" href="/">Home</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/files">Browse Files</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/api/status">API Status</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#docs">Documentation</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+    
+    <section class="py-5">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-8">
+                    <h2>Welcome to CloudFiles Share</h2>
+                    <p>CloudFiles Share is a lightweight file hosting solution that allows you to easily share files with others. 
+                    Simply browse the <a href="/files">file directory</a> or use our download API.</p>
+                    
+                    <div class="card mb-4">
+                        <div class="card-header bg-secondary text-white">
+                            <h5 class="mb-0">Quick Start Guide</h5>
+                        </div>
+                        <div class="card-body">
+                            <h6>Browsing Files</h6>
+                            <p>Navigate to <code>/files</code> to view all available files with directory listing.</p>
+                            
+                            <h6>Direct Downloads</h6>
+                            <p>Use the download endpoint for direct file access:</p>
+                            <pre class="bg-light p-2"><code>GET /download/&lt;filename&gt;</code></pre>
+                            
+                            <h6>API Endpoints</h6>
+                            <ul>
+                                <li><code>GET /api/status</code> - Server status information</li>
+                                <li><code>GET /api/files</code> - List files in JSON format</li>
+                                <li><code>GET /health</code> - Health check endpoint</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-md-4">
+                    <div class="card">
+                        <div class="card-header bg-info text-white">
+                            <h5 class="mb-0">Server Info</h5>
+                        </div>
+                        <div class="card-body">
+                            <p><strong>Version:</strong> 1.0.3</p>
+                            <p><strong>Node.js Runtime:</strong> v18.x</p>
+                            <p><strong>Framework:</strong> Express.js</p>
+                            <p><strong>Status:</strong> <span class="badge badge-success">Online</span></p>
+                        </div>
+                    </div>
+                    
+                    <div class="card mt-3">
+                        <div class="card-header bg-warning">
+                            <h5 class="mb-0">Sample Files</h5>
+                        </div>
+                        <ul class="list-group list-group-flush">
+                            <li class="list-group-item"><a href="/download/readme.txt">readme.txt</a></li>
+                            <li class="list-group-item"><a href="/download/sample.txt">sample.txt</a></li>
+                            <li class="list-group-item"><a href="/files">Browse all...</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="docs" class="py-5 bg-light">
+        <div class="container">
+            <h2 class="text-center mb-4">API Documentation</h2>
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="card mb-3">
+                        <div class="card-body">
+                            <h5 class="card-title">GET /download/:path</h5>
+                            <p class="card-text">Download a file by path. Supports nested directories.</p>
+                            <p><strong>Example:</strong></p>
+                            <pre class="bg-dark text-white p-2"><code>curl http://server/download/docs/manual.pdf</code></pre>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="card mb-3">
+                        <div class="card-body">
+                            <h5 class="card-title">GET /api/files</h5>
+                            <p class="card-text">Returns a JSON array of all available files.</p>
+                            <p><strong>Response:</strong></p>
+                            <pre class="bg-dark text-white p-2"><code>{"files": [{"name": "file.txt", ...}]}</code></pre>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer class="bg-dark text-white text-center py-3">
+        <p class="mb-0">&copy; 2024 CloudFiles Share - Powered by Express.js</p>
+        <small>Version 1.0.3 | <a href="/api/status" class="text-light">Server Status</a></small>
+    </footer>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>

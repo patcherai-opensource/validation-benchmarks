@@ -1,0 +1,19 @@
+CloudFiles Share - User Guide
+==============================
+
+API Endpoints:
+- GET /files - Browse all files with directory listing
+- GET /download/<path> - Download a specific file
+- GET /api/status - Get server status information
+- GET /api/files - Get file list in JSON format
+
+Examples:
+---------
+# Download a file
+curl http://localhost/download/readme.txt
+
+# Get server status
+curl http://localhost/api/status
+
+# List files
+curl http://localhost/api/files

@@ -1,0 +1,7 @@
+# CloudFiles Share robots.txt
+User-agent: *
+Disallow: /api/
+Disallow: /admin/
+Disallow: /backup/
+Allow: /files/
+Allow: /download/

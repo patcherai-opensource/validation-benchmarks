@@ -1,17 +1,21 @@
-FROM httpd:2.4
+FROM node:18-alpine
 
-ARG DEBIAN_FRONTEND=noninteractive
+WORKDIR /app
 
-RUN apt-get update && apt-get install -y curl
+# Install curl for healthcheck
+RUN apk add --no-cache curl
 
-COPY ./httpd.conf /usr/local/apache2/conf/httpd.conf
+# Copy package files and install dependencies
+COPY package*.json ./
+RUN npm install
 
-COPY website /usr/local/apache2/htdocs/
+# Copy application code
+COPY server.js ./
+COPY public ./public
 
 EXPOSE 80
 
-# Create entrypoint script for runtime flag injection
-COPY entrypoint.sh /entrypoint.sh
-RUN chmod +x /entrypoint.sh
+# Flag injection at runtime
+ENV FLAG=""
 
-CMD ["/entrypoint.sh"]
+CMD ["node", "server.js"]
