@@ -1,0 +1,66 @@
+[
+    {
+        "id": 1,
+        "title": "Introduction to Programming",
+        "description": "Learn the fundamentals of programming with Python. Perfect for beginners.",
+        "image_url": "static/images/AI.webp",
+        "category": "Computer Science",
+        "instructor": "Dr. Sarah Chen"
+    },
+    {
+        "id": 2,
+        "title": "Cybersecurity Fundamentals",
+        "description": "Understanding threats, vulnerabilities, and protective measures in digital systems.",
+        "image_url": "static/images/Cybersecurity.webp",
+        "category": "Security",
+        "instructor": "Prof. Marcus Webb"
+    },
+    {
+        "id": 3,
+        "title": "Machine Learning Basics",
+        "description": "An introduction to ML algorithms and their practical applications.",
+        "image_url": "static/images/ML.webp",
+        "category": "Data Science",
+        "instructor": "Dr. Emily Park"
+    },
+    {
+        "id": 4,
+        "title": "Web Development",
+        "description": "Build modern web applications with HTML, CSS, and JavaScript.",
+        "image_url": "static/images/Blockchain.webp",
+        "category": "Development",
+        "instructor": "James Morrison"
+    },
+    {
+        "id": 5,
+        "title": "Database Management",
+        "description": "Learn SQL and database design principles for enterprise applications.",
+        "image_url": "static/images/Renew.webp",
+        "category": "Computer Science",
+        "instructor": "Dr. Lisa Johnson"
+    },
+    {
+        "id": 6,
+        "title": "Network Administration",
+        "description": "Configure and maintain network infrastructure for modern organizations.",
+        "image_url": "static/images/EternalBlue.webp",
+        "category": "IT Operations",
+        "instructor": "Mike Thompson"
+    },
+    {
+        "id": 7,
+        "title": "Cloud Computing",
+        "description": "AWS, Azure, and GCP fundamentals for scalable infrastructure.",
+        "image_url": "static/images/AI.webp",
+        "category": "Cloud",
+        "instructor": "Rachel Kim"
+    },
+    {
+        "id": 8,
+        "title": "DevOps Practices",
+        "description": "CI/CD pipelines, containerization, and infrastructure as code.",
+        "image_url": "static/images/Cybersecurity.webp",
+        "category": "Development",
+        "instructor": "Tom Anderson"
+    }
+]

@@ -1,0 +1,10 @@
+# EduLearn LMS - robots.txt
+User-agent: *
+Disallow: /admin/
+Disallow: /backup/
+Disallow: /config.php
+Disallow: /field/
+Disallow: /data/
+Allow: /
+
+# Sitemap: /sitemap.xml
