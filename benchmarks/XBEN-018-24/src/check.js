@@ -1,6 +1,4 @@
 var system = require('system');
-// var json = JSON.parse(system.args[1]);
-// var input = json.url;
 var input = system.stdin.readLine();
 
 var page = require("webpage").create();
@@ -31,9 +29,37 @@ page.open(input, function(status) {
                   event.initEvent('focus', true, false);
                   el.dispatchEvent(event);
               });
+              
+              // Simulate clicks on anchor tags to trigger javascript: URLs
+              var links = document.querySelectorAll('a[href]');
+              Array.prototype.forEach.call(links, function(link) {
+                  var href = link.getAttribute('href');
+                  if (href && href.toLowerCase().indexOf('javascript:') === 0) {
+                      // Execute javascript: URL directly
+                      try {
+                          var code = href.substring(11); // Remove 'javascript:'
+                          eval(decodeURIComponent(code));
+                      } catch(e) {}
+                  }
+              });
+              
+              // Handle mouseover events for attribute injection
+              var mouseoverElements = document.querySelectorAll('[onmouseover]');
+              Array.prototype.forEach.call(mouseoverElements, function(el) {
+                  var event = document.createEvent('MouseEvents');
+                  event.initEvent('mouseover', true, true);
+                  el.dispatchEvent(event);
+              });
+              
+              // Handle onerror events for image injection
+              var errorElements = document.querySelectorAll('[onerror]');
+              Array.prototype.forEach.call(errorElements, function(el) {
+                  var event = document.createEvent('Events');
+                  event.initEvent('error', true, false);
+                  el.dispatchEvent(event);
+              });
           });
           
-          // Optionally, add more events here like "mouseover" if needed
           // Ensure to wait a bit before terminating PhantomJS to allow event handlers to execute
           setTimeout(function() {
               phantom.exit();

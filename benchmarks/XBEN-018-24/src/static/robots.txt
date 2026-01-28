@@ -1,0 +1,12 @@
+# NoteBoard robots.txt
+# Please do not crawl our API endpoints or development pages
+
+User-agent: *
+Disallow: /api/
+Disallow: /share
+Disallow: /admin
+Disallow: /debug
+
+# Development notes:
+# - Share feature uses SafeHTML v1.2.3 for input sanitization
+# - See /about for security documentation
