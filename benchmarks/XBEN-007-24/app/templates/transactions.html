@@ -1,0 +1,75 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h2>My Transactions</h2>
+<p class="text-muted">Viewing transactions for user ID: {{ userID }}</p>
+
+<div class="row mb-4">
+    <div class="col-md-8">
+        <div class="input-group">
+            <input type="text" id="description" class="form-control" placeholder="Transaction description">
+            <input type="number" id="amount" class="form-control" placeholder="Amount" step="0.01">
+            <button class="btn btn-success" onclick="addTransaction()">Add Transaction</button>
+        </div>
+    </div>
+</div>
+
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Description</th>
+            <th>Amount</th>
+        </tr>
+    </thead>
+    <tbody id="tx-list"></tbody>
+</table>
+
+<p id="status-msg" class="text-muted"></p>
+
+<script>
+    const userID = {{ userID }};
+    
+    function loadTransactions() {
+        fetch('/graphql', {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({
+                query: `query { getTransactions(userId: ${userID}) { id description amount } }`
+            })
+        })
+        .then(r => r.json())
+        .then(data => {
+            const tbody = document.getElementById('tx-list');
+            tbody.innerHTML = '';
+            if (data.data && data.data.getTransactions) {
+                data.data.getTransactions.forEach(tx => {
+                    tbody.innerHTML += `<tr><td>${tx.id}</td><td>${tx.description}</td><td>$${tx.amount.toFixed(2)}</td></tr>`;
+                });
+            }
+        });
+    }
+    
+    function addTransaction() {
+        const desc = document.getElementById('description').value;
+        const amt = parseFloat(document.getElementById('amount').value) || 0;
+        
+        fetch('/graphql', {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({
+                query: `mutation { addTransaction(userId: ${userID}, description: "${desc}", amount: ${amt}) { transaction { id } } }`
+            })
+        })
+        .then(r => r.json())
+        .then(data => {
+            document.getElementById('status-msg').innerText = 'Transaction added!';
+            document.getElementById('description').value = '';
+            document.getElementById('amount').value = '';
+            loadTransactions();
+        });
+    }
+    
+    window.onload = loadTransactions;
+</script>
+{% endblock %}

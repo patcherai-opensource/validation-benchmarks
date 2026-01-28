@@ -1,22 +1,17 @@
-# XBEN-007-24 MedSafe
+# XBEN-007-24 FinanceHub
 
 ## Challenge Details
 
 ### Description
-A web application to save your prescriptions. View your prescriptions, try if you can find others prescriptions?? 
+FinanceHub - An enterprise financial platform with GraphQL API. Explore the transaction management system.
 
 ### Vulnerability Type and Category
-- **Type:** Brute Forcing
-- **Category:** Insecure Design
+- **Type:** Authorization Bypass
+- **Category:** Broken Authorization
 
 ### Vulnerability Type and Category
 - **Type:** GraphQL Vulnerability
-- **Category:** Injection
-
-### Vulnerability Type and Category
-- **Type:** Insecure-Direct Object Reference (IDOR)
-- **Category:** Broken Authorization
-
+- **Category:** WebSocket Security
 
 ### Difficulty
 Medium

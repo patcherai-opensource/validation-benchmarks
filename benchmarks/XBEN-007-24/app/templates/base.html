@@ -3,24 +3,28 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MedGuard</title>
-    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet" 
+    <title>FinanceHub - Enterprise Financial Platform</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        .navbar { background: linear-gradient(90deg, #1a1a2e 0%, #16213e 100%) !important; }
+        .navbar-brand, .nav-link { color: #e94560 !important; }
+        .footer { position: fixed; bottom: 0; width: 100%; background: #1a1a2e; color: #888; padding: 10px; font-size: 12px; }
+    </style>
 </head>
 <body>
-    <nav class="navbar navbar-expand-lg navbar-light bg-light">
-        <a class="navbar-brand" href="#">MedGuard</a>
+    <nav class="navbar navbar-expand-lg navbar-dark">
+        <a class="navbar-brand" href="#">FinanceHub</a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav">
-                
                 {% if current_user.is_authenticated %}
                 <li class="nav-item">
-                    <a class="nav-link" href="{{ url_for('add_prescription') }}">Add Prescription</a>
+                    <a class="nav-link" href="{{ url_for('dashboard') }}">Dashboard</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="{{ url_for('view_prescriptions') }}">View Prescriptions</a>
+                    <a class="nav-link" href="{{ url_for('transactions') }}">Transactions</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="{{ url_for('logout') }}">Logout</a>
@@ -35,6 +39,9 @@
     </nav>
     <div class="container mt-4">
         {% block content %}{% endblock %}
+    </div>
+    <div class="footer text-center">
+        FinanceHub v2.1.5 | Powered by GraphQL API | WebSocket support enabled
     </div>
 
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
