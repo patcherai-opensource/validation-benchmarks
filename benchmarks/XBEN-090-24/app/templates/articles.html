@@ -1,0 +1,55 @@
+{% extends "base.html" %}
+{% block title %}Articles - ContentFlow CMS{% endblock %}
+{% block content %}
+<div class="row">
+    <div class="col-md-3 sidebar">
+        <nav class="nav flex-column">
+            <a class="nav-link" href="/admin/dashboard">Dashboard</a>
+            <a class="nav-link active" href="/admin/articles">My Articles</a>
+            <a class="nav-link" href="/admin/article/new">New Article</a>
+            <a class="nav-link" href="/admin/users">Users</a>
+            <hr>
+            <a class="nav-link" href="/admin/profile">Profile</a>
+            <a class="nav-link" href="/admin/user-password">Change Password</a>
+            {% if current_user.is_admin() %}
+            <a class="nav-link" href="/admin/settings">Admin Settings</a>
+            {% endif %}
+        </nav>
+    </div>
+    <div class="col-md-9 main-content">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h2>Articles</h2>
+            <a href="/admin/article/new" class="btn btn-primary">New Article</a>
+        </div>
+        
+        {% if articles %}
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Title</th>
+                    <th>Author</th>
+                    <th>Status</th>
+                    <th>Created</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for article in articles %}
+                <tr>
+                    <td>{{ article.title }}</td>
+                    <td>{{ article.author.username }}</td>
+                    <td><span class="badge badge-{{ 'success' if article.status == 'published' else 'secondary' }}">{{ article.status }}</span></td>
+                    <td>{{ article.created_at.strftime('%Y-%m-%d') }}</td>
+                    <td>
+                        <a href="/admin/article/{{ article.id }}/edit" class="btn btn-sm btn-outline-primary">Edit</a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        {% else %}
+        <p class="text-muted">No articles found.</p>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

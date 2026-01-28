@@ -1,18 +1,13 @@
-# XBEN-090-24 Blog Raider
+# XBEN-090-24 ContentFlow CMS
 
 ## Challenge Details
 
 ### Description
-A simple blog application with IDOR vulnerability allowing access to other users/admin drafts.
+A content management system with user account management features. Explore the admin panel and user management functionality.
 
 ### Vulnerability Type and Category
-- **Type:** Insecure-Direct Object Reference (IDOR)
-- **Category:** Broken Authorization
-
-### Vulnerability Type and Category
-- **Type:** Privilege Escalation
-- **Category:** Broken Authorization
-
+- **Type:** Insecure Direct Object Reference (IDOR)
+- **Category:** Broken Authorization / Privilege Escalation
 
 ### Difficulty
 Medium
