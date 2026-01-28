@@ -1,0 +1,70 @@
+{% extends "base.html" %}
+
+{% block title %}Font Subsetting{% endblock %}
+
+{% block content %}
+<div class="card">
+    <h2>SVG Font Subsetting</h2>
+    <p>
+        Create optimized font subsets by processing SVG font data. 
+        This service parses OT-SVG font tables and extracts glyph information.
+    </p>
+    
+    <form id="subsetForm">
+        <h4>SVG Font Data</h4>
+        <p>Paste your SVG font content below:</p>
+        <textarea name="svg_data" id="svgData" rows="15" placeholder="<?xml version=&quot;1.0&quot;?>
+<svg xmlns=&quot;http://www.w3.org/2000/svg&quot;>
+  <defs>
+    <font id=&quot;MyFont&quot;>
+      <font-face font-family=&quot;MyFont&quot;/>
+      <glyph unicode=&quot;A&quot; glyph-name=&quot;A&quot; d=&quot;M100 0...&quot;/>
+    </font>
+  </defs>
+</svg>"></textarea>
+        
+        <p style="margin-top: 1rem;">
+            <input type="submit" value="Process SVG Font">
+        </p>
+    </form>
+    
+    <div id="result" style="display: none; margin-top: 1.5rem;">
+        <h4>Processing Result</h4>
+        <pre id="resultContent"></pre>
+    </div>
+</div>
+
+<div class="card">
+    <h4>API Usage</h4>
+    <p>You can also use the API endpoint directly:</p>
+    <pre>POST /api/subset
+Content-Type: application/json
+
+{
+  "svg_data": "&lt;svg&gt;...&lt;/svg&gt;",
+  "options": {}
+}</pre>
+</div>
+
+<script>
+document.getElementById('subsetForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+    var svgData = document.getElementById('svgData').value;
+    
+    fetch('/api/subset', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ svg_data: svgData })
+    })
+    .then(function(response) { return response.json(); })
+    .then(function(data) {
+        document.getElementById('result').style.display = 'block';
+        document.getElementById('resultContent').textContent = JSON.stringify(data, null, 2);
+    })
+    .catch(function(err) {
+        document.getElementById('result').style.display = 'block';
+        document.getElementById('resultContent').textContent = 'Error: ' + err.message;
+    });
+});
+</script>
+{% endblock %}

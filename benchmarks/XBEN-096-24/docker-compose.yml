@@ -1,5 +1,5 @@
 services:
-  libraryv1:
+  fontforgepro:
     build:
       context: ./app
       args:

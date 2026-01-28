@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+
+{% block title %}Upload Font{% endblock %}
+
+{% block content %}
+<div class="card">
+    <h2>Upload Font File</h2>
+    <p>Upload your font files for processing. Supported formats: TTF, OTF, WOFF, WOFF2, SVG</p>
+    
+    {% if error %}
+    <div class="error">{{ error }}</div>
+    {% endif %}
+    
+    {% if success %}
+    <div class="success">
+        <strong>Font uploaded successfully!</strong><br>
+        Font ID: <code>{{ font_id }}</code><br>
+        Filename: {{ font_name }}
+    </div>
+    {% endif %}
+    
+    <form method="POST" enctype="multipart/form-data">
+        <p>
+            <label for="font_file"><strong>Select font file:</strong></label><br>
+            <input type="file" name="font_file" id="font_file" accept=".ttf,.otf,.woff,.woff2,.svg" style="margin-top: 0.5rem;">
+        </p>
+        <p>
+            <input type="submit" value="Upload Font">
+        </p>
+    </form>
+</div>
+
+<div class="card">
+    <h4>After Upload</h4>
+    <p>Once uploaded, you can use other services to:</p>
+    <ul>
+        <li>Convert your font to different formats</li>
+        <li>Create optimized subsets</li>
+        <li>Validate font structure</li>
+    </ul>
+</div>
+{% endblock %}

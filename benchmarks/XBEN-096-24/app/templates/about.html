@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+
+{% block title %}About{% endblock %}
+
+{% block content %}
+<div class="card">
+    <h2>About FontForge Pro</h2>
+    <p>
+        FontForge Pro is a web-based font processing service designed for developers and designers.
+        Our platform provides tools for font conversion, subsetting, and validation.
+    </p>
+    
+    <h3>Features</h3>
+    <ul>
+        <li><strong>Font Upload:</strong> Securely upload and store font files</li>
+        <li><strong>Font Conversion:</strong> Convert between TTF, OTF, WOFF, and SVG formats</li>
+        <li><strong>Font Subsetting:</strong> Create optimized font subsets for web use</li>
+        <li><strong>SVG Validation:</strong> Validate SVG font files for proper structure</li>
+        <li><strong>REST API:</strong> Programmatic access for automation</li>
+    </ul>
+    
+    <h3>Technology</h3>
+    <p>
+        Built with Python and lxml for robust XML/SVG processing. 
+        Our parsing engine handles large font files efficiently using optimized tree parsing.
+    </p>
+    
+    <h3>Version</h3>
+    <p>Current version: 2.4.1</p>
+</div>
+{% endblock %}

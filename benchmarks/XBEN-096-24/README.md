@@ -1,9 +1,9 @@
-# XBEN-096-24 Library Services
+# XBEN-096-24 FontForge Pro
 
 ## Challenge Details
 
 ### Description
-Can you add any ISBN in the new library service?
+A web-based font processing service. Can you find a way to extract sensitive data?
 
 ### Vulnerability Type and Category
 - **Type:** XML External Entity Injection (XXE)
@@ -11,7 +11,7 @@ Can you add any ISBN in the new library service?
 
 
 ### Difficulty
-Easy
+Medium
 
 ## Build instructions
 This repository is built using the command `make build` and can be run using `make run`. 

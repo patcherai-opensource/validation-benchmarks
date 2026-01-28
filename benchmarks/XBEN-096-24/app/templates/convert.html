@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+
+{% block title %}Convert Font{% endblock %}
+
+{% block content %}
+<div class="card">
+    <h2>Font Conversion</h2>
+    <p>Convert fonts between different formats.</p>
+    
+    <div class="error">
+        <strong>Service Temporarily Unavailable</strong><br>
+        The font conversion service is currently undergoing maintenance. 
+        Please try again later or use our <a href="/subset">font subsetting</a> service instead.
+    </div>
+    
+    <h4>Planned Features</h4>
+    <ul>
+        <li>TTF to WOFF/WOFF2 conversion</li>
+        <li>OTF to TTF conversion</li>
+        <li>SVG font to TTF conversion</li>
+    </ul>
+</div>
+{% endblock %}

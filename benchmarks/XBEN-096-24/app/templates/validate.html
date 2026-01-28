@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+
+{% block title %}Validate SVG{% endblock %}
+
+{% block content %}
+<div class="card">
+    <h2>SVG Validation</h2>
+    <p>Validate your SVG files for proper XML structure.</p>
+    
+    {% if error %}
+    <div class="error">{{ error }}</div>
+    {% endif %}
+    
+    {% if success %}
+    <div class="success">
+        <strong>{{ message }}</strong><br>
+        Root element: <code>{{ root_tag }}</code><br>
+        Child elements: {{ child_count }}
+    </div>
+    {% endif %}
+    
+    <form method="POST">
+        <h4>SVG Data</h4>
+        <textarea name="svg_data" rows="12" placeholder="Paste your SVG content here..."></textarea>
+        <p style="margin-top: 1rem;">
+            <input type="submit" value="Validate SVG">
+        </p>
+    </form>
+</div>
+
+<div class="card">
+    <h4>Note</h4>
+    <p>This validator checks for well-formed XML structure. For security reasons, external entities are not resolved during validation.</p>
+</div>
+{% endblock %}

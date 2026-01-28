@@ -1,36 +1,92 @@
-    <!-- templates/home.html -->
-<html>
-<head><title>Library V1: Book Store</title></head>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>FontForge Pro - Web Font Processing Service</title>
+    <style>
+        * { box-sizing: border-box; }
+        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; margin: 0; padding: 0; background: #f5f7fa; color: #333; }
+        .header { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 2rem; text-align: center; }
+        .header h1 { margin: 0; font-size: 2.5rem; }
+        .header p { margin: 0.5rem 0 0; opacity: 0.9; }
+        .container { max-width: 1000px; margin: 0 auto; padding: 2rem; }
+        .card { background: white; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); padding: 1.5rem; margin-bottom: 1.5rem; }
+        .card h3 { margin-top: 0; color: #667eea; }
+        .card p { color: #666; line-height: 1.6; }
+        .services { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem; }
+        .service-card { background: white; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); padding: 1.5rem; transition: transform 0.2s, box-shadow 0.2s; }
+        .service-card:hover { transform: translateY(-2px); box-shadow: 0 4px 12px rgba(0,0,0,0.15); }
+        .service-card h3 { margin-top: 0; }
+        .service-card a { display: inline-block; margin-top: 1rem; padding: 0.5rem 1rem; background: #667eea; color: white; text-decoration: none; border-radius: 4px; }
+        .service-card a:hover { background: #5a67d8; }
+        .badge { display: inline-block; padding: 0.25rem 0.5rem; font-size: 0.75rem; border-radius: 3px; margin-left: 0.5rem; }
+        .badge-new { background: #48bb78; color: white; }
+        .badge-beta { background: #ed8936; color: white; }
+        footer { text-align: center; padding: 2rem; color: #666; font-size: 0.875rem; }
+    </style>
+</head>
 <body>
-<p><h3>Available functions</h3></p>
-<a href="/addbook">Upload a book in XML format</a><br>
-You can use this example <br/>
-<textarea name="xml" rows="20" cols="50">
-<!-- book XML example  -->
-<?xml version="1.0"?>
-<Book>
-    <Title>Empire State Chronicles</Title>
-    <ISBN>123-4567890123</ISBN>
-    <Editor>John Doe</Editor>
-    <Publisher>NY Publishing House</Publisher>
-    <Chapters>
-        <Chapter id="1">
-            <Title>Introduction to the Empire</Title>
-            <Author>Hans Solo</Author>
-            <Pages>1-42</Pages>
-            <Contact>hans@nyph.com</Contact>
-        </Chapter>
-        <Chapter id="2">
-            <Title>The Rise of the City</Title>
-            <Author>Leia</Author>
-            <Pages>43-78</Pages>
-            <Contact>leia@nyph.com</Contact>
-        </Chapter>
-    </Chapters>
-</Book>
-
-</textarea>
-<br/>        
-    </body>
-    </html>
-
+    <div class="header">
+        <h1>FontForge Pro</h1>
+        <p>Professional Web Font Processing & Optimization Service</p>
+    </div>
+    
+    <div class="container">
+        <div class="card">
+            <h3>Welcome to FontForge Pro</h3>
+            <p>
+                FontForge Pro is your all-in-one solution for web font processing. 
+                Our service supports SVG fonts, OT-SVG tables, and various font formats.
+                Upload, convert, subset, and optimize your fonts with ease.
+            </p>
+        </div>
+        
+        <h2>Services</h2>
+        <div class="services">
+            <div class="service-card">
+                <h3>Font Upload</h3>
+                <p>Upload and store your font files securely. Supports TTF, OTF, WOFF, and SVG formats.</p>
+                <a href="/upload">Upload Font</a>
+            </div>
+            
+            <div class="service-card">
+                <h3>Font Conversion <span class="badge badge-beta">Beta</span></h3>
+                <p>Convert fonts between different formats. Currently supports limited conversions.</p>
+                <a href="/convert">Convert Font</a>
+            </div>
+            
+            <div class="service-card">
+                <h3>Font Subsetting <span class="badge badge-new">New</span></h3>
+                <p>Create optimized font subsets by selecting specific glyphs. Supports SVG font tables.</p>
+                <a href="/subset">Subset Font</a>
+            </div>
+            
+            <div class="service-card">
+                <h3>SVG Validation</h3>
+                <p>Validate your SVG font files for proper structure and compatibility.</p>
+                <a href="/validate">Validate SVG</a>
+            </div>
+        </div>
+        
+        <div class="card" style="margin-top: 2rem;">
+            <h3>API Access</h3>
+            <p>
+                FontForge Pro also offers a REST API for programmatic access. 
+                Check our <a href="/docs">API documentation</a> for integration details.
+            </p>
+            <p>Quick endpoints:</p>
+            <ul>
+                <li><code>GET /api/status</code> - Service status</li>
+                <li><code>GET /api/fonts</code> - List uploaded fonts</li>
+                <li><code>POST /api/subset</code> - Subset SVG font data</li>
+            </ul>
+        </div>
+    </div>
+    
+    <footer>
+        <p>&copy; 2024 FontForge Pro. Version 2.4.1</p>
+        <p><a href="/about">About</a> | <a href="/docs">API Docs</a></p>
+    </footer>
+</body>
+</html>

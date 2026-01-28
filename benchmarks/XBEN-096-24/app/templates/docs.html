@@ -1,0 +1,87 @@
+{% extends "base.html" %}
+
+{% block title %}API Documentation{% endblock %}
+
+{% block content %}
+<div class="card">
+    <h2>FontForge Pro API</h2>
+    <p>REST API for programmatic font processing.</p>
+</div>
+
+<div class="card">
+    <h3>GET /api/status</h3>
+    <p>Check service status and available endpoints.</p>
+    <h4>Response</h4>
+    <pre>{
+  "status": "operational",
+  "service": "FontForge Pro",
+  "version": "2.4.1",
+  "endpoints": ["/api/status", "/api/fonts", "/docs"]
+}</pre>
+</div>
+
+<div class="card">
+    <h3>GET /api/fonts</h3>
+    <p>List all uploaded fonts.</p>
+    <h4>Response</h4>
+    <pre>{
+  "fonts": [
+    {
+      "id": "abc123def456",
+      "name": "myfont.ttf",
+      "uploaded": "2024-01-15T10:30:00",
+      "format": "TTF"
+    }
+  ],
+  "total": 1
+}</pre>
+</div>
+
+<div class="card">
+    <h3>POST /api/subset</h3>
+    <p>Process SVG font data for glyph subsetting. Accepts SVG content containing font definitions and glyph data.</p>
+    
+    <h4>Request (JSON)</h4>
+    <pre>POST /api/subset
+Content-Type: application/json
+
+{
+  "svg_data": "&lt;?xml version=\"1.0\"?&gt;\n&lt;svg xmlns=\"http://www.w3.org/2000/svg\"&gt;...&lt;/svg&gt;",
+  "options": {
+    "glyphs": ["A", "B", "C"]
+  }
+}</pre>
+    
+    <h4>Request (Form Data)</h4>
+    <pre>POST /api/subset
+Content-Type: multipart/form-data
+
+svg_file: [file upload]
+-- or --
+svg_data: &lt;svg&gt;...&lt;/svg&gt;</pre>
+    
+    <h4>Response</h4>
+    <pre>{
+  "status": "success",
+  "message": "SVG font data processed successfully",
+  "glyphs_found": 26,
+  "glyphs": [
+    {"name": "A", "unicode": "A", "d": "M100 0..."},
+    ...
+  ],
+  "processed_svg": "&lt;svg&gt;...&lt;/svg&gt;"
+}</pre>
+    
+    <h4>Error Response</h4>
+    <pre>{
+  "error": "XML parsing error",
+  "details": "...",
+  "hint": "Ensure your SVG data is well-formed XML"
+}</pre>
+</div>
+
+<div class="card">
+    <h3>Rate Limits</h3>
+    <p>API requests are limited to 100 requests per minute per IP address.</p>
+</div>
+{% endblock %}
