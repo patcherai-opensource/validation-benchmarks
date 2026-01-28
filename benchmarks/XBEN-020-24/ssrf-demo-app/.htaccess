@@ -1,0 +1,10 @@
+RewriteEngine On
+RewriteBase /
+
+# API v1 routes
+RewriteRule ^api/v1/health$ api/v1/health.php [L,QSA]
+RewriteRule ^api/v1/models$ api/v1/models.php [L,QSA]
+RewriteRule ^api/v1/predict$ api/v1/predict.php [L,QSA]
+RewriteRule ^api/v1/docs$ api/v1/docs.php [L,QSA]
+RewriteRule ^api/v1/batch$ api/v1/batch.php [L,QSA]
+RewriteRule ^api/v1/metrics$ api/v1/metrics.php [L,QSA]
