@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Profile - ReportGen Pro</title>
+    <title>Create Report - ReportGen Pro</title>
     <link href="{{ url_for('static', filename='css/bootstrap.min.css') }}" rel="stylesheet">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
 </head>
@@ -35,27 +35,20 @@
                 </div>
             </div>
             <div class="col-md-9">
-                <h2>User Profile</h2>
+                <h2>Create New Report</h2>
                 <div class="card">
                     <div class="card-body">
                         <form method="post">
                             <div class="mb-3">
-                                <label for="name" class="form-label">First Name:</label>
-                                <input type="text" class="form-control" id="name" name="name" value="{{ user.name }}" required>
+                                <label for="title" class="form-label">Report Title:</label>
+                                <input type="text" class="form-control" id="title" name="title" required>
                             </div>
                             <div class="mb-3">
-                                <label for="lastname" class="form-label">Last Name:</label>
-                                <input type="text" class="form-control" id="lastname" name="lastname" value="{{ user.lastname }}" required>
+                                <label for="content" class="form-label">Content:</label>
+                                <textarea class="form-control" id="content" name="content" rows="10" required></textarea>
                             </div>
-                            <div class="mb-3">
-                                <label for="email" class="form-label">Email:</label>
-                                <input type="email" class="form-control" id="email" name="email" value="{{ user.email }}" required>
-                            </div>
-                            <div class="mb-3">
-                                <label for="department" class="form-label">Department:</label>
-                                <input type="text" class="form-control" id="department" name="department" value="{{ user.department or '' }}">
-                            </div>
-                            <button type="submit" class="btn btn-primary">Update Profile</button>
+                            <button type="submit" class="btn btn-primary">Create Report</button>
+                            <a href="{{ url_for('reports_list') }}" class="btn btn-secondary">Cancel</a>
                         </form>
                     </div>
                 </div>

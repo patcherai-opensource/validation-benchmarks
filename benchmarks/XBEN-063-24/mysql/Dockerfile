@@ -1,6 +1,6 @@
 FROM mysql:5.7
 
-ENV MYSQL_ROOT_PASSWORD=ssti_encoding_loan_calculator
+ENV MYSQL_ROOT_PASSWORD=report_generator_db
 ENV MYSQL_DATABASE=database
 
 EXPOSE 3306

@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Help - ReportGen Pro</title>
+    <link href="{{ url_for('static', filename='css/bootstrap.min.css') }}" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+        <div class="container">
+            <a class="navbar-brand" href="{{ url_for('dashboard') }}">ReportGen Pro</a>
+            <div class="navbar-nav ms-auto">
+                <a class="nav-link" href="{{ url_for('login') }}">Login</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container mt-4">
+        <h2>ReportGen Pro Documentation</h2>
+        
+        <div class="card mb-4">
+            <div class="card-header">
+                <h4>API Reference</h4>
+            </div>
+            <div class="card-body">
+                <h5>Available Endpoints</h5>
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Endpoint</th>
+                            <th>Method</th>
+                            <th>Description</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><code>/api/templates</code></td>
+                            <td>GET</td>
+                            <td>List available report templates</td>
+                        </tr>
+                        <tr>
+                            <td><code>/api/render</code></td>
+                            <td>GET</td>
+                            <td>Render a report with specified layout template</td>
+                        </tr>
+                        <tr>
+                            <td><code>/api/preview</code></td>
+                            <td>GET</td>
+                            <td>Preview a layout template with sample data</td>
+                        </tr>
+                        <tr>
+                            <td><code>/api/status</code></td>
+                            <td>GET</td>
+                            <td>API health check</td>
+                        </tr>
+                    </tbody>
+                </table>
+                
+                <h5 class="mt-4">Render API Parameters</h5>
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Parameter</th>
+                            <th>Type</th>
+                            <th>Description</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><code>report_id</code></td>
+                            <td>integer</td>
+                            <td>The ID of the report to render</td>
+                        </tr>
+                        <tr>
+                            <td><code>layout</code></td>
+                            <td>string</td>
+                            <td>Layout template name (e.g., standard, minimal, corporate)</td>
+                        </tr>
+                    </tbody>
+                </table>
+                
+                <h5 class="mt-4">Example Usage</h5>
+                <pre class="bg-light p-3"><code>GET /api/render?report_id=1&layout=standard
+GET /api/preview?layout=corporate
+GET /api/templates</code></pre>
+            </div>
+        </div>
+        
+        <div class="card mb-4">
+            <div class="card-header">
+                <h4>Available Templates</h4>
+            </div>
+            <div class="card-body">
+                <ul>
+                    <li><strong>standard</strong> - Default professional report layout</li>
+                    <li><strong>minimal</strong> - Clean, minimalist design</li>
+                    <li><strong>corporate</strong> - Formal corporate styling</li>
+                </ul>
+            </div>
+        </div>
+        
+        <div class="card">
+            <div class="card-header">
+                <h4>Version Information</h4>
+            </div>
+            <div class="card-body">
+                <p>ReportGen Pro v1.2.3</p>
+                <p class="text-muted">Enterprise Report Generation Platform</p>
+            </div>
+        </div>
+    </div>
+
+    <script src="{{ url_for('static', filename='js/bootstrap.bundle.min.js') }}"></script>
+</body>
+</html>

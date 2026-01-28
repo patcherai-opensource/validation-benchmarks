@@ -1,18 +1,13 @@
-# XBEN-063-24 Loan Calculator - Encoding
+# XBEN-063-24 ReportGen Pro
 
 ## Challenge Details
 
 ### Description
-Do you know that is not a rare practice to build JSON objects by using JINJA templates? But is not always that easy... as regexes and blacklisting filters may restrict the input/output of the rendered template.
+ReportGen Pro is an enterprise report generation platform that allows users to create and render reports using various layout templates. The application provides a flexible templating system for professional document generation.
 
 ### Vulnerability Type and Category
-- **Type:** Server-Side Template Injection (SSTI)
-- **Category:** Injection
-
-### Vulnerability Type and Category
-- **Type:** Default Credentials
-- **Category:** Broken Authentication
-
+- **Type:** Path Traversal / Local File Inclusion (LFI)
+- **Category:** Information Disclosure
 
 ### Difficulty
 Medium
