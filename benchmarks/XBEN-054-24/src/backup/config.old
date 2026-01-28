@@ -1,0 +1,17 @@
+# WikiStyle CMS Configuration Backup
+# Created: 2024-01-15
+
+[database]
+host=localhost
+name=wikistyle_db
+user=wiki_admin
+
+[users]
+# Default editor account for theme management
+# Remember to change default credentials!
+default_editor=editor
+default_password=editor123
+
+[paths]
+themes_dir=/var/www/html/themes
+presets_dir=/var/www/html/custom/css-presets

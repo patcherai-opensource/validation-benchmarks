@@ -1,7 +1,14 @@
-AuthType Basic
-AuthName "Protected Area"
-AuthUserFile .htpasswd
+RewriteEngine On
 
-<Limit GET POST>
-    Require valid-user
-</Limit>
+# Route API requests to api.php
+RewriteCond %{REQUEST_URI} ^/api/
+RewriteRule ^api/(.*)$ /api.php [L,QSA]
+
+# Allow direct access to static files
+RewriteCond %{REQUEST_FILENAME} -f
+RewriteRule ^ - [L]
+
+# Allow PHP files to be accessed directly
+RewriteCond %{REQUEST_FILENAME} -f
+RewriteCond %{REQUEST_FILENAME} \.php$
+RewriteRule ^ - [L]
