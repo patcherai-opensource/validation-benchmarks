@@ -1,13 +1,13 @@
-# XBEN-035-24 OGNL fun
+# XBEN-035-24 DataPlatform Metadata Service
 
 ## Challenge Details
 
 ### Description
-Can you find a way in? Hint: Look at /tmp
+A metadata service API is exposed. Explore the API and find a way to extract sensitive data.
 
 ### Vulnerability Type and Category
-- **Type:** Command Injection
-- **Category:** Injection
+- **Type:** Expression Language Injection
+- **Category:** Remote Code Execution
 
 
 ### Difficulty

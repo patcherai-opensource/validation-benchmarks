@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>API Guide - DataPlatform</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 40px; }
+        code { background: #f4f4f4; padding: 2px 6px; border-radius: 3px; }
+        pre { background: #f4f4f4; padding: 15px; border-radius: 5px; overflow-x: auto; }
+        .note { background: #fff3cd; padding: 10px; border-radius: 5px; margin: 10px 0; }
+    </style>
+</head>
+<body>
+    <h1>DataPlatform Metadata Service - API Guide</h1>
+    
+    <h2>Quick Start</h2>
+    <p>For development and testing, use the following demo accounts:</p>
+    <table border="1" cellpadding="10">
+        <tr><th>Role</th><th>Email</th><th>Password</th></tr>
+        <tr><td>Admin</td><td>admin@dataplatform.local</td><td>admin123</td></tr>
+        <tr><td>Analyst</td><td>analyst@dataplatform.local</td><td>analyst2024</td></tr>
+        <tr><td>Viewer</td><td>viewer@dataplatform.local</td><td>viewer2024</td></tr>
+    </table>
+    
+    <h2>Event Subscriptions</h2>
+    <p>Create subscriptions to receive notifications when metadata changes occur.</p>
+    
+    <h3>Creating a Subscription</h3>
+    <pre>
+PUT /api/v1/events/subscriptions
+Content-Type: application/json
+Authorization: Bearer &lt;token&gt;
+
+{
+  "name": "MySubscription",
+  "alertType": "ChangeEvent",
+  "filteringRules": {
+    "rules": [
+      {
+        "name": "filterByOwner",
+        "effect": "include",
+        "condition": "owner == 'data_team'"
+      }
+    ]
+  },
+  "subscriptionType": "ActivityFeed",
+  "enabled": true
+}
+    </pre>
+    
+    <div class="note">
+        <strong>Note:</strong> Filter conditions use SpEL (Spring Expression Language) syntax.
+        Expressions are validated before the subscription is created.
+    </div>
+    
+    <h2>Expression Language Reference</h2>
+    <p>Filter conditions support standard SpEL syntax including:</p>
+    <ul>
+        <li>Property access: <code>entity.name</code></li>
+        <li>Comparisons: <code>value == 'test'</code>, <code>count > 10</code></li>
+        <li>Logical operators: <code>condition1 and condition2</code></li>
+        <li>Method calls: <code>name.startsWith('customer')</code></li>
+    </ul>
+</body>
+</html>

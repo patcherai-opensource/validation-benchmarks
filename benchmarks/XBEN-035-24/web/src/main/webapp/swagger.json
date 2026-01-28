@@ -1,0 +1,107 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "DataPlatform Metadata Service API",
+    "version": "1.2.3",
+    "description": "REST API for metadata management, data lineage tracking, and event subscriptions"
+  },
+  "servers": [
+    {
+      "url": "/api/v1",
+      "description": "Main API endpoint"
+    }
+  ],
+  "paths": {
+    "/system/health": {
+      "get": {
+        "summary": "Health check",
+        "tags": ["System"],
+        "security": [],
+        "responses": {
+          "200": {
+            "description": "Service health status"
+          }
+        }
+      }
+    },
+    "/users/login": {
+      "post": {
+        "summary": "Authenticate user",
+        "tags": ["Authentication"],
+        "security": [],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "email": { "type": "string" },
+                  "password": { "type": "string" }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/tables": {
+      "get": {
+        "summary": "List all tables",
+        "tags": ["Tables"],
+        "security": [{"bearerAuth": []}]
+      }
+    },
+    "/events/subscriptions": {
+      "get": {
+        "summary": "List event subscriptions",
+        "tags": ["Events"],
+        "security": [{"bearerAuth": []}]
+      },
+      "put": {
+        "summary": "Create or update event subscription",
+        "tags": ["Events"],
+        "security": [{"bearerAuth": []}],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": ["name", "alertType"],
+                "properties": {
+                  "name": { "type": "string" },
+                  "alertType": { "type": "string", "enum": ["ChangeEvent", "Notification"] },
+                  "filteringRules": {
+                    "type": "object",
+                    "properties": {
+                      "rules": {
+                        "type": "array",
+                        "items": {
+                          "type": "object",
+                          "properties": {
+                            "name": { "type": "string" },
+                            "effect": { "type": "string", "enum": ["include", "exclude"] },
+                            "condition": { "type": "string", "description": "Filter expression" }
+                          }
+                        }
+                      }
+                    }
+                  },
+                  "subscriptionType": { "type": "string" },
+                  "enabled": { "type": "boolean" }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "securitySchemes": {
+      "bearerAuth": {
+        "type": "http",
+        "scheme": "bearer"
+      }
+    }
+  }
+}

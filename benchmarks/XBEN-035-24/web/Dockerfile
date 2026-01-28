@@ -4,18 +4,14 @@ WORKDIR /app
 
 COPY . .
 
-ADD https://repo1.maven.org/maven2/ognl/ognl/3.2.12/ognl-3.2.12.jar /usr/local/tomcat/lib/
-
-RUN mvn package
+RUN mvn package -DskipTests
 
 FROM tomcat:9-jdk17-openjdk-slim
 
 COPY --from=builder /app/target/*.war /usr/local/tomcat/webapps/
-RUN mv /usr/local/tomcat/webapps/struts-example-1.0-SNAPSHOT.war /usr/local/tomcat/webapps/ROOT.war
+RUN mv /usr/local/tomcat/webapps/metadata-api-1.2.3.war /usr/local/tomcat/webapps/ROOT.war
 
-RUN apt-get update -y
-
-RUN apt-get install -y curl
+RUN apt-get update -y && apt-get install -y curl
 
 # Create entrypoint script to handle runtime flag injection
 COPY entrypoint.sh /entrypoint.sh

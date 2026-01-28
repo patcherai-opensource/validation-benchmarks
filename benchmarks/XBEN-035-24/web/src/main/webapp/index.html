@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DataPlatform Metadata Service</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+        .container {
+            background: white;
+            padding: 40px;
+            border-radius: 15px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+            max-width: 800px;
+            width: 90%;
+        }
+        h1 {
+            color: #333;
+            margin-top: 0;
+            font-size: 2em;
+        }
+        .subtitle {
+            color: #666;
+            font-size: 1.1em;
+            margin-bottom: 30px;
+        }
+        .api-info {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 20px 0;
+        }
+        .endpoint {
+            font-family: 'Courier New', monospace;
+            background: #e9ecef;
+            padding: 8px 12px;
+            border-radius: 5px;
+            margin: 10px 0;
+            display: block;
+            font-size: 0.9em;
+        }
+        .badge {
+            display: inline-block;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 0.8em;
+            font-weight: bold;
+            margin-right: 8px;
+        }
+        .badge-get { background: #28a745; color: white; }
+        .badge-put { background: #ffc107; color: #333; }
+        .badge-post { background: #007bff; color: white; }
+        .badge-delete { background: #dc3545; color: white; }
+        .feature-list {
+            list-style: none;
+            padding: 0;
+        }
+        .feature-list li {
+            padding: 10px;
+            margin: 5px 0;
+            background: #f1f3f5;
+            border-left: 4px solid #667eea;
+            border-radius: 4px;
+        }
+        .version {
+            color: #999;
+            font-size: 0.9em;
+            text-align: right;
+            margin-top: 30px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🗄️ DataPlatform Metadata Service</h1>
+        <p class="subtitle">Centralized metadata management and lineage tracking for your data ecosystem</p>
+        
+        <div class="api-info">
+            <h3>Available Endpoints</h3>
+            <p><span class="badge badge-get">GET</span><code class="endpoint">/api/v1/system/health</code></p>
+            <p><span class="badge badge-get">GET</span><code class="endpoint">/api/v1/system/version</code></p>
+            <p><span class="badge badge-get">GET</span><code class="endpoint">/api/v1/system/config</code></p>
+            <p><span class="badge badge-post">POST</span><code class="endpoint">/api/v1/users/login</code></p>
+            <p><span class="badge badge-get">GET</span><code class="endpoint">/api/v1/users</code></p>
+            <p><span class="badge badge-get">GET</span><code class="endpoint">/api/v1/tables</code></p>
+            <p><span class="badge badge-get">GET</span><code class="endpoint">/api/v1/databases</code></p>
+            <p><span class="badge badge-get">GET</span><code class="endpoint">/api/v1/events/subscriptions</code></p>
+            <p><span class="badge badge-put">PUT</span><code class="endpoint">/api/v1/events/subscriptions</code></p>
+            <p><span class="badge badge-delete">DELETE</span><code class="endpoint">/api/v1/events/subscriptions/{id}</code></p>
+        </div>
+        
+        <h3>Features</h3>
+        <ul class="feature-list">
+            <li>📊 Table and database metadata management</li>
+            <li>🔔 Event-driven subscription system</li>
+            <li>🔐 Token-based authentication</li>
+            <li>🔍 Advanced filtering with expression language</li>
+            <li>📈 Data lineage and impact analysis</li>
+        </ul>
+        
+        <div class="api-info">
+            <h4>Authentication</h4>
+            <p>Most endpoints require authentication. Use <code>/api/v1/users/login</code> to obtain a Bearer token.</p>
+            <p><strong>Example:</strong></p>
+            <pre style="background: #2d2d2d; color: #f8f8f2; padding: 15px; border-radius: 5px; overflow-x: auto;">
+curl -X POST http://localhost:8080/api/v1/users/login \
+  -H "Content-Type: application/json" \
+  -d '{"email": "user@dataplatform.local", "password": "yourpassword"}'</pre>
+        </div>
+        
+        <p class="version">Version 1.2.3 | Build b847e9f</p>
+    </div>
+</body>
+</html>
