@@ -1,13 +1,14 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Ping Result</title>
+    <title>Lookup Result</title>
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles.css') }}">
 </head>
 <body>
     <div class="container">
-        <h1>Ping Result for {{ ip_address }}</h1>
-        <pre>{{ ping_output }}</pre>
+        <h1>Lookup Result</h1>
+        <pre>{{ output }}</pre>
+        <p><a href="/">Back to Home</a></p>
     </div>
 </body>
 </html>

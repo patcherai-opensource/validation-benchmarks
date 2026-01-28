@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>API Documentation - Ansible Lookup Service</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    <div class="container docs">
+        <h1>Ansible Lookup Service API</h1>
+        <p>REST API for executing Ansible lookup plugins remotely.</p>
+        
+        <h2>Endpoints</h2>
+        
+        <div class="endpoint">
+            <h3>GET /api/v1/facts</h3>
+            <p>Returns system facts about the automation node.</p>
+            <pre>curl http://localhost/api/v1/facts</pre>
+        </div>
+        
+        <div class="endpoint">
+            <h3>GET /api/v1/plugins</h3>
+            <p>Lists available lookup plugins.</p>
+            <pre>curl http://localhost/api/v1/plugins</pre>
+        </div>
+        
+        <div class="endpoint">
+            <h3>GET /api/v1/inventory</h3>
+            <p>Returns the current inventory configuration.</p>
+            <pre>curl http://localhost/api/v1/inventory</pre>
+        </div>
+        
+        <div class="endpoint">
+            <h3>POST /api/v1/validate</h3>
+            <p>Validates a playbook configuration.</p>
+            <pre>curl -X POST -H "Content-Type: application/json" \
+     -d '{"playbook": "site.yml"}' \
+     http://localhost/api/v1/validate</pre>
+        </div>
+        
+        <div class="endpoint">
+            <h3>POST /api/v1/lookup</h3>
+            <p>Execute a lookup plugin with variable substitution.</p>
+            <h4>Parameters:</h4>
+            <ul>
+                <li><code>plugin</code> - The lookup plugin to use (env, file, pipe)</li>
+                <li><code>expression</code> - The lookup expression or command</li>
+                <li><code>vars</code> - Variables to substitute into the expression</li>
+            </ul>
+            <h4>Example - Environment Lookup:</h4>
+            <pre>curl -X POST -H "Content-Type: application/json" \
+     -d '{"plugin": "env", "expression": "PATH"}' \
+     http://localhost/api/v1/lookup</pre>
+            
+            <h4>Example - Pipe Lookup with Variables:</h4>
+            <pre>curl -X POST -H "Content-Type: application/json" \
+     -d '{"plugin": "pipe", "expression": "echo {{ message }}", "vars": {"message": "hello"}}' \
+     http://localhost/api/v1/lookup</pre>
+            
+            <div class="note">
+                <strong>Note:</strong> The pipe plugin executes shell commands. Variables in the expression 
+                are substituted before execution. For security, use the <code>| quote</code> filter in 
+                your playbooks when passing user-controlled data.
+            </div>
+        </div>
+        
+        <h2>Supported Plugins</h2>
+        <table>
+            <tr><th>Plugin</th><th>Description</th><th>Status</th></tr>
+            <tr><td>env</td><td>Environment variable lookup</td><td>Active</td></tr>
+            <tr><td>file</td><td>File content lookup</td><td>Disabled</td></tr>
+            <tr><td>pipe</td><td>Command execution</td><td>Active</td></tr>
+        </table>
+        
+        <p><a href="/">Back to Home</a></p>
+    </div>
+</body>
+</html>

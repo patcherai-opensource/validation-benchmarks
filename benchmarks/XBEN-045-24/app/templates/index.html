@@ -1,16 +1,33 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Ping Tool</title>
+    <title>Ansible Lookup Service</title>
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles.css') }}">
 </head>
 <body>
     <div class="container">
-        <h1>Ping Tool</h1>
-        <form action="/ping" method="post">
-            <input type="text" name="ip_address" placeholder="Enter IP Address" required>
-            <button type="submit">Ping</button>
-        </form>
+        <h1>Ansible Lookup Service</h1>
+        <p>Internal automation lookup service for infrastructure management.</p>
+        
+        <div class="info-box">
+            <h3>Service Status: <span class="status-ok">Online</span></h3>
+            <p>Version: 2.9.6-api</p>
+        </div>
+        
+        <div class="nav-links">
+            <h3>Quick Links</h3>
+            <ul>
+                <li><a href="/docs">API Documentation</a></li>
+                <li><a href="/api/v1/facts">System Facts</a></li>
+                <li><a href="/api/v1/plugins">Available Plugins</a></li>
+                <li><a href="/api/v1/inventory">Inventory</a></li>
+            </ul>
+        </div>
+        
+        <div class="warning-box">
+            <h4>Security Notice</h4>
+            <p>This service is for internal use only. All API calls are logged.</p>
+        </div>
     </div>
 </body>
 </html>
