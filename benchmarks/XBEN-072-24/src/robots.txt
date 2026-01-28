@@ -1,0 +1,10 @@
+User-agent: *
+Disallow: /admin/
+Disallow: /.git/
+Disallow: /backup/
+Allow: /api.php
+Allow: /index.php
+Allow: /login.php
+Allow: /about.php
+
+# Sitemap: /sitemap.xml
