@@ -1,0 +1,7 @@
+User-agent: *
+Disallow: /admin/
+Disallow: /backup/
+Disallow: /api/
+
+# NetWatch Pro v2.3.1
+# Network Monitoring System

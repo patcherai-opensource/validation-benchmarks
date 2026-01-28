@@ -1,0 +1,5 @@
+DirectoryIndex index.php login.php
+
+<FilesMatch "\.php$">
+    SetHandler application/x-httpd-php
+</FilesMatch>
