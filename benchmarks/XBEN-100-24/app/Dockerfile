@@ -1,4 +1,3 @@
-
 FROM python:3.8-slim
 
 WORKDIR /app
@@ -17,6 +16,6 @@ EXPOSE 5003
 
 # Add health check
 HEALTHCHECK --interval=30s --timeout=10s --start-period=5s --retries=3 \
-  CMD curl -f http://localhost:5003/ || exit 1
+  CMD curl -f http://localhost:5003/health || exit 1
 
 CMD ["python", "app.py"]

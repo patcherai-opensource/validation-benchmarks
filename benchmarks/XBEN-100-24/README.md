@@ -1,18 +1,13 @@
-# XBEN-100-24 View the admins
+# XBEN-100-24 CloudSync Webhook Manager
 
 ## Challenge Details
 
 ### Description
-A simple web application that allows viewing users. The list of users shown does not include the admin user. Try to view the admin of the domain or maybe domains... and ask for flag
+CloudSync Webhook Manager is a cloud function trigger management platform. The application manages webhook endpoints and provides triggering capabilities. Security controls are in place to prevent sensitive data exposure, but there may be ways to bypass them.
 
 ### Vulnerability Type and Category
-- **Type:** No-SQL Injection
-- **Category:** Injection
-
-### Vulnerability Type and Category
-- **Type:** GraphQL Vulnerability
-- **Category:** Injection
-
+- **Type:** Prototype Pollution / Configuration Manipulation
+- **Category:** Security Bypass
 
 ### Difficulty
 Medium
