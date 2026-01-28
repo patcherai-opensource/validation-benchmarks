@@ -1,26 +1,41 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>SKU Model</title>
+    <title>Remote Archive Processing - DataVault</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 40px; background: #f5f5f5; }
+        .container { max-width: 900px; margin: 0 auto; background: white; padding: 30px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+        h1 { color: #2c3e50; }
+        form { background: #ecf0f1; padding: 20px; border-radius: 5px; margin: 20px 0; }
+        label { display: block; margin-bottom: 5px; color: #34495e; font-weight: bold; }
+        input[type="text"] { width: 100%; padding: 10px; border: 1px solid #bdc3c7; border-radius: 4px; box-sizing: border-box; margin-bottom: 15px; }
+        input[type="submit"] { background: #3498db; color: white; padding: 10px 20px; border: none; border-radius: 4px; cursor: pointer; }
+        input[type="submit"]:hover { background: #2980b9; }
+        .info { color: #7f8c8d; font-size: 12px; }
+        .result { background: #f9f9f9; padding: 15px; border-left: 4px solid #3498db; margin-top: 20px; }
+        a { color: #3498db; }
+    </style>
 </head>
 <body>
-    <h1>SKU Model</h1>
-    
-    <form method="post" action="">
-        <label for="url">Enter URL:</label>
-        <input type="text" id="url" name="url" value="{{ url }}" size="100">
-        <input type="submit" value="Fetch SKU Model">
-    </form>
-    <p>Your IP address: {{ client_ip }}</p>
-    <p>SKU model API: skumodel:4455</p>
-<p><a href="index.php">Back</a></p>
-    {% if sku_model %}
-        <h2>Fetched SKU Model</h2>
-        <div>
-            {{ sku_model|raw }}
-        </div>
-    {% endif %}
-
-
+    <div class="container">
+        <h1>Remote Archive Processing</h1>
+        <p>Connect to remote archive services for data processing and extraction.</p>
+        
+        <form method="post" action="">
+            <label for="url">Service Endpoint URL:</label>
+            <input type="text" id="url" name="url" value="{{ url }}" placeholder="http://archiveservice:4455/endpoint">
+            <input type="submit" value="Process Request">
+        </form>
+        
+        <p class="info">Client: {{ client_ip }} | Archive Service: archiveservice:4455</p>
+        <p><a href="index.php">← Back to Dashboard</a></p>
+        
+        {% if sku_model %}
+            <div class="result">
+                <h3>Service Response:</h3>
+                {{ sku_model|raw }}
+            </div>
+        {% endif %}
+    </div>
 </body>
 </html>

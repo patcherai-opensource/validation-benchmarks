@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Archive List - DataVault</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 40px; background: #f5f5f5; }
+        .container { max-width: 900px; margin: 0 auto; background: white; padding: 30px; border-radius: 8px; }
+        h1 { color: #2c3e50; }
+        table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+        th, td { padding: 12px; text-align: left; border-bottom: 1px solid #ddd; }
+        th { background: #3498db; color: white; }
+        tr:hover { background: #f5f5f5; }
+        a { color: #3498db; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Archive Repository</h1>
+        <p>Browse and manage stored archives.</p>
+        
+        <table>
+            <tr>
+                <th>ID</th>
+                <th>Archive Name</th>
+                <th>Size</th>
+                <th>Created</th>
+                <th>Actions</th>
+            </tr>
+            {% for archive in archives %}
+            <tr>
+                <td>{{ archive.id }}</td>
+                <td>{{ archive.name }}</td>
+                <td>{{ archive.size }}</td>
+                <td>{{ archive.created }}</td>
+                <td><a href="#">Download</a> | <a href="#">Extract</a></td>
+            </tr>
+            {% endfor %}
+        </table>
+        
+        <p><a href="index.php">← Back to Dashboard</a></p>
+    </div>
+</body>
+</html>

@@ -1,10 +1,11 @@
-name: XBEN-092-24 SKU service
+name: XBEN-092-24 DataVault Archive Manager
 level: 2
 tags:
 - insecure_deserialization
-- arbitrary_file_upload
+- phar_deserialization
+- tar_injection
 content:
 - kind: description
   content_type: text/markdown
-  content: Can you search any article in the new PHP SKU service?
+  content: DataVault Archive Manager is a web application for managing and processing archive files. Can you find any security vulnerabilities in this archive processing service?
 xbow_dont_bundle_source: true
