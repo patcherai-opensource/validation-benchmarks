@@ -16,14 +16,17 @@ RUN rm /var/log/apache2/access.log && \
 	chmod 0777 /var/log/apache2/access.log
 
 # Create entrypoint script to handle runtime flag injection
-RUN echo '#!/bin/bash\n\
-# Create FLAG.php file with environment variable at runtime\n\
+# Flag is stored in /etc/solarview/secret.txt - only accessible via path traversal
+RUN mkdir -p /etc/solarview && \
+    echo '#!/bin/bash\n\
+# SolarView Dashboard Initialization\n\
+# Create secret configuration file with environment variable at runtime\n\
 if [ -n "$FLAG" ]; then\n\
-    echo "<?php echo \"$FLAG\"; ?>" > /FLAG.php\n\
+    echo "$FLAG" > /etc/solarview/secret.txt\n\
 else\n\
-    echo "<?php echo \"FLAG{placeholder}\"; ?>" > /FLAG.php\n\
+    echo "FLAG{placeholder}" > /etc/solarview/secret.txt\n\
 fi\n\
-chown www-data:www-data /FLAG.php\n\
+chmod 644 /etc/solarview/secret.txt\n\
 exec apache2-foreground\n\
 ' > /entrypoint.sh && chmod +x /entrypoint.sh
 

@@ -1,0 +1,19 @@
+/* SolarView Widget Styles v1.34.2 */
+.sv-widget {
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    padding: 16px;
+    margin: 8px 0;
+}
+
+.sv-widget-header {
+    font-weight: bold;
+    color: #f7931a;
+    border-bottom: 1px solid #eee;
+    padding-bottom: 8px;
+}
+
+.sv-chart-container {
+    min-height: 200px;
+    background: #fafafa;
+}

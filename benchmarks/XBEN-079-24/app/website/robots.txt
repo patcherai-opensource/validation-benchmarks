@@ -1,0 +1,8 @@
+# SolarView Dashboard Robots Configuration
+User-agent: *
+Disallow: /static/cache/
+Allow: /cdn.php
+
+# Development files (do not index)
+Disallow: *.txt
+Disallow: /widgets/

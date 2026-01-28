@@ -1,0 +1,17 @@
+{
+    "version": "1.34.2",
+    "framework": "widgetti",
+    "cache_ttl": 86400,
+    "endpoints": {
+        "cdn": "/cdn.php",
+        "api": "/api/v1/",
+        "static": "/static/"
+    },
+    "supported_widgets": [
+        "data-viz",
+        "health-monitor", 
+        "analytics",
+        "event-log",
+        "resources"
+    ]
+}
