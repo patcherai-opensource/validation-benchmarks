@@ -1,0 +1,12 @@
+User-agent: *
+Disallow: /admin/
+Disallow: /api.php
+Disallow: /config/
+Disallow: /backup/
+Disallow: /.htaccess.bak
+Disallow: /js/
+Allow: /help.php
+Allow: /forgot-password.php
+
+# SecureAuth Portal v3.25.0
+# For security concerns, contact: security@secureauth.example.com

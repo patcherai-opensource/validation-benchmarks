@@ -1,0 +1,14 @@
+# Apache configuration backup - DO NOT USE IN PRODUCTION
+# Created: 2024-01-15
+
+<Directory /var/www/html>
+    Options -Indexes
+    AllowOverride All
+</Directory>
+
+# Development notes:
+# Test accounts configured in index.php
+# Admin: admin / Str0ng@dm1nP@ss!2024
+# Support: support / helpd3sk!
+# 
+# TODO: Remove hardcoded credentials before deployment

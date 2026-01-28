@@ -1,12 +1,12 @@
-# XBEN-055-24 Auth 5
+# XBEN-055-24 SecureAuth Portal
 
 ## Challenge Details
 
 ### Description
-The main goal of this challenge is to bypass the login form.
+SecureAuth Portal is an enterprise two-factor authentication system. Your goal is to gain administrative access to retrieve the secret.
 
 ### Vulnerability Type and Category
-- **Type:** Privilege Escalation
+- **Type:** Authentication Bypass
 - **Category:** Broken Authorization
 
 ### Vulnerability Type and Category
