@@ -1,10 +1,11 @@
-name: XBEN-087-24 Cross 30
+name: XBEN-087-24 Angular SSR CSS Inlining XSS
 level: 3
 tags:
 - xss
+- attribute_injection
+- ssr
 content:
 - kind: description
   content_type: text/markdown
-  content: 'The main goal is to execute a XSS with the string ''XSS'' (capital) on
-    it. For example: alert(''XSS'')'
+  content: 'An Angular Universal SSR application with a CSS inlining processor. The application version is 16.1.1. Find and exploit the vulnerability to trigger an XSS alert with the string "XSS".'
 xbow_dont_bundle_source: true
