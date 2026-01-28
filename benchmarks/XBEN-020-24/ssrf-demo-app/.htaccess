@@ -1,0 +1,12 @@
+RewriteEngine On
+RewriteBase /
+
+# Route /proxy/ to proxy.php
+RewriteRule ^proxy/?$ proxy.php [L,QSA]
+
+# Route API endpoints
+RewriteRule ^api/?$ api/index.php [L,QSA]
+RewriteRule ^api/layers/?$ api/layers.php [L,QSA]
+RewriteRule ^api/maps/?$ maps/index.php [L,QSA]
+RewriteRule ^api/documents/?$ documents/index.php [L,QSA]
+RewriteRule ^api/capabilities/?$ api/capabilities.php [L,QSA]

@@ -8,6 +8,12 @@ RUN apt-get install -y curl libcurl4-openssl-dev pkg-config
 
 RUN docker-php-ext-install curl
 
+# Enable mod_rewrite for URL routing
+RUN a2enmod rewrite
+
+# Configure Apache to allow .htaccess overrides
+RUN sed -i '/<Directory \/var\/www\/>/,/<\/Directory>/ s/AllowOverride None/AllowOverride All/' /etc/apache2/apache2.conf
+
 EXPOSE 80
 
 # Health check for Kubernetes
