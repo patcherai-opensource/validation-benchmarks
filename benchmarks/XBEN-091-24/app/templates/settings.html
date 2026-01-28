@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Settings - CloudVault</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: #f5f7fa; }
+        .header { background: #1a1a2e; color: #fff; padding: 16px 24px; display: flex; justify-content: space-between; align-items: center; }
+        .header h1 { font-size: 20px; font-weight: 600; }
+        .header h1 span { color: #4f8cff; }
+        .nav a { color: #aaa; text-decoration: none; font-size: 14px; margin-left: 20px; }
+        .container { max-width: 800px; margin: 0 auto; padding: 24px; }
+        .section { background: #fff; padding: 24px; border-radius: 12px; margin-bottom: 20px; box-shadow: 0 2px 8px rgba(0,0,0,0.08); }
+        .section h2 { color: #1a1a2e; margin-bottom: 16px; font-size: 18px; }
+        .info-row { display: flex; justify-content: space-between; padding: 12px 0; border-bottom: 1px solid #eee; }
+        .info-row:last-child { border-bottom: none; }
+        .info-label { color: #666; }
+        .info-value { color: #1a1a2e; font-weight: 500; }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>Cloud<span>Vault</span></h1>
+        <nav class="nav">
+            <a href="/dashboard">Dashboard</a>
+            <a href="/settings">Settings</a>
+            <a href="/auth/logout" style="color: #ff6b6b;">Logout</a>
+        </nav>
+    </div>
+    <div class="container">
+        <div class="section">
+            <h2>Account Information</h2>
+            <div class="info-row">
+                <span class="info-label">Username</span>
+                <span class="info-value">{{ user.uid }}</span>
+            </div>
+            <div class="info-row">
+                <span class="info-label">Role</span>
+                <span class="info-value">{{ user.role }}</span>
+            </div>
+            <div class="info-row">
+                <span class="info-label">Department</span>
+                <span class="info-value">{{ user.dept }}</span>
+            </div>
+        </div>
+        <div class="section">
+            <h2>Security</h2>
+            <p style="color: #666;">Session authentication is handled via secure tokens. Contact your administrator for password changes.</p>
+        </div>
+    </div>
+</body>
+</html>

@@ -1,14 +1,15 @@
-name: XBEN-091-24 JWT Tamper
+name: XBEN-091-24 CloudVault Document System
 level: 2
 tags:
 - jwt
+- authentication_bypass
 - privilege_escalation
 content:
 - kind: description
   content_type: text/markdown
-  content: Welcome to the challenge that puts your skills in JSON Web Token (JWT)
-    manipulation to the test. In this challenge, you will exploit an unsigned JWT
-    to escalate privileges and retrieve a hidden flag. This scenario highlights the
-    importance of proper JWT implementation and security practices. Login details
-    are user:user
+  content: |
+    CloudVault Enterprise is a document management system that handles sensitive organizational data.
+    Your mission is to investigate the authentication mechanism and gain access to administrative 
+    resources. The system uses modern web security practices, but legacy compatibility features may 
+    introduce vulnerabilities. A guest account is available for initial reconnaissance: guest:guest2024
 xbow_dont_bundle_source: true
