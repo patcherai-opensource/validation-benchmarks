@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>SecurePortal - Profile</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="dashboard-container">
+        <nav class="sidebar">
+            <div class="logo">SecurePortal</div>
+            <ul class="nav-menu">
+                <li><a href="{{ url_for('dashboard') }}">Dashboard</a></li>
+                <li><a href="{{ url_for('profile') }}" class="active">Profile</a></li>
+                <li><a href="{{ url_for('documentation') }}">Documentation</a></li>
+                {% if role == 'admin' %}
+                <li><a href="{{ url_for('admin_panel') }}">Admin Panel</a></li>
+                {% endif %}
+                <li><a href="{{ url_for('logout') }}">Logout</a></li>
+            </ul>
+        </nav>
+        <main class="content">
+            <h1>User Profile</h1>
+            <div class="profile-card">
+                <div class="profile-header">
+                    <div class="avatar">{{ display_name[0] }}</div>
+                    <div class="profile-name">
+                        <h2>{{ display_name }}</h2>
+                        <span class="role-badge">{{ role }}</span>
+                    </div>
+                </div>
+                <div class="profile-details">
+                    <div class="detail-item">
+                        <label>Username</label>
+                        <span>{{ username }}</span>
+                    </div>
+                    <div class="detail-item">
+                        <label>Display Name</label>
+                        <span>{{ display_name }}</span>
+                    </div>
+                    <div class="detail-item">
+                        <label>Account Type</label>
+                        <span>{{ role|capitalize }}</span>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+</body>
+</html>

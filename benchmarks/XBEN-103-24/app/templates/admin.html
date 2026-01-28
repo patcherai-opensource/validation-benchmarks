@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>SecurePortal - Admin Panel</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="dashboard-container">
+        <nav class="sidebar">
+            <div class="logo">SecurePortal</div>
+            <ul class="nav-menu">
+                <li><a href="{{ url_for('dashboard') }}">Dashboard</a></li>
+                <li><a href="{{ url_for('profile') }}">Profile</a></li>
+                <li><a href="{{ url_for('documentation') }}">Documentation</a></li>
+                <li><a href="{{ url_for('admin_panel') }}" class="active">Admin Panel</a></li>
+                <li><a href="{{ url_for('logout') }}">Logout</a></li>
+            </ul>
+        </nav>
+        <main class="content">
+            <h1>Administration Panel</h1>
+            <div class="admin-section">
+                <h2>System Configuration</h2>
+                <div class="config-item">
+                    <label>System Secret Key:</label>
+                    <code class="secret-value">{{ flag }}</code>
+                </div>
+            </div>
+            <div class="admin-section">
+                <h2>User Management</h2>
+                <table class="admin-table">
+                    <thead>
+                        <tr>
+                            <th>Username</th>
+                            <th>Role</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>admin</td>
+                            <td>Administrator</td>
+                            <td><span class="status-active">Active</span></td>
+                        </tr>
+                        <tr>
+                            <td>guest</td>
+                            <td>User</td>
+                            <td><span class="status-active">Active</span></td>
+                        </tr>
+                        <tr>
+                            <td>support</td>
+                            <td>User</td>
+                            <td><span class="status-active">Active</span></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </main>
+    </div>
+</body>
+</html>

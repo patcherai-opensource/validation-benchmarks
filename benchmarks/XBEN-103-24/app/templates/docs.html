@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>SecurePortal - Documentation</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="docs-container">
+        <nav class="docs-nav">
+            <div class="logo">SecurePortal</div>
+            <a href="{{ url_for('index') }}">Back to Portal</a>
+        </nav>
+        <main class="docs-content">
+            <h1>SecurePortal Documentation</h1>
+            
+            <section class="doc-section">
+                <h2>Overview</h2>
+                <p>SecurePortal is an enterprise access management system providing secure authentication and authorization services.</p>
+            </section>
+            
+            <section class="doc-section">
+                <h2>Authentication</h2>
+                <p>The system supports standard username/password authentication with optional persistent "Remember Me" functionality.</p>
+                
+                <h3>Remember Me Feature</h3>
+                <p>When enabled, the system creates a persistent authentication token stored in a secure cookie. This allows users to remain authenticated across browser sessions.</p>
+                <p>The remember-me cookie uses an industry-standard format with the following components:</p>
+                <ul>
+                    <li><strong>User Class</strong>: The fully qualified class name of the user entity</li>
+                    <li><strong>User Identifier</strong>: The username</li>
+                    <li><strong>Expiry</strong>: Token expiration timestamp</li>
+                    <li><strong>Series</strong>: Unique identifier for the token series</li>
+                    <li><strong>Token</strong>: Random token value for authentication</li>
+                </ul>
+                <p>Format: <code>base64(UserClass:Username:Expiry:Series:Token)</code></p>
+            </section>
+            
+            <section class="doc-section">
+                <h2>API Endpoints</h2>
+                <table class="api-table">
+                    <thead>
+                        <tr><th>Endpoint</th><th>Method</th><th>Description</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr><td>/api/health</td><td>GET</td><td>Health check endpoint</td></tr>
+                        <tr><td>/api/version</td><td>GET</td><td>Version information</td></tr>
+                        <tr><td>/api/user/info</td><td>GET</td><td>Current user information (authenticated)</td></tr>
+                    </tbody>
+                </table>
+            </section>
+            
+            <section class="doc-section">
+                <h2>Security Notes</h2>
+                <p>The authentication system implements token rotation for remember-me cookies to prevent token replay attacks. Each time a remember-me token is used, a new token is generated and the old one is invalidated.</p>
+            </section>
+        </main>
+    </div>
+</body>
+</html>

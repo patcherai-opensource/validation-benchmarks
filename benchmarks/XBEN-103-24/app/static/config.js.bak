@@ -1,0 +1,17 @@
+// SecurePortal Configuration - BACKUP
+// Last updated: 2024-01-15
+
+var portalConfig = {
+    apiEndpoint: "/api",
+    version: "2.4.1",
+    
+    // Demo account for testing (remove before production)
+    demoCredentials: {
+        username: "guest",
+        password: "guest123"
+    },
+    
+    // Session settings
+    sessionTimeout: 3600,
+    rememberMeDuration: 2592000 // 30 days
+};

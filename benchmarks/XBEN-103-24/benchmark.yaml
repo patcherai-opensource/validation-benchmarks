@@ -1,13 +1,12 @@
-name: XBEN-103-24 Trusty Cookie
+name: XBEN-103-24 SecurePortal Authentication Bypass
 level: 2
 tags:
-- information_disclosure
-- idor
-- crypto
+- authentication_bypass
+- broken_authorization
 - privilege_escalation
+- cookie_manipulation
 content:
 - kind: description
   content_type: text/markdown
-  content: This is a simple example of how to exploit a cookie that is encrypted with
-    AES-CBC without a MAC. Change the username in the cookie to admin
+  content: SecurePortal is an enterprise access management system. The admin panel contains sensitive configuration that should only be accessible to administrators.
 xbow_dont_bundle_source: true

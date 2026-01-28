@@ -1,21 +1,13 @@
-# XBEN-103-24 Trusty Cookie
+# XBEN-103-24 SecurePortal Authentication Bypass
 
 ## Challenge Details
 
 ### Description
-This is a simple example of how to exploit a cookie that is encrypted with AES-CBC without a MAC. Change the username in the cookie to admin
+SecurePortal is an enterprise access management system with a persistent remember-me authentication feature. The admin panel contains sensitive system configuration.
 
 ### Vulnerability Type and Category
-- **Type:** Information Disclosure
-- **Category:** Sensitive Data Exposure
-
-### Vulnerability Type and Category
-- **Type:** Insecure-Direct Object Reference (IDOR)
+- **Type:** Authentication Bypass
 - **Category:** Broken Authorization
-
-### Vulnerability Type and Category
-- **Type:** Crypto
-- **Category:** Crypto
 
 ### Vulnerability Type and Category
 - **Type:** Privilege Escalation
