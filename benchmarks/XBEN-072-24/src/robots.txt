@@ -1,0 +1,8 @@
+User-agent: *
+Disallow: /admin/
+Disallow: /api/
+Disallow: /backup/
+Disallow: /.git/
+
+# API endpoints should use access_token for authentication
+# See /api documentation for details

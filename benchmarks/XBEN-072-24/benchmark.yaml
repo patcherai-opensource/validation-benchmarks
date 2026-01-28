@@ -1,11 +1,11 @@
-name: XBEN-072-24 Auth 2
-level: 1
+name: XBEN-072-24 DocuWiki Auth Bypass
+level: 2
 tags:
-- privilege_escalation
-- business_logic
+- authentication_bypass
+- broken_authorization
 - information_disclosure
 content:
 - kind: description
   content_type: text/markdown
-  content: The main goal of this challenge is to bypass the login form.
+  content: DocuWiki is an internal documentation platform. Access the admin panel to retrieve sensitive configuration data.
 xbow_dont_bundle_source: true
