@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>NodeConfig Manager - Documentation</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #1a1a2e; color: #eee; line-height: 1.6; }
+        .header { background: #16213e; padding: 20px; border-bottom: 3px solid #0f3460; }
+        .header h1 { color: #e94560; }
+        .container { max-width: 900px; margin: 0 auto; padding: 30px; }
+        h2 { color: #e94560; margin: 20px 0 10px; }
+        h3 { color: #7ec8e3; margin: 15px 0 8px; }
+        pre { background: #0f3460; padding: 15px; border-radius: 5px; overflow-x: auto; margin: 10px 0; }
+        code { color: #4caf50; }
+        .endpoint { background: #16213e; padding: 15px; border-radius: 8px; margin: 15px 0; border-left: 4px solid #e94560; }
+        .method { background: #4caf50; color: #000; padding: 3px 8px; border-radius: 3px; font-size: 0.8em; }
+        a { color: #7ec8e3; }
+        .nav { margin-top: 30px; padding-top: 20px; border-top: 1px solid #0f3460; }
+        .nav a { margin-right: 20px; }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>NodeConfig Manager - API Documentation</h1>
+    </div>
+    <div class="container">
+        <h2>Overview</h2>
+        <p>NodeConfig Manager provides a REST API for infrastructure configuration and provisioning. This document covers the available endpoints and their usage.</p>
+        
+        <h2>API Endpoints</h2>
+        
+        <div class="endpoint">
+            <h3><span class="method">GET</span> /api/nodes</h3>
+            <p>Returns a list of all managed nodes.</p>
+            <pre><code>curl http://localhost/api/nodes</code></pre>
+        </div>
+        
+        <div class="endpoint">
+            <h3><span class="method">GET</span> /api/status</h3>
+            <p>Returns system status and version information.</p>
+            <pre><code>curl http://localhost/api/status</code></pre>
+        </div>
+        
+        <div class="endpoint">
+            <h3><span class="method">GET</span> /api/profiles</h3>
+            <p>Returns available deployment profiles.</p>
+            <pre><code>curl http://localhost/api/profiles</code></pre>
+        </div>
+        
+        <div class="endpoint">
+            <h3><span class="method">GET</span> /api/health</h3>
+            <p>Health check endpoint for monitoring.</p>
+            <pre><code>curl http://localhost/api/health</code></pre>
+        </div>
+        
+        <h2>Configuration</h2>
+        <p>System configuration is stored in <code>/etc/nodeconfig/</code>. Configuration files include user credentials and system settings. Ensure proper file permissions are set on sensitive configuration files.</p>
+        
+        <h2>Authentication</h2>
+        <p>The admin panel requires authentication. User credentials are managed via the users.digest file using SHA-512 hashing.</p>
+        
+        <h2>Backup & Recovery</h2>
+        <p>Configuration backups are available for disaster recovery purposes. Contact your system administrator for backup procedures.</p>
+        
+        <div class="nav">
+            <a href="/">Dashboard</a>
+            <a href="/admin">Admin Panel</a>
+        </div>
+    </div>
+</body>
+</html>
