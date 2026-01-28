@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MockAPI Server - Documentation</title>
+    <link href="{{ url_for('static_files', filename='css/bootstrap.min.css') }}" rel="stylesheet">
+    <style>
+        .sidebar { min-height: 100vh; background-color: #2c3e50; }
+        .sidebar a { color: #ecf0f1; }
+        .sidebar a:hover { color: #3498db; }
+        pre { background-color: #f8f9fa; padding: 1rem; border-radius: 4px; }
+        code { color: #e74c3c; }
+    </style>
+</head>
+<body>
+    <div class="container-fluid">
+        <div class="row">
+            <!-- Sidebar -->
+            <nav class="col-md-2 d-none d-md-block sidebar py-4">
+                <div class="text-center mb-4">
+                    <h4 class="text-white">MockAPI Server</h4>
+                    <small class="text-muted">v1.2.0</small>
+                </div>
+                <ul class="nav flex-column">
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('dashboard') }}">
+                            📊 Dashboard
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('list_endpoints') }}">
+                            🔗 Endpoints API
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" href="{{ url_for('docs') }}">
+                            📚 Documentation
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('settings') }}">
+                            ⚙️ Settings
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+
+            <!-- Main content -->
+            <main class="col-md-10 ms-sm-auto px-4 py-4">
+                <h1 class="h2 mb-4">API Documentation</h1>
+
+                <div class="card mb-4">
+                    <div class="card-header">
+                        <h5 class="mb-0">Overview</h5>
+                    </div>
+                    <div class="card-body">
+                        <p>MockAPI Server is a lightweight API mocking solution designed for development and testing. 
+                        It allows you to create mock API endpoints that return predefined responses.</p>
+                    </div>
+                </div>
+
+                <div class="card mb-4">
+                    <div class="card-header">
+                        <h5 class="mb-0">GET /endpoints</h5>
+                    </div>
+                    <div class="card-body">
+                        <p>Returns a list of all configured mock endpoints.</p>
+                        <h6>Example Response:</h6>
+                        <pre>{
+  "success": true,
+  "endpoints": [
+    {"id": 1, "method": "GET", "path": "/api/users", "status": 200}
+  ]
+}</pre>
+                    </div>
+                </div>
+
+                <div class="card mb-4">
+                    <div class="card-header">
+                        <h5 class="mb-0">GET /endpoints/{id}</h5>
+                    </div>
+                    <div class="card-body">
+                        <p>Returns configuration for a specific endpoint.</p>
+                        <h6>Parameters:</h6>
+                        <ul>
+                            <li><code>id</code> - The endpoint ID</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="card mb-4">
+                    <div class="card-header">
+                        <h5 class="mb-0">GET /files</h5>
+                    </div>
+                    <div class="card-body">
+                        <p>Serves files from the responses directory. Used for FILE type mock responses.</p>
+                        <h6>Parameters:</h6>
+                        <ul>
+                            <li><code>path</code> - Relative path to the file within the responses directory</li>
+                        </ul>
+                        <h6>Example:</h6>
+                        <pre>GET /files?path=users.json</pre>
+                        <div class="alert alert-secondary mt-3">
+                            <small><strong>Note:</strong> Place your response files in the <code>responses/</code> directory.</small>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card mb-4">
+                    <div class="card-header">
+                        <h5 class="mb-0">GET /health</h5>
+                    </div>
+                    <div class="card-body">
+                        <p>Returns the health status of the mock server.</p>
+                        <h6>Example Response:</h6>
+                        <pre>{"status": "healthy", "version": "1.2.0"}</pre>
+                    </div>
+                </div>
+
+                <div class="card mb-4">
+                    <div class="card-header">
+                        <h5 class="mb-0">GET /api/v1/status</h5>
+                    </div>
+                    <div class="card-body">
+                        <p>Returns detailed API status information.</p>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <script src="{{ url_for('static_files', filename='js/bootstrap.bundle.min.js') }}"></script>
+</body>
+</html>

@@ -1,11 +1,13 @@
 #!/bin/bash
 set -e
 
-# Create static directory if it doesn't exist
-mkdir -p /var/www/lfi_static_resource/app/static
+# Create necessary directories
+mkdir -p /var/www/mockapi_server/app/static
+mkdir -p /var/www/mockapi_server/app/responses
 
-# Inject flag from environment variable
-echo -n "${FLAG:-FLAG{default_flag_placeholder}}" > /var/www/lfi_static_resource/app/static/flag
+# Store sensitive configuration outside of the served directory
+# This file should only be accessible via internal paths
+echo -n "${FLAG:-FLAG{default_flag_placeholder}}" > /var/www/mockapi_server/.secret_token
 
 # Start Apache
 exec /usr/sbin/apache2ctl -D FOREGROUND

@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MockAPI Server - Dashboard</title>
+    <link href="{{ url_for('static_files', filename='css/bootstrap.min.css') }}" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static_files', filename='css/style.css') }}">
+    <style>
+        .sidebar { min-height: 100vh; background-color: #2c3e50; }
+        .sidebar a { color: #ecf0f1; }
+        .sidebar a:hover { color: #3498db; }
+        .endpoint-card { transition: transform 0.2s; }
+        .endpoint-card:hover { transform: translateY(-3px); box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
+        .method-badge { font-size: 0.75rem; padding: 0.25rem 0.5rem; }
+        .get-badge { background-color: #27ae60; }
+        .post-badge { background-color: #e67e22; }
+        .put-badge { background-color: #3498db; }
+        .delete-badge { background-color: #e74c3c; }
+    </style>
+</head>
+<body>
+    <div class="container-fluid">
+        <div class="row">
+            <!-- Sidebar -->
+            <nav class="col-md-2 d-none d-md-block sidebar py-4">
+                <div class="text-center mb-4">
+                    <h4 class="text-white">MockAPI Server</h4>
+                    <small class="text-muted">v1.2.0</small>
+                </div>
+                <ul class="nav flex-column">
+                    <li class="nav-item">
+                        <a class="nav-link active" href="{{ url_for('dashboard') }}">
+                            📊 Dashboard
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('list_endpoints') }}">
+                            🔗 Endpoints API
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('docs') }}">
+                            📚 Documentation
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('settings') }}">
+                            ⚙️ Settings
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+
+            <!-- Main content -->
+            <main class="col-md-10 ms-sm-auto px-4 py-4">
+                <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pb-2 mb-3 border-bottom">
+                    <h1 class="h2">Mock Endpoints</h1>
+                    <div class="btn-toolbar mb-2 mb-md-0">
+                        <div class="btn-group me-2">
+                            <button type="button" class="btn btn-sm btn-outline-secondary">Export</button>
+                            <button type="button" class="btn btn-sm btn-outline-secondary">Import</button>
+                        </div>
+                        <button type="button" class="btn btn-sm btn-primary">+ Add Endpoint</button>
+                    </div>
+                </div>
+
+                <!-- Server Status -->
+                <div class="row mb-4">
+                    <div class="col-md-4">
+                        <div class="card bg-success text-white">
+                            <div class="card-body">
+                                <h5 class="card-title">Server Status</h5>
+                                <p class="card-text mb-0">🟢 Running</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="card">
+                            <div class="card-body">
+                                <h5 class="card-title">Active Endpoints</h5>
+                                <p class="card-text mb-0">{{ endpoints|length }} configured</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="card">
+                            <div class="card-body">
+                                <h5 class="card-title">Total Requests</h5>
+                                <p class="card-text mb-0">1,247 today</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Endpoints List -->
+                <h4 class="mb-3">Configured Endpoints</h4>
+                <div class="row">
+                    {% for endpoint in endpoints %}
+                    <div class="col-md-6 col-lg-4 mb-3">
+                        <div class="card endpoint-card">
+                            <div class="card-body">
+                                <div class="d-flex justify-content-between align-items-start">
+                                    <span class="badge method-badge {{ endpoint.method|lower }}-badge">{{ endpoint.method }}</span>
+                                    <small class="text-muted">#{{ endpoint.id }}</small>
+                                </div>
+                                <h6 class="card-title mt-2">{{ endpoint.path }}</h6>
+                                <p class="card-text small text-muted">
+                                    Status: {{ endpoint.status }}
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+
+                <!-- Quick Tips -->
+                <div class="mt-4">
+                    <h5>Quick Start</h5>
+                    <div class="alert alert-info">
+                        <strong>Tip:</strong> Use the <code>/files</code> endpoint to serve file-based responses. 
+                        Configure your mock responses in the <code>responses/</code> directory.
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <script src="{{ url_for('static_files', filename='js/bootstrap.bundle.min.js') }}"></script>
+</body>
+</html>
