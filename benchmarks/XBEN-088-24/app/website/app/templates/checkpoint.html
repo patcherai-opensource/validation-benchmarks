@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WyvernPanel - 2FA Verification</title>
+    <link href="{{ url_for('static', filename='css/bootstrap.min.css') }}" rel="stylesheet">
+    <style>
+        body {
+            background-color: #0d1117;
+            color: #c9d1d9;
+        }
+        .container {
+            margin-top: 100px;
+        }
+        .form-group label {
+            color: #c9d1d9;
+        }
+        .btn-primary {
+            background-color: #238636;
+            border-color: #238636;
+        }
+        .btn-primary:hover {
+            background-color: #2ea043;
+            border-color: #2ea043;
+        }
+        .checkpoint-form {
+            max-width: 400px;
+            margin: auto;
+            text-align: center;
+            border: 1px solid #30363d;
+            border-radius: 10px;
+            padding: 30px;
+            background-color: #161b22;
+        }
+        .panel-title {
+            font-size: 24px;
+            margin-bottom: 10px;
+            color: #58a6ff;
+        }
+        .panel-subtitle {
+            font-size: 14px;
+            color: #8b949e;
+            margin-bottom: 20px;
+        }
+        .error-message {
+            color: #f85149;
+            margin-top: 10px;
+            margin-bottom: 10px;
+        }
+        .success-message {
+            color: #3fb950;
+            margin-top: 10px;
+            margin-bottom: 10px;
+        }
+        .form-control {
+            background-color: #0d1117;
+            border-color: #30363d;
+            color: #c9d1d9;
+        }
+        .form-control:focus {
+            background-color: #0d1117;
+            border-color: #58a6ff;
+            color: #c9d1d9;
+        }
+        .info-box {
+            background-color: #0d1117;
+            border: 1px solid #30363d;
+            border-radius: 5px;
+            padding: 10px;
+            margin-bottom: 20px;
+            font-size: 12px;
+            color: #8b949e;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="checkpoint-form">
+            <h2 class="panel-title">Two-Factor Authentication</h2>
+            <p class="panel-subtitle">Enter your authentication code to continue</p>
+            
+            <div class="info-box">
+                <strong>Security Notice:</strong> A time-based one-time password (TOTP) is required to complete authentication.
+            </div>
+            
+            <div id="error-container" class="error-message" style="display: none;"></div>
+            <div id="success-container" class="success-message" style="display: none;"></div>
+            
+            <form id="checkpointForm">
+                <div class="form-group mb-3">
+                    <label for="confirmation_token">Confirmation Token</label>
+                    <input type="text" class="form-control" id="confirmation_token" name="confirmation_token" required>
+                </div>
+                <div class="form-group mb-3">
+                    <label for="authentication_code">Authentication Code</label>
+                    <input type="text" class="form-control" id="authentication_code" name="authentication_code" 
+                           placeholder="6-digit code" maxlength="6" pattern="[0-9]{6}" required>
+                </div>
+                <button type="submit" class="btn btn-primary btn-block w-100">Verify</button>
+            </form>
+        </div>
+    </div>
+    <script>
+        // Auto-fill token from session storage if available
+        var storedToken = sessionStorage.getItem('confirmation_token');
+        if (storedToken) {
+            document.getElementById('confirmation_token').value = storedToken;
+        }
+        
+        document.getElementById('checkpointForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            var formData = {
+                confirmation_token: document.getElementById('confirmation_token').value,
+                authentication_code: document.getElementById('authentication_code').value
+            };
+            
+            fetch('/auth/checkpoint', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(formData)
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.complete) {
+                    document.getElementById('success-container').textContent = data.message;
+                    document.getElementById('success-container').style.display = 'block';
+                    document.getElementById('error-container').style.display = 'none';
+                    setTimeout(() => {
+                        window.location.href = data.redirect || '/dashboard';
+                    }, 1000);
+                } else if (data.error) {
+                    document.getElementById('error-container').textContent = data.error;
+                    document.getElementById('error-container').style.display = 'block';
+                    document.getElementById('success-container').style.display = 'none';
+                }
+            })
+            .catch(err => {
+                document.getElementById('error-container').textContent = 'Request failed';
+                document.getElementById('error-container').style.display = 'block';
+            });
+        });
+    </script>
+</body>
+</html>

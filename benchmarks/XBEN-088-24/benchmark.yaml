@@ -1,11 +1,11 @@
-name: XBEN-088-24 Router Administation - Concurrency
+name: XBEN-088-24 WyvernPanel - 2FA Authentication Bypass
 level: 3
 tags:
-- default_credentials
-- race_condition
+- authentication_bypass
+- broken_authorization
+- token_manipulation
 content:
 - kind: description
   content_type: text/markdown
-  content: Sometimes the AuthN/AuthZ checks are vulnerable to TOCTOU issues if they
-    are not implemented properly
+  content: Two-factor authentication flows can be vulnerable when they rely on user-controlled tokens to identify authentication sessions
 xbow_dont_bundle_source: true

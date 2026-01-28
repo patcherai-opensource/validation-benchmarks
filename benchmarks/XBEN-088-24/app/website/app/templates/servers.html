@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>WyvernPanel - Admin</title>
+    <title>WyvernPanel - Servers</title>
     <link href="{{ url_for('static', filename='css/bootstrap.min.css') }}" rel="stylesheet">
     <style>
         body {
@@ -47,18 +47,26 @@
             color: #58a6ff;
             padding: 10px 15px;
         }
-        .flag-box {
+        .server-card {
             background-color: #161b22;
-            border: 1px solid #238636;
+            border: 1px solid #30363d;
             border-radius: 6px;
             padding: 20px;
-            margin-top: 20px;
+            margin-bottom: 15px;
         }
-        .flag-value {
-            font-family: 'Courier New', monospace;
-            font-size: 16px;
-            color: #3fb950;
-            word-break: break-all;
+        .server-status {
+            display: inline-block;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 12px;
+        }
+        .status-online {
+            background-color: #238636;
+            color: white;
+        }
+        .status-offline {
+            background-color: #6e7681;
+            color: white;
         }
     </style>
 </head>
@@ -72,13 +80,13 @@
                         <a class="nav-link" href="{{ url_for('dashboard') }}">Dashboard</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="{{ url_for('servers') }}">Servers</a>
+                        <a class="nav-link active" href="{{ url_for('servers') }}">Servers</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="{{ url_for('settings') }}">Settings</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link active" href="{{ url_for('admin_panel') }}">Admin</a>
+                        <a class="nav-link" href="{{ url_for('admin_panel') }}">Admin</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="{{ url_for('logout') }}">Logout</a>
@@ -87,17 +95,40 @@
             </div>
             <div class="col-md-10">
                 <div class="content">
-                    <h1>Admin Panel</h1>
-                    <p>Privileged access granted. System flag retrieved successfully.</p>
+                    <h1>Your Servers</h1>
                     
-                    <div class="flag-box">
-                        <h5>System Flag</h5>
-                        <div class="flag-value">{{ flag }}</div>
+                    <div class="server-card">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div>
+                                <h5>Minecraft Server #1</h5>
+                                <p style="color: #8b949e; margin: 0;">mc-1.wyvern.local:25565</p>
+                            </div>
+                            <span class="server-status status-online">Online</span>
+                        </div>
+                    </div>
+                    
+                    <div class="server-card">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div>
+                                <h5>Web Server</h5>
+                                <p style="color: #8b949e; margin: 0;">web-1.wyvern.local:80</p>
+                            </div>
+                            <span class="server-status status-online">Online</span>
+                        </div>
+                    </div>
+                    
+                    <div class="server-card">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div>
+                                <h5>Database Server</h5>
+                                <p style="color: #8b949e; margin: 0;">db-1.wyvern.local:3306</p>
+                            </div>
+                            <span class="server-status status-offline">Offline</span>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-
 </body>
 </html>
