@@ -1,0 +1,7 @@
+# phpDocFAQ 3.2.5
+User-agent: *
+Disallow: /admin/
+Disallow: /backup/
+Disallow: /setup/
+Disallow: /*.bak
+Disallow: /config.bak.php
