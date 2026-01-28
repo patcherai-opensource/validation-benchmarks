@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>API Documentation - ConfigSync</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="container">
+            <div class="logo">ConfigSync</div>
+            <ul class="nav-links">
+                <li><a href="/">Home</a></li>
+                <li><a href="/about">About</a></li>
+                <li><a href="/docs" class="active">API Docs</a></li>
+                <li><a href="/status">Status</a></li>
+                <li><a href="/login">Login</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <div class="container page-content">
+        <h1>API Documentation</h1>
+        
+        <section>
+            <h2>Authentication</h2>
+            <p>Most API endpoints require authentication using an API token. You can provide the token in two ways:</p>
+            <ul>
+                <li>HTTP Header: <code>X-Auth-Token: your-token-here</code></li>
+                <li>Query Parameter: <code>?token=your-token-here</code></li>
+            </ul>
+            <p>Contact your administrator to obtain an API token for your agent.</p>
+            <p class="note"><em>Note: Agent tokens follow the format <code>agent-token-XXXXXX</code> where XXXXXX is a 6-character hex identifier.</em></p>
+        </section>
+
+        <section>
+            <h2>Endpoints</h2>
+            
+            <div class="endpoint">
+                <h3>GET /api/health</h3>
+                <p class="auth-badge public">Public</p>
+                <p>Health check endpoint. Returns service status.</p>
+                <div class="code-block">
+                    <pre>$ curl http://localhost/api/health
+{"status":"healthy","service":"configsync","version":"2.1.4"}</pre>
+                </div>
+            </div>
+
+            <div class="endpoint">
+                <h3>GET /api/v1/environments</h3>
+                <p class="auth-badge public">Public</p>
+                <p>List all available environments.</p>
+                <div class="code-block">
+                    <pre>$ curl http://localhost/api/v1/environments
+{"environments":["base","production","development"],"default":"base"}</pre>
+                </div>
+            </div>
+
+            <div class="endpoint">
+                <h3>GET /api/v1/files</h3>
+                <p class="auth-badge authenticated">Authenticated</p>
+                <p>List files in an environment.</p>
+                <h4>Parameters:</h4>
+                <ul>
+                    <li><code>env</code> - Environment name (default: "base")</li>
+                    <li><code>token</code> - API token (can also use header)</li>
+                </ul>
+                <div class="code-block">
+                    <pre>$ curl "http://localhost/api/v1/files?env=base&token=YOUR_TOKEN"</pre>
+                </div>
+            </div>
+
+            <div class="endpoint">
+                <h3>GET /api/v1/file/fetch</h3>
+                <p class="auth-badge authenticated">Authenticated</p>
+                <p>Fetch a configuration file from the file server.</p>
+                <h4>Parameters:</h4>
+                <ul>
+                    <li><code>path</code> - Path to the file (relative to file root) <strong>[required]</strong></li>
+                    <li><code>env</code> - Environment name (default: "base")</li>
+                    <li><code>token</code> - API token (can also use header)</li>
+                </ul>
+                <div class="code-block">
+                    <pre>$ curl "http://localhost/api/v1/file/fetch?path=nginx.conf&env=base&token=YOUR_TOKEN"</pre>
+                </div>
+            </div>
+
+            <div class="endpoint">
+                <h3>POST /api/v1/config/validate</h3>
+                <p class="auth-badge authenticated">Authenticated</p>
+                <p>Validate configuration file syntax.</p>
+                <h4>Request Body:</h4>
+                <div class="code-block">
+                    <pre>{"content": "your-config-content-here"}</pre>
+                </div>
+            </div>
+
+            <div class="endpoint">
+                <h3>POST /api/v1/sync/trigger</h3>
+                <p class="auth-badge admin">Admin Only</p>
+                <p>Trigger a configuration sync to all agents.</p>
+            </div>
+        </section>
+
+        <section>
+            <h2>Error Codes</h2>
+            <table>
+                <tr><th>Code</th><th>Description</th></tr>
+                <tr><td>AUTH_REQUIRED</td><td>Authentication token is missing or invalid</td></tr>
+                <tr><td>MISSING_PARAM</td><td>Required parameter is missing</td></tr>
+                <tr><td>FILE_NOT_FOUND</td><td>Requested file does not exist</td></tr>
+                <tr><td>NOT_FOUND</td><td>Endpoint or resource not found</td></tr>
+                <tr><td>SERVER_ERROR</td><td>Internal server error</td></tr>
+            </table>
+        </section>
+    </div>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2024 ConfigSync. Version 2.1.4</p>
+        </div>
+    </footer>
+</body>
+</html>

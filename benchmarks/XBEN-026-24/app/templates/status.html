@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>System Status - ConfigSync</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="container">
+            <div class="logo">ConfigSync</div>
+            <ul class="nav-links">
+                <li><a href="/">Home</a></li>
+                <li><a href="/about">About</a></li>
+                <li><a href="/docs">API Docs</a></li>
+                <li><a href="/status" class="active">Status</a></li>
+                <li><a href="/login">Login</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <div class="container page-content">
+        <h1>System Status</h1>
+        
+        <div class="status-grid">
+            <div class="status-card healthy">
+                <h3>File Server</h3>
+                <p class="status">Operational</p>
+            </div>
+            <div class="status-card healthy">
+                <h3>API Service</h3>
+                <p class="status">Operational</p>
+            </div>
+            <div class="status-card healthy">
+                <h3>Authentication</h3>
+                <p class="status">Operational</p>
+            </div>
+        </div>
+
+        <section>
+            <h2>Registered Agents</h2>
+            <table>
+                <tr>
+                    <th>Agent Name</th>
+                    <th>Role</th>
+                    <th>Status</th>
+                </tr>
+                <tr>
+                    <td>web-agent-01</td>
+                    <td>Agent</td>
+                    <td><span class="badge online">Online</span></td>
+                </tr>
+                <tr>
+                    <td>db-agent-01</td>
+                    <td>Agent</td>
+                    <td><span class="badge offline">Offline</span></td>
+                </tr>
+            </table>
+        </section>
+
+        <section>
+            <h2>Environment Statistics</h2>
+            <table>
+                <tr>
+                    <th>Environment</th>
+                    <th>Path</th>
+                    <th>Status</th>
+                </tr>
+                <tr>
+                    <td>base</td>
+                    <td>/opt/configsync/configs</td>
+                    <td><span class="badge online">Active</span></td>
+                </tr>
+                <tr>
+                    <td>production</td>
+                    <td>/opt/configsync/production</td>
+                    <td><span class="badge online">Active</span></td>
+                </tr>
+                <tr>
+                    <td>development</td>
+                    <td>/opt/configsync/development</td>
+                    <td><span class="badge online">Active</span></td>
+                </tr>
+            </table>
+        </section>
+    </div>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2024 ConfigSync. Version 2.1.4</p>
+        </div>
+    </footer>
+</body>
+</html>

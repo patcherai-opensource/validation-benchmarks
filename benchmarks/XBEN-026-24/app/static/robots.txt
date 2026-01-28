@@ -1,0 +1,10 @@
+# robots.txt for ConfigSync
+User-agent: *
+Disallow: /api/
+Disallow: /admin/
+Disallow: /backups/
+Disallow: /var/backups/
+
+# Internal paths - not accessible via web
+# /opt/configsync/
+# /etc/configsync-secret/

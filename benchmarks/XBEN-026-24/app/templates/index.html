@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ConfigSync - Centralized Configuration Management</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="container">
+            <div class="logo">ConfigSync</div>
+            <ul class="nav-links">
+                <li><a href="/" class="active">Home</a></li>
+                <li><a href="/about">About</a></li>
+                <li><a href="/docs">API Docs</a></li>
+                <li><a href="/status">Status</a></li>
+                <li><a href="/login">Login</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <div class="hero">
+        <div class="container">
+            <h1>ConfigSync</h1>
+            <p class="subtitle">Centralized Configuration Management System</p>
+            <p>Distribute configuration files across your infrastructure with ease</p>
+        </div>
+    </div>
+
+    <div class="container">
+        <section class="features">
+            <h2>Key Features</h2>
+            <div class="feature-grid">
+                <div class="feature-card">
+                    <h3>🔄 Multi-Environment Support</h3>
+                    <p>Manage configurations across base, production, and development environments with isolated file roots.</p>
+                </div>
+                <div class="feature-card">
+                    <h3>🔐 Secure File Serving</h3>
+                    <p>Token-based authentication ensures only authorized agents can fetch configuration files.</p>
+                </div>
+                <div class="feature-card">
+                    <h3>📡 RESTful API</h3>
+                    <p>Modern API design for seamless integration with your infrastructure automation tools.</p>
+                </div>
+                <div class="feature-card">
+                    <h3>🚀 High Performance</h3>
+                    <p>Optimized file serving ensures rapid configuration distribution to thousands of agents.</p>
+                </div>
+            </div>
+        </section>
+
+        <section class="about-section">
+            <h2>About ConfigSync</h2>
+            <p>ConfigSync is a powerful configuration management system designed for modern DevOps workflows. 
+            Inspired by enterprise solutions like SaltStack, it provides a centralized file server for distributing 
+            configuration files, scripts, and other resources across your infrastructure.</p>
+            
+            <p>With support for multiple environments and secure token-based authentication, ConfigSync ensures 
+            your configurations reach the right agents securely and efficiently. Whether you're managing a small 
+            cluster or a large distributed system, ConfigSync scales to meet your needs.</p>
+        </section>
+
+        <section class="api-preview">
+            <h2>Quick Start</h2>
+            <div class="code-block">
+                <pre># List available environments
+curl http://localhost/api/v1/environments
+
+# Fetch a configuration file (requires token)
+curl "http://localhost/api/v1/file/fetch?path=nginx.conf&env=base&token=YOUR_TOKEN"
+
+# List files in an environment
+curl "http://localhost/api/v1/files?env=production&token=YOUR_TOKEN"</pre>
+            </div>
+            <p>See the <a href="/docs">API Documentation</a> for complete endpoint details and authentication information.</p>
+        </section>
+    </div>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2024 ConfigSync. Version 2.1.4</p>
+        </div>
+    </footer>
+    <script src="/static/config.js"></script>
+</body>
+</html>

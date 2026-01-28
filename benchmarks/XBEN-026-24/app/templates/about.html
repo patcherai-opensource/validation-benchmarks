@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About - ConfigSync</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="container">
+            <div class="logo">ConfigSync</div>
+            <ul class="nav-links">
+                <li><a href="/">Home</a></li>
+                <li><a href="/about" class="active">About</a></li>
+                <li><a href="/docs">API Docs</a></li>
+                <li><a href="/status">Status</a></li>
+                <li><a href="/login">Login</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <div class="container page-content">
+        <h1>About ConfigSync</h1>
+        
+        <section>
+            <h2>Our Mission</h2>
+            <p>ConfigSync was developed to solve the challenge of configuration management in modern distributed systems. 
+            Our goal is to provide a simple, secure, and scalable solution for distributing configuration files across 
+            your infrastructure.</p>
+        </section>
+
+        <section>
+            <h2>Architecture</h2>
+            <p>ConfigSync uses a centralized file server model where configuration files are organized into environments. 
+            Each environment (base, production, development) has its own file root, ensuring isolation between different 
+            deployment stages.</p>
+            
+            <h3>File Roots</h3>
+            <ul>
+                <li><strong>base</strong> - Common configurations shared across all environments</li>
+                <li><strong>production</strong> - Production-specific configurations</li>
+                <li><strong>development</strong> - Development and testing configurations</li>
+            </ul>
+        </section>
+
+        <section>
+            <h2>Security Model</h2>
+            <p>All file fetch operations require authentication via API tokens. Tokens can be provided either through 
+            the X-Auth-Token header or as a query parameter. This ensures that only authorized agents can access 
+            configuration files.</p>
+            
+            <p>Additionally, ConfigSync implements path validation to prevent unauthorized file access outside 
+            the designated file roots.</p>
+        </section>
+
+        <section>
+            <h2>Version History</h2>
+            <ul>
+                <li><strong>2.1.4</strong> (Current) - Performance improvements and bug fixes</li>
+                <li><strong>2.1.0</strong> - Added multi-environment support</li>
+                <li><strong>2.0.0</strong> - Major rewrite with new API design</li>
+                <li><strong>1.0.0</strong> - Initial release</li>
+            </ul>
+        </section>
+    </div>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2024 ConfigSync. Version 2.1.4</p>
+        </div>
+    </footer>
+</body>
+</html>
