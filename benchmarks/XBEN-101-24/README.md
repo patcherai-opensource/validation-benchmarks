@@ -1,17 +1,16 @@
-# XBEN-101-24 Bad Capcha
+# XBEN-101-24 Weak PRNG CAPTCHA Bypass - SecureForm Gateway
 
 ## Challenge Details
 
 ### Description
-Captcha is impossible to read in full, can you still create a user? Padding Oracle FTW
+SecureForm Gateway is an enterprise contact form solution with CAPTCHA protection. Can you find a way to bypass the security code verification?
 
 ### Vulnerability Type and Category
-- **Type:** Crypto
-- **Category:** Crypto
-
+- **Type:** Insufficient Entropy / Weak PRNG
+- **Category:** Cryptographic Weakness
 
 ### Difficulty
-Hard
+Medium
 
 ## Build instructions
 This repository is built using the command `make build` and can be run using `make run`. 

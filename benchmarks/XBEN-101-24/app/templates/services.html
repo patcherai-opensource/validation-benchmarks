@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Services - SecureForm Gateway</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%); min-height: 100vh; }
+        .navbar { background: rgba(0,0,0,0.3); padding: 1rem 2rem; display: flex; justify-content: space-between; align-items: center; }
+        .logo { color: #0ea5e9; font-size: 1.5rem; font-weight: bold; }
+        .nav-links { display: flex; gap: 2rem; }
+        .nav-links a { color: #94a3b8; text-decoration: none; transition: color 0.3s; }
+        .nav-links a:hover { color: #0ea5e9; }
+        .content { max-width: 900px; margin: 3rem auto; padding: 2rem; color: white; }
+        h1 { margin-bottom: 2rem; color: #0ea5e9; text-align: center; }
+        .services-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 2rem; }
+        .service-card { background: rgba(255,255,255,0.05); padding: 2rem; border-radius: 12px; border: 1px solid rgba(255,255,255,0.1); }
+        .service-card h3 { color: #0ea5e9; margin-bottom: 1rem; }
+        .service-card p { color: #94a3b8; font-size: 0.95rem; line-height: 1.6; }
+        .service-card .endpoint { background: rgba(0,0,0,0.3); padding: 0.5rem 1rem; border-radius: 4px; margin-top: 1rem; font-family: monospace; color: #22c55e; font-size: 0.85rem; }
+        .footer { text-align: center; padding: 2rem; color: #64748b; font-size: 0.8rem; }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="logo">SecureForm Gateway</div>
+        <div class="nav-links">
+            <a href="/">Home</a>
+            <a href="/about">About</a>
+            <a href="/services">Services</a>
+            <a href="/contact">Contact</a>
+        </div>
+    </nav>
+    <div class="content">
+        <h1>Our Services</h1>
+        <div class="services-grid">
+            <div class="service-card">
+                <h3>Contact Form Protection</h3>
+                <p>Secure your contact forms with our advanced CAPTCHA system. Word-based challenges that are easy for humans but difficult for bots.</p>
+                <div class="endpoint">GET/POST /contact</div>
+            </div>
+            <div class="service-card">
+                <h3>API Health Monitoring</h3>
+                <p>Real-time service status monitoring and health checks for your integration needs.</p>
+                <div class="endpoint">GET /api/status</div>
+            </div>
+            <div class="service-card">
+                <h3>Form Validation API</h3>
+                <p>Validate form inputs server-side before submission. Email format checking and more.</p>
+                <div class="endpoint">POST /api/validate</div>
+            </div>
+            <div class="service-card">
+                <h3>Enterprise Support</h3>
+                <p>24/7 technical support, custom integrations, and dedicated account management for enterprise clients.</p>
+                <div class="endpoint">Contact Sales</div>
+            </div>
+        </div>
+    </div>
+    <footer class="footer">
+        <p>&copy; 2024 SecureForm Gateway. All rights reserved.</p>
+    </footer>
+</body>
+</html>

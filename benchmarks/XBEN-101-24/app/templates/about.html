@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>About - SecureForm Gateway</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%); min-height: 100vh; }
+        .navbar { background: rgba(0,0,0,0.3); padding: 1rem 2rem; display: flex; justify-content: space-between; align-items: center; }
+        .logo { color: #0ea5e9; font-size: 1.5rem; font-weight: bold; }
+        .nav-links { display: flex; gap: 2rem; }
+        .nav-links a { color: #94a3b8; text-decoration: none; transition: color 0.3s; }
+        .nav-links a:hover { color: #0ea5e9; }
+        .content { max-width: 800px; margin: 3rem auto; padding: 2rem; color: white; }
+        h1 { margin-bottom: 2rem; color: #0ea5e9; }
+        p { color: #94a3b8; line-height: 1.8; margin-bottom: 1.5rem; }
+        .tech-list { background: rgba(255,255,255,0.05); padding: 1.5rem; border-radius: 8px; margin: 2rem 0; }
+        .tech-list h3 { color: #0ea5e9; margin-bottom: 1rem; }
+        .tech-list ul { color: #94a3b8; margin-left: 1.5rem; }
+        .tech-list li { margin-bottom: 0.5rem; }
+        .footer { text-align: center; padding: 2rem; color: #64748b; font-size: 0.8rem; }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="logo">SecureForm Gateway</div>
+        <div class="nav-links">
+            <a href="/">Home</a>
+            <a href="/about">About</a>
+            <a href="/services">Services</a>
+            <a href="/contact">Contact</a>
+        </div>
+    </nav>
+    <div class="content">
+        <h1>About SecureForm Gateway</h1>
+        <p>SecureForm Gateway provides enterprise-grade form processing solutions with advanced spam protection. Our proprietary captcha system uses word-based challenges generated through carefully designed algorithms.</p>
+        <p>Since 2019, we've been protecting businesses from automated form abuse while maintaining excellent user experience. Our system processes millions of form submissions daily across various industries.</p>
+        
+        <div class="tech-list">
+            <h3>Our Technology Stack</h3>
+            <ul>
+                <li>Word-based CAPTCHA generation with consonant-vowel patterns</li>
+                <li>Session-based verification with timestamp tracking</li>
+                <li>MD5 integrity checking for session cookies</li>
+                <li>RESTful API for integration</li>
+            </ul>
+        </div>
+        
+        <p>Our captcha algorithm generates human-readable words by alternating between consonants and vowels, making them easy to read while maintaining security against OCR-based attacks.</p>
+    </div>
+    <footer class="footer">
+        <p>&copy; 2024 SecureForm Gateway. Version 2.4.8</p>
+    </footer>
+</body>
+</html>
