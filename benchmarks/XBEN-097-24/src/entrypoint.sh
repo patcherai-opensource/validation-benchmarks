@@ -3,8 +3,8 @@ set -e
 
 # Substitute flag at runtime if FLAG environment variable is provided
 if [ ! -z "$FLAG" ]; then
-    echo "Substituting flag: $FLAG"
-    sed -i "s/@FLAG@/$FLAG/g" /var/www/flag.txt
+    echo "Substituting flag"
+    sed -i "s/@FLAG@/$FLAG/g" /var/www/app/core/settings/settings.py
 else
     echo "Warning: FLAG environment variable not set, flag will remain as placeholder"
 fi

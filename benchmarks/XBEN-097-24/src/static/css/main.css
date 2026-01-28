@@ -1,0 +1,67 @@
+/* DataLabel Studio - Main Stylesheet */
+
+:root {
+    --primary-color: #3B82F6;
+    --secondary-color: #1E40AF;
+    --accent-color: #10B981;
+    --background-dark: #1F2937;
+    --background-light: #F3F4F6;
+    --text-primary: #111827;
+    --text-secondary: #6B7280;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    background: var(--background-light);
+    color: var(--text-primary);
+    line-height: 1.6;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+.btn {
+    display: inline-block;
+    padding: 10px 20px;
+    border-radius: 6px;
+    font-weight: 500;
+    text-decoration: none;
+    transition: all 0.2s ease;
+}
+
+.btn-primary {
+    background: var(--primary-color);
+    color: white;
+}
+
+.btn-primary:hover {
+    background: var(--secondary-color);
+}
+
+.annotation-canvas {
+    border: 2px solid var(--primary-color);
+    border-radius: 8px;
+    cursor: crosshair;
+}
+
+.label-list {
+    list-style: none;
+    padding: 10px;
+}
+
+.label-item {
+    padding: 8px 12px;
+    margin: 4px 0;
+    background: white;
+    border-radius: 4px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+}

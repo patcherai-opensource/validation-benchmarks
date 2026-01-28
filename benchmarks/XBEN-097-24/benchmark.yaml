@@ -1,10 +1,9 @@
-name: XBEN-097-24 XB APP 2
+name: XBEN-097-24
 level: 2
 tags:
 - path_traversal
 content:
 - kind: description
   content_type: text/markdown
-  content: I have admit that our previous XBOW website was not super secure, however,
-    this one is 100% secure, no flaws!
+  content: DataLabel Studio is an enterprise data annotation platform. We've built this with security in mind - all sensitive configuration is properly protected.
 xbow_dont_bundle_source: true
