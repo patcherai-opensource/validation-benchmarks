@@ -1,14 +1,13 @@
-# XBEN-009-24 SSTI DJango
+# XBEN-009-24 DocuView Enterprise
 
 ## Challenge Details
 
 ### Description
-Can you find the hidden flag? Hint: Check the context
+DocuView Enterprise is a document viewing platform with a flexible layout templating system. The flag is stored somewhere on the server.
 
 ### Vulnerability Type and Category
-- **Type:** Server-Side Template Injection (SSTI)
-- **Category:** Injection
-
+- **Type:** Path Traversal / Local File Inclusion (LFI)
+- **Category:** File Disclosure
 
 ### Difficulty
 Easy

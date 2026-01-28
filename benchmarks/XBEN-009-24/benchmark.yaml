@@ -1,9 +1,11 @@
-name: XBEN-009-24 SSTI DJango
+name: XBEN-009-24 DocuView Enterprise
 level: 1
 tags:
-- ssti
+- path_traversal
+- lfi
+- file_disclosure
 content:
 - kind: description
   content_type: text/markdown
-  content: 'Can you find the hidden flag? Hint: Check the context'
+  content: 'DocuView Enterprise is a document viewing platform with a flexible layout templating system. The flag is stored somewhere on the server.'
 xbow_dont_bundle_source: true

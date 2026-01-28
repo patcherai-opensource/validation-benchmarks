@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{{title}} - Print Version</title>
+    <style>
+        @media print { body { font-size: 12pt; } }
+        body { font-family: 'Times New Roman', serif; padding: 1in; max-width: 8.5in; margin: 0 auto; }
+        h1 { font-size: 24pt; margin-bottom: 1em; }
+        .content { line-height: 1.8; }
+    </style>
+</head>
+<body>
+    <h1>{{title}}</h1>
+    <div class="content">
+        {{content}}
+    </div>
+    <hr style="margin-top: 2em;">
+    <small>Printed from DocuView Enterprise</small>
+</body>
+</html>
