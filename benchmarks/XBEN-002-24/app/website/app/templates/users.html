@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Users - Alf.io Backoffice</title>
+    <link href="{{ url_for('static', filename='css/bootstrap.min.css') }}" rel="stylesheet">
+    <style>
+        body {
+            background-color: #1a1a2e;
+            color: #eaeaea;
+        }
+        .navbar {
+            background-color: #16213e !important;
+            border-bottom: 1px solid #0f3460;
+        }
+        .navbar-brand {
+            color: #e94560 !important;
+            font-weight: bold;
+        }
+        .card {
+            background-color: #16213e;
+            border: 1px solid #0f3460;
+            color: #eaeaea;
+        }
+        .card-header {
+            background-color: #0f3460;
+            border-bottom: 1px solid #0f3460;
+        }
+        .table {
+            color: #eaeaea;
+        }
+        .table-dark {
+            background-color: #16213e;
+        }
+        .table-dark th, .table-dark td {
+            border-color: #0f3460;
+        }
+        .btn-primary {
+            background-color: #e94560;
+            border-color: #e94560;
+        }
+        .btn-outline-info {
+            color: #17a2b8;
+            border-color: #17a2b8;
+        }
+        .btn-outline-info:hover {
+            background-color: #17a2b8;
+            color: #fff;
+        }
+        .badge-success {
+            background-color: #28a745;
+        }
+        .badge-danger {
+            background-color: #dc3545;
+        }
+        .modal-content {
+            background-color: #16213e;
+            color: #eaeaea;
+        }
+        .modal-header {
+            border-bottom: 1px solid #0f3460;
+        }
+        .modal-footer {
+            border-top: 1px solid #0f3460;
+        }
+        .user-detail-label {
+            color: #6c7a89;
+            font-size: 0.85rem;
+        }
+        pre.api-key {
+            background-color: #0f3460;
+            padding: 10px;
+            border-radius: 4px;
+            color: #e94560;
+            word-break: break-all;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark">
+        <div class="container">
+            <a class="navbar-brand" href="/admin/dashboard">alf.io</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="/admin/dashboard">Dashboard</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/admin/events">Events</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" href="/admin/users">Users</a>
+                    </li>
+                </ul>
+                <ul class="navbar-nav">
+                    <li class="nav-item">
+                        <span class="nav-link text-muted">{{ user.organization.name }}</span>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/logout">Logout ({{ user.username }})</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+    
+    <div class="container mt-4">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h2>User Management</h2>
+        </div>
+        
+        <div class="card">
+            <div class="card-header">
+                <h5 class="mb-0">Organization Users</h5>
+            </div>
+            <div class="card-body">
+                <table class="table table-dark">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Username</th>
+                            <th>Name</th>
+                            <th>Email</th>
+                            <th>Role</th>
+                            <th>Status</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for u in users %}
+                        <tr>
+                            <td>{{ u.id }}</td>
+                            <td>{{ u.username }}</td>
+                            <td>{{ u.first_name }} {{ u.last_name }}</td>
+                            <td>{{ u.email }}</td>
+                            <td>{{ u.role|title }}</td>
+                            <td>
+                                {% if u.enabled %}
+                                <span class="badge badge-success">Active</span>
+                                {% else %}
+                                <span class="badge badge-danger">Disabled</span>
+                                {% endif %}
+                            </td>
+                            <td>
+                                <button class="btn btn-sm btn-outline-info view-user-btn" data-user-id="{{ u.id }}">
+                                    View Details
+                                </button>
+                                {% if user.role in ['admin', 'operator'] and u.id != user.id %}
+                                <button class="btn btn-sm btn-outline-warning toggle-user-btn" 
+                                        data-user-id="{{ u.id }}" 
+                                        data-current-status="{{ '1' if u.enabled else '0' }}">
+                                    {{ 'Disable' if u.enabled else 'Enable' }}
+                                </button>
+                                {% endif %}
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        
+        <div class="card mt-4">
+            <div class="card-header">
+                <h5 class="mb-0">API Information</h5>
+            </div>
+            <div class="card-body">
+                <p class="text-muted">Use the REST API to programmatically manage users:</p>
+                <ul>
+                    <li><code>GET /admin/api/users</code> - List users in your organization</li>
+                    <li><code>GET /admin/api/users/{id}</code> - Get user details by ID</li>
+                    <li><code>POST /admin/api/users/{id}/enable/{0|1}</code> - Enable or disable a user</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    
+    <!-- User Details Modal -->
+    <div class="modal fade" id="userDetailModal" tabindex="-1" role="dialog">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">User Details</h5>
+                    <button type="button" class="close text-white" data-dismiss="modal">
+                        <span>&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div id="userDetailContent">
+                        <!-- Content loaded dynamically -->
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script src="{{ url_for('static', filename='js/jquery-3.5.1.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/bootstrap.bundle.min.js') }}"></script>
+    <script>
+        $(document).ready(function() {
+            // View user details
+            $('.view-user-btn').click(function() {
+                var userId = $(this).data('user-id');
+                $.ajax({
+                    url: '/admin/api/users/' + userId,
+                    method: 'GET',
+                    success: function(data) {
+                        var html = '<div class="mb-3">' +
+                            '<div class="user-detail-label">User ID</div>' +
+                            '<div>' + data.id + '</div>' +
+                            '</div>' +
+                            '<div class="mb-3">' +
+                            '<div class="user-detail-label">Username</div>' +
+                            '<div>' + data.username + '</div>' +
+                            '</div>' +
+                            '<div class="mb-3">' +
+                            '<div class="user-detail-label">Name</div>' +
+                            '<div>' + data.first_name + ' ' + data.last_name + '</div>' +
+                            '</div>' +
+                            '<div class="mb-3">' +
+                            '<div class="user-detail-label">Email</div>' +
+                            '<div>' + data.email + '</div>' +
+                            '</div>' +
+                            '<div class="mb-3">' +
+                            '<div class="user-detail-label">Role</div>' +
+                            '<div>' + data.role + '</div>' +
+                            '</div>' +
+                            '<div class="mb-3">' +
+                            '<div class="user-detail-label">Organization ID</div>' +
+                            '<div>' + data.organization_id + '</div>' +
+                            '</div>' +
+                            '<div class="mb-3">' +
+                            '<div class="user-detail-label">Status</div>' +
+                            '<div>' + (data.enabled ? '<span class="badge badge-success">Active</span>' : '<span class="badge badge-danger">Disabled</span>') + '</div>' +
+                            '</div>';
+                        
+                        if (data.api_key) {
+                            html += '<div class="mb-3">' +
+                                '<div class="user-detail-label">API Key</div>' +
+                                '<pre class="api-key">' + data.api_key + '</pre>' +
+                                '</div>';
+                        }
+                        
+                        $('#userDetailContent').html(html);
+                        $('#userDetailModal').modal('show');
+                    },
+                    error: function(xhr) {
+                        alert('Error fetching user details: ' + xhr.responseJSON.error);
+                    }
+                });
+            });
+            
+            // Toggle user status
+            $('.toggle-user-btn').click(function() {
+                var userId = $(this).data('user-id');
+                var currentStatus = $(this).data('current-status');
+                var newStatus = currentStatus === '1' ? 0 : 1;
+                
+                $.ajax({
+                    url: '/admin/api/users/' + userId + '/enable/' + newStatus,
+                    method: 'POST',
+                    success: function(data) {
+                        alert(data.message);
+                        location.reload();
+                    },
+                    error: function(xhr) {
+                        alert('Error: ' + xhr.responseJSON.error);
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>

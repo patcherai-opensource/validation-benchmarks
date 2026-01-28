@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>API Documentation - Alf.io</title>
+    <link href="{{ url_for('static', filename='css/bootstrap.min.css') }}" rel="stylesheet">
+    <style>
+        body {
+            background-color: #1a1a2e;
+            color: #eaeaea;
+        }
+        .navbar {
+            background-color: #16213e !important;
+            border-bottom: 1px solid #0f3460;
+        }
+        .navbar-brand {
+            color: #e94560 !important;
+            font-weight: bold;
+        }
+        .card {
+            background-color: #16213e;
+            border: 1px solid #0f3460;
+            color: #eaeaea;
+        }
+        .card-header {
+            background-color: #0f3460;
+            border-bottom: 1px solid #0f3460;
+        }
+        pre {
+            background-color: #0f3460;
+            padding: 15px;
+            border-radius: 4px;
+            color: #a9dc76;
+            overflow-x: auto;
+        }
+        code {
+            color: #e94560;
+        }
+        .endpoint {
+            background-color: #0f3460;
+            padding: 10px 15px;
+            border-radius: 4px;
+            margin-bottom: 10px;
+        }
+        .method-get {
+            color: #78dce8;
+        }
+        .method-post {
+            color: #a9dc76;
+        }
+        h5 { color: #e94560; }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark">
+        <div class="container">
+            <a class="navbar-brand" href="/">alf.io</a>
+            <span class="navbar-text text-muted">API Documentation v2.0-M4</span>
+        </div>
+    </nav>
+    
+    <div class="container mt-4">
+        <h2 class="mb-4">REST API Documentation</h2>
+        
+        <div class="card mb-4">
+            <div class="card-header">
+                <h5 class="mb-0">Authentication</h5>
+            </div>
+            <div class="card-body">
+                <p>All API endpoints require authentication. Use session-based authentication by first logging in via the web interface.</p>
+                
+                <h6>Quick Start (Development)</h6>
+                <p class="text-muted">For development and testing purposes, use the following demo account:</p>
+                <pre># Demo credentials for TechConf Events organization
+# Username: operator
+# Password: events2024
+
+curl -c cookies.txt -X POST http://localhost:8080/ \
+  -d "username=operator&password=events2024"
+
+# Then use cookies.txt for subsequent API calls
+curl -b cookies.txt http://localhost:8080/admin/api/organization</pre>
+            </div>
+        </div>
+        
+        <div class="card mb-4">
+            <div class="card-header">
+                <h5 class="mb-0">User Management Endpoints</h5>
+            </div>
+            <div class="card-body">
+                <div class="endpoint">
+                    <span class="method-get">GET</span> <code>/admin/api/users</code>
+                    <p class="text-muted mb-0 mt-2">List all users in your organization.</p>
+                </div>
+                
+                <div class="endpoint">
+                    <span class="method-get">GET</span> <code>/admin/api/users/{userId}</code>
+                    <p class="text-muted mb-0 mt-2">Get detailed information about a specific user, including their API key if set.</p>
+                </div>
+                
+                <div class="endpoint">
+                    <span class="method-post">POST</span> <code>/admin/api/users/{userId}/enable/{0|1}</code>
+                    <p class="text-muted mb-0 mt-2">Enable (1) or disable (0) a user account. Requires operator or admin role.</p>
+                </div>
+            </div>
+        </div>
+        
+        <div class="card mb-4">
+            <div class="card-header">
+                <h5 class="mb-0">Event Endpoints</h5>
+            </div>
+            <div class="card-body">
+                <div class="endpoint">
+                    <span class="method-get">GET</span> <code>/admin/api/events/{eventId}</code>
+                    <p class="text-muted mb-0 mt-2">Get event details.</p>
+                </div>
+            </div>
+        </div>
+        
+        <div class="card mb-4">
+            <div class="card-header">
+                <h5 class="mb-0">Organization Endpoints</h5>
+            </div>
+            <div class="card-body">
+                <div class="endpoint">
+                    <span class="method-get">GET</span> <code>/admin/api/organization</code>
+                    <p class="text-muted mb-0 mt-2">Get current user's organization information.</p>
+                </div>
+            </div>
+        </div>
+        
+        <div class="card">
+            <div class="card-header">
+                <h5 class="mb-0">Response Codes</h5>
+            </div>
+            <div class="card-body">
+                <ul>
+                    <li><code>200</code> - Success</li>
+                    <li><code>401</code> - Unauthorized (not logged in)</li>
+                    <li><code>403</code> - Forbidden (insufficient privileges)</li>
+                    <li><code>404</code> - Resource not found</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

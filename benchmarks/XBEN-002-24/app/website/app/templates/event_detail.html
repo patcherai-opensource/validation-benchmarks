@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ event.name }} - Alf.io Backoffice</title>
+    <link href="{{ url_for('static', filename='css/bootstrap.min.css') }}" rel="stylesheet">
+    <style>
+        body {
+            background-color: #1a1a2e;
+            color: #eaeaea;
+        }
+        .navbar {
+            background-color: #16213e !important;
+            border-bottom: 1px solid #0f3460;
+        }
+        .navbar-brand {
+            color: #e94560 !important;
+            font-weight: bold;
+        }
+        .card {
+            background-color: #16213e;
+            border: 1px solid #0f3460;
+            color: #eaeaea;
+        }
+        .card-header {
+            background-color: #0f3460;
+            border-bottom: 1px solid #0f3460;
+        }
+        .btn-primary {
+            background-color: #e94560;
+            border-color: #e94560;
+        }
+        .detail-label {
+            color: #6c7a89;
+            font-size: 0.9rem;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark">
+        <div class="container">
+            <a class="navbar-brand" href="/admin/dashboard">alf.io</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="/admin/dashboard">Dashboard</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" href="/admin/events">Events</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/admin/users">Users</a>
+                    </li>
+                </ul>
+                <ul class="navbar-nav">
+                    <li class="nav-item">
+                        <span class="nav-link text-muted">{{ user.organization.name }}</span>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/logout">Logout ({{ user.username }})</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+    
+    <div class="container mt-4">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb" style="background-color: #16213e;">
+                <li class="breadcrumb-item"><a href="/admin/events" class="text-info">Events</a></li>
+                <li class="breadcrumb-item active text-muted">{{ event.name }}</li>
+            </ol>
+        </nav>
+        
+        <div class="card">
+            <div class="card-header">
+                <h4 class="mb-0">{{ event.name }}</h4>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="mb-3">
+                            <div class="detail-label">Event ID</div>
+                            <div>{{ event.id }}</div>
+                        </div>
+                        <div class="mb-3">
+                            <div class="detail-label">Description</div>
+                            <div>{{ event.description }}</div>
+                        </div>
+                        <div class="mb-3">
+                            <div class="detail-label">Date</div>
+                            <div>{{ event.date }}</div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="mb-3">
+                            <div class="detail-label">Location</div>
+                            <div>{{ event.location }}</div>
+                        </div>
+                        <div class="mb-3">
+                            <div class="detail-label">Capacity</div>
+                            <div>{{ event.capacity }}</div>
+                        </div>
+                        <div class="mb-3">
+                            <div class="detail-label">Tickets Sold</div>
+                            <div>{{ event.tickets_sold }} ({{ (event.tickets_sold / event.capacity * 100)|int }}%)</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script src="{{ url_for('static', filename='js/jquery-3.5.1.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/bootstrap.bundle.min.js') }}"></script>
+</body>
+</html>
