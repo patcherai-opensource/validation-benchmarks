@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>API Documentation - CloudSync</title>
+    <link href="{{ url_for('static', filename='css/bootstrap.min.css') }}" rel="stylesheet">
+    <style>
+        body {
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+            min-height: 100vh;
+            color: #e8e8e8;
+        }
+        .navbar {
+            background: rgba(0,0,0,0.3) !important;
+        }
+        .doc-section {
+            background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 12px;
+            padding: 25px;
+            margin-bottom: 20px;
+        }
+        code {
+            background: rgba(0,0,0,0.4);
+            padding: 2px 8px;
+            border-radius: 4px;
+            color: #4ecca3;
+        }
+        pre {
+            background: rgba(0,0,0,0.4);
+            padding: 15px;
+            border-radius: 8px;
+            color: #4ecca3;
+            overflow-x: auto;
+        }
+        .method-get { color: #61affe; }
+        .method-post { color: #49cc90; }
+        h4 { color: #e94560; }
+        .admin-badge {
+            background: #e94560;
+            color: white;
+            font-size: 0.7em;
+            padding: 2px 8px;
+            border-radius: 4px;
+            margin-left: 8px;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark">
+        <div class="container">
+            <a class="navbar-brand" href="/">CloudSync</a>
+            <div class="navbar-nav ms-auto">
+                <a class="nav-link" href="/login">Login</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container mt-4">
+        <h2 class="mb-4">API Documentation</h2>
+        <p class="lead mb-4">CloudSync Configuration Manager API v1</p>
+
+        <div class="doc-section">
+            <h4>Authentication</h4>
+            <p>All API endpoints require session-based authentication. Log in via <code>/login</code> to establish a session.</p>
+        </div>
+
+        <div class="doc-section">
+            <h4><span class="method-get">GET</span> /api/schemas</h4>
+            <p>List available configuration schemas.</p>
+            <p><strong>Response:</strong></p>
+            <pre>{
+    "schemas": [
+        {"name": "app_settings", "description": "..."},
+        ...
+    ]
+}</pre>
+        </div>
+
+        <div class="doc-section">
+            <h4><span class="method-get">GET</span> /api/config/{config_name}</h4>
+            <p>Retrieve a configuration by name.</p>
+            <p><strong>Parameters:</strong></p>
+            <ul>
+                <li><code>config_name</code> - Name of the configuration to retrieve</li>
+            </ul>
+            <p><strong>Response:</strong></p>
+            <pre>{
+    "config_name": "app_settings",
+    "data": { ... }
+}</pre>
+        </div>
+
+        <div class="doc-section">
+            <h4><span class="method-post">POST</span> /api/config/{config_name}/merge</h4>
+            <p>Merge JSON data into an existing configuration. Uses deep merge to update nested properties without overwriting the entire object.</p>
+            <p><strong>Security Note:</strong> Certain keywords are restricted and cannot be used in configuration updates. The system validates input against a keyword denylist to prevent unauthorized access control modifications.</p>
+            <p><strong>Request Body:</strong></p>
+            <pre>{
+    "settings": {
+        "new_property": "value"
+    }
+}</pre>
+            <p><strong>Response:</strong></p>
+            <pre>{
+    "status": "success",
+    "config_name": "app_settings",
+    "data": { ... merged result ... }
+}</pre>
+        </div>
+
+        <div class="doc-section">
+            <h4><span class="method-post">POST</span> /api/config</h4>
+            <p>Create a new configuration.</p>
+            <p><strong>Request Body:</strong></p>
+            <pre>{
+    "config_name": "my_config",
+    "data": { ... }
+}</pre>
+        </div>
+
+        <div class="doc-section">
+            <h4><span class="method-get">GET</span> /api/admin/secrets <span class="admin-badge">ADMIN</span></h4>
+            <p>Retrieve system secrets. Requires admin privileges.</p>
+            <p><strong>Access Control:</strong> Checks for <code>is_admin</code> flag in the user's <code>app_settings</code> configuration.</p>
+        </div>
+
+        <div class="doc-section">
+            <h4><span class="method-get">GET</span> /api/admin/configs <span class="admin-badge">ADMIN</span></h4>
+            <p>List all configurations in the system. Requires admin privileges.</p>
+        </div>
+
+        <div class="doc-section">
+            <h4><span class="method-get">GET</span> /api/system/info</h4>
+            <p>Get system information and version details.</p>
+        </div>
+
+        <div class="doc-section">
+            <h4><span class="method-get">GET</span> /api/health</h4>
+            <p>Health check endpoint.</p>
+        </div>
+
+        <div class="doc-section">
+            <h4>Error Responses</h4>
+            <p><strong>401 Unauthorized:</strong> Authentication required</p>
+            <p><strong>403 Forbidden:</strong> Denied keyword detected or admin privileges required</p>
+            <p><strong>404 Not Found:</strong> Configuration does not exist</p>
+        </div>
+    </div>
+
+    <footer class="text-center py-4 mt-4" style="color: #666;">
+        <p>CloudSync Config Manager v2.4.1</p>
+    </footer>
+</body>
+</html>

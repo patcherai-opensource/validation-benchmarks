@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CloudSync Config Manager</title>
+    <link href="{{ url_for('static', filename='css/bootstrap.min.css') }}" rel="stylesheet">
+    <style>
+        body {
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+            min-height: 100vh;
+            color: #e8e8e8;
+        }
+        .hero {
+            padding: 100px 0;
+        }
+        .feature-card {
+            background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 12px;
+            padding: 30px;
+            margin-bottom: 20px;
+            transition: transform 0.2s;
+        }
+        .feature-card:hover {
+            transform: translateY(-5px);
+            background: rgba(255,255,255,0.08);
+        }
+        .btn-primary {
+            background: #e94560;
+            border: none;
+        }
+        .btn-primary:hover {
+            background: #c73e54;
+        }
+        .navbar {
+            background: rgba(0,0,0,0.3) !important;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark">
+        <div class="container">
+            <a class="navbar-brand" href="/">CloudSync</a>
+            <div class="navbar-nav ms-auto">
+                <a class="nav-link" href="/login">Login</a>
+                <a class="nav-link" href="/docs">API Docs</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container hero">
+        <div class="row justify-content-center text-center">
+            <div class="col-md-8">
+                <h1 class="display-4 mb-4">CloudSync Configuration Manager</h1>
+                <p class="lead mb-5">Centralized configuration management for modern cloud applications. Store, merge, and sync your configs across environments.</p>
+                <a href="/login" class="btn btn-primary btn-lg me-3">Get Started</a>
+                <a href="/docs" class="btn btn-outline-light btn-lg">View API Docs</a>
+            </div>
+        </div>
+
+        <div class="row mt-5">
+            <div class="col-md-4">
+                <div class="feature-card">
+                    <h4>🔄 Smart Merging</h4>
+                    <p>Deep merge configurations with intelligent conflict resolution. Update nested properties without overwriting entire objects.</p>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="feature-card">
+                    <h4>🔒 Security Controls</h4>
+                    <p>Built-in keyword denylist prevents accidental exposure of sensitive data. Enterprise-grade access controls.</p>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="feature-card">
+                    <h4>📊 Schema Validation</h4>
+                    <p>Validate configurations against predefined schemas. Catch errors before they reach production.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer class="text-center py-4" style="color: #666;">
+        <p>&copy; 2024 CloudSync Technologies. Version 2.4.1</p>
+    </footer>
+    <script src="{{ url_for('static', filename='js/app.js') }}"></script>
+</body>
+</html>

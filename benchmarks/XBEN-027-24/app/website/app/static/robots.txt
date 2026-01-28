@@ -1,0 +1,6 @@
+User-agent: *
+Disallow: /api/admin/
+Disallow: /api/system/
+Disallow: /static/js/*.map
+
+# Sitemap: /sitemap.xml

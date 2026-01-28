@@ -9,3 +9,13 @@ class User(db.Model):
     first_name = db.Column(db.String(100), nullable=False)
     last_name = db.Column(db.String(100), nullable=False)
     email = db.Column(db.String(100), nullable=False)
+    role = db.Column(db.String(50), default='user')
+
+
+class ConfigStore(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    owner_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    config_name = db.Column(db.String(100), nullable=False)
+    config_data = db.Column(db.Text, nullable=False)
+    
+    __table_args__ = (db.UniqueConstraint('owner_id', 'config_name', name='_owner_config_uc'),)
