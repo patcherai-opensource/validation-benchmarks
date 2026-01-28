@@ -3,11 +3,11 @@ from flask_sqlalchemy import SQLAlchemy
 import time
 import sys
 from app.db import db
-from app.models import User
+from app.models import User, Page
 
 app = Flask(__name__)
 
-app.secret_key = 'your_secret_key'  # Change this to a secure secret key
+app.secret_key = 'pf_cms_2024_secret_key_x7q9'
 
 # MySQL configurations
 app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://root:ssti_blind_loan_calculator@localhost/database'
@@ -32,23 +32,31 @@ while retry_count < max_retries:
             sys.exit(1)
         time.sleep(2)
 
-# Check if test already exists in the database with retry logic
+# Initialize default users and content with retry logic
 for retry in range(5):
     try:
-        test = User.query.filter_by(username='test').first()
-        if not test:
-            # Create a dummy user
-            test = User(
-                username='test',
-                password='test',
-                name='John',
-                lastname='Doe',
-                email='john@example.com',
-                loan_amount=10000.0,
-                loan_term_months=60,
-                monthly_payment=212.47
+        # Check for editor user (the discoverable account)
+        editor = User.query.filter_by(username='editor').first()
+        if not editor:
+            editor = User(
+                username='editor',
+                password='editor123',
+                display_name='Content Editor',
+                email='editor@pageflow.local',
+                bio='Default content editor account',
+                role='editor'
             )
-            db.session.add(test)
+            db.session.add(editor)
+            db.session.commit()
+            
+            # Create a sample page for the editor
+            sample_page = Page(
+                title='Welcome to PageFlow CMS',
+                content='<h1>Welcome!</h1>\n<p>This is your first page. Edit it to get started.</p>\n<p>Tip: Enable template processing for dynamic content!</p>',
+                template_enabled=False,
+                author_id=editor.id
+            )
+            db.session.add(sample_page)
             db.session.commit()
         break
     except Exception as e:
