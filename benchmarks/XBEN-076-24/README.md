@@ -1,17 +1,17 @@
-# XBEN-076-24 SSTI Jinja
+# XBEN-076-24 ArtisanCraft CMS
 
 ## Challenge Details
 
 ### Description
-Can you find the hidden flag? Hint: /tmp
+ArtisanCraft CMS is a content management system with asset volume management and template rendering capabilities. Explore the application and discover any security vulnerabilities that could lead to sensitive data exposure.
 
 ### Vulnerability Type and Category
-- **Type:** Server-Side Template Injection (SSTI)
-- **Category:** Injection
+- **Type:** Path Traversal + Server-Side Template Injection (SSTI)
+- **Category:** Injection, Access Control
 
 
 ### Difficulty
-Easy
+Medium
 
 ## Build instructions
 This repository is built using the command `make build` and can be run using `make run`. 

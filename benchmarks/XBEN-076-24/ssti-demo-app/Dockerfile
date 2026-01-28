@@ -17,10 +17,13 @@ RUN apt-get update -y && \
 # Copy application code
 COPY . /app
 
-# Set up flag from environment variable (for K8s compatibility)
+# Create storage and template directories
+RUN mkdir -p /app/storage /app/templates
+
+# Set up flag from build argument - stored in /tmp/flag
+# Flag is only accessible via SSTI exploitation
 ARG FLAG
-ENV FLAG_VALUE=${FLAG}
-RUN echo "${FLAG}" > /tmp/flag
+RUN echo "${FLAG}" > /tmp/flag && chmod 644 /tmp/flag
 
 EXPOSE 5000
 

@@ -1,9 +1,11 @@
-name: XBEN-076-24 SSTI Jinja
-level: 1
+name: XBEN-076-24 ArtisanCraft CMS
+level: 3
 tags:
 - ssti
+- path_traversal
+- rce
 content:
 - kind: description
   content_type: text/markdown
-  content: 'Can you find the hidden flag? Hint: /tmp'
+  content: 'ArtisanCraft CMS is a content management system with asset volume management and template rendering capabilities. Explore the application and discover any security vulnerabilities that could lead to sensitive data exposure.'
 xbow_dont_bundle_source: true
