@@ -1,0 +1,77 @@
+{% extends "base.html" %}
+
+{% block title %}API Documentation - GeoMetadata Service{% endblock %}
+
+{% block content %}
+<div style="max-width: 900px; margin: 0 auto;">
+    <h1>GeoMetadata Service API Documentation</h1>
+    <p>Version 2.3.1 | REST API Reference</p>
+    
+    <hr style="margin: 20px 0;">
+    
+    <h2>Authentication</h2>
+    <p>Most read endpoints are publicly accessible. Write operations require authentication via the <code>/login</code> endpoint.</p>
+    
+    <h2>Endpoints</h2>
+    
+    <div style="background: #f7fafc; padding: 15px; margin: 15px 0; border-radius: 4px; border-left: 4px solid #48bb78;">
+        <h3><code>GET /api/health</code></h3>
+        <p>Returns system health status and version information.</p>
+        <pre style="background: #2d3748; color: #e2e8f0; padding: 10px; border-radius: 4px;">{"status": "healthy", "version": "2.3.1"}</pre>
+    </div>
+    
+    <div style="background: #f7fafc; padding: 15px; margin: 15px 0; border-radius: 4px; border-left: 4px solid #48bb78;">
+        <h3><code>GET /api/layers</code></h3>
+        <p>Returns a list of all available geospatial layers.</p>
+    </div>
+    
+    <div style="background: #f7fafc; padding: 15px; margin: 15px 0; border-radius: 4px; border-left: 4px solid #48bb78;">
+        <h3><code>GET /api/layers/{layer_id}</code></h3>
+        <p>Returns details for a specific layer.</p>
+    </div>
+    
+    <div style="background: #f7fafc; padding: 15px; margin: 15px 0; border-radius: 4px; border-left: 4px solid #4299e1;">
+        <h3><code>POST /metadata/validate</code></h3>
+        <p>Validates an ISO 19139 metadata XML document.</p>
+        <h4>Parameters:</h4>
+        <ul>
+            <li><code>metadata</code> (form data) - The XML document content to validate</li>
+        </ul>
+        <h4>Example:</h4>
+        <pre style="background: #2d3748; color: #e2e8f0; padding: 10px; border-radius: 4px;">curl -X POST http://localhost:8080/metadata/validate \
+  -d "metadata=&lt;xml&gt;...&lt;/xml&gt;"</pre>
+    </div>
+    
+    <div style="background: #f7fafc; padding: 15px; margin: 15px 0; border-radius: 4px; border-left: 4px solid #4299e1;">
+        <h3><code>POST /metadata/import</code></h3>
+        <p>Queue an import job from an external catalog. (Requires authentication)</p>
+        <h4>Parameters:</h4>
+        <ul>
+            <li><code>catalog_url</code> (form data) - URL of the external CSW catalog</li>
+        </ul>
+    </div>
+    
+    <div style="background: #f7fafc; padding: 15px; margin: 15px 0; border-radius: 4px; border-left: 4px solid #48bb78;">
+        <h3><code>GET /metadata/search</code></h3>
+        <p>Search metadata records in the catalog.</p>
+        <h4>Parameters:</h4>
+        <ul>
+            <li><code>q</code> (query string) - Search query</li>
+        </ul>
+    </div>
+    
+    <div style="background: #f7fafc; padding: 15px; margin: 15px 0; border-radius: 4px; border-left: 4px solid #48bb78;">
+        <h3><code>GET /capabilities</code></h3>
+        <p>Returns WMS GetCapabilities XML document (OGC compliant).</p>
+    </div>
+    
+    <h2>Supported Formats</h2>
+    <ul>
+        <li>ISO 19139 Geographic Metadata XML</li>
+        <li>OGC WMS Capabilities</li>
+        <li>GML (Geography Markup Language)</li>
+    </ul>
+    
+    <p style="margin-top: 30px;"><a href="/">← Back to Home</a></p>
+</div>
+{% endblock %}

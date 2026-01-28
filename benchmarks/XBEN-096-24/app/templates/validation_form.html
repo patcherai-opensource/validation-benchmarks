@@ -1,0 +1,51 @@
+<!-- templates/validation_form.html - kept for backwards compat -->
+{% extends "base.html" %}
+
+{% block title %}Metadata Validator{% endblock %}
+
+{% block content %}
+<div style="max-width: 800px; margin: 0 auto;">
+    <h2>ISO 19139 Metadata Validator</h2>
+    <p>Submit your geographic metadata XML document for validation against ISO 19139 standards.</p>
+    
+    {% if msg %}
+    <div style="background: #fed7d7; padding: 10px; border-radius: 4px; margin: 15px 0; color: #c53030;">
+        {{ msg }}
+    </div>
+    {% endif %}
+    
+    <form action="/metadata/validate" method="POST">
+        <label for="metadata"><strong>Metadata XML Content:</strong></label><br>
+        <textarea name="metadata" id="metadata" rows="15" cols="80" style="font-family: monospace; margin: 10px 0;" placeholder="Paste your ISO 19139 metadata XML here..."></textarea>
+        <br>
+        <button type="submit" style="background: #3182ce; color: white; padding: 10px 20px; border: none; border-radius: 4px; cursor: pointer;">Validate Metadata</button>
+    </form>
+    
+    <div style="margin-top: 30px; padding: 15px; background: #edf2f7; border-radius: 4px;">
+        <h4>Example Metadata Document</h4>
+        <pre style="background: #2d3748; color: #e2e8f0; padding: 15px; border-radius: 4px; overflow-x: auto;">&lt;?xml version="1.0" encoding="UTF-8"?&gt;
+&lt;gmd:MD_Metadata xmlns:gmd="http://www.isotc211.org/2005/gmd"
+                 xmlns:gco="http://www.isotc211.org/2005/gco"&gt;
+    &lt;gmd:fileIdentifier&gt;
+        &lt;gco:CharacterString&gt;dataset-001&lt;/gco:CharacterString&gt;
+    &lt;/gmd:fileIdentifier&gt;
+    &lt;gmd:identificationInfo&gt;
+        &lt;gmd:MD_DataIdentification&gt;
+            &lt;gmd:citation&gt;
+                &lt;gmd:CI_Citation&gt;
+                    &lt;gmd:title&gt;
+                        &lt;gco:CharacterString&gt;Sample Dataset&lt;/gco:CharacterString&gt;
+                    &lt;/gmd:title&gt;
+                &lt;/gmd:CI_Citation&gt;
+            &lt;/gmd:citation&gt;
+            &lt;gmd:abstract&gt;
+                &lt;gco:CharacterString&gt;A sample geographic dataset&lt;/gco:CharacterString&gt;
+            &lt;/gmd:abstract&gt;
+        &lt;/gmd:MD_DataIdentification&gt;
+    &lt;/gmd:identificationInfo&gt;
+&lt;/gmd:MD_Metadata&gt;</pre>
+    </div>
+    
+    <p style="margin-top: 20px;"><a href="/">← Back to Home</a></p>
+</div>
+{% endblock %}

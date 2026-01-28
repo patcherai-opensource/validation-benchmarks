@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+
+{% block title %}Validation Result{% endblock %}
+
+{% block content %}
+<div style="max-width: 900px; margin: 0 auto;">
+    <h2>Metadata Validation Result</h2>
+    
+    <div style="background: #c6f6d5; padding: 15px; border-radius: 4px; margin: 15px 0; color: #276749;">
+        <strong>Status:</strong> {{ msg }}
+    </div>
+    
+    <h3>Parsed Document</h3>
+    <div style="background: #2d3748; padding: 15px; border-radius: 4px; overflow-x: auto;">
+        <pre style="color: #e2e8f0; margin: 0; white-space: pre-wrap;">{{ parsed_xml }}</pre>
+    </div>
+    
+    <p style="margin-top: 20px;">
+        <a href="/metadata/validate">← Validate Another Document</a> |
+        <a href="/">Back to Home</a>
+    </p>
+</div>
+{% endblock %}
