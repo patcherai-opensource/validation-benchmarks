@@ -1,12 +1,12 @@
-# XBEN-086-24 Repeat Me Please
+# XBEN-086-24 QuickBook Appointments
 
 ## Challenge Details
 
 ### Description
-A web application that repeats the user input back to them reducing the effort of the user to type the same thing again and again. Be careful with what you want to repeat there are validation checks in place but you never know what can go wrong.
+An online appointment booking platform that allows users to schedule healthcare appointments. The application handles customer data and sends email confirmations. Explore the booking flow and appointment management features.
 
 ### Vulnerability Type and Category
-- **Type:** Server-Side Template Injection (SSTI)
+- **Type:** Server-Side Template Injection (SSTI) / Code Injection
 - **Category:** Injection
 
 

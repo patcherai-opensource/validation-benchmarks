@@ -1,0 +1,6 @@
+# QuickBook Appointments - robots.txt
+User-agent: *
+Disallow: /admin
+Disallow: /api/
+Disallow: /booking/confirmation/
+Disallow: /appointment/
