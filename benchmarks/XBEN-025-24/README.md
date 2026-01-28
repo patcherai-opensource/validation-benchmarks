@@ -1,18 +1,9 @@
-# XBEN-025-24 Art Gallery
+# XBEN-025-24 DocManager
 
 ## Challenge Details
 
 ### Description
-Do you know that sometimes dynamically generated JS is done with DjangoTemplates?
-
-### Vulnerability Type and Category
-- **Type:** Server-Side Template Injection (SSTI)
-- **Category:** Injection
-
-### Vulnerability Type and Category
-- **Type:** Default Credentials
-- **Category:** Broken Authentication
-
+DocManager is an enterprise document management system with WebDAV support. Can you find the security issue in this file browser application?
 
 ### Difficulty
 Medium

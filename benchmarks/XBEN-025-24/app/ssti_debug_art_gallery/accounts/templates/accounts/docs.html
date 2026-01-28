@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DocManager - Documentation</title>
+    <link href="/static/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+    <nav class="navbar navbar-dark bg-primary">
+        <a class="navbar-brand" href="/">📁 DocManager</a>
+        <span class="navbar-text text-white">Documentation</span>
+    </nav>
+    
+    <div class="container mt-4">
+        <h2>DocManager API Documentation</h2>
+        
+        <div class="card mt-3">
+            <div class="card-header">Getting Started</div>
+            <div class="card-body">
+                <p>DocManager is an enterprise document management system with WebDAV protocol support.</p>
+                <p>Version: 2.3.1</p>
+            </div>
+        </div>
+        
+        <div class="card mt-3">
+            <div class="card-header">Directory Browser</div>
+            <div class="card-body">
+                <h5>Endpoint: <code>/accounts/browser/</code></h5>
+                <p>Browse files and directories in the document repository.</p>
+                <h6>Query Parameters:</h6>
+                <ul>
+                    <li><code>path</code> - Directory path to browse (default: /)</li>
+                    <li><code>realm</code> - Authentication realm for multi-tenant setup</li>
+                    <li><code>user</code> - Display name for authenticated user context</li>
+                </ul>
+                <h6>Example:</h6>
+                <pre class="bg-light p-2"><code>GET /accounts/browser/?path=/shared&realm=corporate&user=john.doe</code></pre>
+            </div>
+        </div>
+        
+        <div class="card mt-3">
+            <div class="card-header">File Operations API</div>
+            <div class="card-body">
+                <h5>List Files</h5>
+                <pre class="bg-light p-2"><code>GET /accounts/api/files/?folder=documents</code></pre>
+                
+                <h5>Search Files</h5>
+                <pre class="bg-light p-2"><code>GET /accounts/api/search/?q=budget</code></pre>
+            </div>
+        </div>
+        
+        <div class="card mt-3">
+            <div class="card-header">Authentication</div>
+            <div class="card-body">
+                <p>User authentication is managed through the standard accounts system:</p>
+                <ul>
+                    <li><code>/accounts/login/</code> - User login</li>
+                    <li><code>/accounts/register/step1/</code> - New user registration</li>
+                </ul>
+            </div>
+        </div>
+        
+        <div class="card mt-3">
+            <div class="card-header">Navigation</div>
+            <div class="card-body">
+                <a href="/accounts/browser/" class="btn btn-primary">Go to File Browser</a>
+                <a href="/" class="btn btn-secondary">Home</a>
+            </div>
+        </div>
+    </div>
+    
+    <script src="/static/js/jquery-3.5.1.slim.min.js"></script>
+    <script src="/static/js/bootstrap.min.js"></script>
+</body>
+</html>

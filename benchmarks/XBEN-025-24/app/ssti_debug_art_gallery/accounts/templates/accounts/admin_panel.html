@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DocManager - Admin Configuration</title>
+    <link href="/static/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+    <nav class="navbar navbar-dark bg-danger">
+        <a class="navbar-brand" href="/">⚙️ DocManager Admin</a>
+        <span class="navbar-text text-white">Internal Configuration Panel</span>
+    </nav>
+    
+    <div class="container mt-4">
+        <div class="alert alert-warning">
+            <strong>⚠️ Internal Use Only</strong> - This panel is for system administrators.
+        </div>
+        
+        <div class="card">
+            <div class="card-header bg-dark text-white">System Configuration</div>
+            <div class="card-body">
+                <h5>Current Settings</h5>
+                <table class="table">
+                    <tr>
+                        <th>Realm</th>
+                        <!-- XSS vulnerability: config values rendered without escaping -->
+                        <td>{% autoescape off %}{{ config_realm }}{% endautoescape %}</td>
+                    </tr>
+                    <tr>
+                        <th>Admin User</th>
+                        <td>{% autoescape off %}{{ config_user }}{% endautoescape %}</td>
+                    </tr>
+                    <tr>
+                        <th>Version</th>
+                        <td>2.3.1</td>
+                    </tr>
+                    <tr>
+                        <th>WebDAV Protocol</th>
+                        <td>Enabled</td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+        
+        <div class="card mt-3">
+            <div class="card-header bg-dark text-white">Security Status</div>
+            <div class="card-body">
+                <p class="text-success">✓ System integrity verified</p>
+                <p class="text-muted">Last security scan: 2024-01-15 03:00 UTC</p>
+            </div>
+        </div>
+        
+        <div class="card mt-3">
+            <div class="card-header">Quick Actions</div>
+            <div class="card-body">
+                <a href="/accounts/browser/" class="btn btn-primary">Back to Browser</a>
+                <a href="/" class="btn btn-secondary">Home</a>
+            </div>
+        </div>
+    </div>
+    
+    <script src="/static/js/jquery-3.5.1.slim.min.js"></script>
+    <script src="/static/js/bootstrap.min.js"></script>
+</body>
+</html>

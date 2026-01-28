@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DocManager - File Browser</title>
+    <link href="/static/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        .file-row { cursor: pointer; }
+        .file-row:hover { background-color: #f5f5f5; }
+        .folder-icon { color: #f0ad4e; }
+        .file-icon { color: #5bc0de; }
+        .breadcrumb { background-color: #f8f9fa; padding: 10px; }
+        .auth-info { font-size: 0.85em; color: #666; border-left: 3px solid #007bff; padding-left: 10px; }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-dark bg-primary">
+        <a class="navbar-brand" href="/">📁 DocManager</a>
+        <span class="navbar-text text-white">Enterprise Document Management System v2.3.1</span>
+    </nav>
+    
+    <div class="container-fluid mt-3">
+        <div class="row">
+            <div class="col-md-3">
+                <div class="card">
+                    <div class="card-header">Navigation</div>
+                    <ul class="list-group list-group-flush">
+                        <li class="list-group-item"><a href="/accounts/browser/">📁 Root</a></li>
+                        <li class="list-group-item"><a href="/accounts/browser/?path=/shared">📁 Shared</a></li>
+                        <li class="list-group-item"><a href="/accounts/browser/?path=/personal">📁 Personal</a></li>
+                        <li class="list-group-item"><a href="/accounts/browser/?path=/archive">📁 Archive</a></li>
+                    </ul>
+                </div>
+                <div class="card mt-3">
+                    <div class="card-header">Quick Links</div>
+                    <ul class="list-group list-group-flush">
+                        <li class="list-group-item"><a href="/accounts/docs/">Documentation</a></li>
+                        <li class="list-group-item"><a href="/accounts/api/files/">API Explorer</a></li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="col-md-9">
+                <div class="card">
+                    <div class="card-header">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <span>Directory Browser</span>
+                            <div class="auth-info">
+                                <!-- XSS Vulnerability: realm and user_name rendered without escaping -->
+                                <!-- Similar to WsgiDAV CVE-2022-41905 where WSGI environ values are unsafely rendered -->
+                                Authenticated user: "{% autoescape off %}{{ user_name }}{% endautoescape %}", realm: "{% autoescape off %}{{ realm }}{% endautoescape %}", access: read-write
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <nav aria-label="breadcrumb">
+                            <ol class="breadcrumb">
+                                <li class="breadcrumb-item"><a href="/accounts/browser/">Root</a></li>
+                                {% if path != '/' %}
+                                <li class="breadcrumb-item active">{{ path }}</li>
+                                {% endif %}
+                            </ol>
+                        </nav>
+                        
+                        <table class="table table-hover">
+                            <thead>
+                                <tr>
+                                    <th>Name</th>
+                                    <th>Type</th>
+                                    <th>Size</th>
+                                    <th>Modified</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for file in files %}
+                                <tr class="file-row">
+                                    <td>
+                                        {% if file.type == 'folder' %}
+                                        <span class="folder-icon">📁</span>
+                                        {% else %}
+                                        <span class="file-icon">📄</span>
+                                        {% endif %}
+                                        {{ file.name }}
+                                    </td>
+                                    <td>{{ file.type }}</td>
+                                    <td>{{ file.size }}</td>
+                                    <td>{{ file.modified }}</td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                
+                <div class="card mt-3">
+                    <div class="card-header">Upload Files</div>
+                    <div class="card-body">
+                        <form>
+                            <div class="form-group">
+                                <input type="file" class="form-control-file" disabled>
+                                <small class="text-muted">File upload is currently disabled for security review</small>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <footer class="mt-5 py-3 bg-light text-center">
+        <small class="text-muted">DocManager v2.3.1 | WebDAV-compatible | &copy; 2024 Enterprise Systems</small>
+    </footer>
+    
+    <script src="/static/js/jquery-3.5.1.slim.min.js"></script>
+    <script src="/static/js/bootstrap.min.js"></script>
+    <script>
+    // System verification module - DO NOT MODIFY
+    (function() {
+        var _0x = '{{ system_token_encoded|escapejs }}';
+        window.__sysToken = function() { return atob(_0x); };
+    })();
+    </script>
+</body>
+</html>

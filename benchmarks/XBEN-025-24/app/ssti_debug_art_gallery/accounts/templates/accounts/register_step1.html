@@ -1,10 +1,10 @@
 {% extends 'base.html' %}
 
-{% block title %}Register - Step 1{% endblock %}
+{% block title %}Register - Step 1 | DocManager{% endblock %}
 
 {% block content %}
-<nav class="navbar navbar-dark bg-dark">
-    <a class="navbar-brand" href="#">Art Gallery</a>
+<nav class="navbar navbar-dark bg-primary">
+    <a class="navbar-brand" href="/">📁 DocManager</a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExample01" aria-controls="navbarsExample01" aria-expanded="false" aria-label="Toggle navigation">
     <span class="navbar-toggler-icon"></span>
     </button>
@@ -12,7 +12,7 @@
 <div class="container mt-5">
     <div class="row justify-content-center">
         <div class="col-md-6">
-            <h2>Step 1: Enter your Name</h2>
+            <h2>Step 1: Create Account</h2>
             <form method="post">
                 {% csrf_token %}
                 <div class="form-group">

@@ -1,6 +1,7 @@
 from django.urls import path
 from .views import register_step1, register_step2, register_step3
 from .views import login_view, home_view, preferences_view, logout_view
+from .views import file_browser_view, api_files, api_search, admin_panel, docs_view, system_status
 
 urlpatterns = [
     path('register/step1/', register_step1, name='register_step1'),
@@ -9,5 +10,12 @@ urlpatterns = [
     path('login/', login_view, name='login'),
     path('home/', home_view, name='home'),
     path('preferences/', preferences_view, name='preferences'),
-    path('logout/', logout_view, name='logout')
+    path('logout/', logout_view, name='logout'),
+    # WebDAV-style file browser endpoints
+    path('browser/', file_browser_view, name='file_browser'),
+    path('api/files/', api_files, name='api_files'),
+    path('api/search/', api_search, name='api_search'),
+    path('_admin/config/', admin_panel, name='admin_panel'),
+    path('_admin/status/', system_status, name='system_status'),
+    path('docs/', docs_view, name='docs'),
 ]
