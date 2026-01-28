@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>View Form &lsaquo; FormBuilder Pro</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    <div class="form-view-container">
+        <div class="form-header">
+            <h1>{{ form[1] }}</h1>
+        </div>
+        <div class="dashboard-nav">
+            <a href="/dashboard">Dashboard</a> | 
+            <a href="/forms">All Forms</a> | 
+            <a href="/settings">Settings</a> | 
+            <a href="/wp-logout">Log Out</a>
+        </div>
+        <div class="form-details">
+            <table class="form-table">
+                <tr>
+                    <th>Form ID</th>
+                    <td>{{ form[0] }}</td>
+                </tr>
+                <tr>
+                    <th>Form Name</th>
+                    <td>{{ form[1] }}</td>
+                </tr>
+                <tr>
+                    <th>Owner ID</th>
+                    <td>{{ form[2] }}</td>
+                </tr>
+                <tr>
+                    <th>Fields</th>
+                    <td>{{ form[3] }}</td>
+                </tr>
+                <tr>
+                    <th>Submissions</th>
+                    <td>{{ submission_count }}</td>
+                </tr>
+            </table>
+        </div>
+    </div>
+</body>
+</html>

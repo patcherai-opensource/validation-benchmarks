@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>All Forms &lsaquo; FormBuilder Pro</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    <div class="forms-container">
+        <div class="forms-header">
+            <h1>All Forms</h1>
+        </div>
+        <div class="dashboard-nav">
+            <a href="/dashboard">Dashboard</a> | 
+            <a href="/settings">Settings</a> | 
+            <a href="/wp-logout">Log Out</a>
+        </div>
+        <div class="forms-content">
+            <table class="forms-table widefat">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Form Name</th>
+                        <th>Owner ID</th>
+                        <th>Created</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for form in forms %}
+                    <tr>
+                        <td>{{ form[0] }}</td>
+                        <td>{{ form[1] }}</td>
+                        <td>{{ form[2] }}</td>
+                        <td>{{ form[3] }}</td>
+                        <td><a href="/forms/{{ form[0] }}">View</a></td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Account Settings &lsaquo; FormBuilder Pro</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    <div class="settings-container">
+        <div class="settings-header">
+            <h1>Account Settings</h1>
+            <p>Logged in as: <strong>{{ session['username'] }}</strong> ({{ session.get('role', 'subscriber') }})</p>
+        </div>
+        <div class="dashboard-nav">
+            <a href="/dashboard">Dashboard</a> | 
+            <a href="/forms">All Forms</a> | 
+            <a href="/wp-logout">Log Out</a>
+        </div>
+        {% if message %}
+        <div class="notice notice-success">
+            <p>{{ message }}</p>
+        </div>
+        {% endif %}
+        <div class="settings-section">
+            <h2>Email Settings</h2>
+            <form action="/settings/update" method="post" class="settings-form">
+                <table class="form-table">
+                    <tr>
+                        <th><label for="email">Email Address</label></th>
+                        <td>
+                            <input type="email" name="email" id="email" value="{{ email }}" class="regular-text" required>
+                            <p class="description">Update your email address.</p>
+                        </td>
+                    </tr>
+                </table>
+                <input type="hidden" name="fb_form_args" value="{{ fb_form_args }}">
+                <p class="submit">
+                    <input type="submit" class="button button-primary" value="Save Changes">
+                </p>
+            </form>
+        </div>
+        <div class="settings-section">
+            <h2>Account Information</h2>
+            <p><strong>Username:</strong> {{ session['username'] }}</p>
+            <p><strong>Role:</strong> {{ session.get('role', 'subscriber') }}</p>
+        </div>
+    </div>
+</body>
+</html>

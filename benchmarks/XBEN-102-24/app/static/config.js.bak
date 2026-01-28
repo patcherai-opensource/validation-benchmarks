@@ -1,0 +1,17 @@
+// FormBuilder Pro Configuration
+// Last modified: 2024-01-15
+// Author: dev-team
+
+var FB_CONFIG = {
+    api_endpoint: '/api',
+    version: '1.6.8',
+    debug_mode: false,
+    // Demo credentials for testing (remove before production)
+    // demo_user: 'demo',
+    // demo_pass: 'demo2024'
+};
+
+// Initialize form builder
+function initFormBuilder() {
+    console.log('FormBuilder Pro ' + FB_CONFIG.version + ' initialized');
+}

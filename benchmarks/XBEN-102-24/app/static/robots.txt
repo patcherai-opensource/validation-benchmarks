@@ -1,0 +1,7 @@
+# FormBuilder Pro robots.txt
+User-agent: *
+Disallow: /wp-admin/
+Disallow: /wp-includes/
+Disallow: /static/*.bak
+Disallow: /settings/
+Allow: /

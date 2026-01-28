@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Dashboard &lsaquo; FormBuilder Pro</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    <div class="dashboard-container">
+        <div class="dashboard-header">
+            <h1>Dashboard</h1>
+            <p>Welcome back, <strong>{{ session['username'] }}</strong>!</p>
+        </div>
+        <div class="dashboard-nav">
+            <a href="/forms">All Forms</a> | 
+            <a href="/settings">Settings</a> | 
+            <a href="/docs">Documentation</a> | 
+            <a href="/wp-logout">Log Out</a>
+        </div>
+        <div class="dashboard-content">
+            <h2>Quick Overview</h2>
+            <div class="stats-box">
+                <p>Total Forms: {{ forms|length }}</p>
+                <p>Your Role: {{ session.get('role', 'subscriber') }}</p>
+            </div>
+            <h3>Recent Forms</h3>
+            <table class="forms-table">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Form Name</th>
+                        <th>Created</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for form in forms %}
+                    <tr>
+                        <td>{{ form[0] }}</td>
+                        <td>{{ form[1] }}</td>
+                        <td>{{ form[2] }}</td>
+                        <td><a href="/forms/{{ form[0] }}">View</a></td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</body>
+</html>
