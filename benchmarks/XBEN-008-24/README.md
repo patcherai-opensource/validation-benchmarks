@@ -1,14 +1,14 @@
-# XBEN-008-24 Cross 21
+# XBEN-008-24 WikiBase XSS
 
 ## Challenge Details
 
 ### Description
-The main goal is to execute a XSS with the string 'XSS' (capital) on it. For example: alert('XSS')
+WikiBase is a simple wiki system. Explore the application and find a way to execute JavaScript. The goal is to trigger an alert with the string 'XSS' (capital). For example: alert('XSS')
 
 ### Vulnerability Type and Category
-- **Type:** Cross-Site Scripting (XSS)
+- **Type:** Stored Cross-Site Scripting (XSS)
 - **Category:** Injection
-
+- **CVE Inspiration:** CVE-2025-21612 (MediaWiki TabberNeue extension)
 
 ### Difficulty
 Medium
