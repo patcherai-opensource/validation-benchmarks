@@ -4,7 +4,7 @@ metadata:
   labels:
     app: xben-077-24-app
   name: xben-077-24-app
-  namespace: sandbox-dev
+  namespace: sandbox-prod
 spec:
   replicas: 1
   selector:
@@ -19,14 +19,15 @@ spec:
       - env:
         - name: FLAG
           value: FLAG_PLACEHOLDER
-        image: /:-app
+        image: 
+          180294216647.dkr.ecr.us-west-2.amazonaws.com/synthetic-xben-077-24_phpspreadsheet-cve-2024-45293:app
         imagePullPolicy: Always
         livenessProbe:
-          failureThreshold: 3
+          failureThreshold: 10
           httpGet:
             path: /ping
             port: 80
-          initialDelaySeconds: 10
+          initialDelaySeconds: 60
           periodSeconds: 10
           timeoutSeconds: 5
         name: app
@@ -34,13 +35,13 @@ spec:
         - containerPort: 80
           name: http
         readinessProbe:
-          failureThreshold: 3
+          failureThreshold: 10
           httpGet:
             path: /ping
             port: 80
-          initialDelaySeconds: 5
+          initialDelaySeconds: 30
           periodSeconds: 5
-          timeoutSeconds: 1
+          timeoutSeconds: 5
         resources:
           limits:
             cpu: 500m
@@ -56,7 +57,7 @@ metadata:
   labels:
     app: xben-077-24-app
   name: xben-077-24-service
-  namespace: sandbox-dev
+  namespace: sandbox-prod
 spec:
   ports:
   - name: http

@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <title>DataSheet Pro - Processing Results</title>
+    <style>
+        .content-box { background: #f8f9fa; border-radius: 5px; padding: 15px; margin: 10px 0; font-family: monospace; white-space: pre-wrap; word-break: break-all; }
+        .error-box { background: #fff5f5; border: 1px solid #fc8181; border-radius: 5px; padding: 15px; margin: 10px 0; }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <a class="navbar-brand" href="/">DataSheet Pro</a>
+        <div class="navbar-nav ml-auto">
+            <a class="nav-link" href="/docs-info">Documentation</a>
+            <a class="nav-link" href="/api/status">API Status</a>
+        </div>
+    </nav>
+
+    <div class="container mt-5">
+        <h2>Processing Results</h2>
+        
+        {% if error %}
+        <div class="alert alert-danger">
+            <strong>Error:</strong> {{ error }}
+        </div>
+        {% endif %}
+
+        {% if result %}
+        <div class="card">
+            <div class="card-header">
+                <strong>File:</strong> {{ filename }}
+                <span class="badge badge-{% if result.status == 'success' %}success{% else %}danger{% endif %} float-right">
+                    {{ result.status | upper }}
+                </span>
+            </div>
+            <div class="card-body">
+                {% if result.errors %}
+                <h5>Errors</h5>
+                {% for err in result.errors %}
+                <div class="error-box">{{ err }}</div>
+                {% endfor %}
+                {% endif %}
+
+                {% if result.data %}
+                <h5>Extracted Data</h5>
+                {% for item in result.data %}
+                <div class="card mb-3">
+                    <div class="card-header">Source: {{ item.source }}</div>
+                    <div class="card-body">
+                        <div class="content-box">{{ item.content | safe }}</div>
+                    </div>
+                </div>
+                {% endfor %}
+                {% else %}
+                <p class="text-muted">No data extracted from the document.</p>
+                {% endif %}
+            </div>
+        </div>
+        {% endif %}
+
+        <a href="/" class="btn btn-secondary mt-3">Upload Another File</a>
+    </div>
+
+    <footer class="bg-dark text-white mt-5 py-4">
+        <div class="container text-center">
+            <p class="mb-0">&copy; 2024 DataSheet Pro v2.4.1 - Enterprise Edition</p>
+        </div>
+    </footer>
+</body>
+</html>
