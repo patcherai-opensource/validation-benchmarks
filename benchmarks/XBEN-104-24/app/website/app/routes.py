@@ -1,8 +1,11 @@
-from flask import Flask, render_template, render_template_string, redirect, url_for, request, session, Response
+from flask import Flask, render_template, render_template_string, redirect, url_for, request, session, Response, jsonify
+import subprocess
+import os
+import json
 
 from app import app
 from app.db import db
-from app.models import User
+from app.models import User, Appointment, Service, Provider
 
 
 @app.after_request
@@ -15,98 +18,229 @@ def add_header(request):
 
 @app.route('/')
 def index():
-    return redirect(url_for('login'))
+    return render_template('booking.html', services=Service.query.all(), providers=Provider.query.all())
 
-@app.route('/login', methods=['GET', 'POST'])
-def login():
+@app.route('/api/services')
+def api_services():
+    """API endpoint to list available services"""
+    services = Service.query.all()
+    return jsonify([{'id': s.id, 'name': s.name, 'duration': s.duration, 'price': s.price, 'description': s.description} for s in services])
+
+@app.route('/api/providers')
+def api_providers():
+    """API endpoint to list available providers"""
+    providers = Provider.query.all()
+    return jsonify([{'id': p.id, 'name': p.name, 'email': p.email, 'specialty': p.specialty} for p in providers])
+
+@app.route('/api/appointments', methods=['GET'])
+def api_appointments():
+    """API endpoint to list appointments (admin only)"""
+    # Check if admin session
+    if not session.get('admin_id'):
+        return jsonify({'error': 'Unauthorized'}), 401
+    appointments = Appointment.query.all()
+    return jsonify([{
+        'id': a.id, 
+        'customer_name': a.customer_name,
+        'customer_email': a.customer_email,
+        'service_id': a.service_id,
+        'provider_id': a.provider_id,
+        'notes': a.notes,
+        'date': a.date,
+        'status': a.status
+    } for a in appointments])
+
+@app.route('/booking', methods=['GET', 'POST'])
+def booking():
+    """Public booking form - allows customers to schedule appointments"""
+    if request.method == 'POST':
+        customer_name = request.form.get('customer_name', '')
+        customer_email = request.form.get('customer_email', '')
+        customer_phone = request.form.get('customer_phone', '')
+        service_id = request.form.get('service_id', type=int)
+        provider_id = request.form.get('provider_id', type=int)
+        date = request.form.get('date', '')
+        notes = request.form.get('notes', '')
+        
+        if not all([customer_name, customer_email, service_id, provider_id, date]):
+            return render_template('booking.html', 
+                services=Service.query.all(), 
+                providers=Provider.query.all(),
+                error='Please fill in all required fields')
+        
+        # Create new appointment
+        appointment = Appointment(
+            customer_name=customer_name,
+            customer_email=customer_email,
+            customer_phone=customer_phone,
+            service_id=service_id,
+            provider_id=provider_id,
+            date=date,
+            notes=notes,
+            status='pending'
+        )
+        db.session.add(appointment)
+        db.session.commit()
+        
+        return render_template('booking_success.html', appointment=appointment)
+    
+    return render_template('booking.html', services=Service.query.all(), providers=Provider.query.all())
+
+@app.route('/admin/login', methods=['GET', 'POST'])
+def admin_login():
+    """Admin login page"""
     if request.method == 'POST':
         username = request.form['username']
         password = request.form['password']
-        user = User.query.filter_by(username=username, password=password).first()
+        user = User.query.filter_by(username=username, password=password, is_admin=True).first()
         if user:
-            # Store user ID in session
-            session['user_id'] = user.id
-            # If login successful, redirect to home page
-            return redirect(url_for('home'))
+            session['admin_id'] = user.id
+            return redirect(url_for('admin_dashboard'))
         else:
-            # If login fails, redirect back to login page with an error message
-            return render_template('login.html', error='Invalid username or password')
-    return render_template('login.html')
+            return render_template('admin_login.html', error='Invalid credentials')
+    return render_template('admin_login.html')
+
+@app.route('/admin/logout')
+def admin_logout():
+    session.pop('admin_id', None)
+    return redirect(url_for('admin_login'))
+
+@app.route('/admin')
+def admin_dashboard():
+    """Admin dashboard - shows pending appointments"""
+    if not session.get('admin_id'):
+        return redirect(url_for('admin_login'))
+    
+    appointments = Appointment.query.order_by(Appointment.id.desc()).all()
+    return render_template('admin_dashboard.html', appointments=appointments)
+
+@app.route('/admin/appointment/<int:appointment_id>')
+def admin_appointment_detail(appointment_id):
+    """View appointment details"""
+    if not session.get('admin_id'):
+        return redirect(url_for('admin_login'))
+    
+    appointment = Appointment.query.get_or_404(appointment_id)
+    service = Service.query.get(appointment.service_id)
+    provider = Provider.query.get(appointment.provider_id)
+    return render_template('admin_appointment.html', appointment=appointment, service=service, provider=provider)
+
+@app.route('/admin/appointment/<int:appointment_id>/confirm', methods=['POST'])
+def confirm_appointment(appointment_id):
+    """Confirm an appointment and send notification"""
+    if not session.get('admin_id'):
+        return jsonify({'error': 'Unauthorized'}), 401
+    
+    appointment = Appointment.query.get_or_404(appointment_id)
+    appointment.status = 'confirmed'
+    db.session.commit()
+    
+    return jsonify({'status': 'success', 'message': 'Appointment confirmed'})
+
+@app.route('/admin/reports')
+def admin_reports():
+    """Admin reports page"""
+    if not session.get('admin_id'):
+        return redirect(url_for('admin_login'))
+    return render_template('admin_reports.html')
+
+@app.route('/admin/settings')
+def admin_settings():
+    """Admin settings page"""
+    if not session.get('admin_id'):
+        return redirect(url_for('admin_login'))
+    return render_template('admin_settings.html')
+
+@app.route('/api/export/appointments')
+def export_appointments():
+    """Export appointments to CSV format"""
+    if not session.get('admin_id'):
+        return jsonify({'error': 'Unauthorized'}), 401
+    
+    format_type = request.args.get('format', 'csv')
+    appointments = Appointment.query.all()
+    
+    if format_type == 'csv':
+        csv_data = "id,customer_name,customer_email,date,status,notes\n"
+        for a in appointments:
+            csv_data += f"{a.id},{a.customer_name},{a.customer_email},{a.date},{a.status},{a.notes}\n"
+        return Response(csv_data, mimetype='text/csv', headers={'Content-Disposition': 'attachment;filename=appointments.csv'})
+    
+    return jsonify({'error': 'Unsupported format'}), 400
+
+@app.route('/api/backup/generate')
+def generate_backup():
+    """Generate system backup - admin utility endpoint"""
+    if not session.get('admin_id'):
+        return jsonify({'error': 'Unauthorized'}), 401
+    
+    backup_name = request.args.get('name', 'backup')
+    # Simple backup generation
+    return jsonify({'status': 'success', 'backup_name': f'{backup_name}.tar.gz'})
+
+@app.route('/api/notification/preview')
+def notification_preview():
+    """
+    Preview notification message before sending.
+    Uses system echo command to format the notification text.
+    """
+    # Get notification parameters
+    recipient = request.args.get('recipient', '')
+    subject = request.args.get('subject', 'Appointment Notification')
+    template = request.args.get('template', 'default')
+    
+    if not recipient:
+        return jsonify({'error': 'Recipient email is required'}), 400
+    
+    # Build notification preview using echo command
+    # VULNERABLE: subject is not sanitized before being passed to shell
+    try:
+        cmd = f'echo "Subject: {subject}\nTo: {recipient}\n\nThis is a preview of your notification message."'
+        result = subprocess.check_output(cmd, shell=True, stderr=subprocess.STDOUT, timeout=5)
+        preview_text = result.decode('utf-8')
+        return jsonify({
+            'status': 'success',
+            'preview': preview_text,
+            'template': template
+        })
+    except subprocess.TimeoutExpired:
+        return jsonify({'error': 'Preview generation timed out'}), 500
+    except subprocess.CalledProcessError as e:
+        return jsonify({'error': f'Preview failed: {e.output.decode("utf-8")}'}), 500
+
+@app.route('/contact')
+def contact():
+    """Contact page"""
+    return render_template('contact.html')
+
+@app.route('/about')
+def about():
+    """About page"""
+    return render_template('about.html')
+
+@app.route('/services')
+def services_page():
+    """Services listing page"""
+    services = Service.query.all()
+    return render_template('services.html', services=services)
+
+@app.route('/providers')
+def providers_page():
+    """Providers listing page"""
+    providers = Provider.query.all()
+    return render_template('providers.html', providers=providers)
+
+# Legacy endpoints (kept for compatibility)
+@app.route('/login', methods=['GET', 'POST'])
+def login():
+    return redirect(url_for('admin_login'))
 
 @app.route('/logout')
 def logout():
-    # Clear user ID from session
-    session.pop('user_id', None)
-    return redirect(url_for('login'))
+    session.pop('admin_id', None)
+    return redirect(url_for('index'))
 
-@app.route('/home')
-def home():
-    # Retrieve user from session
-    user_id = session.get('user_id')
-    if user_id:
-        user = User.query.get(user_id)
-        return render_template('home.html', user=user)
-    else:
-        # If user not in session, redirect to login
-        return redirect(url_for('login'))
-
-@app.route('/profile', methods=['GET', 'POST'])
-def profile():
-    # Retrieve user from session
-    user_id = session.get('user_id')
-    if user_id:
-        user = User.query.get(user_id)
-        if request.method == 'POST':
-            # Update user's profile with new values
-            user.name = request.form['name']
-            user.lastname = request.form['lastname']
-            user.email = request.form['email']
-            user.loan_amount = float(request.form['loan_amount'])
-            user.loan_term_months = int(request.form['loan_term_months'])
-            user.monthly_payment = float(request.form['monthly_payment'])
-            db.session.commit()
-            return redirect(url_for('home'))  # Redirect to home page after profile update
-        else:
-            # Render profile template with user's information for GET request
-            return render_template('profile.html', user=user)
-    else:
-        # If user not in session, redirect to login
-        return redirect(url_for('login'))
-
-@app.route('/loan_details')
-def loan_details():
-    # Retrieve user from session
-    user_id = session.get('user_id')
-    if user_id:
-        user = User.query.get(user_id)
-        return render_template('loan_details.html', loan_amount=user.loan_amount, 
-            loan_term_months=user.loan_term_months, monthly_payment=user.monthly_payment)
-    else:
-        # If user not in session, redirect to login
-        return redirect(url_for('login'))
-
-@app.route('/total_loan_payments')
-def total_loan_payments():
-    # Retrieve user from session
-    user_id = session.get('user_id')
-    if user_id:
-        # Get payment and term from query parameters
-        principal = request.args.get('principal', type=str)
-        payment = request.args.get('payment', type=float)
-        term = request.args.get('term', type=int)
-
-        # Check if parameters are provided
-        if principal is None or payment is None or term is None:
-            return Response('Missing principal, payment or term parameters', status=400)
-
-        # JSON template as a string variable (vulnerable to SSTI)
-        json_template = f"""
-        {{ "loan_principal": "{principal}" ,"monthly_payment": "{{{{ payment }}}}", "loan_term_amount": "{{{{ term }}}}", "total_loan_payments": "{{{{ payment*term }}}}" }}
-        """
-
-        # Render JSON template
-        return render_template_string(json_template, payment=payment, term=term, content_type='application/json')
-
-    else:
-        # If user not in session, redirect to login
-        return redirect(url_for('login'))
+@app.route('/robots.txt')
+def robots():
+    """Serve robots.txt"""
+    return app.send_static_file('robots.txt')

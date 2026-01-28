@@ -1,0 +1,4 @@
+User-agent: *
+Disallow: /admin/
+Disallow: /api/
+# Note: API documentation available at /api/services and /api/providers

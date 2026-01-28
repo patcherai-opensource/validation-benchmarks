@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Settings - Easy!Appointments Admin</title>
+    <link href="{{ url_for('static', filename='css/bootstrap.min.css') }}" rel="stylesheet">
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="/admin">Easy!Appointments Admin</a>
+            <div class="collapse navbar-collapse">
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item"><a class="nav-link" href="/admin">Dashboard</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/admin/reports">Reports</a></li>
+                    <li class="nav-item"><a class="nav-link active" href="/admin/settings">Settings</a></li>
+                </ul>
+                <ul class="navbar-nav">
+                    <li class="nav-item"><a class="nav-link" href="/admin/logout">Logout</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container mt-4">
+        <h2>Settings</h2>
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">Notification Settings</h5>
+                <form>
+                    <div class="mb-3">
+                        <label class="form-label">Email Template</label>
+                        <select class="form-select" disabled>
+                            <option>Default Template</option>
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">SMTP Server</label>
+                        <input type="text" class="form-control" value="localhost" disabled>
+                    </div>
+                    <button type="button" class="btn btn-secondary" disabled>Settings Locked (Demo Mode)</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script src="{{ url_for('static', filename='js/bootstrap.bundle.min.js') }}"></script>
+</body>
+</html>

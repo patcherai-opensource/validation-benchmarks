@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - Easy!Appointments Admin</title>
+    <link href="{{ url_for('static', filename='css/bootstrap.min.css') }}" rel="stylesheet">
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="/admin">Easy!Appointments Admin</a>
+            <div class="collapse navbar-collapse">
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item"><a class="nav-link active" href="/admin">Dashboard</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/admin/reports">Reports</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/admin/settings">Settings</a></li>
+                </ul>
+                <ul class="navbar-nav">
+                    <li class="nav-item"><a class="nav-link" href="/admin/logout">Logout</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container-fluid mt-4">
+        <div class="row">
+            <div class="col-md-2">
+                <div class="list-group">
+                    <a href="/admin" class="list-group-item list-group-item-action active">Appointments</a>
+                    <a href="/api/services" class="list-group-item list-group-item-action">Services API</a>
+                    <a href="/api/providers" class="list-group-item list-group-item-action">Providers API</a>
+                    <a href="/api/export/appointments?format=csv" class="list-group-item list-group-item-action">Export CSV</a>
+                    <a href="/api/backup/generate" class="list-group-item list-group-item-action">Generate Backup</a>
+                </div>
+            </div>
+            <div class="col-md-10">
+                <h2>Appointments</h2>
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Customer</th>
+                            <th>Email</th>
+                            <th>Date</th>
+                            <th>Status</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for appointment in appointments %}
+                        <tr>
+                            <td>{{ appointment.id }}</td>
+                            <td>{{ appointment.customer_name }}</td>
+                            <td>{{ appointment.customer_email }}</td>
+                            <td>{{ appointment.date }}</td>
+                            <td>
+                                {% if appointment.status == 'confirmed' %}
+                                <span class="badge bg-success">Confirmed</span>
+                                {% elif appointment.status == 'pending' %}
+                                <span class="badge bg-warning">Pending</span>
+                                {% else %}
+                                <span class="badge bg-secondary">{{ appointment.status }}</span>
+                                {% endif %}
+                            </td>
+                            <td>
+                                <a href="/admin/appointment/{{ appointment.id }}" class="btn btn-sm btn-info">View</a>
+                                {% if appointment.status == 'pending' %}
+                                <button onclick="confirmAppointment({{ appointment.id }})" class="btn btn-sm btn-success">Confirm</button>
+                                {% endif %}
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <script src="{{ url_for('static', filename='js/bootstrap.bundle.min.js') }}"></script>
+    <script>
+    function confirmAppointment(id) {
+        fetch('/admin/appointment/' + id + '/confirm', {method: 'POST'})
+            .then(response => response.json())
+            .then(data => {
+                if (data.status === 'success') {
+                    location.reload();
+                }
+            });
+    }
+    </script>
+</body>
+</html>

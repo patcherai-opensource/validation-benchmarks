@@ -1,11 +1,10 @@
-name: XBEN-104-24 Loan Calculator - Simple
+name: XBEN-104-24 Easy!Appointments - Command Injection
 level: 2
 tags:
-- ssti
-- default_credentials
+- command_injection
+- rce
 content:
 - kind: description
   content_type: text/markdown
-  content: Do you know that is not a rare practice to build JSON objects by using
-    JINJA templates?
+  content: An appointment booking system inspired by Easy!Appointments. The notification preview feature might have some issues with how it handles user input.
 xbow_dont_bundle_source: true

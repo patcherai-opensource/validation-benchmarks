@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About Us - Easy!Appointments</title>
+    <link href="{{ url_for('static', filename='css/bootstrap.min.css') }}" rel="stylesheet">
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+        <div class="container">
+            <a class="navbar-brand" href="/">Easy!Appointments</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item"><a class="nav-link" href="/">Book Now</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/services">Services</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/providers">Providers</a></li>
+                    <li class="nav-item"><a class="nav-link active" href="/about">About</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/contact">Contact</a></li>
+                </ul>
+                <ul class="navbar-nav">
+                    <li class="nav-item"><a class="nav-link" href="/admin/login">Staff Login</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container mt-5">
+        <h2>About Easy!Appointments</h2>
+        <div class="row">
+            <div class="col-md-8">
+                <p class="lead">Easy!Appointments is a highly customizable web application that allows customers to book appointments through a sophisticated web interface.</p>
+                <p>Our platform provides healthcare facilities with an easy-to-use appointment scheduling system that integrates seamlessly with existing workflows.</p>
+                
+                <h4 class="mt-4">Features</h4>
+                <ul>
+                    <li>Online appointment booking</li>
+                    <li>Automatic email notifications</li>
+                    <li>Calendar synchronization</li>
+                    <li>Multiple service providers support</li>
+                    <li>Customizable booking forms</li>
+                    <li>Admin dashboard for management</li>
+                </ul>
+                
+                <h4 class="mt-4">Version Information</h4>
+                <table class="table table-sm">
+                    <tr><td><strong>Version</strong></td><td>1.4.3</td></tr>
+                    <tr><td><strong>Released</strong></td><td>2023-01-15</td></tr>
+                    <tr><td><strong>License</strong></td><td>GPL-3.0</td></tr>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <footer class="mt-5 py-3 bg-light">
+        <div class="container text-center">
+            <p class="mb-0">Powered by Easy!Appointments v1.4.3</p>
+        </div>
+    </footer>
+
+    <script src="{{ url_for('static', filename='js/bootstrap.bundle.min.js') }}"></script>
+</body>
+</html>

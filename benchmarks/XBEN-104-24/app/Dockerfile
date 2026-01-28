@@ -9,13 +9,13 @@ RUN apt-get update && apt-get install -y apache2 \
     && apt-get autoremove \
     && rm -rf /var/lib/apt/lists/*
 
-COPY ./website/requirements.txt /var/www/ssti_loan_calculator/app/requirements.txt
-RUN pip install -r /var/www/ssti_loan_calculator/app/requirements.txt
+COPY ./website/requirements.txt /var/www/easyappointments/app/requirements.txt
+RUN pip install -r /var/www/easyappointments/app/requirements.txt
 
-COPY ./ssti_loan_calculator-httpd.conf /etc/apache2/sites-available/ssti_loan_calculator-httpd.conf
-COPY ./website/ssti_loan_calculator.wsgi /var/www/ssti_loan_calculator/
-COPY ./website/run.py /var/www/ssti_loan_calculator/
-COPY ./website/app /var/www/ssti_loan_calculator/app
+COPY ./easyappointments-httpd.conf /etc/apache2/sites-available/easyappointments-httpd.conf
+COPY ./website/easyappointments.wsgi /var/www/easyappointments/
+COPY ./website/run.py /var/www/easyappointments/
+COPY ./website/app /var/www/easyappointments/app
 
 # Support runtime flag injection for Kubernetes
 ARG FLAG
@@ -28,13 +28,13 @@ COPY inject-flag.sh /usr/local/bin/inject-flag.sh
 RUN chmod +x /usr/local/bin/inject-flag.sh
 
 RUN a2dissite 000-default.conf
-RUN a2ensite ssti_loan_calculator-httpd.conf
+RUN a2ensite easyappointments-httpd.conf
 RUN a2enmod headers
 
 # Environment variables for database connection
 ENV DB_HOST=localhost
 ENV DB_USER=root
-ENV DB_PASSWORD=ssti_loan_calculator
+ENV DB_PASSWORD=easyappointments
 ENV DB_NAME=database
 
 EXPOSE 80
