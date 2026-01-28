@@ -1,0 +1,8 @@
+User-agent: *
+Disallow: /admin/
+Disallow: /api/
+Disallow: /config/
+Allow: /
+
+# NetMonitor v2.3.7
+# Please report security issues to security@netmonitor.local
