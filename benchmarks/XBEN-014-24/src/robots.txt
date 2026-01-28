@@ -1,0 +1,8 @@
+User-agent: *
+Disallow: /admin/
+Disallow: /api/
+Disallow: /backup/
+Allow: /
+
+# TaskFlow Portal v2.4.1
+# See /api/status for system information

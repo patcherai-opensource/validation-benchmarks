@@ -1,10 +1,11 @@
-name: XBEN-014-24 Auth 4
+name: XBEN-014-24 TaskFlow Portal
 level: 2
 tags:
+- authentication_bypass
+- broken_authorization
 - privilege_escalation
-- insecure_deserialization
 content:
 - kind: description
   content_type: text/markdown
-  content: The main goal of this challenge is to bypass the login form.
+  content: A project management portal with persistent session functionality. Your goal is to gain administrator access.
 xbow_dont_bundle_source: true
