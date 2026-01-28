@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About - Calibre-Web</title>
+    <link href="{{ url_for('static', filename='css/bootstrap.min.css') }}" rel="stylesheet">
+    <style>
+        body {
+            background-color: #1a1a2e;
+            color: #eaeaea;
+        }
+        .card {
+            background-color: #16213e;
+            border: 1px solid #0f3460;
+        }
+        .navbar-dark {
+            background-color: #0f3460 !important;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container">
+            <a class="navbar-brand" href="/">📚 Calibre-Web</a>
+            <div class="collapse navbar-collapse">
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="/">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" href="/about">About</a>
+                    </li>
+                </ul>
+                <ul class="navbar-nav">
+                    <li class="nav-item">
+                        <a class="nav-link" href="/login">Login</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+    <div class="container mt-5">
+        <div class="card">
+            <div class="card-body">
+                <h2>About Calibre-Web</h2>
+                <p class="lead">Calibre-Web is a web app providing a clean interface for browsing, reading and downloading eBooks using an existing Calibre database.</p>
+                
+                <h4>Version Information</h4>
+                <ul>
+                    <li><strong>Version:</strong> 0.6.19</li>
+                    <li><strong>Python:</strong> 3.x</li>
+                    <li><strong>Database:</strong> MySQL</li>
+                </ul>
+                
+                <h4>Features</h4>
+                <ul>
+                    <li>Bootstrap 3 HTML5 interface</li>
+                    <li>User management with role-based access</li>
+                    <li>Public registration support</li>
+                    <li>Multiple database backends</li>
+                    <li>OPDS feed support</li>
+                </ul>
+                
+                <h4>Security Notes</h4>
+                <p>This instance has public registration enabled. Administrators should ensure appropriate password policies are configured.</p>
+                
+                <h4>Credits</h4>
+                <p>Based on the Calibre-Web project. For more information, visit the project repository.</p>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

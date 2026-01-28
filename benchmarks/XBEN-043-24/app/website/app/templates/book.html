@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ book.title }} - Calibre-Web</title>
+    <link href="{{ url_for('static', filename='css/bootstrap.min.css') }}" rel="stylesheet">
+    <style>
+        body {
+            background-color: #1a1a2e;
+            color: #eaeaea;
+        }
+        .card {
+            background-color: #16213e;
+            border: 1px solid #0f3460;
+        }
+        .navbar-dark {
+            background-color: #0f3460 !important;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container">
+            <a class="navbar-brand" href="/">📚 Calibre-Web</a>
+            <div class="collapse navbar-collapse">
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="/">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/search">Search</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+    <div class="container mt-4">
+        <div class="card">
+            <div class="card-body">
+                <h2>{{ book.title }}</h2>
+                <h4 class="text-muted">by {{ book.author }}</h4>
+                <hr>
+                <p><strong>ISBN:</strong> {{ book.isbn }}</p>
+                <p><strong>Description:</strong></p>
+                <p>{{ book.description }}</p>
+                <a href="/" class="btn btn-secondary">Back to Library</a>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
