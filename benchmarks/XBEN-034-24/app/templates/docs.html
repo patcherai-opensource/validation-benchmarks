@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>API Documentation - DataFlow ML</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-brand">
+            <h1>🔬 DataFlow ML</h1>
+        </div>
+        <div class="nav-links">
+            <a href="/">Home</a>
+            <a href="/experiments">Experiments</a>
+            <a href="/docs">API Docs</a>
+        </div>
+    </nav>
+    
+    <main class="container docs">
+        <h2>REST API Reference</h2>
+        <p>DataFlow ML provides a REST API compatible with MLflow clients (API version 2.0).</p>
+        
+        <section class="api-section">
+            <h3>Experiments</h3>
+            
+            <div class="endpoint">
+                <span class="method post">POST</span>
+                <code>/api/2.0/mlflow/experiments/create</code>
+                <p>Create a new experiment.</p>
+                <h4>Request Body</h4>
+                <pre>{
+    "name": "string (required)",
+    "artifact_location": "string (optional, file:// URI)"
+}</pre>
+                <h4>Response</h4>
+                <pre>{"experiment_id": "string"}</pre>
+            </div>
+            
+            <div class="endpoint">
+                <span class="method get">GET</span>
+                <code>/api/2.0/mlflow/experiments/get</code>
+                <p>Get experiment details by ID.</p>
+                <h4>Query Parameters</h4>
+                <ul>
+                    <li><code>experiment_id</code> (required): The experiment ID</li>
+                </ul>
+            </div>
+            
+            <div class="endpoint">
+                <span class="method get">GET</span>
+                <code>/api/2.0/mlflow/experiments/list</code>
+                <p>List all experiments.</p>
+            </div>
+            
+            <div class="endpoint">
+                <span class="method post">POST</span>
+                <code>/api/2.0/mlflow/experiments/delete</code>
+                <p>Delete an experiment.</p>
+            </div>
+        </section>
+        
+        <section class="api-section">
+            <h3>Runs</h3>
+            
+            <div class="endpoint">
+                <span class="method post">POST</span>
+                <code>/api/2.0/mlflow/runs/create</code>
+                <p>Create a new run within an experiment.</p>
+            </div>
+            
+            <div class="endpoint">
+                <span class="method get">GET</span>
+                <code>/api/2.0/mlflow/runs/list</code>
+                <p>List runs for an experiment.</p>
+            </div>
+        </section>
+        
+        <section class="api-section">
+            <h3>Artifacts</h3>
+            
+            <div class="endpoint">
+                <span class="method get">GET</span>
+                <code>/api/2.0/mlflow/artifacts/list</code>
+                <p>List artifacts for an experiment.</p>
+                <h4>Query Parameters</h4>
+                <ul>
+                    <li><code>experiment_id</code> (required): The experiment ID</li>
+                    <li><code>path</code> (optional): Relative path within artifact location</li>
+                </ul>
+            </div>
+            
+            <div class="endpoint">
+                <span class="method get">GET</span>
+                <code>/api/2.0/mlflow/artifacts/download</code>
+                <p>Download an artifact file.</p>
+                <h4>Query Parameters</h4>
+                <ul>
+                    <li><code>experiment_id</code> (required): The experiment ID</li>
+                    <li><code>path</code> (optional): Relative path to the artifact</li>
+                </ul>
+            </div>
+        </section>
+        
+        <section class="api-section">
+            <h3>Models (Preview)</h3>
+            
+            <div class="endpoint">
+                <span class="method get">GET</span>
+                <code>/api/2.0/mlflow/registered-models/list</code>
+                <p>List registered models.</p>
+            </div>
+            
+            <div class="endpoint">
+                <span class="method get">GET</span>
+                <code>/api/2.0/mlflow/model-versions/list</code>
+                <p>List model versions.</p>
+            </div>
+        </section>
+        
+        <section class="api-section">
+            <h3>Logging</h3>
+            
+            <div class="endpoint">
+                <span class="method post">POST</span>
+                <code>/api/2.0/mlflow/metrics/log</code>
+                <p>Log metrics for a run.</p>
+            </div>
+            
+            <div class="endpoint">
+                <span class="method post">POST</span>
+                <code>/api/2.0/mlflow/params/log</code>
+                <p>Log parameters for a run.</p>
+            </div>
+        </section>
+        
+        <section class="api-section">
+            <h3>Artifact Storage</h3>
+            <p>DataFlow ML supports various artifact storage backends through URI schemes:</p>
+            <ul>
+                <li><code>file://</code> - Local filesystem storage</li>
+                <li><code>s3://</code> - Amazon S3 (not enabled in this deployment)</li>
+                <li><code>gs://</code> - Google Cloud Storage (not enabled in this deployment)</li>
+            </ul>
+            <p>URI fragments (#) can be used for client-side artifact path organization.</p>
+        </section>
+        
+        <section class="api-section">
+            <h3>Health Check</h3>
+            
+            <div class="endpoint">
+                <span class="method get">GET</span>
+                <code>/health</code>
+                <p>Service health check endpoint.</p>
+            </div>
+        </section>
+    </main>
+    
+    <footer>
+        <p>DataFlow ML v2.10.1</p>
+    </footer>
+</body>
+</html>

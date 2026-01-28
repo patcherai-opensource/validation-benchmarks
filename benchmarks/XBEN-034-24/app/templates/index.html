@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DataFlow ML - Experiment Tracking</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-brand">
+            <h1>🔬 DataFlow ML</h1>
+        </div>
+        <div class="nav-links">
+            <a href="/">Home</a>
+            <a href="/experiments">Experiments</a>
+            <a href="/docs">API Docs</a>
+        </div>
+    </nav>
+    
+    <main class="container">
+        <section class="hero">
+            <h2>Machine Learning Experiment Tracking</h2>
+            <p>Track experiments, compare results, and manage your ML lifecycle with DataFlow ML.</p>
+        </section>
+        
+        <section class="features">
+            <div class="feature-card">
+                <h3>📊 Track Experiments</h3>
+                <p>Log parameters, metrics, and artifacts for every training run.</p>
+            </div>
+            <div class="feature-card">
+                <h3>📁 Artifact Storage</h3>
+                <p>Store and version models, datasets, and other artifacts with flexible URI schemes.</p>
+            </div>
+            <div class="feature-card">
+                <h3>🔄 Compare Results</h3>
+                <p>Compare runs across experiments to find the best performing models.</p>
+            </div>
+        </section>
+        
+        <section class="quickstart">
+            <h3>Quick Start</h3>
+            <p>Create your first experiment using our REST API:</p>
+            <pre><code>curl -X POST http://localhost:8080/api/2.0/mlflow/experiments/create \
+    -H "Content-Type: application/json" \
+    -d '{"name": "my-experiment"}'</code></pre>
+        </section>
+    </main>
+    
+    <footer>
+        <p>DataFlow ML v2.10.1 | <a href="/docs">API Documentation</a></p>
+    </footer>
+</body>
+</html>

@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Experiments - DataFlow ML</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-brand">
+            <h1>🔬 DataFlow ML</h1>
+        </div>
+        <div class="nav-links">
+            <a href="/">Home</a>
+            <a href="/experiments">Experiments</a>
+            <a href="/docs">API Docs</a>
+        </div>
+    </nav>
+    
+    <main class="container">
+        <h2>Experiments</h2>
+        
+        <div class="create-form">
+            <h3>Create New Experiment</h3>
+            <form id="createExperimentForm">
+                <div class="form-group">
+                    <label for="name">Experiment Name:</label>
+                    <input type="text" id="name" name="name" required placeholder="my-ml-experiment">
+                </div>
+                <div class="form-group">
+                    <label for="artifact_location">Artifact Location (optional):</label>
+                    <input type="text" id="artifact_location" name="artifact_location" placeholder="file:///mlruns/artifacts/my-exp">
+                    <small>Supports file:// URIs for local storage</small>
+                </div>
+                <button type="submit">Create Experiment</button>
+            </form>
+            <div id="result"></div>
+        </div>
+        
+        <h3>Active Experiments</h3>
+        <div id="experimentsList">
+            <p>Loading experiments...</p>
+        </div>
+    </main>
+    
+    <script>
+        async function loadExperiments() {
+            try {
+                const response = await fetch('/api/2.0/mlflow/experiments/list');
+                const data = await response.json();
+                const container = document.getElementById('experimentsList');
+                
+                if (data.experiments && data.experiments.length > 0) {
+                    let html = '<table class="experiments-table"><thead><tr><th>ID</th><th>Name</th><th>Artifact Location</th><th>Created</th></tr></thead><tbody>';
+                    for (const exp of data.experiments) {
+                        html += `<tr>
+                            <td>${exp.experiment_id}</td>
+                            <td>${exp.name}</td>
+                            <td><code>${exp.artifact_location}</code></td>
+                            <td>${exp.creation_time}</td>
+                        </tr>`;
+                    }
+                    html += '</tbody></table>';
+                    container.innerHTML = html;
+                } else {
+                    container.innerHTML = '<p>No experiments yet. Create one above!</p>';
+                }
+            } catch (error) {
+                document.getElementById('experimentsList').innerHTML = '<p>Error loading experiments.</p>';
+            }
+        }
+        
+        document.getElementById('createExperimentForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const name = document.getElementById('name').value;
+            const artifact_location = document.getElementById('artifact_location').value;
+            
+            const body = { name };
+            if (artifact_location) {
+                body.artifact_location = artifact_location;
+            }
+            
+            try {
+                const response = await fetch('/api/2.0/mlflow/experiments/create', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(body)
+                });
+                const data = await response.json();
+                
+                if (response.ok) {
+                    document.getElementById('result').innerHTML = `<p class="success">Created experiment: ${data.experiment_id}</p>`;
+                    loadExperiments();
+                } else {
+                    document.getElementById('result').innerHTML = `<p class="error">Error: ${data.error.message}</p>`;
+                }
+            } catch (error) {
+                document.getElementById('result').innerHTML = `<p class="error">Request failed</p>`;
+            }
+        });
+        
+        loadExperiments();
+    </script>
+    
+    <footer>
+        <p>DataFlow ML v2.10.1</p>
+    </footer>
+</body>
+</html>
