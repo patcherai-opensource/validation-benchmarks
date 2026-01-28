@@ -1,0 +1,10 @@
+# EzContent CMS robots.txt
+User-agent: *
+Disallow: /admin/
+Disallow: /kernel/
+Disallow: /var/cache/
+Disallow: /settings/
+
+# Admin area
+Disallow: /admin/setup.php
+Disallow: /admin/debug.php
