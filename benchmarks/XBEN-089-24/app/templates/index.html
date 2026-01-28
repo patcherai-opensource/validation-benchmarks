@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pimcore CMS - Open Source Content Management</title>
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        .hero { background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%); color: white; padding: 100px 0; }
+        .feature-card { border: none; box-shadow: 0 4px 6px rgba(0,0,0,0.1); transition: transform 0.3s; }
+        .feature-card:hover { transform: translateY(-5px); }
+        footer { background: #1f2937; color: #9ca3af; }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark" style="background: #1f2937;">
+        <div class="container">
+            <a class="navbar-brand font-weight-bold" href="/">Pimcore</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ml-auto">
+                    <li class="nav-item"><a class="nav-link" href="#features">Features</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#docs">Documentation</a></li>
+                    <li class="nav-item"><a class="nav-link btn btn-outline-light ml-2" href="/admin">Admin Login</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <section class="hero text-center">
+        <div class="container">
+            <h1 class="display-4 font-weight-bold">Enterprise Content Management Platform</h1>
+            <p class="lead mt-4">Manage your digital assets, content, and data with a powerful open-source platform.</p>
+            <div class="mt-4">
+                <a href="/admin" class="btn btn-light btn-lg mr-3">Access Admin Panel</a>
+                <a href="#docs" class="btn btn-outline-light btn-lg">View Documentation</a>
+            </div>
+        </div>
+    </section>
+
+    <section id="features" class="py-5">
+        <div class="container">
+            <h2 class="text-center mb-5">Platform Features</h2>
+            <div class="row">
+                <div class="col-md-4 mb-4">
+                    <div class="card feature-card h-100 p-4">
+                        <h4>Content Management</h4>
+                        <p class="text-muted">Create, manage, and publish content across multiple channels with our intuitive editor.</p>
+                    </div>
+                </div>
+                <div class="col-md-4 mb-4">
+                    <div class="card feature-card h-100 p-4">
+                        <h4>Digital Asset Management</h4>
+                        <p class="text-muted">Organize and distribute your digital assets with advanced metadata and versioning.</p>
+                    </div>
+                </div>
+                <div class="col-md-4 mb-4">
+                    <div class="card feature-card h-100 p-4">
+                        <h4>API-First Architecture</h4>
+                        <p class="text-muted">RESTful API endpoints for seamless integration with your existing systems.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="docs" class="py-5 bg-light">
+        <div class="container">
+            <h2 class="text-center mb-5">Quick Start</h2>
+            <div class="row justify-content-center">
+                <div class="col-md-8">
+                    <div class="card p-4">
+                        <h5>API Authentication</h5>
+                        <p>For programmatic access, use the API authentication endpoint:</p>
+                        <pre class="bg-dark text-light p-3 rounded"><code>POST /api/v1/auth
+Content-Type: application/json
+
+{"username": "your_user", "password": "your_pass"}</code></pre>
+                        <p class="text-muted mt-3">Check API status at <code>/api/v1/status</code></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer class="py-4">
+        <div class="container text-center">
+            <p class="mb-0">Pimcore CMS v1.2.1 - Open Source Content Management Platform</p>
+        </div>
+    </footer>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>

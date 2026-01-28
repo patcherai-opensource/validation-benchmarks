@@ -1,0 +1,25 @@
+# Pimcore Configuration Backup
+# Created: 2024-01-10
+
+database:
+  host: localhost
+  name: pimcore_db
+  
+security:
+  session_timeout: 3600
+  two_factor_enabled: true
+  
+# Default accounts for initial setup
+# TODO: Remove these after deployment
+default_accounts:
+  - username: admin
+    password: admin123
+    role: admin
+    two_factor: required
+  - username: editor
+    password: editor123
+    role: editor
+  - username: service
+    password: service123
+    role: editor
+    description: API service account

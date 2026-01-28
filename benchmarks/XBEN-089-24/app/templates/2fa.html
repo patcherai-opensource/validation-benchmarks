@@ -3,28 +3,44 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login</title>
+    <title>Pimcore Admin - Two-Factor Authentication</title>
     <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body { background: linear-gradient(135deg, #1f2937 0%, #374151 100%); min-height: 100vh; }
+        .login-card { max-width: 400px; margin: 100px auto; }
+        .brand-logo { font-size: 2rem; font-weight: bold; color: #8b5cf6; }
+    </style>
 </head>
 <body>
     <div class="container">
-        <div class="row justify-content-center mt-5">
-            <div class="col-md-6">
-                <div class="card">
-                    <div class="card-header text-center">
-                        <h4>ENTER OTP</h4>
-                    </div>
-                    <div class="card-body"> 
-                        <form method="post" > 
-                            <div class="form-group">
-                                <label for="otp">OTP</label>
-                                <input type="number" class="form-control" id="otp" name="otp" required>
-                            </div> 
-                            <button type="submit" class="btn btn-primary btn-block">Verify</button>
-                        </form>
-                    </div>
+        <div class="login-card">
+            <div class="text-center mb-4">
+                <span class="brand-logo">Pimcore</span>
+                <p class="text-light mt-2">Security Verification</p>
+            </div>
+            <div class="card shadow">
+                <div class="card-header bg-white text-center">
+                    <h5 class="mb-0">Two-Factor Authentication</h5>
+                </div>
+                <div class="card-body">
+                    <div id="alert-container"></div>
+                    <p class="text-muted text-center">Enter the 6-digit code from your authenticator app</p>
+                    <form id="otpForm">
+                        <div class="form-group">
+                            <label for="code">Verification Code</label>
+                            <input type="text" class="form-control text-center" id="code" name="code" 
+                                   maxlength="6" pattern="[0-9]{6}" placeholder="000000" required>
+                        </div>
+                        <button type="submit" class="btn btn-primary btn-block">Verify</button>
+                    </form>
+                </div>
+                <div class="card-footer bg-white text-center">
+                    <small class="text-muted">Code expires in 5 minutes</small>
                 </div>
             </div>
+            <p class="text-center text-light mt-3">
+                <a href="/admin" class="text-light">Back to Login</a>
+            </p>
         </div>
     </div>
 
@@ -33,23 +49,23 @@
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
     <script>
         $(document).ready(function() {
-           
- 
-            $("form").submit(function(e) {
+            $("#otpForm").submit(function(e) {
                 e.preventDefault();
-                var otp = $("#otp").val(); 
+                var code = $("#code").val();
+                
                 $.ajax({
-                    url: "/admin/2fa",
+                    url: "/admin/security/2fa",
                     type: "POST",
-                    data: {
-                        code: 1234, 
-                    },
+                    data: { code: code },
                     success: function(data) {
-                        if (data.success == true) {
-                            window.location.href = '/admin/dashboard';
+                        if (data.success) {
+                            window.location.href = data.redirect;
                         } else {
-                            alert("Invalid credentials");
+                            $("#alert-container").html('<div class="alert alert-danger">' + data.message + '</div>');
                         }
+                    },
+                    error: function() {
+                        $("#alert-container").html('<div class="alert alert-danger">Verification failed</div>');
                     }
                 });
             });

@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pimcore - Editor Dashboard</title>
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        .sidebar { background: #1f2937; min-height: 100vh; color: white; }
+        .sidebar a { color: #9ca3af; }
+        .sidebar a:hover { color: white; text-decoration: none; }
+        .brand-logo { font-size: 1.5rem; font-weight: bold; color: #8b5cf6; }
+    </style>
+</head>
+<body>
+    <div class="container-fluid">
+        <div class="row">
+            <nav class="col-md-2 d-none d-md-block sidebar py-4">
+                <div class="text-center mb-4">
+                    <span class="brand-logo">Pimcore</span>
+                </div>
+                <ul class="nav flex-column">
+                    <li class="nav-item"><a class="nav-link active" href="/admin/portal">Dashboard</a></li>
+                    <li class="nav-item mt-4"><a class="nav-link text-danger" href="/logout">Logout</a></li>
+                </ul>
+            </nav>
+
+            <main role="main" class="col-md-10 ml-sm-auto px-4 py-4">
+                <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pb-2 mb-3 border-bottom">
+                    <h1 class="h2">Editor Dashboard</h1>
+                    <span class="text-muted">Welcome, {{ username }}</span>
+                </div>
+
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">Content Editor</h5>
+                        <p class="card-text">You have editor-level access to manage content and assets.</p>
+                        <p class="text-muted">For administrative functions, please contact your system administrator.</p>
+                    </div>
+                </div>
+
+                <div class="card mt-4">
+                    <div class="card-header">
+                        <h5 class="mb-0">Recent Documents</h5>
+                    </div>
+                    <div class="card-body">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>Name</th>
+                                    <th>Type</th>
+                                    <th>Modified</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr><td>Homepage</td><td>Page</td><td>2024-01-15</td></tr>
+                                <tr><td>About Us</td><td>Page</td><td>2024-01-14</td></tr>
+                                <tr><td>Product Catalog</td><td>Folder</td><td>2024-01-10</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>

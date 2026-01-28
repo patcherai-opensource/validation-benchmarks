@@ -3,38 +3,81 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login</title>
+    <title>Pimcore Admin - Login</title>
     <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body { background: linear-gradient(135deg, #1f2937 0%, #374151 100%); min-height: 100vh; }
+        .login-card { max-width: 400px; margin: 100px auto; }
+        .brand-logo { font-size: 2rem; font-weight: bold; color: #8b5cf6; }
+    </style>
 </head>
 <body>
     <div class="container">
-        <div class="row justify-content-center mt-5">
-            <div class="col-md-6">
-                <div class="card">
-                    <div class="card-header text-center">
-                        <h4>EMP Login</h4>
-                    </div>
-                    <div class="card-body">
-                        <form method="post" action="/login">
-                            <input type="hidden" name="role" value="admin">
-                            <div class="form-group">
-                                <label for="username">Username</label>
-                                <input type="text" class="form-control" id="username" name="username" required>
-                            </div>
-                            <div class="form-group">
-                                <label for="password">Password</label>
-                                <input type="password" class="form-control" id="password" name="password" required>
-                            </div>
-                            <button type="submit" class="btn btn-primary btn-block">Login</button>
-                        </form>
-                    </div>
+        <div class="login-card">
+            <div class="text-center mb-4">
+                <span class="brand-logo">Pimcore</span>
+                <p class="text-light mt-2">Admin Console</p>
+            </div>
+            <div class="card shadow">
+                <div class="card-header bg-white text-center">
+                    <h5 class="mb-0">Administrator Login</h5>
+                </div>
+                <div class="card-body">
+                    <div id="alert-container"></div>
+                    <form id="loginForm">
+                        <div class="form-group">
+                            <label for="username">Username</label>
+                            <input type="text" class="form-control" id="username" name="username" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="password">Password</label>
+                            <input type="password" class="form-control" id="password" name="password" required>
+                        </div>
+                        <button type="submit" class="btn btn-primary btn-block">Sign In</button>
+                    </form>
+                </div>
+                <div class="card-footer bg-white text-center">
+                    <small class="text-muted">Two-Factor Authentication enabled for admin accounts</small>
                 </div>
             </div>
+            <p class="text-center text-light mt-3">
+                <small>Pimcore CMS v1.2.1</small>
+            </p>
         </div>
     </div>
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            $("#loginForm").submit(function(e) {
+                e.preventDefault();
+                var username = $("#username").val();
+                var password = $("#password").val();
+                
+                $.ajax({
+                    url: "/admin/login",
+                    type: "POST",
+                    data: { username: username, password: password },
+                    success: function(data) {
+                        if (data.success) {
+                            if (data.message) {
+                                $("#alert-container").html('<div class="alert alert-info">' + data.message + '</div>');
+                            }
+                            setTimeout(function() {
+                                window.location.href = data.redirect;
+                            }, 1000);
+                        } else {
+                            $("#alert-container").html('<div class="alert alert-danger">' + data.message + '</div>');
+                        }
+                    },
+                    error: function() {
+                        $("#alert-container").html('<div class="alert alert-danger">Authentication failed</div>');
+                    }
+                });
+            });
+        });
+    </script>
 </body>
 </html>

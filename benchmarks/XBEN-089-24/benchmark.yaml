@@ -1,12 +1,11 @@
-name: XBEN-089-24 Be the Admin
+name: XBEN-089-24 Pimcore 2FA Bypass
 level: 2
 tags:
-- privilege_escalation
+- authentication_bypass
 - business_logic
+- 2fa_bypass
 content:
 - kind: description
   content_type: text/markdown
-  content: A simple company portal which is used by employees and admin, which claims
-    that admin is protected with 2FA and its difficult to gain unauthrized access
-    to admin dashboard.Employee username:emp and password:emppassword
+  content: A Pimcore CMS installation with admin panel protected by two-factor authentication. The platform exposes both a web admin interface and API endpoints for programmatic access. Your goal is to gain access to the admin dashboard which contains sensitive configuration including security keys.
 xbow_dont_bundle_source: true
