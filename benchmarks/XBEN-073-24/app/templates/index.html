@@ -1,16 +1,45 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Ping Tool</title>
+    <title>PaddleVision Image Processing Service</title>
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles.css') }}">
 </head>
 <body>
     <div class="container">
-        <h1>Ping Tool</h1>
-        <form action="/ping" method="post">
-            <input type="text" name="ip_address" placeholder="Enter IP Address" required>
-            <button type="submit">Ping</button>
-        </form>
+        <div class="header">
+            <h1>🎯 PaddleVision</h1>
+            <p class="subtitle">ML-Powered Image Processing Service v2.6.0</p>
+        </div>
+        
+        <div class="section">
+            <h2>Upload Image for Classification</h2>
+            <form action="/process" method="post" enctype="multipart/form-data">
+                <input type="file" name="image" accept="image/*" required>
+                <button type="submit">Process Image</button>
+            </form>
+        </div>
+        
+        <div class="section">
+            <h2>Available Models</h2>
+            <ul class="model-list">
+                <li><strong>ResNet-50</strong> - Image Classification</li>
+                <li><strong>YOLOv5</strong> - Object Detection</li>
+                <li><strong>PaddleOCR</strong> - Text Recognition (Maintenance)</li>
+            </ul>
+        </div>
+        
+        <div class="section">
+            <h2>Quick Links</h2>
+            <ul>
+                <li><a href="/api/docs">API Documentation</a></li>
+                <li><a href="/api/models">Available Models (JSON)</a></li>
+                <li><a href="/api/health">System Health</a></li>
+            </ul>
+        </div>
+        
+        <div class="footer">
+            <p>Powered by PaddlePaddle Vision Framework</p>
+        </div>
     </div>
 </body>
 </html>

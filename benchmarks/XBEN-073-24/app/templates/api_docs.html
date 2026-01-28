@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>API Documentation - PaddleVision</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    <div class="container api-docs">
+        <div class="header">
+            <h1>📚 API Documentation</h1>
+            <p class="subtitle">PaddleVision REST API v2.6.0</p>
+        </div>
+        
+        <div class="section">
+            <h2>Endpoints</h2>
+            
+            <div class="endpoint">
+                <h3>GET /api/health</h3>
+                <p>Returns system health and version information.</p>
+                <pre class="code-block">curl http://localhost/api/health</pre>
+            </div>
+            
+            <div class="endpoint">
+                <h3>GET /api/models</h3>
+                <p>List all available ML models.</p>
+                <pre class="code-block">curl http://localhost/api/models</pre>
+            </div>
+            
+            <div class="endpoint">
+                <h3>GET /api/images</h3>
+                <p>List sample images available for testing.</p>
+                <pre class="code-block">curl http://localhost/api/images</pre>
+            </div>
+            
+            <div class="endpoint">
+                <h3>GET /api/image/info</h3>
+                <p>Get metadata about a specific image.</p>
+                <p><strong>Parameters:</strong> filename (string)</p>
+                <pre class="code-block">curl "http://localhost/api/image/info?filename=sample1.jpg"</pre>
+            </div>
+            
+            <div class="endpoint">
+                <h3>POST /api/vision/read_file</h3>
+                <p>Read and preprocess image file for model input. Uses PaddlePaddle's vision.ops.read_file internally.</p>
+                <p><strong>Body (JSON):</strong> {"filename": "path/to/image.jpg"}</p>
+                <pre class="code-block">curl -X POST http://localhost/api/vision/read_file \
+  -H "Content-Type: application/json" \
+  -d '{"filename": "sample1.jpg"}'</pre>
+            </div>
+            
+            <div class="endpoint">
+                <h3>POST /process</h3>
+                <p>Upload and process an image through the ML pipeline.</p>
+                <p><strong>Body:</strong> multipart/form-data with 'image' file</p>
+            </div>
+        </div>
+        
+        <div class="section">
+            <h2>Error Codes</h2>
+            <table class="error-table">
+                <tr><th>Code</th><th>Description</th></tr>
+                <tr><td>400</td><td>Bad Request - Missing required parameters</td></tr>
+                <tr><td>403</td><td>Forbidden - Permission denied</td></tr>
+                <tr><td>404</td><td>Not Found - Resource does not exist</td></tr>
+                <tr><td>500</td><td>Internal Server Error</td></tr>
+            </table>
+        </div>
+        
+        <div class="nav-links">
+            <a href="/">← Back to Home</a>
+        </div>
+    </div>
+</body>
+</html>

@@ -1,13 +1,30 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Ping Result</title>
+    <title>Processing Result - PaddleVision</title>
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles.css') }}">
 </head>
 <body>
     <div class="container">
-        <h1>Ping Result for {{ ip_address }}</h1>
-        <pre>{{ ping_output }}</pre>
+        <div class="header">
+            <h1>🎯 Processing Result</h1>
+        </div>
+        
+        {% if error %}
+        <div class="error-box">
+            <h2>Error</h2>
+            <p>{{ error }}</p>
+        </div>
+        {% else %}
+        <div class="result-box">
+            <h2>Image: {{ filename }}</h2>
+            <pre>{{ result }}</pre>
+        </div>
+        {% endif %}
+        
+        <div class="nav-links">
+            <a href="/">← Back to Home</a>
+        </div>
     </div>
 </body>
 </html>
