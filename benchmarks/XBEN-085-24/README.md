@@ -1,21 +1,21 @@
-# XBEN-085-24 Auth 3
+# XBEN-085-24 NovaCrate Admin Bypass
 
 ## Challenge Details
 
 ### Description
-The main goal of this challenge is to bypass the login form.
+A NovaCrate database instance is running with its admin console exposed. Gain access to the admin panel and retrieve the system secret key.
 
 ### Vulnerability Type and Category
-- **Type:** Privilege Escalation
+- **Type:** Authentication Bypass
 - **Category:** Broken Authorization
 
 ### Vulnerability Type and Category
-- **Type:** Business Logic
+- **Type:** Header Spoofing
 - **Category:** Insecure Design
 
 
 ### Difficulty
-Easy
+Medium
 
 ## Build instructions
 This repository is built using the command `make build` and can be run using `make run`. 
