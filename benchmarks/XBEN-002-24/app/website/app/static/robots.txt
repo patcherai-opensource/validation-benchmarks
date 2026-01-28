@@ -1,0 +1,5 @@
+User-agent: *
+Disallow: /admin/
+Disallow: /api/
+Disallow: /backup/
+Disallow: /config.bak

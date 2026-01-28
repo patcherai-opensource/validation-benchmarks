@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ device.hostname }} - NetMon Pro</title>
+    <link href="{{ url_for('static', filename='css/bootstrap.min.css') }}" rel="stylesheet">
+    <style>
+        body {
+            background-color: #1a1a2e;
+            color: #eaeaea;
+        }
+        .navbar {
+            background-color: #16213e !important;
+        }
+        .card {
+            background-color: #16213e;
+            color: #eaeaea;
+            border: 1px solid #0f3460;
+        }
+        .logo-text {
+            color: #e94560;
+            font-weight: bold;
+        }
+        .btn-outline-light:hover {
+            background-color: #e94560;
+            border-color: #e94560;
+        }
+        .detail-label {
+            color: #888;
+            font-weight: bold;
+        }
+        .detail-value {
+            color: #eaeaea;
+        }
+        .status-active {
+            color: #27ae60;
+        }
+        .status-inactive {
+            color: #e74c3c;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark">
+        <div class="container">
+            <a class="navbar-brand" href="/dashboard"><span class="logo-text">NetMon</span> Pro</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="/dashboard">Dashboard</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/devices">Devices</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/search/mac">MAC Search</a>
+                    </li>
+                </ul>
+                <ul class="navbar-nav">
+                    <li class="nav-item">
+                        <span class="nav-link text-muted">{{ user.first_name }} {{ user.last_name }}</span>
+                    </li>
+                    <li class="nav-item">
+                        <form action="/logout" method="post" class="d-inline">
+                            <button type="submit" class="btn btn-outline-light btn-sm">Logout</button>
+                        </form>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+    <div class="container mt-4">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb" style="background-color: transparent;">
+                <li class="breadcrumb-item"><a href="/devices" style="color: #e94560;">Devices</a></li>
+                <li class="breadcrumb-item active" style="color: #888;">{{ device.hostname }}</li>
+            </ol>
+        </nav>
+        
+        <h2 class="mb-4">{{ device.hostname }}</h2>
+        
+        <div class="row">
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">Device Information</h5>
+                        <table class="table table-borderless" style="color: #eaeaea;">
+                            <tr>
+                                <td class="detail-label">Hostname</td>
+                                <td class="detail-value">{{ device.hostname }}</td>
+                            </tr>
+                            <tr>
+                                <td class="detail-label">IP Address</td>
+                                <td class="detail-value">{{ device.ip_address }}</td>
+                            </tr>
+                            <tr>
+                                <td class="detail-label">MAC Address</td>
+                                <td class="detail-value"><code>{{ device.mac_address }}</code></td>
+                            </tr>
+                            <tr>
+                                <td class="detail-label">Device Type</td>
+                                <td class="detail-value">{{ device.device_type }}</td>
+                            </tr>
+                            <tr>
+                                <td class="detail-label">Status</td>
+                                <td class="{% if device.status == 'active' %}status-active{% else %}status-inactive{% endif %}">
+                                    {{ device.status }}
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="detail-label">Location</td>
+                                <td class="detail-value">{{ device.location or '-' }}</td>
+                            </tr>
+                            <tr>
+                                <td class="detail-label">Last Seen</td>
+                                <td class="detail-value">{{ device.last_seen or '-' }}</td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

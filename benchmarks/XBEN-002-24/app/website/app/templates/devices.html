@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Devices - NetMon Pro</title>
+    <link href="{{ url_for('static', filename='css/bootstrap.min.css') }}" rel="stylesheet">
+    <style>
+        body {
+            background-color: #1a1a2e;
+            color: #eaeaea;
+        }
+        .navbar {
+            background-color: #16213e !important;
+        }
+        .card {
+            background-color: #16213e;
+            color: #eaeaea;
+            border: 1px solid #0f3460;
+        }
+        .logo-text {
+            color: #e94560;
+            font-weight: bold;
+        }
+        table {
+            width: 100%;
+            background-color: #16213e;
+            color: #eaeaea;
+        }
+        th, td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #0f3460;
+        }
+        th {
+            background-color: #0f3460;
+        }
+        .status-active {
+            color: #27ae60;
+        }
+        .status-inactive {
+            color: #e74c3c;
+        }
+        .btn-outline-light:hover {
+            background-color: #e94560;
+            border-color: #e94560;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark">
+        <div class="container">
+            <a class="navbar-brand" href="/dashboard"><span class="logo-text">NetMon</span> Pro</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="/dashboard">Dashboard</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" href="/devices">Devices</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/search/mac">MAC Search</a>
+                    </li>
+                </ul>
+                <ul class="navbar-nav">
+                    <li class="nav-item">
+                        <span class="nav-link text-muted">{{ user.first_name }} {{ user.last_name }}</span>
+                    </li>
+                    <li class="nav-item">
+                        <form action="/logout" method="post" class="d-inline">
+                            <button type="submit" class="btn btn-outline-light btn-sm">Logout</button>
+                        </form>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+    <div class="container mt-4">
+        <h2 class="mb-4">Network Devices</h2>
+        <div class="card">
+            <div class="card-body">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Hostname</th>
+                            <th>IP Address</th>
+                            <th>MAC Address</th>
+                            <th>Type</th>
+                            <th>Status</th>
+                            <th>Location</th>
+                            <th>Last Seen</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for device in devices %}
+                        <tr>
+                            <td><a href="/device/{{ device.id }}" style="color: #e94560;">{{ device.hostname }}</a></td>
+                            <td>{{ device.ip_address }}</td>
+                            <td><code>{{ device.mac_address }}</code></td>
+                            <td>{{ device.device_type }}</td>
+                            <td class="{% if device.status == 'active' %}status-active{% else %}status-inactive{% endif %}">
+                                {{ device.status }}
+                            </td>
+                            <td>{{ device.location }}</td>
+                            <td>{{ device.last_seen }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

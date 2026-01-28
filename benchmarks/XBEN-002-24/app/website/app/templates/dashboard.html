@@ -3,51 +3,114 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard - Trading Platform</title>
+    <title>Dashboard - NetMon Pro</title>
     <link href="{{ url_for('static', filename='css/bootstrap.min.css') }}" rel="stylesheet">
     <style>
         body {
-            background-color: #2c3e50;
-            color: #ffffff;
+            background-color: #1a1a2e;
+            color: #eaeaea;
+        }
+        .navbar {
+            background-color: #16213e !important;
         }
         .card {
-            background-color: #34495e;
-            color: #ffffff;
+            background-color: #16213e;
+            color: #eaeaea;
+            border: 1px solid #0f3460;
+        }
+        .stat-card {
+            text-align: center;
+            padding: 20px;
+        }
+        .stat-number {
+            font-size: 2.5em;
+            font-weight: bold;
+            color: #e94560;
+        }
+        .stat-label {
+            color: #aaa;
+        }
+        .logo-text {
+            color: #e94560;
+            font-weight: bold;
+        }
+        .btn-outline-light:hover {
+            background-color: #e94560;
+            border-color: #e94560;
         }
     </style>
 </head>
 <body>
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <nav class="navbar navbar-expand-lg navbar-dark">
         <div class="container">
-            <a class="navbar-brand" href="#">Trading Platform</a>
+            <a class="navbar-brand" href="/dashboard"><span class="logo-text">NetMon</span> Pro</a>
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav ml-auto">
+                <ul class="navbar-nav me-auto">
                     <li class="nav-item">
-                        <a class="nav-link" href="/orders">Orders</a>
+                        <a class="nav-link" href="/dashboard">Dashboard</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="/orders_archive">Orders Archive</a>
+                        <a class="nav-link" href="/devices">Devices</a>
                     </li>
                     <li class="nav-item">
-                        <form action="/logout" method="post">
-                            <button type="submit" class="btn btn-success">Logout</button>
+                        <a class="nav-link" href="/search/mac">MAC Search</a>
+                    </li>
+                </ul>
+                <ul class="navbar-nav">
+                    <li class="nav-item">
+                        <span class="nav-link text-muted">{{ user.first_name }} {{ user.last_name }}</span>
+                    </li>
+                    <li class="nav-item">
+                        <form action="/logout" method="post" class="d-inline">
+                            <button type="submit" class="btn btn-outline-light btn-sm">Logout</button>
                         </form>
                     </li>
                 </ul>
             </div>
         </div>
     </nav>
-    <div class="container mt-3">
-        <div class="row justify-content-center">
+    <div class="container mt-4">
+        <h2 class="mb-4">Network Overview</h2>
+        <div class="row">
+            <div class="col-md-4 mb-3">
+                <div class="card stat-card">
+                    <div class="stat-number">{{ stats.total }}</div>
+                    <div class="stat-label">Total Devices</div>
+                </div>
+            </div>
+            <div class="col-md-4 mb-3">
+                <div class="card stat-card">
+                    <div class="stat-number" style="color: #27ae60;">{{ stats.active }}</div>
+                    <div class="stat-label">Active</div>
+                </div>
+            </div>
+            <div class="col-md-4 mb-3">
+                <div class="card stat-card">
+                    <div class="stat-number" style="color: #e74c3c;">{{ stats.inactive }}</div>
+                    <div class="stat-label">Inactive</div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="row mt-4">
             <div class="col-md-6">
-                <h2 class="text-center mb-4">Dashboard</h2>
                 <div class="card">
                     <div class="card-body">
-                        <h5 class="card-title">Welcome, {{ user.first_name }} {{ user.last_name }}</h5>
-                        <p class="card-text">This is your dashboard.</p>
+                        <h5 class="card-title">Quick Actions</h5>
+                        <a href="/devices" class="btn btn-outline-light btn-sm me-2 mb-2">View All Devices</a>
+                        <a href="/search/mac" class="btn btn-outline-light btn-sm me-2 mb-2">Search by MAC</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">System Status</h5>
+                        <p class="card-text"><small class="text-muted">All systems operational</small></p>
+                        <p class="card-text"><small>Version: 2.3.1</small></p>
                     </div>
                 </div>
             </div>
