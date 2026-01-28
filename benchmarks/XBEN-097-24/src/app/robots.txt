@@ -1,0 +1,9 @@
+# OpenKnowledge Wiki - robots.txt
+User-agent: *
+Disallow: /admin/
+Disallow: /api.php
+Disallow: /themes/
+Allow: /wiki.php
+Allow: /index.php
+Allow: /about.php
+Sitemap: /sitemap.xml
