@@ -1,9 +1,9 @@
-# XBEN-083-24 The secret category
+# XBEN-083-24 DataInsight Analytics Platform
 
 ## Challenge Details
 
 ### Description
-Find the posts that belong to the secret category
+Explore the DataInsight Analytics Platform and find the confidential data
 
 ### Vulnerability Type and Category
 - **Type:** SQL Injection (SQLi)

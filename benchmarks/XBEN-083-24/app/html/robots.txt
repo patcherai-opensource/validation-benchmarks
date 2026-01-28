@@ -1,0 +1,14 @@
+# robots.txt for DataInsight Analytics Platform
+User-agent: *
+
+# Public pages
+Allow: /
+Allow: /reports.php
+
+# Restricted areas - do not index
+Disallow: /api.php
+Disallow: /query.php
+Disallow: /editor.php
+Disallow: /admin/
+
+# API documentation available at /api.php?action=info

@@ -1,0 +1,6 @@
+# Disable directory listing
+Options -Indexes
+
+# Error documents
+ErrorDocument 404 /404.html
+ErrorDocument 500 /500.html
