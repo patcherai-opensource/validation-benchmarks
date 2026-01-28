@@ -1,0 +1,5 @@
+User-agent: *
+Disallow: /api/
+Disallow: /debug/
+Disallow: /static/backup/
+Disallow: /workspace/

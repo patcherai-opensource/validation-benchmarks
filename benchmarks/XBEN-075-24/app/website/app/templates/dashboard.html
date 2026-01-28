@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - WorkspaceHub</title>
+    <link href="{{ url_for('static', filename='css/bootstrap.min.css') }}" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+        <div class="container">
+            <a class="navbar-brand" href="/">WorkspaceHub</a>
+            <div class="navbar-nav">
+                <a class="nav-link active" href="{{ url_for('dashboard') }}">Dashboard</a>
+                <a class="nav-link" href="{{ url_for('create_workspace') }}">New Workspace</a>
+                <a class="nav-link" href="{{ url_for('settings') }}">Settings</a>
+                <a class="nav-link" href="{{ url_for('about') }}">About</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container mt-4">
+        <div class="row">
+            <div class="col-md-9">
+                <h2>Your Workspaces</h2>
+                <p class="text-muted">Manage your collaboration workspaces and team projects</p>
+                
+                {% if workspaces %}
+                <div class="row mt-4">
+                    {% for item in workspaces %}
+                    <div class="col-md-6 mb-3">
+                        <div class="card">
+                            <div class="card-body">
+                                <h5 class="card-title">{{ item.name }}</h5>
+                                <p class="card-text">{{ item.description }}</p>
+                                <span class="badge bg-success">Active</span>
+                                <a href="/workspace/delete?name={{ item.name }}" class="btn btn-sm btn-outline-danger float-end">Delete</a>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+                {% else %}
+                <div class="alert alert-info mt-4">
+                    <h5>No workspaces yet</h5>
+                    <p>Create your first workspace to start collaborating with your team.</p>
+                    <a href="{{ url_for('create_workspace') }}" class="btn btn-primary">Create Workspace</a>
+                </div>
+                {% endif %}
+            </div>
+            <div class="col-md-3">
+                <div class="card">
+                    <div class="card-header">Quick Actions</div>
+                    <div class="card-body">
+                        <ul class="list-group list-group-flush">
+                            <li class="list-group-item"><a href="{{ url_for('create_workspace') }}">+ New Workspace</a></li>
+                            <li class="list-group-item"><a href="{{ url_for('settings') }}">Settings</a></li>
+                            <li class="list-group-item"><a href="/api/status">API Status</a></li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="card mt-3">
+                    <div class="card-header">Session Info</div>
+                    <div class="card-body">
+                        <small class="text-muted">User ID: {{ user_id[:8] }}...</small>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="{{ url_for('static', filename='js/bootstrap.bundle.min.js') }}"></script>
+</body>
+</html>

@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create Workspace - WorkspaceHub</title>
+    <link href="{{ url_for('static', filename='css/bootstrap.min.css') }}" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+        <div class="container">
+            <a class="navbar-brand" href="/">WorkspaceHub</a>
+            <div class="navbar-nav">
+                <a class="nav-link" href="{{ url_for('dashboard') }}">Dashboard</a>
+                <a class="nav-link active" href="{{ url_for('create_workspace') }}">New Workspace</a>
+                <a class="nav-link" href="{{ url_for('settings') }}">Settings</a>
+                <a class="nav-link" href="{{ url_for('about') }}">About</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container mt-4">
+        <div class="row justify-content-center">
+            <div class="col-md-8">
+                <div class="card">
+                    <div class="card-header">
+                        <h4>Create New Workspace</h4>
+                    </div>
+                    <div class="card-body">
+                        <form action="{{ url_for('create_workspace') }}" method="post">
+                            <div class="mb-3">
+                                <label for="name" class="form-label">Workspace Name</label>
+                                <input type="text" class="form-control" id="name" name="name" placeholder="Enter workspace name" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="description" class="form-label">Description</label>
+                                <textarea class="form-control" id="description" name="description" rows="3" placeholder="Describe the purpose of this workspace"></textarea>
+                            </div>
+                            <div class="d-flex justify-content-between">
+                                <a href="{{ url_for('dashboard') }}" class="btn btn-secondary">Cancel</a>
+                                <button type="submit" class="btn btn-primary">Create Workspace</button>
+                            </div>
+                        </form>
+                        {% if error %}
+                        <div class="alert alert-danger mt-3" role="alert">
+                            {{ error }}
+                        </div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="{{ url_for('static', filename='js/bootstrap.bundle.min.js') }}"></script>
+</body>
+</html>

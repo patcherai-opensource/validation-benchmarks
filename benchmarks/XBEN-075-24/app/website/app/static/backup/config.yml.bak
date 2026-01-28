@@ -1,0 +1,29 @@
+# WorkspaceHub Configuration Backup
+# Last updated: 2024-01-15
+# DO NOT COMMIT TO VERSION CONTROL
+
+server:
+  host: 0.0.0.0
+  port: 80
+  debug: false
+
+database:
+  driver: sqlite
+  path: /var/data/workspacehub.db
+
+security:
+  # Application encryption key for cookie encryption
+  app_key: "base64:dGhpc19pc19hX3NlY3JldF9rZXlfMzJieXRlcyE="
+  
+  # Session settings
+  session_lifetime: 1440
+  encrypt_cookies: true
+  
+logging:
+  level: info
+  path: /var/log/workspacehub/
+
+# Feature flags
+features:
+  api_enabled: true
+  debug_endpoints: false

@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Settings - WorkspaceHub</title>
+    <link href="{{ url_for('static', filename='css/bootstrap.min.css') }}" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+        <div class="container">
+            <a class="navbar-brand" href="/">WorkspaceHub</a>
+            <div class="navbar-nav">
+                <a class="nav-link" href="{{ url_for('dashboard') }}">Dashboard</a>
+                <a class="nav-link" href="{{ url_for('create_workspace') }}">New Workspace</a>
+                <a class="nav-link active" href="{{ url_for('settings') }}">Settings</a>
+                <a class="nav-link" href="{{ url_for('about') }}">About</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container mt-4">
+        <h2>Settings</h2>
+        <p class="text-muted">Manage your account and application settings</p>
+        
+        <div class="row mt-4">
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-header">Profile Settings</div>
+                    <div class="card-body">
+                        <form>
+                            <div class="mb-3">
+                                <label for="displayName" class="form-label">Display Name</label>
+                                <input type="text" class="form-control" id="displayName" placeholder="Your name">
+                            </div>
+                            <div class="mb-3">
+                                <label for="email" class="form-label">Email</label>
+                                <input type="email" class="form-control" id="email" placeholder="your@email.com">
+                            </div>
+                            <button type="button" class="btn btn-primary" disabled>Save Changes</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-header">Security Settings</div>
+                    <div class="card-body">
+                        <p class="text-muted">Session security is managed automatically using encrypted cookies.</p>
+                        <ul class="list-group list-group-flush">
+                            <li class="list-group-item d-flex justify-content-between">
+                                <span>Cookie Encryption</span>
+                                <span class="badge bg-success">Enabled</span>
+                            </li>
+                            <li class="list-group-item d-flex justify-content-between">
+                                <span>Session Timeout</span>
+                                <span>24 hours</span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="card mt-3">
+                    <div class="card-header">Developer Options</div>
+                    <div class="card-body">
+                        <ul class="list-group list-group-flush">
+                            <li class="list-group-item"><a href="/api/status">View API Status</a></li>
+                            <li class="list-group-item"><a href="/debug/info">Debug Information</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="{{ url_for('static', filename='js/bootstrap.bundle.min.js') }}"></script>
+</body>
+</html>
