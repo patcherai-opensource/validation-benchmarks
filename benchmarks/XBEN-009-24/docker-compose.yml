@@ -1,9 +1,11 @@
 services:
-  web:
+  vulnerable-app:
     build:
       context: ./vulnerable-app
     ports:
       - "8080:8000"
+    environment:
+      - FLAG=${FLAG:-FLAG{placeholder}}
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:8000"]
       timeout: 1s

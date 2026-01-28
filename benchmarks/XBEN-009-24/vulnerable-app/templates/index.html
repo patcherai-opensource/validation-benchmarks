@@ -3,15 +3,126 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SSTI Demo</title>
+    <title>TechCorp HR Portal</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+        .header {
+            background: rgba(255,255,255,0.1);
+            padding: 20px 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .logo {
+            color: white;
+            font-size: 24px;
+            font-weight: bold;
+        }
+        .nav a {
+            color: white;
+            text-decoration: none;
+            margin-left: 30px;
+            opacity: 0.9;
+        }
+        .nav a:hover {
+            opacity: 1;
+            text-decoration: underline;
+        }
+        .hero {
+            text-align: center;
+            padding: 100px 20px;
+            color: white;
+        }
+        .hero h1 {
+            font-size: 48px;
+            margin-bottom: 20px;
+        }
+        .hero p {
+            font-size: 20px;
+            opacity: 0.9;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        .features {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            padding: 50px 20px;
+            flex-wrap: wrap;
+        }
+        .feature-card {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            width: 280px;
+            text-align: center;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+        .feature-card h3 {
+            color: #667eea;
+            margin-bottom: 15px;
+        }
+        .feature-card p {
+            color: #666;
+            line-height: 1.6;
+        }
+        .feature-card a {
+            display: inline-block;
+            margin-top: 15px;
+            color: #764ba2;
+            text-decoration: none;
+            font-weight: bold;
+        }
+        .footer {
+            text-align: center;
+            padding: 40px;
+            color: rgba(255,255,255,0.7);
+            font-size: 14px;
+        }
+    </style>
 </head>
 <body>
-    <h1>SSTI Demo</h1>
-    <form action="/greet/" method="get">
-        <label for="name">Enter your name:</label>
-        <input type="text" id="name" name="name">
-        <button type="submit">Greet</button>
-    </form>
+    <div class="header">
+        <div class="logo">TechCorp HR Portal</div>
+        <div class="nav">
+            <a href="/">Home</a>
+            <a href="/employees/">Employees</a>
+            <a href="/departments/">Departments</a>
+            <a href="/reports/">Reports</a>
+        </div>
+    </div>
+    
+    <div class="hero">
+        <h1>Welcome to TechCorp HR Portal</h1>
+        <p>Your centralized platform for employee management, department organization, and workforce analytics.</p>
+    </div>
+    
+    <div class="features">
+        <div class="feature-card">
+            <h3>Employee Directory</h3>
+            <p>Browse and search through our comprehensive employee database. Sort by name, department, or other criteria.</p>
+            <a href="/employees/">View Directory &rarr;</a>
+        </div>
+        <div class="feature-card">
+            <h3>Department Overview</h3>
+            <p>Explore our organizational structure and see team compositions across different departments.</p>
+            <a href="/departments/">View Departments &rarr;</a>
+        </div>
+        <div class="feature-card">
+            <h3>Workforce Reports</h3>
+            <p>Access detailed analytics and reports about workforce metrics and employee statistics.</p>
+            <a href="/reports/">View Reports &rarr;</a>
+        </div>
+    </div>
+    
+    <div class="footer">
+        &copy; 2024 TechCorp Inc. All rights reserved. | Internal Use Only
+    </div>
 </body>
 </html>
-
