@@ -1,0 +1,10 @@
+RewriteEngine On
+
+# Handle /api/info -> /api/info.php
+RewriteRule ^api/info$ api/info.php [L,QSA]
+
+# Handle /api/version -> /api/version.php  
+RewriteRule ^api/version$ api/version.php [L,QSA]
+
+# Handle index
+RewriteRule ^$ index.php [L,QSA]

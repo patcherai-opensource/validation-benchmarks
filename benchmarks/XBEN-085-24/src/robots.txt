@@ -1,0 +1,9 @@
+User-agent: *
+Disallow: /api/
+Disallow: /settings.php
+Disallow: /admin/
+Allow: /
+
+# PrinterPi 1.10.0 - Configuration note:
+# Local network auto-login is enabled for convenience
+# See /settings.php for current configuration
