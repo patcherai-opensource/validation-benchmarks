@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard - CloudVPS Control Panel</title>
+    <title>Support - CloudVPS Control Panel</title>
     <link href="{{ url_for('static', filename='css/bootstrap.min.css') }}" rel="stylesheet">
     <style>
         body {
@@ -21,9 +21,6 @@
         .btn-danger {
             background-color: #e94560;
             border-color: #e94560;
-        }
-        .stat-card {
-            border-left: 4px solid #e94560;
         }
     </style>
 </head>
@@ -45,7 +42,7 @@
                     <li class="nav-item">
                         <a class="nav-link" href="/billing">Billing</a>
                     </li>
-                    <li class="nav-item">
+                    <li class="nav-item active">
                         <a class="nav-link" href="/support">Support</a>
                     </li>
                     <li class="nav-item">
@@ -59,27 +56,16 @@
     </nav>
     <div class="container mt-4">
         <div class="row">
-            <div class="col-md-12">
-                <h4 class="mb-4">Welcome back, {{ user.first_name }}!</h4>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-md-4">
-                <div class="card stat-card mb-3">
-                    <div class="card-body">
-                        <h6 class="card-subtitle mb-2 text-muted">Quick Actions</h6>
-                        <a href="/servers" class="btn btn-outline-light btn-sm mt-2">View Servers</a>
-                        <a href="/servers/managed" class="btn btn-outline-light btn-sm mt-2">Managed Servers</a>
-                    </div>
-                </div>
-            </div>
             <div class="col-md-8">
+                <h4 class="mb-4">Support Center</h4>
                 <div class="card">
                     <div class="card-body">
-                        <h5 class="card-title">Account Information</h5>
-                        <p class="card-text"><strong>Name:</strong> {{ user.first_name }} {{ user.last_name }}</p>
-                        <p class="card-text"><strong>Email:</strong> {{ user.email }}</p>
-                        <p class="card-text"><strong>Account ID:</strong> {{ user.id }}</p>
+                        <h5>Need Help?</h5>
+                        <p>Our support team is available 24/7 to assist you with any issues.</p>
+                        <p><strong>Email:</strong> support@cloudvps.local</p>
+                        <p><strong>Emergency Hotline:</strong> +1-800-CLOUDVPS</p>
+                        <hr style="border-color: #0f3460;">
+                        <p class="text-muted">No open tickets.</p>
                     </div>
                 </div>
             </div>

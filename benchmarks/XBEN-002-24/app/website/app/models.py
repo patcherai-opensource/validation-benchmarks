@@ -10,22 +10,25 @@ class User(db.Model):
     last_name = db.Column(db.String(100), nullable=False)
     email = db.Column(db.String(100), nullable=False)
 
-    orders = db.relationship('Order', back_populates='creator', foreign_keys='Order.creator_fk')
-    archived_orders = db.relationship('Order', back_populates='archiver', foreign_keys='Order.archiver_fk')
+    servers = db.relationship('VirtualServer', back_populates='owner', foreign_keys='VirtualServer.owner_fk')
+    managed_servers = db.relationship('VirtualServer', back_populates='manager', foreign_keys='VirtualServer.manager_fk')
 
 
-class Order(db.Model):
+class VirtualServer(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    date = db.Column(db.String(50), nullable=False)
-    ticker = db.Column(db.String(50), nullable=False)
-    operation_type = db.Column(db.String(50), nullable=False)
-    quantity = db.Column(db.Integer, nullable=False)
-    price = db.Column(db.Integer, nullable=False)
-    receipt = db.Column(db.String(500), nullable=False)
-    archived = db.Column(db.Boolean, default=False, nullable=False)
+    hostname = db.Column(db.String(100), nullable=False)
+    ip_address = db.Column(db.String(50), nullable=False)
+    os_template = db.Column(db.String(100), nullable=False)
+    vcpu = db.Column(db.Integer, nullable=False)
+    ram_mb = db.Column(db.Integer, nullable=False)
+    disk_gb = db.Column(db.Integer, nullable=False)
+    status = db.Column(db.String(50), nullable=False)  # running, stopped, suspended
+    root_password = db.Column(db.String(500), nullable=False)
+    transferred = db.Column(db.Boolean, default=False, nullable=False)
+    created_at = db.Column(db.String(50), nullable=False)
     
-    creator_fk = db.Column(db.Integer, db.ForeignKey(User.id))
-    creator = db.relationship('User', back_populates='orders', foreign_keys=[creator_fk])
+    owner_fk = db.Column(db.Integer, db.ForeignKey(User.id))
+    owner = db.relationship('User', back_populates='servers', foreign_keys=[owner_fk])
 
-    archiver_fk = db.Column(db.Integer, db.ForeignKey(User.id))
-    archiver = db.relationship('User', back_populates='archived_orders', foreign_keys=[archiver_fk])
+    manager_fk = db.Column(db.Integer, db.ForeignKey(User.id))
+    manager = db.relationship('User', back_populates='managed_servers', foreign_keys=[manager_fk])
