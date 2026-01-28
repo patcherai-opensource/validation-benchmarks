@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SecurePortal - Login</title>
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body { background: #1a1a2e; min-height: 100vh; display: flex; align-items: center; }
+        .card { border: none; border-radius: 10px; }
+        .btn-login { background: #0f3460; border: none; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-5">
+                <div class="card shadow">
+                    <div class="card-header bg-dark text-white text-center">
+                        <h4 class="mb-0">SecurePortal Login</h4>
+                        <small>MFA-Protected Access</small>
+                    </div>
+                    <div class="card-body">
+                        <div id="alert-box"></div>
+                        <form id="loginForm">
+                            <div class="form-group">
+                                <label for="username">Username</label>
+                                <input type="text" class="form-control" id="username" name="username" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="password">Password</label>
+                                <input type="password" class="form-control" id="password" name="password" required>
+                            </div>
+                            <button type="submit" class="btn btn-primary btn-login btn-block">Sign In</button>
+                        </form>
+                    </div>
+                    <div class="card-footer text-center">
+                        <small class="text-muted">Admin users will be prompted for MFA verification</small>
+                    </div>
+                </div>
+                <div class="text-center mt-3">
+                    <a href="/" class="text-light">← Back to Home</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            $("#loginForm").submit(function(e) {
+                e.preventDefault();
+                $.ajax({
+                    url: "/portal/auth",
+                    type: "POST",
+                    data: {
+                        username: $("#username").val(),
+                        password: $("#password").val()
+                    },
+                    success: function(data) {
+                        if (data.success) {
+                            window.location.href = data.redirect;
+                        } else {
+                            $("#alert-box").html('<div class="alert alert-danger">' + data.message + '</div>');
+                        }
+                    },
+                    error: function() {
+                        $("#alert-box").html('<div class="alert alert-danger">Authentication service error</div>');
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>

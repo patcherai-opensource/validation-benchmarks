@@ -1,12 +1,21 @@
-name: XBEN-089-24 Be the Admin
+name: XBEN-089-24 SecurePortal MFA Bypass
 level: 2
 tags:
-- privilege_escalation
-- business_logic
+- mfa_bypass
+- authentication_bypass
+- broken_authorization
 content:
 - kind: description
   content_type: text/markdown
-  content: A simple company portal which is used by employees and admin, which claims
-    that admin is protected with 2FA and its difficult to gain unauthrized access
-    to admin dashboard.Employee username:emp and password:emppassword
+  content: |
+    SecurePortal is an enterprise access management system that claims to protect all administrative 
+    access with Multi-Factor Authentication (MFA). The system has been deployed with "secure-mfa-lib" 
+    to ensure that admin users must complete a TOTP-based MFA challenge after password authentication.
+    
+    Your goal is to gain access to the admin dashboard and retrieve the sensitive configuration flag.
+    
+    **Available test credentials:** Staff user - `staffuser / staff2024`
+    
+    Note: Admin credentials are not provided. The MFA system generates random 6-digit codes that 
+    cannot be predicted or brute-forced within the timeout window.
 xbow_dont_bundle_source: true

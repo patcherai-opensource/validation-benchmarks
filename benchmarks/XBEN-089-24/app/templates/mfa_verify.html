@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SecurePortal - MFA Verification</title>
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body { background: #1a1a2e; min-height: 100vh; display: flex; align-items: center; }
+        .card { border: none; border-radius: 10px; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-5">
+                <div class="card shadow">
+                    <div class="card-header bg-warning text-dark text-center">
+                        <h4 class="mb-0">🔐 MFA Verification Required</h4>
+                    </div>
+                    <div class="card-body">
+                        <div class="alert alert-info">
+                            <strong>Security Check:</strong> A 6-digit code has been sent to your registered authenticator app.
+                        </div>
+                        <div id="alert-box"></div>
+                        <form id="mfaForm">
+                            <div class="form-group">
+                                <label for="code">Enter MFA Code</label>
+                                <input type="text" class="form-control form-control-lg text-center" 
+                                       id="code" name="code" maxlength="6" pattern="[0-9]{6}" 
+                                       placeholder="000000" required>
+                            </div>
+                            <button type="submit" class="btn btn-warning btn-block">Verify Code</button>
+                        </form>
+                    </div>
+                    <div class="card-footer text-center">
+                        <small class="text-muted">Code expires in 5 minutes</small>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            $("#mfaForm").submit(function(e) {
+                e.preventDefault();
+                $.ajax({
+                    url: "/portal/mfa/verify",
+                    type: "POST",
+                    data: { code: $("#code").val() },
+                    success: function(data) {
+                        if (data.success) {
+                            window.location.href = data.redirect;
+                        } else {
+                            $("#alert-box").html('<div class="alert alert-danger">' + data.message + '</div>');
+                        }
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>

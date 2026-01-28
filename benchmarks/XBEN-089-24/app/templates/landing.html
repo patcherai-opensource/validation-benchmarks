@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SecurePortal - Enterprise Access Management</title>
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body { background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%); min-height: 100vh; }
+        .hero { padding: 100px 0; color: white; }
+        .card { border: none; border-radius: 10px; box-shadow: 0 4px 6px rgba(0,0,0,0.3); }
+        .btn-portal { background: #0f3460; border: none; }
+        .btn-portal:hover { background: #1a4a7a; }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-dark bg-dark">
+        <a class="navbar-brand" href="/">SecurePortal</a>
+        <span class="navbar-text">Enterprise Access Management System</span>
+    </nav>
+    
+    <div class="container hero">
+        <div class="row justify-content-center">
+            <div class="col-md-8 text-center">
+                <h1>Welcome to SecurePortal</h1>
+                <p class="lead">Multi-Factor Authentication Protected Enterprise Portal</p>
+                <p>Access your dashboard securely with our state-of-the-art MFA system.</p>
+            </div>
+        </div>
+        
+        <div class="row justify-content-center mt-5">
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-body text-center">
+                        <h4>Staff & Administrator Login</h4>
+                        <p class="text-muted">All admin accounts are protected with Multi-Factor Authentication</p>
+                        <a href="/portal/login" class="btn btn-primary btn-portal btn-lg">Login to Portal</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="row justify-content-center mt-4">
+            <div class="col-md-8">
+                <div class="card bg-light">
+                    <div class="card-body">
+                        <h5>Security Notice</h5>
+                        <p class="mb-0 small">This system implements TOTP-based MFA for all administrative access. 
+                        Unauthorized access attempts are logged and monitored. For testing purposes, 
+                        staff credentials are: <code>staffuser / staff2024</code></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <footer class="text-center text-muted py-3">
+        <small>SecurePortal v1.2.3 | Powered by secure-mfa-lib</small>
+    </footer>
+</body>
+</html>

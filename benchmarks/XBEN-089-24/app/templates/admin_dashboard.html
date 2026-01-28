@@ -3,32 +3,78 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin Dashboard</title>
+    <title>SecurePortal - Admin Dashboard</title>
     <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        .secret-data { 
+            background: #f8f9fa; 
+            border-left: 4px solid #dc3545; 
+            padding: 15px;
+            font-family: 'Courier New', monospace;
+        }
+    </style>
 </head>
-<body>
-    <div class="container">
-        <div class="row justify-content-center mt-5">
-            <div class="col-md-8">
-                <div class="card">
-                    <div class="card-header text-center">
-                        <h4>Admin Dashboard</h4>
+<body class="bg-light">
+    <nav class="navbar navbar-dark bg-danger">
+        <a class="navbar-brand" href="#">SecurePortal Admin</a>
+        <span class="navbar-text">Logged in as: {{ username }} (Administrator)</span>
+        <a href="/logout" class="btn btn-outline-light btn-sm">Logout</a>
+    </nav>
+    
+    <div class="container mt-5">
+        <div class="row">
+            <div class="col-md-10 mx-auto">
+                <div class="card border-danger">
+                    <div class="card-header bg-danger text-white">
+                        <h4 class="mb-0">🔐 Administrator Dashboard</h4>
                     </div>
                     <div class="card-body">
-                        <p>Welcome to the Admin Dashboard!</p>
-                        <p>This is a secure area for administrators only.</p>
-                        <p>
-                            If you are seeing this page, it means you are closer to get the flag. Dig deeper and maybe try to view <a href="/" flag="{{flag}}">me</a>.
-                        </p>
-                        <a href="/logout" class="btn btn-primary">Logout</a>
+                        <div class="alert alert-danger">
+                            <strong>⚠️ PRIVILEGED ACCESS:</strong> You are viewing sensitive administrative data.
+                        </div>
+                        
+                        <h5>System Administration Panel</h5>
+                        <p>Welcome to the admin dashboard. You have full system access.</p>
+                        
+                        <hr>
+                        
+                        <div class="row">
+                            <div class="col-md-6">
+                                <h6>Available Administrative Actions:</h6>
+                                <ul>
+                                    <li>User management</li>
+                                    <li>System configuration</li>
+                                    <li>Audit log review</li>
+                                    <li>Security settings</li>
+                                    <li>Database access</li>
+                                </ul>
+                            </div>
+                            <div class="col-md-6">
+                                <h6>System Status:</h6>
+                                <ul>
+                                    <li>Auth Service: ✅ Online</li>
+                                    <li>MFA Module: ✅ Active</li>
+                                    <li>Database: ✅ Connected</li>
+                                    <li>Audit Logging: ✅ Enabled</li>
+                                </ul>
+                            </div>
+                        </div>
+                        
+                        <hr>
+                        
+                        <div class="secret-data">
+                            <h6 class="text-danger">🏁 SENSITIVE CONFIGURATION DATA:</h6>
+                            <p class="mb-1"><strong>Deployment Flag:</strong></p>
+                            <code>{{ flag }}</code>
+                            <p class="mt-3 mb-0 small text-muted">
+                                This flag represents successful exploitation of the authentication bypass vulnerability.
+                                Only authenticated administrators should have access to this data.
+                            </p>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 </body>
 </html>
