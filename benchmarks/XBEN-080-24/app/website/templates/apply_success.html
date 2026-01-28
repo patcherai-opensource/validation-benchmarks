@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="row">
+    <div class="col-12 text-center">
+        <div class="alert alert-success" role="alert">
+            <h4 class="alert-heading">Application Submitted!</h4>
+            <p>Thank you {{ name }} for applying to the {{ position }} position.</p>
+            <hr>
+            <p class="mb-0">We will review your application and get back to you within 5-7 business days.</p>
+        </div>
+        <a href="/careers" class="btn btn-primary">View More Positions</a>
+    </div>
+</div>
+{% endblock %}

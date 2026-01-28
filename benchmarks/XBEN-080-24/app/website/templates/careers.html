@@ -1,0 +1,90 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="row">
+    <div class="col-12">
+        <h1 class="mb-4">Careers</h1>
+        <p class="lead">Join our team of creative professionals and help shape the future of digital experiences.</p>
+    </div>
+</div>
+
+<div class="row mt-4">
+    <div class="col-md-8">
+        <div class="card mb-4">
+            <div class="card-body">
+                <h4 class="card-title">Senior Frontend Developer</h4>
+                <span class="badge bg-primary">Engineering</span>
+                <span class="badge bg-secondary">Full-time</span>
+                <p class="card-text mt-2">We're looking for an experienced frontend developer to lead our web development initiatives.</p>
+                <ul>
+                    <li>5+ years experience with React or Vue.js</li>
+                    <li>Strong understanding of responsive design</li>
+                    <li>Experience with design systems</li>
+                </ul>
+            </div>
+        </div>
+        
+        <div class="card mb-4">
+            <div class="card-body">
+                <h4 class="card-title">UX Designer</h4>
+                <span class="badge bg-primary">Design</span>
+                <span class="badge bg-secondary">Full-time</span>
+                <p class="card-text mt-2">Join our design team to create intuitive and engaging user experiences.</p>
+                <ul>
+                    <li>3+ years UX design experience</li>
+                    <li>Proficiency in Figma and prototyping tools</li>
+                    <li>Portfolio demonstrating user-centered design</li>
+                </ul>
+            </div>
+        </div>
+        
+        <div class="card mb-4">
+            <div class="card-body">
+                <h4 class="card-title">Digital Marketing Specialist</h4>
+                <span class="badge bg-primary">Marketing</span>
+                <span class="badge bg-secondary">Full-time</span>
+                <p class="card-text mt-2">Help our clients grow their online presence through strategic digital marketing.</p>
+                <ul>
+                    <li>2+ years digital marketing experience</li>
+                    <li>Google Analytics and SEO expertise</li>
+                    <li>Content creation skills</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-4">
+        <div class="card">
+            <div class="card-header bg-primary text-white">
+                <h5 class="mb-0">Apply Now</h5>
+            </div>
+            <div class="card-body">
+                <form action="/apply" method="POST">
+                    <div class="mb-3">
+                        <label for="name" class="form-label">Full Name</label>
+                        <input type="text" class="form-control" id="name" name="name" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="email" class="form-label">Email</label>
+                        <input type="email" class="form-control" id="email" name="email" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="position" class="form-label">Position</label>
+                        <select class="form-control" id="position" name="position" required>
+                            <option value="">Select a position...</option>
+                            <option value="frontend">Senior Frontend Developer</option>
+                            <option value="ux">UX Designer</option>
+                            <option value="marketing">Digital Marketing Specialist</option>
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label for="resume" class="form-label">Resume URL</label>
+                        <input type="url" class="form-control" id="resume" name="resume" placeholder="https://...">
+                    </div>
+                    <button type="submit" class="btn btn-primary w-100">Submit Application</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

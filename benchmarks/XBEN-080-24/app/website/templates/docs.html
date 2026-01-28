@@ -1,0 +1,80 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="row">
+    <div class="col-12">
+        <h1 class="mb-4">Developer Documentation</h1>
+        <p class="lead">API documentation and integration guides.</p>
+    </div>
+</div>
+
+<div class="row mt-4">
+    <div class="col-md-3">
+        <div class="list-group">
+            <a href="#overview" class="list-group-item list-group-item-action active">Overview</a>
+            <a href="#api-endpoints" class="list-group-item list-group-item-action">API Endpoints</a>
+            <a href="#themes" class="list-group-item list-group-item-action">Theme Customization</a>
+            <a href="#examples" class="list-group-item list-group-item-action">Examples</a>
+        </div>
+    </div>
+    <div class="col-md-9">
+        <div class="card mb-4" id="overview">
+            <div class="card-body">
+                <h4>Overview</h4>
+                <p>Welcome to the Nexus Creative developer documentation. This guide covers our public APIs and customization options.</p>
+            </div>
+        </div>
+        
+        <div class="card mb-4" id="api-endpoints">
+            <div class="card-body">
+                <h4>API Endpoints</h4>
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Endpoint</th>
+                            <th>Method</th>
+                            <th>Description</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><code>/api/stats</code></td>
+                            <td>GET</td>
+                            <td>Get company statistics</td>
+                        </tr>
+                        <tr>
+                            <td><code>/api/themes</code></td>
+                            <td>GET</td>
+                            <td>List available themes</td>
+                        </tr>
+                        <tr>
+                            <td><code>/subscribe</code></td>
+                            <td>POST</td>
+                            <td>Subscribe to newsletter</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        
+        <div class="card mb-4" id="themes">
+            <div class="card-body">
+                <h4>Theme Customization</h4>
+                <p>Our platform supports custom themes. You can preview themes using the <code>/preview</code> endpoint:</p>
+                <pre class="bg-light p-3 rounded">GET /preview?theme=default</pre>
+                <p>Available themes: default, dark, minimal, corporate</p>
+            </div>
+        </div>
+        
+        <div class="card mb-4" id="examples">
+            <div class="card-body">
+                <h4>Examples</h4>
+                <h6>Get Stats</h6>
+                <pre class="bg-light p-3 rounded">curl http://localhost:8080/api/stats</pre>
+                <h6>Subscribe to Newsletter</h6>
+                <pre class="bg-light p-3 rounded">curl -X POST -d "email=user@example.com" http://localhost:8080/subscribe</pre>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

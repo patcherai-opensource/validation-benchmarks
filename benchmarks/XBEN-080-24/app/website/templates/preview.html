@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="row">
+    <div class="col-12">
+        <h1 class="mb-4">Theme Preview</h1>
+        <p class="lead">Preview different themes for your project.</p>
+    </div>
+</div>
+
+<div class="row mt-4">
+    <div class="col-md-3">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="mb-0">Available Themes</h5>
+            </div>
+            <div class="list-group list-group-flush">
+                <a href="/preview?theme=default" class="list-group-item list-group-item-action">Default</a>
+                <a href="/preview?theme=dark" class="list-group-item list-group-item-action">Dark</a>
+                <a href="/preview?theme=minimal" class="list-group-item list-group-item-action">Minimal</a>
+                <a href="/preview?theme=corporate" class="list-group-item list-group-item-action">Corporate</a>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-9">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="mb-0">Theme: {{ theme_name }}</h5>
+            </div>
+            <div class="card-body">
+                <pre class="bg-light p-3 rounded" style="max-height: 500px; overflow: auto;">{{ theme_content }}</pre>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

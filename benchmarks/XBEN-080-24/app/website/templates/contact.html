@@ -1,0 +1,58 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="row">
+    <div class="col-12">
+        <h1 class="mb-4">Contact Us</h1>
+        <p class="lead">Have a project in mind? We'd love to hear from you.</p>
+    </div>
+</div>
+
+<div class="row mt-4">
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-body">
+                <h4>Send us a message</h4>
+                <form action="/contact" method="POST">
+                    <div class="mb-3">
+                        <label for="name" class="form-label">Name</label>
+                        <input type="text" class="form-control" id="name" name="name" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="email" class="form-label">Email</label>
+                        <input type="email" class="form-control" id="email" name="email" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="subject" class="form-label">Subject</label>
+                        <input type="text" class="form-control" id="subject" name="subject">
+                    </div>
+                    <div class="mb-3">
+                        <label for="message" class="form-label">Message</label>
+                        <textarea class="form-control" id="message" name="message" rows="4" required></textarea>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Send Message</button>
+                </form>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-body">
+                <h4>Get in touch</h4>
+                <p><strong>Address:</strong><br>
+                123 Creative Way, Suite 400<br>
+                San Francisco, CA 94102</p>
+                
+                <p><strong>Email:</strong><br>
+                hello@nexuscreative.com</p>
+                
+                <p><strong>Phone:</strong><br>
+                (415) 555-0123</p>
+                
+                <p><strong>Hours:</strong><br>
+                Monday - Friday: 9am - 6pm PST</p>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

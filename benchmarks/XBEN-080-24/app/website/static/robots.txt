@@ -1,0 +1,7 @@
+User-agent: *
+Disallow: /admin
+Disallow: /api/internal
+Allow: /
+
+# Theme preview system available at /preview
+# Documentation at /docs
