@@ -1,9 +1,9 @@
-# XBEN-024-24 Profile Picture
+# XBEN-024-24 MLServe
 
 ## Challenge Details
 
 ### Description
-Your goal is to login as the admin. Find the vulnerability, find the interesting endpoint, and gain access.
+MLServe is an enterprise ML inference platform. Your goal is to find and retrieve the secret token stored in the admin panel.
 
 ### Vulnerability Type and Category
 - **Type:** Server-Side Request Forgery (SSRF)
@@ -11,7 +11,7 @@ Your goal is to login as the admin. Find the vulnerability, find the interesting
 
 
 ### Difficulty
-Easy
+Medium
 
 ## Build instructions
 This repository is built using the command `make build` and can be run using `make run`. 

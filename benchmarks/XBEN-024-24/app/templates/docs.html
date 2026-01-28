@@ -1,0 +1,91 @@
+{% extends "base.html" %}
+{% block content %}
+<h2>API Documentation</h2>
+
+<div class="api-section">
+    <h3>Authentication</h3>
+    <p>Most endpoints are publicly accessible for demo purposes. Enterprise features require an API key.</p>
+</div>
+
+<div class="api-section">
+    <h3>Endpoints</h3>
+    
+    <div class="endpoint">
+        <h4>GET /api/v1/health</h4>
+        <p>Returns service health status.</p>
+    </div>
+    
+    <div class="endpoint">
+        <h4>GET /api/v1/models</h4>
+        <p>List all available models.</p>
+    </div>
+    
+    <div class="endpoint">
+        <h4>GET /api/v1/models/{model_name}</h4>
+        <p>Get details for a specific model.</p>
+    </div>
+    
+    <div class="endpoint">
+        <h4>POST /api/v1/inference</h4>
+        <p>Run inference on an uploaded file or remote URL.</p>
+        <h5>Parameters:</h5>
+        <ul>
+            <li><code>model</code> (required) - Name of the model to use</li>
+            <li><code>file</code> - File upload (multipart form)</li>
+            <li><code>file_url</code> - URL of remote file to process</li>
+        </ul>
+        <h5>Example:</h5>
+        <pre><code>curl -X POST /api/v1/inference \
+  -F "model=image-classifier-v1" \
+  -F "file_url=https://images.example.com/cat.jpg"</code></pre>
+    </div>
+    
+    <div class="endpoint">
+        <h4>POST /api/v1/batch</h4>
+        <p>Process multiple files in batch mode.</p>
+        <h5>Request Body (JSON):</h5>
+        <pre><code>{
+  "model": "image-classifier-v1",
+  "files": [
+    "https://example.com/image1.jpg",
+    "https://example.com/image2.jpg"
+  ]
+}</code></pre>
+    </div>
+    
+    <div class="endpoint">
+        <h4>GET /api/v1/jobs</h4>
+        <p>List recent inference jobs.</p>
+    </div>
+    
+    <div class="endpoint">
+        <h4>GET /api/v1/jobs/{job_id}</h4>
+        <p>Get details for a specific job.</p>
+    </div>
+    
+    <div class="endpoint">
+        <h4>GET /api/v1/metrics</h4>
+        <p>Get service metrics and statistics.</p>
+    </div>
+    
+    <div class="endpoint">
+        <h4>POST /api/v1/webhook</h4>
+        <p>Register a webhook for async notifications.</p>
+        <h5>Request Body (JSON):</h5>
+        <pre><code>{
+  "callback_url": "https://your-server.com/callback"
+}</code></pre>
+    </div>
+</div>
+
+<div class="api-section">
+    <h3>Supported File Types</h3>
+    <p>Images: PNG, JPG, JPEG, GIF, BMP, WEBP</p>
+</div>
+
+<div class="api-section">
+    <h3>Rate Limits</h3>
+    <p>Free tier: 100 requests/hour</p>
+    <p>Enterprise: Unlimited (contact sales)</p>
+</div>
+{% endblock %}

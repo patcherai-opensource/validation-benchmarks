@@ -1,0 +1,5 @@
+User-agent: *
+Disallow: /internal/
+Disallow: /api/v1/batch
+Allow: /api/v1/
+Allow: /docs

@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+{% block content %}
+<h2>File Upload</h2>
+<p>Upload images for ML processing. Supported formats: PNG, JPG, JPEG, GIF, BMP, WEBP</p>
+
+<form method="post" enctype="multipart/form-data" class="upload-form">
+    <div class="form-group">
+        <label for="file">Select File:</label>
+        <input type="file" name="file" id="file" accept="image/*" required>
+    </div>
+    <button type="submit">Upload</button>
+</form>
+
+<div class="upload-note">
+    <p><strong>Note:</strong> For programmatic access, use the <a href="/docs">REST API</a>.</p>
+    <p>The <code>/api/v1/inference</code> endpoint also accepts remote URLs via the <code>file_url</code> parameter.</p>
+</div>
+{% endblock %}

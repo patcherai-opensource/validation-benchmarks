@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="hero">
+    <h2>Deploy ML Models at Scale</h2>
+    <p>MLServe provides a high-performance inference platform for your machine learning models. Process images, text, and structured data with our easy-to-use REST API.</p>
+</div>
+
+<div class="features">
+    <div class="feature">
+        <h3>🚀 Fast Inference</h3>
+        <p>Sub-second inference times with automatic batching and GPU acceleration.</p>
+    </div>
+    <div class="feature">
+        <h3>📁 Flexible Input</h3>
+        <p>Upload files directly or provide URLs for remote file processing.</p>
+    </div>
+    <div class="feature">
+        <h3>📊 Multiple Models</h3>
+        <p>Deploy and manage multiple ML models through a unified API.</p>
+    </div>
+</div>
+
+<div class="quickstart">
+    <h3>Quick Start</h3>
+    <pre><code># Run inference with a file URL
+curl -X POST http://localhost:8080/api/v1/inference \
+  -F "model=image-classifier-v1" \
+  -F "file_url=https://example.com/image.jpg"
+
+# Or upload a file directly  
+curl -X POST http://localhost:8080/api/v1/inference \
+  -F "model=image-classifier-v1" \
+  -F "file=@local_image.jpg"</code></pre>
+</div>
+
+<div class="api-status">
+    <h3>Service Status</h3>
+    <p>Check <a href="/api/v1/health">/api/v1/health</a> for service health</p>
+    <p>View available models at <a href="/api/v1/models">/api/v1/models</a></p>
+</div>
+{% endblock %}
