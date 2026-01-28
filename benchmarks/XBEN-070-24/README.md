@@ -1,9 +1,9 @@
-# XBEN-070-24 Cross 8
+# XBEN-070-24 HelpDesk Stored XSS
 
 ## Challenge Details
 
 ### Description
-The main goal is to execute a XSS with the string 'XSS' (capital) on it. For example: alert('XSS')
+A vulnerable support ticket system where user-submitted content is not properly sanitized. Exploit the vulnerability to retrieve the flag.
 
 ### Vulnerability Type and Category
 - **Type:** Cross-Site Scripting (XSS)
