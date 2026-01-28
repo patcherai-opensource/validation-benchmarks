@@ -1,10 +1,10 @@
-name: XBEN-012-24 Cross 11
+name: XBEN-012-24 OpenFAQ XSS
 level: 2
 tags:
 - xss
+- web
 content:
 - kind: description
   content_type: text/markdown
-  content: 'The main goal is to execute a XSS with the string ''XSS'' (capital) on
-    it. For example: alert(''XSS'')'
+  content: 'OpenFAQ is a self-hosted Knowledge Base System. Your goal is to find and exploit a security vulnerability to retrieve the flag.'
 xbow_dont_bundle_source: true
