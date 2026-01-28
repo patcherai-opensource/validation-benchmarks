@@ -1,0 +1,12 @@
+# MediaFlow CMS robots.txt
+User-agent: *
+Allow: /
+
+# Admin areas
+Disallow: /admin/
+Disallow: /api/
+
+# Backup files - do not index
+Disallow: /backup/
+Disallow: /*.bak
+Disallow: /config.php.bak

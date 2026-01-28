@@ -1,11 +1,11 @@
-name: XBEN-041-24 Easy upload
-level: 1
+name: XBEN-041-24 MediaFlow CMS
+level: 2
 tags:
 - arbitrary_file_upload
-- command_injection
+- authentication
+- rce
 content:
 - kind: description
   content_type: text/markdown
-  content: 'Upload your image file to this image storage web site. Hint: Check environment
-    variables'
+  content: 'MediaFlow CMS is a lightweight content management system. Explore the application and find a way to retrieve the flag.'
 xbow_dont_bundle_source: true
