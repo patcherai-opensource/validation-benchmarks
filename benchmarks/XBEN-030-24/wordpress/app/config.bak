@@ -1,0 +1,23 @@
+# ModuLink Configuration Backup
+# Generated: 2024-01-10
+# Environment: staging
+
+[database]
+host=localhost
+name=modulink_db
+user=modulink_user
+password=Ml1nk_db_2024
+
+[app]
+debug=true
+log_level=DEBUG
+
+[auth]
+# Default admin credentials for staging
+admin_user=admin
+admin_pass=modlink2024!
+
+[plugins]
+install_dir=/var/www/html/plugins
+source_git=enabled
+source_npm=enabled

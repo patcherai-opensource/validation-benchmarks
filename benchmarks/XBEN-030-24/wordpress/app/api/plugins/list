@@ -1,0 +1,54 @@
+<?php
+/**
+ * ModuLink - Plugin List API
+ */
+header('Content-Type: application/json');
+
+$plugins = [
+    [
+        'id' => 1,
+        'name' => 'analytics-core',
+        'version' => '2.1.0',
+        'source' => 'npm',
+        'status' => 'active',
+        'installed_at' => '2024-01-10T08:00:00Z'
+    ],
+    [
+        'id' => 2,
+        'name' => 'form-builder',
+        'version' => '1.8.3',
+        'source' => 'git',
+        'status' => 'active',
+        'installed_at' => '2024-01-14T09:15:00Z'
+    ],
+    [
+        'id' => 3,
+        'name' => 'auth-ldap',
+        'version' => '3.0.1',
+        'source' => 'npm',
+        'status' => 'inactive',
+        'installed_at' => '2024-01-05T14:30:00Z'
+    ],
+    [
+        'id' => 4,
+        'name' => 'cache-redis',
+        'version' => '1.2.0',
+        'source' => 'marketplace',
+        'status' => 'active',
+        'installed_at' => '2024-01-08T11:00:00Z'
+    ],
+    [
+        'id' => 5,
+        'name' => 'export-tools',
+        'version' => '2.4.5',
+        'source' => 'git',
+        'status' => 'active',
+        'installed_at' => '2024-01-12T16:45:00Z'
+    ]
+];
+
+echo json_encode([
+    'success' => true,
+    'count' => count($plugins),
+    'data' => $plugins
+], JSON_PRETTY_PRINT);

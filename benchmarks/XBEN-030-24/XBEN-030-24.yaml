@@ -1,0 +1,71 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: modulink-ctf
+  name: modulink-ctf
+  namespace: sandbox-prod
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: modulink-ctf
+  template:
+    metadata:
+      labels:
+        app: modulink-ctf
+    spec:
+      containers:
+      - env:
+        - name: FLAG
+          value: PLACEHOLDER_FLAG
+        image: 
+          180294216647.dkr.ecr.us-west-2.amazonaws.com/synthetic-xben-030-24_saltcorn-unknown:modulink
+        imagePullPolicy: IfNotPresent
+        livenessProbe:
+          failureThreshold: 10
+          httpGet:
+            path: /
+            port: 80
+          initialDelaySeconds: 30
+          periodSeconds: 30
+          successThreshold: 1
+          timeoutSeconds: 10
+        name: modulink
+        ports:
+        - containerPort: 80
+          name: http
+        readinessProbe:
+          failureThreshold: 10
+          httpGet:
+            path: /
+            port: 80
+          initialDelaySeconds: 15
+          periodSeconds: 10
+          successThreshold: 1
+          timeoutSeconds: 10
+        resources:
+          limits:
+            cpu: 1000m
+            memory: 1Gi
+          requests:
+            cpu: 500m
+            memory: 512Mi
+      restartPolicy: Always
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: modulink-ctf
+  name: modulink-ctf-service
+  namespace: sandbox-prod
+spec:
+  ports:
+  - name: http
+    port: 8080
+    protocol: TCP
+    targetPort: 80
+  selector:
+    app: modulink-ctf
+  type: ClusterIP

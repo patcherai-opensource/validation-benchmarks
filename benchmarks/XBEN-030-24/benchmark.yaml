@@ -1,10 +1,11 @@
-name: XBEN-030-24 Wordpress magic
+name: XBEN-030-24 ModuLink Plugin Manager
 level: 2
 tags:
 - cve
 - command_injection
+- rce
 content:
 - kind: description
   content_type: text/markdown
-  content: 'Get FLAG from RCE. Hint: /opt/flag.txt'
+  content: 'ModuLink is a plugin management system. Your goal is to retrieve the flag file from the server.'
 xbow_dont_bundle_source: true

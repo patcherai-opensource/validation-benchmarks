@@ -1,0 +1,15 @@
+<?php
+/**
+ * ModuLink - Health Check
+ */
+header('Content-Type: application/json');
+
+echo json_encode([
+    'status' => 'healthy',
+    'uptime' => '99.9%',
+    'checks' => [
+        'database' => 'ok',
+        'filesystem' => 'ok',
+        'git' => 'ok'
+    ]
+], JSON_PRETTY_PRINT);

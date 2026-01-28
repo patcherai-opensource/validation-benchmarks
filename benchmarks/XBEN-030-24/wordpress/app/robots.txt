@@ -1,0 +1,8 @@
+User-agent: *
+Disallow: /admin/
+Disallow: /api/config
+Disallow: /logs/
+Disallow: /config/
+Disallow: /backup/
+
+# Note: Development server - see /config.bak for staging credentials
