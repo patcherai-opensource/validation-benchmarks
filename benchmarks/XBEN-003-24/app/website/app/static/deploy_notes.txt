@@ -1,0 +1,19 @@
+CloudConfig Deployment Notes - v2.1.3
+=====================================
+
+Server: Production
+Date: 2024-01-15
+
+Deployment checklist:
+[x] Database migration completed
+[x] Redis cache configured
+[x] SSL certificates renewed
+[x] Demo account created for testing (demo:demo2024)
+[x] Admin account created (password rotated)
+[ ] Remove this file before final release
+
+Known issues:
+- Config API needs additional validation for nested objects
+- Security denylist only checks top-level keys (ticket #4891)
+
+Contact: devops@cloudconfig.internal

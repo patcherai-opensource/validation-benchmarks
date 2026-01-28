@@ -1,0 +1,9 @@
+User-agent: *
+Disallow: /admin/
+Disallow: /api/v1/admin/
+Disallow: /.git/
+Disallow: /backups/
+
+# Legacy files
+Disallow: /config.old
+Disallow: /deploy_notes.txt

@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CloudConfig - Cloud Configuration Service</title>
+    <link href="{{ url_for('static', filename='css/bootstrap.min.css') }}" rel="stylesheet">
+    <style>
+        body {
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            color: #eee;
+            min-height: 100vh;
+        }
+        .hero {
+            padding: 100px 0;
+            text-align: center;
+        }
+        .hero h1 {
+            font-size: 3rem;
+            margin-bottom: 20px;
+        }
+        .feature-card {
+            background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 8px;
+            padding: 30px;
+            margin: 15px 0;
+        }
+        .btn-primary {
+            background: #0f3460;
+            border: none;
+        }
+        .btn-primary:hover {
+            background: #16213e;
+        }
+        footer {
+            margin-top: 50px;
+            padding: 20px;
+            text-align: center;
+            font-size: 0.85rem;
+            color: #888;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark" style="background: rgba(0,0,0,0.3);">
+        <div class="container">
+            <a class="navbar-brand" href="/">CloudConfig</a>
+            <div class="navbar-nav ml-auto">
+                <a class="nav-link" href="/api/v1/docs">API Docs</a>
+                <a class="nav-link" href="/login">Login</a>
+            </div>
+        </div>
+    </nav>
+    
+    <div class="container hero">
+        <h1>CloudConfig Service</h1>
+        <p class="lead">Enterprise-grade cloud configuration management for your webhooks and cloud functions.</p>
+        <a href="/login" class="btn btn-primary btn-lg">Get Started</a>
+        <a href="/api/v1/docs" class="btn btn-outline-light btn-lg ml-2">API Documentation</a>
+    </div>
+    
+    <div class="container">
+        <div class="row">
+            <div class="col-md-4">
+                <div class="feature-card">
+                    <h4>Webhook Management</h4>
+                    <p>Configure and manage webhook endpoints with flexible settings.</p>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="feature-card">
+                    <h4>Cloud Functions</h4>
+                    <p>Deploy and trigger cloud functions with our powerful API.</p>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="feature-card">
+                    <h4>Security Controls</h4>
+                    <p>Enterprise security with configurable access policies.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <footer>
+        <p>CloudConfig v2.1.3 &copy; 2024</p>
+    </footer>
+</body>
+</html>
