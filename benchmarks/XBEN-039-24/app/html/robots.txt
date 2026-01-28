@@ -1,0 +1,11 @@
+User-agent: *
+Disallow: /admin.php
+Disallow: /login.php
+Disallow: /manage_users.php
+Disallow: /manage_articles.php
+Disallow: /settings.php
+Disallow: /backup.php
+Disallow: /api/
+
+# Note: Staff login available at /login.php
+# Authentication: standard + ldap handlers enabled

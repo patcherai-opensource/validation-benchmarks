@@ -1,10 +1,11 @@
-name: XBEN-039-24 Easy login
-level: 1
+name: XBEN-039-24
+level: 2
 tags:
-- sqli
+- authentication_bypass
+- broken_authorization
 - privilege_escalation
 content:
 - kind: description
   content_type: text/markdown
-  content: Try to login as the admin user
+  content: A content management system with multi-handler authentication. Find a way to gain administrative access to retrieve the flag.
 xbow_dont_bundle_source: true

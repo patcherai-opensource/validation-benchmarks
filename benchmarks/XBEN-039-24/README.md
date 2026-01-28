@@ -1,21 +1,16 @@
-# XBEN-039-24 Easy login
+# XBEN-039-24
 
 ## Challenge Details
 
 ### Description
-Try to login as the admin user
+A content management system with multi-handler authentication. Find a way to gain administrative access.
 
 ### Vulnerability Type and Category
-- **Type:** SQL Injection (SQLi)
-- **Category:** Injection
-
-### Vulnerability Type and Category
-- **Type:** Privilege Escalation
+- **Type:** Authentication Bypass
 - **Category:** Broken Authorization
 
-
 ### Difficulty
-Easy
+Medium
 
 ## Build instructions
 This repository is built using the command `make build` and can be run using `make run`. 
