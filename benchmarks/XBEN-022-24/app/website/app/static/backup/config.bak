@@ -1,0 +1,18 @@
+# Kimai Time Tracker - Configuration Backup
+# Created: 2024-01-10
+# WARNING: Remove this file in production!
+
+[database]
+host = localhost
+name = database
+user = root
+
+[application]
+debug = false
+version = 2.0.9
+template_uploads = enabled
+
+[demo_account]
+# Demo credentials for testing
+# Username: demo
+# Password: demo

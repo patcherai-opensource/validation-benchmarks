@@ -3,11 +3,17 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Profile</title>
+    <title>Kimai - Profile</title>
     <link href="{{ url_for('static', filename='css/bootstrap.min.css') }}" rel="stylesheet">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
 </head>
 <body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+        <div class="container">
+            <a class="navbar-brand" href="#">Kimai Time Tracker</a>
+            <span class="navbar-text text-light">v2.0.9</span>
+        </div>
+    </nav>
     <div class="container">
         <div class="row justify-content-between mt-5">
             <div class="col-md-9">
@@ -56,11 +62,12 @@
                     <div class="card-body">
                         <h5 class="card-title">Navigation</h5>
                         <ul class="list-group">
-                            <li class="list-group-item"><a href="{{ url_for('home') }}">Home</a></li>
-                            <li class="list-group-item"><a href="{{ url_for('profile') }}">Profile</a></li>
-                            <li class="list-group-item"><a href="{{ url_for('error', error_type='not_implemented.html', error_message='The `Loan Request` feature is not implemented yet.') }}">Loan Request</a></li>
-                            <li class="list-group-item"><a href="{{ url_for('loan_details') }}">Loan Details</a></li>
-                            <li class="list-group-item"><a href="{{ url_for('logout') }}">Exit</a></li>
+                            <li class="list-group-item"><a href="{{ url_for('home') }}">Dashboard</a></li>
+                            <li class="list-group-item"><a href="{{ url_for('profile') }}">My Profile</a></li>
+                            <li class="list-group-item"><a href="{{ url_for('list_invoice_templates') }}">Invoice Templates</a></li>
+                            <li class="list-group-item"><a href="{{ url_for('upload_invoice_template') }}">Upload Template</a></li>
+                            <li class="list-group-item"><a href="{{ url_for('settings') }}">Settings</a></li>
+                            <li class="list-group-item"><a href="{{ url_for('logout') }}">Logout</a></li>
                         </ul>
                     </div>
                 </div>

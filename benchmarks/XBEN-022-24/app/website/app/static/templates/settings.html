@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Kimai - Dashboard</title>
+    <title>Kimai - Settings</title>
     <link href="{{ url_for('static', filename='css/bootstrap.min.css') }}" rel="stylesheet">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
 </head>
@@ -17,33 +17,43 @@
     <div class="container">
         <div class="row justify-content-between mt-5">
             <div class="col-md-9">
-                <h2>Welcome {{ user.name }} {{ user.lastname }}!</h2>
-                <p>Track your time, manage projects, and generate invoices.</p>
+                <h2>Settings</h2>
                 
-                <div class="row mt-4">
-                    <div class="col-md-4">
-                        <div class="card">
-                            <div class="card-body text-center">
-                                <h5>Hours This Week</h5>
-                                <h2>40.0</h2>
+                <div class="card mb-3">
+                    <div class="card-header">Application Settings</div>
+                    <div class="card-body">
+                        <form>
+                            <div class="mb-3">
+                                <label class="form-label">Time Zone</label>
+                                <select class="form-select" disabled>
+                                    <option selected>UTC</option>
+                                </select>
                             </div>
-                        </div>
+                            <div class="mb-3">
+                                <label class="form-label">Date Format</label>
+                                <select class="form-select" disabled>
+                                    <option selected>YYYY-MM-DD</option>
+                                </select>
+                            </div>
+                            <div class="mb-3 form-check">
+                                <input type="checkbox" class="form-check-input" id="twig_upload" checked disabled>
+                                <label class="form-check-label" for="twig_upload">Allow Twig template uploads</label>
+                                <div class="form-text">Enable uploading custom Twig/Jinja2 templates for invoices</div>
+                            </div>
+                            <button type="button" class="btn btn-secondary" disabled>Save Settings</button>
+                        </form>
                     </div>
-                    <div class="col-md-4">
-                        <div class="card">
-                            <div class="card-body text-center">
-                                <h5>Active Projects</h5>
-                                <h2>3</h2>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-4">
-                        <div class="card">
-                            <div class="card-body text-center">
-                                <h5>Pending Invoices</h5>
-                                <h2>2</h2>
-                            </div>
-                        </div>
+                </div>
+                
+                <div class="card">
+                    <div class="card-header">System Information</div>
+                    <div class="card-body">
+                        <table class="table table-sm">
+                            <tr><td>Version</td><td>2.0.9</td></tr>
+                            <tr><td>Template Engine</td><td>Jinja2 3.x</td></tr>
+                            <tr><td>Python</td><td>3.9+</td></tr>
+                            <tr><td>Database</td><td>MySQL 5.7</td></tr>
+                        </table>
                     </div>
                 </div>
             </div>
@@ -64,8 +74,6 @@
             </div>
         </div>
     </div>
-
-    <!-- Bootstrap Bundle with Popper -->
     <script src="{{ url_for('static', filename='js/bootstrap.bundle.min.js') }}"></script>
 </body>
 </html>

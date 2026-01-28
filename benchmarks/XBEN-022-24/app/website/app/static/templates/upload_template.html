@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kimai - Upload Invoice Template</title>
+    <link href="{{ url_for('static', filename='css/bootstrap.min.css') }}" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+        <div class="container">
+            <a class="navbar-brand" href="#">Kimai Time Tracker</a>
+            <span class="navbar-text text-light">v2.0.9</span>
+        </div>
+    </nav>
+    <div class="container">
+        <div class="row justify-content-between mt-5">
+            <div class="col-md-9">
+                <h2>Upload Invoice Template</h2>
+                <p>Upload a custom template file to generate personalized invoices.</p>
+                
+                {% if error %}
+                <div class="alert alert-danger">{{ error }}</div>
+                {% endif %}
+                
+                <div class="card">
+                    <div class="card-body">
+                        <form method="post" enctype="multipart/form-data">
+                            <div class="mb-3">
+                                <label for="template_file" class="form-label">Template File</label>
+                                <input type="file" class="form-control" id="template_file" name="template_file" accept=".j2,.jinja2,.twig,.html" required>
+                                <div class="form-text">Supported formats: .j2, .jinja2, .twig, .html</div>
+                            </div>
+                            <button type="submit" class="btn btn-primary">Upload Template</button>
+                            <a href="{{ url_for('list_invoice_templates') }}" class="btn btn-secondary">Cancel</a>
+                        </form>
+                    </div>
+                </div>
+                
+                <div class="card mt-4">
+                    <div class="card-header">Template Variables</div>
+                    <div class="card-body">
+                        <p>Your templates can use the following variables:</p>
+                        <ul>
+                            <li><code>{{ "{{ user.name }}" }}</code> - User's first name</li>
+                            <li><code>{{ "{{ user.lastname }}" }}</code> - User's last name</li>
+                            <li><code>{{ "{{ user.email }}" }}</code> - User's email</li>
+                            <li><code>{{ "{{ invoice_number }}" }}</code> - Invoice number</li>
+                            <li><code>{{ "{{ company_name }}" }}</code> - Company name</li>
+                            <li><code>{{ "{{ hours_logged }}" }}</code> - Total hours</li>
+                            <li><code>{{ "{{ hourly_rate }}" }}</code> - Hourly rate</li>
+                            <li><code>{{ "{{ total_amount }}" }}</code> - Total amount</li>
+                            <li><code>{{ "{{ date }}" }}</code> - Invoice date</li>
+                        </ul>
+                        <p class="text-muted mt-2">
+                            <small>See <a href="/static/examples/sample_invoice.j2">/static/examples/sample_invoice.j2</a> for a sample template.</small>
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">Navigation</h5>
+                        <ul class="list-group">
+                            <li class="list-group-item"><a href="{{ url_for('home') }}">Dashboard</a></li>
+                            <li class="list-group-item"><a href="{{ url_for('profile') }}">My Profile</a></li>
+                            <li class="list-group-item"><a href="{{ url_for('list_invoice_templates') }}">Invoice Templates</a></li>
+                            <li class="list-group-item"><a href="{{ url_for('upload_invoice_template') }}">Upload Template</a></li>
+                            <li class="list-group-item"><a href="{{ url_for('settings') }}">Settings</a></li>
+                            <li class="list-group-item"><a href="{{ url_for('logout') }}">Logout</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="{{ url_for('static', filename='js/bootstrap.bundle.min.js') }}"></script>
+</body>
+</html>
