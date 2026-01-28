@@ -1,27 +1,188 @@
 body {
-    font-family: Arial, sans-serif;
-    background-color: #f4f4f9;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #1a1a2e;
+    color: #eaeaea;
     margin: 0;
     padding: 20px;
 }
 .container {
-    width: 80%;
+    width: 90%;
+    max-width: 1200px;
     margin: auto;
-    background: white;
-    padding: 20px;
-    border-radius: 8px;
+    background: #16213e;
+    padding: 30px;
+    border-radius: 12px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.3);
 }
-.post {
-    border-bottom: 1px solid #ccc;
+.service-header {
+    text-align: center;
+    border-bottom: 2px solid #0f3460;
     padding-bottom: 20px;
     margin-bottom: 20px;
 }
-.post h2 a {
-    color: #333;
-    text-decoration: none;
+.service-header h1 {
+    color: #e94560;
+    margin: 0;
 }
-.post img {
+.tagline {
+    color: #a0a0a0;
+    font-size: 1.1em;
+}
+.version {
+    color: #666;
+    font-size: 0.9em;
+}
+.main-nav {
+    display: flex;
+    gap: 20px;
+    justify-content: center;
+    margin-bottom: 30px;
+    padding: 15px;
+    background: #0f3460;
+    border-radius: 8px;
+}
+.main-nav a {
+    color: #eaeaea;
+    text-decoration: none;
+    padding: 8px 16px;
+    border-radius: 4px;
+    transition: background 0.3s;
+}
+.main-nav a:hover, .main-nav a.active {
+    background: #e94560;
+}
+.hero {
+    text-align: center;
+    padding: 40px 20px;
+    background: linear-gradient(135deg, #0f3460 0%, #16213e 100%);
+    border-radius: 8px;
+    margin-bottom: 30px;
+}
+.features, .supported-regions, .quick-test, .lookup-section, .docs-section, .status-section, .metrics-section, .recent-activity {
+    margin-bottom: 30px;
+    padding: 20px;
+    background: #1f2b47;
+    border-radius: 8px;
+}
+.features ul {
+    list-style: none;
+    padding: 0;
+}
+.features li {
+    padding: 8px 0;
+    border-bottom: 1px solid #0f3460;
+}
+.features li:before {
+    content: "✓ ";
+    color: #e94560;
+}
+.data-table, .result-table, .params-table {
     width: 100%;
-    height: auto;
-    border-radius: 5px;
+    border-collapse: collapse;
+    margin-top: 15px;
+}
+.data-table th, .data-table td, .result-table th, .result-table td, .params-table th, .params-table td {
+    padding: 12px;
+    text-align: left;
+    border-bottom: 1px solid #0f3460;
+}
+.data-table th, .result-table th, .params-table th {
+    background: #0f3460;
+    color: #e94560;
+}
+.status-active { color: #4caf50; }
+.status-disabled { color: #f44336; }
+.lookup-form {
+    display: flex;
+    gap: 10px;
+    margin-top: 15px;
+}
+.lookup-form input {
+    flex: 1;
+    padding: 12px;
+    border: 2px solid #0f3460;
+    border-radius: 4px;
+    background: #1a1a2e;
+    color: #eaeaea;
+    font-size: 1em;
+}
+.lookup-form button {
+    padding: 12px 24px;
+    background: #e94560;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 1em;
+}
+.lookup-form button:hover {
+    background: #c73e54;
+}
+.result-box {
+    background: #0f3460;
+    padding: 20px;
+    border-radius: 8px;
+    margin-top: 20px;
+}
+.error-message {
+    background: #4a1c1c;
+    color: #ff6b6b;
+    padding: 15px;
+    border-radius: 4px;
+    margin-top: 15px;
+    border-left: 4px solid #ff6b6b;
+}
+.info-message {
+    background: #1c3a4a;
+    color: #6bceff;
+    padding: 15px;
+    border-radius: 4px;
+    margin-top: 15px;
+}
+.example-ips ul {
+    list-style: none;
+    padding: 0;
+}
+.example-ips a {
+    color: #e94560;
+}
+.status-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 20px;
+}
+.status-card {
+    padding: 20px;
+    border-radius: 8px;
+    text-align: center;
+}
+.status-ok { background: #1c4a1c; border: 2px solid #4caf50; }
+.status-error { background: #4a1c1c; border: 2px solid #f44336; }
+.status-value { font-size: 1.2em; font-weight: bold; }
+.endpoint-doc {
+    margin-bottom: 30px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid #0f3460;
+}
+.code-block {
+    background: #0a0a15;
+    padding: 15px;
+    border-radius: 4px;
+    overflow-x: auto;
+    font-family: 'Courier New', monospace;
+}
+code {
+    background: #0a0a15;
+    padding: 2px 6px;
+    border-radius: 3px;
+    color: #e94560;
+}
+.main-footer {
+    text-align: center;
+    padding-top: 20px;
+    border-top: 1px solid #0f3460;
+    color: #666;
+}
+.main-footer a {
+    color: #e94560;
 }

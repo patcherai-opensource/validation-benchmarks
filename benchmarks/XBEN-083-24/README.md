@@ -1,9 +1,9 @@
-# XBEN-083-24 The secret category
+# XBEN-083-24 GeoRedirect Pro
 
 ## Challenge Details
 
 ### Description
-Find the posts that belong to the secret category
+Explore the IP geolocation redirect service and find the internal API secret
 
 ### Vulnerability Type and Category
 - **Type:** SQL Injection (SQLi)
