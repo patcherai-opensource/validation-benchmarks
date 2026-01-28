@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Documentation - GeoProcessor WPS</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="container docs-container">
+        <header>
+            <h1>🌍 GeoProcessor WPS Documentation</h1>
+        </header>
+        
+        <nav>
+            <a href="/">Home</a>
+            <a href="/docs">Documentation</a>
+            <a href="/wps?service=WPS&request=GetCapabilities">Capabilities</a>
+            <a href="/api/processes">REST API</a>
+            <a href="/status">Status</a>
+        </nav>
+        
+        <main class="docs-main">
+            <section class="doc-section">
+                <h2>WPS 2.0 Interface</h2>
+                <p>GeoProcessor implements the OGC Web Processing Service (WPS) 2.0 standard.</p>
+                
+                <h3>Endpoints</h3>
+                <table class="endpoint-table">
+                    <tr><th>Endpoint</th><th>Method</th><th>Description</th></tr>
+                    <tr><td><code>/wps</code></td><td>GET/POST</td><td>Main WPS service endpoint</td></tr>
+                    <tr><td><code>/ows</code></td><td>GET/POST</td><td>OWS-compatible endpoint (alias)</td></tr>
+                    <tr><td><code>/api/processes</code></td><td>GET</td><td>REST API for process listing</td></tr>
+                    <tr><td><code>/status</code></td><td>GET</td><td>Service health status</td></tr>
+                </table>
+            </section>
+            
+            <section class="doc-section">
+                <h2>Operations</h2>
+                
+                <h3>GetCapabilities</h3>
+                <p>Returns service metadata and available processes.</p>
+                <div class="code-block">
+                    <pre>GET /wps?service=WPS&request=GetCapabilities</pre>
+                </div>
+                
+                <h3>DescribeProcess</h3>
+                <p>Returns detailed information about a specific process.</p>
+                <div class="code-block">
+                    <pre>GET /wps?service=WPS&request=DescribeProcess&identifier=data:echo</pre>
+                </div>
+                
+                <h3>Execute</h3>
+                <p>Execute a process with provided inputs. Submit XML payload via POST.</p>
+                <div class="code-block">
+                    <pre>POST /wps
+Content-Type: application/xml
+
+&lt;wps:Execute xmlns:wps="http://www.opengis.net/wps/2.0" 
+             xmlns:ows="http://www.opengis.net/ows/2.0"
+             service="WPS" version="2.0.0"&gt;
+    &lt;ows:Identifier&gt;data:echo&lt;/ows:Identifier&gt;
+    &lt;wps:Input id="input_data"&gt;
+        &lt;wps:Data&gt;
+            &lt;wps:LiteralValue&gt;Hello World&lt;/wps:LiteralValue&gt;
+        &lt;/wps:Data&gt;
+    &lt;/wps:Input&gt;
+&lt;/wps:Execute&gt;</pre>
+                </div>
+            </section>
+            
+            <section class="doc-section">
+                <h2>Available Processes</h2>
+                <div id="process-list">
+                    <p>Loading processes...</p>
+                </div>
+            </section>
+            
+            <section class="doc-section">
+                <h2>Example: Data Echo Service</h2>
+                <p>The <code>data:echo</code> process demonstrates basic WPS functionality by echoing input data back to the caller.</p>
+                
+                <h4>Try it:</h4>
+                <div class="demo-section">
+                    <textarea id="inputData" rows="3" placeholder="Enter data to echo...">Test input data</textarea>
+                    <button onclick="executeEcho()">Execute Echo</button>
+                    <div id="echoResult" class="result-box"></div>
+                </div>
+            </section>
+        </main>
+        
+        <footer>
+            <p>&copy; 2024 GeoSystems Inc.</p>
+        </footer>
+    </div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            loadProcessList();
+        });
+        
+        function loadProcessList() {
+            fetch('/api/processes')
+                .then(response => response.json())
+                .then(data => {
+                    let html = '<ul class="process-list">';
+                    data.processes.forEach(proc => {
+                        html += `<li><strong>${proc.id}</strong>: ${proc.title} - ${proc.abstract}</li>`;
+                    });
+                    html += '</ul>';
+                    document.getElementById('process-list').innerHTML = html;
+                })
+                .catch(error => {
+                    document.getElementById('process-list').innerHTML = '<p>Error loading processes</p>';
+                });
+        }
+        
+        function executeEcho() {
+            const inputData = document.getElementById('inputData').value;
+            const xmlPayload = `<?xml version="1.0" encoding="UTF-8"?>
+<wps:Execute xmlns:wps="http://www.opengis.net/wps/2.0" 
+             xmlns:ows="http://www.opengis.net/ows/2.0"
+             service="WPS" version="2.0.0">
+    <ows:Identifier>data:echo</ows:Identifier>
+    <wps:Input id="input_data">
+        <wps:Data>
+            <wps:LiteralValue>${inputData}</wps:LiteralValue>
+        </wps:Data>
+    </wps:Input>
+</wps:Execute>`;
+            
+            fetch('/wps', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/xml'
+                },
+                body: xmlPayload
+            })
+            .then(response => response.text())
+            .then(data => {
+                document.getElementById('echoResult').innerHTML = '<pre>' + escapeHtml(data) + '</pre>';
+            })
+            .catch(error => {
+                document.getElementById('echoResult').innerHTML = '<p class="error">Error: ' + error + '</p>';
+            });
+        }
+        
+        function escapeHtml(text) {
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+    </script>
+</body>
+</html>

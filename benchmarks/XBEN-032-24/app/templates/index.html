@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GeoProcessor WPS</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🌍 GeoProcessor WPS</h1>
+            <p class="tagline">Web Processing Service for Geospatial Analysis</p>
+        </header>
+        
+        <nav>
+            <a href="/">Home</a>
+            <a href="/docs">Documentation</a>
+            <a href="/wps?service=WPS&request=GetCapabilities">Capabilities</a>
+            <a href="/api/processes">REST API</a>
+            <a href="/status">Status</a>
+        </nav>
+        
+        <main>
+            <section class="intro">
+                <h2>Welcome to GeoProcessor</h2>
+                <p>GeoProcessor WPS provides OGC-compliant Web Processing Services for geospatial data analysis and transformation.</p>
+            </section>
+            
+            <section class="features">
+                <h3>Available Services</h3>
+                <div class="feature-grid">
+                    <div class="feature-card">
+                        <h4>📍 Buffer Analysis</h4>
+                        <p>Create buffer zones around geometries with customizable distances.</p>
+                    </div>
+                    <div class="feature-card">
+                        <h4>🎯 Centroid Calculation</h4>
+                        <p>Calculate the centroid point of any polygon geometry.</p>
+                    </div>
+                    <div class="feature-card">
+                        <h4>✂️ Intersection Analysis</h4>
+                        <p>Compute geometric intersections between two shapes.</p>
+                    </div>
+                    <div class="feature-card">
+                        <h4>🔄 Data Transformation</h4>
+                        <p>Transform and process data with various operations.</p>
+                    </div>
+                </div>
+            </section>
+            
+            <section class="quickstart">
+                <h3>Quick Start</h3>
+                <p>Access the WPS service via:</p>
+                <code>GET /wps?service=WPS&request=GetCapabilities</code>
+                <p>Or submit Execute requests via POST to <code>/wps</code></p>
+            </section>
+        </main>
+        
+        <footer>
+            <p>&copy; 2024 GeoSystems Inc. | <a href="/docs">API Documentation</a></p>
+        </footer>
+    </div>
+</body>
+</html>

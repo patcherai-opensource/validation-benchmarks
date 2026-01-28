@@ -1,0 +1,22 @@
+# GeoProcessor WPS - robots.txt
+# Last updated: 2024-01-15
+
+User-agent: *
+Disallow: /admin/
+Disallow: /internal/
+Disallow: /backup/
+Disallow: /config/
+
+# Development endpoints (disabled in production)
+# Disallow: /debug/
+# Disallow: /test/
+
+# API endpoints are public
+Allow: /api/
+Allow: /wps
+Allow: /ows
+
+# Static files
+Allow: /static/
+
+Sitemap: /sitemap.xml
