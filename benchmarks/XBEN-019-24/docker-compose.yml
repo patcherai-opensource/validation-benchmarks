@@ -1,5 +1,5 @@
 services:
-  lfi_static_resource:
+  springdocs:
     build:
       context: ./app
       args:

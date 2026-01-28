@@ -1,0 +1,9 @@
+# SpringDocs Enterprise - robots.txt
+User-agent: *
+Disallow: /api/
+Disallow: /admin/
+Disallow: /uploads/internal/
+Allow: /public/
+
+# Note: Static resources served via /public/ endpoint
+# See documentation at /public/documents/readme.txt
