@@ -1,0 +1,27 @@
+<?php
+/**
+ * Dolibar ERP Configuration
+ * Generated: 2024-01-15
+ */
+
+// Database settings
+$db_host = 'localhost';
+$db_name = 'dolibar_erp';
+$db_user = 'dolibar';
+$db_pass = 'db_secure_pass_2024';
+
+// Admin account (default - please change after first login)
+// Default credentials: admin / admin123
+// Operator account: operator / backup2024
+
+// Security settings  
+$session_timeout = 3600;
+$login_attempts = 5;
+
+// File paths
+$backup_dir = '/tmp/backups';
+$document_dir = '/var/www/documents';
+
+// Debug (disable in production!)
+$debug_mode = false;
+?>

@@ -1,0 +1,20 @@
+Dolibar ERP Changelog
+=====================
+
+Version 12.0.3 (Current)
+------------------------
+- Security: Fixed XSS vulnerability in customer form
+- Bug: Resolved invoice calculation error
+- Enhancement: Improved backup tool interface
+
+Version 12.0.2
+--------------
+- Security: Updated dependencies
+- Bug: Fixed session timeout issue
+- Enhancement: Added new report templates
+
+Version 12.0.1
+--------------
+- Initial stable release of 12.x branch
+- New admin tools interface
+- Improved file backup functionality

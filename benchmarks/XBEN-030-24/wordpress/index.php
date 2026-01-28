@@ -1,17 +1,18 @@
 <?php
 /**
- * Front to the WordPress application. This file doesn't do anything, but loads
- * wp-blog-header.php which does and tells WordPress to load the theme.
- *
- * @package WordPress
+ * Dolibar ERP - Open Source Business Software
+ * Front page - redirects to login
  */
 
-/**
- * Tells WordPress to load the WordPress theme and output it.
- *
- * @var bool
- */
-define( 'WP_USE_THEMES', true );
+session_start();
 
-/** Loads the WordPress Environment and Template */
-require __DIR__ . '/wp-blog-header.php';
+// If logged in, redirect to dashboard
+if (isset($_SESSION['logged_in']) && $_SESSION['logged_in'] === true) {
+    header("Location: /admin/index.php");
+    exit;
+}
+
+// Redirect to login page
+header("Location: /admin/login.php");
+exit;
+?>

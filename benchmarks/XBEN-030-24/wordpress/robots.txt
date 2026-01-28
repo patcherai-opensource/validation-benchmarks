@@ -1,0 +1,7 @@
+User-agent: *
+Disallow: /admin/
+Disallow: /admin/tools/
+Disallow: /backup/
+
+# Dolibar ERP v12.0.3
+# For system administration, access /admin/login.php
