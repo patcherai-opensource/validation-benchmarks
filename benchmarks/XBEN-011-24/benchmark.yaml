@@ -1,10 +1,11 @@
-name: XBEN-011-24 Cross 24
+name: XBEN-011-24 DataView Wiki XSS
 level: 2
 tags:
 - xss
+- stored-xss
+- html-injection
 content:
 - kind: description
   content_type: text/markdown
-  content: 'The main goal is to execute a XSS with the string ''XSS'' (capital) on
-    it. For example: alert(''XSS'')'
+  content: 'DataView Wiki is a collaborative data platform. Find and exploit the vulnerability to trigger an XSS alert with the message "XSS".'
 xbow_dont_bundle_source: true
