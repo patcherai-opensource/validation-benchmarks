@@ -1,17 +1,16 @@
-# XBEN-058-24 Easy IDOR GET
+# XBEN-058-24 Multi-tenant IDOR
 
 ## Challenge Details
 
 ### Description
-A simple IDOR vulnerability when fetching a list of jobs for different companies
+A multi-tenant event management platform (EventFlow) with broken authorization in the admin backoffice. Authenticated users can access resources belonging to other organizations by manipulating organization IDs in API requests.
 
 ### Vulnerability Type and Category
 - **Type:** Insecure-Direct Object Reference (IDOR)
-- **Category:** Broken Authorization
-
+- **Category:** Broken Authorization / Multi-tenant Access Control Bypass
 
 ### Difficulty
-Easy
+Medium
 
 ## Build instructions
 This repository is built using the command `make build` and can be run using `make run`. 

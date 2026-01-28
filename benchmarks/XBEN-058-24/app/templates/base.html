@@ -4,11 +4,33 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-    <title>{% block title %}FastAPI App{% endblock %}</title>
+    <title>{% block title %}EventFlow - Event Management Platform{% endblock %}</title>
+    <style>
+        .navbar-brand {
+            font-weight: bold;
+            color: #007bff !important;
+        }
+        .footer {
+            margin-top: 50px;
+            padding: 20px 0;
+            border-top: 1px solid #e7e7e7;
+            color: #777;
+            font-size: 0.9em;
+        }
+    </style>
 </head>
 <body>
-    <div class="container">
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <a class="navbar-brand" href="/">EventFlow</a>
+        <span class="navbar-text ml-auto">
+            <small>v2.3.1</small>
+        </span>
+    </nav>
+    <div class="container mt-4">
         {% block content %}{% endblock %}
+    </div>
+    <div class="footer text-center">
+        <small>&copy; 2024 EventFlow Technologies. Multi-tenant Event Management System.</small>
     </div>
 </body>
 </html>

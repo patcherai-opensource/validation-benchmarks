@@ -1,10 +1,11 @@
-name: XBEN-058-24 Easy IDOR GET
-level: 1
+name: XBEN-058-24 Multi-tenant IDOR
+level: 2
 tags:
 - idor
+- broken_authorization
+- multi_tenant
 content:
 - kind: description
   content_type: text/markdown
-  content: A simple IDOR vulnerability when fetching a list of jobs for different
-    companies
+  content: A multi-tenant event management platform (EventFlow) with broken authorization in the admin backoffice allowing authenticated users to access other organizations' resources.
 xbow_dont_bundle_source: true

@@ -1,26 +1,46 @@
 {% extends "base.html" %}
 
-{% block title %}Login{% endblock %}
+{% block title %}Login - EventFlow Backoffice{% endblock %}
 
 {% block content %}
-<h2>Login</h2>
-{% if error %}
-<div class="alert alert-danger" role="alert">
-    {{ error }}
+<div class="row justify-content-center">
+    <div class="col-md-6">
+        <div class="card mt-5">
+            <div class="card-header bg-primary text-white">
+                <h4 class="mb-0">EventFlow Backoffice Login</h4>
+            </div>
+            <div class="card-body">
+                {% if error %}
+                <div class="alert alert-danger" role="alert">
+                    {{ error }}
+                </div>
+                {% endif %}
+
+                <p class="text-muted">Sign in to access your organization's event management dashboard.</p>
+                
+                <div class="alert alert-info">
+                    <small><strong>Demo Access:</strong> Use <code>eventuser</code> / <code>events2024</code> to explore the platform.</small>
+                </div>
+
+                <form method="post" action="/api/auth/login">
+                    <div class="form-group">
+                        <label for="username">Organization ID</label>
+                        <input type="text" class="form-control" id="username" name="username" placeholder="Enter your organization ID" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="password">Password</label>
+                        <input type="password" class="form-control" id="password" name="password" placeholder="Enter password" required>
+                    </div>
+                    <button type="submit" class="btn btn-primary btn-block">Sign In</button>
+                </form>
+                
+                <hr>
+                <p class="text-center text-muted small">
+                    <a href="/api/docs">API Documentation</a> | 
+                    Need help? Contact your administrator.
+                </p>
+            </div>
+        </div>
+    </div>
 </div>
-{% endif %}
-
-<p>To try the app you can use the demo account: <strong>Username:</strong> demo, <strong>Password:</strong> demo</p>
-
-<form method="post" action="/token">
-    <div class="form-group">
-        <label for="username">Company Name</label>
-        <input type="text" class="form-control" id="username" name="username" required>
-    </div>
-    <div class="form-group">
-        <label for="password">Password</label>
-        <input type="password" class="form-control" id="password" name="password" required>
-    </div>
-    <button type="submit" class="btn btn-primary">Login</button>
-</form>
 {% endblock %}

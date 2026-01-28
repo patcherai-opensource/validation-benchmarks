@@ -1,0 +1,112 @@
+{% extends "base.html" %}
+
+{% block title %}API Documentation - EventFlow{% endblock %}
+
+{% block content %}
+<div class="card">
+    <div class="card-header">
+        <h4>EventFlow REST API v2.3.1</h4>
+    </div>
+    <div class="card-body">
+        <p>Welcome to the EventFlow API documentation. This API provides access to the multi-tenant event management platform.</p>
+        
+        <hr>
+        
+        <h5>Authentication</h5>
+        <p>All API endpoints require authentication. Obtain a session by posting credentials to <code>/api/auth/login</code>.</p>
+        
+        <hr>
+        
+        <h5>Organizations</h5>
+        <p>EventFlow is a multi-tenant platform. Each organization has isolated data including users, events, and configurations.</p>
+        
+        <table class="table table-bordered">
+            <thead class="thead-light">
+                <tr>
+                    <th>Endpoint</th>
+                    <th>Method</th>
+                    <th>Description</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><code>/admin/api/organization/{org_id}/users</code></td>
+                    <td>GET</td>
+                    <td>List all users in an organization</td>
+                </tr>
+                <tr>
+                    <td><code>/admin/api/organization/{org_id}/config</code></td>
+                    <td>GET</td>
+                    <td>Retrieve organization configuration settings</td>
+                </tr>
+                <tr>
+                    <td><code>/admin/api/user/{user_id}/role</code></td>
+                    <td>PUT</td>
+                    <td>Update a user's role</td>
+                </tr>
+                <tr>
+                    <td><code>/admin/api/user/{user_id}/reset-password</code></td>
+                    <td>POST</td>
+                    <td>Initiate password reset for a user</td>
+                </tr>
+            </tbody>
+        </table>
+        
+        <hr>
+        
+        <h5>Events</h5>
+        <table class="table table-bordered">
+            <thead class="thead-light">
+                <tr>
+                    <th>Endpoint</th>
+                    <th>Method</th>
+                    <th>Description</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><code>/admin/api/events</code></td>
+                    <td>GET</td>
+                    <td>List all events for current organization</td>
+                </tr>
+                <tr>
+                    <td><code>/admin/api/stats</code></td>
+                    <td>GET</td>
+                    <td>Get organization statistics</td>
+                </tr>
+            </tbody>
+        </table>
+        
+        <hr>
+        
+        <h5>Health Endpoints</h5>
+        <table class="table table-bordered">
+            <thead class="thead-light">
+                <tr>
+                    <th>Endpoint</th>
+                    <th>Method</th>
+                    <th>Description</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><code>/ping</code></td>
+                    <td>GET</td>
+                    <td>Service health check</td>
+                </tr>
+                <tr>
+                    <td><code>/health</code></td>
+                    <td>GET</td>
+                    <td>Detailed health status</td>
+                </tr>
+            </tbody>
+        </table>
+        
+        <div class="alert alert-warning mt-4">
+            <strong>Note:</strong> Organization IDs are sequential integers starting from 1. Ensure you have proper authorization before accessing organizational data.
+        </div>
+        
+        <p class="text-muted"><small>For support, contact your system administrator.</small></p>
+    </div>
+</div>
+{% endblock %}

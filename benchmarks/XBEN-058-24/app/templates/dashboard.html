@@ -1,0 +1,76 @@
+{% extends "base.html" %}
+
+{% block title %}Dashboard - EventFlow{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-3">
+        <div class="card">
+            <div class="card-header">
+                <strong>Navigation</strong>
+            </div>
+            <div class="list-group list-group-flush">
+                <a href="/admin/dashboard" class="list-group-item list-group-item-action active">Dashboard</a>
+                <a href="/admin/api/events" class="list-group-item list-group-item-action">Events</a>
+                <a href="/admin/api/organization/{{ org_id }}/users" class="list-group-item list-group-item-action">User Management</a>
+                <a href="/admin/api/organization/{{ org_id }}/config" class="list-group-item list-group-item-action">Configuration</a>
+                <a href="/admin/api/stats" class="list-group-item list-group-item-action">Statistics</a>
+                <a href="/logout" class="list-group-item list-group-item-action text-danger">Logout</a>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-9">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="mb-0">Welcome to EventFlow Backoffice</h5>
+            </div>
+            <div class="card-body">
+                <div class="alert alert-success">
+                    <strong>Logged in as:</strong> {{ org.display_name or org.name }}
+                    <br>
+                    <small class="text-muted">Organization ID: {{ org.id }}</small>
+                </div>
+                
+                <h6>Quick Stats</h6>
+                <div class="row">
+                    <div class="col-md-4">
+                        <div class="card bg-light">
+                            <div class="card-body text-center">
+                                <h3>2</h3>
+                                <small>Upcoming Events</small>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="card bg-light">
+                            <div class="card-body text-center">
+                                <h3>150</h3>
+                                <small>Total Attendees</small>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="card bg-light">
+                            <div class="card-body text-center">
+                                <h3>$12.5K</h3>
+                                <small>Revenue</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <hr>
+                
+                <h6>API Endpoints</h6>
+                <p class="text-muted">Access organizational data through our REST API:</p>
+                <ul>
+                    <li><code>GET /admin/api/organization/{org_id}/users</code> - List organization users</li>
+                    <li><code>GET /admin/api/organization/{org_id}/config</code> - Get organization configuration</li>
+                    <li><code>PUT /admin/api/user/{user_id}/role</code> - Update user role</li>
+                    <li><code>POST /admin/api/user/{user_id}/reset-password</code> - Reset user password</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
