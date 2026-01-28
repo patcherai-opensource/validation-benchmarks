@@ -1,0 +1,9 @@
+# DataLabel Studio Robots.txt
+User-agent: *
+Allow: /
+Disallow: /api/internal/
+Disallow: /admin/
+
+# Sitemap: /sitemap.xml
+# API Documentation: /api/docs (deprecated)
+# Configuration: POST /projects/upload-example/
