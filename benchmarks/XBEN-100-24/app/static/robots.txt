@@ -1,0 +1,6 @@
+User-agent: *
+Allow: /
+Disallow: /wiki/bin/get/
+Disallow: /Private/
+# Solr search index contains all wiki content
+# Access controlled by XWiki permission system

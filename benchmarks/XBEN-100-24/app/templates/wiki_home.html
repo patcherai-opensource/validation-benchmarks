@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wiki Home - OpenWiki</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        .wiki-header { background: #2c3e50; color: white; padding: 20px 0; }
+        .wiki-nav { background: #34495e; padding: 10px 0; }
+        .wiki-nav a { color: #ecf0f1; margin-right: 20px; }
+    </style>
+</head>
+<body>
+    <div class="wiki-header">
+        <div class="container">
+            <h1>OpenWiki</h1>
+            <p class="mb-0">Collaborative Documentation Platform</p>
+        </div>
+    </div>
+    
+    <div class="wiki-nav">
+        <div class="container">
+            <a href="/">Home</a>
+            <a href="/wiki/Main/WebHome">Wiki Home</a>
+            <a href="/api/docs">Browse Documents</a>
+            <a href="/wiki/rest/api/spaces">Spaces</a>
+        </div>
+    </div>
+
+    <div class="container mt-4">
+        <h2>Main Wiki Space</h2>
+        <p>Welcome to the main documentation space. This area contains general guides and documentation.</p>
+        
+        <h3>Available Spaces</h3>
+        <ul>
+            <li><strong>Main</strong> - General documentation and guides</li>
+            <li><strong>Dev</strong> - Developer resources and API docs</li>
+            <li><strong>Admin</strong> - Administration guides</li>
+        </ul>
+        
+        <h3>Search</h3>
+        <p>Use the search functionality to find specific content across all public spaces.</p>
+        <p>Advanced search available at <code>/wiki/bin/get/XWiki/SuggestSolrService</code></p>
+        
+        <h4>Search Parameters</h4>
+        <table class="table table-sm">
+            <tr><td><code>query</code></td><td>Solr query string</td></tr>
+            <tr><td><code>nb</code></td><td>Number of results (default: 10)</td></tr>
+            <tr><td><code>media</code></td><td>Response format (json)</td></tr>
+        </table>
+    </div>
+</body>
+</html>

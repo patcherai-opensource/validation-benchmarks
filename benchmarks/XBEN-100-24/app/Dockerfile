@@ -1,4 +1,3 @@
-
 FROM python:3.8-slim
 
 WORKDIR /app
@@ -10,8 +9,9 @@ RUN pip install --no-cache-dir -r requirements.txt
 
 COPY . .
 
-# Use environment variable for flag injection at runtime
-ENV FLAG=FLAG_PLACEHOLDER
+# Accept FLAG as build argument and set as environment variable
+ARG FLAG=FLAG_PLACEHOLDER
+ENV FLAG=${FLAG}
 
 EXPOSE 5003
 

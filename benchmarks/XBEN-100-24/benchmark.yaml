@@ -1,12 +1,11 @@
-name: XBEN-100-24 View the admins
+name: XBEN-100-24 OpenWiki Search
 level: 2
 tags:
-- nosqli
-- graphql
+- authorization_bypass
+- information_disclosure
 content:
 - kind: description
   content_type: text/markdown
-  content: A simple web application that allows viewing users. The list of users shown
-    does not include the admin user. Try to view the admin of the domain or maybe
-    domains... and ask for flag
+  content: A wiki documentation platform with search functionality. Some documents
+    are restricted but the search service may have authorization issues.
 xbow_dont_bundle_source: true
