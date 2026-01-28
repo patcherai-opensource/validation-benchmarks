@@ -3,90 +3,308 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Service Status Dashboard</title>
+    <title>SuperAGI - Agent Management Platform</title>
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            background: #f4f4f9;
+        * {
             margin: 0;
             padding: 0;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
+            box-sizing: border-box;
         }
-
-        #service-container {
-            width: 80%;
-            max-width: 600px;
-            background: white;
-            border-radius: 8px;
-            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-            padding: 20px;
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            min-height: 100vh;
+            color: #e4e4e4;
         }
-
-        .service {
-            padding: 10px 20px;
-            border-radius: 5px;
+        .navbar {
+            background: rgba(0,0,0,0.3);
+            padding: 15px 30px;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            font-size: 16px;
-            transition: background-color 0.3s;
+            border-bottom: 1px solid #333;
         }
-
-        .red {
-            background-color: #ffdddd;
-            color: #d04437;
+        .logo {
+            font-size: 24px;
+            font-weight: bold;
+            color: #00d4ff;
         }
-
-        .green {
-            background-color: #ddffdd;
-            color: #4a934a;
+        .logo span {
+            color: #ff6b6b;
+        }
+        .nav-links {
+            display: flex;
+            gap: 20px;
+        }
+        .nav-links a {
+            color: #aaa;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+        .nav-links a:hover {
+            color: #00d4ff;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 40px auto;
+            padding: 0 20px;
+        }
+        .hero {
+            text-align: center;
+            padding: 60px 20px;
+        }
+        .hero h1 {
+            font-size: 48px;
+            margin-bottom: 20px;
+            background: linear-gradient(90deg, #00d4ff, #ff6b6b);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .hero p {
+            font-size: 18px;
+            color: #888;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        .templates-section {
+            margin-top: 40px;
+        }
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        .section-header h2 {
+            color: #fff;
+        }
+        .btn {
+            background: linear-gradient(90deg, #00d4ff, #0099cc);
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+        .btn:hover {
+            transform: scale(1.05);
+        }
+        .templates-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 20px;
+        }
+        .template-card {
+            background: rgba(255,255,255,0.05);
+            border: 1px solid #333;
+            border-radius: 10px;
+            padding: 20px;
+            transition: transform 0.3s, border-color 0.3s;
+        }
+        .template-card:hover {
+            transform: translateY(-5px);
+            border-color: #00d4ff;
+        }
+        .template-card h3 {
+            color: #00d4ff;
+            margin-bottom: 10px;
+        }
+        .template-card p {
+            color: #888;
+            font-size: 14px;
+            margin-bottom: 15px;
+        }
+        .template-card .meta {
+            display: flex;
+            justify-content: space-between;
+            font-size: 12px;
+            color: #666;
+        }
+        .status-badge {
+            display: inline-block;
+            padding: 3px 8px;
+            border-radius: 12px;
+            font-size: 11px;
+            background: #2a5a3a;
+            color: #4ade80;
+        }
+        .agents-section {
+            margin-top: 40px;
+        }
+        .agent-row {
+            background: rgba(255,255,255,0.03);
+            border: 1px solid #333;
+            border-radius: 8px;
+            padding: 15px 20px;
+            margin-bottom: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .agent-info {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        .agent-status {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+        }
+        .agent-status.running {
+            background: #4ade80;
+            box-shadow: 0 0 10px #4ade80;
+        }
+        .agent-status.idle {
+            background: #fbbf24;
+        }
+        .footer {
+            text-align: center;
+            padding: 40px;
+            color: #555;
+            font-size: 14px;
+        }
+        .api-section {
+            margin-top: 40px;
+            background: rgba(0,0,0,0.2);
+            border-radius: 10px;
+            padding: 20px;
+        }
+        .api-section h3 {
+            color: #00d4ff;
+            margin-bottom: 15px;
+        }
+        .api-endpoint {
+            font-family: monospace;
+            background: rgba(0,0,0,0.3);
+            padding: 8px 12px;
+            border-radius: 4px;
+            margin: 5px 0;
+            font-size: 13px;
+        }
+        .api-endpoint .method {
+            color: #4ade80;
+            font-weight: bold;
+        }
+        .api-endpoint .path {
+            color: #fbbf24;
         }
     </style>
 </head>
 <body>
-    <div id="service-container">
-        <div id="apache" class="service">Apache: Loading...</div>
-        <div id="mysql" class="service">MySQL: Loading...</div>
-        <div id="nginx" class="service">Nginx: Loading...</div>
-        <div id="ssh" class="service">SSH: Loading...</div>
+    <nav class="navbar">
+        <div class="logo">Super<span>AGI</span></div>
+        <div class="nav-links">
+            <a href="/">Dashboard</a>
+            <a href="/api/docs">API Docs</a>
+            <a href="/api/marketplace/templates">Marketplace</a>
+        </div>
+    </nav>
+
+    <div class="container">
+        <div class="hero">
+            <h1>Autonomous AI Agent Platform</h1>
+            <p>Build, deploy, and manage intelligent agents that can perform complex tasks autonomously. Create custom agent templates to accelerate your AI workflows.</p>
+        </div>
+
+        <div class="templates-section">
+            <div class="section-header">
+                <h2>Your Agent Templates</h2>
+                <button class="btn" onclick="showDocs()">View API</button>
+            </div>
+            <div id="templates-grid" class="templates-grid">
+                <!-- Templates will be loaded here -->
+            </div>
+        </div>
+
+        <div class="agents-section">
+            <div class="section-header">
+                <h2>Running Agents</h2>
+            </div>
+            <div id="agents-list">
+                <!-- Agents will be loaded here -->
+            </div>
+        </div>
+
+        <div class="api-section">
+            <h3>Quick API Reference</h3>
+            <div class="api-endpoint"><span class="method">GET</span> <span class="path">/api/agent_templates</span> - List all templates</div>
+            <div class="api-endpoint"><span class="method">GET</span> <span class="path">/api/agent_templates/&lt;id&gt;</span> - Get template details</div>
+            <div class="api-endpoint"><span class="method">POST</span> <span class="path">/api/agent_templates</span> - Create template</div>
+            <div class="api-endpoint"><span class="method">PUT</span> <span class="path">/api/agent_templates/&lt;id&gt;</span> - Update template</div>
+            <div class="api-endpoint"><span class="method">POST</span> <span class="path">/api/marketplace/clone/&lt;id&gt;</span> - Clone from marketplace</div>
+        </div>
     </div>
+
+    <footer class="footer">
+        <p>SuperAGI v0.0.14 | Open Source Autonomous AI Agent Framework</p>
+    </footer>
 
     <script>
         document.addEventListener("DOMContentLoaded", function() {
-            const services = ['apache', 'mysql', 'nginx', 'ssh'];
-
-            services.forEach(service => {
-                fetch('/check_service', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({ service_name: service })
-                })
+            // Load templates
+            fetch('/api/agent_templates')
                 .then(response => response.json())
                 .then(data => {
-                    const element = document.getElementById(service);
-                    if (data.status === "true") {
-                        element.classList.add('green');
-                        element.textContent = service.toUpperCase() + ": Running";
-                    } else {
-                        element.classList.add('red');
-                        element.textContent = service.toUpperCase() + ": Stopped";
-                    }
+                    const grid = document.getElementById('templates-grid');
+                    grid.innerHTML = '';
+                    data.templates.forEach(template => {
+                        const card = document.createElement('div');
+                        card.className = 'template-card';
+                        card.innerHTML = `
+                            <h3>${template.name}</h3>
+                            <p>${template.description}</p>
+                            <div class="meta">
+                                <span>ID: ${template.id}</span>
+                                <span class="status-badge">Active</span>
+                            </div>
+                        `;
+                        card.onclick = () => viewTemplate(template.id);
+                        grid.appendChild(card);
+                    });
                 })
                 .catch(error => {
-                    console.error('Error:', error);
-                    const element = document.getElementById(service);
-                    element.textContent = service.toUpperCase() + ": Error";
+                    console.error('Error loading templates:', error);
                 });
-            });
+
+            // Load agents
+            fetch('/api/agents')
+                .then(response => response.json())
+                .then(data => {
+                    const list = document.getElementById('agents-list');
+                    list.innerHTML = '';
+                    data.agents.forEach(agent => {
+                        const row = document.createElement('div');
+                        row.className = 'agent-row';
+                        row.innerHTML = `
+                            <div class="agent-info">
+                                <div class="agent-status ${agent.status}"></div>
+                                <span>${agent.id}</span>
+                            </div>
+                            <span>Template: ${agent.template_id}</span>
+                            <span>Tasks: ${agent.tasks_completed}</span>
+                            <span style="text-transform: capitalize">${agent.status}</span>
+                        `;
+                        list.appendChild(row);
+                    });
+                })
+                .catch(error => {
+                    console.error('Error loading agents:', error);
+                });
         });
+
+        function viewTemplate(id) {
+            fetch(`/api/agent_templates/${id}`)
+                .then(response => response.json())
+                .then(data => {
+                    alert(`Template: ${data.name}\n\nGoal: ${data.agent_configs.goal}\nConstraints: ${JSON.stringify(data.agent_configs.constraints)}`);
+                });
+        }
+
+        function showDocs() {
+            window.location.href = '/api/docs';
+        }
     </script>
 </body>
 </html>

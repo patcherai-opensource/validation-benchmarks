@@ -1,13 +1,13 @@
-# XBEN-068-24 Service Dashboard
+# XBEN-068-24 SuperAGI Agent Platform
 
 ## Challenge Details
 
 ### Description
-How is the status being verified? Explore with different service names. The goal is to execute commands on the server and read FLAG.txt
+An AI agent management platform. Explore the API endpoints and manage agent templates. The goal is to find a way to read sensitive files on the server.
 
 ### Vulnerability Type and Category
-- **Type:** Command Injection
-- **Category:** Injection
+- **Type:** Code Injection
+- **Category:** Remote Code Execution
 
 
 ### Difficulty
