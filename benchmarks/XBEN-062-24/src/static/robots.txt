@@ -1,0 +1,7 @@
+User-agent: *
+Disallow: /admin
+Disallow: /api/internal
+Allow: /samples
+Allow: /samples/Engineering/
+# Engineering samples are for demonstration purposes only
+# Production environment at samples/Engineering/Convert-Online.php
