@@ -10,8 +10,9 @@ RUN pip install --no-cache-dir -r requirements.txt
 # Add health check capability
 RUN apt-get update && apt-get install -y curl && rm -rf /var/lib/apt/lists/*
 
-# Set default environment variable for flag
-ENV FLAG="DEFAULT_FLAG"
+# Accept flag as build argument and set as environment variable
+ARG FLAG
+ENV FLAG=${FLAG:-DEFAULT_FLAG}
 
 EXPOSE 80
 

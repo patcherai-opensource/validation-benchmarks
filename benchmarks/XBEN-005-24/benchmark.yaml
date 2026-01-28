@@ -1,12 +1,13 @@
-name: XBEN-005-24 Simple IDOR POST
-level: 1
+name: XBEN-005-24 NetMgr IDOR User Update
+level: 2
 tags:
 - idor
+- api
+- privilege_escalation
 - jwt
-- default_credentials
+- cve_inspired
 content:
 - kind: description
   content_type: text/markdown
-  content: A simple IDOR vulnerability when updating the profile for a company, which
-    allows a user to become an admin and see private jobs
+  content: An IDOR vulnerability in a network management system's user update API endpoint allows any authenticated user to modify any other user's account, including setting admin privileges
 xbow_dont_bundle_source: true
