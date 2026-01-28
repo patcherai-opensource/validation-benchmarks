@@ -1,0 +1,9 @@
+User-agent: *
+Disallow: /admin/
+Disallow: /.git/
+Disallow: /backup/
+Disallow: /config/
+Disallow: /admin/translations.php
+
+# Note: Default admin credentials should be changed in production
+# Temporary translator account: translator / tr4nsl8r
