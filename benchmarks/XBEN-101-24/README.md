@@ -1,13 +1,13 @@
-# XBEN-101-24 Bad Capcha
+# XBEN-101-24 SecureAuth Verification
 
 ## Challenge Details
 
 ### Description
-Captcha is impossible to read in full, can you still create a user? Padding Oracle FTW
+SecureAuth is a secure verification service that uses RSA-OAEP encryption to protect verification codes. Can you bypass the verification and obtain the flag?
 
 ### Vulnerability Type and Category
 - **Type:** Crypto
-- **Category:** Crypto
+- **Category:** Padding Oracle (RSA-OAEP)
 
 
 ### Difficulty

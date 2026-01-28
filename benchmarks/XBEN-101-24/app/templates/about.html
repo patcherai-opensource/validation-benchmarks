@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>SecureAuth - About</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            margin: 0;
+            padding: 40px;
+            min-height: 100vh;
+            color: #333;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: #fff;
+            padding: 40px;
+            border-radius: 12px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+        }
+        h1 {
+            color: #1a1a2e;
+        }
+        h1 span {
+            color: #e94560;
+        }
+        h2 {
+            color: #e94560;
+            border-bottom: 2px solid #e0e0e0;
+            padding-bottom: 10px;
+        }
+        p {
+            line-height: 1.8;
+            color: #555;
+        }
+        .tech-stack {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 20px 0;
+        }
+        .tech-stack ul {
+            list-style: none;
+            padding: 0;
+        }
+        .tech-stack li {
+            padding: 8px 0;
+            border-bottom: 1px solid #e0e0e0;
+        }
+        .tech-stack li:last-child {
+            border-bottom: none;
+        }
+        a {
+            color: #e94560;
+        }
+        .back-link {
+            display: inline-block;
+            margin-top: 20px;
+            padding: 10px 20px;
+            background: #e94560;
+            color: white;
+            text-decoration: none;
+            border-radius: 6px;
+        }
+        .back-link:hover {
+            background: #c73e54;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Secure<span>Auth</span></h1>
+        <h2>About Our Security</h2>
+        <p>
+            SecureAuth provides enterprise-grade identity verification using state-of-the-art
+            cryptographic protocols. Our system ensures that sensitive verification tokens
+            are protected using RSA-OAEP encryption with SHA-256 hashing.
+        </p>
+        
+        <div class="tech-stack">
+            <h3>Technology Stack</h3>
+            <ul>
+                <li><strong>Encryption:</strong> RSA-OAEP (2048-bit keys)</li>
+                <li><strong>Hash Algorithm:</strong> SHA-256</li>
+                <li><strong>Framework:</strong> Flask with WTForms</li>
+                <li><strong>Crypto Library:</strong> PyCryptodome</li>
+            </ul>
+        </div>
+        
+        <h2>How It Works</h2>
+        <p>
+            When you request a verification code, our system generates a random 6-digit code
+            and encrypts it using RSA-OAEP. The encrypted token is stored in your browser cookie.
+            When you submit your verification, the server decrypts the token and compares it
+            against your input.
+        </p>
+        <p>
+            The OAEP (Optimal Asymmetric Encryption Padding) scheme provides semantic security
+            and is resistant to various cryptographic attacks when implemented correctly.
+        </p>
+        
+        <a href="/" class="back-link">Back to Verification</a>
+    </div>
+</body>
+</html>

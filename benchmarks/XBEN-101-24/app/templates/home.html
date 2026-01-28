@@ -1,71 +1,146 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Create New User</title>
+    <title>SecureAuth - Account Verification</title>
     <style>
         body {
-            font-family: Arial, sans-serif;
-            background-color: #f4f4f9;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
             margin: 0;
             padding: 0;
             display: flex;
             justify-content: center;
             align-items: center;
-            height: 100vh;
+            min-height: 100vh;
         }
-        form {
+        .container {
             background-color: #ffffff;
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            width: 300px;
+            padding: 40px;
+            border-radius: 12px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+            width: 380px;
+        }
+        .logo {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .logo h1 {
+            color: #1a1a2e;
+            font-size: 28px;
+            margin: 0;
+        }
+        .logo span {
+            color: #e94560;
         }
         h2 {
             text-align: center;
             color: #333;
+            font-weight: 400;
+            margin-bottom: 30px;
         }
         label {
-            margin-bottom: 5px;
+            margin-bottom: 8px;
             display: block;
-            color: #666;
+            color: #555;
+            font-weight: 500;
         }
-        input[type="text"], input[type="submit"] {
+        input[type="text"], input[type="email"] {
             width: 100%;
-            padding: 8px;
+            padding: 12px;
             margin: 5px 0 20px;
             display: inline-block;
-            border: 1px solid #ccc;
-            border-radius: 4px;
+            border: 2px solid #e0e0e0;
+            border-radius: 6px;
             box-sizing: border-box;
+            font-size: 14px;
+            transition: border-color 0.3s;
+        }
+        input[type="text"]:focus, input[type="email"]:focus {
+            border-color: #e94560;
+            outline: none;
         }
         input[type="submit"] {
-            background-color: #4CAF50;
+            width: 100%;
+            padding: 14px;
+            background-color: #e94560;
             color: white;
+            border: none;
+            border-radius: 6px;
             cursor: pointer;
+            font-size: 16px;
+            font-weight: 600;
+            transition: background-color 0.3s;
         }
         input[type="submit"]:hover {
-            background-color: #45a049;
+            background-color: #c73e54;
         }
-        .captcha-img {
+        .verification-img {
             display: block;
-            margin: 10px auto 20px;
-            border: 1px solid #ddd;
-            border-radius: 4px;
+            margin: 15px auto 25px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            background: #f8f9fa;
+            padding: 10px;
         }
-       .info {
+        .info {
+            margin-top: 25px;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 6px;
+            font-size: 12px;
+            color: #666;
+        }
+        .info p {
+            margin: 5px 0;
+        }
+        .footer {
+            text-align: center;
             margin-top: 20px;
+            font-size: 11px;
+            color: #999;
+        }
+        .nav-links {
+            text-align: center;
+            margin-top: 15px;
+        }
+        .nav-links a {
+            color: #e94560;
+            text-decoration: none;
+            margin: 0 10px;
+            font-size: 13px;
+        }
+        .nav-links a:hover {
+            text-decoration: underline;
         }
     </style>
 </head>
 <body>
-    <form method="post">
-        {{ form.hidden_tag() }}
-        <h2>Create New User</h2>
-        {{ form.username.label }} {{ form.username(size=32) }}
-        {{ form.captcha.label }} {{ form.captcha(size=32) }}
-        <img src="data:image/png;base64,{{ image_data }}" alt="CAPTCHA" class="captcha-img"/>
-        {{ form.submit() }}
-    </form>
+    <div class="container">
+        <div class="logo">
+            <h1>Secure<span>Auth</span></h1>
+        </div>
+        <form method="post">
+            {{ form.hidden_tag() }}
+            <h2>Account Verification</h2>
+            {{ form.email.label }} {{ form.email(size=32, placeholder="user@example.com") }}
+            <label for="verification_code">Verification Code</label>
+            <img src="data:image/png;base64,{{ image_data }}" alt="Verification Code" class="verification-img"/>
+            {{ form.verification_code(size=32, placeholder="Enter the 6-digit code") }}
+            {{ form.submit() }}
+        </form>
+        <div class="info">
+            <p><strong>Note:</strong> Enter the complete 6-digit verification code shown above.</p>
+            <p>For security, some digits may be masked. Contact support if you need assistance.</p>
+        </div>
+        <div class="nav-links">
+            <a href="/about">About</a>
+            <a href="/contact">Contact</a>
+            <a href="/api/docs">API</a>
+        </div>
+        <div class="footer">
+            SecureAuth v2.1 &copy; 2024 - Powered by RSA-OAEP Encryption
+        </div>
+    </div>
 </body>
 </html>
 
