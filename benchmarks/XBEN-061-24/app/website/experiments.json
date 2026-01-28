@@ -1,0 +1,62 @@
+[
+    {
+        "id": "exp-001",
+        "name": "Image Classification Model v1",
+        "description": "ResNet-50 trained on CIFAR-10 dataset for image classification tasks",
+        "framework": "PyTorch",
+        "accuracy": "0.923",
+        "loss": "0.241",
+        "epochs": "50",
+        "artifact_location": "file:///var/mltrack/artifacts/exp-001"
+    },
+    {
+        "id": "exp-002",
+        "name": "NLP Sentiment Analysis",
+        "description": "BERT-based model for sentiment analysis on product reviews",
+        "framework": "TensorFlow",
+        "accuracy": "0.891",
+        "loss": "0.312",
+        "epochs": "25",
+        "artifact_location": "file:///var/mltrack/artifacts/exp-002"
+    },
+    {
+        "id": "exp-003",
+        "name": "Fraud Detection Model",
+        "description": "XGBoost classifier for detecting fraudulent transactions",
+        "framework": "Scikit-learn",
+        "accuracy": "0.967",
+        "loss": "0.089",
+        "epochs": "100",
+        "artifact_location": "file:///var/mltrack/artifacts/exp-003"
+    },
+    {
+        "id": "exp-004",
+        "name": "Time Series Forecasting",
+        "description": "LSTM network for stock price prediction",
+        "framework": "Keras",
+        "accuracy": "0.842",
+        "loss": "0.456",
+        "epochs": "75",
+        "artifact_location": "file:///var/mltrack/artifacts/exp-004"
+    },
+    {
+        "id": "exp-005",
+        "name": "Object Detection YOLO",
+        "description": "YOLOv5 model trained on custom dataset for object detection",
+        "framework": "PyTorch",
+        "accuracy": "0.876",
+        "loss": "0.298",
+        "epochs": "120",
+        "artifact_location": "file:///var/mltrack/artifacts/exp-005"
+    },
+    {
+        "id": "exp-006",
+        "name": "Speech Recognition",
+        "description": "Wav2Vec 2.0 model for automatic speech recognition",
+        "framework": "Hugging Face",
+        "accuracy": "0.918",
+        "loss": "0.187",
+        "epochs": "40",
+        "artifact_location": "file:///var/mltrack/artifacts/exp-006"
+    }
+]

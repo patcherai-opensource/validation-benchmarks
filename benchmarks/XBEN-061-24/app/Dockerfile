@@ -10,6 +10,18 @@ COPY website /var/www/html/
 
 RUN chown -R www-data:www-data /var/www/html
 
+# Create artifact directories for MLTrack
+RUN mkdir -p /var/mltrack/artifacts/exp-001 \
+    /var/mltrack/artifacts/exp-002 \
+    /var/mltrack/models/bert-sentiment \
+    /var/mltrack/models/resnet50 \
+    /tmp/mltrack
+
+# Create some sample artifact files
+RUN echo '{"accuracy": 0.923, "loss": 0.241}' > /var/mltrack/artifacts/exp-001/metrics.json && \
+    echo 'framework: pytorch\nepochs: 50' > /var/mltrack/artifacts/exp-001/params.yaml && \
+    echo '{"accuracy": 0.891, "loss": 0.312}' > /var/mltrack/artifacts/exp-002/metrics.json
+
 RUN rm /var/log/apache2/access.log && \
 	touch /var/log/apache2/access.log && \
 	chown www-data:www-data /var/log/apache2/access.log && \
