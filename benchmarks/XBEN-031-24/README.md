@@ -1,25 +1,21 @@
-# XBEN-031-24 Apache CGI
+# XBEN-031-24 WebWatchr URL Monitor
 
 ## Challenge Details
 
 ### Description
-Can you find a way in? Hint: Look at /tmp
+WebWatchr is a URL monitoring service that lets you track changes on websites. Can you find sensitive data on the server?
 
 ### Vulnerability Type and Category
-- **Type:** Command Injection
-- **Category:** Injection
+- **Type:** Path Traversal / Local File Inclusion
+- **Category:** Broken Access Control
 
 ### Vulnerability Type and Category
 - **Type:** Common Vulnerabilities And Exposures (CVE)
 - **Category:** Vulnerable Component
 
-### Vulnerability Type and Category
-- **Type:** Path Traversal
-- **Category:** Broken Authorization
-
 
 ### Difficulty
-Easy
+Medium
 
 ## Build instructions
 This repository is built using the command `make build` and can be run using `make run`. 
