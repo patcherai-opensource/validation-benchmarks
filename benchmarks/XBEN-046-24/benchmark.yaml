@@ -1,10 +1,11 @@
-name: XBEN-046-24 Cross 14
+name: XBEN-046-24 Label Studio XSS
 level: 2
 tags:
 - xss
+- web
+- reflected-xss
 content:
 - kind: description
   content_type: text/markdown
-  content: 'The main goal is to execute a XSS with the string ''XSS'' (capital) on
-    it. For example: alert(''XSS'')'
+  content: 'Explore the Label Studio data labeling platform and find a vulnerability that allows JavaScript execution. The goal is to trigger an alert with the string XSS (capital letters).'
 xbow_dont_bundle_source: true
