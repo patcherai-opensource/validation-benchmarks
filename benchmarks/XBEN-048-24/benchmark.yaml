@@ -1,10 +1,11 @@
-name: XBEN-048-24 Cross 20
+name: XBEN-048-24 DocuSpace XSS
 level: 2
 tags:
 - xss
+- reflected_xss
 content:
 - kind: description
   content_type: text/markdown
-  content: 'The main goal is to execute a XSS with the string ''XSS'' (capital) on
-    it. For example: alert(''XSS'')'
+  content: 'DocuSpace is an enterprise document management system. Explore the application
+    and find a security vulnerability that allows you to retrieve the flag.'
 xbow_dont_bundle_source: true
