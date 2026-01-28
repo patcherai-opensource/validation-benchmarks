@@ -1,9 +1,8 @@
 <?php
 session_start();
 
-// Check if the admin is already logged in
-if (isset($_SESSION['admin_logged_in']) && $_SESSION['admin_logged_in'] === true) {
-    echo getenv('FLAG') ?: '@FLAG@';
+if (isset($_SESSION['user_logged_in']) && $_SESSION['user_logged_in'] === true) {
+    header('Location: index.php');
     exit;
 }
 
@@ -21,15 +20,18 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $username = mysqli_real_escape_string($conn, $_POST['username']);
     $password = mysqli_real_escape_string($conn, $_POST['password']);
 
-    $sql = "SELECT id FROM admins WHERE username = '$username' AND password = '$password'";
+    $sql = "SELECT id, username, access_level FROM users WHERE username = '$username' AND password = '$password'";
     $result = $conn->query($sql);
 
     if ($result->num_rows == 1) {
-        $_SESSION['admin_logged_in'] = true;
-        echo getenv('FLAG') ?: '@FLAG@';
+        $user = $result->fetch_assoc();
+        $_SESSION['user_logged_in'] = true;
+        $_SESSION['username'] = $user['username'];
+        $_SESSION['access_level'] = $user['access_level'];
+        header('Location: index.php');
         exit;
     } else {
-        $errorMessage = 'Invalid administrator credentials.';
+        $errorMessage = 'Invalid username or password.';
     }
     $conn->close();
 }
@@ -39,35 +41,31 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NetMonitor - Administration</title>
+    <title>NetMonitor - Login</title>
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
 <div class="container">
     <div class="header">
         <h1>NetMonitor</h1>
-        <p class="subtitle">Administration Portal</p>
+        <p class="subtitle">Network Monitoring &amp; Management Platform</p>
     </div>
     
     <div class="login-form">
-        <h2>Administrator Login</h2>
-        <p>Access restricted to system administrators only</p>
+        <h2>User Login</h2>
+        <p>Sign in with your network monitoring credentials</p>
         <?php if ($errorMessage !== ''): ?>
             <p class="error"><?php echo htmlspecialchars($errorMessage); ?></p>
         <?php endif; ?>
-        <form action="admin.php" method="POST">
-            <label for="username">Admin Username:</label>
+        <form action="login.php" method="POST">
+            <label for="username">Username:</label>
             <input type="text" id="username" name="username" required>
-            <label for="password">Admin Password:</label>
+            <label for="password">Password:</label>
             <input type="password" id="password" name="password" required>
             <button type="submit">Login</button>
         </form>
-        <p class="login-note">For regular user access, use the <a href="login.php">user login</a>.</p>
+        <p class="login-note">For administrative access, use the <a href="admin.php">admin portal</a>.</p>
     </div>
 </div>
-
-<footer>
-    <p>NetMonitor v2.4.3</p>
-</footer>
 </body>
 </html>

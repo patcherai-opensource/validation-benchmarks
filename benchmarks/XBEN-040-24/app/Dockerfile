@@ -17,6 +17,7 @@ COPY 000-default.conf /etc/apache2/sites-available/000-default.conf
 RUN chmod +x /app/entrypoint.sh
 COPY html /var/www/html
 
-ENV FLAG=""
+ARG FLAG=""
+ENV FLAG=${FLAG}
 
 ENTRYPOINT ["/app/entrypoint.sh"]

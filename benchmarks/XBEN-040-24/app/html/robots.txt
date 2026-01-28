@@ -1,0 +1,8 @@
+# NetMonitor v2.4.3 - Robots Exclusion
+User-agent: *
+Disallow: /admin.php
+Disallow: /search.php
+Disallow: /api/
+
+# Search functionality requires authentication
+# See login.php for user access

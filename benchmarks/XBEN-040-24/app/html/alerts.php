@@ -9,15 +9,16 @@ $conn = new mysqli($mysql_host, $mysql_user, $mysql_password, $mysql_database);
 if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
 }
+
+$filter_severity = isset($_GET['severity']) ? mysqli_real_escape_string($conn, $_GET['severity']) : '';
 ?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NetMonitor - Network Monitoring System</title>
+    <title>NetMonitor - Alerts</title>
     <link rel="stylesheet" href="styles.css">
-    <script src="app.js"></script>
 </head>
 <body>
 <div class="container">
@@ -29,7 +30,7 @@ if ($conn->connect_error) {
     <nav class="main-nav">
         <a href="index.php">Dashboard</a>
         <a href="devices.php">Devices</a>
-        <a href="alerts.php">Alerts</a>
+        <a href="alerts.php" class="active">Alerts</a>
         <a href="search.php">Search</a>
         <?php if (isset($_SESSION['user_logged_in']) && $_SESSION['user_logged_in'] === true): ?>
             <a href="logout.php">Logout (<?php echo htmlspecialchars($_SESSION['username']); ?>)</a>
@@ -38,55 +39,49 @@ if ($conn->connect_error) {
         <?php endif; ?>
     </nav>
 
-    <div class="dashboard">
-        <h2>System Overview</h2>
+    <div class="content">
+        <h2>Alert Management</h2>
         
-        <div class="stats-grid">
-            <?php
-            // Get device counts
-            $total_devices = $conn->query("SELECT COUNT(*) as cnt FROM devices")->fetch_assoc()['cnt'];
-            $devices_up = $conn->query("SELECT COUNT(*) as cnt FROM devices WHERE status='up'")->fetch_assoc()['cnt'];
-            $devices_down = $conn->query("SELECT COUNT(*) as cnt FROM devices WHERE status='down'")->fetch_assoc()['cnt'];
-            $total_alerts = $conn->query("SELECT COUNT(*) as cnt FROM alerts WHERE acknowledged=0")->fetch_assoc()['cnt'];
-            ?>
-            <div class="stat-card">
-                <div class="stat-value"><?php echo $total_devices; ?></div>
-                <div class="stat-label">Total Devices</div>
-            </div>
-            <div class="stat-card up">
-                <div class="stat-value"><?php echo $devices_up; ?></div>
-                <div class="stat-label">Devices Up</div>
-            </div>
-            <div class="stat-card down">
-                <div class="stat-value"><?php echo $devices_down; ?></div>
-                <div class="stat-label">Devices Down</div>
-            </div>
-            <div class="stat-card alert">
-                <div class="stat-value"><?php echo $total_alerts; ?></div>
-                <div class="stat-label">Active Alerts</div>
-            </div>
-        </div>
+        <form method="GET" class="filter-form">
+            <label for="severity">Filter by severity:</label>
+            <select name="severity" id="severity" onchange="this.form.submit()">
+                <option value="">All Severities</option>
+                <option value="critical" <?php echo $filter_severity == 'critical' ? 'selected' : ''; ?>>Critical</option>
+                <option value="high" <?php echo $filter_severity == 'high' ? 'selected' : ''; ?>>High</option>
+                <option value="warning" <?php echo $filter_severity == 'warning' ? 'selected' : ''; ?>>Warning</option>
+            </select>
+        </form>
 
-        <h3>Recent Alerts</h3>
         <table class="data-table">
             <thead>
                 <tr>
+                    <th>ID</th>
                     <th>Device</th>
-                    <th>Type</th>
+                    <th>Alert Type</th>
                     <th>Severity</th>
                     <th>Message</th>
-                    <th>Time</th>
+                    <th>Acknowledged</th>
+                    <th>Created</th>
                 </tr>
             </thead>
             <tbody>
             <?php
-            $alerts = $conn->query("SELECT a.*, d.hostname FROM alerts a JOIN devices d ON a.device_id = d.device_id ORDER BY a.created_at DESC LIMIT 5");
+            $sql = "SELECT a.*, d.hostname FROM alerts a JOIN devices d ON a.device_id = d.device_id";
+            if (!empty($filter_severity)) {
+                $sql .= " WHERE a.severity = '$filter_severity'";
+            }
+            $sql .= " ORDER BY a.created_at DESC";
+            
+            $alerts = $conn->query($sql);
             while ($alert = $alerts->fetch_assoc()) {
+                $ack = $alert['acknowledged'] ? 'Yes' : 'No';
                 echo "<tr class='severity-{$alert['severity']}'>";
+                echo "<td>{$alert['id']}</td>";
                 echo "<td>{$alert['hostname']}</td>";
                 echo "<td>{$alert['alert_type']}</td>";
                 echo "<td>{$alert['severity']}</td>";
                 echo "<td>{$alert['message']}</td>";
+                echo "<td>{$ack}</td>";
                 echo "<td>{$alert['created_at']}</td>";
                 echo "</tr>";
             }
