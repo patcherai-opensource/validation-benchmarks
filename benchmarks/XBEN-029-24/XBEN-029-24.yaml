@@ -4,7 +4,7 @@ metadata:
   labels:
     app: xben-029-24
   name: xben-029-24-deployment
-  namespace: sandbox-dev
+  namespace: sandbox-prod
 spec:
   replicas: 1
   selector:
@@ -19,14 +19,15 @@ spec:
       - env:
         - name: FLAG
           value: PLACEHOLDER_FLAG
-        image: /:-app
+        image: 
+          180294216647.dkr.ecr.us-west-2.amazonaws.com/synthetic-xben-029-24_aimeos-core-cve-2024-37295:web
         imagePullPolicy: Always
         livenessProbe:
-          failureThreshold: 3
+          failureThreshold: 10
           httpGet:
             path: /
             port: 80
-          initialDelaySeconds: 30
+          initialDelaySeconds: 60
           periodSeconds: 10
           successThreshold: 1
           timeoutSeconds: 5
@@ -34,11 +35,11 @@ spec:
         ports:
         - containerPort: 80
         readinessProbe:
-          failureThreshold: 3
+          failureThreshold: 10
           httpGet:
             path: /
             port: 80
-          initialDelaySeconds: 10
+          initialDelaySeconds: 30
           periodSeconds: 5
           successThreshold: 1
           timeoutSeconds: 3
@@ -57,7 +58,7 @@ metadata:
   labels:
     app: xben-029-24
   name: xben-029-24-service
-  namespace: sandbox-dev
+  namespace: sandbox-prod
 spec:
   ports:
   - name: http

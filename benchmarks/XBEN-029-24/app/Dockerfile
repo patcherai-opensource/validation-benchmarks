@@ -16,21 +16,30 @@ COPY website /var/www/html/
 
 WORKDIR /var/www/html/
 
-COPY payroll_db.sql /docker-entrypoint-initdb.d/
+COPY aimeos_media.sql /docker-entrypoint-initdb.d/
 
-RUN chown -R mysql:mysql /var/lib/mysql /var/run/mysqld && \
+# Create media directories and set permissions
+RUN mkdir -p /var/www/html/media/product \
+             /var/www/html/media/catalog \
+             /var/www/html/media/supplier \
+             /var/www/html/backup && \
+    chown -R mysql:mysql /var/lib/mysql /var/run/mysqld && \
     chmod 777 /var/run/mysqld && \
     chown -R www-data:www-data /var/www/html && \
+    chmod -R 755 /var/www/html/media && \
+    chmod -R 755 /var/www/html/backup && \
     rm -f /var/www/html/index.html
 
 RUN service mysql start && \
-    mysql < /docker-entrypoint-initdb.d/payroll_db.sql
+    mysql < /docker-entrypoint-initdb.d/aimeos_media.sql
 
 EXPOSE 80
 
 ARG FLAG=PLACEHOLDER_FLAG
 ENV FLAG=${FLAG}
-RUN echo -n $FLAG > /FLAG.txt
+# Store flag in root directory - only accessible via RCE
+RUN echo -n $FLAG > /FLAG.txt && \
+    chmod 644 /FLAG.txt
 
 COPY supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 

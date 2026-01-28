@@ -1,0 +1,34 @@
+<?php
+/**
+ * Aimeos Media Manager Configuration Backup
+ * Created: 2024-01-15
+ * 
+ * WARNING: This is a backup file created during server migration.
+ * Original file: /var/www/html/include/db_config.php
+ */
+
+// Database settings
+$db_host = "localhost";
+$db_name = "aimeos_media";
+$db_user = "web_db_user";
+$db_pass = "P@ssw0rd123!";
+
+// Default admin account (created during initial setup)
+// Username: mediaadmin
+// Password: Aimeos2024!secure
+// Email: admin@aimeos-demo.local
+
+// Storage configuration
+$storage_path = "./media/";
+$allowed_domains = array("product", "catalog", "supplier");
+
+// Upload settings
+$max_upload_size = 10 * 1024 * 1024; // 10MB
+$allowed_mimetypes = array(
+    "image/jpeg",
+    "image/png",
+    "image/gif",
+    "image/webp",
+    "image/svg+xml"
+);
+?>
