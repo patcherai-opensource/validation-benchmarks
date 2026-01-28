@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DataViz Analytics - API Documentation</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #f5f5f5;
+            line-height: 1.6;
+        }
+        .navbar {
+            background: #1a1a2e;
+            color: #fff;
+            padding: 15px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .navbar h1 { font-size: 20px; }
+        .nav-links a {
+            color: #fff;
+            text-decoration: none;
+            margin-left: 20px;
+            padding: 8px 16px;
+            border-radius: 4px;
+            transition: background 0.3s;
+        }
+        .nav-links a:hover { background: rgba(255,255,255,0.1); }
+        .container {
+            max-width: 1000px;
+            margin: 30px auto;
+            padding: 0 20px;
+        }
+        .doc-section {
+            background: #fff;
+            padding: 30px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .doc-section h2 { 
+            color: #1a1a2e; 
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #0f3460;
+        }
+        .endpoint {
+            background: #f9f9f9;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            border-left: 4px solid #0f3460;
+        }
+        .endpoint h3 { color: #0f3460; margin-bottom: 10px; }
+        .method {
+            display: inline-block;
+            padding: 3px 8px;
+            border-radius: 4px;
+            font-size: 12px;
+            font-weight: bold;
+            margin-right: 10px;
+        }
+        .method.get { background: #2ecc71; color: #fff; }
+        .method.post { background: #3498db; color: #fff; }
+        .endpoint-path {
+            font-family: monospace;
+            background: #1a1a2e;
+            color: #fff;
+            padding: 5px 10px;
+            border-radius: 4px;
+        }
+        .endpoint p { color: #666; margin-top: 10px; }
+        code {
+            background: #eee;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-family: monospace;
+        }
+        .note {
+            background: #fff3cd;
+            border-left: 4px solid #ffc107;
+            padding: 15px;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <h1>DataViz Analytics</h1>
+        <div class="nav-links">
+            <a href="/dashboard">Dashboard</a>
+            <a href="/profile">Profile</a>
+            <a href="/docs">API Docs</a>
+            <a href="/logout">Logout</a>
+        </div>
+    </nav>
+    
+    <div class="container">
+        <div class="doc-section">
+            <h2>API Documentation</h2>
+            <p>Welcome to the DataViz Analytics API. All endpoints require authentication unless otherwise noted.</p>
+        </div>
+        
+        <div class="doc-section">
+            <h2>Authentication</h2>
+            <div class="endpoint">
+                <h3><span class="method post">POST</span> <span class="endpoint-path">/login</span></h3>
+                <p>Authenticate user and create session. Accepts <code>username</code> and <code>password</code> form fields.</p>
+            </div>
+            <div class="endpoint">
+                <h3><span class="method get">GET</span> <span class="endpoint-path">/logout</span></h3>
+                <p>End current session and redirect to login page.</p>
+            </div>
+        </div>
+        
+        <div class="doc-section">
+            <h2>Datasets API</h2>
+            <div class="endpoint">
+                <h3><span class="method get">GET</span> <span class="endpoint-path">/api/datasets</span></h3>
+                <p>List all available datasets. Returns JSON array of dataset objects.</p>
+            </div>
+            <div class="endpoint">
+                <h3><span class="method get">GET</span> <span class="endpoint-path">/api/dataset/{id}</span></h3>
+                <p>Get detailed information about a specific dataset including settings.</p>
+            </div>
+            <div class="endpoint">
+                <h3><span class="method post">POST</span> <span class="endpoint-path">/api/update-settings/{id}</span></h3>
+                <p>Update dataset settings. Requires owner or admin privileges. Send JSON body with new settings.</p>
+            </div>
+        </div>
+        
+        <div class="doc-section">
+            <h2>Admin API</h2>
+            <div class="endpoint">
+                <h3><span class="method get">GET</span> <span class="endpoint-path">/api/users</span></h3>
+                <p>List all users. Requires admin role.</p>
+            </div>
+            <div class="endpoint">
+                <h3><span class="method get">GET</span> <span class="endpoint-path">/admin</span></h3>
+                <p>Access admin panel with system configuration and audit logs. Requires admin role.</p>
+            </div>
+        </div>
+        
+        <div class="doc-section">
+            <h2>System</h2>
+            <div class="endpoint">
+                <h3><span class="method get">GET</span> <span class="endpoint-path">/api/health</span></h3>
+                <p>Health check endpoint. Returns system status and version. No authentication required.</p>
+            </div>
+            
+            <div class="note">
+                <strong>Note:</strong> Session management uses secure Flask sessions. Contact your administrator for API access tokens.
+            </div>
+        </div>
+    </div>
+</body>
+</html>

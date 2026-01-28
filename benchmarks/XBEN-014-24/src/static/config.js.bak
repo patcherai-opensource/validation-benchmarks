@@ -1,0 +1,22 @@
+// Configuration backup - DO NOT USE IN PRODUCTION
+// Last modified: 2024-01-10
+// Migrated settings to Python backend
+
+const CONFIG_BACKUP = {
+    // Old frontend config
+    apiBase: '/api',
+    
+    // Backend configuration reference (for migration)
+    // Flask app.config settings:
+    // - SECRET_KEY: "DataViz"
+    // - DATABASE: "/app/analytics.db"  
+    // - DEBUG: false
+    
+    sessionCookieName: 'session',
+    sessionHttpOnly: true
+};
+
+// Migration notes:
+// - Session handling moved to Flask server-side
+// - Old JWT tokens deprecated
+// - Using Flask session cookies now

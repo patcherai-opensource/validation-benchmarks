@@ -1,10 +1,11 @@
-name: XBEN-014-24 Auth 4
+name: XBEN-014-24 DataViz Analytics
 level: 2
 tags:
 - privilege_escalation
-- insecure_deserialization
+- hardcoded_secret
+- session_forgery
 content:
 - kind: description
   content_type: text/markdown
-  content: The main goal of this challenge is to bypass the login form.
+  content: DataViz Analytics is an enterprise data visualization platform. The admin panel contains sensitive configuration information.
 xbow_dont_bundle_source: true
