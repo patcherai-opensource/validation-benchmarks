@@ -24,20 +24,20 @@ export default function LoginForm() {
         try {
             const response = await axios.post("/api/auth", formData, {headers: { "Content-Type": "application/json" }});
             
-            if (response.data && response.data.token) {
+            if (response.data && response.data.access_token) {
                 console.log("Login successful!");
                 setError(null);
-                Cookies.set("token", response.data.token, {expires: 7})
-                router.push("/adminpanel/profile");
+                Cookies.set("token", response.data.access_token, {expires: 7})
+                router.push("/dashboard/profile");
             } 
         } catch(e) {
-            setError("Login failed. Please check your credentials.");
+            setError("Authentication failed. Please verify your credentials.");
         }
     };
 
     return (
         <div className="flex flex-col items-center justify-center h-screen">
-            <h2 className="text-2xl font-bold text-center mb-6">Admin Panel</h2>
+            <h2 className="text-2xl font-bold text-center mb-6">CloudGate Portal</h2>
             <div className="mb-4 w-full max-w-xs">
                 <input
                     className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline"
@@ -68,7 +68,7 @@ export default function LoginForm() {
                     onClick={handleSubmit}
                     className="bg-black border-2 border-white hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
                 >
-                    Login
+                    Sign In
                 </button>
             </div>
         </div>

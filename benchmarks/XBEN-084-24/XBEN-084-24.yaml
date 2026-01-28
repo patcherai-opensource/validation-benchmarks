@@ -4,7 +4,7 @@ metadata:
   labels:
     app: xben-084-24
   name: xben-084-24
-  namespace: sandbox-dev
+  namespace: sandbox-prod
 spec:
   replicas: 1
   selector:
@@ -16,48 +16,51 @@ spec:
         app: xben-084-24
     spec:
       containers:
-      - image: /:-s3
-        imagePullPolicy: Always
+      - image: 
+          180294216647.dkr.ecr.us-west-2.amazonaws.com/synthetic-xben-084-24_lamp-cloud-cve-2023-31579:s3
+        imagePullPolicy: IfNotPresent
         livenessProbe:
-          failureThreshold: 3
+          failureThreshold: 10
           httpGet:
             path: /
-            port: 8333
-          initialDelaySeconds: 10
+            port: 8334
+          initialDelaySeconds: 60
           periodSeconds: 10
           timeoutSeconds: 30
         name: s3
         ports:
-        - containerPort: 8333
+        - containerPort: 8334
           name: s3-port
         readinessProbe:
-          failureThreshold: 3
+          failureThreshold: 10
           httpGet:
             path: /
-            port: 8333
-          initialDelaySeconds: 10
+            port: 8334
+          initialDelaySeconds: 30
           periodSeconds: 10
           timeoutSeconds: 30
         resources:
+          # Increased resources to prevent OOM/CPU throttling during startup
           limits:
-            cpu: 200m
-            memory: 256Mi
+            cpu: 1000m
+            memory: 1Gi
           requests:
-            cpu: 100m
-            memory: 128Mi
+            cpu: 500m
+            memory: 512Mi
       - env:
         - name: FLAG
           value: '@FLAG_PLACEHOLDER@'
         - name: FRONTEND_URL
           value: http://localhost:3000
-        image: /:-frontend
-        imagePullPolicy: Always
+        image: 
+          180294216647.dkr.ecr.us-west-2.amazonaws.com/synthetic-xben-084-24_lamp-cloud-cve-2023-31579:frontend
+        imagePullPolicy: IfNotPresent
         livenessProbe:
-          failureThreshold: 3
+          failureThreshold: 10
           httpGet:
             path: /
             port: 3000
-          initialDelaySeconds: 10
+          initialDelaySeconds: 60
           periodSeconds: 10
           timeoutSeconds: 30
         name: frontend
@@ -65,28 +68,29 @@ spec:
         - containerPort: 3000
           name: frontend-port
         readinessProbe:
-          failureThreshold: 3
+          failureThreshold: 10
           httpGet:
             path: /
             port: 3000
-          initialDelaySeconds: 10
+          initialDelaySeconds: 30
           periodSeconds: 10
           timeoutSeconds: 30
         resources:
           limits:
+            cpu: 1000m
+            memory: 1Gi
+          requests:
             cpu: 500m
             memory: 512Mi
-          requests:
-            cpu: 200m
-            memory: 256Mi
-      - image: /:-nginx
-        imagePullPolicy: Always
+      - image: 
+          180294216647.dkr.ecr.us-west-2.amazonaws.com/synthetic-xben-084-24_lamp-cloud-cve-2023-31579:nginx
+        imagePullPolicy: IfNotPresent
         livenessProbe:
-          failureThreshold: 3
+          failureThreshold: 10
           httpGet:
             path: /
             port: 80
-          initialDelaySeconds: 30
+          initialDelaySeconds: 60
           periodSeconds: 30
           timeoutSeconds: 10
         name: nginx
@@ -96,7 +100,7 @@ spec:
         - containerPort: 8333
           name: s3-proxy
         readinessProbe:
-          failureThreshold: 3
+          failureThreshold: 10
           httpGet:
             path: /
             port: 80
@@ -105,11 +109,11 @@ spec:
           timeoutSeconds: 10
         resources:
           limits:
-            cpu: 100m
-            memory: 128Mi
+            cpu: 500m
+            memory: 512Mi
           requests:
-            cpu: 50m
-            memory: 64Mi
+            cpu: 200m
+            memory: 256Mi
       restartPolicy: Always
 ---
 apiVersion: v1
@@ -118,7 +122,7 @@ metadata:
   labels:
     app: xben-084-24
   name: xben-084-24-service
-  namespace: sandbox-dev
+  namespace: sandbox-prod
 spec:
   ports:
   - name: http

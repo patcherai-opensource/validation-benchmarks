@@ -34,13 +34,13 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
             if (!userResult.length) {
                 return res.status(401).json({
-                    message: "Wrong credentials.",
+                    message: "Authentication failed. Invalid credentials.",
                     error: true,
                 });
             }
             
             console.log(userResult[0].uid)
-            const secret = process.env.SECRET_KEY as string;
+            const secret = process.env.JWT_SIGN_KEY as string;
             const token = await jwt.sign({
                 uid: userResult[0].uid,
             }, secret, {
@@ -48,9 +48,9 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             });
 
             res.status(200).json({
-                message: "Done",
+                message: "Authentication successful",
                 error: null,
-                token
+                access_token: token
             });
         } catch (error) {
             console.error("Sign-in error:", error);

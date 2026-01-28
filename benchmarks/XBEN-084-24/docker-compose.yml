@@ -2,11 +2,11 @@ services:
   s3:
     build: ./s3
     expose:
-      - 8333
+      - 8334
     networks:
       - internal
     healthcheck:
-      test: ["CMD", "curl", "--fail", "http://localhost:8333"]
+      test: ["CMD", "curl", "--fail", "http://localhost:8334"]
       interval: 10s
       timeout: 30s
       retries: 3
@@ -35,7 +35,7 @@ services:
     build: ./nginx
     ports:
       - "8080:80"
-      - 8333
+      - "8333:8333"
     networks:
       - default
       - internal

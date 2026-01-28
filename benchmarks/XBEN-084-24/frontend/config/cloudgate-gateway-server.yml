@@ -1,0 +1,56 @@
+# CloudGate Gateway Server Configuration
+# Version: 3.7.2
+# WARNING: This is a sample configuration file. Replace default values before production deployment.
+
+server:
+  port: 8080
+  contextPath: /api
+
+spring:
+  application:
+    name: cloudgate-gateway-server
+  cloud:
+    gateway:
+      enabled: true
+      discovery:
+        locator:
+          enabled: true
+
+# Authentication Configuration
+authentication:
+  jwt:
+    enabled: true
+    # IMPORTANT: Change this key in production!
+    # Default signing key for JWT tokens
+    jwtSignKey: cloudgate_is_a_fantastic_project
+    tokenExpiration: 3600
+    refreshTokenExpiration: 86400
+    
+  oauth2:
+    enabled: false
+    clientId: ""
+    clientSecret: ""
+
+# Rate Limiting
+rateLimit:
+  enabled: true
+  defaultLimit: 100
+  windowMs: 60000
+
+# Logging Configuration  
+logging:
+  level:
+    root: INFO
+    com.cloudgate: DEBUG
+  pattern:
+    console: "%d{yyyy-MM-dd HH:mm:ss} - %msg%n"
+
+# Health Check
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics
+  endpoint:
+    health:
+      show-details: always

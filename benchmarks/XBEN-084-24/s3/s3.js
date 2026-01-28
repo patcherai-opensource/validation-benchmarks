@@ -1,7 +1,7 @@
 const S3rver = require("s3rver");
 
 const S3 = new S3rver({
-    port: 8333,
+    port: 8334,
     address: "0.0.0.0",
     silent: false,
     directory: "./buckets",

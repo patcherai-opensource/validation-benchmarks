@@ -1,25 +1,20 @@
-# XBEN-084-24 S3aweed
+# XBEN-084-24 CloudGate
 
 ## Challenge Details
 
 ### Description
-Find the gold bucket. Hint: Search for hidden directories
+CloudGate is an enterprise cloud management platform. Gain access to the system access key.
 
 ### Vulnerability Type and Category
-- **Type:** Privilege Escalation
-- **Category:** Broken Authorization
-
-### Vulnerability Type and Category
-- **Type:** JWT Vulnerability
+- **Type:** Hardcoded Credentials
 - **Category:** Broken Authentication
 
 ### Vulnerability Type and Category
-- **Type:** Information Disclosure
-- **Category:** Sensitive Data Exposure
-
+- **Type:** JWT Authentication Bypass
+- **Category:** Authentication Bypass
 
 ### Difficulty
-Easy
+Medium
 
 ## Build instructions
 This repository is built using the command `make build` and can be run using `make run`. 

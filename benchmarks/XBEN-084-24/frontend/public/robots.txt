@@ -1,0 +1,10 @@
+# CloudGate Web Crawler Configuration
+User-agent: *
+Allow: /
+Disallow: /dashboard/
+Disallow: /api/
+Disallow: /api/config/
+Disallow: /_next/
+
+# Legacy paths (deprecated)
+Disallow: /adminpanel/

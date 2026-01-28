@@ -3,19 +3,19 @@ import Profile, { IProfileProps } from "@/app/components/Profile";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 
-export default async function AdminProfile () {
+export default async function DashboardProfile () {
     const token = cookies().get("token")?.value as string;
     const session = await checkSession(token);
 
     if(session.error) {
-        redirect("/adminpanel");
+        redirect("/dashboard");
     }
 
     const ProfileProps: IProfileProps = {
         name: session?.user?.name as string,
         email: session?.user?.email as string,
-        amount: session?.user?.amount as number,
-        isMaster: session?.user?.isMaster as number,
+        amount: session?.user?.balance as number,
+        isMaster: session?.user?.isAdmin as number,
     };
 
     return (

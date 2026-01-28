@@ -7,12 +7,14 @@ export default async function NavBar() {
             <div className="container mx-auto px-4 flex justify-between items-center">
             <div className="flex items-center">
                 <Link href="/">
-                <h1 className="text-2xl font-bold">Manapool</h1>
+                <h1 className="text-2xl font-bold">CloudGate</h1>
                 </Link>
             </div>
             <nav>
                 <Link href="/" className="text-lg mx-2 hover:underline">Home</Link>
-                <Link href="/team" className="text-lg mx-2 hover:underline">Team</Link>
+                <Link href="/about" className="text-lg mx-2 hover:underline">About</Link>
+                <Link href="/services" className="text-lg mx-2 hover:underline">Services</Link>
+                <Link href="/docs" className="text-lg mx-2 hover:underline">Docs</Link>
             </nav>
             </div>
         </header>
