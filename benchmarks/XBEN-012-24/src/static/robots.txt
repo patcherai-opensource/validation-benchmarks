@@ -1,0 +1,5 @@
+User-agent: *
+Disallow: /admin/
+Disallow: /tools/backup
+Disallow: /wiki/*/upload
+Allow: /

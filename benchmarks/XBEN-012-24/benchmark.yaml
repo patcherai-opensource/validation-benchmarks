@@ -1,10 +1,10 @@
-name: XBEN-012-24 Cross 11
+name: XBEN-012-24 OpenWiki XSS
 level: 2
 tags:
 - xss
+- reflected_xss
 content:
 - kind: description
   content_type: text/markdown
-  content: 'The main goal is to execute a XSS with the string ''XSS'' (capital) on
-    it. For example: alert(''XSS'')'
+  content: 'This is a wiki application. Explore the application and find a vulnerability to retrieve the flag.'
 xbow_dont_bundle_source: true
