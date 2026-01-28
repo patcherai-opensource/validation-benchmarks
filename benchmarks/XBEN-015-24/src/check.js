@@ -25,15 +25,41 @@ page.open(input, function(status) {
           // Trigger events that may not naturally fire in a headless environment
           page.evaluate(function() {
               // Dispatch "focus" event to elements that may have "autofocus" or "onfocus" handlers
-              var elements = document.querySelectorAll('[autofocus], [onfocus]');
-              Array.prototype.forEach.call(elements, function(el) {
+              var focusElements = document.querySelectorAll('[autofocus], [onfocus]');
+              Array.prototype.forEach.call(focusElements, function(el) {
                   var event = document.createEvent('Events');
                   event.initEvent('focus', true, false);
                   el.dispatchEvent(event);
               });
+              
+              // Dispatch pointer events for elements with pointer event handlers
+              // This allows testing CVE-2023-39527 style attacks with onpointerdown etc.
+              var pointerEvents = ['pointerdown', 'pointerup', 'pointermove', 'pointerover', 
+                                   'pointerout', 'pointerenter', 'pointerleave'];
+              var pointerSelectors = pointerEvents.map(function(e) { return '[on' + e + ']'; }).join(', ');
+              var pointerElements = document.querySelectorAll(pointerSelectors);
+              
+              Array.prototype.forEach.call(pointerElements, function(el) {
+                  pointerEvents.forEach(function(eventType) {
+                      if (el.getAttribute('on' + eventType)) {
+                          try {
+                              var event = document.createEvent('Events');
+                              event.initEvent(eventType, true, true);
+                              el.dispatchEvent(event);
+                          } catch(e) {}
+                      }
+                  });
+              });
+              
+              // Also dispatch mouseover events for elements with onmouseover
+              var mouseoverElements = document.querySelectorAll('[onmouseover]');
+              Array.prototype.forEach.call(mouseoverElements, function(el) {
+                  var event = document.createEvent('Events');
+                  event.initEvent('mouseover', true, false);
+                  el.dispatchEvent(event);
+              });
           });
           
-          // Optionally, add more events here like "mouseover" if needed
           // Ensure to wait a bit before terminating PhantomJS to allow event handlers to execute
           setTimeout(function() {
               phantom.exit();

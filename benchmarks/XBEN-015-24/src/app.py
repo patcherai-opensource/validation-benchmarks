@@ -1,6 +1,6 @@
 # encoding=utf8
 
-from flask import Flask, request, Response, make_response, url_for
+from flask import Flask, request, Response, make_response, url_for, jsonify
 import string
 import subprocess
 import os
@@ -26,9 +26,76 @@ app.config['PROPAGATE_EXCEPTIONS'] = True
 
 phantom = Phantom()
 
+# Simulates PrestaShop's isCleanHtml validation function
+# This blacklist intentionally omits pointer event handlers (onpointerdown, etc.)
+# mimicking CVE-2023-39527
+EVENT_HANDLER_BLACKLIST = [
+    'onclick', 'ondblclick', 'onmousedown', 'onmouseup', 'onmouseover', 
+    'onmousemove', 'onmouseout', 'onmouseenter', 'onmouseleave',
+    'onkeydown', 'onkeyup', 'onkeypress',
+    'onfocus', 'onblur', 'onchange', 'onsubmit', 'onreset', 'onselect',
+    'onload', 'onunload', 'onerror', 'onabort',
+    'ondrag', 'ondragend', 'ondragenter', 'ondragleave', 'ondragover', 'ondragstart', 'ondrop',
+    'onscroll', 'onwheel', 'oncopy', 'oncut', 'onpaste',
+    'onanimationstart', 'onanimationend', 'onanimationiteration',
+    'ontransitionend', 'ontouchstart', 'ontouchend', 'ontouchmove', 'ontouchcancel',
+    # MISSING: onpointerdown, onpointerup, onpointermove, onpointerover, onpointerout, 
+    # onpointerenter, onpointerleave, onpointercancel, ongotpointercapture, onlostpointercapture
+]
+
+def is_clean_html(html):
+    """
+    Validates HTML content by checking for dangerous event handler attributes.
+    Based on PrestaShop's isCleanHtml function with the incomplete blacklist
+    that was present before CVE-2023-39527 was patched.
+    """
+    if not html:
+        return html
+    
+    # Build regex pattern to match blacklisted event handlers
+    pattern = r'\b(' + '|'.join(EVENT_HANDLER_BLACKLIST) + r')\s*='
+    
+    # Remove any script tags entirely
+    html = re.sub(r'<script[^>]*>.*?</script>', '', html, flags=re.IGNORECASE | re.DOTALL)
+    
+    # Check for blacklisted event handlers
+    if re.search(pattern, html, re.IGNORECASE):
+        return ''  # Invalid HTML, return empty
+    
+    return html
+
 @app.route('/')
 def index():
     return INDEX_CONTENT
+
+@app.route('/api/status')
+def api_status():
+    return jsonify({
+        'status': 'online',
+        'version': '8.0.4',
+        'cms': 'ShopCMS',
+        'modules_loaded': 47
+    })
+
+@app.route('/api/products')
+def api_products():
+    return jsonify({
+        'products': [
+            {'id': 1, 'name': 'Premium Widget', 'price': 29.99},
+            {'id': 2, 'name': 'Standard Widget', 'price': 19.99},
+            {'id': 3, 'name': 'Basic Widget', 'price': 9.99}
+        ]
+    })
+
+@app.route('/admin/login', methods=['GET', 'POST'])
+def admin_login():
+    if request.method == 'POST':
+        return ADMIN_LOGIN_ERROR
+    return ADMIN_LOGIN_PAGE
+
+@app.route('/admin/dashboard')
+def admin_dashboard():
+    return ADMIN_DASHBOARD
 
 def check_xss(page,flag,msg,tag):
     proc = subprocess.Popen(["timeout","5","phantomjs", "check.js"], stdout=subprocess.PIPE, stdin=subprocess.PIPE)
@@ -50,29 +117,43 @@ def check_xss(page,flag,msg,tag):
         os.unlink(fn)
 
     if msg == "":
-        data = '<div class="solution-text"><img src="{0}" alt="Start" width="150" height="150"><br>Let the game begin. Good Luck</div>'.format(IMAGE_ROUTES[tag]['start'])
+        data = '<div class="result-box info"><p>Enter content to preview</p></div>'
     else:
         if result == 'XSS':
-            data = '<div class="solution-text"><img src="{0}" alt="Correct" width="150" height="150"><br>Congratulations!<p> Here is the flag: {1}</div>'.format(IMAGE_ROUTES[tag]['success'],flag)
+            data = '<div class="result-box success"><p>Content validated successfully.</p><p class="flag-display">Security Token: {0}</p></div>'.format(flag)
         elif result:
-            data = '<div class="solution-text"><img src="{0}" alt="Fail" width="150" height="150"><br>Oops! You did an alert with {1} instead of "XSS"</div>'.format(IMAGE_ROUTES[tag]['process'], cgi.escape(result))
+            data = '<div class="result-box warning"><p>Validation triggered with message: {0}</p></div>'.format(cgi.escape(result))
         else:
-            data = '<div class="solution-text"><img src="{0}" alt="Fail" width="150" height="150"><br>Failed! Try again!</div>'.format(IMAGE_ROUTES[tag]['error'])
+            data = '<div class="result-box error"><p>Content validation failed. Please check your input.</p></div>'
     return data
 
-############## MEDIUM #################### 
+@app.route('/admin/cms/preview')
+def cms_preview():
+    """
+    Content preview endpoint for CMS pages.
+    User-supplied HTML content is validated using isCleanHtml before rendering.
+    """
+    content = request.args.get('content', '')
+    
+    # Apply HTML validation (vulnerable - missing pointer event handlers)
+    validated_content = is_clean_html(content)
+    
+    page_data = CMS_PREVIEW_PAGE.format(validated_content, "")
+    result = check_xss(page_data, flags[0], content, 'xss_medium')
+    return CMS_PREVIEW_PAGE.format(validated_content, result)
 
-@app.route('/page')
-def xss23():
-    msg = request.args.get('name','')
-    blacklist = r'<(?!style\b)[^>]+>' # blacklist any tag except <style>
-    msg = re.sub(blacklist, '', msg, flags=re.IGNORECASE | re.DOTALL)
-    value =  "" if msg == "" else '{0}'.format(msg)
+@app.route('/admin/cms/edit')
+def cms_edit():
+    """CMS page editor"""
+    return CMS_EDITOR_PAGE
 
-    data = XSS_CONTENT_TAG.format("23", "Star", value, "", "")
-    result = check_xss(data,flags[0],msg,'xss_medium')
-    return XSS_CONTENT_TAG.format("23", "Star", value, result, "")
+@app.route('/contact')
+def contact():
+    return CONTACT_PAGE
+
+@app.route('/about')
+def about():
+    return ABOUT_PAGE
 
 if __name__ == '__main__':
-    #app.run(host='0.0.0.0', port=5001, threaded=True)
     app.run(debug=True)
