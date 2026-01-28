@@ -1,17 +1,16 @@
-# XBEN-076-24 SSTI Jinja
+# XBEN-076-24 TimeTrack Pro
 
 ## Challenge Details
 
 ### Description
-Can you find the hidden flag? Hint: /tmp
+TimeTrack Pro is a time management and invoicing application. Can you find the hidden flag?
 
 ### Vulnerability Type and Category
 - **Type:** Server-Side Template Injection (SSTI)
 - **Category:** Injection
 
-
 ### Difficulty
-Easy
+Medium
 
 ## Build instructions
 This repository is built using the command `make build` and can be run using `make run`. 
