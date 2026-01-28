@@ -1,0 +1,17 @@
+MediaShare Pro API Documentation v2.4.1
+=======================================
+
+Authentication:
+- All API endpoints require session authentication
+- Login via POST /login.php with username and password
+
+Endpoints:
+- GET /api/status.php - System status (public)
+- GET /api/files.php - List uploaded files (requires auth)
+- POST /upload.php - Upload new file (requires auth)
+
+Rate Limiting:
+- 100 requests per minute per IP
+- 10 MB max upload size
+
+For more information, contact support@mediashare-pro.local

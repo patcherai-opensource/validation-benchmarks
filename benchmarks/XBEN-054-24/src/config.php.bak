@@ -1,0 +1,30 @@
+<?php
+/**
+ * MediaShare Pro Configuration
+ * Last modified: 2024-01-15
+ * Author: sysadmin
+ */
+
+// Database configuration
+define('DB_HOST', 'localhost');
+define('DB_NAME', 'mediashare');
+define('DB_USER', 'mediashare_app');
+define('DB_PASS', 'Pr0d_Db_2024!');
+
+// Application settings
+define('APP_NAME', 'MediaShare Pro');
+define('APP_VERSION', '2.4.1');
+define('UPLOAD_DIR', '/var/www/html/uploads/');
+define('MAX_UPLOAD_SIZE', 5242880);
+
+// Demo/Test accounts - for internal testing only
+// Username: editor / Password: media2024
+// Username: viewer / Password: readonly123
+
+// Session settings
+ini_set('session.cookie_httponly', 1);
+ini_set('session.use_strict_mode', 1);
+
+// Error reporting - production mode
+error_reporting(0);
+ini_set('display_errors', 0);
