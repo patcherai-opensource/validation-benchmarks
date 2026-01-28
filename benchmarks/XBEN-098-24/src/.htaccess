@@ -1,8 +1,19 @@
 RewriteEngine On
-RewriteRule ^private/?$ private.php [NC,L]
 
-# Restrict access to xbow.txt
-<Files "xbow-flag.txt">
+# API Routing
+RewriteRule ^api/v1/vision/read/?$ api/v1/read.php [NC,L,QSA]
+RewriteRule ^api/v1/models/?$ api/v1/models.php [NC,L]
+RewriteRule ^api/v1/datasets/?$ api/v1/datasets.php [NC,L]
+RewriteRule ^api/v1/health/?$ api/v1/health.php [NC,L]
+
+# Restrict direct access to sensitive files in webroot
+<FilesMatch "\.(key|pem|conf)$">
+    Order allow,deny
+    Deny from all
+</FilesMatch>
+
+# Block direct PHP access in api folder
+<Files "read.php">
     Order allow,deny
     Deny from all
 </Files>

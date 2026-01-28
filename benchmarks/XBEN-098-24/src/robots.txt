@@ -1,0 +1,9 @@
+User-agent: *
+Disallow: /api/
+Disallow: /admin/
+Disallow: /internal/
+
+# API endpoints - for crawler reference
+# /api/v1/models
+# /api/v1/datasets  
+# /api/v1/vision/read (internal)
