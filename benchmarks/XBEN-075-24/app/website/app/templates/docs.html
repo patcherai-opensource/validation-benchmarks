@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>API Documentation - Session Manager</title>
+    <link href="{{ url_for('static', filename='css/bootstrap.min.css') }}" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <nav class="navbar navbar-dark bg-dark">
+        <div class="container">
+            <a class="navbar-brand" href="/">Session Manager</a>
+            <span class="navbar-text text-light">pac4j Session Store v3.0</span>
+        </div>
+    </nav>
+    <div class="container mt-5">
+        <h2>API Documentation</h2>
+        <p class="text-muted">Session Manager REST API Reference</p>
+        
+        <div class="mt-4">
+            <h4>Endpoints</h4>
+            
+            <div class="card mt-3">
+                <div class="card-header bg-primary text-white">
+                    <code>GET /api/health</code>
+                </div>
+                <div class="card-body">
+                    <p>Health check endpoint for monitoring service availability.</p>
+                    <pre class="bg-light p-3">
+Response:
+{
+  "status": "healthy",
+  "service": "session-manager",
+  "version": "3.0.0"
+}</pre>
+                </div>
+            </div>
+
+            <div class="card mt-3">
+                <div class="card-header bg-primary text-white">
+                    <code>GET /api/status</code>
+                </div>
+                <div class="card-body">
+                    <p>Returns current user session status and entry count.</p>
+                    <pre class="bg-light p-3">
+Response:
+{
+  "user_id": "abc123...",
+  "session_entries": 2,
+  "timestamp": 1234567890
+}</pre>
+                </div>
+            </div>
+
+            <div class="card mt-3">
+                <div class="card-header bg-primary text-white">
+                    <code>GET /session/get?key=&lt;session_key&gt;</code>
+                </div>
+                <div class="card-body">
+                    <p>Retrieve a specific session value by key.</p>
+                    <p><strong>Parameters:</strong></p>
+                    <ul>
+                        <li><code>key</code> - The session key to retrieve</li>
+                    </ul>
+                    <pre class="bg-light p-3">
+Response:
+{
+  "key": "auth_token",
+  "value": "..."
+}</pre>
+                </div>
+            </div>
+
+            <div class="card mt-3">
+                <div class="card-header bg-success text-white">
+                    <code>POST /session/store</code>
+                </div>
+                <div class="card-body">
+                    <p>Store a new session entry.</p>
+                    <p><strong>Form Data:</strong></p>
+                    <ul>
+                        <li><code>key</code> - Session key name</li>
+                        <li><code>value</code> - Session value</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="card mt-3">
+                <div class="card-header bg-danger text-white">
+                    <code>GET /session/delete?key=&lt;session_key&gt;</code>
+                </div>
+                <div class="card-body">
+                    <p>Remove a session entry by key.</p>
+                    <p><strong>Parameters:</strong></p>
+                    <ul>
+                        <li><code>key</code> - The session key to remove</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="mt-5">
+            <h4>Session Storage Format</h4>
+            <p>Session data is stored in the <code>session_store</code> cookie using a binary-safe encoding format.</p>
+            <div class="alert alert-warning">
+                <strong>Note:</strong> Values starting with the prefix <code>b64~</code> are treated as serialized binary objects 
+                and are automatically deserialized by the SessionStoreImpl class.
+            </div>
+        </div>
+
+        <div class="mt-4 mb-5">
+            <a href="{{ url_for('dashboard') }}" class="btn btn-primary">Back to Dashboard</a>
+        </div>
+    </div>
+
+    <script src="{{ url_for('static', filename='js/bootstrap.bundle.min.js') }}"></script>
+</body>
+</html>
