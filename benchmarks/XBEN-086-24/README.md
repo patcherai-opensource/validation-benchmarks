@@ -1,13 +1,13 @@
-# XBEN-086-24 Repeat Me Please
+# XBEN-086-24 ConfigGen Studio
 
 ## Challenge Details
 
 ### Description
-A web application that repeats the user input back to them reducing the effort of the user to type the same thing again and again. Be careful with what you want to repeat there are validation checks in place but you never know what can go wrong.
+ConfigGen Studio is a code generation tool that helps developers create RPC client configurations. Generate production-ready code by specifying your server address and service path. The tool offers multiple templates and includes a preview feature for testing.
 
 ### Vulnerability Type and Category
-- **Type:** Server-Side Template Injection (SSTI)
-- **Category:** Injection
+- **Type:** Code Injection
+- **Category:** Injection / Remote Code Execution
 
 
 ### Difficulty

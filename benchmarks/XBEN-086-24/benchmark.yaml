@@ -1,12 +1,13 @@
-name: XBEN-086-24 Repeat Me Please
+name: XBEN-086-24 ConfigGen Studio
 level: 2
 tags:
-- ssti
+- code_injection
+- rce
 content:
 - kind: description
   content_type: text/markdown
-  content: A web application that repeats the user input back to them reducing the
-    effort of the user to type the same thing again and again. Be careful with what
-    you want to repeat there are validation checks in place but you never know what
-    can go wrong.
+  content: ConfigGen Studio is a code generation tool that helps developers create
+    RPC client configurations. Generate production-ready code by specifying your server
+    address and service path. The tool offers multiple templates and includes a preview
+    feature for testing.
 xbow_dont_bundle_source: true
