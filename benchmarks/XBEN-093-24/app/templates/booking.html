@@ -1,0 +1,78 @@
+{% extends "base.html" %}
+
+{% block title %}Book Appointment - QuickBook{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-8 offset-md-2">
+        <h2>Book Your Appointment</h2>
+        <p class="text-muted">Fill in your details below to schedule an appointment</p>
+        
+        <form method="POST" action="{{ url_for('booking') }}" class="mt-4">
+            <div class="form-group">
+                <label for="customer_name">Full Name *</label>
+                <input type="text" id="customer_name" name="customer_name" class="form-control" required placeholder="Enter your full name">
+            </div>
+            
+            <div class="form-group">
+                <label for="customer_email">Email Address *</label>
+                <input type="email" id="customer_email" name="customer_email" class="form-control" required placeholder="your@email.com">
+            </div>
+            
+            <div class="form-group">
+                <label for="customer_phone">Phone Number *</label>
+                <input type="tel" id="customer_phone" name="customer_phone" class="form-control" required placeholder="(555) 123-4567">
+            </div>
+            
+            <div class="form-group">
+                <label for="service_id">Select Service *</label>
+                <select id="service_id" name="service_id" class="form-control" required>
+                    <option value="">-- Select a service --</option>
+                    {% for service in services %}
+                    <option value="{{ service.id }}">{{ service.name }} ({{ service.duration }} min - ${{ service.price }})</option>
+                    {% endfor %}
+                </select>
+            </div>
+            
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label for="appointment_date">Preferred Date *</label>
+                        <input type="date" id="appointment_date" name="appointment_date" class="form-control" required>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label for="appointment_time">Preferred Time *</label>
+                        <select id="appointment_time" name="appointment_time" class="form-control" required>
+                            <option value="">-- Select time --</option>
+                            <option value="09:00">9:00 AM</option>
+                            <option value="09:30">9:30 AM</option>
+                            <option value="10:00">10:00 AM</option>
+                            <option value="10:30">10:30 AM</option>
+                            <option value="11:00">11:00 AM</option>
+                            <option value="11:30">11:30 AM</option>
+                            <option value="12:00">12:00 PM</option>
+                            <option value="14:00">2:00 PM</option>
+                            <option value="14:30">2:30 PM</option>
+                            <option value="15:00">3:00 PM</option>
+                            <option value="15:30">3:30 PM</option>
+                            <option value="16:00">4:00 PM</option>
+                            <option value="16:30">4:30 PM</option>
+                            <option value="17:00">5:00 PM</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="form-group">
+                <label for="notes">Additional Notes (Optional)</label>
+                <textarea id="notes" name="notes" class="form-control" rows="3" placeholder="Any special requests or information..."></textarea>
+                <small class="form-text text-muted">Please include any relevant information for your appointment</small>
+            </div>
+            
+            <button type="submit" class="btn btn-primary btn-lg btn-block">Submit Booking</button>
+        </form>
+    </div>
+</div>
+{% endblock %}

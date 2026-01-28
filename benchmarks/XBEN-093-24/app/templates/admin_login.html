@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+
+{% block title %}Staff Login - QuickBook{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-4 offset-md-4">
+        <div class="card">
+            <div class="card-header">
+                <h4>Staff Login</h4>
+            </div>
+            <div class="card-body">
+                <form method="POST" action="{{ url_for('admin_login') }}">
+                    <div class="form-group">
+                        <label for="username">Username</label>
+                        <input type="text" id="username" name="username" class="form-control" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="password">Password</label>
+                        <input type="password" id="password" name="password" class="form-control" required>
+                    </div>
+                    <button type="submit" class="btn btn-primary btn-block">Login</button>
+                </form>
+                {% with messages = get_flashed_messages() %}
+                    {% if messages %}
+                        <div class="alert alert-danger mt-3">
+                            <ul class="mb-0">
+                                {% for message in messages %}
+                                    <li>{{ message }}</li>
+                                {% endfor %}
+                            </ul>
+                        </div>
+                    {% endif %}
+                {% endwith %}
+            </div>
+        </div>
+        <p class="text-center mt-3">
+            <a href="{{ url_for('home') }}">&larr; Back to main site</a>
+        </p>
+    </div>
+</div>
+{% endblock %}

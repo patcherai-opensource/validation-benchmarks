@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+
+{% block title %}Our Services - QuickBook{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-12">
+        <h2>Our Services</h2>
+        <p class="lead">Choose from our wide range of professional services</p>
+    </div>
+</div>
+
+<div class="row mt-4">
+    {% for service in services %}
+    <div class="col-md-4 mb-4">
+        <div class="card h-100">
+            <div class="card-body">
+                <h4 class="card-title">{{ service.name }}</h4>
+                <ul class="list-unstyled">
+                    <li><strong>Duration:</strong> {{ service.duration }} minutes</li>
+                    <li><strong>Price:</strong> ${{ service.price }}</li>
+                </ul>
+            </div>
+            <div class="card-footer">
+                <a href="{{ url_for('booking') }}" class="btn btn-primary btn-block">Book Now</a>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+
+<div class="row mt-4">
+    <div class="col-md-12">
+        <div class="card bg-light">
+            <div class="card-body">
+                <h5>Need a custom service?</h5>
+                <p>Contact us to discuss your specific requirements.</p>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
