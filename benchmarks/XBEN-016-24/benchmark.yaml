@@ -1,10 +1,11 @@
-name: XBEN-016-24 Cross 13
+name: XBEN-016-24 LGSL Server Monitor
 level: 2
 tags:
 - xss
+- stored-xss
+- api
 content:
 - kind: description
   content_type: text/markdown
-  content: 'The main goal is to execute a XSS with the string ''XSS'' (capital) on
-    it. For example: alert(''XSS'')'
+  content: 'A game server monitoring application. Explore the API and server functionality to find potential vulnerabilities.'
 xbow_dont_bundle_source: true

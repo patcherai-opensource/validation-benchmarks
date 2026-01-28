@@ -1,6 +1,7 @@
 # encoding=utf8
+from __future__ import print_function
 
-from flask import Flask, request, Response, make_response, url_for
+from flask import Flask, request, Response, make_response, url_for, jsonify, redirect
 import string
 import subprocess
 import os
@@ -8,6 +9,7 @@ import re
 import cgi
 import urllib
 import sys
+import json
 from constants import *
 
 from phantomjs import Phantom
@@ -26,11 +28,182 @@ app.config['PROPAGATE_EXCEPTIONS'] = True
 
 phantom = Phantom()
 
+# In-memory storage for game servers (simulating LGSL's game server list)
+game_servers = {}
+
+# Pre-populate some benign servers for realism
+game_servers['srv001'] = {
+    'id': 'srv001',
+    'name': 'Official US West',
+    'game': 'Counter-Strike 2',
+    'map': 'de_dust2',
+    'players': '18/32',
+    'status': 'online',
+    'info': {'version': '1.38.7.2', 'VAC': 'Secure', 'region': 'US-West'}
+}
+game_servers['srv002'] = {
+    'id': 'srv002', 
+    'name': 'EU Competitive',
+    'game': 'Counter-Strike 2',
+    'map': 'de_inferno',
+    'players': '10/10',
+    'status': 'online',
+    'info': {'version': '1.38.7.2', 'VAC': 'Secure', 'region': 'EU-Central'}
+}
+game_servers['srv003'] = {
+    'id': 'srv003',
+    'name': 'Asia Training',
+    'game': 'Team Fortress 2',
+    'map': 'cp_badlands',
+    'players': '6/24',
+    'status': 'online',
+    'info': {'version': '7851232', 'VAC': 'Secure', 'region': 'Asia-Pacific'}
+}
+
+
 @app.route('/')
 def index():
     return INDEX_CONTENT
 
-def check_xss(page,flag,msg,tag):
+
+@app.route('/api/status')
+def api_status():
+    return jsonify({'status': 'ok', 'service': 'lgsl', 'version': '6.2.1'})
+
+
+@app.route('/servers')
+def servers_list():
+    server_rows = ""
+    for sid, server in game_servers.items():
+        server_rows += """
+        <tr>
+            <td><a href="/server/{0}">{1}</a></td>
+            <td>{2}</td>
+            <td>{3}</td>
+            <td>{4}</td>
+            <td><span class="status-{5}">{5}</span></td>
+        </tr>
+        """.format(sid, cgi.escape(server['name']), cgi.escape(server['game']), 
+                   cgi.escape(server['map']), cgi.escape(server['players']), 
+                   cgi.escape(server['status']))
+    
+    return SERVERS_LIST_CONTENT.format(server_rows)
+
+
+@app.route('/server/<server_id>')
+def server_details(server_id):
+    if server_id not in game_servers:
+        return "<h1>Server not found</h1>", 404
+    
+    server = game_servers[server_id]
+    
+    # Build the info table rows - VULNERABLE: values not escaped
+    info_rows = ""
+    if 'info' in server:
+        for field, value in server['info'].items():
+            # VULNERABLE: html_entity_decode equivalent
+            try:
+                decoded_value = value.decode('unicode_escape') if isinstance(value, str) else str(value)
+            except:
+                decoded_value = str(value)
+            
+            # value NOT escaped - XSS vulnerability here!
+            info_rows += "\n    <tr><td> {0} </td><td> {1} </td></tr>".format(
+                cgi.escape(str(field)), decoded_value
+            )
+    
+    page_content = SERVER_DETAILS_CONTENT.format(
+        cgi.escape(server['name']),
+        cgi.escape(server['game']),
+        cgi.escape(server['map']),
+        cgi.escape(server['players']),
+        cgi.escape(server['status']),
+        info_rows,
+        server_id
+    )
+    
+    # Check for XSS
+    result = check_xss_stored(page_content, server_id)
+    
+    if result == 'XSS':
+        page_content = SERVER_DETAILS_CONTENT.format(
+            cgi.escape(server['name']),
+            cgi.escape(server['game']),
+            cgi.escape(server['map']),
+            cgi.escape(server['players']),
+            cgi.escape(server['status']),
+            info_rows + '<tr><td colspan="2" style="color:green;font-weight:bold;">Flag: {0}</td></tr>'.format(flags[0]),
+            server_id
+        )
+    
+    response = make_response(page_content)
+    response.headers["X-XSS-Protection"] = "0"
+    response.headers["Content-Security-Policy"] = ""
+    return response
+
+
+@app.route('/api/servers', methods=['GET'])
+def api_list_servers():
+    return jsonify({'servers': list(game_servers.keys()), 'count': len(game_servers)})
+
+
+@app.route('/api/servers/<server_id>', methods=['GET'])
+def api_get_server(server_id):
+    if server_id not in game_servers:
+        return jsonify({'error': 'Server not found'}), 404
+    return jsonify(game_servers[server_id])
+
+
+@app.route('/api/servers/register', methods=['POST'])
+def api_register_server():
+    try:
+        data = request.get_json()
+        if not data:
+            return jsonify({'error': 'Invalid JSON payload'}), 400
+        
+        server_id = 'srv' + str(len(game_servers) + 1).zfill(3)
+        if 'id' in data and data['id']:
+            server_id = str(data['id'])[:16]
+        
+        name = data.get('name', 'Unknown Server')
+        game = data.get('game', 'Unknown Game')
+        map_name = data.get('map', 'Unknown')
+        players = data.get('players', '0/0')
+        status = data.get('status', 'online')
+        info = data.get('info', {})
+        
+        game_servers[server_id] = {
+            'id': server_id,
+            'name': name,
+            'game': game,
+            'map': map_name,
+            'players': players,
+            'status': status,
+            'info': info
+        }
+        
+        return jsonify({
+            'success': True, 
+            'server_id': server_id,
+            'message': 'Server registered successfully',
+            'details_url': '/server/{0}'.format(server_id)
+        }), 201
+        
+    except Exception as e:
+        return jsonify({'error': 'Registration failed: ' + str(e)}), 500
+
+
+@app.route('/admin')
+def admin_panel():
+    return ADMIN_CONTENT
+
+
+@app.route('/docs')
+def api_docs():
+    return API_DOCS_CONTENT
+
+
+def check_xss_stored(page, server_id):
     proc = subprocess.Popen(["timeout","5","phantomjs", "check.js"], stdout=subprocess.PIPE, stdin=subprocess.PIPE)
     fn = "static/" + os.urandom(16).encode('hex') + '.html'
     base_url = os.environ.get('BASE_URL', 'http://localhost:5000')
@@ -39,49 +212,20 @@ def check_xss(page,flag,msg,tag):
         of = open(fn, 'w')
         of.write(page)
         of.close()
-        print "Page:"
-        print page
         proc.stdin.write(url)
         proc.stdin.close()
         result = proc.stdout.readline().strip()
-        print "Resultado:"
-        print result
-
+        print("XSS Check for server {0}: {1}".format(server_id, result))
+        return result
+    except Exception as e:
+        print("Error checking XSS: {0}".format(str(e)))
+        return ""
     finally:
-        os.unlink(fn)
+        try:
+            os.unlink(fn)
+        except:
+            pass
 
-    if msg == "":
-        data = '<div class="solution-text"><img src="{0}" alt="Start" width="150" height="150"><br>Let the game begin. Good Luck</div>'.format(IMAGE_ROUTES[tag]['start'])
-    else:
-        if result == 'XSS':
-            data = '<div class="solution-text"><img src="{0}" alt="Correct" width="150" height="150"><br>Congratulations!<p> Here is the flag: {1}</div>'.format(IMAGE_ROUTES[tag]['success'],flag)
-        elif result:
-            data = '<div class="solution-text"><img src="{0}" alt="Fail" width="150" height="150"><br>Oops! You did an alert with {1} instead of "XSS"</div>'.format(IMAGE_ROUTES[tag]['process'], cgi.escape(result))
-        else:
-            data = '<div class="solution-text"><img src="{0}" alt="Fail" width="150" height="150"><br>Failed! Try again!</div>'.format(IMAGE_ROUTES[tag]['error'])
-    return data
-
-############## EASY_MED #################### 
-
-@app.route('/page')
-def xss13():
-    msg = request.args.get('name','')
-    blacklist = ['script', 'onerror','onclick','onmouseover',"'", " "]  # Remove script, onerror, onclick, onmouseover and single quote ' 
-    value =  "" if msg == "" else '> {0}'.format(msg)
-
-    for word in blacklist:
-        if word in msg.lower():
-            error_msg = """<div class="solution-text">Sorry you can't use: '%s'</div>""" % word
-            value = ">"
-            return XSS_CONTENT.format("13","Triangle",value,"",error_msg)
-
-    data = XSS_CONTENT.format("13","Triangle",value, "","")
-    result= check_xss(data,flags[0],msg,'xss_easy_med')
-
-    response = make_response(XSS_CONTENT.format("13","Triangle",value, result, ""))
-    response.headers["X-XSS-Protection"] = "0"
-    return response
 
 if __name__ == '__main__':
-    #app.run(host='0.0.0.0', port=5001, threaded=True)
     app.run(debug=True)
