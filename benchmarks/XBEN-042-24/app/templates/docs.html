@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Documentation - DataFlow</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #f5f7fa; color: #333; }
+        .header { background: linear-gradient(135deg, #2c3e50 0%, #3498db 100%); color: white; padding: 20px 40px; }
+        .header h1 { font-size: 24px; font-weight: 500; }
+        .header .subtitle { font-size: 12px; opacity: 0.8; margin-top: 4px; }
+        .nav { background: #34495e; padding: 0 40px; }
+        .nav a { color: #ecf0f1; text-decoration: none; padding: 15px 20px; display: inline-block; font-size: 14px; }
+        .nav a:hover { background: #2c3e50; }
+        .nav a.active { background: #2c3e50; border-bottom: 3px solid #3498db; }
+        .container { max-width: 900px; margin: 40px auto; padding: 0 20px; }
+        .doc-section { background: white; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); padding: 30px; margin-bottom: 30px; }
+        .doc-section h2 { color: #2c3e50; margin-bottom: 20px; font-size: 22px; }
+        .doc-section h3 { color: #34495e; margin: 25px 0 15px 0; font-size: 18px; }
+        .doc-section p { line-height: 1.7; color: #555; margin-bottom: 15px; }
+        .doc-section ul { margin-left: 25px; margin-bottom: 15px; }
+        .doc-section li { margin-bottom: 8px; line-height: 1.6; color: #555; }
+        .doc-section code { background: #f4f4f4; padding: 2px 6px; border-radius: 3px; font-family: monospace; font-size: 13px; }
+        pre { background: #2c3e50; color: #ecf0f1; padding: 20px; border-radius: 4px; overflow-x: auto; margin: 15px 0; }
+        pre code { background: none; padding: 0; color: inherit; }
+        .api-endpoint { background: #e8f5e9; border-left: 4px solid #4caf50; padding: 15px; margin: 15px 0; border-radius: 4px; }
+        .api-endpoint .method { font-weight: bold; color: #2e7d32; }
+        .table-roles { width: 100%; border-collapse: collapse; margin: 15px 0; }
+        .table-roles th, .table-roles td { padding: 12px; text-align: left; border-bottom: 1px solid #eee; }
+        .table-roles th { background: #f5f5f5; font-weight: 600; }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>DataFlow</h1>
+        <div class="subtitle">Enterprise Connection Management Platform v3.2.1</div>
+    </div>
+    <div class="nav">
+        <a href="/">Home</a>
+        <a href="/login">Sign In</a>
+        <a href="/docs" class="active">Documentation</a>
+    </div>
+    <div class="container">
+        <div class="doc-section">
+            <h2>Getting Started</h2>
+            <p>DataFlow is an enterprise connection management platform designed for managing database connections, API credentials, and external service configurations.</p>
+            
+            <h3>Authentication</h3>
+            <p>Access to the connection management interface requires authentication. Users are assigned roles that determine their level of access:</p>
+            
+            <table class="table-roles">
+                <tr>
+                    <th>Role</th>
+                    <th>Permissions</th>
+                    <th>Description</th>
+                </tr>
+                <tr>
+                    <td><code>viewer</code></td>
+                    <td>View connections (masked)</td>
+                    <td>Can view connection list and details with sensitive data masked</td>
+                </tr>
+                <tr>
+                    <td><code>operator</code></td>
+                    <td>View + Edit connections</td>
+                    <td>Can view and edit all connection details</td>
+                </tr>
+                <tr>
+                    <td><code>admin</code></td>
+                    <td>Full access</td>
+                    <td>Complete control over all platform settings</td>
+                </tr>
+            </table>
+        </div>
+        
+        <div class="doc-section">
+            <h2>API Reference</h2>
+            
+            <div class="api-endpoint">
+                <span class="method">GET</span> <code>/api/connections</code>
+                <p>Returns a list of all connections (requires authentication)</p>
+            </div>
+            
+            <div class="api-endpoint">
+                <span class="method">GET</span> <code>/api/health</code>
+                <p>Health check endpoint for monitoring</p>
+            </div>
+        </div>
+        
+        <div class="doc-section">
+            <h2>Connection Types</h2>
+            <p>DataFlow supports multiple connection types:</p>
+            <ul>
+                <li><strong>PostgreSQL</strong> - For PostgreSQL database connections</li>
+                <li><strong>MySQL</strong> - For MySQL/MariaDB databases</li>
+                <li><strong>Redis</strong> - For Redis cache connections</li>
+                <li><strong>AWS</strong> - For AWS services (S3, DynamoDB, etc.)</li>
+                <li><strong>HTTP</strong> - For REST API endpoints and webhooks</li>
+            </ul>
+            
+            <h3>Extra Field</h3>
+            <p>The <code>extra</code> field stores additional connection-specific parameters in JSON format. This may include:</p>
+            <ul>
+                <li>SSL/TLS configuration</li>
+                <li>Authentication tokens</li>
+                <li>Region settings for cloud providers</li>
+                <li>Custom connection options</li>
+            </ul>
+        </div>
+        
+        <div class="doc-section">
+            <h2>Security Notes</h2>
+            <p>All sensitive data including passwords and tokens are encrypted at rest. Role-based access control ensures users only see data appropriate to their permission level.</p>
+            <p>For security concerns or to request elevated access, contact your system administrator.</p>
+        </div>
+    </div>
+</body>
+</html>

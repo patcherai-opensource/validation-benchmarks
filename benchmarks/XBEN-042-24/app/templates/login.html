@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Sign In - DataFlow</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #f5f7fa; color: #333; min-height: 100vh; display: flex; flex-direction: column; }
+        .header { background: linear-gradient(135deg, #2c3e50 0%, #3498db 100%); color: white; padding: 20px 40px; }
+        .header h1 { font-size: 24px; font-weight: 500; }
+        .header .subtitle { font-size: 12px; opacity: 0.8; margin-top: 4px; }
+        .nav { background: #34495e; padding: 0 40px; }
+        .nav a { color: #ecf0f1; text-decoration: none; padding: 15px 20px; display: inline-block; font-size: 14px; }
+        .nav a:hover { background: #2c3e50; }
+        .container { flex: 1; display: flex; align-items: center; justify-content: center; padding: 40px 20px; }
+        .login-box { background: white; padding: 40px; border-radius: 8px; box-shadow: 0 4px 20px rgba(0,0,0,0.1); width: 100%; max-width: 400px; }
+        .login-box h2 { margin-bottom: 30px; color: #2c3e50; font-size: 24px; text-align: center; }
+        .form-group { margin-bottom: 20px; }
+        .form-group label { display: block; margin-bottom: 8px; font-size: 14px; color: #666; }
+        .form-group input { width: 100%; padding: 12px 15px; border: 1px solid #ddd; border-radius: 4px; font-size: 14px; }
+        .form-group input:focus { outline: none; border-color: #3498db; }
+        .btn { width: 100%; padding: 14px; background: #3498db; color: white; border: none; border-radius: 4px; font-size: 16px; cursor: pointer; transition: background 0.3s; }
+        .btn:hover { background: #2980b9; }
+        .error { background: #ffebee; color: #c62828; padding: 12px; border-radius: 4px; margin-bottom: 20px; font-size: 14px; }
+        .help-text { margin-top: 20px; text-align: center; font-size: 13px; color: #999; }
+        .footer { text-align: center; padding: 20px; color: #999; font-size: 12px; }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>DataFlow</h1>
+        <div class="subtitle">Enterprise Connection Management Platform v3.2.1</div>
+    </div>
+    <div class="nav">
+        <a href="/">Home</a>
+        <a href="/login">Sign In</a>
+        <a href="/docs">Documentation</a>
+    </div>
+    <div class="container">
+        <div class="login-box">
+            <h2>Sign In</h2>
+            {% if error %}
+            <div class="error">{{ error }}</div>
+            {% endif %}
+            <form method="POST" action="/login">
+                <div class="form-group">
+                    <label for="username">Username</label>
+                    <input type="text" id="username" name="username" placeholder="Enter your username" required>
+                </div>
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <input type="password" id="password" name="password" placeholder="Enter your password" required>
+                </div>
+                <button type="submit" class="btn">Sign In</button>
+            </form>
+            <div class="help-text">
+                Contact your administrator if you need access.
+            </div>
+        </div>
+    </div>
+    <div class="footer">
+        &copy; 2024 DataFlow Platform | Enterprise Edition
+    </div>
+</body>
+</html>

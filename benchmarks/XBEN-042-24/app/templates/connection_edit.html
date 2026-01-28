@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Edit Connection - DataFlow</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #f5f7fa; color: #333; }
+        .header { background: linear-gradient(135deg, #2c3e50 0%, #3498db 100%); color: white; padding: 20px 40px; display: flex; justify-content: space-between; align-items: center; }
+        .header h1 { font-size: 24px; font-weight: 500; }
+        .header .user-info { font-size: 14px; }
+        .header .user-info a { color: white; margin-left: 15px; }
+        .nav { background: #34495e; padding: 0 40px; }
+        .nav a { color: #ecf0f1; text-decoration: none; padding: 15px 20px; display: inline-block; font-size: 14px; }
+        .nav a:hover { background: #2c3e50; }
+        .nav a.active { background: #2c3e50; border-bottom: 3px solid #3498db; }
+        .container { max-width: 800px; margin: 30px auto; padding: 0 20px; }
+        .breadcrumb { font-size: 14px; color: #666; margin-bottom: 20px; }
+        .breadcrumb a { color: #3498db; text-decoration: none; }
+        .card { background: white; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); overflow: hidden; }
+        .card-header { background: #ecf0f1; padding: 20px; border-bottom: 1px solid #ddd; }
+        .card-header h2 { font-size: 18px; color: #2c3e50; }
+        .card-body { padding: 30px; }
+        .form-group { margin-bottom: 20px; }
+        .form-group label { display: block; font-size: 13px; color: #666; margin-bottom: 8px; font-weight: 500; }
+        .form-group input, .form-group textarea, .form-group select { width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 4px; font-size: 14px; font-family: inherit; }
+        .form-group input:focus, .form-group textarea:focus, .form-group select:focus { outline: none; border-color: #3498db; }
+        .form-group textarea { min-height: 120px; font-family: monospace; resize: vertical; }
+        .form-group .help-text { font-size: 12px; color: #999; margin-top: 5px; }
+        .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+        .actions { margin-top: 30px; padding-top: 20px; border-top: 1px solid #eee; display: flex; gap: 10px; }
+        .btn { display: inline-block; padding: 12px 24px; border-radius: 4px; text-decoration: none; font-size: 14px; border: none; cursor: pointer; }
+        .btn-primary { background: #3498db; color: white; }
+        .btn-secondary { background: #ecf0f1; color: #333; }
+        .btn:hover { opacity: 0.9; }
+        .warning-box { background: #fff3e0; border-left: 4px solid #ff9800; padding: 15px 20px; margin-bottom: 20px; border-radius: 4px; }
+        .warning-box p { font-size: 14px; color: #e65100; }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>DataFlow</h1>
+        <div class="user-info">
+            Signed in as: <strong>{{ user }}</strong>
+            <a href="/logout">Sign Out</a>
+        </div>
+    </div>
+    <div class="nav">
+        <a href="/">Home</a>
+        <a href="/connections" class="active">Connections</a>
+        <a href="/settings">Settings</a>
+        <a href="/docs">Documentation</a>
+    </div>
+    <div class="container">
+        <div class="breadcrumb">
+            <a href="/connections">Connections</a> / Edit: {{ connection.conn_id }}
+        </div>
+        <div class="card">
+            <div class="card-header">
+                <h2>Edit Connection</h2>
+            </div>
+            <div class="card-body">
+                <form method="POST">
+                    <div class="form-group">
+                        <label for="conn_id">Connection ID</label>
+                        <input type="text" id="conn_id" name="conn_id" value="{{ connection.conn_id }}" readonly>
+                    </div>
+                    <div class="form-group">
+                        <label for="conn_type">Connection Type</label>
+                        <select id="conn_type" name="conn_type">
+                            <option value="postgres" {% if connection.conn_type == 'postgres' %}selected{% endif %}>PostgreSQL</option>
+                            <option value="mysql" {% if connection.conn_type == 'mysql' %}selected{% endif %}>MySQL</option>
+                            <option value="redis" {% if connection.conn_type == 'redis' %}selected{% endif %}>Redis</option>
+                            <option value="aws" {% if connection.conn_type == 'aws' %}selected{% endif %}>AWS</option>
+                            <option value="http" {% if connection.conn_type == 'http' %}selected{% endif %}>HTTP</option>
+                        </select>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="host">Host</label>
+                            <input type="text" id="host" name="host" value="{{ connection.host }}">
+                        </div>
+                        <div class="form-group">
+                            <label for="port">Port</label>
+                            <input type="number" id="port" name="port" value="{{ connection.port }}">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="schema">Schema</label>
+                        <input type="text" id="schema" name="schema" value="{{ connection.schema }}">
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="login">Login</label>
+                            <input type="text" id="login" name="login" value="{{ connection.login }}">
+                        </div>
+                        <div class="form-group">
+                            <label for="password">Password</label>
+                            <input type="password" id="password" name="password" placeholder="••••••••">
+                            <div class="help-text">Leave blank to keep existing password</div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="extra">Extra (JSON)</label>
+                        <textarea id="extra" name="extra">{{ connection.extra }}</textarea>
+                        <div class="help-text">Additional connection parameters in JSON format. Contains sensitive credentials for some connection types.</div>
+                    </div>
+                    <div class="actions">
+                        <a href="/connections" class="btn btn-secondary">Cancel</a>
+                        <button type="submit" class="btn btn-primary">Save Changes</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Settings - DataFlow</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #f5f7fa; color: #333; }
+        .header { background: linear-gradient(135deg, #2c3e50 0%, #3498db 100%); color: white; padding: 20px 40px; display: flex; justify-content: space-between; align-items: center; }
+        .header h1 { font-size: 24px; font-weight: 500; }
+        .header .user-info { font-size: 14px; }
+        .header .user-info a { color: white; margin-left: 15px; }
+        .nav { background: #34495e; padding: 0 40px; }
+        .nav a { color: #ecf0f1; text-decoration: none; padding: 15px 20px; display: inline-block; font-size: 14px; }
+        .nav a:hover { background: #2c3e50; }
+        .nav a.active { background: #2c3e50; border-bottom: 3px solid #3498db; }
+        .container { max-width: 800px; margin: 30px auto; padding: 0 20px; }
+        .card { background: white; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); overflow: hidden; margin-bottom: 20px; }
+        .card-header { background: #ecf0f1; padding: 20px; border-bottom: 1px solid #ddd; }
+        .card-header h2 { font-size: 18px; color: #2c3e50; }
+        .card-body { padding: 30px; }
+        .setting-item { display: flex; justify-content: space-between; align-items: center; padding: 15px 0; border-bottom: 1px solid #eee; }
+        .setting-item:last-child { border-bottom: none; }
+        .setting-info h3 { font-size: 15px; color: #333; margin-bottom: 5px; }
+        .setting-info p { font-size: 13px; color: #666; }
+        .badge { padding: 4px 10px; border-radius: 4px; font-size: 12px; }
+        .badge-info { background: #e3f2fd; color: #1565c0; }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>DataFlow</h1>
+        <div class="user-info">
+            Signed in as: <strong>{{ user }}</strong>
+            <a href="/logout">Sign Out</a>
+        </div>
+    </div>
+    <div class="nav">
+        <a href="/">Home</a>
+        <a href="/connections">Connections</a>
+        <a href="/settings" class="active">Settings</a>
+        <a href="/docs">Documentation</a>
+    </div>
+    <div class="container">
+        <div class="card">
+            <div class="card-header">
+                <h2>Account Settings</h2>
+            </div>
+            <div class="card-body">
+                <div class="setting-item">
+                    <div class="setting-info">
+                        <h3>Username</h3>
+                        <p>Your login username</p>
+                    </div>
+                    <span class="badge badge-info">{{ user }}</span>
+                </div>
+                <div class="setting-item">
+                    <div class="setting-info">
+                        <h3>Role</h3>
+                        <p>Your assigned role and permissions</p>
+                    </div>
+                    <span class="badge badge-info">{{ user }}</span>
+                </div>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-header">
+                <h2>System Information</h2>
+            </div>
+            <div class="card-body">
+                <div class="setting-item">
+                    <div class="setting-info">
+                        <h3>Version</h3>
+                        <p>Platform version</p>
+                    </div>
+                    <span>3.2.1</span>
+                </div>
+                <div class="setting-item">
+                    <div class="setting-info">
+                        <h3>API Status</h3>
+                        <p>Current API health status</p>
+                    </div>
+                    <span style="color: #4caf50;">● Healthy</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

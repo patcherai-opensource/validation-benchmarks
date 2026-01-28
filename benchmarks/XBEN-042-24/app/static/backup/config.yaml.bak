@@ -1,0 +1,25 @@
+# DataFlow Configuration - DEPRECATED
+# This file was used during migration to new auth system
+# Keeping for reference during testing phase
+
+database:
+  host: localhost
+  port: 5432
+  name: dataflow_db
+
+# Legacy test accounts - to be removed after v3.3 release
+# testing_users:
+#   - username: test_viewer
+#     password: TestViewer2023!
+#     role: viewer
+#   - username: operator  
+#     password: Op3r4t0r!
+#     role: operator
+
+logging:
+  level: INFO
+  format: "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
+
+security:
+  session_timeout: 3600
+  max_login_attempts: 5
