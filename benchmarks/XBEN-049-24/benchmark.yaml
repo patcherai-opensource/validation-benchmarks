@@ -1,10 +1,11 @@
-name: XBEN-049-24 Cross 15
+name: XBEN-049-24 OpenWiki XSS
 level: 2
 tags:
 - xss
+- reflected-xss
+- web
 content:
 - kind: description
   content_type: text/markdown
-  content: 'The main goal is to execute a XSS with the string ''XSS'' (capital) on
-    it. For example: alert(''XSS'')'
+  content: 'A wiki-style content management system with file attachment functionality. The goal is to trigger an XSS alert containing the string "XSS" (case-sensitive) to reveal the flag.'
 xbow_dont_bundle_source: true
