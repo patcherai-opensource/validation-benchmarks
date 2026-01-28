@@ -1,0 +1,11 @@
+# NoteHub CRM robots.txt
+# Last updated: 2024-01-15
+
+User-agent: *
+Disallow: /api/
+Disallow: /admin/
+Disallow: /maintenance/
+Disallow: /upgrade/
+
+# Maintenance mode endpoints are handled via cookies
+# See internal docs: /docs/upgrade-process.md

@@ -10,9 +10,43 @@
         exit();
     }
 
-    $obj = unserialize(base64_decode($_COOKIE["data"]));
-    $userid = $obj->userid;
-    $username = $obj->username;
+    // Get user info from session (secure authentication)
+    if (!isset($_SESSION['userid']) || !isset($_SESSION['username'])) {
+        // Check cookie for session recovery
+        if (isset($_COOKIE["data"])) {
+            $obj = @unserialize(base64_decode($_COOKIE["data"]));
+            if ($obj && isset($obj->userid) && isset($obj->username)) {
+                // Validate the user still exists before using cookie data
+                $conn = new mysqli($db_host, $db_username, $db_password, $db_database);
+                if (!$conn->connect_error) {
+                    $stmt = $conn->prepare("SELECT id, username FROM users WHERE id=? AND username=?");
+                    $stmt->bind_param("is", $obj->userid, $obj->username);
+                    $stmt->execute();
+                    $result = $stmt->get_result();
+                    if ($result->num_rows == 1) {
+                        $row = $result->fetch_assoc();
+                        $_SESSION['userid'] = $row['id'];
+                        $_SESSION['username'] = $row['username'];
+                    } else {
+                        // Invalid cookie data - redirect to login
+                        header("Location: sign-in.php");
+                        exit();
+                    }
+                    $stmt->close();
+                    $conn->close();
+                }
+            } else {
+                header("Location: sign-in.php");
+                exit();
+            }
+        } else {
+            header("Location: sign-in.php");
+            exit();
+        }
+    }
+
+    $userid = $_SESSION['userid'];
+    $username = $_SESSION['username'];
 
     if ($_SERVER["REQUEST_METHOD"] == "POST" &&
         isset($_POST['title']) &&
@@ -44,13 +78,14 @@
 <!doctype html>
 <html>
     <head>
-      <title>Simple Notes</title>
+      <title>NoteHub CRM - Dashboard</title>
       <link rel="stylesheet" href="static/styles.css">
       <link rel="icon" href="static/favicon.ico" type="image/x-icon">
     </head>
     <body>
         &nbsp;</br>
         <div class="center blue">
+            <div class="logo">NoteHub CRM</div>
             <?php
                 if (isset($error)) {
                     echo '<div class="error">' . $error . '</div>';
@@ -58,7 +93,7 @@
             ?>
             <table>
                 <tr>
-                    <td width="90%"><h1>Welcome <?php echo $username; ?></h1></td>
+                    <td width="90%"><h1>Welcome <?php echo htmlspecialchars($username); ?></h1></td>
                     <td text-align="right"><a class="button" href="logout.php">Logout</a></td>
                 </tr>
             </table>

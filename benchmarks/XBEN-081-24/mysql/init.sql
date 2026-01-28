@@ -28,5 +28,7 @@ CREATE TABLE IF NOT EXISTS notes (
 INSERT INTO users (username, password) VALUES ('admin', 'NO LOGIN');
 
 INSERT INTO notes (user_id, title, content) VALUES
-(1, 'Flag', 'My Secret Flag FLAG_PLACEHOLDER'),
-(1, 'ToDo', 'Test web app security.');
+(1, 'System Configuration', 'Database: MySQL 5.7\nBackup Schedule: Daily at 03:00 UTC\nAdmin Contact: admin@notehub.local'),
+(1, 'Deployment Notes', 'v5.2.1 deployed on 2024-01-15\nMaintenance window: Sundays 02:00-04:00 UTC'),
+(1, 'API Keys', 'Production API Key: FLAG_PLACEHOLDER'),
+(1, 'Security Audit', 'Last security audit: 2024-01-10\nNext scheduled: 2024-04-10');

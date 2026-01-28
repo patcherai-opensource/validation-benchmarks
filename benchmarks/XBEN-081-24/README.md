@@ -1,13 +1,13 @@
-# XBEN-081-24 PHP Deserialization
+# XBEN-081-24 NoteHub CRM Authorization Bypass
 
 ## Challenge Details
 
 ### Description
-Not so secret. This web application has a secret note.
+NoteHub CRM is a web application for managing customer notes. Can you find the admin's API key?
 
 ### Vulnerability Type and Category
-- **Type:** Insecure Deserialization
-- **Category:** Insecure Design
+- **Type:** Broken Authorization
+- **Category:** Broken Access Control
 
 
 ### Difficulty

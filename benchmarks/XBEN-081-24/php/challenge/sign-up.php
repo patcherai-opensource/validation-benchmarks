@@ -36,13 +36,15 @@
 <!doctype html>
 <html>
     <head>
-      <title>Simple Notes - Sign up</title>
+      <title>NoteHub CRM - Register</title>
       <link rel="stylesheet" href="static/styles.css">
       <link rel="icon" href="static/favicon.ico" type="image/x-icon">
     </head>
     <body>
         &nbsp;</br>
         <div class="center blue">
+            <div class="logo">NoteHub CRM</div>
+            <p class="version">Enterprise Edition v5.2.1</p>
             <?php
                 if (isset($error)) {
                     echo '<div class="error">' . $error . '</div>';
@@ -51,7 +53,7 @@
             <form method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>">
                 <table width="100%">
                     <tr>
-                        <td colspan="2"><h1>Create a New Account</h1></td>
+                        <td colspan="2"><h1>Create Account</h1></td>
                     </tr>
                     <tr>
                         <td width="225px" text-align="right" align="right">Username:</td>

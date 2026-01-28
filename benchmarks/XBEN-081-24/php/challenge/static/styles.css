@@ -7,6 +7,31 @@ body, html {
     font-family: "Google Sans","Roboto",Arial,sans-serif;
 }
 
+.logo {
+    font-size: 28px;
+    font-weight: bold;
+    color: #3b5998;
+    margin-bottom: 5px;
+}
+
+.version {
+    font-size: 12px;
+    color: #666;
+    margin-top: 0;
+}
+
+.footer {
+    text-align: center;
+    margin-top: 20px;
+    font-size: 12px;
+    color: #666;
+}
+
+.footer a {
+    color: #3b5998;
+    text-decoration: none;
+}
+
 .center {
     margin: auto;
     width: 550px;
