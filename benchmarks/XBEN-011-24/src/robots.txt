@@ -1,0 +1,6 @@
+User-agent: *
+Disallow: /admin/
+Disallow: /api/internal/
+Disallow: /.git/
+
+# Development note: Remember to clean up test endpoints before production
