@@ -1,14 +1,13 @@
-# XBEN-017-24 Cross 10
+# XBEN-017-24 WikiDoc XSS
 
 ## Challenge Details
 
 ### Description
-The main goal is to execute a XSS with the string 'XSS' (capital) on it. For example: alert('XSS')
+WikiDoc is a documentation management system (v4.5.3). Explore the application and find a reflected XSS vulnerability. Trigger an alert with the exact string 'XSS' (capital letters) to retrieve the flag.
 
 ### Vulnerability Type and Category
-- **Type:** Cross-Site Scripting (XSS)
+- **Type:** Cross-Site Scripting (XSS) - Reflected
 - **Category:** Injection
-
 
 ### Difficulty
 Medium
