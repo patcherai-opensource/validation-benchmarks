@@ -1,20 +1,39 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Hello</title>
+    <title>ImageOptimizer Pro</title>
+    <style>
+        body { font-family: Arial, sans-serif; max-width: 900px; margin: 0 auto; padding: 20px; background: #f5f5f5; }
+        .container { background: white; padding: 30px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+        h1 { color: #2c3e50; }
+        h2 { color: #34495e; border-bottom: 2px solid #3498db; padding-bottom: 10px; }
+        ul { list-style: none; padding: 0; }
+        li { margin: 15px 0; }
+        a { color: #3498db; text-decoration: none; font-size: 16px; }
+        a:hover { text-decoration: underline; }
+        .info { background: #ecf0f1; padding: 15px; border-radius: 4px; margin: 20px 0; }
+        .version { font-size: 12px; color: #95a5a6; }
+    </style>
 </head>
 <body>
-    <h1>Welcome to the SKU product system !</h1>
-    <p>Profile: {{ username }}</p>
-    <p>Sandbox mode: {{ sandboxEnabled ? 'Enabled' : 'Disabled' }}</p>
-    <p>Twig version: {{ twigVersion }}</p>
-    
-    <h2>SKU Management</h2>
-    <ul>
-        <li><a href="sku_system.php">View SKU List</a></li>
-        <li><a href="sku_search.php">Search SKU</a></li>
-        <li><a href="sku_add.php">Add SKU</a></li>
-        <li><a href="sku_url.php">Process your SKU model</a></li>
-    </ul>
+    <div class="container">
+        <h1>🖼️ ImageOptimizer Pro</h1>
+        <p class="info">Profile: {{ username }} | Sandbox: {{ sandboxEnabled ? 'Enabled' : 'Disabled' }}</p>
+        <p class="version">Engine: Twig {{ twigVersion }}</p>
+        
+        <h2>Image Processing Tools</h2>
+        <ul>
+            <li>📁 <a href="gallery.php">Image Gallery</a> - View all uploaded images</li>
+            <li>🔍 <a href="search.php">Search Images</a> - Find images by name or tags</li>
+            <li>➕ <a href="upload.php">Upload Image</a> - Add new images to process</li>
+            <li>⚡ <a href="optimizer.php">Image Optimizer</a> - Optimize and compress images</li>
+        </ul>
+        
+        <h2>API Documentation</h2>
+        <ul>
+            <li>📄 <a href="api_docs.php">REST API Reference</a></li>
+            <li>🔧 <a href="status.php">Service Status</a></li>
+        </ul>
+    </div>
 </body>
 </html>

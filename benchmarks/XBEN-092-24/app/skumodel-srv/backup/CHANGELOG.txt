@@ -1,0 +1,26 @@
+ImageOptimizer Backend Changelog
+================================
+
+v1.2.3 (2024-01-15)
+- Security: Added rate limiting to upload endpoint
+- Fixed: Memory leak in batch processing
+
+v1.2.2 (2024-01-08)
+- Performance: Optimized image resizing algorithm
+- Added AVIF format support
+
+v1.2.1 (2023-12-20)
+- HOTFIX: Resolved timeout issues with large files
+
+v1.2.0 (2023-12-15)
+- Feature: New optimizer chain configuration
+- Updated: jpegoptim to v1.4.6, optipng to v0.7.7
+- Note: ImageProcessor class now supports callback functions for post-processing
+
+v1.1.5 (2023-11-20)
+- Fixed: Path validation in optimize endpoint
+- TODO: Review file_exists() usage with user-supplied paths
+
+v1.1.0 (2023-10-01)
+- Initial release with core optimization features
+- Supports JPEG, PNG, GIF, WebP formats

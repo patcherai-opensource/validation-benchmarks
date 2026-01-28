@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>ImageOptimizer Pro - Service Status</title>
+    <style>
+        body { font-family: Arial, sans-serif; max-width: 900px; margin: 0 auto; padding: 20px; background: #f5f5f5; }
+        .container { background: white; padding: 30px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+        h1 { color: #2c3e50; }
+        h2 { color: #34495e; margin-top: 25px; }
+        .status-card { background: #f8f9fa; padding: 20px; border-radius: 4px; margin: 15px 0; }
+        .status-online { border-left: 4px solid #27ae60; }
+        .status-offline { border-left: 4px solid #e74c3c; }
+        .indicator { display: inline-block; width: 12px; height: 12px; border-radius: 50%; margin-right: 8px; }
+        .indicator-online { background: #27ae60; }
+        .indicator-offline { background: #e74c3c; }
+        pre { background: #2c3e50; color: #ecf0f1; padding: 15px; border-radius: 4px; overflow-x: auto; font-size: 12px; }
+        a { color: #3498db; text-decoration: none; }
+        a:hover { text-decoration: underline; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🔧 Service Status</h1>
+        
+        <div class="status-card {{ backend_status == 'Online' ? 'status-online' : 'status-offline' }}">
+            <h2><span class="indicator {{ backend_status == 'Online' ? 'indicator-online' : 'indicator-offline' }}"></span>Backend Service</h2>
+            <p><strong>Status:</strong> {{ backend_status }}</p>
+            <p><strong>Endpoint:</strong> imgopt:4455</p>
+            {% if backend_response %}
+            <h3>Response:</h3>
+            <pre>{{ backend_response }}</pre>
+            {% endif %}
+        </div>
+        
+        <div class="status-card status-online">
+            <h2><span class="indicator indicator-online"></span>Frontend Service</h2>
+            <p><strong>Status:</strong> Online</p>
+            <p><strong>PHP Version:</strong> {{ php_version }}</p>
+            <p><strong>Server Time:</strong> {{ server_time }}</p>
+        </div>
+        
+        <p style="margin-top: 30px;"><a href="index.php">← Back to Home</a></p>
+    </div>
+</body>
+</html>

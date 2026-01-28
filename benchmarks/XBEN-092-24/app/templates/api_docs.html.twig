@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>ImageOptimizer Pro - API Documentation</title>
+    <style>
+        body { font-family: Arial, sans-serif; max-width: 1000px; margin: 0 auto; padding: 20px; background: #f5f5f5; }
+        .container { background: white; padding: 30px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+        h1 { color: #2c3e50; }
+        h2 { color: #34495e; border-bottom: 2px solid #3498db; padding-bottom: 10px; margin-top: 30px; }
+        h3 { color: #2980b9; }
+        .endpoint { background: #f8f9fa; padding: 20px; border-radius: 4px; margin: 15px 0; border-left: 4px solid #3498db; }
+        .method { display: inline-block; padding: 4px 12px; border-radius: 4px; font-weight: bold; font-size: 12px; }
+        .method-post { background: #27ae60; color: white; }
+        .method-get { background: #3498db; color: white; }
+        code { background: #ecf0f1; padding: 2px 8px; border-radius: 3px; font-family: 'Courier New', monospace; }
+        pre { background: #2c3e50; color: #ecf0f1; padding: 15px; border-radius: 4px; overflow-x: auto; }
+        table { width: 100%; border-collapse: collapse; margin: 15px 0; }
+        th, td { padding: 10px; text-align: left; border-bottom: 1px solid #ddd; }
+        th { background: #ecf0f1; }
+        a { color: #3498db; text-decoration: none; }
+        a:hover { text-decoration: underline; }
+        .warning { background: #ffeaa7; padding: 15px; border-radius: 4px; margin: 20px 0; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>📄 API Documentation</h1>
+        <p>ImageOptimizer Pro Backend API v1.2.3</p>
+        
+        <h2>Endpoints</h2>
+        
+        <div class="endpoint">
+            <span class="method method-post">POST</span> <code>/health</code>
+            <h3>Health Check</h3>
+            <p>Returns service health status and version information.</p>
+            <h4>Response:</h4>
+            <pre>{
+  "status": "healthy",
+  "service": "ImageOptimizer Backend",
+  "version": "1.2.3"
+}</pre>
+        </div>
+        
+        <div class="endpoint">
+            <span class="method method-post">POST</span> <code>/stats</code>
+            <h3>Statistics</h3>
+            <p>Returns processing statistics and optimizer chain versions.</p>
+        </div>
+        
+        <div class="endpoint">
+            <span class="method method-post">POST</span> <code>/upload</code>
+            <h3>Upload Image</h3>
+            <p>Upload a base64-encoded image for storage.</p>
+            <h4>Parameters:</h4>
+            <table>
+                <tr><th>Name</th><th>Type</th><th>Description</th></tr>
+                <tr><td><code>data</code></td><td>string</td><td>Base64-encoded image data</td></tr>
+                <tr><td><code>format</code></td><td>string</td><td>Output format (jpg, png, etc.)</td></tr>
+            </table>
+            <h4>Response:</h4>
+            <pre>{
+  "status": "success",
+  "message": "Image uploaded successfully",
+  "image_id": "abc123...",
+  "file_path": "/tmp/abc123.jpg"
+}</pre>
+        </div>
+        
+        <div class="endpoint">
+            <span class="method method-post">POST</span> <code>/optimize</code>
+            <h3>Optimize Image</h3>
+            <p>Run the optimizer chain on an uploaded image.</p>
+            <h4>Parameters:</h4>
+            <table>
+                <tr><th>Name</th><th>Type</th><th>Description</th></tr>
+                <tr><td><code>image_path</code></td><td>string</td><td>Path to the uploaded image file</td></tr>
+            </table>
+            <h4>Response:</h4>
+            <pre>{
+  "status": "success",
+  "message": "Image optimized successfully",
+  "original_path": "/tmp/abc123.jpg"
+}</pre>
+        </div>
+        
+        <div class="warning">
+            <strong>⚠️ Security Note:</strong> The backend service only accepts connections from internal network (172.0.0.0/8). 
+            Use the <a href="optimizer.php">API Client</a> to forward requests.
+        </div>
+        
+        <p style="margin-top: 30px;"><a href="index.php">← Back to Home</a></p>
+    </div>
+</body>
+</html>
