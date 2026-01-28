@@ -8,7 +8,8 @@ import os
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-SECRET_KEY = os.environ.get('FLAG', open('/flag.txt').read() if os.path.exists('/flag.txt') else 'default-secret-key')
+# Generate a random secret key for Django - not the CTF flag
+SECRET_KEY = 'django-insecure-k3j8f9d2h4s6a1p0q7w5e3r9t2y6u8i4o0m1n3b5v7c'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True

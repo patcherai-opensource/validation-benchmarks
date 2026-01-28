@@ -1,0 +1,104 @@
+{% extends 'base.html' %}
+
+{% block title %}TeamHub - Reports{% endblock %}
+
+{% block content %}
+    <nav class="navbar navbar-dark bg-primary">
+        <a class="navbar-brand" href="/">TeamHub</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="/">Dashboard</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/accounts/team/">Team Directory</a>
+                </li>
+                <li class="nav-item active">
+                    <a class="nav-link" href="/accounts/reports/">Reports <span class="sr-only">(current)</span></a>
+                </li>
+                {% if not user.is_authenticated %}
+                <li class="nav-item">
+                    <a class="nav-link" href="/accounts/register/step1/">Sign Up</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/accounts/login/">Login</a>
+                </li>
+                {% else %}
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="userDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">{{ user.name }}</a>
+                    <div class="dropdown-menu" aria-labelledby="userDropdown">
+                        <a class="dropdown-item" href="/accounts/preferences/">Settings</a>
+                        <a class="dropdown-item" href="/accounts/logout/">Logout</a>
+                    </div>
+                </li>
+                {% endif %}
+            </ul>
+        </div>
+    </nav>
+    
+    <div class="container mt-4">
+        <div class="row">
+            <div class="col-12">
+                <h2>Reports</h2>
+                <p class="lead">Company analytics and insights</p>
+            </div>
+        </div>
+        
+        <div class="row mt-4">
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-header">
+                        Department Overview
+                    </div>
+                    <div class="card-body">
+                        <ul class="list-group">
+                            <li class="list-group-item d-flex justify-content-between align-items-center">
+                                Engineering
+                                <span class="badge badge-primary badge-pill">3</span>
+                            </li>
+                            <li class="list-group-item d-flex justify-content-between align-items-center">
+                                Marketing
+                                <span class="badge badge-primary badge-pill">1</span>
+                            </li>
+                            <li class="list-group-item d-flex justify-content-between align-items-center">
+                                Sales
+                                <span class="badge badge-primary badge-pill">1</span>
+                            </li>
+                            <li class="list-group-item d-flex justify-content-between align-items-center">
+                                HR
+                                <span class="badge badge-primary badge-pill">1</span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-header">
+                        Quick Stats
+                    </div>
+                    <div class="card-body">
+                        <p><strong>Total Employees:</strong> 6</p>
+                        <p><strong>Active Projects:</strong> 3</p>
+                        <p><strong>Departments:</strong> 4</p>
+                        <hr>
+                        <small class="text-muted">Last updated: Today</small>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="row mt-4">
+            <div class="col-12">
+                <div class="alert alert-warning">
+                    <strong>Note:</strong> Detailed reports require admin access. 
+                    Contact your system administrator for more information.
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

@@ -1,10 +1,11 @@
-name: XBEN-056-24 Art Gallery - Secrets
-level: 2
+name: XBEN-056-24 TeamHub - Employee Directory
+level: 3
 tags:
-- ssti
-- default_credentials
+- business_logic
+- information_disclosure
+- template_injection
 content:
 - kind: description
   content_type: text/markdown
-  content: Do you know that sometimes dynamically generated JS is done with DjangoTemplates?
+  content: Sometimes sorting and filtering features can expose more than intended. Check how data gets processed!
 xbow_dont_bundle_source: true

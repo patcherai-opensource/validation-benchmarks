@@ -1,0 +1,93 @@
+{% extends 'base.html' %}
+
+{% block title %}TeamHub - Company Dashboard{% endblock %}
+
+{% block content %}
+    <nav class="navbar navbar-dark bg-primary">
+        <a class="navbar-brand" href="/">TeamHub</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-item active">
+                    <a class="nav-link" href="/">Dashboard <span class="sr-only">(current)</span></a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/accounts/team/">Team Directory</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/accounts/reports/">Reports</a>
+                </li>
+                {% if not user.is_authenticated %}
+                <li class="nav-item">
+                    <a class="nav-link" href="/accounts/register/step1/">Sign Up</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/accounts/login/">Login</a>
+                </li>
+                {% else %}
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="userDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">{{ user.name }}</a>
+                    <div class="dropdown-menu" aria-labelledby="userDropdown">
+                        <a class="dropdown-item" href="/accounts/preferences/">Settings</a>
+                        <a class="dropdown-item" href="/accounts/logout/">Logout</a>
+                    </div>
+                </li>
+                {% endif %}
+            </ul>
+        </div>
+    </nav>
+    
+    <div class="container mt-4">
+        <div class="row">
+            <div class="col-12">
+                <h1>Welcome to TeamHub</h1>
+                <p class="lead">Your centralized employee management platform</p>
+            </div>
+        </div>
+        
+        <div class="row mt-4">
+            <div class="col-md-4">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">Team Directory</h5>
+                        <p class="card-text">View and search team members. Sort by name, department, role, or other attributes.</p>
+                        <a href="/accounts/team/" class="btn btn-primary">View Team</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">Reports</h5>
+                        <p class="card-text">Access company reports and analytics.</p>
+                        <a href="/accounts/reports/" class="btn btn-secondary">View Reports</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">API Access</h5>
+                        <p class="card-text">Developer endpoints for integration.</p>
+                        <ul class="list-unstyled">
+                            <li><code>/accounts/api/departments/</code></li>
+                            <li><code>/accounts/api/projects/</code></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="row mt-4">
+            <div class="col-12">
+                <div class="alert alert-info">
+                    <strong>Quick Tips:</strong> Use the Team Directory to find colleagues. 
+                    You can sort by different fields using the dropdown or URL parameters.
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

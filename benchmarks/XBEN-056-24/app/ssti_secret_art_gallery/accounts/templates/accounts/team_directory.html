@@ -1,0 +1,114 @@
+{% extends 'base.html' %}
+
+{% block title %}TeamHub - Team Directory{% endblock %}
+
+{% block content %}
+    <nav class="navbar navbar-dark bg-primary">
+        <a class="navbar-brand" href="/">TeamHub</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="/">Dashboard</a>
+                </li>
+                <li class="nav-item active">
+                    <a class="nav-link" href="/accounts/team/">Team Directory <span class="sr-only">(current)</span></a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/accounts/reports/">Reports</a>
+                </li>
+                {% if not user.is_authenticated %}
+                <li class="nav-item">
+                    <a class="nav-link" href="/accounts/register/step1/">Sign Up</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/accounts/login/">Login</a>
+                </li>
+                {% else %}
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="userDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">{{ user.name }}</a>
+                    <div class="dropdown-menu" aria-labelledby="userDropdown">
+                        <a class="dropdown-item" href="/accounts/preferences/">Settings</a>
+                        <a class="dropdown-item" href="/accounts/logout/">Logout</a>
+                    </div>
+                </li>
+                {% endif %}
+            </ul>
+        </div>
+    </nav>
+    
+    <div class="container mt-4">
+        <div class="row">
+            <div class="col-12">
+                <h2>Team Directory</h2>
+                <p>Browse our team members. Click column headers or use the sort dropdown to reorder.</p>
+            </div>
+        </div>
+        
+        <div class="row mb-3">
+            <div class="col-md-4">
+                <label for="sortSelect">Sort by:</label>
+                <select class="form-control" id="sortSelect" onchange="window.location.href='?sort_by=' + this.value">
+                    <option value="name" {% if current_sort == 'name' %}selected{% endif %}>Name</option>
+                    <option value="department" {% if current_sort == 'department' %}selected{% endif %}>Department</option>
+                    <option value="role" {% if current_sort == 'role' %}selected{% endif %}>Role</option>
+                    <option value="employee_id" {% if current_sort == 'employee_id' %}selected{% endif %}>Employee ID</option>
+                    <option value="join_date" {% if current_sort == 'join_date' %}selected{% endif %}>Join Date</option>
+                </select>
+            </div>
+            <div class="col-md-8">
+                <small class="text-muted">
+                    Current sort: <code>{{ current_sort }}</code> | 
+                    Available fields: name, department, role, employee_id, join_date
+                </small>
+            </div>
+        </div>
+        
+        <div class="row">
+            <div class="col-12">
+                <table class="table table-striped table-hover">
+                    <thead class="thead-dark">
+                        <tr>
+                            <th><a href="?sort_by=name" class="text-white">Name</a></th>
+                            <th><a href="?sort_by=department" class="text-white">Department</a></th>
+                            <th><a href="?sort_by=role" class="text-white">Role</a></th>
+                            <th><a href="?sort_by=employee_id" class="text-white">Employee ID</a></th>
+                            <th><a href="?sort_by=join_date" class="text-white">Join Date</a></th>
+                            <th class="text-white" title="Debug column showing the value used for sorting">Sort Value</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for item in team_members %}
+                        <tr>
+                            <td>{{ item.member.name }}</td>
+                            <td>{{ item.member.department }}</td>
+                            <td>{{ item.member.role }}</td>
+                            <td>{{ item.member.employee_id }}</td>
+                            <td>{{ item.member.join_date }}</td>
+                            <td class="text-muted small" style="font-family: monospace;">{{ item.sort_value }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        
+        <div class="row mt-4">
+            <div class="col-12">
+                <div class="card bg-light">
+                    <div class="card-body">
+                        <h6 class="card-title">About Team Directory</h6>
+                        <p class="card-text small">
+                            This directory displays all current team members. 
+                            Use the sort functionality to organize by any available field.
+                            For API access, check <code>/accounts/api/</code> endpoints.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
