@@ -3,35 +3,109 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Home</title>
+    <title>PromptStudio - Dashboard</title>
     <link href="{{ url_for('static', filename='css/bootstrap.min.css') }}" rel="stylesheet">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <style>
+        .navbar-brand { font-weight: bold; }
+        .stat-card { border-left: 4px solid #667eea; }
+        .quick-action { transition: transform 0.2s; }
+        .quick-action:hover { transform: translateY(-2px); }
+    </style>
 </head>
 <body>
-    <div class="container">
-        <div class="row justify-content-between mt-5">
+    <nav class="navbar navbar-expand-lg navbar-dark" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
+        <div class="container">
+            <a class="navbar-brand" href="{{ url_for('home') }}">🚀 PromptStudio</a>
+            <div class="navbar-nav ms-auto">
+                <span class="navbar-text me-3">{{ user.name }} {{ user.lastname }} ({{ user.tier }})</span>
+                <a class="nav-link" href="{{ url_for('logout') }}">Logout</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container mt-4">
+        <div class="row">
             <div class="col-md-9">
-                <h2>Welcome {{ user.name }} {{ user.lastname }}!</h2>
-                <p>Here you can check the status of your loan</p>
+                <h2>Welcome back, {{ user.name }}!</h2>
+                <p class="text-muted">Manage your AI prompts and templates</p>
+                
+                <div class="row mt-4">
+                    <div class="col-md-4">
+                        <div class="card stat-card">
+                            <div class="card-body">
+                                <h6 class="text-muted">Templates</h6>
+                                <h3>3</h3>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="card stat-card">
+                            <div class="card-body">
+                                <h6 class="text-muted">API Calls Today</h6>
+                                <h3>127</h3>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="card stat-card">
+                            <div class="card-body">
+                                <h6 class="text-muted">Active Projects</h6>
+                                <h3>2</h3>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card mt-4">
+                    <div class="card-header">
+                        <h5 class="mb-0">Quick Actions</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-4">
+                                <a href="{{ url_for('builder') }}" class="btn btn-outline-primary w-100 quick-action py-3">
+                                    🛠️ Prompt Builder
+                                </a>
+                            </div>
+                            <div class="col-md-4">
+                                <a href="{{ url_for('api_docs') }}" class="btn btn-outline-secondary w-100 quick-action py-3">
+                                    📖 API Documentation
+                                </a>
+                            </div>
+                            <div class="col-md-4">
+                                <a href="{{ url_for('profile') }}" class="btn btn-outline-info w-100 quick-action py-3">
+                                    ⚙️ Settings
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
             <div class="col-md-3">
                 <div class="card">
                     <div class="card-body">
                         <h5 class="card-title">Navigation</h5>
-                        <ul class="list-group">
-                            <li class="list-group-item"><a href="{{ url_for('home') }}">Home</a></li>
+                        <ul class="list-group list-group-flush">
+                            <li class="list-group-item"><a href="{{ url_for('home') }}">Dashboard</a></li>
+                            <li class="list-group-item"><a href="{{ url_for('builder') }}">Prompt Builder</a></li>
+                            <li class="list-group-item"><a href="{{ url_for('api_docs') }}">API Docs</a></li>
                             <li class="list-group-item"><a href="{{ url_for('profile') }}">Profile</a></li>
-                            <li class="list-group-item"><a href="{{ url_for('error', error_type='not_implemented.html', error_message='The `Loan Request` feature is not implemented yet.') }}">Loan Request</a></li>
-                            <li class="list-group-item"><a href="{{ url_for('loan_details') }}">Loan Details</a></li>
-                            <li class="list-group-item"><a href="{{ url_for('logout') }}">Exit</a></li>
+                            <li class="list-group-item"><a href="{{ url_for('logout') }}">Logout</a></li>
                         </ul>
+                    </div>
+                </div>
+                <div class="card mt-3">
+                    <div class="card-body">
+                        <h6>Your API Key</h6>
+                        <code class="small">{{ user.api_key[:8] }}...{{ user.api_key[-4:] }}</code>
+                        <p class="small text-muted mt-2">Use this key for API authentication</p>
                     </div>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- Bootstrap Bundle with Popper -->
     <script src="{{ url_for('static', filename='js/bootstrap.bundle.min.js') }}"></script>
 </body>
 </html>

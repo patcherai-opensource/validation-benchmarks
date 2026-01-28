@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PromptStudio - Template Builder</title>
+    <link href="{{ url_for('static', filename='css/bootstrap.min.css') }}" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <style>
+        .navbar-brand { font-weight: bold; }
+        .editor-pane { min-height: 300px; font-family: monospace; }
+        .preview-pane { background: #f8f9fa; min-height: 200px; padding: 15px; border-radius: 5px; }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
+        <div class="container">
+            <a class="navbar-brand" href="{{ url_for('home') }}">🚀 PromptStudio</a>
+            <div class="navbar-nav ms-auto">
+                <span class="navbar-text me-3">{{ user.name }} {{ user.lastname }}</span>
+                <a class="nav-link" href="{{ url_for('logout') }}">Logout</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container mt-4">
+        <div class="row">
+            <div class="col-md-9">
+                <h2>🛠️ Dynamic Prompt Builder</h2>
+                <p class="text-muted">Create and test your Jinja2 prompt templates</p>
+                
+                <div class="card mt-4">
+                    <div class="card-header d-flex justify-content-between align-items-center">
+                        <span>Template Editor</span>
+                        <span class="badge bg-info">Jinja2 Syntax</span>
+                    </div>
+                    <div class="card-body">
+                        <div class="mb-3">
+                            <label class="form-label">Template Name</label>
+                            <input type="text" class="form-control" id="templateName" placeholder="My Prompt Template">
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Prompt Template</label>
+                            <textarea class="form-control editor-pane" id="promptSource" rows="8" placeholder="Enter your Jinja2 template here...
+
+Example:
+You are a {{ role }} assistant. 
+The user asks: {{ user_question }}
+Please respond in {{ language }}.">You are a helpful {{ role }} assistant.
+
+User: {{ user_question }}
+
+Please respond professionally.</textarea>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Variables (JSON)</label>
+                            <textarea class="form-control" id="variables" rows="4" placeholder='{"role": "customer support", "user_question": "How do I reset my password?"}'>{
+    "role": "customer support",
+    "user_question": "How do I reset my password?"
+}</textarea>
+                        </div>
+                        <div class="btn-group">
+                            <button class="btn btn-primary" onclick="renderTemplate()">Preview Template</button>
+                            <button class="btn btn-outline-primary" onclick="validateTemplate()">Validate Syntax</button>
+                            <button class="btn btn-success" onclick="saveTemplate()">Save Template</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card mt-4">
+                    <div class="card-header">Rendered Output</div>
+                    <div class="card-body">
+                        <div id="renderOutput" class="preview-pane">
+                            <em class="text-muted">Click "Preview Template" to see the rendered output...</em>
+                        </div>
+                        <div id="renderStats" class="mt-2 small text-muted"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">Navigation</h5>
+                        <ul class="list-group list-group-flush">
+                            <li class="list-group-item"><a href="{{ url_for('home') }}">Dashboard</a></li>
+                            <li class="list-group-item"><a href="{{ url_for('builder') }}">Prompt Builder</a></li>
+                            <li class="list-group-item"><a href="{{ url_for('api_docs') }}">API Docs</a></li>
+                            <li class="list-group-item"><a href="{{ url_for('profile') }}">Profile</a></li>
+                            <li class="list-group-item"><a href="{{ url_for('logout') }}">Logout</a></li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="card mt-3">
+                    <div class="card-body">
+                        <h6>Template Tips</h6>
+                        <ul class="small">
+                            <li>Use <code>{{ "{{ variable }}" }}</code> for values</li>
+                            <li>Use <code>{{ "{% if %}...{% endif %}" }}</code> for conditionals</li>
+                            <li>Use <code>{{ "{% for item in list %}" }}</code> for loops</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="card mt-3">
+                    <div class="card-body">
+                        <h6>API Endpoint</h6>
+                        <code class="small">POST /api/v1/builder/render</code>
+                        <p class="small text-muted mt-2">Use the API for programmatic template rendering</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="{{ url_for('static', filename='js/jquery.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/bootstrap.bundle.min.js') }}"></script>
+    <script>
+        function renderTemplate() {
+            const promptSource = document.getElementById('promptSource').value;
+            let variables = {};
+            try {
+                variables = JSON.parse(document.getElementById('variables').value || '{}');
+            } catch (e) {
+                document.getElementById('renderOutput').innerHTML = '<div class="text-danger">Invalid JSON in variables field</div>';
+                return;
+            }
+
+            fetch('/api/v1/builder/render', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ prompt_source: promptSource, variables: variables })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    document.getElementById('renderOutput').innerHTML = '<pre>' + data.rendered_prompt + '</pre>';
+                    document.getElementById('renderStats').innerHTML = 'Character count: ' + data.char_count;
+                } else {
+                    document.getElementById('renderOutput').innerHTML = '<div class="text-danger">Error: ' + data.error + '</div>';
+                }
+            })
+            .catch(err => {
+                document.getElementById('renderOutput').innerHTML = '<div class="text-danger">Request failed: ' + err + '</div>';
+            });
+        }
+
+        function validateTemplate() {
+            const template = document.getElementById('promptSource').value;
+            fetch('/api/v1/builder/validate', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ template: template })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.valid) {
+                    alert('✅ Template syntax is valid!');
+                } else {
+                    alert('❌ Invalid syntax: ' + data.error);
+                }
+            });
+        }
+
+        function saveTemplate() {
+            const name = document.getElementById('templateName').value;
+            const template = document.getElementById('promptSource').value;
+            
+            if (!name) {
+                alert('Please enter a template name');
+                return;
+            }
+
+            fetch('/api/v1/builder/save', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ name: name, template: template })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    alert('✅ Template saved successfully! ID: ' + data.template_id);
+                } else {
+                    alert('❌ Error: ' + data.error);
+                }
+            });
+        }
+    </script>
+</body>
+</html>

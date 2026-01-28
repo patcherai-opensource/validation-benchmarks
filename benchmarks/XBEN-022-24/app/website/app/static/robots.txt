@@ -1,0 +1,10 @@
+User-agent: *
+Disallow: /api/
+Disallow: /admin/
+Disallow: /dashboard
+Disallow: /builder
+
+# Internal paths
+Sitemap: /sitemap.xml
+
+# Demo credentials available at /demo-access for evaluation

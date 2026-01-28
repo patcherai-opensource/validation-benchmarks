@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PromptStudio - API Documentation</title>
+    <link href="{{ url_for('static', filename='css/bootstrap.min.css') }}" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <style>
+        .navbar-brand { font-weight: bold; }
+        .endpoint-card { border-left: 4px solid #667eea; margin-bottom: 20px; }
+        .method-badge { font-family: monospace; }
+        pre { background: #f8f9fa; padding: 15px; border-radius: 5px; overflow-x: auto; }
+        code { color: #e83e8c; }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
+        <div class="container">
+            <a class="navbar-brand" href="{{ url_for('home') }}">🚀 PromptStudio</a>
+            <div class="navbar-nav ms-auto">
+                <span class="navbar-text me-3">{{ user.name }} {{ user.lastname }}</span>
+                <a class="nav-link" href="{{ url_for('logout') }}">Logout</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container mt-4">
+        <div class="row">
+            <div class="col-md-9">
+                <h2>📖 API Documentation</h2>
+                <p class="text-muted">PromptStudio REST API v1 Reference</p>
+                
+                <div class="alert alert-info">
+                    <strong>Base URL:</strong> <code>/api/v1</code><br>
+                    <strong>Authentication:</strong> Session-based (login required)
+                </div>
+
+                <h4 class="mt-4">Template Builder Endpoints</h4>
+
+                <div class="card endpoint-card">
+                    <div class="card-header">
+                        <span class="badge bg-success method-badge">POST</span>
+                        <code>/api/v1/builder/render</code>
+                    </div>
+                    <div class="card-body">
+                        <p>Render a dynamic prompt template with provided variables.</p>
+                        <h6>Request Body</h6>
+<pre>{
+    "prompt_source": "You are a {{ role }} assistant. User asks: {{ question }}",
+    "variables": {
+        "role": "helpful",
+        "question": "What is the weather?"
+    }
+}</pre>
+                        <h6>Response</h6>
+<pre>{
+    "success": true,
+    "rendered_prompt": "You are a helpful assistant. User asks: What is the weather?",
+    "char_count": 62
+}</pre>
+                    </div>
+                </div>
+
+                <div class="card endpoint-card">
+                    <div class="card-header">
+                        <span class="badge bg-success method-badge">POST</span>
+                        <code>/api/v1/builder/validate</code>
+                    </div>
+                    <div class="card-body">
+                        <p>Validate Jinja2 template syntax.</p>
+                        <h6>Request Body</h6>
+<pre>{
+    "template": "Hello {{ name }}"
+}</pre>
+                        <h6>Response</h6>
+<pre>{
+    "valid": true,
+    "message": "Template syntax is valid"
+}</pre>
+                    </div>
+                </div>
+
+                <div class="card endpoint-card">
+                    <div class="card-header">
+                        <span class="badge bg-success method-badge">POST</span>
+                        <code>/api/v1/builder/save</code>
+                    </div>
+                    <div class="card-body">
+                        <p>Save a prompt template to your library.</p>
+                        <h6>Request Body</h6>
+<pre>{
+    "name": "My Template",
+    "template": "Hello {{ name }}, welcome to {{ company }}!"
+}</pre>
+                    </div>
+                </div>
+
+                <h4 class="mt-4">Resource Endpoints</h4>
+
+                <div class="card endpoint-card">
+                    <div class="card-header">
+                        <span class="badge bg-primary method-badge">GET</span>
+                        <code>/api/v1/templates</code>
+                    </div>
+                    <div class="card-body">
+                        <p>List all saved templates for the authenticated user.</p>
+                    </div>
+                </div>
+
+                <div class="card endpoint-card">
+                    <div class="card-header">
+                        <span class="badge bg-primary method-badge">GET</span>
+                        <code>/api/v1/projects</code>
+                    </div>
+                    <div class="card-body">
+                        <p>List all prompt projects.</p>
+                    </div>
+                </div>
+
+                <div class="card endpoint-card">
+                    <div class="card-header">
+                        <span class="badge bg-primary method-badge">GET</span>
+                        <code>/api/v1/health</code>
+                    </div>
+                    <div class="card-body">
+                        <p>Health check endpoint (no authentication required).</p>
+                    </div>
+                </div>
+
+            </div>
+            <div class="col-md-3">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">Navigation</h5>
+                        <ul class="list-group list-group-flush">
+                            <li class="list-group-item"><a href="{{ url_for('home') }}">Dashboard</a></li>
+                            <li class="list-group-item"><a href="{{ url_for('builder') }}">Prompt Builder</a></li>
+                            <li class="list-group-item"><a href="{{ url_for('api_docs') }}">API Docs</a></li>
+                            <li class="list-group-item"><a href="{{ url_for('profile') }}">Profile</a></li>
+                            <li class="list-group-item"><a href="{{ url_for('logout') }}">Logout</a></li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="card mt-3">
+                    <div class="card-body">
+                        <h6>Rate Limits</h6>
+                        <ul class="small list-unstyled">
+                            <li>Free: 100 req/hour</li>
+                            <li>Pro: 1000 req/hour</li>
+                            <li>Enterprise: Unlimited</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="{{ url_for('static', filename='js/bootstrap.bundle.min.js') }}"></script>
+</body>
+</html>
