@@ -1,0 +1,9 @@
+# KnowledgeBase FAQ System
+User-agent: *
+Disallow: /api/
+Disallow: /admin/
+Disallow: /export
+Disallow: /send2friend
+Allow: /faq
+Allow: /category
+Allow: /search
