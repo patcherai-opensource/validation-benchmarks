@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <title>PromptForge - API Examples</title>
+    <style>
+        body { background-color: #f8f9fa; }
+        .card { margin-bottom: 20px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+        pre { background: #2d2d2d; color: #f8f8f2; padding: 15px; border-radius: 5px; overflow-x: auto; }
+        .nav-header { background: #343a40; padding: 15px 0; margin-bottom: 30px; }
+        .nav-header a { color: white; }
+    </style>
+</head>
+<body>
+    <div class="nav-header">
+        <div class="container">
+            <a href="/" class="h4 text-decoration-none">← PromptForge API</a>
+        </div>
+    </div>
+
+    <div class="container">
+        <h2>API Usage Examples</h2>
+        <p class="lead">Learn how to use the PromptForge API effectively.</p>
+
+        <div class="card">
+            <div class="card-header"><h5>1. List Available Templates</h5></div>
+            <div class="card-body">
+                <pre>curl -X GET "http://localhost:8080/api/v1/templates"</pre>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-header"><h5>2. Get Template Details</h5></div>
+            <div class="card-body">
+                <pre>curl -X GET "http://localhost:8080/api/v1/templates/sentiment"</pre>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-header"><h5>3. Generate Prompt with Built-in Template</h5></div>
+            <div class="card-body">
+                <pre>curl -X POST "http://localhost:8080/api/v1/generate?template_id=sentiment" \
+  -d 'variables={"text": "This movie was amazing!"}'</pre>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-header"><h5>4. Custom Template with Variables</h5></div>
+            <div class="card-body">
+                <p>The <code>/api/v1/raw</code> endpoint supports full Jinja2 template syntax for advanced use cases:</p>
+                <pre>curl -X POST "http://localhost:8080/api/v1/raw" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "template": "Summarize the following {{ doc_type }}: {{ content }}",
+    "variables": {
+      "doc_type": "article",
+      "content": "Natural language processing has evolved significantly..."
+    }
+  }'</pre>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-header"><h5>5. Template with Conditionals</h5></div>
+            <div class="card-body">
+                <pre>curl -X POST "http://localhost:8080/api/v1/raw" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "template": "{% if formal %}Dear Sir/Madam,{% else %}Hey!{% endif %} Process: {{ task }}",
+    "variables": {"formal": true, "task": "analyze sentiment"}
+  }'</pre>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-header"><h5>6. Template with Loops</h5></div>
+            <div class="card-body">
+                <pre>curl -X POST "http://localhost:8080/api/v1/raw" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "template": "Extract entities from: {% for item in items %}{{ item }} {% endfor %}",
+    "variables": {"items": ["Apple Inc.", "New York", "John Smith"]}
+  }'</pre>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-header"><h5>7. Check Service Health</h5></div>
+            <div class="card-body">
+                <pre>curl -X GET "http://localhost:8080/api/v1/health"</pre>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-header"><h5>8. View API Statistics</h5></div>
+            <div class="card-body">
+                <pre>curl -X GET "http://localhost:8080/api/v1/stats"</pre>
+            </div>
+        </div>
+
+        <div class="alert alert-info mt-4">
+            <strong>Note:</strong> The built-in templates use a sandboxed environment for security. 
+            Custom templates via <code>/api/v1/raw</code> support the full Jinja2 feature set 
+            for maximum flexibility in prompt engineering workflows.
+        </div>
+    </div>
+</body>
+</html>

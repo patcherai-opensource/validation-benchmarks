@@ -4,27 +4,212 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
-    <title>Directory Listing</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css">
+    <title>PromptForge - NLP Prompt Generation API</title>
     <style>
         body {
-            margin: 20px;
+            background-color: #f8f9fa;
         }
-        .file-list {
+        .hero {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 60px 0;
+            margin-bottom: 40px;
+        }
+        .card {
+            margin-bottom: 20px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .endpoint {
             font-family: monospace;
-            white-space: pre;
+            background: #e9ecef;
+            padding: 2px 6px;
+            border-radius: 3px;
+        }
+        .method {
+            font-weight: bold;
+            padding: 2px 8px;
+            border-radius: 3px;
+            color: white;
+            font-size: 0.85em;
+        }
+        .method-get { background-color: #28a745; }
+        .method-post { background-color: #007bff; }
+        pre {
+            background: #2d2d2d;
+            color: #f8f8f2;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+        }
+        code {
+            color: #e83e8c;
+        }
+        .version-badge {
+            background: rgba(255,255,255,0.2);
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 0.9em;
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <h2 class="mt-4">You can call this URL with a username querystring parameter, anything you put there will be shown on the page. </h2>
-        <h2 class="mt-4">Can you think of a way to exploit this?</h2>
-        <h2 class="mt-4"> HINT: This is the directory listing for this app.</h2>
-        <div class="file-list border p-3 mt-3">
-            {% for file in files %}
-                {{ file }}<br>
-            {% endfor %}
+    <div class="hero">
+        <div class="container">
+            <h1><i class="fas fa-robot"></i> PromptForge API</h1>
+            <p class="lead">Enterprise NLP Prompt Generation Service</p>
+            <span class="version-badge">v0.7.2</span>
         </div>
+    </div>
+
+    <div class="container">
+        <div class="row">
+            <div class="col-md-8">
+                <div class="card">
+                    <div class="card-header">
+                        <h5 class="mb-0">Getting Started</h5>
+                    </div>
+                    <div class="card-body">
+                        <p>PromptForge provides a powerful API for generating NLP prompts using customizable templates. 
+                        Use our built-in templates or create your own for maximum flexibility.</p>
+                        
+                        <h6>Quick Start</h6>
+                        <pre>curl -X GET "http://localhost:8080/api/v1/templates"</pre>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-header">
+                        <h5 class="mb-0">API Endpoints</h5>
+                    </div>
+                    <div class="card-body">
+                        <table class="table table-sm">
+                            <thead>
+                                <tr>
+                                    <th>Method</th>
+                                    <th>Endpoint</th>
+                                    <th>Description</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><span class="method method-get">GET</span></td>
+                                    <td><code>/api/v1/templates</code></td>
+                                    <td>List all available templates</td>
+                                </tr>
+                                <tr>
+                                    <td><span class="method method-get">GET</span></td>
+                                    <td><code>/api/v1/templates/{id}</code></td>
+                                    <td>Get template details</td>
+                                </tr>
+                                <tr>
+                                    <td><span class="method method-post">POST</span></td>
+                                    <td><code>/api/v1/generate</code></td>
+                                    <td>Generate prompt from built-in template</td>
+                                </tr>
+                                <tr>
+                                    <td><span class="method method-post">POST</span></td>
+                                    <td><code>/api/v1/raw</code></td>
+                                    <td>Generate prompt from custom template</td>
+                                </tr>
+                                <tr>
+                                    <td><span class="method method-get">GET</span></td>
+                                    <td><code>/api/v1/stats</code></td>
+                                    <td>API usage statistics</td>
+                                </tr>
+                                <tr>
+                                    <td><span class="method method-get">GET</span></td>
+                                    <td><code>/api/v1/models</code></td>
+                                    <td>List supported LLM backends</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-header">
+                        <h5 class="mb-0">Example: Using Built-in Templates</h5>
+                    </div>
+                    <div class="card-body">
+                        <pre>curl -X POST "http://localhost:8080/api/v1/generate?template_id=sentiment&variables=%7B%22text%22%3A%22I%20love%20this%20product%22%7D"</pre>
+                        <p class="text-muted mt-2">Response:</p>
+                        <pre>{
+  "status": "success",
+  "prompt": "Analyze the sentiment of the following text: I love this product",
+  "template_used": "sentiment"
+}</pre>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-header">
+                        <h5 class="mb-0">Example: Custom Templates</h5>
+                    </div>
+                    <div class="card-body">
+                        <p>For advanced users, the <code>/api/v1/raw</code> endpoint accepts custom Jinja2 templates:</p>
+                        <pre>curl -X POST "http://localhost:8080/api/v1/raw" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "template": "Hello {{ name }}, welcome to {{ service }}!",
+    "variables": {"name": "Alice", "service": "PromptForge"}
+  }'</pre>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-4">
+                <div class="card">
+                    <div class="card-header bg-primary text-white">
+                        <h6 class="mb-0">Available Templates</h6>
+                    </div>
+                    <ul class="list-group list-group-flush">
+                        <li class="list-group-item">
+                            <strong>sentiment</strong><br>
+                            <small class="text-muted">Analyze text sentiment</small>
+                        </li>
+                        <li class="list-group-item">
+                            <strong>summarize</strong><br>
+                            <small class="text-muted">Summarize long documents</small>
+                        </li>
+                        <li class="list-group-item">
+                            <strong>translate</strong><br>
+                            <small class="text-muted">Translate between languages</small>
+                        </li>
+                        <li class="list-group-item">
+                            <strong>ner</strong><br>
+                            <small class="text-muted">Named entity extraction</small>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="card mt-3">
+                    <div class="card-header bg-info text-white">
+                        <h6 class="mb-0">Status</h6>
+                    </div>
+                    <div class="card-body">
+                        <p class="mb-1"><strong>Service:</strong> <span class="badge badge-success">Online</span></p>
+                        <p class="mb-1"><strong>Version:</strong> 0.7.2</p>
+                        <p class="mb-0"><strong>API Docs:</strong> <a href="/docs">/docs</a></p>
+                    </div>
+                </div>
+
+                <div class="card mt-3">
+                    <div class="card-header">
+                        <h6 class="mb-0">Resources</h6>
+                    </div>
+                    <ul class="list-group list-group-flush">
+                        <li class="list-group-item"><a href="/docs">Interactive API Docs</a></li>
+                        <li class="list-group-item"><a href="/docs/examples">Usage Examples</a></li>
+                        <li class="list-group-item"><a href="/api/v1/health">Health Check</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <footer class="mt-5 mb-4 text-center text-muted">
+            <small>&copy; 2024 PromptForge - NLP Prompt Generation Service</small>
+        </footer>
     </div>
 </body>
 </html>
