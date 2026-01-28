@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>eZ Platform - Help</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-brand">eZ Platform</div>
+        <div class="nav-links">
+            <a href="{{ url_for('dashboard') }}">Dashboard</a>
+            <a href="{{ url_for('content_list') }}">Content</a>
+            <a href="{{ url_for('settings') }}">Settings</a>
+            <a href="{{ url_for('help_page') }}" class="active">Help</a>
+        </div>
+        <div class="nav-user">
+            {% if session.get('username') %}
+            <span>{{ session['username'] }}</span>
+            <a href="{{ url_for('logout') }}" class="btn-logout">Logout</a>
+            {% else %}
+            <a href="{{ url_for('login') }}">Login</a>
+            {% endif %}
+        </div>
+    </nav>
+
+    <div class="help-container">
+        <h2>Help & Documentation</h2>
+        
+        <div class="help-section">
+            <h3>Getting Started</h3>
+            <p>Welcome to eZ Platform RichText CMS. This system allows you to manage and edit content using XML-based RichText fields.</p>
+        </div>
+
+        <div class="help-section">
+            <h3>User Roles</h3>
+            <ul>
+                <li><strong>Administrator:</strong> Full system access</li>
+                <li><strong>Editor:</strong> Can create and edit content</li>
+                <li><strong>Reviewer:</strong> Read-only access to content</li>
+            </ul>
+        </div>
+
+        <div class="help-section">
+            <h3>API Documentation</h3>
+            <p>The REST API provides programmatic access to content management:</p>
+            <table class="api-table">
+                <tr>
+                    <th>Endpoint</th>
+                    <th>Method</th>
+                    <th>Description</th>
+                    <th>Required Role</th>
+                </tr>
+                <tr>
+                    <td>/api/status</td>
+                    <td>GET</td>
+                    <td>System status</td>
+                    <td>None</td>
+                </tr>
+                <tr>
+                    <td>/api/content</td>
+                    <td>GET</td>
+                    <td>List all content</td>
+                    <td>Any authenticated</td>
+                </tr>
+                <tr>
+                    <td>/api/content/{id}</td>
+                    <td>GET</td>
+                    <td>Get content by ID</td>
+                    <td>Any authenticated</td>
+                </tr>
+                <tr>
+                    <td>/api/content/{id}/richtext</td>
+                    <td>POST</td>
+                    <td>Update RichText field</td>
+                    <td>Editor or Admin</td>
+                </tr>
+                <tr>
+                    <td>/api/content/preview</td>
+                    <td>POST</td>
+                    <td>Preview RichText</td>
+                    <td>Editor or Admin</td>
+                </tr>
+            </table>
+        </div>
+
+        <div class="help-section">
+            <h3>RichText XML Format</h3>
+            <p>Content is stored in DocBook-style XML format. Example:</p>
+            <pre>&lt;section xmlns="http://docbook.org/ns/docbook"&gt;
+    &lt;title&gt;Article Title&lt;/title&gt;
+    &lt;para&gt;This is a paragraph.&lt;/para&gt;
+&lt;/section&gt;</pre>
+        </div>
+    </div>
+</body>
+</html>

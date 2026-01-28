@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>eZ Platform - Access Denied</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-brand">eZ Platform</div>
+        <div class="nav-links">
+            <a href="{{ url_for('dashboard') }}">Dashboard</a>
+            <a href="{{ url_for('content_list') }}">Content</a>
+            <a href="{{ url_for('settings') }}">Settings</a>
+            <a href="{{ url_for('help_page') }}">Help</a>
+        </div>
+        <div class="nav-user">
+            <span>{{ session['username'] }} ({{ session.get('role', 'user') }})</span>
+            <a href="{{ url_for('logout') }}" class="btn-logout">Logout</a>
+        </div>
+    </nav>
+
+    <div class="error-container">
+        <h2>Access Denied</h2>
+        <p>You do not have permission to access this resource.</p>
+        <p>This feature requires Editor or Administrator privileges.</p>
+        <a href="{{ url_for('dashboard') }}" class="btn-primary">Return to Dashboard</a>
+    </div>
+</body>
+</html>

@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>eZ Platform - RichText Editor</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-brand">eZ Platform</div>
+        <div class="nav-links">
+            <a href="{{ url_for('dashboard') }}">Dashboard</a>
+            <a href="{{ url_for('content_list') }}">Content</a>
+            <a href="{{ url_for('editor') }}" class="active">Editor</a>
+            <a href="{{ url_for('settings') }}">Settings</a>
+            <a href="{{ url_for('help_page') }}">Help</a>
+        </div>
+        <div class="nav-user">
+            <span>{{ session['username'] }} ({{ session.get('role', 'user') }})</span>
+            <a href="{{ url_for('logout') }}" class="btn-logout">Logout</a>
+        </div>
+    </nav>
+
+    <div class="editor-container">
+        <h2>RichText Editor</h2>
+        
+        <div class="editor-panel">
+            <div class="form-group">
+                <label for="content-select">Select Content to Edit:</label>
+                <select id="content-select">
+                    {% for id, item in content_items.items() %}
+                    <option value="{{ id }}">{{ item.title }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="xml-content">RichText XML Content:</label>
+                <textarea id="xml-content" rows="15" placeholder="Enter XML content...">
+<section xmlns="http://docbook.org/ns/docbook">
+    <para>Enter your rich text content here.</para>
+</section>
+                </textarea>
+            </div>
+
+            <div class="editor-actions">
+                <button onclick="previewContent()" class="btn-secondary">Preview</button>
+                <button onclick="saveContent()" class="btn-primary">Save Changes</button>
+            </div>
+
+            <div id="preview-result" class="preview-panel" style="display: none;">
+                <h3>Preview</h3>
+                <pre id="preview-content"></pre>
+            </div>
+
+            <div id="save-result" class="result-panel" style="display: none;"></div>
+        </div>
+
+        <div class="editor-help">
+            <h3>XML Format Reference</h3>
+            <p>RichText fields accept DocBook-style XML:</p>
+            <pre>&lt;section xmlns="http://docbook.org/ns/docbook"&gt;
+    &lt;para&gt;Paragraph text&lt;/para&gt;
+    &lt;emphasis&gt;Emphasized text&lt;/emphasis&gt;
+&lt;/section&gt;</pre>
+        </div>
+    </div>
+
+    <script>
+        function previewContent() {
+            const xmlContent = document.getElementById('xml-content').value;
+            
+            fetch('/api/content/preview', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/xml'
+                },
+                body: xmlContent
+            })
+            .then(response => response.text())
+            .then(data => {
+                document.getElementById('preview-content').textContent = data;
+                document.getElementById('preview-result').style.display = 'block';
+            })
+            .catch(error => {
+                document.getElementById('preview-content').textContent = 'Error: ' + error;
+                document.getElementById('preview-result').style.display = 'block';
+            });
+        }
+
+        function saveContent() {
+            const contentId = document.getElementById('content-select').value;
+            const xmlContent = document.getElementById('xml-content').value;
+            
+            fetch('/api/content/' + contentId + '/richtext', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/xml'
+                },
+                body: xmlContent
+            })
+            .then(response => response.json())
+            .then(data => {
+                const resultDiv = document.getElementById('save-result');
+                if (data.success) {
+                    resultDiv.innerHTML = '<div class="success">Content saved successfully!</div>';
+                } else {
+                    resultDiv.innerHTML = '<div class="error">Error: ' + (data.error || 'Unknown error') + '</div>';
+                }
+                resultDiv.style.display = 'block';
+            })
+            .catch(error => {
+                const resultDiv = document.getElementById('save-result');
+                resultDiv.innerHTML = '<div class="error">Error: ' + error + '</div>';
+                resultDiv.style.display = 'block';
+            });
+        }
+    </script>
+</body>
+</html>

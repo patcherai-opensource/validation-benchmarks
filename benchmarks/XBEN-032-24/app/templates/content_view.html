@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>eZ Platform - {{ item.title }}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-brand">eZ Platform</div>
+        <div class="nav-links">
+            <a href="{{ url_for('dashboard') }}">Dashboard</a>
+            <a href="{{ url_for('content_list') }}">Content</a>
+            {% if session.get('role') in ['editor', 'administrator'] %}
+            <a href="{{ url_for('editor') }}">Editor</a>
+            {% endif %}
+            <a href="{{ url_for('settings') }}">Settings</a>
+            <a href="{{ url_for('help_page') }}">Help</a>
+        </div>
+        <div class="nav-user">
+            <span>{{ session['username'] }} ({{ session.get('role', 'user') }})</span>
+            <a href="{{ url_for('logout') }}" class="btn-logout">Logout</a>
+        </div>
+    </nav>
+
+    <div class="content-container">
+        <div class="breadcrumb">
+            <a href="{{ url_for('content_list') }}">Content</a> &gt; {{ item.title }}
+        </div>
+        
+        <article class="content-article">
+            <header>
+                <h1>{{ item.title }}</h1>
+                <div class="article-meta">
+                    <span class="status-{{ item.status }}">{{ item.status }}</span>
+                    <span>Author: {{ item.author }}</span>
+                    <span>Created: {{ item.created }}</span>
+                </div>
+            </header>
+            
+            <div class="richtext-content">
+                {{ item.content | safe }}
+            </div>
+        </article>
+
+        <div class="content-actions">
+            <a href="{{ url_for('content_list') }}" class="btn-secondary">Back to List</a>
+            {% if session.get('role') in ['editor', 'administrator'] %}
+            <a href="{{ url_for('editor') }}?id={{ item.id }}" class="btn-primary">Edit Content</a>
+            {% endif %}
+        </div>
+    </div>
+</body>
+</html>

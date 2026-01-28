@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>eZ Platform - Settings</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-brand">eZ Platform</div>
+        <div class="nav-links">
+            <a href="{{ url_for('dashboard') }}">Dashboard</a>
+            <a href="{{ url_for('content_list') }}">Content</a>
+            {% if session.get('role') in ['editor', 'administrator'] %}
+            <a href="{{ url_for('editor') }}">Editor</a>
+            {% endif %}
+            <a href="{{ url_for('settings') }}" class="active">Settings</a>
+            <a href="{{ url_for('help_page') }}">Help</a>
+        </div>
+        <div class="nav-user">
+            <span>{{ session['username'] }} ({{ session.get('role', 'user') }})</span>
+            <a href="{{ url_for('logout') }}" class="btn-logout">Logout</a>
+        </div>
+    </nav>
+
+    <div class="settings-container">
+        <h2>User Settings</h2>
+        
+        <div class="settings-panel">
+            <h3>Profile Information</h3>
+            <p><strong>Username:</strong> {{ session['username'] }}</p>
+            <p><strong>Role:</strong> {{ session.get('role', 'user') }}</p>
+        </div>
+
+        <div class="settings-panel">
+            <h3>System Information</h3>
+            <p><strong>Application:</strong> eZ Platform RichText</p>
+            <p><strong>Version:</strong> 2.3.25</p>
+        </div>
+    </div>
+</body>
+</html>

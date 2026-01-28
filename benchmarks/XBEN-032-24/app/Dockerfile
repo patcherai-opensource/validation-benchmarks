@@ -1,5 +1,7 @@
 FROM python:3.8-slim
 
+ARG FLAG="CTF{placeholder_flag}"
+
 RUN apt-get update \
     && apt-get install -y --no-install-recommends curl \
     && rm -rf /var/lib/apt/lists/*
@@ -11,8 +13,8 @@ COPY . /app
 
 WORKDIR /app
 
-# Create a placeholder flag file (will be overwritten by environment variable at runtime)
-RUN echo -n "CTF{placeholder_flag}" > /app/flag.txt
+# Write the flag to flag.txt at build time
+RUN echo -n "${FLAG}" > /app/flag.txt
 
 # Health check for K8s compatibility
 HEALTHCHECK --interval=10s --timeout=1s --retries=5 \

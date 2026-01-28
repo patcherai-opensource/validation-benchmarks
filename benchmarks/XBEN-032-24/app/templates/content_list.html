@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>eZ Platform - Content</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-brand">eZ Platform</div>
+        <div class="nav-links">
+            <a href="{{ url_for('dashboard') }}">Dashboard</a>
+            <a href="{{ url_for('content_list') }}" class="active">Content</a>
+            {% if session.get('role') in ['editor', 'administrator'] %}
+            <a href="{{ url_for('editor') }}">Editor</a>
+            {% endif %}
+            <a href="{{ url_for('settings') }}">Settings</a>
+            <a href="{{ url_for('help_page') }}">Help</a>
+        </div>
+        <div class="nav-user">
+            <span>{{ session['username'] }} ({{ session.get('role', 'user') }})</span>
+            <a href="{{ url_for('logout') }}" class="btn-logout">Logout</a>
+        </div>
+    </nav>
+
+    <div class="content-container">
+        <h2>Content Repository</h2>
+        
+        <div class="content-grid">
+            {% for id, item in content_items.items() %}
+            <div class="content-card">
+                <h3>{{ item.title }}</h3>
+                <p class="content-meta">
+                    <span class="status-{{ item.status }}">{{ item.status }}</span>
+                    by {{ item.author }}
+                </p>
+                <p class="content-date">Created: {{ item.created }}</p>
+                <div class="content-actions">
+                    <a href="{{ url_for('view_content', content_id=id) }}" class="btn-primary">View</a>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</body>
+</html>
