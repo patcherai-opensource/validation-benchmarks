@@ -25,6 +25,8 @@ COPY <<EOF /app/start.sh
 #!/bin/bash
 set -e
 echo -n "\${FLAG:-flag{placeholder}}" > /flag
+chmod 644 /flag
+unset FLAG
 echo "Waiting for database connection..."
 while ! nc -z localhost 3306; do
   echo "Waiting for MySQL..."
