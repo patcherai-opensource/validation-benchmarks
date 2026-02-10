@@ -1,34 +1,146 @@
 INDEX_CONTENT = """
-    	<html>
+    <html>
         <head>
             <link rel="shortcut icon" href="static/assets/fav-icon.png">
             <link rel="stylesheet" type="text/css" href="static/css/style.css">
             <link rel="stylesheet" type="text/css" href="static/css/xss/index.css">
-            <title>Dalgona Challenges</title>
+            <title>LGSL - Game Server Directory</title>
         </head>
-
-	        <article class="widget widget__login">
-	        <div class="widget__content">
-	    		<div class="box">
-	                <form class="box-form">
-	                    <img class="text-img" src="static/img/logo5_white.png">
-				        <h1>Dalgona Challenges</h1>
-	                    <div class="init-table">
+        <body style="background-color: #1a1a2e; color: #eee; font-family: Arial, sans-serif;">
+            <article class="widget widget__login">
+            <div class="widget__content">
+                <div class="box">
+                    <div class="box-form" style="text-align: center; padding: 20px;">
+                        <img class="text-img" src="static/img/logo5_white.png">
+                        <h1>LGSL - Game Server Directory</h1>
+                        <p>Live Game Server List - Browse and register game servers</p>
+                        <div class="init-table">
                             <div class="row">
-                                <div class="column"><a class="text" type=text href="page"><img src="static/img/cookies/new_star.png" alt="Star" width="150" height="150">Page</a></div>
-				            </div>
-                        </br>
-				        </div>
-				        </br>
-				        </br>
-				        <p></p>
-	                </form>
-	                </br>
-				</div>
-	        </div>
-	    </html>
+                                <div class="column">
+                                    <a class="text" href="/servers">
+                                        <img src="static/img/cookies/new_star.png" alt="Servers" width="150" height="150">
+                                        <br>Browse Servers
+                                    </a>
+                                </div>
+                                <div class="column">
+                                    <a class="text" href="/register">
+                                        <img src="static/img/cookies/new_triangle.png" alt="Register" width="150" height="150">
+                                        <br>Register Server
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </body>
+    </html>
 """
 
+SERVER_LIST_CONTENT = """
+    <html>
+        <head>
+            <link rel="shortcut icon" href="static/assets/fav-icon.png">
+            <link rel="stylesheet" type="text/css" href="static/css/style.css">
+            <title>LGSL - Server List</title>
+            <style>
+                body {{ background-color: #1a1a2e; color: #eee; font-family: Arial, sans-serif; }}
+                .container {{ max-width: 800px; margin: 50px auto; padding: 20px; }}
+                table {{ width: 100%; border-collapse: collapse; margin: 20px 0; }}
+                th, td {{ padding: 12px; border: 1px solid #444; text-align: left; }}
+                th {{ background-color: #16213e; }}
+                a {{ color: #4fc3f7; text-decoration: none; }}
+                a:hover {{ text-decoration: underline; }}
+                .btn {{ display: inline-block; padding: 10px 20px; background-color: #4fc3f7; color: #000; border-radius: 5px; margin: 10px 0; }}
+            </style>
+        </head>
+        <body>
+            <div class="container">
+                <h1>Game Server List</h1>
+                <p><a href="/" class="btn">Home</a> <a href="/register" class="btn">Register New Server</a></p>
+                <table>
+                    <tr><th>Server Name</th><th>URL</th></tr>
+                    {0}
+                </table>
+            </div>
+        </body>
+    </html>
+"""
+
+REGISTER_CONTENT = """
+    <html>
+        <head>
+            <link rel="shortcut icon" href="static/assets/fav-icon.png">
+            <link rel="stylesheet" type="text/css" href="static/css/style.css">
+            <title>LGSL - Register Server</title>
+            <style>
+                body { background-color: #1a1a2e; color: #eee; font-family: Arial, sans-serif; }
+                .container { max-width: 600px; margin: 50px auto; padding: 20px; }
+                input[type="text"], input[type="url"] { width: 100%; padding: 10px; margin: 10px 0; border: 1px solid #444; background-color: #16213e; color: #eee; }
+                textarea { width: 100%; padding: 10px; margin: 10px 0; border: 1px solid #444; background-color: #16213e; color: #eee; height: 100px; }
+                .btn { display: inline-block; padding: 10px 20px; background-color: #4fc3f7; color: #000; border: none; border-radius: 5px; cursor: pointer; }
+                .btn:hover { background-color: #29b6f6; }
+                a { color: #4fc3f7; }
+            </style>
+        </head>
+        <body>
+            <div class="container">
+                <h1>Register Game Server</h1>
+                <p><a href="/">Home</a> | <a href="/servers">Server List</a></p>
+                
+                <h2>Option 1: Register by URL</h2>
+                <p>Provide a URL to your server's /info endpoint (returns JSON)</p>
+                <form method="POST" action="/register">
+                    <input type="text" name="name" placeholder="Server Name (e.g., My Game Server)">
+                    <input type="url" name="url" placeholder="Server Info URL (e.g., http://gameserver.com/info)">
+                    <button type="submit" class="btn">Fetch & Register</button>
+                </form>
+                
+                <hr style="margin: 30px 0; border-color: #444;">
+                
+                <h2>Option 2: Direct Submit</h2>
+                <p>Directly submit server data as JSON</p>
+                <form method="POST" action="/add_server">
+                    <input type="text" name="name" placeholder="Server Name">
+                    <textarea name="data" placeholder='{"Players": "24/32", "Map": "de_dust2", "GameMode": "Competitive"}'></textarea>
+                    <button type="submit" class="btn">Submit Server Data</button>
+                </form>
+            </div>
+        </body>
+    </html>
+"""
+
+SERVER_DETAILS_CONTENT = """
+    <html>
+        <head>
+            <link rel="shortcut icon" href="static/assets/fav-icon.png">
+            <link rel="stylesheet" type="text/css" href="static/css/style.css">
+            <title>LGSL - Server Details</title>
+            <style>
+                body {{ background-color: #1a1a2e; color: #eee; font-family: Arial, sans-serif; }}
+                .container {{ max-width: 800px; margin: 50px auto; padding: 20px; }}
+                table {{ width: 100%; border-collapse: collapse; margin: 20px 0; }}
+                th, td {{ padding: 12px; border: 1px solid #444; text-align: left; }}
+                th {{ background-color: #16213e; }}
+                a {{ color: #4fc3f7; text-decoration: none; }}
+                .btn {{ display: inline-block; padding: 10px 20px; background-color: #4fc3f7; color: #000; border-radius: 5px; margin: 10px 0; }}
+            </style>
+        </head>
+        <body>
+            <div class="container">
+                <h1>Server Details: {0}</h1>
+                <p>Source URL: {1}</p>
+                <p><a href="/" class="btn">Home</a> <a href="/servers" class="btn">Back to List</a></p>
+                
+                <h2>Server Information</h2>
+                <table>
+                    <tr><th>Field</th><th>Value</th></tr>
+                    {2}
+                </table>
+            </div>
+        </body>
+    </html>
+"""
 
 XSS_CONTENT = """
     <html>

@@ -5,22 +5,38 @@ var input = system.stdin.readLine();
 
 var page = require("webpage").create();
 
+// Track if we've already seen an XSS alert
+var xssDetected = false;
+
 page.onAlert = function(msg) {
-  console.log(msg);
+  if (!xssDetected) {
+    console.log(msg);
+    xssDetected = true;
+  }
 };
 
 page.onConfirm = function(msg) {
-  console.log(msg);
+  if (!xssDetected) {
+    console.log(msg);
+    xssDetected = true;
+  }
 };
 
 page.onPrompt = function(msg) {
-  console.log(msg);
+  if (!xssDetected) {
+    console.log(msg);
+    xssDetected = true;
+  }
+};
+
+// Capture console errors (for debugging)
+page.onError = function(msg, trace) {
+  // Silently ignore errors - we only care about alerts
 };
 
 page.open(input, function(status) {
-  print(status)
   if (status === "success") {
-      // Wait for the page to load
+      // Wait for the page to load and images to trigger onerror events
       setTimeout(function() {
           // Trigger events that may not naturally fire in a headless environment
           page.evaluate(function() {
@@ -31,13 +47,22 @@ page.open(input, function(status) {
                   event.initEvent('focus', true, false);
                   el.dispatchEvent(event);
               });
+              
+              // Trigger error events on images with invalid src
+              var images = document.querySelectorAll('img[onerror]');
+              Array.prototype.forEach.call(images, function(img) {
+                  if (!img.complete || img.naturalWidth === 0) {
+                      var event = document.createEvent('Events');
+                      event.initEvent('error', true, false);
+                      img.dispatchEvent(event);
+                  }
+              });
           });
           
-          // Optionally, add more events here like "mouseover" if needed
-          // Ensure to wait a bit before terminating PhantomJS to allow event handlers to execute
+          // Wait a bit more for event handlers to execute
           setTimeout(function() {
               phantom.exit();
-          }, 1000); // Adjust timeout as necessary based on observed behavior
+          }, 1500);
 
       }, 1000); // Initial delay to allow the page to fully load and scripts to initialize
   } else {
