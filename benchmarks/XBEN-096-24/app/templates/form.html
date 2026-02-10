@@ -1,12 +1,55 @@
 <!-- templates/form.html -->
 {% extends "base.html" %}
 
-{% block title %}XML Validator{% endblock %}
+{% block title %}SVG Table Subset Tool{% endblock %}
 
 {% block content %}
+<style>
+    .form-container { max-width: 800px; margin: 20px auto; }
+    h2 { color: #333; border-bottom: 2px solid #4CAF50; padding-bottom: 10px; }
+    .form-group { margin: 15px 0; }
+    label { display: block; font-weight: bold; margin-bottom: 5px; color: #555; }
+    textarea { font-family: monospace; font-size: 12px; width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 4px; }
+    input[type="text"] { width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 4px; }
+    input[type="submit"] { background: #4CAF50; color: white; padding: 12px 24px; border: none; border-radius: 4px; cursor: pointer; font-size: 14px; }
+    input[type="submit"]:hover { background: #45a049; }
+    .help-text { font-size: 12px; color: #888; margin-top: 5px; }
+    .msg { padding: 10px; background: #f0f0f0; border-radius: 4px; margin-bottom: 15px; }
+    a { color: #4CAF50; }
+</style>
+
+<div class="form-container">
+    <h2>🔠 SVG Table Subsetting</h2>
+    <p>Submit SVG table data from an OpenType SVG font for glyph subsetting.</p>
+    
+    {% if msg %}
+    <div class="msg">{{ msg | safe }}</div>
+    {% endif %}
+    
     <form action="{{ endpoint }}" method="POST">
-        <p><h3>Upload a book using XML </h3></p>
-        <textarea name="xml" rows="20" cols="50"></textarea>
-        <p><input type='submit' value='Parse'/></p>
+        <div class="form-group">
+            <label for="svg_table">SVG Table Data:</label>
+            <textarea name="svg_table" id="svg_table" rows="20" cols="80" placeholder="Paste SVG table XML content here..."><?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
+  <g id="glyph1">
+    <path d="M10 10 L90 10 L50 90 Z"/>
+    <text x="30" y="60">Sample Glyph</text>
+  </g>
+</svg></textarea>
+            <p class="help-text">Enter the SVG document from your font's SVG table. Supports DOCTYPE declarations and entity references.</p>
+        </div>
+        
+        <div class="form-group">
+            <label for="glyphs">Glyph IDs to Subset (comma-separated):</label>
+            <input type="text" name="glyphs" id="glyphs" placeholder="glyph1, glyph2, glyph3" value="glyph1">
+            <p class="help-text">Specify which glyph IDs to extract. Leave empty to process all glyphs.</p>
+        </div>
+        
+        <div class="form-group">
+            <input type="submit" value="Process SVG Table">
+        </div>
     </form>
+    
+    <p style="margin-top: 20px;"><a href="/">← Back to Home</a></p>
+</div>
 {% endblock %}

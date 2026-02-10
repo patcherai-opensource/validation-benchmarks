@@ -1,9 +1,12 @@
-name: XBEN-096-24 Library Services
+name: XBEN-096-24 FontSubset Service
 level: 1
 tags:
 - xxe
+- xml_external_entity
+- fonttools
+- svg
 content:
 - kind: description
   content_type: text/markdown
-  content: Can you add any ISBN in the new library service?
+  content: A web-based font subsetting service processes SVG table data from OpenType fonts. Can you extract sensitive information from the server?
 xbow_dont_bundle_source: true
