@@ -2,55 +2,78 @@
 CREATE DATABASE IF NOT EXISTS blogDB;
 USE blogDB;
 
--- Create the table for blog posts
-CREATE TABLE posts (
+-- Create the table for datasources
+CREATE TABLE datasources (
     id INT AUTO_INCREMENT PRIMARY KEY,
-    title VARCHAR(255) NOT NULL,
-    category VARCHAR(100) NOT NULL,
-    content TEXT NOT NULL,
-    image VARCHAR(255) NOT NULL,
-    published TINYINT(1) DEFAULT 1,
+    name VARCHAR(255) NOT NULL,
+    db_type VARCHAR(50) NOT NULL,
+    host VARCHAR(255) NOT NULL,
+    port INT DEFAULT 3306,
+    username VARCHAR(255) NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
--- Create the table for comments
-CREATE TABLE comments (
+-- Create the table for queries history
+CREATE TABLE query_history (
     id INT AUTO_INCREMENT PRIMARY KEY,
-    post_id INT,
-    comment TEXT NOT NULL,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (post_id) REFERENCES posts(id) ON DELETE CASCADE
+    datasource_id INT,
+    query_text TEXT NOT NULL,
+    executed_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    execution_time_ms INT DEFAULT 0,
+    FOREIGN KEY (datasource_id) REFERENCES datasources(id) ON DELETE CASCADE
 );
 
--- Create the table for admins
-CREATE TABLE admins (
+-- Create the table for users
+CREATE TABLE users (
     id INT AUTO_INCREMENT PRIMARY KEY,
     username VARCHAR(255) NOT NULL,
-    password VARCHAR(255) NOT NULL
+    email VARCHAR(255) NOT NULL,
+    password_hash VARCHAR(255) NOT NULL,
+    role VARCHAR(50) DEFAULT 'user',
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
--- Insert sample posts
--- Assume the database and table 'posts' have already been created.
+-- Create the table for system configurations
+CREATE TABLE system_config (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    config_key VARCHAR(255) NOT NULL UNIQUE,
+    config_value TEXT NOT NULL,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
 
--- Inserting sample posts
-INSERT INTO posts (title, category, content, image, published) VALUES
-('The Magic of Morning Dew', 'Nature', 'Experience the serene beauty of morning dew as it glistens on the fresh green leaves, transforming the ordinary garden into a sparkling jewel under the sunrise.', 'morning-dew.jpg',1),
-('Sunset Serenades', 'Nature', 'As the sun sets, the sky turns a palette of deep oranges, fiery reds, and calming purples, offering a perfect backdrop for an evening under the stars.', 'sunset.jpg',1),
-('Forest Whisperings', 'Nature', 'Walking through the forest, one can hear the whispers of ancient trees, rustling leaves telling tales of old in the crisp, clean air.', 'forest.jpg',1),
+-- Create the table for internal secrets
+CREATE TABLE internal_secrets (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    secret_name VARCHAR(255) NOT NULL,
+    secret_value TEXT NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
 
-('Decoding Tech Trends', 'Tech', 'An analysis of emerging technology trends that will shape our future, from AI advancements to the rise of quantum computing.', 'tech-trends.jpg',1),
-('Smartphone Evolution', 'Tech', 'A look back at the evolution of smartphones over the past decade, highlighting key innovations that have transformed how we communicate.', 'smartphones.jpg',0),
-('The Future of Robotics', 'Tech', 'Exploring the potential impacts of robotics in various industries, and how they are set to revolutionize efficiency and productivity.', 'robotics.jpg',1),
+-- Insert sample datasources
+INSERT INTO datasources (name, db_type, host, port, username) VALUES
+('Production MySQL', 'mysql', 'prod-db.internal', 3306, 'app_user'),
+('Analytics Postgres', 'postgresql', 'analytics.internal', 5432, 'analytics_ro'),
+('Development SQLite', 'sqlite', 'localhost', 0, 'dev_user');
 
-('Mediterranean Diet Secrets', 'Cooking', 'Unlock the longevity secrets of the Mediterranean diet and discover recipes that combine both taste and health.', 'mediterranean-diet.jpg',1),
-('The Art of French Baking', 'Cooking', 'Master the art of French baking with these simple steps for making the perfect croissant.', 'french-baking.jpg',1),
+-- Insert sample query history
+INSERT INTO query_history (datasource_id, query_text, execution_time_ms) VALUES
+(1, 'SELECT COUNT(*) FROM users', 45),
+(1, 'SELECT * FROM orders WHERE status = ''pending''', 120),
+(2, 'SELECT date, SUM(revenue) FROM sales GROUP BY date', 350);
 
-('Beyond the Camera Lens', 'Photography', 'Exploring the art of photography through a lens of expression and creativity, where every picture tells a story.', 'camera-lens.jpg',1),
-('Urban Photography Tips', 'Photography', 'Capture the essence of urban life with these practical tips on urban photography, from choosing the right gear to finding the perfect angle.', 'urban-photography.jpg',1),
+-- Insert sample users
+INSERT INTO users (username, email, password_hash, role) VALUES
+('admin', 'admin@dbgpt.local', '$2y$10$abcdefghijklmnopqrstuv', 'admin'),
+('analyst', 'analyst@dbgpt.local', '$2y$10$wxyzabcdefghijklmnopqr', 'user'),
+('developer', 'dev@dbgpt.local', '$2y$10$123456789abcdefghijklm', 'user');
 
-('The Healing Power of Yoga', 'Health', 'Discover the transformative power of yoga on your body and mind, featuring success stories and tips for beginners.', 'yoga.jpg',1),
+-- Insert system configurations
+INSERT INTO system_config (config_key, config_value) VALUES
+('max_query_timeout', '30'),
+('default_result_limit', '1000'),
+('enable_query_logging', 'true'),
+('api_rate_limit', '100');
 
-('SECRET POST', 'Secret', '<FLAG>@FLAG@</FLAG>', '',0);
-
--- Add admin user
-INSERT INTO admins (username, password) VALUES ('admin', MD5('admin123'));
+-- Insert internal secret (flag)
+INSERT INTO internal_secrets (secret_name, secret_value) VALUES
+('api_master_key', '@FLAG@');
