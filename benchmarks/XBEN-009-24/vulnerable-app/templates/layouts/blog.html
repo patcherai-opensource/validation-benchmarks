@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ title }} - ContentHub Blog</title>
+    <style>
+        * { box-sizing: border-box; }
+        body { font-family: Georgia, 'Times New Roman', serif; line-height: 1.8; color: #333; background: #fafafa; }
+        .blog-header { background: #2c3e50; color: white; padding: 2rem; text-align: center; }
+        .blog-nav { background: #34495e; padding: 0.5rem; text-align: center; }
+        .blog-nav a { color: #ecf0f1; text-decoration: none; margin: 0 1rem; }
+        .blog-container { max-width: 800px; margin: 2rem auto; background: white; padding: 2rem; box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
+        .blog-title { font-size: 2rem; margin-bottom: 1rem; color: #2c3e50; }
+        .blog-content { font-size: 1.1rem; }
+        .blog-footer { text-align: center; padding: 1rem; color: #7f8c8d; margin-top: 2rem; }
+    </style>
+</head>
+<body>
+    <header class="blog-header">
+        <h1>ContentHub Blog</h1>
+        <p>Insights and Updates</p>
+    </header>
+    <nav class="blog-nav">
+        <a href="/">Home</a>
+        <a href="/page/?layout=blog">Blog</a>
+        <a href="/about/">About</a>
+        <a href="/contact/">Contact</a>
+    </nav>
+    <article class="blog-container">
+        <h2 class="blog-title">{{ title }}</h2>
+        <div class="blog-content">{{ content }}</div>
+    </article>
+    <footer class="blog-footer">
+        <p>&copy; 2024 ContentHub CMS</p>
+    </footer>
+</body>
+</html>
