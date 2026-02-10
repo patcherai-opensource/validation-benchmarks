@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+
+{% block title %}Font Subsetting - FontForge Pro{% endblock %}
+
+{% block content %}
+<h1>Font Subsetting</h1>
+<p class="subtitle">Upload a font file and specify which glyphs to keep</p>
+
+{% if error %}
+<div class="error">{{ error }}</div>
+{% endif %}
+
+<div class="card">
+    <form action="/subset" method="POST" enctype="multipart/form-data">
+        <div class="form-group">
+            <label for="font">Font File</label>
+            <input type="file" id="font" name="font" accept=".ttf,.otf,.woff,.woff2" required>
+            <small style="color: #666;">Supported formats: TTF, OTF, WOFF, WOFF2</small>
+        </div>
+        
+        <div class="form-group">
+            <label for="glyphs">Glyph IDs to Keep</label>
+            <input type="text" id="glyphs" name="glyphs" placeholder="e.g., 0-100 or 1,2,3,10-20" required>
+            <small style="color: #666;">Specify glyph IDs as ranges (0-100) or comma-separated values</small>
+        </div>
+        
+        <button type="submit" class="btn">Process Font</button>
+    </form>
+</div>
+
+<div class="info-section">
+    <h3>How it works</h3>
+    <ol style="margin-left: 20px;">
+        <li>Upload your font file (TTF, OTF, WOFF, or WOFF2)</li>
+        <li>Specify which glyph IDs you want to keep</li>
+        <li>The service will process the font and extract only the specified glyphs</li>
+        <li>For SVG fonts, the SVG table will be processed to keep only matching glyph elements</li>
+    </ol>
+</div>
+{% endblock %}

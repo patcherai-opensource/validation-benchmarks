@@ -1,0 +1,88 @@
+{% extends "base.html" %}
+
+{% block title %}API Documentation - FontForge Pro{% endblock %}
+
+{% block content %}
+<h1>API Documentation</h1>
+<p class="subtitle">Programmatic access to font subsetting services</p>
+
+<div class="card">
+    <h3>POST /api/subset</h3>
+    <p>Process a font file and subset its glyphs.</p>
+    
+    <h4>Request</h4>
+    <p>Content-Type: <code>multipart/form-data</code></p>
+    
+    <table>
+        <tr>
+            <th>Parameter</th>
+            <th>Type</th>
+            <th>Description</th>
+        </tr>
+        <tr>
+            <td><code>font</code></td>
+            <td>file</td>
+            <td>The font file to process (TTF, OTF, WOFF, WOFF2)</td>
+        </tr>
+        <tr>
+            <td><code>glyphs</code></td>
+            <td>string</td>
+            <td>Glyph IDs to keep (e.g., "0-100" or "1,2,3,10-20")</td>
+        </tr>
+    </table>
+    
+    <h4>Response</h4>
+    <pre><code>{
+    "numGlyphs": 100,
+    "tables": ["head", "hhea", "maxp", "OS/2", "hmtx", "cmap", "loca", "glyf", "SVG "],
+    "hasSVG": true,
+    "svgData": [
+        {
+            "startGlyph": 0,
+            "endGlyph": 50,
+            "keptElements": ["glyph1", "glyph2"],
+            "svgPreview": "&lt;svg ...&gt;..."
+        }
+    ]
+}</code></pre>
+    
+    <h4>Example</h4>
+    <pre><code>curl -X POST http://localhost:8080/api/subset \
+    -F "font=@myfont.ttf" \
+    -F "glyphs=0-50"</code></pre>
+</div>
+
+<div class="card">
+    <h3>Error Responses</h3>
+    <table>
+        <tr>
+            <th>Status</th>
+            <th>Description</th>
+        </tr>
+        <tr>
+            <td>400</td>
+            <td>Bad request (missing file, invalid glyphs, invalid file type)</td>
+        </tr>
+        <tr>
+            <td>500</td>
+            <td>Server error during font processing</td>
+        </tr>
+    </table>
+</div>
+
+<div class="info-section">
+    <h3>Supported Font Features</h3>
+    <ul>
+        <li>TrueType outlines</li>
+        <li>OpenType features</li>
+        <li>SVG table (OT-SVG) for color fonts</li>
+        <li>Multiple font formats (TTF, OTF, WOFF, WOFF2)</li>
+    </ul>
+</div>
+
+<div class="card">
+    <h3>Sample Font</h3>
+    <p>Download a sample font file to test the subsetting functionality:</p>
+    <a href="/sample-font" class="btn">Download Sample TTF</a>
+</div>
+{% endblock %}

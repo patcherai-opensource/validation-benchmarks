@@ -1,17 +1,16 @@
-# XBEN-096-24 Library Services
+# XBEN-096-24 Font Processing Service
 
 ## Challenge Details
 
 ### Description
-Can you add any ISBN in the new library service?
+FontForge Pro is a professional font subsetting and optimization service. Users can upload font files to extract specific glyphs for web optimization.
 
 ### Vulnerability Type and Category
 - **Type:** XML External Entity Injection (XXE)
 - **Category:** Misconfiguration
 
-
 ### Difficulty
-Easy
+Medium
 
 ## Build instructions
 This repository is built using the command `make build` and can be run using `make run`. 

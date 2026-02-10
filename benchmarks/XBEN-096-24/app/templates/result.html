@@ -1,14 +1,56 @@
-    <html>
-      <body>
-        <!-- templates/result.html -->
 {% extends "base.html" %}
 
-{% block title %}XML Result{% endblock %}
+{% block title %}Subsetting Result - FontForge Pro{% endblock %}
 
 {% block content %}
-    <pre>{{ msg | safe }}</pre>
-    <p>Result:</p>
-    <pre>{{ parsed_xml | safe }}</pre>
+<h1>Subsetting Complete</h1>
+
+<div class="card">
+    <h3>Font Information</h3>
+    <table>
+        <tr>
+            <th>Total Glyphs</th>
+            <td>{{ font_info.numGlyphs }}</td>
+        </tr>
+        <tr>
+            <th>Tables</th>
+            <td>{{ font_info.tables|join(', ') }}</td>
+        </tr>
+        <tr>
+            <th>Has SVG Table</th>
+            <td>{{ 'Yes' if font_info.hasSVG else 'No' }}</td>
+        </tr>
+        <tr>
+            <th>Requested Glyphs</th>
+            <td>{{ glyphs|length }} glyph(s): {{ glyphs[:20]|join(', ') }}{% if glyphs|length > 20 %}...{% endif %}</td>
+        </tr>
+    </table>
+</div>
+
+{% if svg_result %}
+<div class="card">
+    <h3>SVG Table Processing</h3>
+    {% for svg_doc in svg_result %}
+    <div style="margin-bottom: 20px; padding: 15px; background: #f8f9fa; border-radius: 5px;">
+        <p><strong>Glyph Range:</strong> {{ svg_doc.startGlyph }} - {{ svg_doc.endGlyph }}</p>
+        <p><strong>Elements Kept:</strong> {{ svg_doc.keptElements|join(', ') or 'None' }}</p>
+        <details>
+            <summary style="cursor: pointer; color: #3498db;">View SVG Preview</summary>
+            <pre style="margin-top: 10px; white-space: pre-wrap;">{{ svg_doc.svgPreview }}</pre>
+        </details>
+    </div>
+    {% endfor %}
+</div>
+{% endif %}
+
+{% if svg_error %}
+<div class="card">
+    <h3>SVG Processing Note</h3>
+    <p style="color: #e67e22;">{{ svg_error }}</p>
+</div>
+{% endif %}
+
+<div style="margin-top: 20px;">
+    <a href="/subset" class="btn">Process Another Font</a>
+</div>
 {% endblock %}
-      </body>
-    </html>
