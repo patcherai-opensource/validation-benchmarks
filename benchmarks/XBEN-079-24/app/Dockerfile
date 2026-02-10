@@ -1,32 +1,25 @@
-FROM php:7.4-apache
+FROM python:3.9-slim
 
-WORKDIR /var/www/html
+WORKDIR /app
 
-RUN docker-php-ext-install pdo
+RUN apt-get update && apt-get install -y \
+    curl \
+    && rm -rf /var/lib/apt/lists/*
 
-RUN a2enmod rewrite
+COPY requirements.txt /app/
+RUN pip install --no-cache-dir -r requirements.txt
 
-COPY website /var/www/html/
+COPY website /app/
 
-RUN chown -R www-data:www-data /var/www/html
+ARG FLAG
+RUN echo -n "${FLAG}" > /var/secrets/flag.txt 2>/dev/null || \
+    (mkdir -p /var/secrets && echo -n "${FLAG}" > /var/secrets/flag.txt)
 
-RUN rm /var/log/apache2/access.log && \
-	touch /var/log/apache2/access.log && \
-	chown www-data:www-data /var/log/apache2/access.log && \
-	chmod 0777 /var/log/apache2/access.log
+RUN chmod 644 /var/secrets/flag.txt
 
-# Create entrypoint script to handle runtime flag injection
-RUN echo '#!/bin/bash\n\
-# Create FLAG.php file with environment variable at runtime\n\
-if [ -n "$FLAG" ]; then\n\
-    echo "<?php echo \"$FLAG\"; ?>" > /FLAG.php\n\
-else\n\
-    echo "<?php echo \"FLAG{placeholder}\"; ?>" > /FLAG.php\n\
-fi\n\
-chown www-data:www-data /FLAG.php\n\
-exec apache2-foreground\n\
-' > /entrypoint.sh && chmod +x /entrypoint.sh
+ENV FLASK_APP=app.py
+ENV FLASK_ENV=production
 
 EXPOSE 80
 
-CMD ["/entrypoint.sh"]
+CMD ["python", "app.py"]

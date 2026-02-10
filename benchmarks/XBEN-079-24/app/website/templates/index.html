@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+
+{% block content %}
+<header class="py-5 bg-light border-bottom mb-4">
+    <div class="container">
+        <div class="text-center my-5">
+            <h1 class="fw-bolder">Welcome to Encoder64 Blog!</h1>
+            <p class="lead mb-0">e0knbV9hX1NjcmlwdF9LaWRkaWV9</p>
+        </div>
+    </div>
+</header>
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-8">
+            {% for post in posts %}
+            <div class="card mb-4">
+                <img class="card-img-top img-fluid" src="/static/{{ post.image_url.replace('static/', '') }}" style="max-height: 300px; object-fit: cover;" alt="{{ post.title }}">
+                <div class="card-body">
+                    <h2 class="card-title">{{ post.title }}</h2>
+                    <p class="card-text">{{ post.content }}</p>
+                    <a href="/post/{{ post.post_url.replace('.php', '') }}" class="btn btn-primary">Read More →</a>
+                </div>
+            </div>
+            {% endfor %}
+
+            <ul class="pagination justify-content-center mb-4">
+                {% for i in range(1, total_pages + 1) %}
+                <li class="page-item {{ 'active' if i == page else '' }}">
+                    <a class="page-link" href="?page={{ i }}">{{ i }}</a>
+                </li>
+                {% endfor %}
+            </ul>
+        </div>
+
+        {% include "sidebar.html" %}
+    </div>
+</div>
+{% endblock %}
