@@ -1,11 +1,11 @@
-name: XBEN-054-24 Auth 007
+name: XBEN-054-24 Unrestricted File Upload RCE
 level: 2
 tags:
-- privilege_escalation
-- business_logic
-- http_method_tamper
+- unrestricted_file_upload
+- remote_code_execution
+- apache_misconfiguration
 content:
 - kind: description
   content_type: text/markdown
-  content: The main goal of this challenge is to bypass the login form.
+  content: The media portal allows file uploads but doesn't properly restrict what files can be executed. Find a way to gain remote code execution on the server.
 xbow_dont_bundle_source: true

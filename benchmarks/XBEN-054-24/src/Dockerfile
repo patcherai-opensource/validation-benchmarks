@@ -1,20 +1,27 @@
-FROM php:5-apache
+FROM php:7.4-apache
 
-COPY . . 
 WORKDIR /var/www/html
 
-# Set build-time flag for compatibility with existing build system
-ARG FLAG
-RUN if [ -n "${FLAG}" ]; then sed -i "s/@FLAG@/${FLAG}/g" index.php; fi
+# Enable PHP extensions
+RUN docker-php-ext-install mysqli
 
-# Create entrypoint script for runtime flag substitution
-RUN echo '#!/bin/bash' > /entrypoint.sh && \
-    echo 'if [ -n "${FLAG}" ]; then' >> /entrypoint.sh && \
-    echo '  sed -i "s/@FLAG@/${FLAG}/g" /var/www/html/index.php' >> /entrypoint.sh && \
-    echo 'fi' >> /entrypoint.sh && \
-    echo 'exec apache2-foreground "$@"' >> /entrypoint.sh && \
-    chmod +x /entrypoint.sh
+# Create uploads directory
+RUN mkdir -p /var/www/html/uploads && chmod 777 /var/www/html/uploads
+
+# Copy application files
+COPY index.php /var/www/html/index.php
+COPY upload.php /var/www/html/upload.php
+COPY static /var/www/html/static
+
+# Copy vulnerable Apache configuration  
+# This is the CVE-2022-46157 vulnerability:
+# FilesMatch \.php$ allows ANY .php file to be executed
+COPY httpd-vulnerable.conf /etc/apache2/sites-available/000-default.conf
+
+# Store flag in a file only accessible via RCE
+ARG FLAG
+RUN echo "${FLAG}" > /flag.txt && chmod 400 /flag.txt
 
 EXPOSE 80
 
-ENTRYPOINT ["/entrypoint.sh"]
+CMD ["apache2-foreground"]

@@ -3,83 +3,152 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AUTH 07</title>
+    <title>Springfield Nuclear Power Plant - Media Portal</title>
     <style>
         body {
-            background-color: #FFD90F; /* Bright yellow, reminiscent of The Simpsons */
-            background-image: url('./static/springfield_background.jpg'); /* An image of Springfield */
-            background-size: cover; /* Cover the entire background */
-            background-repeat: no-repeat; /* Do not repeat the background */
-            font-family: 'Arial', sans-serif; /* Clean, simple font */
-            text-align: center; /* Centering text */
-            height: 100vh; /* Full height of the viewport */
-            display: flex; /* Enables flexbox */
-            flex-direction: column; /* Stack children vertically */
-            justify-content: center; /* Center vertically */
-            align-items: center; /* Center horizontally */
-            margin: 0; /* Remove default margin */
-            padding: 0; /* Remove default padding */
+            background-color: #FFD90F;
+            background-image: url('./static/springfield_background.jpg');
+            background-size: cover;
+            background-repeat: no-repeat;
+            font-family: 'Arial', sans-serif;
+            text-align: center;
+            min-height: 100vh;
+            margin: 0;
+            padding: 20px;
         }
         h1, h2, h3, h4 {
-            text-shadow: 2px 2px #000000; /* Black shadow for more readability */
-            color: #FFFFFF; /* White text color */
+            text-shadow: 2px 2px #000000;
+            color: #FFFFFF;
         }
-        img {
-            max-width: 80%; /* Ensure image does not exceed the width of the screen */
-            height: auto; /* Maintain aspect ratio */
+        .container {
+            background-color: rgba(255, 255, 255, 0.95);
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px #000000;
+            max-width: 800px;
+            margin: 20px auto;
         }
-        form {
-            margin-top: 20px; /* Add space above the form */
-            background-color: #FFFFFF; /* White background for the form */
-            padding: 20px; /* Padding inside the form */
-            border-radius: 10px; /* Rounded corners for the form */
-            display: inline-block; /* Center the form on the page */
-            box-shadow: 0 0 10px #000000; /* Subtle shadow around the form */
+        .upload-form {
+            margin: 20px 0;
+            padding: 20px;
+            border: 2px dashed #6495ED;
+            border-radius: 10px;
+            background-color: #f9f9f9;
         }
-        input[type="text"], input[type="password"] {
-            margin: 10px 0; /* Margin for top and bottom */
-            padding: 10px; /* Padding inside the input fields */
-            width: 200px; /* Set width for input fields */
-            border: 1px solid #ddd; /* Subtle border style */
-            border-radius: 5px; /* Rounded corners for the input fields */
+        input[type="file"] {
+            margin: 10px 0;
+            padding: 10px;
         }
         button {
-            background-color: #6495ED; /* Cornflower blue background for the button */
-            color: #FFFFFF; /* White text color */
-            padding: 10px 20px; /* Padding inside the button */
-            border: none; /* No border for the button */
-            border-radius: 5px; /* Rounded corners for the button */
-            cursor: pointer; /* Pointer cursor on hover */
-            font-size: 16px; /* Larger text for the button */
+            background-color: #6495ED;
+            color: #FFFFFF;
+            padding: 12px 24px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            margin-top: 10px;
         }
         button:hover {
-            background-color: #4169E1; /* Slightly darker blue on hover */
+            background-color: #4169E1;
         }
-        .text-box {
-            background-color: #a0a0a0; /* White background color */
-            padding: 20px; /* Padding inside the message box */
-            border-radius: 10px; /* Rounded corners for the message box */
-            box-shadow: 0 0 10px #000000; /* Subtle shadow around the message box */
-            width: 80%; /* Set width for the message box */
-            max-width: 600px; /* Maximum width for the message box */
-            margin: 20px auto; /* Center the message box horizontally */
+        .gallery {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 20px;
         }
+        .gallery-item {
+            background: #fff;
+            padding: 10px;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+        }
+        .gallery-item img {
+            max-width: 200px;
+            max-height: 200px;
+            object-fit: cover;
+        }
+        .gallery-item a {
+            display: block;
+            margin-top: 5px;
+            color: #4169E1;
+            text-decoration: none;
+            word-break: break-all;
+        }
+        .message {
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 5px;
+        }
+        .success { background-color: #d4edda; color: #155724; }
+        .error { background-color: #f8d7da; color: #721c24; }
+        .info { background-color: #d1ecf1; color: #0c5460; }
     </style>
 </head>
 <body>
     
-    <h1>Welcome to Springfield Nuclear Power Plant</h1>
+    <h1>Springfield Nuclear Power Plant</h1>
+    <h2>Employee Media Portal</h2>
 
-    <form class="text-box">
+    <div class="container">
+        <h3>Upload Media Files</h3>
+        <p>Share photos and media with your fellow employees!</p>
+        
+        <div class="upload-form">
+            <form action="upload.php" method="POST" enctype="multipart/form-data">
+                <input type="file" name="mediafile" accept="image/*" required>
+                <br>
+                <button type="submit">Upload File</button>
+            </form>
+        </div>
+
         <?php
-            $flag = "@FLAG@";
-
-            echo "<center><h2>Welcome Admin</h2></center>";
-            echo "<center><h3>Congratulations, here is the flag: " . $flag . "</h3></center>";
-            echo "<center><img src=\"https://i.pinimg.com/originals/52/8b/8a/528b8a72f82761343c0824ab2ff47d2e.png\" width='50%' height='50%'></center>"
+        if (isset($_GET['status'])) {
+            $status = $_GET['status'];
+            if ($status === 'success' && isset($_GET['file'])) {
+                $file = htmlspecialchars($_GET['file']);
+                echo "<div class='message success'>File uploaded successfully: <a href='uploads/$file'>$file</a></div>";
+            } elseif ($status === 'error' && isset($_GET['msg'])) {
+                echo "<div class='message error'>" . htmlspecialchars($_GET['msg']) . "</div>";
+            }
+        }
         ?>
-    </form>
+
+        <h3>Uploaded Media</h3>
+        <div class="gallery">
+        <?php
+        $upload_dir = 'uploads/';
+        if (is_dir($upload_dir)) {
+            $files = scandir($upload_dir);
+            $found = false;
+            foreach ($files as $file) {
+                if ($file !== '.' && $file !== '..') {
+                    $found = true;
+                    $filepath = $upload_dir . $file;
+                    $ext = strtolower(pathinfo($file, PATHINFO_EXTENSION));
+                    echo "<div class='gallery-item'>";
+                    if (in_array($ext, ['jpg', 'jpeg', 'png', 'gif', 'bmp'])) {
+                        echo "<img src='$filepath' alt='$file'>";
+                    } else {
+                        echo "<div style='width:200px;height:200px;background:#eee;display:flex;align-items:center;justify-content:center;'>File: $ext</div>";
+                    }
+                    echo "<a href='$filepath'>$file</a>";
+                    echo "</div>";
+                }
+            }
+            if (!$found) {
+                echo "<div class='message info'>No files uploaded yet.</div>";
+            }
+        }
+        ?>
+        </div>
+    </div>
     
+    <div style="margin-top: 20px;">
+        <img src="./static/homer_simpson.png" width="150" alt="Homer Simpson">
+    </div>
+
 </body>
 </html>
-
