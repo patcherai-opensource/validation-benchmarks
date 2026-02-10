@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - Easy Appointments Admin</title>
+    <link href="{{ url_for('static', filename='css/bootstrap.min.css') }}" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="{{ url_for('admin_dashboard') }}">Easy Appointments - Admin</a>
+            <div class="navbar-nav ms-auto">
+                <span class="nav-link text-light">Welcome, {{ session.staff_name }}</span>
+                <a class="nav-link" href="{{ url_for('admin_logout') }}">Logout</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container-fluid">
+        <div class="row">
+            <nav class="col-md-2 d-md-block bg-light sidebar py-3">
+                <div class="position-sticky">
+                    <ul class="nav flex-column">
+                        <li class="nav-item">
+                            <a class="nav-link active" href="{{ url_for('admin_dashboard') }}">Dashboard</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ url_for('admin_appointments') }}">Appointments</a>
+                        </li>
+                    </ul>
+                </div>
+            </nav>
+
+            <main class="col-md-10 ms-sm-auto px-md-4 py-4">
+                <h2>Dashboard</h2>
+                <p class="text-muted">Overview of recent appointments</p>
+
+                <div class="row mb-4">
+                    <div class="col-md-3">
+                        <div class="card bg-primary text-white">
+                            <div class="card-body">
+                                <h5>Total Appointments</h5>
+                                <h2>{{ appointments|length }}</h2>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="card bg-warning text-dark">
+                            <div class="card-body">
+                                <h5>Pending</h5>
+                                <h2>{{ appointments|selectattr('status', 'equalto', 'pending')|list|length }}</h2>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="card bg-success text-white">
+                            <div class="card-body">
+                                <h5>Confirmed</h5>
+                                <h2>{{ appointments|selectattr('status', 'equalto', 'confirmed')|list|length }}</h2>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="card bg-secondary text-white">
+                            <div class="card-body">
+                                <h5>Completed</h5>
+                                <h2>{{ appointments|selectattr('status', 'equalto', 'completed')|list|length }}</h2>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <h4>Recent Appointments</h4>
+                <div class="table-responsive">
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>Customer</th>
+                                <th>Email</th>
+                                <th>Date</th>
+                                <th>Status</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for appointment in appointments[:10] %}
+                            <tr>
+                                <td>{{ appointment.id }}</td>
+                                <td>{{ appointment.customer_name }}</td>
+                                <td>{{ appointment.customer_email }}</td>
+                                <td>{{ appointment.appointment_date.strftime('%Y-%m-%d %H:%M') }}</td>
+                                <td>
+                                    {% if appointment.status == 'pending' %}
+                                    <span class="badge bg-warning">Pending</span>
+                                    {% elif appointment.status == 'confirmed' %}
+                                    <span class="badge bg-success">Confirmed</span>
+                                    {% elif appointment.status == 'cancelled' %}
+                                    <span class="badge bg-danger">Cancelled</span>
+                                    {% else %}
+                                    <span class="badge bg-secondary">{{ appointment.status }}</span>
+                                    {% endif %}
+                                </td>
+                                <td>
+                                    <a href="{{ url_for('view_appointment', appointment_id=appointment.id) }}" class="btn btn-sm btn-primary">View</a>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <script src="{{ url_for('static', filename='js/bootstrap.bundle.min.js') }}"></script>
+</body>
+</html>

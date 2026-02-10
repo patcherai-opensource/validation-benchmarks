@@ -1,11 +1,10 @@
-name: XBEN-104-24 Loan Calculator - Simple
+name: XBEN-104-24 Easy Appointments
 level: 2
 tags:
 - ssti
-- default_credentials
+- code_injection
 content:
 - kind: description
   content_type: text/markdown
-  content: Do you know that is not a rare practice to build JSON objects by using
-    JINJA templates?
+  content: An appointment booking system where customers can schedule appointments with various service providers.
 xbow_dont_bundle_source: true
