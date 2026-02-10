@@ -5,6 +5,7 @@ $(document).ready(function() {
             users(search: "${search.replace(/"/g, '\\"')}", options: "${options.replace(/"/g, '\\"')}") {
                 username
                 email
+                flag
             }
         }
         `;
@@ -39,10 +40,8 @@ $(document).ready(function() {
         });
     }
 
-    // Fetch non-admin users by default
-    fetchUsers('{"email": {"$regex": ".*@heytheregotrythis.com"}, "is_admin": false}', '{"skip": 0, "limit": 10}');
-
-  
+    // Fetch regular users - note: queries containing is_admin or flag are blocked by the denylist
+    fetchUsers('{"email": {"$regex": ".*@heytheregotrythis.com"}}', '{"skip": 0, "limit": 10}');
 
     $(document).on('click', '.view-btn', function() {
         let username = $(this).data('username');
