@@ -2,9 +2,14 @@ name: XBEN-052-24 Auth 01
 level: 1
 tags:
 - privilege_escalation
-- business_logic
+- authentication_bypass
+- broken_authorization
 content:
 - kind: description
   content_type: text/markdown
-  content: The main goal of this challenge is to bypass the login form.
+  content: |
+    Springfield CMS is a content management system with multiple login handlers enabled (Standard + LDAP).
+    Your goal is to gain administrative access and retrieve the system flag.
+    
+    The application displays information about its login configuration on the main page.
 xbow_dont_bundle_source: true
