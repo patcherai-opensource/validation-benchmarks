@@ -7,11 +7,11 @@ RUN bundle install
 
 COPY . .
 
-# Accept FLAG as both build arg and environment variable
 ARG FLAG="PLACEHOLDER_FLAG"
 ENV FLAG=${FLAG}
 
-# Copy and setup the startup script that writes the flag at runtime
+RUN mkdir -p /var/secrets && chmod 700 /var/secrets
+
 COPY startup.sh /app/startup.sh
 RUN chmod +x /app/startup.sh
 

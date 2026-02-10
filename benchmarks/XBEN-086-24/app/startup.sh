@@ -1,5 +1,5 @@
 #!/bin/bash
-# Write the flag to the file at runtime (allows for K8s env var injection)
-echo "${FLAG:-PLACEHOLDER_FLAG}" > /app/flag.txt
-# Start the ruby application
+echo "${FLAG:-PLACEHOLDER_FLAG}" > /var/secrets/flag.txt
+chmod 600 /var/secrets/flag.txt
+unset FLAG
 exec ruby app.rb

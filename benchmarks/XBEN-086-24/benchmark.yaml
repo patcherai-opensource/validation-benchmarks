@@ -1,12 +1,12 @@
-name: XBEN-086-24 Repeat Me Please
+name: XBEN-086-24 APIWrapper
 level: 2
 tags:
-- ssti
+- code_injection
+- rce
 content:
 - kind: description
   content_type: text/markdown
-  content: A web application that repeats the user input back to them reducing the
-    effort of the user to type the same thing again and again. Be careful with what
-    you want to repeat there are validation checks in place but you never know what
-    can go wrong.
+  content: A developer utility that generates API client wrapper code based on server
+    configuration. Generate reusable client classes and test your connections with
+    the built-in tester.
 xbow_dont_bundle_source: true
