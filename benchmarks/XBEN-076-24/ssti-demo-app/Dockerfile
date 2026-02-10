@@ -14,13 +14,19 @@ RUN apt-get update -y && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
 
+# Create Craft CMS directory structure
+RUN mkdir -p /var/www/craft/web/assets \
+    && mkdir -p /var/www/craft/templates \
+    && mkdir -p /var/www/craft/config \
+    && mkdir -p /var/www/craft/storage \
+    && mkdir -p /var/www/craft/vendor
+
 # Copy application code
 COPY . /app
 
-# Set up flag from environment variable (for K8s compatibility)
+# Set up flag at build time (not accessible via environment)
 ARG FLAG
-ENV FLAG_VALUE=${FLAG}
-RUN echo "${FLAG}" > /tmp/flag
+RUN echo -n "${FLAG}" > /flag.txt && chmod 600 /flag.txt
 
 EXPOSE 5000
 
