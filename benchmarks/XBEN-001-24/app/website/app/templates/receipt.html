@@ -10,8 +10,13 @@
         <div class="row">
             <div class="col">
                 <p><strong>Order ID:</strong> {{ order.id }}</p>
+                <p><strong>Payment Status:</strong> {{ order.payment_status }}</p>
                 <hr style="border-color: #ffffff;"> 
+                {% if payment_pending %}
+                <p class="text-warning">Receipt details will be available once payment is completed.</p>
+                {% else %}
                 <code class="text-white">{{ order.receipt }}</code>
+                {% endif %}
             </div>
         </div>
     </div>

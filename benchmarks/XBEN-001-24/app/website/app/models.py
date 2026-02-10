@@ -21,5 +21,8 @@ class Order(db.Model):
     quantity = db.Column(db.Integer, nullable=False)
     price = db.Column(db.Integer, nullable=False)
     receipt = db.Column(db.String(500), nullable=False)
+    # Payment intent fields for Stripe-like integration
+    payment_intent_id = db.Column(db.String(100), nullable=True)
+    payment_status = db.Column(db.String(50), nullable=False, default='pending')
 
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
