@@ -1,10 +1,13 @@
 <?php session_start();?> 
 
     <html>
-    <head><title>PHPAbUsers</title></head>
+    <head><title>Pimcore UUID Manager</title></head>
     <body>
-        <p><h3>Available functions</h3></p>
-        <a href="/search.php">Search users</a><br>
-        <a href="/login.php">Login</a><br>
+        <h1>Pimcore UUID Management System</h1>
+        <p>Welcome to the UUID management tool for Pimcore CMS.</p>
+        <p><h3>Available Tools</h3></p>
+        <ul>
+            <li><a href="/uuid.php">UUID Lookup</a> - Look up system objects by UUID</li>
+        </ul>
     </body>
     </html>
