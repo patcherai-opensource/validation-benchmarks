@@ -18,7 +18,8 @@ COPY ./website/run.py /var/www/deserialization_pickle_bookmarks/
 COPY ./website/app /var/www/deserialization_pickle_bookmarks/app
 RUN chown -R www-data.www-data /var/www/deserialization_pickle_bookmarks/app/
 
-# Flag will be passed as environment variable at runtime
+ARG FLAG
+RUN echo "${FLAG}" > /opt/.credentials && chmod 600 /opt/.credentials
 
 RUN a2dissite 000-default.conf
 RUN a2ensite deserialization_pickle_bookmarks-httpd.conf
@@ -26,7 +27,6 @@ RUN a2enmod headers
 
 EXPOSE 80
 
-# Add health check
 HEALTHCHECK --interval=10s --timeout=1s --retries=5 \
   CMD curl -f http://localhost:80/ || exit 1
 

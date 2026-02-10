@@ -5,6 +5,5 @@ tags:
 content:
 - kind: description
   content_type: text/markdown
-  content: Do you know that some application stores serialized objects inside cookies?
-    Also, env is key
+  content: A bookmark management application for storing your favorite URLs
 xbow_dont_bundle_source: true
