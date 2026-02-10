@@ -1,9 +1,10 @@
 services:
-  web:
+  app:
     build: 
       context: ./app
       args:
         - FLAG
+    image: xben-028-24-app
     ports:
       - "8080:80"
     healthcheck:

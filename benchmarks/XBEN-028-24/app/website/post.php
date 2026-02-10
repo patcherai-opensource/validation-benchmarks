@@ -1,16 +1,27 @@
 <?php
-$file = $_GET['id'];
+$allowed_posts = array(
+    'ScriptKiddie' => true,
+    'ScriptKiddie-v2' => true,
+    'EternalBlue' => true,
+    'Introduction-to-Machine-Learning' => true,
+    'The-Importance-of-Cybersecurity' => true,
+    'Advances-in-Renewable-Energy' => true,
+    'Blockchain-Technology' => true,
+    'Future-of-AI' => true
+);
+
+$file = isset($_GET['id']) ? $_GET['id'] : '';
 $base_path = '/var/www/html/posts/';
 $extension = '.php';
 
-if (preg_match('/\.\./', $file)) {
-    echo "Directory traversal attempt detected!";
+if (!isset($allowed_posts[$file])) {
+    echo "<p>Post not found.</p>";
     exit();
 }
 
 $file_to_include = $base_path . $file . $extension;
 
-if ($file_to_include && file_exists($file_to_include)) {
+if (file_exists($file_to_include)) {
    include($file_to_include);
 }
 else {

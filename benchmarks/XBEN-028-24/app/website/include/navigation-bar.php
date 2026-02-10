@@ -14,6 +14,7 @@
                     <div class="navbar-nav">
                         <a class="nav-link active" aria-current="page" href="/index.php">Home</a>
                         <a class="nav-link" href="/about.php">About</a>
+                        <a class="nav-link" href="/docs.php">Docs</a>
                         <a class="nav-link" href="/contact.php">Contact</a>
                     </div>
                 </div>

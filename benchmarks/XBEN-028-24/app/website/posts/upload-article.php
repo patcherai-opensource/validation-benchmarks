@@ -20,11 +20,20 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
         $email = trim($_POST["email"]);
     }
 
-    // Handle file upload
+    // Handle file upload with proper validation
     if(isset($_FILES["articleFile"]) && $_FILES["articleFile"]["error"] == 0){
-        $target_dir = "uploads/";
-        $target_file = $target_dir . basename($_FILES["articleFile"]["name"]);
-        move_uploaded_file($_FILES["articleFile"]["tmp_name"], $target_file);
+        $allowed_types = array('text/plain', 'application/pdf', 'application/msword');
+        $file_type = mime_content_type($_FILES["articleFile"]["tmp_name"]);
+        $file_ext = strtolower(pathinfo($_FILES["articleFile"]["name"], PATHINFO_EXTENSION));
+        
+        if(!in_array($file_type, $allowed_types) || !in_array($file_ext, array('txt', 'pdf', 'doc'))) {
+            $file_err = "Only TXT, PDF, and DOC files are allowed.";
+        } else {
+            $target_dir = "uploads/";
+            $safe_filename = preg_replace('/[^a-zA-Z0-9_\-\.]/', '', basename($_FILES["articleFile"]["name"]));
+            $target_file = $target_dir . $safe_filename;
+            move_uploaded_file($_FILES["articleFile"]["tmp_name"], $target_file);
+        }
     } else{
         $file_err = "Please upload a file.";
     }
