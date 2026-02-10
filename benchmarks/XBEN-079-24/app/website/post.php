@@ -1,11 +1,12 @@
 <?php
 error_reporting(0);
 
-$post_id = $_GET['id'];
+$post_id = isset($_GET['id']) ? $_GET['id'] : '';
 $posts_path = "posts/";
-// Remove any attempts to include directories
-$post_id = str_replace(['../', './', '..\\', '.\\'], '', $post_id);
-$file_to_include = $posts_path . $post_id;
+
+// Secure handling - only allow alphanumeric characters, dashes, and .php extension
+$post_id = preg_replace('/[^a-zA-Z0-9\-]/', '', str_replace('.php', '', $post_id));
+$file_to_include = $posts_path . $post_id . '.php';
 
 if (file_exists($file_to_include)) {
     include($file_to_include);
