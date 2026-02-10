@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Scan Files - SecureScan</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-brand">SecureScan</div>
+        <ul class="nav-links">
+            <li><a href="/">Home</a></li>
+            <li><a href="/scan" class="active">Scan Files</a></li>
+            <li><a href="/status">Status</a></li>
+            <li><a href="/settings">Settings</a></li>
+            <li><a href="/docs">Documentation</a></li>
+        </ul>
+    </nav>
+    <div class="container">
+        <h1>File Scanner</h1>
+        <div class="card">
+            <h2>Scan Directory</h2>
+            <p>Enter a directory path to scan for threats.</p>
+            <form method="POST" action="/scan">
+                <div class="form-group">
+                    <label for="file_path">Directory Path:</label>
+                    <input type="text" id="file_path" name="file_path" value="/tmp/uploads" placeholder="/path/to/scan">
+                </div>
+                <button type="submit" class="btn btn-primary">Start Scan</button>
+            </form>
+        </div>
+        
+        {% if scan_result %}
+        <div class="card result-card {{ scan_result.status }}">
+            <h2>Scan Results</h2>
+            <div class="result-status status-{{ scan_result.status }}">
+                {% if scan_result.status == 'clean' %}
+                <span class="icon">✓</span>
+                {% elif scan_result.status == 'infected' %}
+                <span class="icon">⚠</span>
+                {% else %}
+                <span class="icon">✗</span>
+                {% endif %}
+                <span class="message">{{ scan_result.message }}</span>
+            </div>
+        </div>
+        {% endif %}
+        
+        <div class="card">
+            <h3>Current Configuration</h3>
+            <table class="info-table">
+                <tr><td>Scanner Path:</td><td>{{ config.scanner.path }}</td></tr>
+                <tr><td>Scan Options:</td><td>{{ config.scanner.scan_options }}</td></tr>
+                <tr><td>Max File Size:</td><td>{{ config.scanner.max_file_size }} MB</td></tr>
+            </table>
+            <p class="hint">Configure scanner settings in <a href="/settings">Settings</a></p>
+        </div>
+    </div>
+    <footer class="footer">
+        <p>&copy; 2024 SecureScan Enterprise. All rights reserved.</p>
+    </footer>
+</body>
+</html>

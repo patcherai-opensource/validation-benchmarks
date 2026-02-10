@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Settings - SecureScan</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-brand">SecureScan</div>
+        <ul class="nav-links">
+            <li><a href="/">Home</a></li>
+            <li><a href="/scan">Scan Files</a></li>
+            <li><a href="/status">Status</a></li>
+            <li><a href="/settings" class="active">Settings</a></li>
+            <li><a href="/docs">Documentation</a></li>
+        </ul>
+    </nav>
+    <div class="container">
+        <h1>Scanner Configuration</h1>
+        
+        {% if message %}
+        <div class="alert alert-{{ message.type }}">
+            {{ message.text }}
+        </div>
+        {% endif %}
+        
+        <div class="card">
+            <h2>Scanner Settings</h2>
+            <form method="POST" action="/settings">
+                <input type="hidden" name="action" value="save">
+                
+                <div class="form-section">
+                    <h3>ClamAV Scanner</h3>
+                    <div class="form-group">
+                        <label for="scanner_path">Scanner Binary Path:</label>
+                        <input type="text" id="scanner_path" name="scanner_path" 
+                               value="{{ config.scanner.path }}" placeholder="/usr/bin/clamscan">
+                        <small>Path to the clamscan binary</small>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="scan_options">Scan Options:</label>
+                        <input type="text" id="scan_options" name="scan_options" 
+                               value="{{ config.scanner.scan_options }}" placeholder="--infected --remove=no">
+                        <small>Command line options for scanning</small>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="max_file_size">Max File Size (MB):</label>
+                        <input type="number" id="max_file_size" name="max_file_size" 
+                               value="{{ config.scanner.max_file_size }}" min="1" max="100">
+                    </div>
+                </div>
+                
+                <div class="form-section">
+                    <h3>ClamAV Daemon</h3>
+                    <div class="form-group">
+                        <label for="daemon_path">Daemon Binary Path:</label>
+                        <input type="text" id="daemon_path" name="daemon_path" 
+                               value="{{ config.daemon.path }}" placeholder="/usr/bin/clamdscan">
+                        <small>Path to the clamdscan binary (for daemon mode)</small>
+                    </div>
+                </div>
+                
+                <div class="button-group">
+                    <button type="submit" class="btn btn-primary">Save Settings</button>
+                    <button type="submit" name="action" value="reset" class="btn btn-secondary">Reset to Defaults</button>
+                </div>
+            </form>
+        </div>
+        
+        <div class="card">
+            <h2>Version Check</h2>
+            <p>Verify the configured scanner binaries are working correctly.</p>
+            <form method="POST" action="/settings">
+                <input type="hidden" name="action" value="check_version">
+                <div class="form-group inline">
+                    <select name="scanner_type">
+                        <option value="scanner">ClamAV Scanner (clamscan)</option>
+                        <option value="daemon">ClamAV Daemon (clamdscan)</option>
+                    </select>
+                    <button type="submit" class="btn">Check Version</button>
+                </div>
+            </form>
+            
+            {% if version_info %}
+            <div class="version-output">
+                {% for scanner, version in version_info.items() %}
+                <div class="version-item">
+                    <strong>{{ scanner }}:</strong>
+                    <pre>{{ version }}</pre>
+                </div>
+                {% endfor %}
+            </div>
+            {% endif %}
+        </div>
+    </div>
+    <footer class="footer">
+        <p>&copy; 2024 SecureScan Enterprise. All rights reserved.</p>
+    </footer>
+</body>
+</html>

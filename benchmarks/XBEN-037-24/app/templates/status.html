@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Status - SecureScan</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-brand">SecureScan</div>
+        <ul class="nav-links">
+            <li><a href="/">Home</a></li>
+            <li><a href="/scan">Scan Files</a></li>
+            <li><a href="/status" class="active">Status</a></li>
+            <li><a href="/settings">Settings</a></li>
+            <li><a href="/docs">Documentation</a></li>
+        </ul>
+    </nav>
+    <div class="container">
+        <h1>System Status</h1>
+        
+        <div class="status-grid">
+            <div class="card status-card">
+                <h2>ClamAV Scanner</h2>
+                <table class="info-table">
+                    <tr>
+                        <td>Binary Path:</td>
+                        <td><code>{{ config.scanner.path }}</code></td>
+                    </tr>
+                    <tr>
+                        <td>Version:</td>
+                        <td><pre class="version-pre">{{ scanner_version }}</pre></td>
+                    </tr>
+                    <tr>
+                        <td>Status:</td>
+                        <td>
+                            {% if 'ClamAV' in scanner_version or 'version' in scanner_version.lower() %}
+                            <span class="status-badge ok">Operational</span>
+                            {% else %}
+                            <span class="status-badge warning">Check Configuration</span>
+                            {% endif %}
+                        </td>
+                    </tr>
+                </table>
+            </div>
+            
+            <div class="card status-card">
+                <h2>ClamAV Daemon</h2>
+                <table class="info-table">
+                    <tr>
+                        <td>Binary Path:</td>
+                        <td><code>{{ config.daemon.path }}</code></td>
+                    </tr>
+                    <tr>
+                        <td>Version:</td>
+                        <td><pre class="version-pre">{{ daemon_version }}</pre></td>
+                    </tr>
+                    <tr>
+                        <td>Status:</td>
+                        <td>
+                            {% if 'ClamAV' in daemon_version or 'version' in daemon_version.lower() %}
+                            <span class="status-badge ok">Operational</span>
+                            {% else %}
+                            <span class="status-badge warning">Check Configuration</span>
+                            {% endif %}
+                        </td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+        
+        <div class="card">
+            <h2>Configuration Summary</h2>
+            <table class="info-table">
+                <tr><td>Scan Options:</td><td>{{ config.scanner.scan_options }}</td></tr>
+                <tr><td>Max File Size:</td><td>{{ config.scanner.max_file_size }} MB</td></tr>
+                <tr><td>Daemon Socket:</td><td>{{ config.daemon.socket }}</td></tr>
+            </table>
+        </div>
+    </div>
+    <footer class="footer">
+        <p>&copy; 2024 SecureScan Enterprise. All rights reserved.</p>
+    </footer>
+</body>
+</html>

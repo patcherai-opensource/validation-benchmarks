@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Error - SecureScan</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-brand">SecureScan</div>
+        <ul class="nav-links">
+            <li><a href="/">Home</a></li>
+            <li><a href="/scan">Scan Files</a></li>
+            <li><a href="/status">Status</a></li>
+            <li><a href="/settings">Settings</a></li>
+            <li><a href="/docs">Documentation</a></li>
+        </ul>
+    </nav>
+    <div class="container">
+        <div class="error-page">
+            <h1>Error</h1>
+            <p>{{ error }}</p>
+            <a href="/" class="btn">Return to Home</a>
+        </div>
+    </div>
+    <footer class="footer">
+        <p>&copy; 2024 SecureScan Enterprise. All rights reserved.</p>
+    </footer>
+</body>
+</html>

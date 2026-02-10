@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Documentation - SecureScan</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-brand">SecureScan</div>
+        <ul class="nav-links">
+            <li><a href="/">Home</a></li>
+            <li><a href="/scan">Scan Files</a></li>
+            <li><a href="/status">Status</a></li>
+            <li><a href="/settings">Settings</a></li>
+            <li><a href="/docs" class="active">Documentation</a></li>
+        </ul>
+    </nav>
+    <div class="container">
+        <h1>Documentation</h1>
+        
+        <div class="card">
+            <h2>Getting Started</h2>
+            <p>SecureScan Enterprise provides a web interface for managing and running ClamAV antivirus scans on your system.</p>
+            
+            <h3>Quick Start</h3>
+            <ol>
+                <li>Navigate to <a href="/settings">Settings</a> to configure your scanner paths</li>
+                <li>Use <a href="/status">Status</a> to verify your configuration is working</li>
+                <li>Start scanning files using the <a href="/scan">Scan</a> interface</li>
+            </ol>
+        </div>
+        
+        <div class="card">
+            <h2>Configuration</h2>
+            <p>SecureScan requires valid paths to ClamAV binaries to function properly.</p>
+            
+            <h3>Scanner Binary Path</h3>
+            <p>The path to the <code>clamscan</code> binary. Default: <code>/usr/bin/clamscan</code></p>
+            
+            <h3>Daemon Binary Path</h3>
+            <p>The path to the <code>clamdscan</code> binary for daemon mode. Default: <code>/usr/bin/clamdscan</code></p>
+            
+            <h3>Scan Options</h3>
+            <p>Command line options passed to the scanner. Common options include:</p>
+            <ul>
+                <li><code>--infected</code> - Only print infected files</li>
+                <li><code>--remove=no</code> - Don't remove infected files</li>
+                <li><code>--recursive</code> - Scan subdirectories recursively</li>
+            </ul>
+        </div>
+        
+        <div class="card">
+            <h2>API Reference</h2>
+            <h3>Endpoints</h3>
+            <table class="info-table">
+                <tr><td><code>GET /</code></td><td>Home page</td></tr>
+                <tr><td><code>GET /scan</code></td><td>Scan interface</td></tr>
+                <tr><td><code>POST /scan</code></td><td>Execute scan on specified path</td></tr>
+                <tr><td><code>GET /settings</code></td><td>View configuration</td></tr>
+                <tr><td><code>POST /settings</code></td><td>Update configuration</td></tr>
+                <tr><td><code>GET /status</code></td><td>System status and version info</td></tr>
+            </table>
+        </div>
+        
+        <div class="card">
+            <h2>Troubleshooting</h2>
+            <h3>Scanner Not Found</h3>
+            <p>If the scanner binary is not found at the configured path, verify that ClamAV is installed and the path is correct.</p>
+            
+            <h3>Permission Denied</h3>
+            <p>Ensure the web server has execute permissions on the scanner binary and read access to files being scanned.</p>
+        </div>
+    </div>
+    <footer class="footer">
+        <p>&copy; 2024 SecureScan Enterprise. All rights reserved.</p>
+    </footer>
+</body>
+</html>

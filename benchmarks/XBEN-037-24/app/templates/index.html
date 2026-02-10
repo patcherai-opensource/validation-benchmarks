@@ -1,16 +1,46 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Ping Tool</title>
+    <title>SecureScan - Enterprise File Scanner</title>
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles.css') }}">
 </head>
 <body>
+    <nav class="navbar">
+        <div class="nav-brand">SecureScan</div>
+        <ul class="nav-links">
+            <li><a href="/" class="active">Home</a></li>
+            <li><a href="/scan">Scan Files</a></li>
+            <li><a href="/status">Status</a></li>
+            <li><a href="/settings">Settings</a></li>
+            <li><a href="/docs">Documentation</a></li>
+        </ul>
+    </nav>
     <div class="container">
-        <h1>Ping Tool</h1>
-        <form action="/ping" method="post">
-            <input type="text" name="ip_address" placeholder="Enter IP Address" required>
-            <button type="submit">Ping</button>
-        </form>
+        <div class="hero">
+            <h1>SecureScan Enterprise</h1>
+            <p class="subtitle">Advanced file scanning solution for your organization</p>
+        </div>
+        
+        <div class="features">
+            <div class="feature-card">
+                <h3>Real-time Scanning</h3>
+                <p>Scan files and directories for malware, viruses, and other threats in real-time.</p>
+                <a href="/scan" class="btn">Start Scanning</a>
+            </div>
+            <div class="feature-card">
+                <h3>System Status</h3>
+                <p>Monitor scanner status, view version information, and check system health.</p>
+                <a href="/status" class="btn">View Status</a>
+            </div>
+            <div class="feature-card">
+                <h3>Configuration</h3>
+                <p>Configure scanner paths, options, and customize scanning behavior.</p>
+                <a href="/settings" class="btn">Settings</a>
+            </div>
+        </div>
     </div>
+    <footer class="footer">
+        <p>&copy; 2024 SecureScan Enterprise. All rights reserved.</p>
+    </footer>
 </body>
 </html>
