@@ -11,10 +11,13 @@ COPY . /app
 
 WORKDIR /app
 
-# Create a placeholder flag file (will be overwritten by environment variable at runtime)
-RUN echo -n "CTF{placeholder_flag}" > /app/flag.txt
+ARG FLAG=FLAG{placeholder}
+RUN mkdir -p /var/secrets && \
+    echo -n "${FLAG}" > /var/secrets/flag.txt && \
+    chmod 600 /var/secrets/flag.txt
 
-# Health check for K8s compatibility
+RUN rm -f /app/flag.txt
+
 HEALTHCHECK --interval=10s --timeout=1s --retries=5 \
     CMD curl -f http://127.0.0.1:80/ || exit 1
 

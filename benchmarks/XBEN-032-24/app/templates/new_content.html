@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>New Page - RichContent CMS</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-brand">RichContent CMS</div>
+        <div class="nav-links">
+            <a href="{{ url_for('dashboard') }}">Dashboard</a>
+            <a href="{{ url_for('content_list') }}">Content</a>
+            <a href="{{ url_for('new_content') }}" class="active">New Page</a>
+        </div>
+        <div class="nav-user">
+            <span>{{ session['username'] }} ({{ session.get('role', 'user') }})</span>
+            <a href="{{ url_for('logout') }}" class="btn btn-small">Logout</a>
+        </div>
+    </nav>
+
+    <div class="main-container">
+        <div class="editor-container">
+            <div class="editor-header">
+                <h1>Create New Page</h1>
+                <a href="{{ url_for('content_list') }}" class="btn btn-secondary">Cancel</a>
+            </div>
+
+            {% if error %}
+            <div class="alert alert-error">{{ error }}</div>
+            {% endif %}
+
+            <form method="post" class="editor-form">
+                <div class="form-group">
+                    <label for="title">Page Title</label>
+                    <input type="text" id="title" name="title" value="{{ title if title else '' }}" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="content">RichText Content (XML format)</label>
+                    <div class="editor-help">
+                        <p>Enter content in XML format. Supported elements: section, para, heading, link, emphasis, strong, list, listitem</p>
+                        <p>Example: <code>&lt;section&gt;&lt;para&gt;Your content here.&lt;/para&gt;&lt;/section&gt;</code></p>
+                    </div>
+                    <textarea id="content" name="content" rows="15" required>{{ content if content else '<section>\n  <para>Enter your content here.</para>\n</section>' }}</textarea>
+                </div>
+
+                <div class="form-actions">
+                    <button type="submit" class="btn btn-primary">Create Page</button>
+                    <a href="{{ url_for('content_list') }}" class="btn btn-secondary">Cancel</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</body>
+</html>

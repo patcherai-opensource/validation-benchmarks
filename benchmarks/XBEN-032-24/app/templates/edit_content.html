@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit {{ page.title }} - RichContent CMS</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-brand">RichContent CMS</div>
+        <div class="nav-links">
+            <a href="{{ url_for('dashboard') }}">Dashboard</a>
+            <a href="{{ url_for('content_list') }}">Content</a>
+            <a href="{{ url_for('new_content') }}">New Page</a>
+        </div>
+        <div class="nav-user">
+            <span>{{ session['username'] }} ({{ session.get('role', 'user') }})</span>
+            <a href="{{ url_for('logout') }}" class="btn btn-small">Logout</a>
+        </div>
+    </nav>
+
+    <div class="main-container">
+        <div class="editor-container">
+            <div class="editor-header">
+                <h1>Edit Content</h1>
+                <a href="{{ url_for('view_content', page_id=page.id) }}" class="btn btn-secondary">Cancel</a>
+            </div>
+
+            {% if error %}
+            <div class="alert alert-error">{{ error }}</div>
+            {% endif %}
+            {% if success %}
+            <div class="alert alert-success">{{ success }}</div>
+            {% endif %}
+
+            <form method="post" class="editor-form">
+                <div class="form-group">
+                    <label for="title">Page Title</label>
+                    <input type="text" id="title" name="title" value="{{ title if title else page.title }}" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="content">RichText Content (XML format)</label>
+                    <div class="editor-help">
+                        <p>Enter content in XML format. Supported elements: section, para, heading, link, emphasis, strong, list, listitem</p>
+                        <p>Example: <code>&lt;section&gt;&lt;para&gt;Your content here.&lt;/para&gt;&lt;/section&gt;</code></p>
+                    </div>
+                    <textarea id="content" name="content" rows="15" required>{{ content if content else page.content }}</textarea>
+                </div>
+
+                <div class="form-actions">
+                    <button type="submit" class="btn btn-primary">Save Changes</button>
+                    <a href="{{ url_for('view_content', page_id=page.id) }}" class="btn btn-secondary">Cancel</a>
+                </div>
+            </form>
+
+            {% if preview %}
+            <div class="preview-section">
+                <h3>Preview</h3>
+                <div class="richtext-preview">
+                    <pre>{{ preview }}</pre>
+                </div>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ page.title }} - RichContent CMS</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-brand">RichContent CMS</div>
+        <div class="nav-links">
+            <a href="{{ url_for('dashboard') }}">Dashboard</a>
+            <a href="{{ url_for('content_list') }}">Content</a>
+            <a href="{{ url_for('new_content') }}">New Page</a>
+        </div>
+        <div class="nav-user">
+            <span>{{ session['username'] }} ({{ session.get('role', 'user') }})</span>
+            <a href="{{ url_for('logout') }}" class="btn btn-small">Logout</a>
+        </div>
+    </nav>
+
+    <div class="main-container">
+        <div class="content-view">
+            <div class="content-header">
+                <h1>{{ page.title }}</h1>
+                <div class="content-meta">
+                    <span>By {{ page.author }}</span>
+                    <span class="status-badge status-{{ page.status }}">{{ page.status }}</span>
+                    <span>Last modified: {{ page.modified[:10] }}</span>
+                </div>
+                <a href="{{ url_for('edit_content', page_id=page.id) }}" class="btn btn-primary">Edit Page</a>
+            </div>
+            <div class="content-body">
+                <h3>Content Preview</h3>
+                <div class="richtext-preview">
+                    <pre>{{ page.content }}</pre>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

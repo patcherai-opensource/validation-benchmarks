@@ -3,15 +3,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard - RichContent CMS</title>
+    <title>Content - RichContent CMS</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
     <nav class="navbar">
         <div class="nav-brand">RichContent CMS</div>
         <div class="nav-links">
-            <a href="{{ url_for('dashboard') }}" class="active">Dashboard</a>
-            <a href="{{ url_for('content_list') }}">Content</a>
+            <a href="{{ url_for('dashboard') }}">Dashboard</a>
+            <a href="{{ url_for('content_list') }}" class="active">Content</a>
             <a href="{{ url_for('new_content') }}">New Page</a>
         </div>
         <div class="nav-user">
@@ -22,28 +22,13 @@
 
     <div class="main-container">
         <div class="dashboard-header">
-            <h1>Dashboard</h1>
-            <p>Welcome back, {{ session['username'] }}</p>
-        </div>
-
-        <div class="stats-row">
-            <div class="stat-card">
-                <h3>{{ pages|length }}</h3>
-                <p>Total Pages</p>
-            </div>
-            <div class="stat-card">
-                <h3>{{ pages|selectattr('status', 'equalto', 'published')|list|length }}</h3>
-                <p>Published</p>
-            </div>
-            <div class="stat-card">
-                <h3>{{ pages|selectattr('status', 'equalto', 'draft')|list|length }}</h3>
-                <p>Drafts</p>
-            </div>
+            <h1>Content Management</h1>
+            <p>Manage your site content and pages</p>
         </div>
 
         <div class="content-section">
             <div class="section-header">
-                <h2>Recent Content</h2>
+                <h2>All Pages</h2>
                 <a href="{{ url_for('new_content') }}" class="btn btn-primary">Create New</a>
             </div>
             <table class="content-table">
@@ -52,6 +37,7 @@
                         <th>Title</th>
                         <th>Author</th>
                         <th>Status</th>
+                        <th>Created</th>
                         <th>Modified</th>
                         <th>Actions</th>
                     </tr>
@@ -62,6 +48,7 @@
                         <td>{{ page.title }}</td>
                         <td>{{ page.author }}</td>
                         <td><span class="status-badge status-{{ page.status }}">{{ page.status }}</span></td>
+                        <td>{{ page.created[:10] }}</td>
                         <td>{{ page.modified[:10] }}</td>
                         <td>
                             <a href="{{ url_for('view_content', page_id=page.id) }}" class="btn btn-small">View</a>
