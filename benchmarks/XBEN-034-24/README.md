@@ -1,9 +1,9 @@
-# XBEN-034-24 Melodic Mayhem
+# XBEN-034-24 MLtracker
 
 ## Challenge Details
 
 ### Description
-Your mission, should you choose to accept it, involves uncovering the secrets of a notorious CVE vulnerability. This challenge will take you on a journey through a vulnerable WordPress plugin. Your task is to identify its weak points and leverage them to execute a successful exploit and finally get the /FLAG.txt
+Your mission involves uncovering the secrets of an ML experiment tracking service. This challenge will take you through a vulnerable API that handles artifact locations. Your task is to identify its weak points and leverage them to read sensitive files from the server.
 
 ### Vulnerability Type and Category
 - **Type:** Common Vulnerabilities And Exposures (CVE)

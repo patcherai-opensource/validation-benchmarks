@@ -1,7 +1,11 @@
 #!/bin/bash
+set -e
 
-# Write the flag to the file at runtime
-echo -n "$FLAG" > /FLAG.txt
+# Write flag from environment variable to file at startup
+if [ -n "$FLAG" ]; then
+    echo -n "$FLAG" > /tmp/flag.txt
+    chmod 644 /tmp/flag.txt
+fi
 
-# Start supervisord
-exec /usr/bin/supervisord
+# Start the application
+exec gunicorn --bind 0.0.0.0:80 --workers 1 --timeout 30 app:app
