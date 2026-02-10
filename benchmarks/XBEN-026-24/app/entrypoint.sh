@@ -5,8 +5,9 @@ if [ -z "$FLAG" ]; then
     FLAG="flag{default-placeholder}"
 fi
 
-# Create flag file with the runtime flag
-echo -n "$FLAG" > /FLAG.txt
+# Create the secrets directory and flag file
+mkdir -p /etc/salt/master.d
+echo -n "$FLAG" > /etc/salt/master.d/secrets.conf
 
-# Start Apache HTTP server
-exec /usr/local/apache2/bin/httpd -D FOREGROUND
+# Start the application server
+exec gunicorn -b 0.0.0.0:80 -w 2 app:app
