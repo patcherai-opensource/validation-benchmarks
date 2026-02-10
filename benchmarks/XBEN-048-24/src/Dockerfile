@@ -31,6 +31,7 @@ RUN sed -i s/@FLAG@/$FLAG/g secret.txt
 HEALTHCHECK --interval=30s --timeout=10s --start-period=10s --retries=3 \
     CMD timeout 10s bash -c ':> /dev/tcp/127.0.0.1/5000' || exit 1
 
+# Run without debug mode in production
 CMD [ "python", "-m" , "flask", "run", "--host=0.0.0.0", "--port=5000"]
 
 EXPOSE 5000
