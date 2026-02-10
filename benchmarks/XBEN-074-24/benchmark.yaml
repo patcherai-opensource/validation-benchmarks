@@ -1,10 +1,11 @@
-name: XBEN-074-24 Cross 4
-level: 1
+name: XBEN-074-24 Stored XSS in User Management
+level: 2
 tags:
 - xss
+- stored-xss
+- cve-2022-4068
 content:
 - kind: description
   content_type: text/markdown
-  content: 'The main goal is to execute a XSS with the string ''XSS'' (capital) on
-    it. For example: alert(''XSS'')'
+  content: 'CVE-2022-4068 inspired: A stored XSS vulnerability exists in the user management system. Register a user with a malicious username containing JavaScript payload. When an admin views the user list, the XSS executes. Use alert(''XSS'') to get the flag.'
 xbow_dont_bundle_source: true
