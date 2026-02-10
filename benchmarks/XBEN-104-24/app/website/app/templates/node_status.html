@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Node Status Monitor</title>
+    <link href="{{ url_for('static', filename='css/bootstrap.min.css') }}" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <div class="row justify-content-between mt-5">
+            <div class="col-md-9">
+                <h2>Node Status Monitor</h2>
+                <p>Monitor status reports from managed nodes</p>
+                
+                <h4>Submit New Report</h4>
+                <form id="reportForm">
+                    <div class="mb-3">
+                        <label for="node_id" class="form-label">Node ID:</label>
+                        <input type="text" class="form-control" id="node_id" name="node_id" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="status" class="form-label">Status:</label>
+                        <select class="form-control" id="status" name="status">
+                            <option value="healthy">Healthy</option>
+                            <option value="warning">Warning</option>
+                            <option value="critical">Critical</option>
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label for="message" class="form-label">Message:</label>
+                        <textarea class="form-control" id="message" name="message" rows="2"></textarea>
+                    </div>
+                    <div class="mb-3">
+                        <label for="metrics" class="form-label">Metrics:</label>
+                        <textarea class="form-control" id="metrics" name="metrics" rows="2"></textarea>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Submit Report</button>
+                </form>
+                
+                <div id="submitResult" class="mt-3"></div>
+                
+                <hr class="mt-4">
+                
+                <h4>Submitted Reports</h4>
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Node ID</th>
+                            <th>Status</th>
+                            <th>Timestamp</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for report in reports %}
+                        <tr>
+                            <td>{{ report.id }}</td>
+                            <td>{{ report.node_id }}</td>
+                            <td>{{ report.status }}</td>
+                            <td>{{ report.timestamp }}</td>
+                            <td>
+                                <a href="{{ url_for('render_node_report', report_id=report.id) }}" class="btn btn-sm btn-info">View Details</a>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            <div class="col-md-3">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">Navigation</h5>
+                        <ul class="list-group">
+                            <li class="list-group-item"><a href="{{ url_for('home') }}">Home</a></li>
+                            <li class="list-group-item"><a href="{{ url_for('profile') }}">Profile</a></li>
+                            <li class="list-group-item"><a href="{{ url_for('loan_details') }}">Loan Details</a></li>
+                            <li class="list-group-item"><a href="{{ url_for('node_status_page') }}">Node Status</a></li>
+                            <li class="list-group-item"><a href="{{ url_for('logout') }}">Exit</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="{{ url_for('static', filename='js/bootstrap.bundle.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/jquery.min.js') }}"></script>
+    
+    <script>
+        $(document).ready(function() {
+            $('#reportForm').submit(function(e) {
+                e.preventDefault();
+                
+                var reportData = {
+                    node_id: $('#node_id').val(),
+                    status: $('#status').val(),
+                    message: $('#message').val(),
+                    metrics: $('#metrics').val()
+                };
+                
+                $.ajax({
+                    url: '/api/node/report',
+                    type: 'POST',
+                    contentType: 'application/json',
+                    data: JSON.stringify(reportData),
+                    success: function(data) {
+                        $('#submitResult').html('<div class="alert alert-success">Report submitted successfully! ID: ' + data.report_id + '</div>');
+                        setTimeout(function() {
+                            location.reload();
+                        }, 1500);
+                    },
+                    error: function(xhr, status, error) {
+                        $('#submitResult').html('<div class="alert alert-danger">Error: ' + error + '</div>');
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>

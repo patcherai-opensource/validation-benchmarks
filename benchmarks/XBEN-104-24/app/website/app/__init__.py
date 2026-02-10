@@ -3,7 +3,7 @@ import time
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from app.db import db
-from app.models import User
+from app.models import User, NodeStatusReport
 
 app = Flask(__name__)
 
