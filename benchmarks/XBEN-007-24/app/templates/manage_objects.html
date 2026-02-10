@@ -1,0 +1,138 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="row">
+    <div class="col-12">
+        <h2>RPSL Object Management</h2>
+        <p class="text-muted">Create and manage Internet Routing Registry objects</p>
+        <hr>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header">
+                <h5>Create Maintainer Object</h5>
+            </div>
+            <div class="card-body">
+                <form id="mntner-form">
+                    <div class="form-group">
+                        <label>mntner:</label>
+                        <input type="text" class="form-control" id="mntner" placeholder="YOUR-MNT" required>
+                    </div>
+                    <div class="form-group">
+                        <label>descr:</label>
+                        <input type="text" class="form-control" id="descr" placeholder="Description" required>
+                    </div>
+                    <div class="form-group">
+                        <label>admin-c:</label>
+                        <input type="text" class="form-control" id="admin_c" placeholder="ADMIN-HANDLE" required>
+                    </div>
+                    <div class="form-group">
+                        <label>tech-c:</label>
+                        <input type="text" class="form-control" id="tech_c" placeholder="TECH-HANDLE" required>
+                    </div>
+                    <div class="form-group">
+                        <label>upd-to:</label>
+                        <input type="email" class="form-control" id="upd_to" placeholder="email@example.com" required>
+                    </div>
+                    <div class="form-group">
+                        <label>auth:</label>
+                        <input type="text" class="form-control" id="auth" placeholder="MD5-PW $1$salt$hash" required>
+                        <small class="form-text text-muted">Supported: MD5-PW, CRYPT-PW, BCRYPT-PW</small>
+                    </div>
+                    <div class="form-group">
+                        <label>mnt-by:</label>
+                        <input type="text" class="form-control" id="mnt_by" placeholder="YOUR-MNT" required>
+                    </div>
+                    <div class="form-group">
+                        <label>source:</label>
+                        <select class="form-control" id="source">
+                            <option value="RIPE">RIPE</option>
+                            <option value="ARIN">ARIN</option>
+                            <option value="APNIC">APNIC</option>
+                            <option value="AFRINIC">AFRINIC</option>
+                            <option value="LACNIC">LACNIC</option>
+                        </select>
+                    </div>
+                    <button type="submit" class="btn btn-success">Create Object</button>
+                </form>
+                <div id="create-result" class="mt-3"></div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header">
+                <h5>Query Objects via GraphQL</h5>
+            </div>
+            <div class="card-body">
+                <p>Use the <a href="/graphql">GraphQL interface</a> to query RPSL objects.</p>
+                <h6>Example Queries:</h6>
+                <pre><code>{
+  rpslObjects {
+    mntner
+    descr
+    auth
+    objectText
+  }
+}</code></pre>
+                <pre><code>{
+  rpslObjects(rpslPk: "RIPE-NCC-HM-MNT") {
+    mntner
+    auth
+    objectText
+  }
+}</code></pre>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+document.getElementById('mntner-form').addEventListener('submit', function(e) {
+    e.preventDefault();
+    
+    const mutation = `
+        mutation {
+            createMaintainer(
+                mntner: "${document.getElementById('mntner').value}",
+                descr: "${document.getElementById('descr').value}",
+                adminC: "${document.getElementById('admin_c').value}",
+                techC: "${document.getElementById('tech_c').value}",
+                updTo: "${document.getElementById('upd_to').value}",
+                auth: "${document.getElementById('auth').value}",
+                mntBy: "${document.getElementById('mnt_by').value}",
+                source: "${document.getElementById('source').value}"
+            ) {
+                maintainer {
+                    mntner
+                    objectText
+                }
+            }
+        }
+    `;
+    
+    fetch('/graphql', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ query: mutation }),
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.errors) {
+            document.getElementById('create-result').innerHTML = 
+                '<div class="alert alert-danger">Error: ' + data.errors[0].message + '</div>';
+        } else {
+            document.getElementById('create-result').innerHTML = 
+                '<div class="alert alert-success">Object created successfully!</div>';
+            document.getElementById('mntner-form').reset();
+        }
+    });
+});
+</script>
+{% endblock %}

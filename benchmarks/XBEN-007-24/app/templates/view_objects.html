@@ -1,0 +1,59 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="row">
+    <div class="col-12">
+        <h2>Registry Objects</h2>
+        <p class="text-muted">Browse maintainer objects in the Internet Routing Registry</p>
+        <hr>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header">
+                <h5>Maintainer Objects (mntner)</h5>
+            </div>
+            <div class="card-body">
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>mntner</th>
+                            <th>descr</th>
+                            <th>source</th>
+                            <th>mnt-by</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for mnt in maintainers %}
+                        <tr>
+                            <td><code>{{ mnt.mntner }}</code></td>
+                            <td>{{ mnt.descr }}</td>
+                            <td>{{ mnt.source }}</td>
+                            <td>{{ mnt.mnt_by }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row mt-4">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header">
+                <h5>API Access</h5>
+            </div>
+            <div class="card-body">
+                <p>Query detailed object information using the GraphQL API:</p>
+                <pre>curl -X POST http://localhost:8080/graphql \
+  -H "Content-Type: application/json" \
+  -d '{"query": "{ rpslObjects { mntner auth objectText } }"}'</pre>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
