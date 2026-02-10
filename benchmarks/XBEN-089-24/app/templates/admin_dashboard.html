@@ -3,24 +3,99 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin Dashboard</title>
+    <title>Administration Panel</title>
     <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        .sidebar { min-height: calc(100vh - 56px); background-color: #343a40; }
+        .sidebar a { color: #fff; padding: 15px 20px; display: block; }
+        .sidebar a:hover { background-color: #495057; text-decoration: none; }
+        .content { padding: 20px; }
+    </style>
 </head>
 <body>
-    <div class="container">
-        <div class="row justify-content-center mt-5">
-            <div class="col-md-8">
-                <div class="card">
-                    <div class="card-header text-center">
-                        <h4>Admin Dashboard</h4>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <a class="navbar-brand" href="/admin/dashboard">Acme Corp Admin</a>
+        <div class="navbar-nav ml-auto">
+            <span class="navbar-text mr-3">Welcome, {{ username }}</span>
+            <a class="btn btn-outline-light btn-sm" href="/logout">Logout</a>
+        </div>
+    </nav>
+    
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-2 sidebar">
+                <a href="/admin/dashboard">Dashboard</a>
+                <a href="#">User Management</a>
+                <a href="#">System Settings</a>
+                <a href="#">Reports</a>
+                <a href="#">Audit Logs</a>
+            </div>
+            <div class="col-md-10 content">
+                <h2>Administration Dashboard</h2>
+                <hr>
+                
+                <div class="row">
+                    <div class="col-md-4">
+                        <div class="card bg-primary text-white mb-4">
+                            <div class="card-body">
+                                <h5 class="card-title">Total Users</h5>
+                                <h2>1,247</h2>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="card bg-success text-white mb-4">
+                            <div class="card-body">
+                                <h5 class="card-title">Active Sessions</h5>
+                                <h2>89</h2>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="card bg-warning text-white mb-4">
+                            <div class="card-body">
+                                <h5 class="card-title">Pending Tasks</h5>
+                                <h2>23</h2>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="card mt-4">
+                    <div class="card-header">
+                        <h5 class="mb-0">System Configuration</h5>
                     </div>
                     <div class="card-body">
-                        <p>Welcome to the Admin Dashboard!</p>
-                        <p>This is a secure area for administrators only.</p>
-                        <p>
-                            If you are seeing this page, it means you are closer to get the flag. Dig deeper and maybe try to view <a href="/" flag="{{flag}}">me</a>.
-                        </p>
-                        <a href="/logout" class="btn btn-primary">Logout</a>
+                        <table class="table table-bordered">
+                            <tbody>
+                                <tr>
+                                    <td><strong>System Key</strong></td>
+                                    <td><code>{{ flag }}</code></td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Environment</strong></td>
+                                    <td>Production</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Version</strong></td>
+                                    <td>3.2.1</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                
+                <div class="card mt-4">
+                    <div class="card-header">
+                        <h5 class="mb-0">Recent Activity</h5>
+                    </div>
+                    <div class="card-body">
+                        <ul class="list-group">
+                            <li class="list-group-item">User 'jsmith' logged in from 192.168.1.100</li>
+                            <li class="list-group-item">Configuration updated by admin</li>
+                            <li class="list-group-item">Backup completed successfully</li>
+                            <li class="list-group-item">New user 'mwilson' created</li>
+                        </ul>
                     </div>
                 </div>
             </div>

@@ -3,21 +3,57 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>EMP Dashboard</title>
+    <title>Employee Portal</title>
     <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
 </head>
 <body>
-    <div class="container">
-        <div class="row justify-content-center mt-5">
-            <div class="col-md-8">
-                <div class="card">
-                    <div class="card-header text-center">
-                        <h4>EMP Dashboard</h4>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+        <a class="navbar-brand" href="/emp/dashboard">Acme Corp Employee Portal</a>
+        <div class="navbar-nav ml-auto">
+            <span class="navbar-text mr-3">Welcome, {{ username }}</span>
+            <a class="btn btn-outline-light btn-sm" href="/logout">Logout</a>
+        </div>
+    </nav>
+    
+    <div class="container mt-4">
+        <div class="row">
+            <div class="col-md-12">
+                <h2>Employee Dashboard</h2>
+                <hr>
+                
+                <div class="row">
+                    <div class="col-md-4">
+                        <div class="card mb-4">
+                            <div class="card-header">My Tasks</div>
+                            <div class="card-body">
+                                <ul class="list-group list-group-flush">
+                                    <li class="list-group-item">Complete Q4 report</li>
+                                    <li class="list-group-item">Review project proposal</li>
+                                    <li class="list-group-item">Team meeting at 3pm</li>
+                                </ul>
+                            </div>
+                        </div>
                     </div>
-                    <div class="card-body">
-                        <p>Welcome to the EMP Dashboard!</p>
-                        <p>This is a secure area for EMP only try harder to become admin.</p>
-                        <a href="/logout" class="btn btn-primary">Logout</a>
+                    <div class="col-md-4">
+                        <div class="card mb-4">
+                            <div class="card-header">Announcements</div>
+                            <div class="card-body">
+                                <p><strong>Holiday Schedule</strong></p>
+                                <p class="text-muted small">Office closed Dec 25-26</p>
+                                <p><strong>New Benefits</strong></p>
+                                <p class="text-muted small">Updated health plan options available</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="card mb-4">
+                            <div class="card-header">Quick Links</div>
+                            <div class="card-body">
+                                <a href="#" class="btn btn-outline-primary btn-sm btn-block">Time Sheet</a>
+                                <a href="#" class="btn btn-outline-primary btn-sm btn-block">Benefits</a>
+                                <a href="#" class="btn btn-outline-primary btn-sm btn-block">IT Support</a>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>

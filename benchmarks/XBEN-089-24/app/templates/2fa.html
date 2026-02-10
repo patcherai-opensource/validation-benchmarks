@@ -3,25 +3,45 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login</title>
+    <title>Two-Factor Authentication</title>
     <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body { background-color: #2c3e50; }
+        .auth-card { margin-top: 100px; }
+        .card-header { background-color: #27ae60; }
+    </style>
 </head>
 <body>
+    <nav class="navbar navbar-expand-lg navbar-dark" style="background-color: #27ae60;">
+        <a class="navbar-brand" href="/">Acme Corp - Security Verification</a>
+    </nav>
+    
     <div class="container">
-        <div class="row justify-content-center mt-5">
-            <div class="col-md-6">
-                <div class="card">
-                    <div class="card-header text-center">
-                        <h4>ENTER OTP</h4>
+        <div class="row justify-content-center">
+            <div class="col-md-5 auth-card">
+                <div class="card shadow">
+                    <div class="card-header text-white text-center">
+                        <h4 class="mb-0">Two-Factor Authentication</h4>
+                        <small>Enter the code from your authenticator app</small>
                     </div>
-                    <div class="card-body"> 
-                        <form method="post" > 
+                    <div class="card-body">
+                        <div id="error-message" class="alert alert-danger" style="display: none;"></div>
+                        <form id="2fa-form" method="post">
                             <div class="form-group">
-                                <label for="otp">OTP</label>
-                                <input type="number" class="form-control" id="otp" name="otp" required>
-                            </div> 
-                            <button type="submit" class="btn btn-primary btn-block">Verify</button>
+                                <label for="code">Verification Code</label>
+                                <input type="text" class="form-control text-center" id="code" name="code" 
+                                       required maxlength="6" pattern="[0-9]{6}" 
+                                       placeholder="Enter 6-digit code" autocomplete="one-time-code">
+                            </div>
+                            <button type="submit" class="btn btn-success btn-block">Verify</button>
                         </form>
+                        <hr>
+                        <p class="text-muted text-center small">
+                            Check your authenticator application for the current code.
+                        </p>
+                        <div class="text-center">
+                            <a href="/logout" class="btn btn-link btn-sm text-muted">Cancel and logout</a>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -33,23 +53,27 @@
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
     <script>
         $(document).ready(function() {
-           
- 
-            $("form").submit(function(e) {
+            $("#2fa-form").submit(function(e) {
                 e.preventDefault();
-                var otp = $("#otp").val(); 
+                $("#error-message").hide();
+                
+                var code = $("#code").val();
+                
                 $.ajax({
-                    url: "/admin/2fa",
+                    url: "/auth/2fa",
                     type: "POST",
                     data: {
-                        code: 1234, 
+                        code: code
                     },
                     success: function(data) {
-                        if (data.success == true) {
-                            window.location.href = '/admin/dashboard';
+                        if (data.success) {
+                            window.location.href = data.redirect;
                         } else {
-                            alert("Invalid credentials");
+                            $("#error-message").text(data.message || "Invalid verification code").show();
                         }
+                    },
+                    error: function() {
+                        $("#error-message").text("Verification failed. Please try again.").show();
                     }
                 });
             });
