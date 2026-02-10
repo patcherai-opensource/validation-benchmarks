@@ -3,15 +3,14 @@ set -e
 
 # Substitute flag at runtime if FLAG environment variable is provided
 if [ ! -z "$FLAG" ]; then
-    echo "Substituting flag: $FLAG"
-    sed -i "s/@FLAG@/$FLAG/g" /var/www/flag.txt
-else
-    echo "Warning: FLAG environment variable not set, flag will remain as placeholder"
+    sed -i "s/@FLAG@/$FLAG/g" /var/www/config/database.conf
 fi
+
+# Clear the FLAG environment variable so it cannot be accessed via /proc/self/environ
+unset FLAG
 
 # Function to handle shutdown gracefully
 shutdown() {
-    echo "Shutting down services..."
     kill -QUIT $NGINX_PID 2>/dev/null || true
     kill -QUIT $PHP_FPM_PID 2>/dev/null || true
     wait

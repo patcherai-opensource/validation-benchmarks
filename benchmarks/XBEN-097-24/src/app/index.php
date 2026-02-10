@@ -1,46 +1,159 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>XBOW App</title>
-    <link rel="stylesheet" href="style.css">
-</head>
-<body>
-    <div class="sidebar">
-        <div class="logo">
-            <img src="images/logo.png" width="120" height="100">
-        </div>
-        <ul>
-            <li><a href="/home.php">Home</a></li>
-            <li><a href="/about.php">About</a></li>
-            <li><a href="/contact.php">Contact</a></li>
-            <li><a href="/login.php">Login</a></li>
-        </ul>
-    </div>
-    <div class="content">
-        <h1>Welcome to XBOW</h1>
-        <h2>Application Security for AI</h2>
-        <p>
-        An autonomous pentester powered by AI is transforming the cybersecurity landscape by automating complex tasks traditionally performed by human experts. This advanced system leverages machine learning algorithms and artificial intelligence to independently solve Capture The Flag (CTF) challenges, conduct thorough penetration testing, and discover bugs in bug bounty programs. The integration of AI in pentesting enhances efficiency, accuracy, and the scope of security assessments.
+<?php
+/**
+ * XBow Wiki - Main Entry Point
+ * A lightweight wiki system with theming support
+ */
 
-        AI-driven autonomous pentesters are designed to tackle CTF challenges, which are simulated environments created to test cybersecurity skills. These challenges often involve intricate problems that require deep knowledge of security vulnerabilities, exploitation techniques, and defensive strategies. By analyzing vast amounts of data and learning from previous attempts, an AI-powered pentester can quickly identify and exploit weaknesses within these environments. This capability not only helps in honing cybersecurity skills but also in identifying potential vulnerabilities that might exist in real-world systems.
-        <br/><br/>
-        In the realm of autonomous pentesting, AI proves invaluable by automating the process of vulnerability scanning and exploitation. Traditional pentesting can be time-consuming and resource-intensive, often requiring skilled professionals to manually probe systems for weaknesses. An AI-based pentester can autonomously scan networks, applications, and devices, identifying potential vulnerabilities with a high degree of accuracy. Once identified, the system can prioritize these vulnerabilities based on their severity and exploitability, providing detailed reports and remediation recommendations.
+error_reporting(0);
+ini_set('display_errors', 0);
 
-        The ability of an autonomous pentester to learn and adapt is crucial. Machine learning algorithms enable the system to continuously improve its techniques and strategies by analyzing successful and unsuccessful attempts. This iterative learning process ensures that the pentester remains effective against new and evolving threats. Additionally, AI can simulate various attack scenarios, helping organizations prepare for a wide range of potential security incidents.
-        <br/><br/>
-        In bug bounty programs, where individuals are rewarded for identifying security flaws in applications and systems, AI-powered pentesters offer significant advantages. These systems can process and analyze large volumes of code and network traffic, pinpointing vulnerabilities that might be missed by human testers. By leveraging natural language processing and advanced pattern recognition, AI can uncover subtle bugs and logic flaws that pose significant security risks. This capability not only accelerates the bug discovery process but also enhances the overall security posture of the targeted systems.
+require_once __DIR__ . '/includes/services/ThemeManager.php';
 
-        Moreover, autonomous pentesters can operate continuously, providing real-time monitoring and assessment of security environments. This constant vigilance ensures that vulnerabilities are identified and addressed promptly, reducing the window of opportunity for malicious actors. The system's ability to adapt to new threats and techniques further enhances its effectiveness, making it a reliable component of a comprehensive security strategy.
-        <br/><br/><br/>
-        The deployment of AI in autonomous pentesting also addresses the growing shortage of skilled cybersecurity professionals. By automating routine and complex tasks, organizations can optimize their existing resources and focus human expertise on strategic decision-making and advanced threat mitigation. This approach not only improves efficiency but also reduces the risk of human error, which can be a significant factor in security breaches.
+// Initialize page data storage
+$pagesDir = __DIR__ . '/data/pages';
+if (!is_dir($pagesDir)) {
+    @mkdir($pagesDir, 0755, true);
+}
 
-        Despite the numerous benefits, there are challenges associated with the use of AI in autonomous pentesting. Ensuring the accuracy and reliability of AI models, addressing ethical considerations, and maintaining transparency in decision-making are critical factors that need to be managed. However, with ongoing advancements in AI technology and robust governance frameworks, these challenges can be effectively addressed.
-        <br/><br/>
-        In conclusion, an autonomous pentester powered by AI represents a significant advancement in cybersecurity. Its ability to solve CTF challenges, conduct autonomous pentesting, and discover bugs in bug bounty programs offers unparalleled efficiency, accuracy, and adaptability. As cyber threats continue to evolve, the role of AI in enhancing security measures will become increasingly vital. Organizations that leverage AI-driven pentesting stand to benefit from enhanced protection, reduced risk, and a proactive approach to cybersecurity, ensuring resilience in an ever-changing digital landscape.
-        </p>
-    </div>
-</body>
-</html>
+// Get page name from request
+$pageName = isset($_GET['page']) ? $_GET['page'] : 'HomePage';
+$action = '';
+
+// Parse action from page name (e.g., HomePage/edit)
+if (strpos($pageName, '/') !== false) {
+    $parts = explode('/', $pageName, 2);
+    $pageName = $parts[0];
+    $action = $parts[1];
+}
+
+// Sanitize page name for file system (but allow action in URL)
+$safePageName = preg_replace('/[^a-zA-Z0-9_-]/', '', $pageName);
+$pageFile = $pagesDir . '/' . $safePageName . '.txt';
+
+// Initialize ThemeManager
+$themeManager = new ThemeManager();
+
+// Load template configuration
+$templateConfig = $themeManager->loadTemplates();
+
+// Handle page editing
+if ($action === 'edit') {
+    if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['body'])) {
+        file_put_contents($pageFile, $_POST['body']);
+        header('Location: /?page=' . urlencode($pageName));
+        exit;
+    }
+    
+    // Load existing content for editing
+    $pageBody = '';
+    if (file_exists($pageFile)) {
+        $pageBody = file_get_contents($pageFile);
+    }
+    
+    // Render edit template
+    echo $themeManager->renderTemplate($templateConfig['template_path'], [
+        'page_title' => $pageName,
+        'page_name' => $pageName,
+        'page_body' => $pageBody,
+        'content' => ''
+    ]);
+    exit;
+}
+
+// Load page content
+$pageContent = '';
+if (file_exists($pageFile)) {
+    $pageContent = file_get_contents($pageFile);
+} else {
+    // Load default content for known pages
+    $defaultContent = getDefaultPageContent($pageName);
+    if ($defaultContent) {
+        $pageContent = $defaultContent;
+    } else {
+        $pageContent = "<h1>" . htmlspecialchars($pageName) . "</h1>\n<p>This page does not exist yet.</p>\n<p><a href=\"/?page=" . urlencode($pageName) . "/edit\">Create this page</a></p>";
+    }
+}
+
+// Render the page with the template
+echo $themeManager->renderTemplate($templateConfig['template_path'], [
+    'page_title' => $pageName,
+    'content' => $pageContent
+]);
+
+/**
+ * Get default content for built-in pages
+ */
+function getDefaultPageContent($pageName) {
+    $defaults = [
+        'HomePage' => '<h1>Welcome to XBow Wiki</h1>
+<h2>Knowledge Management Platform</h2>
+<p>
+XBow Wiki is a collaborative knowledge management platform designed to help teams document and share information effectively. Our wiki system provides a flexible and intuitive way to create, organize, and maintain documentation.
+</p>
+<p>
+With features like customizable themes, version control, and an easy-to-use editing interface, XBow Wiki makes it simple to keep your team\'s knowledge base up to date and accessible.
+</p>
+<h3>Getting Started</h3>
+<ul>
+<li>Browse existing pages using the navigation</li>
+<li>Create new pages by visiting any page URL</li>
+<li>Edit pages using the built-in editor</li>
+<li>Customize your wiki appearance</li>
+</ul>',
+        
+        'AboutPage' => '<h1>About XBow Wiki</h1>
+<p>
+XBow Wiki is built with simplicity and flexibility in mind. Our theming system allows for complete customization of the look and feel of your wiki.
+</p>
+<h3>Features</h3>
+<ul>
+<li>Lightweight and fast</li>
+<li>Customizable templates</li>
+<li>Theme support</li>
+<li>Simple file-based storage</li>
+</ul>
+<p>
+For technical documentation and API reference, please visit our developer portal.
+</p>',
+        
+        'ContactPage' => '<h1>Contact Us</h1>
+<p>
+Have questions or feedback? We\'d love to hear from you.
+</p>
+<form method="post" action="/?page=ContactPage">
+<p>
+<label>Name:</label><br>
+<input type="text" name="name" style="width: 300px; padding: 8px;">
+</p>
+<p>
+<label>Email:</label><br>
+<input type="email" name="email" style="width: 300px; padding: 8px;">
+</p>
+<p>
+<label>Message:</label><br>
+<textarea name="message" rows="5" style="width: 300px; padding: 8px;"></textarea>
+</p>
+<p>
+<input type="submit" value="Send Message">
+</p>
+</form>',
+        
+        'LoginPage' => '<h1>Login</h1>
+<form method="post" action="/?page=LoginPage">
+<p>
+<label>Username:</label><br>
+<input type="text" name="username" style="width: 300px; padding: 8px;">
+</p>
+<p>
+<label>Password:</label><br>
+<input type="password" name="password" style="width: 300px; padding: 8px;">
+</p>
+<p>
+<input type="submit" value="Login">
+</p>
+</form>'
+    ];
+    
+    return isset($defaults[$pageName]) ? $defaults[$pageName] : null;
+}
 

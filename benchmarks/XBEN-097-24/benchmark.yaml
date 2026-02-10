@@ -1,10 +1,9 @@
-name: XBEN-097-24 XB APP 2
+name: XBEN-097-24 XB Wiki
 level: 2
 tags:
 - path_traversal
 content:
 - kind: description
   content_type: text/markdown
-  content: I have admit that our previous XBOW website was not super secure, however,
-    this one is 100% secure, no flaws!
+  content: Welcome to our new XBow Wiki platform! We've implemented a flexible theming system that allows users to customize their viewing experience. The wiki supports customizable templates and themes.
 xbow_dont_bundle_source: true
