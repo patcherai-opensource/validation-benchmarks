@@ -1,0 +1,136 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: wordpress-ctf
+  name: wordpress-ctf
+  namespace: sandbox-prod
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: wordpress-ctf
+  template:
+    metadata:
+      labels:
+        app: wordpress-ctf
+    spec:
+      containers:
+      - args:
+        # Disable native AIO to prevent node exhaustion (EAGAIN errors) when running many instances
+        - --innodb_use_native_aio=0
+        env:
+        - name: MYSQL_ROOT_PASSWORD
+          value: root_password
+        - name: MYSQL_DATABASE
+          value: challenge
+        - name: MYSQL_USER
+          value: wordpress
+        - name: MYSQL_PASSWORD
+          value: wordpress
+        image: 
+          180294216647.dkr.ecr.us-west-2.amazonaws.com/synthetic-xben-030-24_saltcorn-unknown:mysql
+        imagePullPolicy: IfNotPresent
+        livenessProbe:
+          exec:
+            command:
+            - mysqladmin
+            - ping
+            - -h
+            - localhost
+            - -u
+            - wordpress
+            - -pwordpress
+          failureThreshold: 10
+          initialDelaySeconds: 60
+          periodSeconds: 10
+          successThreshold: 1
+          timeoutSeconds: 10
+        name: mysql
+        ports:
+        - containerPort: 3306
+          name: mysql
+        readinessProbe:
+          exec:
+            command:
+            - mysqladmin
+            - ping
+            - -h
+            - localhost
+            - -u
+            - wordpress
+            - -pwordpress
+          failureThreshold: 10
+          initialDelaySeconds: 30
+          periodSeconds: 5
+          successThreshold: 1
+          timeoutSeconds: 10
+        resources:
+          limits:
+            cpu: 1000m
+            memory: 1Gi
+          requests:
+            cpu: 500m
+            memory: 512Mi
+      - env:
+        - name: DB_HOST
+          # Use 127.0.0.1 to force TCP connection over loopback (shared in pod), as localhost might resolve to unix socket path which isn't shared
+          value: 127.0.0.1
+        - name: DB_NAME
+          value: challenge
+        - name: DB_USER
+          value: wordpress
+        - name: DB_PASSWORD
+          value: wordpress
+        - name: FLAG
+          value: PLACEHOLDER_FLAG
+        image: 
+          180294216647.dkr.ecr.us-west-2.amazonaws.com/synthetic-xben-030-24_saltcorn-unknown:wordpress
+        imagePullPolicy: IfNotPresent
+        livenessProbe:
+          failureThreshold: 10
+          httpGet:
+            path: /
+            port: 80
+          initialDelaySeconds: 60
+          periodSeconds: 30
+          successThreshold: 1
+          timeoutSeconds: 10
+        name: wordpress
+        ports:
+        - containerPort: 80
+          name: http
+        readinessProbe:
+          failureThreshold: 10
+          httpGet:
+            path: /
+            port: 80
+          initialDelaySeconds: 30
+          periodSeconds: 10
+          successThreshold: 1
+          timeoutSeconds: 10
+        resources:
+          limits:
+            cpu: 1000m
+            memory: 1Gi
+          requests:
+            cpu: 500m
+            memory: 512Mi
+      restartPolicy: Always
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: wordpress-ctf
+  name: wordpress-ctf-service
+  namespace: sandbox-prod
+spec:
+  ports:
+  - name: http
+    port: 8080
+    protocol: TCP
+    targetPort: 80
+  selector:
+    app: wordpress-ctf
+  type: ClusterIP

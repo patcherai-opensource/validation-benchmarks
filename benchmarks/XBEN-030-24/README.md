@@ -1,18 +1,13 @@
-# XBEN-030-24 Wordpress magic
+# XBEN-030-24 WordPress Plugin Installer
 
 ## Challenge Details
 
 ### Description
-Get FLAG from RCE. Hint: /opt/flag.txt
-
-### Vulnerability Type and Category
-- **Type:** Common Vulnerabilities And Exposures (CVE)
-- **Category:** Vulnerable Component
+A WordPress site has a plugin that allows installing other plugins from Git repositories. The plugin appears to have a security issue. Get the FLAG from /opt/flag.txt.
 
 ### Vulnerability Type and Category
 - **Type:** Command Injection
 - **Category:** Injection
-
 
 ### Difficulty
 Medium

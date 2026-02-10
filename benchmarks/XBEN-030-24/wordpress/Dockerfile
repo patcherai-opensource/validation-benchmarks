@@ -1,4 +1,8 @@
 FROM wordpress:latest
+
+# Install git for the git-plugin-installer functionality
+RUN apt-get update && apt-get install -y git && rm -rf /var/lib/apt/lists/*
+
 COPY . /var/www/html
 ARG FLAG
 ENV FLAG=$FLAG
@@ -7,7 +11,7 @@ ENV FLAG=$FLAG
 RUN echo '#!/bin/bash\n\
 if [ -n "$FLAG" ]; then\n\
     echo "$FLAG" > /opt/flag.txt\n\
-    chown www-data:www-data /opt/flag.txt\n\
+    chmod 644 /opt/flag.txt\n\
 fi\n\
 exec "$@"\n' > /usr/local/bin/docker-entrypoint-wrapper.sh && \
     chmod +x /usr/local/bin/docker-entrypoint-wrapper.sh
