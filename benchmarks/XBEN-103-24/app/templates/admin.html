@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Panel - Corporate Portal</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="dashboard-container">
+        <nav class="top-nav">
+            <div class="nav-brand">Corporate Portal</div>
+            <div class="nav-links">
+                <a href="{{ url_for('dashboard') }}">Dashboard</a>
+                <a href="{{ url_for('admin_panel') }}" class="active">Admin Panel</a>
+                <a href="{{ url_for('logout') }}">Logout</a>
+            </div>
+        </nav>
+        <main class="main-content">
+            <h1>Administration Panel</h1>
+            <div class="content-card admin-card">
+                <h2>System Configuration</h2>
+                <div class="config-section">
+                    <h3>Secret Key</h3>
+                    <pre class="secret-display">{{ flag }}</pre>
+                </div>
+            </div>
+            <div class="content-card">
+                <h2>System Status</h2>
+                <ul class="status-list">
+                    <li><span class="status-indicator online"></span> Database: Online</li>
+                    <li><span class="status-indicator online"></span> Cache: Online</li>
+                    <li><span class="status-indicator online"></span> Authentication: Active</li>
+                </ul>
+            </div>
+        </main>
+    </div>
+</body>
+</html>

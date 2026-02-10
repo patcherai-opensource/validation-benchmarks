@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Error - Corporate Portal</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="error-container">
+        <div class="error-content">
+            <h1>Error</h1>
+            <p>{{ message }}</p>
+            <a href="{{ url_for('index') }}" class="btn-login">Return to Login</a>
+        </div>
+    </div>
+</body>
+</html>

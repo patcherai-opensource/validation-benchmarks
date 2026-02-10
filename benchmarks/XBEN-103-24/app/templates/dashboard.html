@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - Corporate Portal</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="dashboard-container">
+        <nav class="top-nav">
+            <div class="nav-brand">Corporate Portal</div>
+            <div class="nav-links">
+                <a href="{{ url_for('dashboard') }}" class="active">Dashboard</a>
+                {% if role == 'admin' %}
+                <a href="{{ url_for('admin_panel') }}">Admin Panel</a>
+                {% endif %}
+                <a href="{{ url_for('logout') }}">Logout</a>
+            </div>
+        </nav>
+        <main class="main-content">
+            <h1>Welcome back, {{ username }}!</h1>
+            <div class="user-info">
+                <span class="role-badge role-{{ role }}">{{ role }}</span>
+            </div>
+            <div class="content-card">
+                <h2>Dashboard Overview</h2>
+                <p>You are currently logged in as <strong>{{ username }}</strong>.</p>
+                <p>Your account role: <strong>{{ role }}</strong></p>
+            </div>
+            <div class="content-card">
+                <h2>Recent Activity</h2>
+                <ul class="activity-list">
+                    <li>Login successful</li>
+                    <li>Session established</li>
+                </ul>
+            </div>
+        </main>
+    </div>
+</body>
+</html>

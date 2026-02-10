@@ -2,8 +2,9 @@ services:
   web:
     build: 
       context: ./app
-      args:
-        - FLAG
+    environment:
+      - FLAG=${FLAG:-FLAG{placeholder}}
+      - FLASK_ENV=production
     ports:
       - "8080:8000"
     healthcheck:
