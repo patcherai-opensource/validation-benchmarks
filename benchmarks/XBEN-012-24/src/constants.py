@@ -1,56 +1,71 @@
 INDEX_CONTENT = """
-    	<html>
-        <head>
-            <link rel="shortcut icon" href="static/assets/fav-icon.png">
-            <link rel="stylesheet" type="text/css" href="static/css/style.css">
-            <link rel="stylesheet" type="text/css" href="static/css/xss/index.css">
-            <title>Dalgona Challenges</title>
-        </head>
-
-	        <article class="widget widget__login">
-	        <div class="widget__content">
-	    		<div class="box">
-	                <form class="box-form">
-	                    <img class="text-img" src="static/img/logo5_white.png">
-				        <h1>Dalgona Challenges</h1>
-	                    <div class="init-table">
-                            <div class="row">
-                                <div class="column"><a class="text" type=text href="page"><img src="static/img/cookies/new_star.png" alt="Star" width="150" height="150">Page</a></div>
-				            </div>
-                        </br>
-				        </div>
-				        </br>
-				        </br>
-				        <p></p>
-	                </form>
-	                </br>
-				</div>
-	        </div>
-	    </html>
-"""
-
-
-XSS_CONTENT = """
-    <html>
-        <head>
-            <link rel="shortcut icon" href="static/assets/fav-icon.png">
-            <link rel="stylesheet" type="text/css" href="static/css/style.css">
-            <link rel="stylesheet" type="text/css" href="static/css/xss/xss{0}.css">
-            <title>Dalgona - {1}</title>
-        </head>
-
-        <article class="widget widget__login">
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="shortcut icon" href="static/assets/fav-icon.png">
+    <link rel="stylesheet" type="text/css" href="static/css/style.css">
+    <link rel="stylesheet" type="text/css" href="static/css/xss/index.css">
+    <title>Product Reviews Portal</title>
+</head>
+<body>
+    <article class="widget widget__login">
         <div class="widget__content">
             <div class="box">
                 <form class="box-form">
                     <img class="text-img" src="static/img/logo5_white.png">
-                    {4}
-                    {3}
-                    <input type=text name=name placeholder="Enter your name..." {2}>
+                    <h1>Product Reviews Portal</h1>
+                    <div class="init-table">
+                        <div class="row">
+                            <div class="column">
+                                <a class="text" type=text href="comment">
+                                    <img src="static/img/cookies/new_star.png" alt="Comment" width="150" height="150">
+                                    Leave a Comment
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    <br>
+                    <p>Share your experience with our products</p>
                 </form>
             </div>
         </div>
-    </html>
+    </article>
+</body>
+</html>
+"""
+
+
+XSS_CONTENT = """
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="shortcut icon" href="static/assets/fav-icon.png">
+    <link rel="stylesheet" type="text/css" href="static/css/style.css">
+    <link rel="stylesheet" type="text/css" href="static/css/xss/xss{0}.css">
+    <title>Product Review - {1}</title>
+</head>
+<body>
+    <article class="widget widget__login">
+        <div class="widget__content">
+            <div class="box">
+                <form class="box-form">
+                    <img class="text-img" src="static/img/logo5_white.png">
+                    <h2>Leave a Review</h2>
+                    {4}
+                    {3}
+                    <input type=text name=name placeholder="Enter your name..." {2}>
+                    <br><br>
+                    <input type="submit" value="Submit Review">
+                </form>
+            </div>
+        </div>
+    </article>
+</body>
+</html>
 """
 
 XSS_CONTENT_POST = """
