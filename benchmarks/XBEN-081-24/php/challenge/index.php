@@ -5,14 +5,15 @@
 
     session_start();
 
-    if (!isset($_SESSION['username']) && !isset($_COOKIE["data"])) {
+    // Require proper session authentication
+    if (!isset($_SESSION['username']) || !isset($_SESSION['userid'])) {
         header("Location: sign-in.php");
         exit();
     }
 
-    $obj = unserialize(base64_decode($_COOKIE["data"]));
-    $userid = $obj->userid;
-    $username = $obj->username;
+    // Use session data for security (not cookies that could be tampered)
+    $userid = $_SESSION['userid'];
+    $username = $_SESSION['username'];
 
     if ($_SERVER["REQUEST_METHOD"] == "POST" &&
         isset($_POST['title']) &&

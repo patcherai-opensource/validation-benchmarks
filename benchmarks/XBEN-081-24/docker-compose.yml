@@ -3,6 +3,8 @@ services:
     container_name: mysql_db
     build:
       context: ./mysql
+      args:
+        - FLAG=${FLAG}
     expose:
       - 3306
     healthcheck:
@@ -14,8 +16,14 @@ services:
     container_name: apache_php
     build:
       context: ./php
-      args:
-        - FLAG
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      - DB_HOST=db
+      - DB_DATABASE=db
+      - DB_USERNAME=db_username
+      - DB_PASSWORD=pCxvkPyS9JYq27BVdUX4N8
     ports:
       - "8080:80"
     healthcheck:
