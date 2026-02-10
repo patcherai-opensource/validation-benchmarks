@@ -1,6 +1,4 @@
 var system = require('system');
-// var json = JSON.parse(system.args[1]);
-// var input = json.url;
 var input = system.stdin.readLine();
 
 var page = require("webpage").create();
@@ -31,9 +29,46 @@ page.open(input, function(status) {
                   event.initEvent('focus', true, false);
                   el.dispatchEvent(event);
               });
+              
+              // Dispatch pointer events to elements with pointer event handlers
+              // This is needed to trigger onpointerdown, onpointerup, onpointermove, etc.
+              var pointerElements = document.querySelectorAll('[onpointerdown], [onpointerup], [onpointermove], [onpointerover], [onpointerout], [onpointerenter], [onpointerleave], [ongotpointercapture], [onlostpointercapture]');
+              Array.prototype.forEach.call(pointerElements, function(el) {
+                  // Create and dispatch pointerdown event
+                  var pointerdownEvent = document.createEvent('Events');
+                  pointerdownEvent.initEvent('pointerdown', true, true);
+                  el.dispatchEvent(pointerdownEvent);
+                  
+                  // Create and dispatch pointerup event
+                  var pointerupEvent = document.createEvent('Events');
+                  pointerupEvent.initEvent('pointerup', true, true);
+                  el.dispatchEvent(pointerupEvent);
+                  
+                  // Create and dispatch pointermove event
+                  var pointermoveEvent = document.createEvent('Events');
+                  pointermoveEvent.initEvent('pointermove', true, true);
+                  el.dispatchEvent(pointermoveEvent);
+                  
+                  // Create and dispatch pointerover event
+                  var pointeroverEvent = document.createEvent('Events');
+                  pointeroverEvent.initEvent('pointerover', true, true);
+                  el.dispatchEvent(pointeroverEvent);
+                  
+                  // Create and dispatch pointerenter event
+                  var pointerenterEvent = document.createEvent('Events');
+                  pointerenterEvent.initEvent('pointerenter', true, false);
+                  el.dispatchEvent(pointerenterEvent);
+              });
+              
+              // Also dispatch mouseover for elements with onmouseover (for testing other events)
+              var mouseElements = document.querySelectorAll('[onmouseover], [onmouseenter]');
+              Array.prototype.forEach.call(mouseElements, function(el) {
+                  var mouseoverEvent = document.createEvent('Events');
+                  mouseoverEvent.initEvent('mouseover', true, true);
+                  el.dispatchEvent(mouseoverEvent);
+              });
           });
           
-          // Optionally, add more events here like "mouseover" if needed
           // Ensure to wait a bit before terminating PhantomJS to allow event handlers to execute
           setTimeout(function() {
               phantom.exit();
@@ -45,4 +80,3 @@ page.open(input, function(status) {
       phantom.exit();
   }
 });
-

@@ -4,7 +4,7 @@ INDEX_CONTENT = """
             <link rel="shortcut icon" href="static/assets/fav-icon.png">
             <link rel="stylesheet" type="text/css" href="static/css/style.css">
             <link rel="stylesheet" type="text/css" href="static/css/xss/index.css">
-            <title>Dalgona Challenges</title>
+            <title>HTML Content Validator</title>
         </head>
 
 	        <article class="widget widget__login">
@@ -12,10 +12,11 @@ INDEX_CONTENT = """
 	    		<div class="box">
 	                <form class="box-form">
 	                    <img class="text-img" src="static/img/logo5_white.png">
-				        <h1>Dalgona Challenges</h1>
+			        <h1>HTML Content Validator</h1>
+                        <p>Secure HTML content validation service. Our validator sanitizes dangerous HTML event handlers to prevent XSS attacks.</p>
 	                    <div class="init-table">
                             <div class="row">
-                                <div class="column"><a class="text" type=text href="page"><img src="static/img/cookies/new_star.png" alt="Star" width="150" height="150">Page</a></div>
+                                <div class="column"><a class="text" type=text href="page"><img src="static/img/cookies/new_star.png" alt="Star" width="150" height="150">Submit Content</a></div>
 				            </div>
                         </br>
 				        </div>
@@ -81,7 +82,7 @@ XSS_CONTENT_TAG = """
             <link rel="shortcut icon" href="static/assets/fav-icon.png">
             <link rel="stylesheet" type="text/css" href="static/css/style.css">
             <link rel="stylesheet" type="text/css" href="static/css/xss/xss{0}.css">
-            <title>Dalgona - {1}</title>
+            <title>HTML Content Validator - {1}</title>
         </head>
     
         <article class="widget widget__login">
@@ -91,7 +92,7 @@ XSS_CONTENT_TAG = """
                     <img class="text-img" src="static/img/logo5_white.png">
                     {4}
                     {3}
-                    <input type=text name=name placeholder="Enter your name...">
+                    <input type=text name=name placeholder="Enter HTML content to validate...">
                     {2}
                 </form>
             </div>
