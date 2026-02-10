@@ -1,11 +1,30 @@
-from flask import Flask, render_template, render_template_string, redirect, url_for, request, session, Response
+from flask import Flask, render_template, render_template_string, redirect, url_for, request, session, Response, send_file
 
 from app import app
 from app.db import db
 from app.models import User
 
+import os
 import json
-import re
+
+
+# Default layouts directory for the application
+LAYOUTS_DIR = os.path.join(os.path.dirname(__file__), 'layouts')
+
+
+def _resolve_layout_path(layout_path):
+    """
+    Resolves the layout path.
+    Similar to express-handlebars _resolveLayoutPath function.
+    If no extension is provided, '.html' is appended.
+    VULNERABLE: Does not properly sanitize path traversal sequences.
+    """
+    # If no extension, append default extension (mimics express-handlebars behavior)
+    if not os.path.splitext(layout_path)[1]:
+        layout_path = layout_path + '.html'
+    
+    # Resolve the path relative to layouts directory
+    return os.path.join(LAYOUTS_DIR, layout_path)
 
 
 @app.after_request
@@ -96,38 +115,91 @@ def loan_details():
         return redirect(url_for('login'))
 
 
-@app.route('/total_loan_payments')
-def total_loan_payments():
+@app.route('/statements')
+def statements():
+    """
+    Renders loan statements with customizable layout/theme.
+    Accepts layout parameter from user to select different statement layouts.
+    
+    VULNERABLE: User-controlled 'layout' parameter is passed directly to file resolution
+    without proper path validation, similar to CVE-2021-32820 in express-handlebars.
+    """
     # Retrieve user from session
     user_id = session.get('user_id')
     if user_id:
-        # Get payment and term from query parameters
-        principal = request.args.get('principal', type=str).strip()
-        payment = request.args.get('payment', type=float)
-        term = request.args.get('term', type=int)
-
-        # Check if parameters are provided
-        if principal is None or payment is None or term is None:
-            return Response('Missing principal, payment or term parameters', status=400)
-
-        # Forbid certain characters
-        if "{{" in principal or "}}" in principal or "[" in principal or \
-            "]" in principal or "_" in principal or "." in principal:
-            return Response('GET parameter `principal` contains forbidden characters.', status=400)
- 
-        # JSON template as a string variable (vulnerable to SSTI)
-        json_template = f"""
-        {{ "loan_principal": "{principal}" ,"monthly_payment": "{{{{ payment }}}}", "loan_term_amount": "{{{{ term }}}}", "total_loan_payments": "{{{{ payment*term }}}}" }}
-        """
-
-        # Render JSON template
-        rendered = render_template_string(json_template, payment=payment, term=term, content_type='application/json')
-
-        # Only allows numbers and dots
-        if re.match("^[0-9\.]*$", json.loads(rendered)['loan_principal']) is None:
-            return Response('Computed `loan_principal` value is not a number.', status=400)
-
-        return rendered
+        user = User.query.get(user_id)
+        
+        # Get render options from query parameters (similar to express-handlebars)
+        # Developers might pass req.query directly to render options, allowing
+        # users to control the 'layout' parameter
+        render_options = dict(request.args)
+        
+        # Extract layout from render options, default to 'default' layout
+        layout = render_options.get('layout', 'default')
+        
+        # Resolve the layout path (VULNERABLE - path traversal)
+        layout_path = _resolve_layout_path(layout)
+        
+        try:
+            # Read the layout file content
+            with open(layout_path, 'r') as f:
+                layout_content = f.read()
+            
+            # Render the layout with user data
+            # The layout content is used as template for rendering statement
+            return render_template_string(
+                layout_content,
+                user=user,
+                loan_amount=user.loan_amount,
+                loan_term_months=user.loan_term_months,
+                monthly_payment=user.monthly_payment,
+                total_payments=user.monthly_payment * user.loan_term_months
+            )
+        except FileNotFoundError:
+            return Response(f'Layout not found: {layout}', status=404)
+        except Exception as e:
+            return Response(f'Error rendering layout: {str(e)}', status=500)
     else:
         # If user not in session, redirect to login
         return redirect(url_for('login'))
+
+
+@app.route('/api/statement')
+def api_statement():
+    """
+    API endpoint for generating loan statements in various formats.
+    Accepts layout parameter to customize output format.
+    
+    VULNERABLE: Same path traversal vulnerability as /statements endpoint.
+    This mimics how Express apps might pass user input directly to res.render().
+    """
+    # Retrieve user from session
+    user_id = session.get('user_id')
+    if user_id:
+        user = User.query.get(user_id)
+        
+        # Merge all request parameters into render options
+        # This is the vulnerable pattern from CVE-2021-32820:
+        # res.render('view', req.query) passes all query params to handlebars
+        render_options = {**request.args}
+        
+        # Get layout (default to 'api_default')
+        layout = render_options.get('layout', 'api_default')
+        
+        # Resolve layout path (VULNERABLE)
+        layout_path = _resolve_layout_path(layout)
+        
+        try:
+            with open(layout_path, 'r') as f:
+                content = f.read()
+            
+            return Response(content, mimetype='text/plain')
+        except FileNotFoundError:
+            return Response(json.dumps({'error': f'Layout not found: {layout}'}), 
+                          status=404, mimetype='application/json')
+        except Exception as e:
+            return Response(json.dumps({'error': str(e)}), 
+                          status=500, mimetype='application/json')
+    else:
+        return Response(json.dumps({'error': 'Unauthorized'}), 
+                      status=401, mimetype='application/json')

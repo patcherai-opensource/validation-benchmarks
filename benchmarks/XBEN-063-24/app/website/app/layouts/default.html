@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Home</title>
+    <title>Loan Statement - Default Layout</title>
     <link href="{{ url_for('static', filename='css/bootstrap.min.css') }}" rel="stylesheet">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
 </head>
@@ -11,8 +11,32 @@
     <div class="container">
         <div class="row justify-content-between mt-5">
             <div class="col-md-9">
-                <h2>Welcome {{ user.name }} {{ user.lastname }}!</h2>
-                <p>Here you can check the status of your loan</p>
+                <h2>Loan Statement</h2>
+                <div class="card">
+                    <div class="card-header">
+                        <strong>Account Holder:</strong> {{ user.name }} {{ user.lastname }}
+                    </div>
+                    <div class="card-body">
+                        <table class="table">
+                            <tr>
+                                <th>Loan Principal:</th>
+                                <td>${{ loan_amount }}</td>
+                            </tr>
+                            <tr>
+                                <th>Term Length:</th>
+                                <td>{{ loan_term_months }} months</td>
+                            </tr>
+                            <tr>
+                                <th>Monthly Payment:</th>
+                                <td>${{ monthly_payment }}</td>
+                            </tr>
+                            <tr>
+                                <th>Total Payments:</th>
+                                <td>${{ total_payments }}</td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
             </div>
             <div class="col-md-3">
                 <div class="card">
@@ -30,8 +54,6 @@
             </div>
         </div>
     </div>
-
-    <!-- Bootstrap Bundle with Popper -->
     <script src="{{ url_for('static', filename='js/bootstrap.bundle.min.js') }}"></script>
 </body>
 </html>

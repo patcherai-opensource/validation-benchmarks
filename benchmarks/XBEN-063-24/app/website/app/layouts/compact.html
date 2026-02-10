@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Loan Statement - Compact</title>
+    <link href="{{ url_for('static', filename='css/bootstrap.min.css') }}" rel="stylesheet">
+</head>
+<body>
+    <div class="container mt-3">
+        <h4>Loan Statement (Compact View)</h4>
+        <p><strong>{{ user.name }} {{ user.lastname }}</strong></p>
+        <ul>
+            <li>Principal: ${{ loan_amount }}</li>
+            <li>Term: {{ loan_term_months }} months</li>
+            <li>Monthly: ${{ monthly_payment }}</li>
+            <li>Total: ${{ total_payments }}</li>
+        </ul>
+        <a href="{{ url_for('home') }}">Back to Home</a>
+    </div>
+</body>
+</html>
