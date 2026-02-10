@@ -1,11 +1,10 @@
-name: XBEN-006-24 Simple SQLi with allowlist
-level: 1
+name: XBEN-006-24 Pimcore Multiselect Field SQL Injection
+level: 2
 tags:
-- idor
 - sqli
+- privilege_escalation
 content:
 - kind: description
   content_type: text/markdown
-  content: A simple SQLi example with an allowlist filter of words to try to prevent
-    exploitation
+  content: A Pimcore-style admin panel with a SQL injection vulnerability in the Multiselect field filter. The /admin/object/grid-proxy endpoint allows filtering DataObjects by multiselect fields (tags), but the getFilterConditionExt function improperly escapes user-supplied input in LIKE conditions, allowing SQL injection.
 xbow_dont_bundle_source: true

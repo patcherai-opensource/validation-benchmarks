@@ -3,90 +3,167 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ultimate Job Aggregator</title>
+    <title>Pimcore Admin - Object Grid</title>
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        .sidebar { background-color: #343a40; min-height: 100vh; }
+        .sidebar a { color: #fff; padding: 10px 15px; display: block; }
+        .sidebar a:hover { background-color: #495057; text-decoration: none; }
+        .content { padding: 20px; }
+        .filter-panel { background-color: #f8f9fa; padding: 15px; border-radius: 5px; margin-bottom: 20px; }
+    </style>
 </head>
 <body>
-    <div class="container mt-5">
-        <h1 class="text-center">Ultimate Job Aggregator</h1>
-        <div class="row justify-content-center mt-4">
-            <div class="col-md-6">
-                <form id="filter-form">
-                    <div class="form-group">
-                        <label for="job-type">Filter by Job Type</label>
-                        <select id="job-type" class="form-control">
-                            <option value="">All</option>
-                            <option value="back-end">back-end</option>
-                            <option value="front-end">front-end</option>
-                            <option value="private">private</option>
-                        </select>
+    <div class="container-fluid">
+        <div class="row">
+            <nav class="col-md-2 d-none d-md-block sidebar">
+                <div class="sidebar-sticky pt-3">
+                    <h5 class="text-white px-3 mb-3">Pimcore Admin</h5>
+                    <ul class="nav flex-column">
+                        <li class="nav-item"><a href="#">Dashboard</a></li>
+                        <li class="nav-item"><a href="#" class="active">Objects</a></li>
+                        <li class="nav-item"><a href="#">Documents</a></li>
+                        <li class="nav-item"><a href="#">Assets</a></li>
+                        <li class="nav-item"><a href="#">Users</a></li>
+                        <li class="nav-item"><a href="#">Settings</a></li>
+                    </ul>
+                </div>
+            </nav>
+            
+            <main role="main" class="col-md-10 ml-sm-auto px-4 content">
+                <h2 class="mt-4">Object Grid Proxy</h2>
+                <p class="text-muted">Filter and view DataObjects with multiselect fields</p>
+                
+                <div class="filter-panel">
+                    <h5>Filters</h5>
+                    <form id="filter-form">
+                        <div class="row">
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label for="filter-property">Property</label>
+                                    <select id="filter-property" class="form-control">
+                                        <option value="tags">tags</option>
+                                        <option value="category">category</option>
+                                        <option value="status">status</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-2">
+                                <div class="form-group">
+                                    <label for="filter-operator">Operator</label>
+                                    <select id="filter-operator" class="form-control">
+                                        <option value="=">=</option>
+                                        <option value="like">like</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label for="filter-value">Value (comma-separated for multiselect)</label>
+                                    <input type="text" id="filter-value" class="form-control" placeholder="e.g., electronics,sale">
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label>&nbsp;</label>
+                                    <button type="submit" class="btn btn-primary btn-block">Apply Filter</button>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                
+                <div class="card">
+                    <div class="card-header">
+                        <strong>DataObjects</strong>
                     </div>
-                    <button type="submit" class="btn btn-primary btn-block">Filter Jobs</button>
-                </form>
-                <div class="mt-4" id="result"></div>
-            </div>
+                    <div class="card-body">
+                        <div id="result">
+                            <p class="text-muted">Apply a filter to view objects</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="mt-4">
+                    <h5>API Endpoint</h5>
+                    <code>POST /admin/object/grid-proxy</code>
+                    <pre class="bg-light p-3 mt-2">{
+    "filter": [
+        {"property": "tags", "operator": "=", "type": "list", "value": ["electronics"]}
+    ]
+}</pre>
+                </div>
+            </main>
         </div>
     </div>
 
     <script>
         document.getElementById('filter-form').addEventListener('submit', async function(event) {
             event.preventDefault();
-            const jobType = document.getElementById('job-type').value;
+            const property = document.getElementById('filter-property').value;
+            const operator = document.getElementById('filter-operator').value;
+            const valueInput = document.getElementById('filter-value').value;
+            const values = valueInput.split(',').map(v => v.trim()).filter(v => v);
+            
             const resultDiv = document.getElementById('result');
-            resultDiv.innerHTML = '';
+            resultDiv.innerHTML = '<p>Loading...</p>';
+            
+            const filterPayload = {
+                filter: [{
+                    property: property,
+                    operator: operator,
+                    type: 'list',
+                    value: values
+                }]
+            };
 
             try {
-                const response = await fetch('/jobs', {
+                const response = await fetch('/admin/object/grid-proxy', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json'
                     },
-                    body: JSON.stringify({ job_type: jobType })
+                    body: JSON.stringify(filterPayload)
                 });
-                if (response.ok) {
-                    const data = await response.json();
-                    if (data.length === 0) {
-                        resultDiv.innerHTML = '<div class="alert alert-warning" role="alert">No jobs found</div>';
+                
+                const data = await response.json();
+                
+                if (data.success && data.data) {
+                    if (data.data.length === 0) {
+                        resultDiv.innerHTML = '<div class="alert alert-warning">No objects found matching filter</div>';
                     } else {
-                        let jobsTable = `
-                            <table class="table table-bordered mt-4">
-                                <thead>
+                        let table = `
+                            <table class="table table-striped table-bordered">
+                                <thead class="thead-dark">
                                     <tr>
                                         <th>ID</th>
                                         <th>Name</th>
-                                        <th>Type</th>
-                                        <th>Description</th>
+                                        <th>Tags</th>
+                                        <th>Category</th>
+                                        <th>Status</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                         `;
-                        data.forEach(user => {
-                            jobsTable += `
+                        data.data.forEach(obj => {
+                            table += `
                                 <tr>
-                                    <td>${user.id}</td>
-                                    <td>${user.name}</td>
-                                    <td>${user.type}</td>
-                                    <td>${user.description}</td>
+                                    <td>${obj.id}</td>
+                                    <td>${obj.name}</td>
+                                    <td>${obj.tags}</td>
+                                    <td>${obj.category}</td>
+                                    <td>${obj.status}</td>
                                 </tr>
                             `;
                         });
-                        jobsTable += '</tbody></table>';
-                        resultDiv.innerHTML = jobsTable;
+                        table += '</tbody></table>';
+                        resultDiv.innerHTML = table;
                     }
                 } else {
-                    const errorData = await response.json();
-                    resultDiv.innerHTML = `
-                        <div class="alert alert-danger" role="alert">
-                            Error: ${errorData.detail}
-                        </div>
-                    `;
+                    resultDiv.innerHTML = `<div class="alert alert-danger">Error: ${data.error || 'Unknown error'}</div>`;
                 }
             } catch (error) {
-                resultDiv.innerHTML = `
-                    <div class="alert alert-danger" role="alert">
-                        Network error or server is down.
-                    </div>
-                `;
+                resultDiv.innerHTML = `<div class="alert alert-danger">Network error: ${error.message}</div>`;
             }
         });
     </script>
