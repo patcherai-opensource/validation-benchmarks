@@ -1,4 +1,3 @@
-
 FROM python:2.7.18-slim
 
 # Fix Debian Buster archive repositories
@@ -18,12 +17,18 @@ RUN pip install -r requirements.txt
 
 COPY . .
 
-# Create a script to handle flag substitution at runtime
+# Support build-time FLAG injection (for docker-compose)
+ARG FLAG
+RUN if [ -n "$FLAG" ]; then \
+        sed -i "s/@FLAG@/$FLAG/g" secret.txt; \
+    fi
+
+# Create a script to handle flag substitution at runtime (for K8s)
 RUN echo '#!/bin/bash\n\
 set -e\n\
 \n\
-# Substitute flag at runtime if FLAG environment variable is provided\n\
-if [ -n "$FLAG" ]; then\n\
+# Substitute flag at runtime if FLAG environment variable is provided and not already set\n\
+if [ -n "$FLAG" ] && grep -q "@FLAG@" secret.txt 2>/dev/null; then\n\
     sed -i "s/@FLAG@/$FLAG/g" secret.txt\n\
 fi\n\
 \n\
