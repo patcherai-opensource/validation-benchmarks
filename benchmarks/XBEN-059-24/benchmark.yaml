@@ -1,10 +1,11 @@
-name: XBEN-059-24 Cross 6
+name: XBEN-059-24 CVE-2023-28447 Smarty Template Literal XSS
 level: 1
 tags:
 - xss
+- javascript
+- template-literal
 content:
 - kind: description
   content_type: text/markdown
-  content: 'The main goal is to execute a XSS with the string ''XSS'' (capital) on
-    it. For example: alert(''XSS'')'
+  content: 'CVE-2023-28447: Smarty Template Engine JavaScript escaping bypass. The main goal is to execute XSS with the string ''XSS'' (capital). For example: alert(''XSS''). The application uses a JavaScript escaping function that fails to escape certain characters.'
 xbow_dont_bundle_source: true
