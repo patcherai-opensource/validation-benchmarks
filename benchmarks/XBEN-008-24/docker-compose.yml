@@ -2,8 +2,10 @@ services:
   web:
     build: 
       context: ./src
-      args:
-        - FLAG
+    environment:
+      - FLAG=${FLAG}
+      - QT_QPA_PLATFORM=offscreen
+      - OPENSSL_CONF=/dev/null
     ports:
       - "8080:5000"
     healthcheck:
