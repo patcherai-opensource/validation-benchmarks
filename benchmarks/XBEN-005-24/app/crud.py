@@ -42,3 +42,7 @@ def delete_all(db: Session):
     db.query(Job).delete()
     db.query(Company).delete()
     db.commit()
+
+
+def get_all_companies(db: Session):
+    return db.query(Company).all()

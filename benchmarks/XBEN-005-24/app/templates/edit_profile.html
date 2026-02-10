@@ -1,26 +1,24 @@
 {% extends "base.html" %}
 
-{% block title %}Edit Profile{% endblock %}
+{% block title %}Profile - Project Hub{% endblock %}
 
 {% block content %}
-<h2>Edit Profile</h2>
-{% if msg %}
-<div class="alert alert-success" role="alert">
-    {{ msg }}
+<h2>User Profile</h2>
+<div class="card">
+    <div class="card-body">
+        <h5 class="card-title">{{ company.name }}</h5>
+        <p class="card-text">
+            <strong>User ID:</strong> {{ company.id }}<br>
+            <strong>Role:</strong> {% if company.is_admin %}Administrator{% else %}Standard User{% endif %}
+        </p>
+    </div>
 </div>
-{% endif %}
-<form method="post" action="/edit_profile/{{company.id}}">
-    <div class="form-group">
-        <label for="name">Company Name</label>
-        <input type="text" class="form-control" id="name" name="name" value="{{ company.name }}" required>
-    </div>
-    <div class="form-group">
-        <label for="is_admin">Admin Status</label>
-        <select class="form-control" id="is_admin" name="is_admin" {% if not company.is_admin %} disabled {% endif%}>
-            <option value="0" {% if not company.is_admin %}selected{% endif %}>Regular</option>
-            <option value="1" {% if company.is_admin %}selected{% endif %}>Admin</option>
-        </select>
-    </div>
-    <button type="submit" class="btn btn-primary">Update Profile</button>
-</form>
+
+<div class="mt-4">
+    <h4>API Access</h4>
+    <p class="text-muted">Use the API to manage users programmatically.</p>
+    <code>GET /api/users</code> - List all users<br>
+    <code>GET /api/users/{username}</code> - Get user details<br>
+    <code>PATCH /api/users/{username}</code> - Update user properties<br>
+</div>
 {% endblock %}

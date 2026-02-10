@@ -4,28 +4,53 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-    <title>{% block title %}FastAPI App{% endblock %}</title>
+    <title>{% block title %}Project Hub{% endblock %}</title>
     <style>
         body {
             display: flex;
+            min-height: 100vh;
         }
-        .nav {
-            width: 200px;
+        .sidebar {
+            width: 220px;
+            background-color: #343a40;
+            padding-top: 20px;
+        }
+        .sidebar .nav-link {
+            color: #adb5bd;
+        }
+        .sidebar .nav-link:hover {
+            color: #fff;
+        }
+        .sidebar .brand {
+            color: #fff;
+            font-size: 1.2rem;
+            padding: 0 1rem 1rem;
+            border-bottom: 1px solid #495057;
+            margin-bottom: 1rem;
         }
         .content {
             flex-grow: 1;
-            padding: 20px;
+            padding: 30px;
+            background-color: #f8f9fa;
+        }
+        .login-container {
+            max-width: 400px;
+            margin: 50px auto;
+            padding: 30px;
+            background: #fff;
+            border-radius: 5px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
         }
     </style>
 </head>
 <body>
-    <div class="nav flex-column nav-pills" aria-orientation="vertical">
-        {% if request.cookies.access_token %}
-        <a class="nav-link" href="/company/{{company_id}}/jobs">View Jobs</a>
-        <a class="nav-link" href="/edit_profile/{{company_id}}">Edit Profile</a>
-        {% endif %}
-
+    {% if request.cookies.access_token %}
+    <div class="sidebar nav flex-column nav-pills" aria-orientation="vertical">
+        <div class="brand">Project Hub</div>
+        <a class="nav-link" href="/users/{{company_id}}/projects">My Projects</a>
+        <a class="nav-link" href="/profile/{{company_id}}">Profile</a>
     </div>
+    {% endif %}
     <div class="content">
         {% block content %}{% endblock %}
     </div>
