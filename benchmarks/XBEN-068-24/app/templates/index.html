@@ -3,90 +3,380 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Service Status Dashboard</title>
+    <title>AutoAGI - Agent Template Manager</title>
     <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
         body {
-            font-family: Arial, sans-serif;
-            background: #f4f4f9;
-            margin: 0;
-            padding: 0;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            min-height: 100vh;
+            color: #e0e0e0;
         }
-
-        #service-container {
-            width: 80%;
-            max-width: 600px;
-            background: white;
-            border-radius: 8px;
-            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-            padding: 20px;
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-        }
-
-        .service {
-            padding: 10px 20px;
-            border-radius: 5px;
+        .navbar {
+            background: rgba(0,0,0,0.3);
+            padding: 1rem 2rem;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            font-size: 16px;
-            transition: background-color 0.3s;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
         }
-
-        .red {
-            background-color: #ffdddd;
-            color: #d04437;
+        .logo {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #00d4ff;
         }
-
-        .green {
-            background-color: #ddffdd;
-            color: #4a934a;
+        .nav-links a {
+            color: #aaa;
+            text-decoration: none;
+            margin-left: 2rem;
         }
+        .nav-links a:hover { color: #fff; }
+        .container {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 0 1rem;
+        }
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+        }
+        h1 { font-size: 1.8rem; }
+        .btn {
+            background: #00d4ff;
+            color: #000;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 600;
+        }
+        .btn:hover { background: #00b8e0; }
+        .btn-secondary {
+            background: transparent;
+            border: 1px solid #00d4ff;
+            color: #00d4ff;
+        }
+        .templates-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 1.5rem;
+        }
+        .template-card {
+            background: rgba(255,255,255,0.05);
+            border-radius: 12px;
+            padding: 1.5rem;
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+        .template-card h3 {
+            color: #fff;
+            margin-bottom: 0.5rem;
+        }
+        .template-card p {
+            color: #888;
+            font-size: 0.9rem;
+            margin-bottom: 1rem;
+        }
+        .template-meta {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.8rem;
+            color: #666;
+        }
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.8);
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+        .modal-content {
+            background: #1e1e2e;
+            border-radius: 12px;
+            padding: 2rem;
+            width: 90%;
+            max-width: 600px;
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 1.5rem;
+        }
+        .close-btn {
+            background: none;
+            border: none;
+            color: #888;
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+        .form-group {
+            margin-bottom: 1rem;
+        }
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: #aaa;
+        }
+        .form-group input, .form-group textarea {
+            width: 100%;
+            padding: 0.75rem;
+            border-radius: 6px;
+            border: 1px solid rgba(255,255,255,0.1);
+            background: rgba(0,0,0,0.3);
+            color: #fff;
+        }
+        .form-group textarea { min-height: 80px; resize: vertical; }
+        .empty-state {
+            text-align: center;
+            padding: 4rem;
+            color: #666;
+        }
+        .config-section {
+            margin-top: 1.5rem;
+            padding-top: 1.5rem;
+            border-top: 1px solid rgba(255,255,255,0.1);
+        }
+        .config-section h4 {
+            margin-bottom: 1rem;
+            color: #00d4ff;
+        }
+        .actions { margin-top: 1rem; display: flex; gap: 0.5rem; }
     </style>
 </head>
 <body>
-    <div id="service-container">
-        <div id="apache" class="service">Apache: Loading...</div>
-        <div id="mysql" class="service">MySQL: Loading...</div>
-        <div id="nginx" class="service">Nginx: Loading...</div>
-        <div id="ssh" class="service">SSH: Loading...</div>
+    <nav class="navbar">
+        <div class="logo">AutoAGI</div>
+        <div class="nav-links">
+            <a href="#">Dashboard</a>
+            <a href="#">Agents</a>
+            <a href="#" class="active">Templates</a>
+            <a href="#">Marketplace</a>
+            <a href="#">Settings</a>
+        </div>
+    </nav>
+
+    <div class="container">
+        <div class="header">
+            <h1>Agent Templates</h1>
+            <div>
+                <button class="btn btn-secondary" onclick="openMarketplaceModal()">Import from Marketplace</button>
+                <button class="btn" onclick="openCreateModal()">Create Template</button>
+            </div>
+        </div>
+
+        <div id="templates-container" class="templates-grid">
+            <div class="empty-state">
+                <p>No templates yet. Create your first agent template or import from the marketplace.</p>
+            </div>
+        </div>
+    </div>
+
+    <div id="createModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Create Agent Template</h2>
+                <button class="close-btn" onclick="closeModal('createModal')">&times;</button>
+            </div>
+            <form id="createForm">
+                <div class="form-group">
+                    <label>Template Name</label>
+                    <input type="text" id="templateName" required placeholder="e.g., Research Assistant">
+                </div>
+                <div class="form-group">
+                    <label>Description</label>
+                    <textarea id="templateDesc" placeholder="Describe what this agent template does..."></textarea>
+                </div>
+                <div class="config-section">
+                    <h4>Agent Configuration</h4>
+                    <div class="form-group">
+                        <label>Goal</label>
+                        <textarea id="configGoal" placeholder="Define the agent's primary goal..."></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label>Constraints</label>
+                        <textarea id="configConstraints" placeholder="Define constraints for the agent..."></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label>Instruction</label>
+                        <textarea id="configInstruction" placeholder="Provide instructions for the agent..."></textarea>
+                    </div>
+                </div>
+                <div class="actions">
+                    <button type="submit" class="btn">Create Template</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div id="marketplaceModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Import from Marketplace</h2>
+                <button class="close-btn" onclick="closeModal('marketplaceModal')">&times;</button>
+            </div>
+            <form id="marketplaceForm">
+                <div class="form-group">
+                    <label>Template JSON</label>
+                    <textarea id="marketplaceJson" rows="10" placeholder='Paste marketplace template JSON here...'></textarea>
+                </div>
+                <div class="actions">
+                    <button type="submit" class="btn">Import Template</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div id="viewModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="viewTitle">Template Details</h2>
+                <button class="close-btn" onclick="closeModal('viewModal')">&times;</button>
+            </div>
+            <div id="viewContent"></div>
+        </div>
     </div>
 
     <script>
-        document.addEventListener("DOMContentLoaded", function() {
-            const services = ['apache', 'mysql', 'nginx', 'ssh'];
+        let templates = [];
 
-            services.forEach(service => {
-                fetch('/check_service', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({ service_name: service })
-                })
-                .then(response => response.json())
+        function loadTemplates() {
+            fetch('/api/agent_templates')
+                .then(r => r.json())
                 .then(data => {
-                    const element = document.getElementById(service);
-                    if (data.status === "true") {
-                        element.classList.add('green');
-                        element.textContent = service.toUpperCase() + ": Running";
-                    } else {
-                        element.classList.add('red');
-                        element.textContent = service.toUpperCase() + ": Stopped";
-                    }
-                })
-                .catch(error => {
-                    console.error('Error:', error);
-                    const element = document.getElementById(service);
-                    element.textContent = service.toUpperCase() + ": Error";
+                    templates = data.templates || [];
+                    renderTemplates();
                 });
+        }
+
+        function renderTemplates() {
+            const container = document.getElementById('templates-container');
+            if (templates.length === 0) {
+                container.innerHTML = '<div class="empty-state"><p>No templates yet. Create your first agent template or import from the marketplace.</p></div>';
+                return;
+            }
+            container.innerHTML = templates.map(t => `
+                <div class="template-card">
+                    <h3>${escapeHtml(t.name)}</h3>
+                    <p>${escapeHtml(t.description || 'No description')}</p>
+                    <div class="template-meta">
+                        <span>ID: ${t.id}</span>
+                        <span>${t.created_at ? new Date(t.created_at).toLocaleDateString() : ''}</span>
+                    </div>
+                    <div class="actions">
+                        <button class="btn btn-secondary" onclick="viewTemplate('${t.id}')">View</button>
+                        <button class="btn btn-secondary" onclick="deleteTemplate('${t.id}')">Delete</button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function escapeHtml(text) {
+            if (!text) return '';
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+
+        function openCreateModal() {
+            document.getElementById('createModal').style.display = 'flex';
+        }
+
+        function openMarketplaceModal() {
+            document.getElementById('marketplaceModal').style.display = 'flex';
+        }
+
+        function closeModal(id) {
+            document.getElementById(id).style.display = 'none';
+        }
+
+        function viewTemplate(id) {
+            fetch(`/api/agent_templates/${id}`)
+                .then(r => r.json())
+                .then(data => {
+                    document.getElementById('viewTitle').textContent = data.name || 'Template Details';
+                    document.getElementById('viewContent').innerHTML = `
+                        <div class="form-group"><label>Description</label><p>${escapeHtml(data.description)}</p></div>
+                        <div class="config-section">
+                            <h4>Configuration</h4>
+                            <pre style="background:rgba(0,0,0,0.3);padding:1rem;border-radius:6px;overflow-x:auto;">${escapeHtml(JSON.stringify(data.agent_configs, null, 2))}</pre>
+                        </div>
+                        <div class="config-section">
+                            <h4>Processed Configuration</h4>
+                            <pre style="background:rgba(0,0,0,0.3);padding:1rem;border-radius:6px;overflow-x:auto;">${escapeHtml(JSON.stringify(data.processed_configs, null, 2))}</pre>
+                        </div>
+                    `;
+                    document.getElementById('viewModal').style.display = 'flex';
+                });
+        }
+
+        function deleteTemplate(id) {
+            if (!confirm('Delete this template?')) return;
+            fetch(`/api/agent_templates/delete/${id}`, { method: 'DELETE' })
+                .then(() => loadTemplates());
+        }
+
+        document.getElementById('createForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const data = {
+                name: document.getElementById('templateName').value,
+                description: document.getElementById('templateDesc').value,
+                agent_configs: {}
+            };
+            const goal = document.getElementById('configGoal').value;
+            const constraints = document.getElementById('configConstraints').value;
+            const instruction = document.getElementById('configInstruction').value;
+            if (goal) data.agent_configs.goal = goal;
+            if (constraints) data.agent_configs.constraints = constraints;
+            if (instruction) data.agent_configs.instruction = instruction;
+
+            fetch('/api/agent_templates/create', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(data)
+            })
+            .then(r => r.json())
+            .then(() => {
+                closeModal('createModal');
+                this.reset();
+                loadTemplates();
             });
         });
+
+        document.getElementById('marketplaceForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            try {
+                const template = JSON.parse(document.getElementById('marketplaceJson').value);
+                fetch('/api/agent_templates/clone_from_marketplace', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ template })
+                })
+                .then(r => r.json())
+                .then(() => {
+                    closeModal('marketplaceModal');
+                    this.reset();
+                    loadTemplates();
+                });
+            } catch (err) {
+                alert('Invalid JSON format');
+            }
+        });
+
+        window.onclick = function(e) {
+            if (e.target.classList.contains('modal')) {
+                e.target.style.display = 'none';
+            }
+        };
+
+        loadTemplates();
     </script>
 </body>
 </html>

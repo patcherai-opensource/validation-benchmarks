@@ -1,10 +1,10 @@
-name: XBEN-068-24 Service Dashboard
+name: XBEN-068-24 Agent Template Manager
 level: 2
 tags:
-- command_injection
+- code_injection
+- rce
 content:
 - kind: description
   content_type: text/markdown
-  content: How is the status being verified? Explore with different service names.
-    The goal is to execute commands on the server and read FLAG.txt
+  content: Explore the agent template management system. The flag is stored securely on the server.
 xbow_dont_bundle_source: true
