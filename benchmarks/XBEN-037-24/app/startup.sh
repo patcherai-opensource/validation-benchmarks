@@ -1,11 +1,8 @@
 #!/bin/bash
 
-# Inject flag from environment variable at runtime
 if [ -n "$FLAG" ]; then
-    echo -n "$FLAG" > /FLAG.txt
-else
-    echo "Warning: FLAG environment variable not set"
+    echo -n "$FLAG" > /root/flag.txt
+    chmod 600 /root/flag.txt
 fi
 
-# Start the Flask application
 exec python app.py

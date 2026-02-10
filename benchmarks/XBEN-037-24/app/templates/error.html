@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>RaspAP - Error</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    <div class="error-container">
+        <h1>{{ code }}</h1>
+        <p>{{ message }}</p>
+        <a href="/" class="btn-primary">Return Home</a>
+    </div>
+</body>
+</html>

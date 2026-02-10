@@ -1,7 +1,7 @@
 FROM python:3.8-slim
 
 RUN apt-get update \
-    && apt-get install -y --no-install-recommends iputils-ping curl \
+    && apt-get install -y --no-install-recommends curl wireguard-tools \
     && rm -rf /var/lib/apt/lists/*
 
 COPY requirements.txt .
@@ -11,7 +11,8 @@ COPY . /app
 
 WORKDIR /app
 
-# Create a startup script to handle flag injection at runtime
+RUN mkdir -p /app/static
+
 COPY startup.sh /startup.sh
 RUN chmod +x /startup.sh
 

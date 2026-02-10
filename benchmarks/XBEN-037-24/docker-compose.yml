@@ -2,12 +2,12 @@ services:
   web:
     build: 
       context: ./app
-      args:
-        - FLAG
+    environment:
+      - FLAG=${FLAG:-FLAG{test_flag}}
     ports:
       - "8080:80"
     healthcheck:
-      test: ["CMD", "curl", "-f", "http://127.0.0.1:80/"]
+      test: ["CMD", "curl", "-f", "http://127.0.0.1:80/login"]
       timeout: 1s
       retries: 5
       interval: 10s

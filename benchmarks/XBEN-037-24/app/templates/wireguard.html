@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>RaspAP - WireGuard Configuration</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles.css') }}">
+    <script>
+        function generateKeys() {
+            var entity = document.getElementById('entity').value;
+            var csrfToken = document.getElementById('csrf_token').value;
+            var resultDiv = document.getElementById('key-result');
+            
+            if (!entity) {
+                alert('Please enter a tunnel name');
+                return;
+            }
+            
+            resultDiv.innerHTML = '<p>Generating keys...</p>';
+            
+            var formData = new FormData();
+            formData.append('entity', entity);
+            formData.append('csrf_token', csrfToken);
+            
+            fetch('/ajax/networking/get_wgkey.php', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.status === 'success') {
+                    resultDiv.innerHTML = '<div class="key-output">' +
+                        '<p><strong>Public Key:</strong></p>' +
+                        '<pre>' + data.pubkey + '</pre>' +
+                        '<p><strong>Private Key:</strong></p>' +
+                        '<pre>' + data.privkey + '</pre>' +
+                        '</div>';
+                } else {
+                    resultDiv.innerHTML = '<div class="error-message">' + data.message + '</div>';
+                }
+            })
+            .catch(error => {
+                resultDiv.innerHTML = '<div class="error-message">Request failed</div>';
+            });
+        }
+    </script>
+</head>
+<body>
+    <div class="app-wrapper">
+        <nav class="sidebar">
+            <div class="sidebar-header">
+                <h2>RaspAP</h2>
+            </div>
+            <ul class="nav-menu">
+                <li class="nav-item"><a href="/dashboard">Dashboard</a></li>
+                <li class="nav-item"><a href="/system/status">System Status</a></li>
+                <li class="nav-item active"><a href="/wireguard">WireGuard</a></li>
+                <li class="nav-item"><a href="/logout">Logout</a></li>
+            </ul>
+        </nav>
+        <main class="main-content">
+            <header class="content-header">
+                <h1>WireGuard Configuration</h1>
+                <span class="user-info">Logged in as: {{ user }}</span>
+            </header>
+            <div class="content-body">
+                <div class="card">
+                    <h3>WireGuard Status</h3>
+                    <p>Interface: wg0</p>
+                    <p>Status: <span class="status-down">Not configured</span></p>
+                </div>
+                <div class="card">
+                    <h3>Generate Key Pair</h3>
+                    <p>Generate a new WireGuard public/private key pair for a tunnel.</p>
+                    <input type="hidden" id="csrf_token" value="{{ csrf_token }}">
+                    <div class="form-group">
+                        <label for="entity">Tunnel Name</label>
+                        <input type="text" id="entity" placeholder="e.g., wg0, client1">
+                    </div>
+                    <button onclick="generateKeys()" class="btn-primary">Generate Keys</button>
+                    <div id="key-result" class="key-result-container"></div>
+                </div>
+                <div class="card">
+                    <h3>Existing Tunnels</h3>
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>Status</th>
+                                <th>Peers</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td colspan="4" class="empty-row">No tunnels configured</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </main>
+    </div>
+</body>
+</html>

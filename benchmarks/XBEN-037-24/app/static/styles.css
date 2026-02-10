@@ -1,47 +1,344 @@
-body {
-    font-family: Arial, sans-serif;
+* {
     margin: 0;
     padding: 0;
-    background-color: #f0f0f0;
+    box-sizing: border-box;
 }
 
-.container {
-    width: 50%;  /* Adjusted width */
-    margin: 50px auto;
-    padding: 20px;
-    border: 1px solid #ccc;
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #1a1a2e;
+    color: #eaeaea;
+    min-height: 100vh;
+}
+
+.login-container {
+    width: 100%;
+    max-width: 400px;
+    margin: 100px auto;
+    padding: 40px;
+    background-color: #16213e;
+    border-radius: 8px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+}
+
+.login-header {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.login-header h1 {
+    color: #e94560;
+    font-size: 2.5em;
+    margin-bottom: 5px;
+}
+
+.login-header p {
+    color: #a0a0a0;
+    font-size: 0.9em;
+}
+
+.login-form .form-group {
+    margin-bottom: 20px;
+}
+
+.login-form label {
+    display: block;
+    margin-bottom: 8px;
+    color: #b0b0b0;
+    font-size: 0.9em;
+}
+
+.login-form input {
+    width: 100%;
+    padding: 12px 15px;
+    border: 1px solid #3a3a5e;
     border-radius: 5px;
-    background-color: #ffffff;
+    background-color: #0f0f23;
+    color: #eaeaea;
+    font-size: 1em;
 }
 
-h1 {
+.login-form input:focus {
+    outline: none;
+    border-color: #e94560;
+}
+
+.btn-login {
+    width: 100%;
+    padding: 14px;
+    background-color: #e94560;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    font-size: 1em;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.btn-login:hover {
+    background-color: #d63850;
+}
+
+.login-footer {
+    text-align: center;
+    margin-top: 30px;
+    color: #606060;
+    font-size: 0.85em;
+}
+
+.error-message {
+    background-color: rgba(233, 69, 96, 0.2);
+    color: #e94560;
+    padding: 12px;
+    border-radius: 5px;
+    margin-bottom: 20px;
     text-align: center;
 }
 
-input[type="text"], button {
-    display: block;
-    width: 95%;
-    margin-bottom: 10px;
-    padding: 10px;
-    border: 1px solid #ccc;
-    border-radius: 3px;
+.app-wrapper {
+    display: flex;
+    min-height: 100vh;
 }
 
-button {
-    background-color: #4CAF50;
+.sidebar {
+    width: 250px;
+    background-color: #16213e;
+    padding: 20px 0;
+    position: fixed;
+    height: 100vh;
+}
+
+.sidebar-header {
+    padding: 20px;
+    border-bottom: 1px solid #3a3a5e;
+}
+
+.sidebar-header h2 {
+    color: #e94560;
+    font-size: 1.8em;
+}
+
+.nav-menu {
+    list-style: none;
+    margin-top: 20px;
+}
+
+.nav-item a {
+    display: block;
+    padding: 15px 25px;
+    color: #a0a0a0;
+    text-decoration: none;
+    transition: all 0.2s;
+}
+
+.nav-item a:hover,
+.nav-item.active a {
+    background-color: #0f0f23;
+    color: #e94560;
+    border-left: 3px solid #e94560;
+}
+
+.main-content {
+    flex: 1;
+    margin-left: 250px;
+    padding: 20px 40px;
+}
+
+.content-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-bottom: 20px;
+    border-bottom: 1px solid #3a3a5e;
+    margin-bottom: 30px;
+}
+
+.content-header h1 {
+    font-size: 1.8em;
+    color: #eaeaea;
+}
+
+.user-info {
+    color: #a0a0a0;
+    font-size: 0.9em;
+}
+
+.content-body {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+}
+
+.card {
+    background-color: #16213e;
+    border-radius: 8px;
+    padding: 25px;
+    flex: 1;
+    min-width: 300px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+}
+
+.card h3 {
+    color: #e94560;
+    margin-bottom: 20px;
+    font-size: 1.2em;
+    border-bottom: 1px solid #3a3a5e;
+    padding-bottom: 10px;
+}
+
+.stats-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+}
+
+.stat-item {
+    background-color: #0f0f23;
+    padding: 15px;
+    border-radius: 5px;
+    text-align: center;
+}
+
+.stat-label {
+    display: block;
+    color: #a0a0a0;
+    font-size: 0.85em;
+    margin-bottom: 5px;
+}
+
+.stat-value {
+    display: block;
+    color: #eaeaea;
+    font-size: 1.3em;
+    font-weight: bold;
+}
+
+.data-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.data-table th,
+.data-table td {
+    padding: 12px;
+    text-align: left;
+    border-bottom: 1px solid #3a3a5e;
+}
+
+.data-table th {
+    color: #a0a0a0;
+    font-weight: normal;
+    font-size: 0.9em;
+}
+
+.data-table td {
+    color: #eaeaea;
+}
+
+.info-table {
+    width: 100%;
+}
+
+.info-table td {
+    padding: 10px 0;
+    border-bottom: 1px solid #3a3a5e;
+}
+
+.info-table td:first-child {
+    color: #a0a0a0;
+    width: 40%;
+}
+
+.status-up {
+    color: #4ade80;
+    font-weight: bold;
+}
+
+.status-down {
+    color: #f87171;
+    font-weight: bold;
+}
+
+.form-group {
+    margin-bottom: 15px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 8px;
+    color: #b0b0b0;
+    font-size: 0.9em;
+}
+
+.form-group input {
+    width: 100%;
+    padding: 12px 15px;
+    border: 1px solid #3a3a5e;
+    border-radius: 5px;
+    background-color: #0f0f23;
+    color: #eaeaea;
+    font-size: 1em;
+}
+
+.form-group input:focus {
+    outline: none;
+    border-color: #e94560;
+}
+
+.btn-primary {
+    padding: 12px 25px;
+    background-color: #e94560;
     color: white;
     border: none;
-    cursor: pointer;
-}
-
-button:hover {
-    background-color: #45a049;
-}
-
-pre {
-    white-space: pre-wrap; /* Ensures whitespace and newlines are preserved */
-    background-color: #f4f4f4;
-    padding: 10px;
     border-radius: 5px;
-    border: 1px solid #ddd;
+    font-size: 1em;
+    cursor: pointer;
+    transition: background-color 0.2s;
+    text-decoration: none;
+    display: inline-block;
+}
+
+.btn-primary:hover {
+    background-color: #d63850;
+}
+
+.key-result-container {
+    margin-top: 20px;
+}
+
+.key-output pre {
+    background-color: #0f0f23;
+    padding: 15px;
+    border-radius: 5px;
+    font-family: 'Courier New', monospace;
+    word-break: break-all;
+    white-space: pre-wrap;
+    color: #4ade80;
+    margin: 10px 0;
+}
+
+.empty-row {
+    text-align: center;
+    color: #606060;
+    font-style: italic;
+}
+
+.error-container {
+    width: 100%;
+    max-width: 500px;
+    margin: 150px auto;
+    text-align: center;
+    padding: 40px;
+}
+
+.error-container h1 {
+    font-size: 6em;
+    color: #e94560;
+    margin-bottom: 20px;
+}
+
+.error-container p {
+    font-size: 1.3em;
+    color: #a0a0a0;
+    margin-bottom: 30px;
 }

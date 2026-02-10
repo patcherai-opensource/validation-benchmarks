@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>RaspAP - System Status</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    <div class="app-wrapper">
+        <nav class="sidebar">
+            <div class="sidebar-header">
+                <h2>RaspAP</h2>
+            </div>
+            <ul class="nav-menu">
+                <li class="nav-item"><a href="/dashboard">Dashboard</a></li>
+                <li class="nav-item active"><a href="/system/status">System Status</a></li>
+                <li class="nav-item"><a href="/wireguard">WireGuard</a></li>
+                <li class="nav-item"><a href="/logout">Logout</a></li>
+            </ul>
+        </nav>
+        <main class="main-content">
+            <header class="content-header">
+                <h1>System Status</h1>
+                <span class="user-info">Logged in as: {{ user }}</span>
+            </header>
+            <div class="content-body">
+                <div class="card">
+                    <h3>System Information</h3>
+                    <table class="info-table">
+                        <tr>
+                            <td>Hostname</td>
+                            <td>raspberrypi</td>
+                        </tr>
+                        <tr>
+                            <td>Kernel Version</td>
+                            <td>5.15.84-v8+</td>
+                        </tr>
+                        <tr>
+                            <td>Architecture</td>
+                            <td>aarch64</td>
+                        </tr>
+                        <tr>
+                            <td>RaspAP Version</td>
+                            <td>2.9.2</td>
+                        </tr>
+                    </table>
+                </div>
+                <div class="card">
+                    <h3>Service Status</h3>
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>Service</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>hostapd</td>
+                                <td><span class="status-up">Running</span></td>
+                            </tr>
+                            <tr>
+                                <td>dnsmasq</td>
+                                <td><span class="status-up">Running</span></td>
+                            </tr>
+                            <tr>
+                                <td>wg-quick@wg0</td>
+                                <td><span class="status-down">Stopped</span></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </main>
+    </div>
+</body>
+</html>

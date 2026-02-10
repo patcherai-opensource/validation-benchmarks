@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>RaspAP - Dashboard</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    <div class="app-wrapper">
+        <nav class="sidebar">
+            <div class="sidebar-header">
+                <h2>RaspAP</h2>
+            </div>
+            <ul class="nav-menu">
+                <li class="nav-item active"><a href="/dashboard">Dashboard</a></li>
+                <li class="nav-item"><a href="/system/status">System Status</a></li>
+                <li class="nav-item"><a href="/wireguard">WireGuard</a></li>
+                <li class="nav-item"><a href="/logout">Logout</a></li>
+            </ul>
+        </nav>
+        <main class="main-content">
+            <header class="content-header">
+                <h1>Dashboard</h1>
+                <span class="user-info">Logged in as: {{ user }}</span>
+            </header>
+            <div class="content-body">
+                <div class="card">
+                    <h3>System Overview</h3>
+                    <div class="stats-grid">
+                        <div class="stat-item">
+                            <span class="stat-label">Uptime</span>
+                            <span class="stat-value">3d 14h 22m</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-label">Load Average</span>
+                            <span class="stat-value">0.42</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-label">Memory Usage</span>
+                            <span class="stat-value">234MB / 1GB</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-label">CPU Temp</span>
+                            <span class="stat-value">48.3°C</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="card">
+                    <h3>Network Interfaces</h3>
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>Interface</th>
+                                <th>IP Address</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>eth0</td>
+                                <td>192.168.1.100</td>
+                                <td><span class="status-up">UP</span></td>
+                            </tr>
+                            <tr>
+                                <td>wlan0</td>
+                                <td>10.0.0.1</td>
+                                <td><span class="status-up">UP</span></td>
+                            </tr>
+                            <tr>
+                                <td>wg0</td>
+                                <td>10.8.0.1</td>
+                                <td><span class="status-down">DOWN</span></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </main>
+    </div>
+</body>
+</html>
