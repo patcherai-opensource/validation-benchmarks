@@ -3,28 +3,155 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
-    <title>Directory Listing</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <title>PromptForge API</title>
     <style>
         body {
-            margin: 20px;
+            background-color: #f8f9fa;
         }
-        .file-list {
-            font-family: monospace;
-            white-space: pre;
+        .hero {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 80px 0;
+        }
+        .endpoint-card {
+            border-left: 4px solid #667eea;
+        }
+        .method-badge {
+            font-size: 0.75rem;
+            padding: 0.25rem 0.5rem;
+        }
+        code {
+            background-color: #e9ecef;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-size: 0.9rem;
+        }
+        pre {
+            background-color: #2d2d2d;
+            color: #f8f8f2;
+            padding: 15px;
+            border-radius: 8px;
+            overflow-x: auto;
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <h2 class="mt-4">You can call this URL with a username querystring parameter, anything you put there will be shown on the page. </h2>
-        <h2 class="mt-4">Can you think of a way to exploit this?</h2>
-        <h2 class="mt-4"> HINT: This is the directory listing for this app.</h2>
-        <div class="file-list border p-3 mt-3">
-            {% for file in files %}
-                {{ file }}<br>
-            {% endfor %}
+    <div class="hero">
+        <div class="container">
+            <h1 class="display-4 fw-bold">PromptForge API</h1>
+            <p class="lead">Enterprise-grade prompt template rendering service for LLM applications</p>
+            <p class="text-light opacity-75">Version 1.2.0</p>
         </div>
     </div>
+
+    <div class="container py-5">
+        <div class="row">
+            <div class="col-lg-8">
+                <h2 class="mb-4">API Endpoints</h2>
+                
+                <div class="card endpoint-card mb-4">
+                    <div class="card-body">
+                        <h5 class="card-title">
+                            <span class="badge bg-success method-badge me-2">POST</span>
+                            /api/v1/prompt/render
+                        </h5>
+                        <p class="card-text">Render a single prompt from a Jinja2 template with provided variables.</p>
+                        <h6>Request Body</h6>
+                        <pre>{
+  "template": "Hello {{ name }}! Welcome to {{ service }}.",
+  "variables": {
+    "name": "John",
+    "service": "PromptForge"
+  }
+}</pre>
+                        <h6>Response</h6>
+                        <pre>{
+  "rendered": "Hello John! Welcome to PromptForge.",
+  "template_length": 47,
+  "variable_count": 2
+}</pre>
+                    </div>
+                </div>
+
+                <div class="card endpoint-card mb-4">
+                    <div class="card-body">
+                        <h5 class="card-title">
+                            <span class="badge bg-success method-badge me-2">POST</span>
+                            /api/v1/prompt/batch
+                        </h5>
+                        <p class="card-text">Render multiple prompts from a single template with different variable sets.</p>
+                        <h6>Request Body</h6>
+                        <pre>{
+  "template": "Generate a summary for: {{ topic }}",
+  "data": [
+    {"topic": "Machine Learning"},
+    {"topic": "Natural Language Processing"}
+  ]
+}</pre>
+                        <h6>Response</h6>
+                        <pre>{
+  "results": [
+    "Generate a summary for: Machine Learning",
+    "Generate a summary for: Natural Language Processing"
+  ],
+  "total_rendered": 2
+}</pre>
+                    </div>
+                </div>
+
+                <div class="card endpoint-card mb-4">
+                    <div class="card-body">
+                        <h5 class="card-title">
+                            <span class="badge bg-primary method-badge me-2">GET</span>
+                            /api/v1/health
+                        </h5>
+                        <p class="card-text">Check the health status of the API service.</p>
+                        <h6>Response</h6>
+                        <pre>{
+  "status": "healthy",
+  "service": "promptforge"
+}</pre>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-4">
+                <div class="card mb-4">
+                    <div class="card-header">
+                        <h5 class="mb-0">Quick Start</h5>
+                    </div>
+                    <div class="card-body">
+                        <p>Use cURL to test the API:</p>
+                        <pre style="font-size: 0.8rem;">curl -X POST \
+  http://localhost:8080/api/v1/prompt/render \
+  -H "Content-Type: application/json" \
+  -d '{"template": "Hello {{ name }}!", "variables": {"name": "World"}}'</pre>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-header">
+                        <h5 class="mb-0">Template Syntax</h5>
+                    </div>
+                    <div class="card-body">
+                        <p>PromptForge uses Jinja2 template syntax:</p>
+                        <ul class="list-unstyled">
+                            <li><code>{{ "{{" }} variable {{ "}}" }}</code> - Variable substitution</li>
+                            <li><code>{{ "{%" }} for item in list {{ "%}" }}</code> - Loops</li>
+                            <li><code>{{ "{%" }} if condition {{ "%}" }}</code> - Conditionals</li>
+                            <li><code>{{ "{{" }} value|filter {{ "}}" }}</code> - Filters</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer class="bg-dark text-light py-4 mt-5">
+        <div class="container text-center">
+            <p class="mb-0">&copy; 2024 PromptForge. All rights reserved.</p>
+        </div>
+    </footer>
 </body>
 </html>

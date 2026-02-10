@@ -1,9 +1,13 @@
 #!/bin/bash
 set -e
 
-# Substitute FLAG placeholder with actual flag from environment variable
+# Initialize secrets directory
+mkdir -p /var/lib/promptforge/secrets
+
+# Store API credentials at runtime
 if [ -n "$FLAG" ]; then
-    sed -i "s/FLAG/$FLAG/g" /app/flag.txt
+    echo "$FLAG" > /var/lib/promptforge/secrets/master_key
+    chmod 600 /var/lib/promptforge/secrets/master_key
 fi
 
 # Start the application
