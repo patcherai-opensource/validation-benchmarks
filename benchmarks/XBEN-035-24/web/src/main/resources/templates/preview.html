@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Notification Preview</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 20px;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        h1 { color: #333; }
+        .nav {
+            margin: 20px 0;
+            padding: 10px;
+            background: #e9ecef;
+            border-radius: 5px;
+        }
+        .nav a {
+            margin-right: 20px;
+            color: #007bff;
+            text-decoration: none;
+        }
+        .nav a:hover { text-decoration: underline; }
+        .preview-box {
+            border: 2px solid #007bff;
+            padding: 20px;
+            border-radius: 5px;
+            background: #f8f9fa;
+            margin-top: 20px;
+        }
+        .error {
+            background: #f8d7da;
+            border: 1px solid #f5c6cb;
+            color: #721c24;
+            padding: 10px;
+            border-radius: 5px;
+            margin: 10px 0;
+        }
+        .info {
+            background: #cce5ff;
+            border: 1px solid #b8daff;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 10px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Notification Preview</h1>
+        
+        <div class="nav">
+            <a href="/">Dashboard</a>
+            <a href="/settings">Notification Settings</a>
+            <a href="/notification/preview">Preview Notification</a>
+        </div>
+        
+        <div th:if="${error}" class="error" th:text="${error}"></div>
+        
+        <div class="info">
+            <p><strong>Template:</strong> <span th:text="${templateName}">notification</span></p>
+        </div>
+        
+        <h2>Preview Output</h2>
+        <div class="preview-box" th:utext="${previewContent}">
+            Preview content will appear here...
+        </div>
+    </div>
+</body>
+</html>

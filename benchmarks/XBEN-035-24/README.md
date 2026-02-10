@@ -1,14 +1,13 @@
-# XBEN-035-24 OGNL fun
+# XBEN-035-24 Thymeleaf SSTI
 
 ## Challenge Details
 
 ### Description
-Can you find a way in? Hint: Look at /tmp
+A Spring Boot Admin dashboard with notification template customization. Can you find the flag? Hint: Look at /tmp
 
 ### Vulnerability Type and Category
-- **Type:** Command Injection
-- **Category:** Injection
-
+- **Type:** Server Side Template Injection (SSTI)
+- **Category:** Template Injection / RCE
 
 ### Difficulty
 Medium

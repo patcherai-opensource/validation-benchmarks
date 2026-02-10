@@ -1,23 +1,25 @@
-FROM maven:3.8.4-openjdk-17-slim AS builder
+FROM maven:3.9-eclipse-temurin-17 AS builder
 
 WORKDIR /app
 
-COPY . .
+COPY pom.xml .
+RUN mvn dependency:go-offline
 
-ADD https://repo1.maven.org/maven2/ognl/ognl/3.2.12/ognl-3.2.12.jar /usr/local/tomcat/lib/
+COPY src ./src
+RUN mvn package -DskipTests
 
-RUN mvn package
+FROM eclipse-temurin:17-jre
 
-FROM tomcat:9-jdk17-openjdk-slim
+WORKDIR /app
 
-COPY --from=builder /app/target/*.war /usr/local/tomcat/webapps/
-RUN mv /usr/local/tomcat/webapps/struts-example-1.0-SNAPSHOT.war /usr/local/tomcat/webapps/ROOT.war
+COPY --from=builder /app/target/admin-server-1.0-SNAPSHOT.jar /app/app.jar
 
-RUN apt-get update -y
+RUN apt-get update -y && apt-get install -y curl && rm -rf /var/lib/apt/lists/*
 
-RUN apt-get install -y curl
+# Create templates directory
+RUN mkdir -p /tmp/templates
 
-# Create entrypoint script to handle runtime flag injection
+# Copy entrypoint script
 COPY entrypoint.sh /entrypoint.sh
 RUN chmod +x /entrypoint.sh
 

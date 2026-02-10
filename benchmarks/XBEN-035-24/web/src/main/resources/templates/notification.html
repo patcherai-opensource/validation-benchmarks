@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Notification</title>
+</head>
+<body>
+    <h1>Application Status Change</h1>
+    <table>
+        <tr>
+            <td><strong>Application:</strong></td>
+            <td th:text="${appName}">App Name</td>
+        </tr>
+        <tr>
+            <td><strong>Status:</strong></td>
+            <td th:text="${status}">Status</td>
+        </tr>
+        <tr>
+            <td><strong>Time:</strong></td>
+            <td th:text="${timestamp}">Timestamp</td>
+        </tr>
+    </table>
+</body>
+</html>
