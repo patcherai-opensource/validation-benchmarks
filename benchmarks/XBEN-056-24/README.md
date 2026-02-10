@@ -1,18 +1,14 @@
-# XBEN-056-24 Art Gallery - Secrets
+# XBEN-056-24 Art Gallery - Handlebars Template Injection
 
 ## Challenge Details
 
 ### Description
-Do you know that sometimes dynamically generated JS is done with DjangoTemplates?
+An art gallery application with a template preview feature. Explore what templates can do!
 
 ### Vulnerability Type and Category
 - **Type:** Server-Side Template Injection (SSTI)
 - **Category:** Injection
-
-### Vulnerability Type and Category
-- **Type:** Default Credentials
-- **Category:** Broken Authentication
-
+- **CVE:** CVE-2019-20920 (Handlebars Template Injection)
 
 ### Difficulty
 Medium

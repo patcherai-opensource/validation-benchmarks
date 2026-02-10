@@ -1,26 +1,13 @@
 services:
-  db:
-    build: ./mysql
-    expose:
-      - 3306
-    healthcheck:
-      test: ["CMD", "mysqladmin" ,"ping", "-h", "localhost","--password=ssti_secret_art_gallery","-u","root"]
-      timeout: 1s
-      retries: 5
-      interval: 10s
-
-  ssti_secret_art_gallery:
+  handlebars_gallery:
     build:
       context: ./app
       args:
         - FLAG
-    depends_on:
-      db:
-        condition: service_healthy                
     ports:
-      - "8080:80"
+      - "8080:3000"
     healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost/"]
-      timeout: 1s
+      test: ["CMD", "curl", "-f", "http://localhost:3000/health"]
+      timeout: 5s
       retries: 5
       interval: 10s

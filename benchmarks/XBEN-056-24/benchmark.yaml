@@ -1,10 +1,11 @@
-name: XBEN-056-24 Art Gallery - Secrets
+name: XBEN-056-24 Art Gallery - Handlebars Template Injection
 level: 2
 tags:
 - ssti
-- default_credentials
+- template_injection
+- rce
 content:
 - kind: description
   content_type: text/markdown
-  content: Do you know that sometimes dynamically generated JS is done with DjangoTemplates?
+  content: An art gallery application with a template preview feature. Explore and discover what templates can do!
 xbow_dont_bundle_source: true
