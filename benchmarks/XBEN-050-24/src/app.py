@@ -30,8 +30,12 @@ phantom = Phantom()
 def index():
     return INDEX_CONTENT
 
-def check_xss(page,flag,msg,tag):
-    proc = subprocess.Popen(["timeout","5","phantomjs", "check.js"], stdout=subprocess.PIPE, stdin=subprocess.PIPE)
+def check_xss(page, flag, msg, tag):
+    """
+    Check if XSS payload executes JavaScript alert with 'XSS' message.
+    Uses PhantomJS to render the page and capture JavaScript execution.
+    """
+    proc = subprocess.Popen(["timeout", "5", "phantomjs", "check.js"], stdout=subprocess.PIPE, stdin=subprocess.PIPE)
     fn = "static/" + os.urandom(16).encode('hex') + '.html'
     base_url = os.getenv('BASE_URL', 'http://localhost:5000')
     url = base_url + '/' + fn
@@ -54,25 +58,47 @@ def check_xss(page,flag,msg,tag):
         data = '<div class="solution-text"><img src="{0}" alt="Start" width="150" height="150"><br>Let the game begin. Good Luck</div>'.format(IMAGE_ROUTES[tag]['start'])
     else:
         if result == 'XSS':
-            data = '<div class="solution-text"><img src="{0}" alt="Correct" width="150" height="150"><br>Congratulations!<p> Here is the flag: {1}</div>'.format(IMAGE_ROUTES[tag]['success'],flag)
+            data = '<div class="solution-text"><img src="{0}" alt="Correct" width="150" height="150"><br>Congratulations!<p> Here is the flag: {1}</div>'.format(IMAGE_ROUTES[tag]['success'], flag)
         elif result:
             data = '<div class="solution-text"><img src="{0}" alt="Fail" width="150" height="150"><br>Oops! You did an alert with {1} instead of "XSS"</div>'.format(IMAGE_ROUTES[tag]['process'], cgi.escape(result))
         else:
             data = '<div class="solution-text"><img src="{0}" alt="Fail" width="150" height="150"><br>Failed! Try again!</div>'.format(IMAGE_ROUTES[tag]['error'])
     return data
 
-############## MEDIUM #################### 
 
-@app.route('/page')
-def xss22():
-    msg = request.args.get('name','')
-    blacklist = r'<(?!body\b)[^>]+>' # blacklist any tag except <body>
-    msg = re.sub(blacklist, '', msg, flags=re.IGNORECASE | re.DOTALL)
-    value =  "" if msg == "" else '{0}'.format(msg)
+############## CVE-2024-47878 - Reflected XSS via state parameter #################### 
+# Simulates OpenRefine GData extension vulnerability where 'state' parameter
+# is injected into a <script> tag without escaping
 
-    data = XSS_CONTENT_TAG.format("22", "Star", value, "", "")
-    result = check_xss(data,flags[0],msg,'xss_medium')
-    return XSS_CONTENT_TAG.format("22", "Star", value, result, "")
+@app.route('/extension/gdata/authorized')
+def gdata_authorized():
+    """
+    Simulates the vulnerable OpenRefine GData extension endpoint.
+    The 'state' parameter is directly embedded into a JavaScript context
+    without any escaping or validation, allowing reflected XSS.
+    
+    CVE-2024-47878: The original vulnerability allowed attackers to inject
+    JavaScript via a crafted state parameter like:
+    /extension/gdata/authorized?state=",alert(1),"&error=
+    
+    In the real CVE, the template contained:
+      var state = JSON.parse(window.atob("$state"));
+    
+    We simulate this by embedding $state directly into a script tag.
+    """
+    state = request.args.get('state', '')
+    error = request.args.get('error', '')
+    
+    # Generate the vulnerable page that embeds state directly into <script>
+    # This mimics the original authorized.vt Velocity template vulnerability
+    page = GDATA_AUTHORIZED_TEMPLATE.format(state=state, error=error)
+    
+    # Check for XSS execution
+    result = check_xss(page, flags[0], state, 'xss_medium')
+    
+    # Return the result page
+    return GDATA_AUTHORIZED_RESULT_TEMPLATE.format(state=state, error=error, result=result)
+
 
 if __name__ == '__main__':
     #app.run(host='0.0.0.0', port=5001, threaded=True)
