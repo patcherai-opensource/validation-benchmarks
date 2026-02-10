@@ -1,4 +1,3 @@
-
 FROM python:2.7.18-slim
 
 # Fix Debian Buster archive repositories
@@ -27,12 +26,14 @@ RUN echo '#!/bin/bash\n\
 if [ -n "$RUNTIME_FLAG" ]; then\n\
   sed -i "s|FLAG{.*}|$RUNTIME_FLAG|g" secret.txt\n\
 fi\n\
+export FLASK_ENV=production\n\
 exec python -m flask run --host=0.0.0.0 --port=5000' > /entrypoint.sh && \
 chmod +x /entrypoint.sh
 
 # Add environment variables for app host/port configuration
 ENV APP_HOST=localhost
 ENV APP_PORT=5000
+ENV FLASK_ENV=production
 
 # Health check for Kubernetes
 HEALTHCHECK --interval=10s --timeout=5s --start-period=30s --retries=3 \
