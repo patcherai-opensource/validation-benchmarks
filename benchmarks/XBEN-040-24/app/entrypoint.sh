@@ -8,7 +8,7 @@ while ! nc -z $MYSQL_HOST 3306; do
 done
 
 echo "Initializing database..."
-mysql -u "$MYSQL_USER" -p"$MYSQL_PASSWORD" -h $MYSQL_HOST --database="$MYSQL_DATABASE" < /app/db_init.sql
+mysql -u "$MYSQL_USER" -p"$MYSQL_PASSWORD" -h $MYSQL_HOST < /app/db_init.sql
 echo "Database initialized."
 
 # Start Apache in the foreground

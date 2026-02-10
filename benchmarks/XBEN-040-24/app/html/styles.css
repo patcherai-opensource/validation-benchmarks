@@ -1,27 +1,372 @@
-body {
-    font-family: Arial, sans-serif;
-    background-color: #f4f4f9;
+* {
     margin: 0;
-    padding: 20px;
+    padding: 0;
+    box-sizing: border-box;
 }
-.container {
-    width: 80%;
-    margin: auto;
-    background: white;
-    padding: 20px;
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+    background-color: #1a1d21;
+    color: #e4e6eb;
+    line-height: 1.6;
+}
+
+/* Login Page Styles */
+.login-container {
+    max-width: 400px;
+    margin: 100px auto;
+    padding: 40px;
+    background: #242830;
     border-radius: 8px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
 }
-.post {
-    border-bottom: 1px solid #ccc;
-    padding-bottom: 20px;
+
+.login-header {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.login-header h1 {
+    color: #4a9eff;
+    font-size: 2rem;
+    margin-bottom: 5px;
+}
+
+.login-header p {
+    color: #8a8f98;
+    font-size: 0.9rem;
+}
+
+.login-form .form-group {
     margin-bottom: 20px;
 }
-.post h2 a {
-    color: #333;
+
+.login-form label {
+    display: block;
+    margin-bottom: 8px;
+    color: #b0b3b8;
+    font-size: 0.9rem;
+}
+
+.login-form input {
+    width: 100%;
+    padding: 12px;
+    background: #1a1d21;
+    border: 1px solid #3a3f47;
+    border-radius: 4px;
+    color: #e4e6eb;
+    font-size: 1rem;
+}
+
+.login-form input:focus {
+    outline: none;
+    border-color: #4a9eff;
+}
+
+.btn-login {
+    width: 100%;
+    padding: 12px;
+    background: #4a9eff;
+    border: none;
+    border-radius: 4px;
+    color: white;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.btn-login:hover {
+    background: #3a8eef;
+}
+
+.login-footer {
+    text-align: center;
+    margin-top: 30px;
+    color: #5a5f68;
+    font-size: 0.8rem;
+}
+
+.error-message {
+    background: #ff4757;
+    color: white;
+    padding: 10px;
+    border-radius: 4px;
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+/* App Layout */
+.app-container {
+    display: flex;
+    min-height: 100vh;
+}
+
+/* Sidebar */
+.sidebar {
+    width: 250px;
+    background: #242830;
+    padding: 20px 0;
+    display: flex;
+    flex-direction: column;
+}
+
+.sidebar-header {
+    padding: 0 20px 20px;
+    border-bottom: 1px solid #3a3f47;
+}
+
+.sidebar-header h2 {
+    color: #4a9eff;
+    font-size: 1.5rem;
+}
+
+.nav-menu {
+    list-style: none;
+    padding: 20px 0;
+    flex: 1;
+}
+
+.nav-item {
+    margin-bottom: 5px;
+}
+
+.nav-item a {
+    display: block;
+    padding: 12px 20px;
+    color: #b0b3b8;
+    text-decoration: none;
+    transition: all 0.2s;
+}
+
+.nav-item a:hover,
+.nav-item.active a {
+    background: #1a1d21;
+    color: #4a9eff;
+    border-left: 3px solid #4a9eff;
+}
+
+.sidebar-footer {
+    padding: 20px;
+    border-top: 1px solid #3a3f47;
+    color: #8a8f98;
+    font-size: 0.85rem;
+}
+
+/* Main Content */
+.main-content {
+    flex: 1;
+    padding: 30px;
+    background: #1a1d21;
+}
+
+.page-header {
+    margin-bottom: 30px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid #3a3f47;
+}
+
+.page-header h1 {
+    color: #e4e6eb;
+    font-size: 1.75rem;
+}
+
+/* Stats Grid */
+.stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 20px;
+    margin-bottom: 30px;
+}
+
+.stat-card {
+    background: #242830;
+    padding: 25px;
+    border-radius: 8px;
+    text-align: center;
+}
+
+.stat-card h3 {
+    color: #8a8f98;
+    font-size: 0.9rem;
+    margin-bottom: 10px;
+}
+
+.stat-value {
+    font-size: 2.5rem;
+    font-weight: bold;
+    color: #4a9eff;
+}
+
+.stat-card.alert .stat-value {
+    color: #ff4757;
+}
+
+/* Content Section */
+.content-section {
+    background: #242830;
+    padding: 25px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+}
+
+.content-section h2 {
+    color: #e4e6eb;
+    font-size: 1.25rem;
+    margin-bottom: 20px;
+}
+
+/* Data Table */
+.data-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.data-table th,
+.data-table td {
+    padding: 12px 15px;
+    text-align: left;
+    border-bottom: 1px solid #3a3f47;
+}
+
+.data-table th {
+    background: #1a1d21;
+    color: #8a8f98;
+    font-weight: 600;
+    font-size: 0.85rem;
+    text-transform: uppercase;
+}
+
+.data-table td {
+    color: #e4e6eb;
+}
+
+.data-table tr:hover {
+    background: rgba(74, 158, 255, 0.05);
+}
+
+.data-table a {
+    color: #4a9eff;
     text-decoration: none;
 }
-.post img {
+
+.data-table a:hover {
+    text-decoration: underline;
+}
+
+/* Badges */
+.badge {
+    display: inline-block;
+    padding: 4px 10px;
+    border-radius: 4px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+}
+
+.badge.critical {
+    background: rgba(255, 71, 87, 0.2);
+    color: #ff4757;
+}
+
+.badge.warning {
+    background: rgba(255, 193, 7, 0.2);
+    color: #ffc107;
+}
+
+.badge.info {
+    background: rgba(74, 158, 255, 0.2);
+    color: #4a9eff;
+}
+
+.badge.up {
+    background: rgba(46, 213, 115, 0.2);
+    color: #2ed573;
+}
+
+.badge.down {
+    background: rgba(255, 71, 87, 0.2);
+    color: #ff4757;
+}
+
+.badge.active {
+    background: rgba(255, 193, 7, 0.2);
+    color: #ffc107;
+}
+
+.badge.resolved {
+    background: rgba(46, 213, 115, 0.2);
+    color: #2ed573;
+}
+
+/* Search Styles */
+.search-tabs {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 25px;
+}
+
+.tab {
+    padding: 10px 20px;
+    background: #1a1d21;
+    color: #b0b3b8;
+    text-decoration: none;
+    border-radius: 4px;
+    transition: all 0.2s;
+}
+
+.tab:hover,
+.tab.active {
+    background: #4a9eff;
+    color: white;
+}
+
+.search-form {
+    margin-bottom: 25px;
+}
+
+.search-form .form-group {
+    margin-bottom: 15px;
+}
+
+.search-form label {
+    display: block;
+    margin-bottom: 8px;
+    color: #b0b3b8;
+}
+
+.search-form input {
     width: 100%;
-    height: auto;
-    border-radius: 5px;
+    max-width: 400px;
+    padding: 12px;
+    background: #1a1d21;
+    border: 1px solid #3a3f47;
+    border-radius: 4px;
+    color: #e4e6eb;
+    font-size: 1rem;
+}
+
+.search-form input:focus {
+    outline: none;
+    border-color: #4a9eff;
+}
+
+.btn-search {
+    padding: 12px 25px;
+    background: #4a9eff;
+    border: none;
+    border-radius: 4px;
+    color: white;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.btn-search:hover {
+    background: #3a8eef;
+}
+
+.no-results {
+    color: #8a8f98;
+    text-align: center;
+    padding: 40px;
 }
