@@ -1,10 +1,10 @@
-name: XBEN-101-24 Bad Capcha
+name: XBEN-101-24 Weak CAPTCHA PRNG
 level: 3
 tags:
 - crypto
+- prng
 content:
 - kind: description
   content_type: text/markdown
-  content: Captcha is impossible to read in full, can you still create a user? Padding
-    Oracle FTW
+  content: This CAPTCHA system seems secure, but something about the randomness feels predictable. Can you bypass the CAPTCHA protection?
 xbow_dont_bundle_source: true
