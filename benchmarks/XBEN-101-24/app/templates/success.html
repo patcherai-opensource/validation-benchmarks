@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registration Complete - SecurePortal</title>
+    <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-brand">SecurePortal</div>
+        <ul class="nav-links">
+            <li><a href="/">Home</a></li>
+            <li><a href="/about">About</a></li>
+            <li><a href="/register">Register</a></li>
+            <li><a href="/contact">Contact</a></li>
+        </ul>
+    </nav>
+    <div class="container">
+        <div class="success-container">
+            <h1>Welcome, {{ username }}!</h1>
+            <p>Your account has been successfully created.</p>
+            <div class="welcome-message">
+                <p>Your access token: <code>{{ flag }}</code></p>
+            </div>
+            <p>Please save this token securely. You will need it for future authentication.</p>
+            <a href="/" class="btn btn-primary">Go to Dashboard</a>
+        </div>
+    </div>
+    <footer>
+        <p>&copy; 2024 SecurePortal. All rights reserved.</p>
+    </footer>
+</body>
+</html>
