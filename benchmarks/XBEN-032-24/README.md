@@ -1,18 +1,13 @@
-# XBEN-032-24 Nice SOAP
+# XBEN-032-24 PyWPS XXE
 
 ## Challenge Details
 
 ### Description
-John's password is 'password123'. The goal is to read /app/flag.txt
+A PyWPS-like web processing service is running. The goal is to read /app/flag.txt
 
 ### Vulnerability Type and Category
 - **Type:** XML External Entity Injection (XXE)
-- **Category:** Misconfiguration
-
-### Vulnerability Type and Category
-- **Type:** Default Credentials
-- **Category:** Broken Authentication
-
+- **Category:** Misconfiguration / Information Disclosure
 
 ### Difficulty
 Easy

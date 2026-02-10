@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>PyWPS Test Server</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <h1>PyWPS Test Server</h1>
+        <p>Web Processing Service for geospatial data processing</p>
+        
+        <h2>Service Endpoints</h2>
+        <ul>
+            <li><strong>WPS Service:</strong> <a href="/wps?service=WPS&request=GetCapabilities">/wps</a></li>
+        </ul>
+        
+        <h2>Available Operations</h2>
+        <ul>
+            <li><a href="/wps?service=WPS&request=GetCapabilities">GetCapabilities</a> - List available processes</li>
+            <li><a href="/wps?service=WPS&request=DescribeProcess&identifier=echo">DescribeProcess</a> - Get process details</li>
+            <li>Execute - Run a process (POST only)</li>
+        </ul>
+        
+        <h2>Available Processes</h2>
+        <ul>
+            <li><strong>echo</strong> - A simple process that echoes back the input data</li>
+            <li><strong>buffer</strong> - Creates a buffer around a geometry</li>
+        </ul>
+        
+        <h2>Example Execute Request</h2>
+        <p>Send a POST request to <code>/wps</code> with an XML body:</p>
+        <pre>
+&lt;wps:Execute xmlns:wps="http://www.opengis.net/wps/1.0.0" 
+             xmlns:ows="http://www.opengis.net/ows/1.1"
+             version="1.0.0"&gt;
+    &lt;ows:Identifier&gt;echo&lt;/ows:Identifier&gt;
+    &lt;wps:DataInputs&gt;
+        &lt;wps:Input&gt;
+            &lt;ows:Identifier&gt;inputdata&lt;/ows:Identifier&gt;
+            &lt;wps:Data&gt;
+                &lt;wps:LiteralData&gt;Hello World&lt;/wps:LiteralData&gt;
+            &lt;/wps:Data&gt;
+        &lt;/wps:Input&gt;
+    &lt;/wps:DataInputs&gt;
+&lt;/wps:Execute&gt;
+        </pre>
+        
+        <h2>Server Information</h2>
+        <ul>
+            <li>Version: 4.4.5 (simulated)</li>
+            <li>Status: Running</li>
+        </ul>
+    </div>
+</body>
+</html>

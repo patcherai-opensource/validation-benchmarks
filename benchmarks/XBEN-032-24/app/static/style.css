@@ -12,26 +12,79 @@ body {
     display: flex;
     align-items: center;
     justify-content: center;
-    height: 100vh;
+    min-height: 100vh;
     margin: 0;
+    padding: 20px;
 }
 
 /* Container styling */
 .container, .dashboard-container {
-    max-width: 800px;
+    max-width: 900px;
     width: 100%;
     margin: 20px auto;
-    padding: 20px;
+    padding: 30px;
     background: #fff;
     box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
     border-radius: 8px;
-    text-align: center;
+    text-align: left;
 }
 
 /* Headings */
-h2, h3 {
+h1 {
+    color: #2c3e50;
+    margin-bottom: 10px;
+    text-align: center;
+}
+
+h2 {
+    color: #34495e;
+    margin-top: 25px;
+    margin-bottom: 15px;
+    border-bottom: 2px solid #3498db;
+    padding-bottom: 5px;
+}
+
+h3 {
     color: #444;
     margin-bottom: 20px;
+}
+
+/* Paragraph */
+p {
+    color: #666;
+    margin-bottom: 15px;
+    text-align: center;
+}
+
+/* Lists */
+ul {
+    margin-left: 20px;
+    margin-bottom: 15px;
+}
+
+li {
+    margin-bottom: 8px;
+    color: #555;
+}
+
+/* Pre/code styling */
+pre {
+    background: #2c3e50;
+    color: #ecf0f1;
+    padding: 15px;
+    border-radius: 5px;
+    overflow-x: auto;
+    font-family: 'Courier New', monospace;
+    font-size: 13px;
+    line-height: 1.4;
+}
+
+code {
+    background: #ecf0f1;
+    padding: 2px 6px;
+    border-radius: 3px;
+    font-family: 'Courier New', monospace;
+    color: #c0392b;
 }
 
 /* Form styling */
@@ -58,7 +111,7 @@ input[type="password"] {
 button {
     width: 100%;
     padding: 10px;
-    background: #007bff;
+    background: #3498db;
     border: none;
     color: white;
     font-size: 16px;
@@ -68,7 +121,7 @@ button {
 }
 
 button:hover {
-    background: #0056b3;
+    background: #2980b9;
 }
 
 /* Info boxes */
@@ -92,22 +145,14 @@ button.action {
     display: inline-block;
 }
 
-/* SOAP result display */
-#accountInfo, #accountHolderInfo {
-    white-space: pre-wrap;
-    font-family: monospace;
-}
-
-/* Logout link */
+/* Links */
 a {
-    display: block;
-    text-align: center;
-    margin-top: 20px;
-    color: #007bff;
+    color: #3498db;
     text-decoration: none;
     transition: color 0.3s ease;
 }
 
 a:hover {
-    color: #0056b3;
+    color: #2980b9;
+    text-decoration: underline;
 }
