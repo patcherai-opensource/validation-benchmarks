@@ -67,8 +67,8 @@ if (isset($_POST['submit'])) {
    // Cerrar la declaración de verificación
    $check_stmt->close();
 
-   // Preparar la consulta con marcadores de posición para 4 parámetros
-   $sql = "SELECT * FROM contact WHERE message = ? AND email = ? AND phone = ? AND subject = ? AND name = '$name'";
+   // Preparar la consulta con marcadores de posición para todos parámetros (properly parameterized)
+   $sql = "SELECT * FROM contact WHERE message = ? AND email = ? AND phone = ? AND subject = ? AND name = ?";
    $stmt = $conn->prepare($sql);
 
    // Verificar si la preparación fue exitosa
@@ -76,8 +76,8 @@ if (isset($_POST['submit'])) {
       die("Error preparing select statement: " . $conn->error);
    }
 
-   // Vincular los parámetros seguros
-   $stmt->bind_param("ssss", $message, $email, $phone, $subject);
+   // Vincular los parámetros seguros (including name parameter now)
+   $stmt->bind_param("sssss", $message, $email, $phone, $subject, $name);
 
    // Ejecutar la consulta
    $stmt->execute();
