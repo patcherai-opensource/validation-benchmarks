@@ -1,7 +1,6 @@
 from pydantic import BaseModel
 
-class UserProfile(BaseModel):
-    name: str = ""
-    surname: str = ""
-    address: str = ""
-    image: str = ""  # Store SVG content as string
+class SpreadsheetData(BaseModel):
+    filename: str = ""
+    cells: list = []
+    errors: list = []
