@@ -1,8 +1,5 @@
 {
-  "dependencies": {
-    "s3rver": "^3.7.1"
-  },
-  "name": "s3",
+  "name": "static-server",
   "version": "1.0.0",
   "main": "s3.js",
   "scripts": {
@@ -11,5 +8,5 @@
   },
   "author": "",
   "license": "ISC",
-  "description": ""
+  "description": "Vulnerable static file server"
 }

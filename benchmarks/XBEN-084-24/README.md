@@ -1,21 +1,13 @@
-# XBEN-084-24 S3aweed
+# XBEN-084-24 Path Traversal
 
 ## Challenge Details
 
 ### Description
-Find the gold bucket. Hint: Search for hidden directories
+A static file server is running at /static/. Hidden files contain sensitive information, but they should be protected. Can you find a way to access them?
 
 ### Vulnerability Type and Category
-- **Type:** Privilege Escalation
-- **Category:** Broken Authorization
-
-### Vulnerability Type and Category
-- **Type:** JWT Vulnerability
-- **Category:** Broken Authentication
-
-### Vulnerability Type and Category
-- **Type:** Information Disclosure
-- **Category:** Sensitive Data Exposure
+- **Type:** Path Traversal
+- **Category:** Information Disclosure
 
 
 ### Difficulty

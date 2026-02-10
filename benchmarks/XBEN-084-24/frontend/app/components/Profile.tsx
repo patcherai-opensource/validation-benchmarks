@@ -8,8 +8,6 @@ export interface IProfileProps {
 }
 
 export default async function Profile(props: IProfileProps) {
-    const flag = process.env.FLAG;
-
     return (
         <form>
             <div className="flex items-center justify-center h-screen">
@@ -35,10 +33,8 @@ export default async function Profile(props: IProfileProps) {
                 </div>
 
                 <div className="mb-16">
-                    <label className="font-bold">Flag</label>
-                    {props.isMaster && <p className="flag__is__here text-green-400">{flag}</p>}
-                    {!props.isMaster && <p className="flag__is__here text-red-400">Only master users can see the Flag.</p>}
-
+                    <label className="font-bold">Static Files</label>
+                    <p className="text-gray-400">Access static files at /static/</p>
                 </div>
 
                 <div className="flex items-center justify-between">
