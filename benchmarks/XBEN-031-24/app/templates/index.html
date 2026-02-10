@@ -1,0 +1,60 @@
+{% extends "base.html" %}
+
+{% block title %}Dashboard - ChangeWatcher{% endblock %}
+
+{% block content %}
+<div class="card">
+    <h2>Add New Watch</h2>
+    <form action="/watch/add" method="POST">
+        <div class="form-group">
+            <label for="url">URL to Monitor</label>
+            <input type="text" id="url" name="url" placeholder="https://example.com/page" required>
+        </div>
+        <div class="form-group">
+            <label for="name">Name (optional)</label>
+            <input type="text" id="name" name="name" placeholder="My Website">
+        </div>
+        <button type="submit" class="btn">Add Watch</button>
+    </form>
+</div>
+
+<div class="card">
+    <h2>Active Watches</h2>
+    {% if watches %}
+    <table>
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>URL</th>
+                <th>Status</th>
+                <th>Last Checked</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for watch in watches %}
+            <tr>
+                <td>{{ watch.name }}</td>
+                <td style="max-width: 300px; overflow: hidden; text-overflow: ellipsis;">{{ watch.url }}</td>
+                <td class="status-{{ watch.status }}">{{ watch.status|capitalize }}</td>
+                <td>{{ watch.last_checked or 'Never' }}</td>
+                <td>
+                    <a href="/watch/{{ watch.id }}" class="btn btn-small">View</a>
+                    <form action="/watch/{{ watch.id }}/check" method="POST" style="display:inline;">
+                        <button type="submit" class="btn btn-small">Check Now</button>
+                    </form>
+                    <form action="/watch/{{ watch.id }}/delete" method="POST" style="display:inline;">
+                        <button type="submit" class="btn btn-small btn-danger">Delete</button>
+                    </form>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% else %}
+    <div class="empty-state">
+        <p>No watches configured yet. Add a URL above to start monitoring.</p>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

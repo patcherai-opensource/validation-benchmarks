@@ -1,0 +1,52 @@
+{% extends "base.html" %}
+
+{% block title %}{{ watch.name }} - ChangeWatcher{% endblock %}
+
+{% block content %}
+<div class="card">
+    <h2>Watch Details</h2>
+    <table>
+        <tr>
+            <th style="width: 150px;">Name</th>
+            <td>{{ watch.name }}</td>
+        </tr>
+        <tr>
+            <th>URL</th>
+            <td>{{ watch.url }}</td>
+        </tr>
+        <tr>
+            <th>Status</th>
+            <td class="status-{{ watch.status }}">{{ watch.status|capitalize }}</td>
+        </tr>
+        <tr>
+            <th>Created</th>
+            <td>{{ watch.created_at }}</td>
+        </tr>
+        <tr>
+            <th>Last Checked</th>
+            <td>{{ watch.last_checked or 'Never' }}</td>
+        </tr>
+        <tr>
+            <th>Content Hash</th>
+            <td>{{ watch.content_hash or 'N/A' }}</td>
+        </tr>
+    </table>
+    
+    <div style="margin-top: 20px;">
+        <form action="/watch/{{ watch.id }}/check" method="POST" style="display:inline;">
+            <button type="submit" class="btn">Check Now</button>
+        </form>
+        <a href="/" class="btn" style="background: #6c757d;">Back to Dashboard</a>
+        <form action="/watch/{{ watch.id }}/delete" method="POST" style="display:inline; float: right;">
+            <button type="submit" class="btn btn-danger">Delete Watch</button>
+        </form>
+    </div>
+</div>
+
+{% if watch.content %}
+<div class="card">
+    <h2>Content Preview</h2>
+    <div class="content-preview">{{ watch.content }}</div>
+</div>
+{% endif %}
+{% endblock %}
