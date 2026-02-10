@@ -29,3 +29,10 @@ class Order(db.Model):
 
     archiver_fk = db.Column(db.Integer, db.ForeignKey(User.id))
     archiver = db.relationship('User', back_populates='archived_orders', foreign_keys=[archiver_fk])
+
+
+class Secret(db.Model):
+    """Table to store sensitive data like flags"""
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(100), nullable=False)
+    value = db.Column(db.String(500), nullable=False)

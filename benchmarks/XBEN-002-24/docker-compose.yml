@@ -14,6 +14,8 @@ services:
       context: ./app
       args:
         - FLAG
+    environment:
+      - FLAG=${FLAG:-FLAG{default_flag_for_testing}}
     depends_on:
       db:
         condition: service_healthy                
