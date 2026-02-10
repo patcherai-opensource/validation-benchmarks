@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Connections - Connection Manager</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            background-color: #f5f5f5;
+            margin: 0;
+            padding: 0;
+        }
+        .navbar {
+            background-color: #017cee;
+            color: white;
+            padding: 15px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .navbar h1 {
+            margin: 0;
+            font-size: 20px;
+        }
+        .navbar .user-info {
+            font-size: 14px;
+        }
+        .navbar a {
+            color: white;
+            text-decoration: none;
+            margin-left: 20px;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 30px auto;
+            padding: 0 20px;
+        }
+        .card {
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            padding: 20px;
+        }
+        h2 {
+            margin-top: 0;
+            color: #333;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        th, td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #eee;
+        }
+        th {
+            background-color: #f8f9fa;
+            font-weight: 600;
+            color: #333;
+        }
+        tr:hover {
+            background-color: #f5f5f5;
+        }
+        .btn {
+            display: inline-block;
+            padding: 6px 12px;
+            background-color: #017cee;
+            color: white;
+            text-decoration: none;
+            border-radius: 4px;
+            font-size: 13px;
+        }
+        .btn:hover {
+            background-color: #015bb5;
+        }
+        .masked {
+            color: #999;
+            font-family: monospace;
+        }
+        .flash {
+            padding: 10px 15px;
+            margin-bottom: 20px;
+            border-radius: 4px;
+        }
+        .flash.error {
+            background-color: #ffebee;
+            color: #c62828;
+        }
+        .flash.success {
+            background-color: #e8f5e9;
+            color: #2e7d32;
+        }
+        .flash.info {
+            background-color: #e3f2fd;
+            color: #1565c0;
+        }
+        .extra-preview {
+            font-size: 12px;
+            color: #666;
+            max-width: 300px;
+        }
+        .badge {
+            display: inline-block;
+            padding: 3px 8px;
+            background-color: #e0e0e0;
+            border-radius: 12px;
+            font-size: 11px;
+            color: #333;
+        }
+    </style>
+</head>
+<body>
+    <div class="navbar">
+        <h1>🔗 Connection Manager</h1>
+        <div class="user-info">
+            Logged in as: <strong>{{ user }}</strong> ({{ role }})
+            <a href="/logout">Logout</a>
+        </div>
+    </div>
+    
+    <div class="container">
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                    <div class="flash {{ category }}">{{ message }}</div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+        
+        <div class="card">
+            <h2>Connections</h2>
+            <p style="color: #666;">Manage your data pipeline connections. Click "Edit" to view and modify connection details.</p>
+            
+            <table>
+                <thead>
+                    <tr>
+                        <th>Connection ID</th>
+                        <th>Connection Type</th>
+                        <th>Host</th>
+                        <th>Port</th>
+                        <th>Login</th>
+                        <th>Password</th>
+                        <th>Extra</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for conn in connections %}
+                    <tr>
+                        <td><strong>{{ conn.conn_id }}</strong></td>
+                        <td><span class="badge">{{ conn.conn_type }}</span></td>
+                        <td>{{ conn.host or '-' }}</td>
+                        <td>{{ conn.port or '-' }}</td>
+                        <td>{{ conn.login or '-' }}</td>
+                        <td class="masked">{{ conn.password }}</td>
+                        <td class="extra-preview">
+                            {% if conn.extra_display %}
+                                {% for key, value in conn.extra_display.items() %}
+                                    <span>{{ key }}: {{ value }}</span><br>
+                                {% endfor %}
+                            {% else %}
+                                -
+                            {% endif %}
+                        </td>
+                        <td>
+                            {% if can_edit %}
+                            <a href="/connection/edit/{{ conn.id }}" class="btn">Edit</a>
+                            {% else %}
+                            <span class="masked">No access</span>
+                            {% endif %}
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</body>
+</html>

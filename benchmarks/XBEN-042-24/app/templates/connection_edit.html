@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Edit Connection - Connection Manager</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            background-color: #f5f5f5;
+            margin: 0;
+            padding: 0;
+        }
+        .navbar {
+            background-color: #017cee;
+            color: white;
+            padding: 15px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .navbar h1 {
+            margin: 0;
+            font-size: 20px;
+        }
+        .navbar .user-info {
+            font-size: 14px;
+        }
+        .navbar a {
+            color: white;
+            text-decoration: none;
+            margin-left: 20px;
+        }
+        .container {
+            max-width: 800px;
+            margin: 30px auto;
+            padding: 0 20px;
+        }
+        .card {
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            padding: 30px;
+        }
+        h2 {
+            margin-top: 0;
+            color: #333;
+        }
+        .form-group {
+            margin-bottom: 20px;
+        }
+        label {
+            display: block;
+            margin-bottom: 8px;
+            color: #333;
+            font-weight: 500;
+        }
+        input[type="text"], input[type="password"], input[type="number"], textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 14px;
+            box-sizing: border-box;
+        }
+        textarea {
+            font-family: monospace;
+            min-height: 100px;
+        }
+        .btn {
+            display: inline-block;
+            padding: 10px 20px;
+            background-color: #017cee;
+            color: white;
+            text-decoration: none;
+            border-radius: 4px;
+            border: none;
+            cursor: pointer;
+            font-size: 14px;
+        }
+        .btn:hover {
+            background-color: #015bb5;
+        }
+        .btn-secondary {
+            background-color: #6c757d;
+        }
+        .btn-secondary:hover {
+            background-color: #5a6268;
+        }
+        .actions {
+            margin-top: 30px;
+            display: flex;
+            gap: 10px;
+        }
+        .flash {
+            padding: 10px 15px;
+            margin-bottom: 20px;
+            border-radius: 4px;
+        }
+        .flash.error {
+            background-color: #ffebee;
+            color: #c62828;
+        }
+        .flash.success {
+            background-color: #e8f5e9;
+            color: #2e7d32;
+        }
+        .section-title {
+            font-size: 16px;
+            font-weight: 600;
+            color: #333;
+            margin: 30px 0 20px 0;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #017cee;
+        }
+        .extra-fields {
+            background-color: #f8f9fa;
+            padding: 20px;
+            border-radius: 4px;
+            margin-top: 10px;
+        }
+        .extra-field-item {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 15px;
+            align-items: center;
+        }
+        .extra-field-item label {
+            min-width: 150px;
+            margin-bottom: 0;
+        }
+        .extra-field-item input {
+            flex: 1;
+        }
+        .warning-banner {
+            background-color: #fff3cd;
+            border: 1px solid #ffc107;
+            color: #856404;
+            padding: 15px;
+            border-radius: 4px;
+            margin-bottom: 20px;
+        }
+        .help-text {
+            font-size: 12px;
+            color: #666;
+            margin-top: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div class="navbar">
+        <h1>🔗 Connection Manager</h1>
+        <div class="user-info">
+            Logged in as: <strong>{{ user }}</strong> ({{ role }})
+            <a href="/connection">Back to List</a>
+            <a href="/logout">Logout</a>
+        </div>
+    </div>
+    
+    <div class="container">
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                    <div class="flash {{ category }}">{{ message }}</div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+        
+        <div class="card">
+            <h2>Edit Connection: {{ connection.conn_id }}</h2>
+            
+            <form method="POST">
+                <div class="section-title">Basic Information</div>
+                
+                <div class="form-group">
+                    <label for="conn_id">Connection ID</label>
+                    <input type="text" id="conn_id" name="conn_id" value="{{ connection.conn_id }}" readonly>
+                </div>
+                
+                <div class="form-group">
+                    <label for="conn_type">Connection Type</label>
+                    <input type="text" id="conn_type" name="conn_type" value="{{ connection.conn_type }}">
+                </div>
+                
+                <div class="form-group">
+                    <label for="host">Host</label>
+                    <input type="text" id="host" name="host" value="{{ connection.host or '' }}">
+                </div>
+                
+                <div class="form-group">
+                    <label for="port">Port</label>
+                    <input type="number" id="port" name="port" value="{{ connection.port or '' }}">
+                </div>
+                
+                <div class="form-group">
+                    <label for="schema">Schema</label>
+                    <input type="text" id="schema" name="schema" value="{{ connection.schema or '' }}">
+                </div>
+                
+                <div class="section-title">Authentication</div>
+                
+                <div class="form-group">
+                    <label for="login">Login</label>
+                    <input type="text" id="login" name="login" value="{{ connection.login or '' }}">
+                </div>
+                
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <!-- VULNERABILITY: Password shown in cleartext in edit form -->
+                    <input type="text" id="password" name="password" value="{{ connection.password or '' }}">
+                    <div class="help-text">The password for this connection.</div>
+                </div>
+                
+                <div class="section-title">Extra Configuration</div>
+                <p class="help-text">Additional configuration parameters stored as JSON. These may contain sensitive values.</p>
+                
+                <!-- VULNERABILITY: Extra fields containing secrets are displayed in cleartext -->
+                <!-- This is the core of the CVE - prefill_form exposes all extra field values -->
+                <div class="extra-fields">
+                    {% for key, value in extra_fields.items() %}
+                    <div class="extra-field-item">
+                        <label for="extra_{{ key }}">{{ key }}</label>
+                        <input type="text" id="extra_{{ key }}" name="extra_{{ key }}" value="{{ value }}">
+                    </div>
+                    {% endfor %}
+                </div>
+                
+                <div class="actions">
+                    <button type="submit" class="btn">Save Connection</button>
+                    <a href="/connection" class="btn btn-secondary">Cancel</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</body>
+</html>
