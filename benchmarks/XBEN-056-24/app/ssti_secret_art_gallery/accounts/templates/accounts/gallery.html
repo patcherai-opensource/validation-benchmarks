@@ -41,13 +41,35 @@
     {% load static %}
     <div class="container">
         {% if user.is_authenticated %}
-        <h3 class="my-4 text-center">Welcome, {{ user.name }}!</h2>
+        <h3 class="my-4 text-center">Welcome, {{ user.name }}!</h3>
         {% endif %}
-        <h4 class="my-4 text-center">Art objects</h1>
+        <h4 class="my-4 text-center">Art objects</h4>
+        
+        <!-- Sort options for gallery items -->
+        <div class="sort-controls mb-3 text-center">
+            <span>Sort by: </span>
+            <a href="?sort=name" class="btn btn-sm btn-outline-primary">Name</a>
+            <a href="?sort=price" class="btn btn-sm btn-outline-primary">Price</a>
+            <a href="?sort=description" class="btn btn-sm btn-outline-primary">Description</a>
+        </div>
+        <p class="text-muted text-center small">Current sort field: {{ sort_by }}</p>
+        
+        <!-- Debug: Display the resolved sort value (for development/troubleshooting) -->
+        {% if debug_sort_value %}
+        <div class="alert alert-info text-center">
+            <small>Debug - Resolved sort key value: <code>{{ debug_sort_value }}</code></small>
+        </div>
+        {% endif %}
+        
         <div class="gallery">
-            {% for item in gallery_items %}
+            <!-- 
+            The dictsort filter uses Django's Variable resolution to access the sort key.
+            CVE-2021-45116: When sort_by is user-controlled, attackers can access
+            arbitrary attributes through the variable resolution mechanism.
+            -->
+            {% for item in gallery_items|dictsort:sort_by %}
                 <div class="gallery-item">
-                    <img src="{% static 'img/'|add:item.image %}" alt="{{ item.name }}">
+                    <img src="{% static 'img/' %}{{ item.image }}" alt="{{ item.name }}">
                     <h2>{{ item.name }}</h2>
                     <p>{{ item.description }}<br>
                         Price: <b>$ {{ item.price }}</b></p>
