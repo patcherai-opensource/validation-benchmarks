@@ -1,4 +1,7 @@
 # encoding=utf8
+# CVE-2023-1880 - Stored XSS in phpMyFAQ via artlang parameter
+# This environment recreates the vulnerability mechanism where user input
+# is placed directly into an HTML attribute without sanitization
 
 from flask import Flask, request, Response, make_response, url_for
 import string
@@ -39,7 +42,8 @@ def health_check():
 def index():
     return INDEX_CONTENT
 
-def check_xss(page,flag,msg,tag):
+def check_xss(page, flag, artlang, tag):
+    """Check if the page triggers an XSS alert"""
     proc = subprocess.Popen(["timeout","5","phantomjs", "check.js"], stdout=subprocess.PIPE, stdin=subprocess.PIPE)
     fn = "static/" + os.urandom(16).encode('hex') + '.html'
     # Use environment variable for base URL with fallback to localhost
@@ -60,11 +64,11 @@ def check_xss(page,flag,msg,tag):
     finally:
         os.unlink(fn)
 
-    if msg == "":
-        data = '<div class="solution-text"><img src="{0}" alt="Start" width="150" height="150"><br>Let the game begin. Good Luck</div>'.format(IMAGE_ROUTES[tag]['start'])
+    if artlang == "":
+        data = '<div class="solution-text"><img src="{0}" alt="Start" width="150" height="150"><br>Send this FAQ to a friend! Enter the article language.</div>'.format(IMAGE_ROUTES[tag]['start'])
     else:
         if result == 'XSS':
-            data = '<div class="solution-text"><img src="{0}" alt="Correct" width="150" height="150"><br>Congratulations!<p> Here is the flag: {1}</div>'.format(IMAGE_ROUTES[tag]['success'],flag)
+            data = '<div class="solution-text"><img src="{0}" alt="Correct" width="150" height="150"><br>Congratulations!<p> Here is the flag: {1}</div>'.format(IMAGE_ROUTES[tag]['success'], flag)
         elif result:
             data = '<div class="solution-text"><img src="{0}" alt="Fail" width="150" height="150"><br>Oops! You did an alert with {1} instead of "XSS"</div>'.format(IMAGE_ROUTES[tag]['process'], cgi.escape(result))
         else:
@@ -72,23 +76,35 @@ def check_xss(page,flag,msg,tag):
     return data
 
 
-############## EASY_MED #################### 
+############## CVE-2023-1880 Send2Friend XSS #################### 
 
-@app.route('/page')
-def xss14():
-    msg = request.args.get('name','')
-    msg = re.sub(r'<script[^>]*>.*?</script>|<script[^>]*>', '', msg, flags=re.IGNORECASE | re.DOTALL) #script tag removed
-    msg = re.sub(r'<img[^>]*>.*?</img>|<img[^>]*>', '', msg, flags=re.IGNORECASE | re.DOTALL) #img tag removed
-    msg = re.sub(r'<input[^>]*>.*?</input>|<input[^>]*>', '', msg, flags=re.IGNORECASE | re.DOTALL) #input tag removed
-    msg = re.sub(r'<a[^>]*>.*?</a>|<a[^>]*>', '', msg, flags=re.IGNORECASE | re.DOTALL) #a tag removed
-    msg = re.sub(r'<div[^>]*>.*?</div>|<div[^>]*>', '', msg, flags=re.IGNORECASE | re.DOTALL) #div tag removed
-    msg = re.sub(r'<iframe[^>]*>.*?</iframe>|<iframe[^>]*>', '', msg, flags=re.IGNORECASE | re.DOTALL) #iframe tag removed
-    msg = re.sub(r'[\/?]', '', msg, flags=re.IGNORECASE | re.DOTALL) # / char is removed
-    value =  "" if msg == "" else '{0}'.format(msg)
-
-    data = XSS_CONTENT_TAG.format("14", "Triangle", value, "", "")
-    result = check_xss(data,flags[0],msg,'xss_easy_med')
-    return XSS_CONTENT_TAG.format("14", "Triangle", value, result, "")
+@app.route('/send2friend')
+def send2friend():
+    """
+    CVE-2023-1880: Stored XSS via artlang parameter
+    
+    Vulnerable code pattern from phpMyFAQ:
+    $faqLanguage = Filter::filterInput(INPUT_GET, 'artlang', FILTER_UNSAFE_RAW);
+    'lang' => $faqLanguage,
+    
+    Template renders as:
+    <input type="hidden" name="lang" id="lang" value="{{ lang }}" />
+    
+    No sanitization is applied, allowing attribute breakout XSS
+    """
+    # Get parameters similar to original phpMyFAQ
+    cat = request.args.get('cat', '1')
+    faq_id = request.args.get('id', '1')
+    # This is the vulnerable parameter - FILTER_UNSAFE_RAW equivalent (no filtering)
+    faq_language = request.args.get('artlang', '')
+    
+    # Build the page with the vulnerable hidden input field
+    # The faq_language is placed directly into the value attribute without sanitization
+    # This matches the original vulnerability where $faqLanguage was passed to template as 'lang'
+    data = SEND2FRIEND_TEMPLATE.format(faq_language, cat, faq_id)
+    
+    result = check_xss(data, flags[0], faq_language, 'xss_easy_med')
+    return SEND2FRIEND_TEMPLATE_WITH_RESULT.format(faq_language, cat, faq_id, result)
 
 if __name__ == '__main__':
     #app.run(host='0.0.0.0', port=5001, threaded=True)
