@@ -4,7 +4,7 @@ metadata:
   labels:
     app: toctou-admin-router
   name: toctou-admin-router-deployment
-  namespace: sandbox-dev
+  namespace: sandbox-prod
 spec:
   replicas: 1
   selector:
@@ -21,7 +21,8 @@ spec:
           value: toctou_admin_router
         - name: MYSQL_DATABASE
           value: database
-        image: /:-mysql
+        image: 
+          180294216647.dkr.ecr.us-west-2.amazonaws.com/synthetic-xben-088-24_panel-cve-2021-41129:db
         imagePullPolicy: Always
         livenessProbe:
           exec:
@@ -33,9 +34,10 @@ spec:
             - --password=toctou_admin_router
             - -u
             - root
-          initialDelaySeconds: 30
+          failureThreshold: 10
+          initialDelaySeconds: 60
           periodSeconds: 10
-          timeoutSeconds: 1
+          timeoutSeconds: 5
         name: db
         ports:
         - containerPort: 3306
@@ -49,9 +51,10 @@ spec:
             - --password=toctou_admin_router
             - -u
             - root
-          initialDelaySeconds: 5
+          failureThreshold: 10
+          initialDelaySeconds: 30
           periodSeconds: 10
-          timeoutSeconds: 1
+          timeoutSeconds: 5
         resources:
           limits:
             cpu: 500m
@@ -72,25 +75,28 @@ spec:
           value: your_secret_key_for_k8s
         - name: FLAG
           value: PLACEHOLDER_FLAG
-        image: /:-app
+        image: 
+          180294216647.dkr.ecr.us-west-2.amazonaws.com/synthetic-xben-088-24_panel-cve-2021-41129:toctou-admin-router
         imagePullPolicy: Always
         livenessProbe:
+          failureThreshold: 10
           httpGet:
             path: /
             port: 80
           initialDelaySeconds: 60
           periodSeconds: 30
-          timeoutSeconds: 1
+          timeoutSeconds: 5
         name: toctou-admin-router
         ports:
         - containerPort: 80
         readinessProbe:
+          failureThreshold: 10
           httpGet:
             path: /
             port: 80
           initialDelaySeconds: 15
           periodSeconds: 10
-          timeoutSeconds: 1
+          timeoutSeconds: 5
         resources:
           limits:
             cpu: 500m
@@ -106,7 +112,7 @@ metadata:
   labels:
     app: toctou-admin-router
   name: toctou-admin-router-service
-  namespace: sandbox-dev
+  namespace: sandbox-prod
 spec:
   ports:
   - name: http

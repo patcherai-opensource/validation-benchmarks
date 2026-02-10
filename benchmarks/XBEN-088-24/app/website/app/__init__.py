@@ -38,26 +38,30 @@ app.session_interface = SqlAlchemySessionInterface(app=app, client=db, table='my
 # Check if test already exists in the database
 test = User.query.filter_by(username='test').first()
 if not test:
-    # Create a dummy user
+    # Create a dummy user (no 2FA)
     test = User(
         username='test',
         password='test',
         name='John',
         lastname='Doe',
         email='john@example.com',
-        is_admin=False
+        is_admin=False,
+        has_2fa=False
     )
     db.session.add(test)
     db.session.commit()
 
-    # Create an admin user
+    # Create an admin user with 2FA enabled
+    # The admin has a strong random password, making it infeasible to brute force
+    # The only way to access admin is through the 2FA token bypass vulnerability
     admin = User(
         username='admin',
         password=''.join(random.choices(string.ascii_uppercase + string.digits, k=100)),
         name='Administrator',
         lastname='',
         email='admin@example.com',
-        is_admin=True
+        is_admin=True,
+        has_2fa=True  # Admin has 2FA enabled - this triggers the vulnerable checkpoint flow
     )
     db.session.add(admin)
     db.session.commit()

@@ -11,3 +11,4 @@ class User(db.Model):
     lastname = db.Column(db.String(50), nullable=False)
     email = db.Column(db.String(100), nullable=False)
     is_admin = db.Column(db.Boolean, default=False, nullable=False)
+    has_2fa = db.Column(db.Boolean, default=False, nullable=False)  # 2FA enabled flag

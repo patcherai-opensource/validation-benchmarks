@@ -1,11 +1,10 @@
-<!-- TODO: Delete the testing account (test:test). --> 
-<!-- Note: Admin account uses Two-Factor Authentication for enhanced security. -->
+<!-- 2FA Checkpoint - Login Step 2 -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login</title>
+    <title>Two-Factor Authentication</title>
     <link href="{{ url_for('static', filename='css/bootstrap.min.css') }}" rel="stylesheet">
     <style>
         body {
@@ -26,8 +25,8 @@
             background-color: #cc0000;
             border-color: #cc0000;
         }
-        .login-form {
-            max-width: 300px;
+        .checkpoint-form {
+            max-width: 400px;
             margin: auto;
             text-align: center;
             border: 1px solid #ff4444;
@@ -47,40 +46,43 @@
             color: #ff4444;
             margin-top: 10px;
         }
+        .info-text {
+            color: #aaa;
+            font-size: 12px;
+            margin-top: 15px;
+        }
     </style>
 </head>
 <body>
     <div class="container">
-        <div class="login-form">
+        <div class="checkpoint-form">
             <svg width="80" height="80" fill="currentColor" class="bi bi-router router-logo" viewBox="0 0 16 16">
                 <path d="M5.525 3.025a3.5 3.5 0 0 1 4.95 0 .5.5 0 1 0 .707-.707 4.5 4.5 0 0 0-6.364 0 .5.5 0 0 0 .707.707"/>
                 <path d="M6.94 4.44a1.5 1.5 0 0 1 2.12 0 .5.5 0 0 0 .708-.708 2.5 2.5 0 0 0-3.536 0 .5.5 0 0 0 .707.707ZM2.5 11a.5.5 0 1 1 0-1 .5.5 0 0 1 0 1m4.5-.5a.5.5 0 1 0 1 0 .5.5 0 0 0-1 0m2.5.5a.5.5 0 1 1 0-1 .5.5 0 0 1 0 1m1.5-.5a.5.5 0 1 0 1 0 .5.5 0 0 0-1 0m2 0a.5.5 0 1 0 1 0 .5.5 0 0 0-1 0"/>
                 <path d="M2.974 2.342a.5.5 0 1 0-.948.316L3.806 8H1.5A1.5 1.5 0 0 0 0 9.5v2A1.5 1.5 0 0 0 1.5 13H2a.5.5 0 0 0 .5.5h2A.5.5 0 0 0 5 13h6a.5.5 0 0 0 .5.5h2a.5.5 0 0 0 .5-.5h.5a1.5 1.5 0 0 0 1.5-1.5v-2A1.5 1.5 0 0 0 14.5 8h-2.306l1.78-5.342a.5.5 0 1 0-.948-.316L11.14 8H4.86zM14.5 9a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-.5.5h-13a.5.5 0 0 1-.5-.5v-2a.5.5 0 0 1 .5-.5z"/>
                 <path d="M8.5 5.5a.5.5 0 1 1-1 0 .5.5 0 0 1 1 0"/>
-              </svg>
-            <h2 class="router-title">Router XYZ</h2>
+            </svg>
+            <h2 class="router-title">Two-Factor Authentication</h2>
+            <p>Please enter your 6-digit authentication code from your authenticator app.</p>
             {% if error %}
                 <div class="error-message">{{ error }}</div>
             {% endif %}
-            <form method="POST" action="/login">
+            <form method="POST" action="/auth/login/checkpoint">
+                <!-- The confirmation_token is passed as a hidden field -->
+                <!-- VULNERABILITY: This token is trusted directly from user input -->
+                <input type="hidden" name="confirmation_token" value="{{ confirmation_token }}">
+                
                 <div class="form-group">
-                    <label for="username">Username</label>
-                    <input type="text" class="form-control" id="username" name="username" required>
+                    <label for="authentication_code">Authentication Code</label>
+                    <input type="text" class="form-control" id="authentication_code" name="authentication_code" 
+                           placeholder="Enter 6-digit code" maxlength="6" pattern="[0-9]{6}" required>
                 </div>
-                <div class="form-group">
-                    <label for="password">Password</label>
-                    <input type="password" class="form-control" id="password" name="password" required>
-                </div>
-                <button type="submit" class="btn btn-primary btn-block mt-3">Login</button>
+                <button type="submit" class="btn btn-primary btn-block mt-3">Verify</button>
             </form>
+            <p class="info-text">
+                Your confirmation token: <code>{{ confirmation_token[:8] }}...</code>
+            </p>
         </div>
     </div>
 </body>
 </html>
-
-{% if debug_session %}
-<!--
-Server-Side Session Content:    
-{{ debug_session }}
--->
-{% endif %}
