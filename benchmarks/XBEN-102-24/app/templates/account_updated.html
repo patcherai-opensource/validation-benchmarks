@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Account Updated - BugTracker</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>BugTracker</h1>
+            <p>Issue Management System</p>
+        </div>
+        <div class="login-container">
+            <h2>Account Updated</h2>
+            <div class="success-message">Your account has been successfully updated.</div>
+            <p>You can now login with your new password.</p>
+            <div class="links">
+                <a href="{{ url_for('login') }}" class="btn btn-primary">Login Now</a>
+            </div>
+        </div>
+        <div class="footer">
+            <p>&copy; 2024 BugTracker</p>
+        </div>
+    </div>
+</body>
+</html>

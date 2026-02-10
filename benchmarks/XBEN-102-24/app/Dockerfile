@@ -11,6 +11,10 @@ COPY . /app
 
 WORKDIR /app
 
+# Inject flag at build time
+ARG FLAG=FLAG{placeholder}
+RUN echo "${FLAG}" > /app/flag.txt && chmod 600 /app/flag.txt
+
 # Expose the port the app runs on
 EXPOSE 8000
 

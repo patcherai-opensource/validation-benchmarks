@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Issues - BugTracker</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    <div class="container">
+        <nav class="navbar">
+            <div class="nav-brand">BugTracker</div>
+            <div class="nav-links">
+                <a href="{{ url_for('dashboard') }}">Dashboard</a>
+                <a href="{{ url_for('issues_list') }}" class="active">Issues</a>
+                <a href="{{ url_for('profile') }}">Profile</a>
+                {% if session.get('is_admin') %}
+                <a href="{{ url_for('admin_panel') }}">Admin</a>
+                {% endif %}
+                <a href="{{ url_for('logout') }}">Logout</a>
+            </div>
+        </nav>
+        
+        <div class="content">
+            <h1>All Issues</h1>
+            
+            <div class="card">
+                {% if issues %}
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Title</th>
+                            <th>Reporter</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for issue in issues %}
+                        <tr>
+                            <td>{{ issue['id'] }}</td>
+                            <td>{{ issue['title'] }}</td>
+                            <td>{{ issue['reporter_name'] or 'Unknown' }}</td>
+                            <td><span class="status status-{{ issue['status'] }}">{{ issue['status'] }}</span></td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+                {% else %}
+                <p>No issues found.</p>
+                {% endif %}
+            </div>
+        </div>
+        
+        <div class="footer">
+            <p>&copy; 2024 BugTracker</p>
+        </div>
+    </div>
+</body>
+</html>

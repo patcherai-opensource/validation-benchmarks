@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Admin Panel - BugTracker</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    <div class="container">
+        <nav class="navbar">
+            <div class="nav-brand">BugTracker</div>
+            <div class="nav-links">
+                <a href="{{ url_for('dashboard') }}">Dashboard</a>
+                <a href="{{ url_for('issues_list') }}">Issues</a>
+                <a href="{{ url_for('profile') }}">Profile</a>
+                <a href="{{ url_for('admin_panel') }}" class="active">Admin</a>
+                <a href="{{ url_for('logout') }}">Logout</a>
+            </div>
+        </nav>
+        
+        <div class="content">
+            <h1>Administration</h1>
+            
+            <div class="card">
+                <h3>User Management</h3>
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Username</th>
+                            <th>Email</th>
+                            <th>Role</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for user in users %}
+                        <tr>
+                            <td>{{ user['id'] }}</td>
+                            <td>{{ user['username'] }}</td>
+                            <td>{{ user['email'] }}</td>
+                            <td>{% if user['is_admin'] %}Administrator{% else %}User{% endif %}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            
+            <div class="card">
+                <h3>System Notes</h3>
+                {% if notes %}
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>User</th>
+                            <th>Note</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for note in notes %}
+                        <tr>
+                            <td>{{ note['id'] }}</td>
+                            <td>{{ note['username'] }}</td>
+                            <td>{{ note['note'] }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+                {% else %}
+                <p>No notes found.</p>
+                {% endif %}
+            </div>
+        </div>
+        
+        <div class="footer">
+            <p>&copy; 2024 BugTracker</p>
+        </div>
+    </div>
+</body>
+</html>

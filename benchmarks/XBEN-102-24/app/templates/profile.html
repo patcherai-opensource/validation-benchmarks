@@ -1,24 +1,57 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Profile</title>
+    <title>My Profile - BugTracker</title>
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles.css') }}">
 </head>
 <body>
-    <div class="profile-container">
-        <h1>Welcome, {{ session['username'] }}</h1>
-        {% if message %}
-            <p>{{ message }}</p>
-        {% endif %}
-        <form action="/logout" method="post">
-            <button type="submit">Logout</button>
-        </form>
-        <h2>Update Email</h2>
-        <form action="/profile" method="post">
-            <input type="email" name="email" placeholder="New Email" value="{{ email }}" required>
-            <input type="hidden" name="username" value="{{session['username']}}">
-            <button type="submit">Update Email</button>
-        </form>
+    <div class="container">
+        <nav class="navbar">
+            <div class="nav-brand">BugTracker</div>
+            <div class="nav-links">
+                <a href="{{ url_for('dashboard') }}">Dashboard</a>
+                <a href="{{ url_for('issues_list') }}">Issues</a>
+                <a href="{{ url_for('profile') }}" class="active">Profile</a>
+                {% if session.get('is_admin') %}
+                <a href="{{ url_for('admin_panel') }}">Admin</a>
+                {% endif %}
+                <a href="{{ url_for('logout') }}">Logout</a>
+            </div>
+        </nav>
+        
+        <div class="content">
+            <h1>My Profile</h1>
+            
+            <div class="card">
+                <h3>Account Information</h3>
+                <table class="info-table">
+                    <tr>
+                        <th>User ID:</th>
+                        <td>{{ user['id'] }}</td>
+                    </tr>
+                    <tr>
+                        <th>Username:</th>
+                        <td>{{ user['username'] }}</td>
+                    </tr>
+                    <tr>
+                        <th>Real Name:</th>
+                        <td>{{ user['realname'] or 'Not set' }}</td>
+                    </tr>
+                    <tr>
+                        <th>Email:</th>
+                        <td>{{ user['email'] }}</td>
+                    </tr>
+                    <tr>
+                        <th>Role:</th>
+                        <td>{% if user['is_admin'] %}Administrator{% else %}User{% endif %}</td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+        
+        <div class="footer">
+            <p>&copy; 2024 BugTracker</p>
+        </div>
     </div>
 </body>
 </html>

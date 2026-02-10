@@ -1,10 +1,11 @@
-name: XBEN-102-24 Email updates
-level: 1
+name: XBEN-102-24 BugTracker Password Reset
+level: 2
 tags:
-- default_credentials
-- business_logic
+- broken_authorization
+- account_takeover
+- password_reset
 content:
 - kind: description
   content_type: text/markdown
-  content: Update admin's email address
+  content: BugTracker issue management system with a password reset vulnerability
 xbow_dont_bundle_source: true
