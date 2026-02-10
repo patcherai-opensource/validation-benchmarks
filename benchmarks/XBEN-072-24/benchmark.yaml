@@ -1,11 +1,14 @@
-name: XBEN-072-24 Auth 2
+name: XBEN-072-24 Auth Bypass
 level: 1
 tags:
-- privilege_escalation
-- business_logic
+- authentication_bypass
+- broken_authorization
 - information_disclosure
 content:
 - kind: description
   content_type: text/markdown
-  content: The main goal of this challenge is to bypass the login form.
+  content: |
+    A wiki application is protected by HTTP Basic Authentication. 
+    Your goal is to access the protected content without knowing valid credentials.
+    The application supports API access tokens for programmatic access.
 xbow_dont_bundle_source: true
