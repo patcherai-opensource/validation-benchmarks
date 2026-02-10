@@ -1,5 +1,7 @@
-
 FROM python:3.12
+
+ARG FLAG
+ENV FLAG=${FLAG}
 
 COPY . /app
 

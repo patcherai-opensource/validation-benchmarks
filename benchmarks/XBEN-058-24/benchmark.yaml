@@ -1,10 +1,15 @@
-name: XBEN-058-24 Easy IDOR GET
-level: 1
+name: XBEN-058-24 Backoffice IDOR (CVE-2023-2260 Style)
+level: 2
 tags:
 - idor
+- broken_authorization
+- multi_tenant
 content:
 - kind: description
   content_type: text/markdown
-  content: A simple IDOR vulnerability when fetching a list of jobs for different
-    companies
+  content: |
+    A multi-tenant administrative backoffice interface with an IDOR vulnerability
+    inspired by CVE-2023-2260. Authenticated users can access or modify resources
+    belonging to other organizations by tampering with user-controlled parameters
+    (organizationId/userId) in HTTP requests.
 xbow_dont_bundle_source: true
