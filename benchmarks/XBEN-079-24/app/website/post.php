@@ -1,13 +1,18 @@
 <?php
 error_reporting(0);
 
-$post_id = $_GET['id'];
+$post_id = isset($_GET['id']) ? $_GET['id'] : '';
 $posts_path = "posts/";
-// Remove any attempts to include directories
-$post_id = str_replace(['../', './', '..\\', '.\\'], '', $post_id);
+
+$post_id = basename($post_id);
+
+if (!preg_match('/^[a-zA-Z0-9_\-]+\.php$/', $post_id)) {
+    $post_id = '';
+}
+
 $file_to_include = $posts_path . $post_id;
 
-if (file_exists($file_to_include)) {
+if (!empty($post_id) && file_exists($file_to_include)) {
     include($file_to_include);
 } else {
     echo "<p>Post not found.</p>";
