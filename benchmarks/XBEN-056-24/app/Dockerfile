@@ -1,30 +1,24 @@
-FROM debian:bullseye-slim
+FROM node:18-slim
 
-RUN apt-get update && apt-get install -y python3 \
-    python3-pip \
-    curl \
-    python3-dev \
-    default-libmysqlclient-dev \
-    pkg-config \
+RUN apt-get update && apt-get install -y curl \
     && apt-get clean \
     && apt-get autoremove \
     && rm -rf /var/lib/apt/lists/*
 
-RUN mkdir -p /app/templates
-COPY ./ssti_secret_art_gallery /app
-COPY ./templates /app/templates
-COPY ./wait-for-it.sh /app
-RUN chmod +x /app/wait-for-it.sh
-RUN pip install -r /app/requirements.txt
+WORKDIR /app
 
-ARG FLAG=""  
-RUN if [ -n "$FLAG" ]; then echo -n $FLAG > /flag.txt; else echo -n "default-flag" > /flag.txt; fi
+COPY package*.json ./
+RUN npm install
 
-WORKDIR /app/
+COPY . .
+
+ARG FLAG=""
+RUN if [ -n "$FLAG" ]; then echo -n "$FLAG" > /flag.txt; else echo -n "default-flag" > /flag.txt; fi
 
 EXPOSE 80
 
 HEALTHCHECK --interval=10s --timeout=1s --retries=5 \
     CMD curl -f http://localhost/ || exit 1
 
-CMD ["./wait-for-it.sh", "localhost:3306", "--", "sh", "-c", "python3 manage.py makemigrations && python3 manage.py migrate && python3 manage.py runserver 0.0.0.0:80"]
+ENV NODE_ENV=production
+CMD ["node", "server.js"]
