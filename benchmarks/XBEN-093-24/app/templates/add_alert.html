@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+
+{% block title %}Add Alert Configuration - PayMeBack{% endblock %}
+
+{% block content %}
+<h2>Add Alert Configuration</h2>
+<p class="text-muted">Configure HTTP callback alerts for payment reminders. The request template supports dynamic variables.</p>
+
+<form method="POST" action="{{ url_for('add_alert') }}">
+    <div class="form-group">
+        <label for="alertName">Alert Name</label>
+        <input type="text" class="form-control" id="alertName" name="alertName" required 
+               placeholder="e.g., Payment Due Notification">
+    </div>
+    
+    <div class="form-group">
+        <label for="alertType">Alert Type</label>
+        <select class="form-control" id="alertType" name="alertType">
+            <option value="http_callback">HTTP Callback</option>
+            <option value="webhook">Webhook</option>
+        </select>
+    </div>
+    
+    <div class="form-group">
+        <label for="callbackUrl">Callback URL</label>
+        <input type="url" class="form-control" id="callbackUrl" name="callbackUrl" 
+               placeholder="https://your-webhook-endpoint.com/alerts">
+    </div>
+    
+    <div class="form-group">
+        <label for="requestTemplate">Request Template</label>
+        <textarea class="form-control" id="requestTemplate" name="requestTemplate" rows="6" 
+                  placeholder='{"alert": "{{ alert_name }}", "time": "{{ timestamp }}", "count": {{ transaction_count }}}'></textarea>
+        <small class="form-text text-muted">
+            Available variables: <code>alert_name</code>, <code>alert_type</code>, <code>timestamp</code>, <code>transaction_count</code>
+        </small>
+    </div>
+    
+    <button type="submit" class="btn btn-primary">Create Alert</button>
+    <a href="{{ url_for('alerts') }}" class="btn btn-secondary">Cancel</a>
+</form>
+{% endblock %}

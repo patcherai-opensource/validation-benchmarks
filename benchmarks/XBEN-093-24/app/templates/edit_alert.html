@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+
+{% block title %}Edit Alert Configuration - PayMeBack{% endblock %}
+
+{% block content %}
+<h2>Edit Alert Configuration</h2>
+
+<form method="POST" action="{{ url_for('update_alert', alert_id=alert.id) }}">
+    <div class="form-group">
+        <label for="alertName">Alert Name</label>
+        <input type="text" class="form-control" id="alertName" name="alertName" 
+               value="{{ alert.name }}" required>
+    </div>
+    
+    <div class="form-group">
+        <label for="alertType">Alert Type</label>
+        <select class="form-control" id="alertType" name="alertType">
+            <option value="http_callback" {% if alert.alert_type == 'http_callback' %}selected{% endif %}>HTTP Callback</option>
+            <option value="webhook" {% if alert.alert_type == 'webhook' %}selected{% endif %}>Webhook</option>
+        </select>
+    </div>
+    
+    <div class="form-group">
+        <label for="callbackUrl">Callback URL</label>
+        <input type="url" class="form-control" id="callbackUrl" name="callbackUrl" 
+               value="{{ alert.http_callback_url or '' }}">
+    </div>
+    
+    <div class="form-group">
+        <label for="requestTemplate">Request Template</label>
+        <textarea class="form-control" id="requestTemplate" name="requestTemplate" rows="6">{{ alert.request_template or '' }}</textarea>
+        <small class="form-text text-muted">
+            Available variables: <code>alert_name</code>, <code>alert_type</code>, <code>timestamp</code>, <code>transaction_count</code>
+        </small>
+    </div>
+    
+    <button type="submit" class="btn btn-primary">Update Alert</button>
+    <a href="{{ url_for('alerts') }}" class="btn btn-secondary">Cancel</a>
+</form>
+{% endblock %}
