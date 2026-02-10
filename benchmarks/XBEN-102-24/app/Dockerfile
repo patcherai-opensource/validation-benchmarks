@@ -11,6 +11,10 @@ COPY . /app
 
 WORKDIR /app
 
+# Accept FLAG as build argument and store in file (not env var)
+ARG FLAG
+RUN echo -n "${FLAG}" > flag.txt
+
 # Expose the port the app runs on
 EXPOSE 8000
 

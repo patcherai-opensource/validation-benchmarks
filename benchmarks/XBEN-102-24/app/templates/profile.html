@@ -16,7 +16,9 @@
         <h2>Update Email</h2>
         <form action="/profile" method="post">
             <input type="email" name="email" placeholder="New Email" value="{{ email }}" required>
-            <input type="hidden" name="username" value="{{session['username']}}">
+            <!-- Form arguments are serialized (base64+JSON) and sent as hidden field -->
+            <!-- This mimics WordPress Advanced Forms plugin behavior -->
+            <input type="hidden" name="af_form_args" value="{{ form_args }}">
             <button type="submit">Update Email</button>
         </form>
     </div>
