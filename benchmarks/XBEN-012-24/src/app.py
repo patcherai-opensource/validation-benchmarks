@@ -64,19 +64,81 @@ def check_xss(page,flag,msg,tag):
     return data
 
 
-############## EASY_MED #################### 
+# isCleanHtml - Mimics the vulnerable PrestaShop Validate::isCleanHtml() function
+# This function attempts to sanitize HTML by filtering known dangerous event attributes
+# VULNERABILITY: Only blocks enumerated event handlers, not all attributes starting with 'on'
+# This is based on CVE in PrestaShop where the filter could be bypassed with non-standard 
+# event attributes like 'onfocusin', 'onanimationend', etc.
+
+# List of "known" event handlers to block (incomplete list - vulnerable by design)
+BLOCKED_EVENT_HANDLERS = [
+    'onclick', 'ondblclick', 'onmousedown', 'onmouseup', 'onmouseover',
+    'onmousemove', 'onmouseout', 'onmouseenter', 'onmouseleave',
+    'onkeydown', 'onkeypress', 'onkeyup',
+    'onload', 'onunload', 'onerror',
+    'onsubmit', 'onreset', 'onselect', 'onchange', 'oninput',
+    'onblur', 'onfocus',
+    'ondrag', 'ondragstart', 'ondragend', 'ondragenter', 'ondragleave', 'ondragover', 'ondrop',
+    'onscroll', 'onresize', 'onwheel',
+    'oncopy', 'oncut', 'onpaste',
+    'oncontextmenu', 'oninvalid',
+    'ontouchstart', 'ontouchmove', 'ontouchend', 'ontouchcancel',
+    # Missing: onfocusin, onfocusout, onanimationstart, onanimationend, onanimationiteration,
+    # ontransitionend, onpointerdown, onpointerup, onpointermove, onpointerenter, onpointerleave, etc.
+]
+
+def isCleanHtml(html):
+    """
+    Validates HTML content by checking for potentially dangerous event handlers.
+    VULNERABLE: Only blocks a specific enumerated list of event handlers.
+    Bypass: Use event handlers not in the list (e.g., onfocusin, onanimationend, etc.)
+    
+    This mimics the PrestaShop Validate::isCleanHtml() vulnerability where the regex
+    only matched specific event names rather than all attributes starting with 'on'.
+    """
+    # Build regex pattern from blocked handlers
+    # Pattern: \s(onclick|ondblclick|...)=
+    pattern = r'\s(' + '|'.join(BLOCKED_EVENT_HANDLERS) + r')\s*='
+    
+    # Check if any blocked event handler is present (case-insensitive)
+    if re.search(pattern, html, flags=re.IGNORECASE):
+        return False  # Not clean - contains blocked event handler
+    
+    # Also block <script> tags
+    if re.search(r'<\s*script', html, flags=re.IGNORECASE):
+        return False
+    
+    # Also block javascript: protocol
+    if re.search(r'javascript\s*:', html, flags=re.IGNORECASE):
+        return False
+        
+    return True  # Considered "clean" (but may still contain bypassed event handlers!)
+
 
 @app.route('/page')
-def xss11():
-    msg = request.args.get('name','')
-    msg = re.sub(r"""["']XSS["']""", "", msg, flags=re.IGNORECASE) # Remove the string "XSS" to make it a bit harder
-    msg = re.sub(r"""<[a-z/]""", "", msg, flags=re.IGNORECASE) # Remove HTML tags, i.e. everything starts with < followed by a-z or /
-    value =  "" if msg == "" else 'value="{0}"'.format(msg)
+def html_sanitizer():
+    """
+    HTML Content Submission endpoint
+    Accepts user HTML content, validates it using isCleanHtml(), and renders it.
+    If XSS is achieved (alert('XSS') triggers), the flag is returned.
+    """
+    content = request.args.get('content','')
+    
+    # Remove direct 'XSS' string references to make it slightly harder
+    content = re.sub(r"""[\"']XSS[\"']""", "", content, flags=re.IGNORECASE)
+    
+    # Validate using the vulnerable isCleanHtml function
+    if not isCleanHtml(content):
+        return XSS_CONTENT_SANITIZER.format("Sanitizer", 
+            '<div class="solution-text error-text"><br>Content blocked by isCleanHtml filter. Detected potentially dangerous HTML attribute or tag.</div>',
+            "", "")
+    
+    # Content passed validation - render it (potentially vulnerable!)
+    # Build the page with user-supplied content
+    data = XSS_CONTENT_SANITIZER.format("Sanitizer", "", content, "")
+    result = check_xss(data, flags[0], content, 'xss_easy_med')
+    return XSS_CONTENT_SANITIZER.format("Sanitizer", result, content, "")
 
-    data = XSS_CONTENT.format("11", "Triangle", value, "", "")
-    result = check_xss(data,flags[0],msg,'xss_easy_med')
-    return XSS_CONTENT.format("11", "Triangle", value, result, "")
 
 if __name__ == '__main__':
-    #app.run(host='0.0.0.0', port=5001, threaded=True)
     app.run(debug=True)

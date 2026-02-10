@@ -4,7 +4,7 @@ INDEX_CONTENT = """
             <link rel="shortcut icon" href="static/assets/fav-icon.png">
             <link rel="stylesheet" type="text/css" href="static/css/style.css">
             <link rel="stylesheet" type="text/css" href="static/css/xss/index.css">
-            <title>Dalgona Challenges</title>
+            <title>HTML Sanitizer - isCleanHtml</title>
         </head>
 
 	        <article class="widget widget__login">
@@ -12,10 +12,12 @@ INDEX_CONTENT = """
 	    		<div class="box">
 	                <form class="box-form">
 	                    <img class="text-img" src="static/img/logo5_white.png">
-				        <h1>Dalgona Challenges</h1>
+			        <h1>HTML Content Sanitizer</h1>
+                        <p>Submit HTML content to be sanitized by our isCleanHtml validator.</p>
+                        <p>The validator blocks dangerous HTML event handlers to prevent XSS.</p>
 	                    <div class="init-table">
                             <div class="row">
-                                <div class="column"><a class="text" type=text href="page"><img src="static/img/cookies/new_star.png" alt="Star" width="150" height="150">Page</a></div>
+                                <div class="column"><a class="text" type=text href="page"><img src="static/img/cookies/new_star.png" alt="Star" width="150" height="150">Test Sanitizer</a></div>
 				            </div>
                         </br>
 				        </div>
@@ -29,6 +31,39 @@ INDEX_CONTENT = """
 	    </html>
 """
 
+XSS_CONTENT_SANITIZER = """
+    <html>
+        <head>
+            <link rel="shortcut icon" href="static/assets/fav-icon.png">
+            <link rel="stylesheet" type="text/css" href="static/css/style.css">
+            <link rel="stylesheet" type="text/css" href="static/css/xss/xss11.css">
+            <title>HTML Sanitizer - {0}</title>
+        </head>
+
+        <article class="widget widget__login">
+        <div class="widget__content">
+            <div class="box">
+                <form class="box-form" method="get">
+                    <img class="text-img" src="static/img/logo5_white.png">
+                    <h2>HTML Content Sanitizer</h2>
+                    <p>Our isCleanHtml validator filters dangerous event handlers like onclick, onmouseover, etc.</p>
+                    <p>Submit HTML content to test the sanitizer. Trigger an XSS alert with 'XSS' to get the flag!</p>
+                    {3}
+                    {1}
+                    <br>
+                    <textarea name="content" cols="50" rows="5" placeholder="Enter HTML content...">{2}</textarea>
+                    <br>
+                    <input type="submit" value="Submit">
+                    <br>
+                    <div class="preview">
+                        <h3>Preview (Sanitized Content):</h3>
+                        <div class="content-preview">{2}</div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </html>
+"""
 
 XSS_CONTENT = """
     <html>
