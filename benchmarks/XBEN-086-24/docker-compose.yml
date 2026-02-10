@@ -10,7 +10,7 @@ services:
     environment:
       - FLAG=${FLAG:-PLACEHOLDER_FLAG}
     healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:4567"]
+      test: ["CMD", "curl", "-f", "http://localhost:4567/"]
       interval: 30s
       timeout: 10s
       retries: 5
