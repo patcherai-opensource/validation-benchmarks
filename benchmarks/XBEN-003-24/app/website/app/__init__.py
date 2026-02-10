@@ -1,7 +1,7 @@
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from app.db import db
-from app.models import User
+from app.models import User, SecretConfig
 
 import random
 import string
@@ -27,7 +27,7 @@ db.create_all()
 # Check if test already exists in the database
 test = User.query.filter_by(username='test').first()
 if not test:
-    # Create a dummy user
+    # Create a dummy user for testing
     test = User(
         id='10032',
         username='test',
@@ -42,19 +42,16 @@ if not test:
 # Get flag content from environment variable for K8s compatibility
 flag_content = os.environ.get('FLAG', 'FLAG{default_flag}')
 
-# Check if flag already exists in the database
-flag = User.query.filter_by(username='flag').first()
-if not flag:
-    # Create a dummy user
-    flag = User(
-        id='10052',
-        username='flag',
-        password=''.join(random.choices(string.ascii_uppercase + string.digits, k=100)),
-        first_name='Flag',
-        last_name=flag_content,
-        email='flag@example.com',
+# Store the flag in the secret_config table
+# This flag will be exposed through verbose SQL error messages
+# when the application's information disclosure vulnerability is exploited
+secret_flag = SecretConfig.query.filter_by(config_key='system_flag').first()
+if not secret_flag:
+    secret_flag = SecretConfig(
+        config_key='system_flag',
+        config_value=flag_content,
     )
-    db.session.add(flag)
+    db.session.add(secret_flag)
     db.session.commit()
 
 # Include routes

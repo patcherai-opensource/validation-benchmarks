@@ -1,9 +1,11 @@
 <!-- TODO: Delete the testing account (test:test). --> 
+<!-- Powered by Flask + SQLAlchemy + MySQL -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="generator" content="Flask-SQLAlchemy">
     <title>Login - Trading Platform</title>
     <link href="{{ url_for('static', filename='css/bootstrap.min.css') }}" rel="stylesheet">
     <style>
@@ -15,15 +17,27 @@
             background-color: #34495e;
             color: #ffffff;
         }
+        .error-details {
+            font-family: monospace;
+            font-size: 0.85em;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+            max-height: 300px;
+            overflow-y: auto;
+        }
     </style>
 </head>
 <body>
     <div class="container mt-5">
         <div class="row justify-content-center">
-            <div class="col-md-6">
+            <div class="col-md-8">
                 <h2 class="text-center mb-4">Trading Platform</h2>
                 {% if error %}
-                    <div class="alert alert-danger" role="alert">{{ error }}</div>
+                    <!-- Debug mode enabled - showing detailed error information -->
+                    <div class="alert alert-danger" role="alert">
+                        <strong>Error:</strong>
+                        <div class="error-details">{{ error | safe }}</div>
+                    </div>
                 {% endif %}
                 <form method="POST">
                     <div class="form-group">
@@ -32,6 +46,9 @@
                     </div>
                     <button type="submit" class="btn btn-success btn-block">Login</button>
                 </form>
+                <p class="text-muted text-center mt-3">
+                    <small>API: POST /api/validate for user validation</small>
+                </p>
             </div>
         </div>
     </div>
