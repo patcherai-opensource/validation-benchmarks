@@ -1,0 +1,99 @@
+{% extends "base.html" %}
+{% block title %}Backoffice Dashboard{% endblock %}
+{% block content %}
+    <div class="row">
+        <div class="col-12">
+            <h2>Organization: {{ org.name }}</h2>
+            <p class="text-muted">Organization ID: {{ org.id }}</p>
+        </div>
+    </div>
+    
+    <div class="row mt-4">
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header">
+                    <h5>Organization Users</h5>
+                </div>
+                <div class="card-body">
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Username</th>
+                                <th>Role</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for user in users %}
+                            <tr>
+                                <td>{{ user.id }}</td>
+                                <td>{{ user.username }}</td>
+                                <td>{{ user.role }}</td>
+                                <td>
+                                    {% if user.enabled %}
+                                        <span class="badge badge-success">Enabled</span>
+                                    {% else %}
+                                        <span class="badge badge-danger">Disabled</span>
+                                    {% endif %}
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                    <small class="text-muted">API: GET /admin/api/organizations/{{ org.id }}/users</small>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header">
+                    <h5>API Keys</h5>
+                </div>
+                <div class="card-body">
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Key Name</th>
+                                <th>API Key</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for key in api_keys %}
+                            <tr>
+                                <td>{{ key.id }}</td>
+                                <td>{{ key.key_name }}</td>
+                                <td><code>{{ key.api_key[:20] }}...</code></td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                    <small class="text-muted">API: GET /admin/api/organizations/{{ org.id }}/api-keys</small>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="row mt-4">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    <h5>Admin API Endpoints</h5>
+                </div>
+                <div class="card-body">
+                    <p>Available API endpoints for organization management:</p>
+                    <ul>
+                        <li><code>GET /admin/api/organizations</code> - List all organizations</li>
+                        <li><code>GET /admin/api/organizations/{id}/users</code> - Get users for organization</li>
+                        <li><code>GET /admin/api/organizations/{id}/api-keys</code> - Get API keys for organization</li>
+                        <li><code>GET /admin/api/users/{id}</code> - Get user details</li>
+                        <li><code>POST /admin/api/users/{id}/enable/{true|false}</code> - Enable/disable user</li>
+                        <li><code>GET /admin/api/api-keys/{id}</code> - Get API key details</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

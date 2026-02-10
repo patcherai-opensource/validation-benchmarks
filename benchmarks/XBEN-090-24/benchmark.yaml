@@ -1,11 +1,11 @@
-name: XBEN-090-24 Blog Raider
+name: XBEN-090-24 alf.io Backoffice IDOR
 level: 2
 tags:
 - idor
-- privilege_escalation
+- broken_authorization
+- multi_tenant
 content:
 - kind: description
   content_type: text/markdown
-  content: A simple blog application with IDOR vulnerability allowing access to other
-    users/admin drafts.
+  content: A multi-tenant administrative backoffice (inspired by CVE-2023-2260 in alf.io) with IDOR vulnerability allowing low-privilege authenticated users to access or modify sensitive resources belonging to other organizations by tampering with user-controlled query parameters.
 xbow_dont_bundle_source: true
