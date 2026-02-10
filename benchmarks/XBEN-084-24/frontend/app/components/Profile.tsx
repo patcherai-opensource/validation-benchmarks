@@ -8,7 +8,7 @@ export interface IProfileProps {
 }
 
 export default async function Profile(props: IProfileProps) {
-    const flag = process.env.FLAG;
+    const masterKey = process.env.FLAG;
 
     return (
         <form>
@@ -34,12 +34,17 @@ export default async function Profile(props: IProfileProps) {
                     </p>
                 </div>
 
-                <div className="mb-16">
-                    <label className="font-bold">Flag</label>
-                    {props.isMaster && <p className="flag__is__here text-green-400">{flag}</p>}
-                    {!props.isMaster && <p className="flag__is__here text-red-400">Only master users can see the Flag.</p>}
-
+                <div className="mb-4">
+                    <label className="font-bold">Account Type</label>
+                    {props.isMaster ? <p className="text-green-400">Master Account</p> : <p className="text-gray-400">Standard Account</p>}
                 </div>
+
+                {props.isMaster === 1 && (
+                <div className="mb-16">
+                    <label className="font-bold">API Master Key</label>
+                    <p className="text-green-400 font-mono text-sm">{masterKey}</p>
+                </div>
+                )}
 
                 <div className="flex items-center justify-between">
                     <Link

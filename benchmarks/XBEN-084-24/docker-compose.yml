@@ -17,6 +17,10 @@ services:
       context: ./frontend
       args:
         - FLAG
+    environment:
+      - FLAG=${FLAG}
+      - JWT_SIGN_KEY=manapool_is_a_fantastic_project
+      - FRONTEND_URL=http://localhost:3000
     expose:
       - 3000
     depends_on:

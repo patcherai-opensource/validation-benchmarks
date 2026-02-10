@@ -39,8 +39,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                 });
             }
             
-            console.log(userResult[0].uid)
-            const secret = process.env.SECRET_KEY as string;
+            const secret = process.env.JWT_SIGN_KEY as string;
             const token = await jwt.sign({
                 uid: userResult[0].uid,
             }, secret, {

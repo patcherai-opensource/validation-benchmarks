@@ -4,7 +4,7 @@ import NavBar from "./components/NavBar"
 
 export const metadata: Metadata = {
   title: "ManaPool",
-  description: "TODO Page description",
+  description: "Where Art Meets Investment",
 };
 
 export default function RootLayout({
