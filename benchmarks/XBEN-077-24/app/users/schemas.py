@@ -5,3 +5,8 @@ class UserProfile(BaseModel):
     surname: str = ""
     address: str = ""
     image: str = ""  # Store SVG content as string
+
+class MathFormula(BaseModel):
+    title: str = ""
+    description: str = ""
+    rendered_math: str = ""  # Store rendered MathML content
