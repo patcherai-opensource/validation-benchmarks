@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GeoProcessing WPS Server</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>GeoProcessing WPS Server</h1>
+            <p class="subtitle">Open Geospatial Consortium Web Processing Service</p>
+        </header>
+        
+        <nav class="main-nav">
+            <a href="{{ url_for('index') }}" class="active">Home</a>
+            <a href="/wps?service=WPS&request=GetCapabilities">Capabilities</a>
+            <a href="{{ url_for('admin_login') }}">Admin</a>
+        </nav>
+        
+        <main>
+            <section class="info-section">
+                <h2>About This Service</h2>
+                <p>This WPS server provides geospatial processing capabilities following the OGC WPS 1.0.0 specification. Submit Execute requests to perform spatial analysis operations on your geographic data.</p>
+            </section>
+            
+            <section class="info-section">
+                <h2>Available Operations</h2>
+                <div class="operations-grid">
+                    <div class="operation-card">
+                        <h3>GetCapabilities</h3>
+                        <p>Returns service metadata and available processes</p>
+                        <code>GET /wps?service=WPS&request=GetCapabilities</code>
+                    </div>
+                    <div class="operation-card">
+                        <h3>DescribeProcess</h3>
+                        <p>Returns detailed process description</p>
+                        <code>GET /wps?service=WPS&request=DescribeProcess&identifier=geo:buffer</code>
+                    </div>
+                    <div class="operation-card">
+                        <h3>Execute</h3>
+                        <p>Executes a process with provided inputs</p>
+                        <code>POST /wps (XML body)</code>
+                    </div>
+                </div>
+            </section>
+            
+            <section class="info-section">
+                <h2>Available Processes</h2>
+                <ul class="process-list">
+                    <li><strong>geo:buffer</strong> - Creates a buffer around a geometry feature</li>
+                    <li><strong>geo:centroid</strong> - Computes the centroid of a geometry</li>
+                    <li><strong>geo:intersection</strong> - Computes the intersection of two geometries</li>
+                    <li><strong>geo:union</strong> - Computes the union of multiple geometries</li>
+                    <li><strong>geo:simplify</strong> - Simplifies geometry using Douglas-Peucker algorithm</li>
+                </ul>
+            </section>
+            
+            <section class="info-section">
+                <h2>Example Execute Request</h2>
+                <pre class="code-block">&lt;?xml version="1.0" encoding="UTF-8"?&gt;
+&lt;wps:Execute xmlns:wps="http://www.opengis.net/wps/1.0.0"
+             xmlns:ows="http://www.opengis.net/ows/1.1"
+             service="WPS" version="1.0.0"&gt;
+    &lt;ows:Identifier&gt;geo:buffer&lt;/ows:Identifier&gt;
+    &lt;wps:DataInputs&gt;
+        &lt;wps:Input&gt;
+            &lt;ows:Identifier&gt;geometry&lt;/ows:Identifier&gt;
+            &lt;wps:Data&gt;
+                &lt;wps:LiteralData&gt;POINT(0 0)&lt;/wps:LiteralData&gt;
+            &lt;/wps:Data&gt;
+        &lt;/wps:Input&gt;
+        &lt;wps:Input&gt;
+            &lt;ows:Identifier&gt;distance&lt;/ows:Identifier&gt;
+            &lt;wps:Data&gt;
+                &lt;wps:LiteralData&gt;10&lt;/wps:LiteralData&gt;
+            &lt;/wps:Data&gt;
+        &lt;/wps:Input&gt;
+    &lt;/wps:DataInputs&gt;
+    &lt;wps:ResponseForm&gt;
+        &lt;wps:RawDataOutput&gt;
+            &lt;ows:Identifier&gt;buffered_geometry&lt;/ows:Identifier&gt;
+        &lt;/wps:RawDataOutput&gt;
+    &lt;/wps:ResponseForm&gt;
+&lt;/wps:Execute&gt;</pre>
+            </section>
+        </main>
+        
+        <footer>
+            <p>&copy; 2024 GeoData Solutions Inc. | OGC WPS 1.0.0 Compliant</p>
+        </footer>
+    </div>
+</body>
+</html>
