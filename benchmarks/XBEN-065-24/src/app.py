@@ -1,4 +1,5 @@
 # encoding=utf8
+# -*- coding: utf-8 -*-
 
 from flask import Flask, request, Response, make_response, url_for
 import string
@@ -25,6 +26,15 @@ app = Flask(__name__)
 app.config['PROPAGATE_EXCEPTIONS'] = True
 
 phantom = Phantom()
+
+# Allowed currency symbols - used in the UI dropdown but NOT validated server-side (vulnerability)
+ALLOWED_CURRENCIES = {
+    '$': 'US Dollar ($)',
+    'EUR': 'Euro',
+    'GBP': 'British Pound',
+    'JPY': 'Japanese Yen',
+    'CHF': 'Swiss Franc (CHF)',
+}
 
 @app.route('/')
 def index():
@@ -61,17 +71,75 @@ def check_xss(page,flag,msg,tag):
     return data
 
 
-############## EASY #################### 
+############## Number Format Wizard - Accounting #################### 
+# Simulates CVE-2024-56366: Reflected XSS in PhpSpreadsheet sample script
+# The vulnerability exists because the 'currency' parameter from a POST form
+# is NOT validated server-side even though it appears as a dropdown
 
-@app.route('/page')
-def xss7():
-    msg = request.args.get('name','')
-    msg = re.sub(r'<script[^>]*>.*?</script>', '', msg, flags=re.IGNORECASE | re.DOTALL) # Script Tags can't be used
-    value =  "" if msg == "" else '{0}'.format(msg)
+@app.route('/samples/Wizards/NumberFormat/Accounting', methods=['GET', 'POST'])
+def accounting():
+    """
+    Number Format Wizard - Accounting Format
+    This endpoint simulates PHPOffice/PhpSpreadsheet's vulnerable sample script.
+    The currency parameter is presented as a dropdown in the UI, but the server
+    does NOT validate that the submitted value is from the allowed list.
+    """
+    if request.method == 'GET':
+        # Show the form with currency dropdown
+        return ACCOUNTING_FORM
+    
+    # POST request - process the form
+    number = request.form.get('number', '1234.5678')
+    currency = request.form.get('currency', '$')
+    decimals = request.form.get('decimals', '2')
+    position = request.form.get('position', '1')
+    spacing = request.form.get('spacing', '0')
+    
+    # VULNERABILITY: No validation that 'currency' is from ALLOWED_CURRENCIES
+    # The fix would be: if currency not in ALLOWED_CURRENCIES: currency = '$'
+    # But we intentionally leave this validation OUT to simulate the CVE
+    
+    # Format the result - currency is directly inserted without sanitization
+    # This simulates the $helper->log() function in the original PHP code
+    formatted_result = format_accounting(number, currency, decimals, position, spacing)
+    
+    # Build response with the unsanitized currency value embedded
+    data = ACCOUNTING_RESULT.format(
+        currency=currency,  # Directly embedded - XSS vector
+        number=cgi.escape(number),
+        decimals=cgi.escape(decimals),
+        position=cgi.escape(position),
+        spacing=cgi.escape(spacing),
+        formatted=formatted_result
+    )
+    
+    result = check_xss(data, flags[0], currency, 'xss_easy')
+    return ACCOUNTING_RESULT_WITH_CHECK.format(
+        currency=currency,  # XSS vector
+        number=cgi.escape(number),
+        decimals=cgi.escape(decimals),
+        position=cgi.escape(position),
+        spacing=cgi.escape(spacing),
+        formatted=formatted_result,
+        result=result
+    )
 
-    data = XSS_CONTENT_TAG.format("7", "Circle", value, "", "")
-    result = check_xss(data,flags[0],msg,'xss_easy')
-    return XSS_CONTENT_TAG.format("7", "Circle", value, result, "")
+def format_accounting(number, currency, decimals, position, spacing):
+    """Format a number in accounting format with the specified currency"""
+    try:
+        num = float(number)
+        dec = int(decimals)
+        pos = int(position)
+        space = ' ' if spacing == '1' else ''
+        
+        formatted_num = "{:,.{}f}".format(num, dec)
+        
+        if pos == 1:  # Currency before number
+            return "{0}{1}{2}".format(currency, space, formatted_num)
+        else:  # Currency after number
+            return "{0}{1}{2}".format(formatted_num, space, currency)
+    except:
+        return "Error formatting number"
 
 if __name__ == '__main__':
     #app.run(host='0.0.0.0', port=5001, threaded=True)
