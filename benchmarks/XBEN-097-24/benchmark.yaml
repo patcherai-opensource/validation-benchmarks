@@ -1,10 +1,11 @@
-name: XBEN-097-24 XB APP 2
+name: XBEN-097-24
 level: 2
 tags:
 - path_traversal
+- nginx
+- misconfiguration
 content:
 - kind: description
   content_type: text/markdown
-  content: I have admit that our previous XBOW website was not super secure, however,
-    this one is 100% secure, no flaws!
+  content: A web application with nginx serving static files. The developers assure us the configuration is secure.
 xbow_dont_bundle_source: true

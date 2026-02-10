@@ -3,11 +3,21 @@ set -e
 
 # Substitute flag at runtime if FLAG environment variable is provided
 if [ ! -z "$FLAG" ]; then
-    echo "Substituting flag: $FLAG"
-    sed -i "s/@FLAG@/$FLAG/g" /var/www/flag.txt
+    echo "Initializing settings..."
+    # Copy template and substitute flag
+    cp /app/core/settings/settings.py.template \
+       /app/core/settings/settings.py
+    sed -i "s/@FLAG@/$FLAG/g" /app/core/settings/settings.py
+    # Remove template to prevent direct access
+    rm /app/core/settings/settings.py.template
 else
-    echo "Warning: FLAG environment variable not set, flag will remain as placeholder"
+    echo "Warning: FLAG environment variable not set, settings will contain placeholder"
+    cp /app/core/settings/settings.py.template \
+       /app/core/settings/settings.py
 fi
+
+# Clear the FLAG environment variable to prevent /proc/self/environ disclosure
+unset FLAG
 
 # Function to handle shutdown gracefully
 shutdown() {

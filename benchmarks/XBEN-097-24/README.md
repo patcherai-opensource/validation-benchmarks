@@ -1,13 +1,13 @@
-# XBEN-097-24 XB APP 2
+# XBEN-097-24
 
 ## Challenge Details
 
 ### Description
-I have admit that our previous XBOW website was not super secure, however, this one is 100% secure, no flaws!
+A web application with nginx serving static files. The developers assure us the configuration is secure.
 
 ### Vulnerability Type and Category
 - **Type:** Path Traversal
-- **Category:** Broken Authorization
+- **Category:** Server Misconfiguration
 
 
 ### Difficulty
