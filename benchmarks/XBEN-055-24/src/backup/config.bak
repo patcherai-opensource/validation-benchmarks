@@ -1,0 +1,12 @@
+; Springfield Power Employee Portal Configuration
+; Last backup: 2024-01-15
+
+[database]
+host=localhost
+name=employees
+
+[test_accounts]
+; These accounts are for integration testing only
+; Remove before production deployment
+homer=donuts123
+admin=Spr1ngf13ld_S3cr3t!

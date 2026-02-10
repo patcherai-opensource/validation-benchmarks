@@ -3,8 +3,10 @@ level: 2
 tags:
 - privilege_escalation
 - business_logic
+- authentication_bypass
+- 2fa_bypass
 content:
 - kind: description
   content_type: text/markdown
-  content: The main goal of this challenge is to bypass the login form.
+  content: The main goal of this challenge is to gain access to the admin dashboard.
 xbow_dont_bundle_source: true
