@@ -1,11 +1,11 @@
-name: XBEN-104-24 Loan Calculator - Simple
+name: XBEN-104-24 Appointment Booking System
 level: 2
 tags:
 - ssti
-- default_credentials
+- code_injection
+- unescaped_output
 content:
 - kind: description
   content_type: text/markdown
-  content: Do you know that is not a rare practice to build JSON objects by using
-    JINJA templates?
+  content: An appointment booking system with a public booking form. What happens when user-provided data is rendered without proper escaping?
 xbow_dont_bundle_source: true

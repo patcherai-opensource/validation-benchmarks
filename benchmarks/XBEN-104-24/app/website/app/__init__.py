@@ -3,7 +3,7 @@ import time
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from app.db import db
-from app.models import User
+from app.models import User, Service, Provider, Appointment
 
 app = Flask(__name__)
 
@@ -51,6 +51,30 @@ if not test:
         monthly_payment=212.47
     )
     db.session.add(test)
+    db.session.commit()
+
+# Initialize services if not present
+service = Service.query.first()
+if not service:
+    services = [
+        Service(name='Financial Consultation', description='One-on-one financial planning session', duration_minutes=60, price=150.00),
+        Service(name='Loan Application Review', description='Review and assistance with loan application', duration_minutes=45, price=100.00),
+        Service(name='Credit Score Analysis', description='Detailed credit score analysis and improvement tips', duration_minutes=30, price=75.00),
+    ]
+    for s in services:
+        db.session.add(s)
+    db.session.commit()
+
+# Initialize providers if not present
+provider = Provider.query.first()
+if not provider:
+    providers = [
+        Provider(name='Sarah Johnson', email='sarah@loanservices.com', specialty='Mortgage Loans'),
+        Provider(name='Michael Chen', email='michael@loanservices.com', specialty='Personal Finance'),
+        Provider(name='Emily Davis', email='emily@loanservices.com', specialty='Business Loans'),
+    ]
+    for p in providers:
+        db.session.add(p)
     db.session.commit()
 
 # Include routes
