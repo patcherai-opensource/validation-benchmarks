@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login</title>
+    <title>Admin Login</title>
     <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
 </head>
 <body>
@@ -12,10 +12,12 @@
             <div class="col-md-6">
                 <div class="card">
                     <div class="card-header text-center">
-                        <h4>EMP Login</h4>
+                        <h4>Admin Login</h4>
+                        <small class="text-muted">Multi-Factor Authentication Required</small>
                     </div>
                     <div class="card-body">
-                        <form method="post" action="/login">
+                        <div id="error-msg" class="alert alert-danger" role="alert" style="display: none;"></div>
+                        <form method="post" id="login-form">
                             <input type="hidden" name="role" value="admin">
                             <div class="form-group">
                                 <label for="username">Username</label>
@@ -36,5 +38,34 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            $("#login-form").submit(function(e) {
+                e.preventDefault();
+                var username = $("#username").val();
+                var password = $("#password").val();
+                var role = $("input[name='role']").val();
+                $.ajax({
+                    url: "/login",
+                    type: "POST",
+                    data: {
+                        username: username,
+                        password: password,
+                        role: role
+                    },
+                    success: function(data) {
+                        if (data.success == true) {
+                            window.location.href = data.redirect;
+                        } else {
+                            $("#error-msg").text(data.message || "Invalid credentials").show();
+                        }
+                    },
+                    error: function() {
+                        $("#error-msg").text("An error occurred").show();
+                    }
+                });
+            });
+        });
+    </script>
 </body>
 </html>

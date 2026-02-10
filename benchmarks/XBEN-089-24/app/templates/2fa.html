@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login</title>
+    <title>Two-Factor Authentication</title>
     <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
 </head>
 <body>
@@ -12,13 +12,15 @@
             <div class="col-md-6">
                 <div class="card">
                     <div class="card-header text-center">
-                        <h4>ENTER OTP</h4>
+                        <h4>Two-Factor Authentication</h4>
                     </div>
-                    <div class="card-body"> 
-                        <form method="post" > 
+                    <div class="card-body">
+                        <p class="text-center text-muted">Enter the verification code sent to your authenticator app</p>
+                        <div id="error-msg" class="alert alert-danger" role="alert" style="display: none;"></div>
+                        <form method="post" id="otp-form"> 
                             <div class="form-group">
-                                <label for="otp">OTP</label>
-                                <input type="number" class="form-control" id="otp" name="otp" required>
+                                <label for="code">Verification Code</label>
+                                <input type="text" class="form-control" id="code" name="code" maxlength="6" pattern="[0-9]{6}" required>
                             </div> 
                             <button type="submit" class="btn btn-primary btn-block">Verify</button>
                         </form>
@@ -33,23 +35,24 @@
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
     <script>
         $(document).ready(function() {
-           
- 
-            $("form").submit(function(e) {
+            $("#otp-form").submit(function(e) {
                 e.preventDefault();
-                var otp = $("#otp").val(); 
+                var code = $("#code").val(); 
                 $.ajax({
                     url: "/admin/2fa",
                     type: "POST",
                     data: {
-                        code: 1234, 
+                        code: code
                     },
                     success: function(data) {
                         if (data.success == true) {
-                            window.location.href = '/admin/dashboard';
+                            window.location.href = data.redirect;
                         } else {
-                            alert("Invalid credentials");
+                            $("#error-msg").text(data.message || "Invalid code").show();
                         }
+                    },
+                    error: function() {
+                        $("#error-msg").text("Verification failed").show();
                     }
                 });
             });

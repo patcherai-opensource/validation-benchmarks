@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login</title>
+    <title>Employee Login</title>
     <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
 </head>
 <body>
@@ -12,17 +12,11 @@
             <div class="col-md-6">
                 <div class="card">
                     <div class="card-header text-center">
-                        <h4>Login</h4>
+                        <h4>Employee Login</h4>
                     </div>
                     <div class="card-body">
-                        {% with messages = get_flashed_messages() %}
-                            {% if messages %}
-                            <div class="alert alert-danger" role="alert">
-                                {{ messages[0] }}
-                            </div>
-                            {% endif %}
-                        {% endwith %}
-                        <form method="post" >
+                        <div id="error-msg" class="alert alert-danger" role="alert" style="display: none;"></div>
+                        <form method="post" id="login-form">
                             <input type="hidden" name="role" value="{{ role }}"> 
                             <div class="form-group">
                                 <label for="username">Username</label>
@@ -45,15 +39,7 @@
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
     <script>
         $(document).ready(function() {
-            var role = "{{ role }}";
-            if (role === "admin") {
-                $("h4").text("Admin Login");
-            } else {
-                $("h4").text("EMP Login");
-            }
-
-            // form
-            $("form").submit(function(e) {
+            $("#login-form").submit(function(e) {
                 e.preventDefault();
                 var username = $("#username").val();
                 var password = $("#password").val();
@@ -70,8 +56,11 @@
                         if (data.success == true) {
                             window.location.href = data.redirect;
                         } else {
-                            alert("Invalid credentials");
+                            $("#error-msg").text(data.message || "Invalid credentials").show();
                         }
+                    },
+                    error: function() {
+                        $("#error-msg").text("An error occurred").show();
                     }
                 });
             });

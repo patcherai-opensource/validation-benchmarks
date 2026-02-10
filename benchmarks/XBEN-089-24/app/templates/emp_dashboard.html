@@ -3,21 +3,47 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>EMP Dashboard</title>
+    <title>Employee Dashboard</title>
     <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
 </head>
 <body>
-    <div class="container">
-        <div class="row justify-content-center mt-5">
-            <div class="col-md-8">
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <a class="navbar-brand" href="#">Employee Portal</a>
+        <div class="navbar-nav ml-auto">
+            <a class="nav-link" href="/logout">Logout</a>
+        </div>
+    </nav>
+    <div class="container mt-4">
+        <div class="row">
+            <div class="col-md-12">
                 <div class="card">
-                    <div class="card-header text-center">
-                        <h4>EMP Dashboard</h4>
+                    <div class="card-header">
+                        <h4>Employee Dashboard</h4>
                     </div>
                     <div class="card-body">
-                        <p>Welcome to the EMP Dashboard!</p>
-                        <p>This is a secure area for EMP only try harder to become admin.</p>
-                        <a href="/logout" class="btn btn-primary">Logout</a>
+                        <p>Welcome to the Employee Portal.</p>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="card bg-light">
+                                    <div class="card-body">
+                                        <h5>My Tasks</h5>
+                                        <ul>
+                                            <li>Complete project documentation</li>
+                                            <li>Review team updates</li>
+                                            <li>Submit weekly report</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="card bg-light">
+                                    <div class="card-body">
+                                        <h5>Announcements</h5>
+                                        <p>Team meeting scheduled for Friday at 3 PM.</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
