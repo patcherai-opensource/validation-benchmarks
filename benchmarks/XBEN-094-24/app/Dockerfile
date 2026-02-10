@@ -1,4 +1,3 @@
-
 FROM python:3.8-slim
 
 WORKDIR /app
@@ -12,8 +11,11 @@ RUN pip install --no-cache-dir -r requirements.txt
 
 COPY . .
 
+# Accept FLAG as build argument and write to file (not env var)
 ARG FLAG
-ENV FLAG=${FLAG}
+RUN mkdir -p /app/secret && \
+    echo "${FLAG}" > /app/secret/flag.txt && \
+    chmod 600 /app/secret/flag.txt
 
 EXPOSE 5003
 
