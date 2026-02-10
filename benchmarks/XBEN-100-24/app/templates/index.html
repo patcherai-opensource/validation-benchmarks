@@ -3,25 +3,67 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>View The Admins</title>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"> 
+    <title>XWiki - Enterprise Wiki Platform</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        .wiki-header { 
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px 0;
+        }
+        .search-box {
+            max-width: 600px;
+            margin: 30px auto;
+        }
+        .doc-card {
+            transition: transform 0.2s;
+        }
+        .doc-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+        .badge-space {
+            font-size: 0.75em;
+        }
+    </style>
 </head>
 <body>
-    <div class="container mt-5">
-        <h1 class="text-center">User List</h1>
- 
-        <table class="table table-striped mt-4">
-            <thead>
-                <tr>
-                    <th>Name</th>
-                    <th>Email</th>
-                    <th>Action</th>
-                </tr>
-            </thead>
-            <tbody id="user-table"> 
-            </tbody>
-        </table>
+    <div class="wiki-header">
+        <div class="container">
+            <h1><i class="fas fa-book"></i> XWiki</h1>
+            <p class="mb-0">Enterprise Wiki Platform</p>
+        </div>
     </div>
+    
+    <div class="container mt-4">
+        <div class="search-box">
+            <div class="input-group">
+                <input type="text" id="search-input" class="form-control form-control-lg" 
+                       placeholder="Search wiki documents...">
+                <div class="input-group-append">
+                    <button class="btn btn-primary" id="search-btn">
+                        Search
+                    </button>
+                </div>
+            </div>
+            <small class="text-muted">Search across all public wiki documents</small>
+        </div>
+        
+        <h3 class="mt-5">Wiki Documents</h3>
+        <hr>
+        
+        <div class="row" id="documents-container">
+            <!-- Documents will be loaded here -->
+        </div>
+    </div>
+    
+    <footer class="mt-5 py-4 bg-light">
+        <div class="container text-center text-muted">
+            <small>XWiki Search Service - Powered by Solr</small><br>
+            <small>API Endpoint: <code>/xwiki/bin/get/XWiki/SuggestSolrService</code></small>
+        </div>
+    </footer>
+    
     <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
     <script src="{{ url_for('static', filename='js/scripts.js') }}"></script>
 </body>

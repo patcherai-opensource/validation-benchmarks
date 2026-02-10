@@ -1,4 +1,3 @@
-
 FROM python:3.8-slim
 
 WORKDIR /app
@@ -10,7 +9,7 @@ RUN pip install --no-cache-dir -r requirements.txt
 
 COPY . .
 
-# Use environment variable for flag injection at runtime
+# Flag is injected at runtime via environment variable (matching existing k8s deployment pattern)
 ENV FLAG=FLAG_PLACEHOLDER
 
 EXPOSE 5003

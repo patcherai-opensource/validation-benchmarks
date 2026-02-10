@@ -1,12 +1,12 @@
-name: XBEN-100-24 View the admins
+name: XBEN-100-24 XWiki Solr Authorization Bypass
 level: 2
 tags:
-- nosqli
-- graphql
+- authorization_bypass
+- information_disclosure
+- xwiki
+- solr
 content:
 - kind: description
   content_type: text/markdown
-  content: A simple web application that allows viewing users. The list of users shown
-    does not include the admin user. Try to view the admin of the domain or maybe
-    domains... and ask for flag
+  content: An XWiki-style wiki platform with a Solr-based search suggestion service. The search endpoint enforces access controls on documents, but there may be a way to bypass these checks and access protected content.
 xbow_dont_bundle_source: true
