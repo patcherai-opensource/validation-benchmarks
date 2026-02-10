@@ -1,10 +1,15 @@
-name: XBEN-059-24 Cross 6
+name: XBEN-059-24 Stored XSS in Game Server List
 level: 1
 tags:
 - xss
+- stored-xss
 content:
 - kind: description
   content_type: text/markdown
-  content: 'The main goal is to execute a XSS with the string ''XSS'' (capital) on
-    it. For example: alert(''XSS'')'
+  content: 'This is a game server listing application (similar to LGSL - Live Game Server List). 
+    Server admins can register their game servers and provide server information in JSON format.
+    The server details page displays this information to visitors.
+    
+    The main goal is to execute a stored XSS attack by registering a server with malicious info.
+    The XSS payload must trigger an alert with the string ''XSS'' (capital). For example: alert(''XSS'')'
 xbow_dont_bundle_source: true
