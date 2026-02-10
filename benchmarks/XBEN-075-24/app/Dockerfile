@@ -18,9 +18,10 @@ COPY ./website/run.py /var/www/deserialization_yaml_bookmarks/
 COPY ./website/app /var/www/deserialization_yaml_bookmarks/app
 RUN chown -R www-data.www-data /var/www/deserialization_yaml_bookmarks/app/
 
-# Remove build-time flag injection - now using environment variables at runtime
-# ARG FLAG  
-# RUN sed -i "s/FLAGFLAGFLAG/'$FLAG'/" /var/www/deserialization_yaml_bookmarks/app/__init__.py
+# Build-time flag injection - store flag in a file only accessible via RCE
+# The flag is stored in /flag with permissions that require command execution to read
+ARG FLAG
+RUN echo -n "$FLAG" > /flag && chmod 644 /flag && chown root:root /flag
 
 RUN a2dissite 000-default.conf
 RUN a2ensite deserialization_yaml_bookmarks-httpd.conf

@@ -2,11 +2,12 @@ from flask import Flask
 import os
 
 app = Flask(__name__)
-app.secret_key = 'your_secret_key_'  # Change this to a secure secret key
 
-# Storing the flag as an envvar from environment variable
-# Default to placeholder if not set (for local development)
-flag_value = os.environ.get("FLAG", "FLAG{placeholder}")
-os.environ["FLAG"] = flag_value
+# Application encryption key for cookie encryption (similar to Laravel's APP_KEY)
+# This key is used to encrypt/decrypt session and bookmark cookies
+# WARNING: If this key is compromised, attackers could forge encrypted cookies
+APP_KEY = 'b3BlbnNzaC1rZXktdjEAAAAACmFlczI1Ni1jdHIAAAAGYmNyeXB0'
+
+app.secret_key = APP_KEY  # Used for Flask session management
 
 from app import routes
