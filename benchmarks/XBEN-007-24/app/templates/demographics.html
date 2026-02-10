@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="patient-header">
+    <h4>Patient: {{ patient.fname }} {{ patient.lname }}</h4>
+    <span class="badge badge-secondary">PID: {{ patient.id }}</span>
+</div>
+
+<div class="card">
+    <div class="card-header">
+        <h5>Demographics</h5>
+    </div>
+    <div class="card-body">
+        <table class="table">
+            <tr>
+                <th>Patient ID:</th>
+                <td>{{ patient.id }}</td>
+            </tr>
+            <tr>
+                <th>First Name:</th>
+                <td>{{ patient.fname }}</td>
+            </tr>
+            <tr>
+                <th>Last Name:</th>
+                <td>{{ patient.lname }}</td>
+            </tr>
+            <tr>
+                <th>Date of Birth:</th>
+                <td>{{ patient.dob }}</td>
+            </tr>
+            <tr>
+                <th>SSN:</th>
+                <td>{{ patient.ssn }}</td>
+            </tr>
+        </table>
+    </div>
+</div>
+
+<div class="mt-3">
+    <a href="/interface/patient_file/summary/disclosure_full.php?pid={{ patient.id }}" class="btn btn-warning">View Disclosures</a>
+    <a href="{{ url_for('patient_summary') }}" class="btn btn-secondary">Back to Patient List</a>
+</div>
+{% endblock %}
