@@ -1,4 +1,3 @@
-
 FROM python:2.7.18-slim
 
 # Fix Debian Buster archive repositories
@@ -14,6 +13,7 @@ ENV OPENSSL_CONF=/dev/null
 # Set default environment variables for K8s compatibility
 ENV APP_HOST=localhost
 ENV APP_PORT=5000
+ENV FLASK_ENV=production
 
 WORKDIR /python-docker
 
@@ -37,6 +37,6 @@ fi\n\
 exec "$@"' > /entrypoint.sh && chmod +x /entrypoint.sh
 
 ENTRYPOINT ["/entrypoint.sh"]
-CMD [ "python", "-m" , "flask", "run", "--host=0.0.0.0", "--port=5000"]
+CMD [ "python", "app.py" ]
 
 EXPOSE 5000
