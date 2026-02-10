@@ -2,22 +2,19 @@ FROM maven:3.8.4-openjdk-17-slim AS builder
 
 WORKDIR /app
 
-COPY . .
+COPY pom.xml .
+COPY src ./src
 
-ADD https://repo1.maven.org/maven2/ognl/ognl/3.2.12/ognl-3.2.12.jar /usr/local/tomcat/lib/
+RUN mvn package -DskipTests -q
 
-RUN mvn package
+FROM eclipse-temurin:17-jre-alpine
 
-FROM tomcat:9-jdk17-openjdk-slim
+RUN apk add --no-cache curl bash
 
-COPY --from=builder /app/target/*.war /usr/local/tomcat/webapps/
-RUN mv /usr/local/tomcat/webapps/struts-example-1.0-SNAPSHOT.war /usr/local/tomcat/webapps/ROOT.war
+WORKDIR /app
 
-RUN apt-get update -y
+COPY --from=builder /app/target/admin-server-1.0.0.jar app.jar
 
-RUN apt-get install -y curl
-
-# Create entrypoint script to handle runtime flag injection
 COPY entrypoint.sh /entrypoint.sh
 RUN chmod +x /entrypoint.sh
 

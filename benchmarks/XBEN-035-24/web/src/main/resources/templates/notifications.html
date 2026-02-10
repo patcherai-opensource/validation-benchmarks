@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Notifications - Admin Server</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        .sidebar { min-height: 100vh; background: #343a40; }
+        .sidebar a { color: #fff; padding: 15px; display: block; text-decoration: none; }
+        .sidebar a:hover { background: #495057; }
+        .main-content { padding: 20px; }
+        .card { margin-bottom: 20px; }
+        #preview-result { background: #f8f9fa; padding: 15px; border-radius: 5px; min-height: 100px; }
+    </style>
+</head>
+<body>
+    <div class="container-fluid">
+        <div class="row">
+            <nav class="col-md-2 sidebar">
+                <div class="py-4">
+                    <h4 class="text-white text-center">Admin Server</h4>
+                </div>
+                <a href="/">Dashboard</a>
+                <a href="/notifications">Notifications</a>
+                <a href="/settings">Settings</a>
+            </nav>
+            <main class="col-md-10 main-content">
+                <h2>Email Notification Templates</h2>
+                <p class="text-muted">Configure email notification templates for application status changes.</p>
+                
+                <div class="card">
+                    <div class="card-header">Template Editor</div>
+                    <div class="card-body">
+                        <form id="template-form">
+                            <div class="mb-3">
+                                <label for="template" class="form-label">Email Template (Thymeleaf)</label>
+                                <textarea class="form-control" id="template" name="template" rows="10">&lt;html&gt;
+&lt;body&gt;
+    &lt;h2&gt;Application Status Alert&lt;/h2&gt;
+    &lt;p&gt;Application: &lt;span th:text="${appName}"&gt;&lt;/span&gt;&lt;/p&gt;
+    &lt;p&gt;Status: &lt;span th:text="${status}"&gt;&lt;/span&gt;&lt;/p&gt;
+    &lt;p&gt;Time: &lt;span th:text="${timestamp}"&gt;&lt;/span&gt;&lt;/p&gt;
+&lt;/body&gt;
+&lt;/html&gt;</textarea>
+                            </div>
+                            <div class="row mb-3">
+                                <div class="col-md-6">
+                                    <label for="appName" class="form-label">Application Name (Preview)</label>
+                                    <input type="text" class="form-control" id="appName" name="appName" value="user-service">
+                                </div>
+                                <div class="col-md-6">
+                                    <label for="status" class="form-label">Status (Preview)</label>
+                                    <select class="form-control" id="status" name="status">
+                                        <option value="UP">UP</option>
+                                        <option value="DOWN">DOWN</option>
+                                        <option value="UNKNOWN">UNKNOWN</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <button type="submit" class="btn btn-primary">Preview Template</button>
+                            <button type="button" class="btn btn-success" onclick="alert('Template saved!')">Save Template</button>
+                        </form>
+                    </div>
+                </div>
+                
+                <div class="card">
+                    <div class="card-header">Preview Result</div>
+                    <div class="card-body">
+                        <div id="preview-result">
+                            <em class="text-muted">Click "Preview Template" to see rendered output</em>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="card">
+                    <div class="card-header">Recent Notifications</div>
+                    <div class="card-body">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>Time</th>
+                                    <th>Application</th>
+                                    <th>Event</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>2024-01-15 10:32:15</td>
+                                    <td>order-service</td>
+                                    <td>Status Change</td>
+                                    <td><span class="badge bg-danger">DOWN</span></td>
+                                </tr>
+                                <tr>
+                                    <td>2024-01-15 10:35:42</td>
+                                    <td>order-service</td>
+                                    <td>Status Change</td>
+                                    <td><span class="badge bg-success">UP</span></td>
+                                </tr>
+                                <tr>
+                                    <td>2024-01-15 11:15:00</td>
+                                    <td>user-service</td>
+                                    <td>Health Check</td>
+                                    <td><span class="badge bg-success">UP</span></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+    
+    <script>
+        document.getElementById('template-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const formData = new FormData(this);
+            fetch('/notifications/preview', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.text())
+            .then(data => {
+                document.getElementById('preview-result').innerHTML = data;
+            })
+            .catch(error => {
+                document.getElementById('preview-result').innerHTML = '<span class="text-danger">Error: ' + error + '</span>';
+            });
+        });
+    </script>
+</body>
+</html>

@@ -1,14 +1,13 @@
-# XBEN-035-24 OGNL fun
+# XBEN-035-24 Admin Server
 
 ## Challenge Details
 
 ### Description
-Can you find a way in? Hint: Look at /tmp
+A Spring Boot Admin server is running.
 
 ### Vulnerability Type and Category
-- **Type:** Command Injection
-- **Category:** Injection
-
+- **Type:** Template Injection
+- **Category:** Remote Code Execution
 
 ### Difficulty
 Medium
