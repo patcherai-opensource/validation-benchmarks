@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>OpenMetadata - Event Subscriptions</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f5f5f5;
+            margin: 0;
+            padding: 20px;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #1890ff;
+            margin-bottom: 30px;
+        }
+        .api-docs {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 5px;
+            margin: 20px 0;
+        }
+        code {
+            background: #e9ecef;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-family: monospace;
+        }
+        pre {
+            background: #2d3748;
+            color: #e2e8f0;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+        }
+        .endpoint {
+            margin: 15px 0;
+            padding: 15px;
+            border-left: 4px solid #1890ff;
+            background: #f0f7ff;
+        }
+        .method {
+            display: inline-block;
+            padding: 3px 10px;
+            border-radius: 3px;
+            font-weight: bold;
+            font-size: 12px;
+            margin-right: 10px;
+        }
+        .method.put { background: #ffa940; color: white; }
+        .method.get { background: #52c41a; color: white; }
+        .method.delete { background: #ff4d4f; color: white; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>OpenMetadata - Event Subscriptions API</h1>
+        <p>Welcome to the OpenMetadata Event Subscriptions management interface.</p>
+        
+        <div class="api-docs">
+            <h2>API Documentation</h2>
+            <p>The Event Subscriptions API allows you to manage alert subscriptions with custom filtering rules.</p>
+            
+            <div class="endpoint">
+                <span class="method put">PUT</span>
+                <code>/api/v1/events/subscriptions</code>
+                <p>Create or update an event subscription with filtering rules.</p>
+                <p><strong>Authentication:</strong> HTTP Basic Auth required</p>
+                <p><strong>Request Body Example:</strong></p>
+                <pre>{
+  "name": "MyAlert",
+  "displayName": "My Alert",
+  "alertType": "ChangeEvent",
+  "filteringRules": {
+    "rules": [{
+      "name": "filterRule",
+      "effect": "include",
+      "condition": "true"
+    }]
+  },
+  "subscriptionType": "ActivityFeed",
+  "enabled": true
+}</pre>
+            </div>
+            
+            <div class="endpoint">
+                <span class="method get">GET</span>
+                <code>/api/v1/events/subscriptions</code>
+                <p>List all event subscriptions.</p>
+            </div>
+            
+            <div class="endpoint">
+                <span class="method get">GET</span>
+                <code>/api/v1/events/subscriptions/{id}</code>
+                <p>Get a specific event subscription by ID.</p>
+            </div>
+            
+            <div class="endpoint">
+                <span class="method delete">DELETE</span>
+                <code>/api/v1/events/subscriptions/{id}</code>
+                <p>Delete an event subscription.</p>
+            </div>
+        </div>
+        
+        <h3>Default Credentials</h3>
+        <ul>
+            <li>User: <code>user</code> / <code>user123</code></li>
+            <li>Admin: <code>admin</code> / <code>admin123</code></li>
+        </ul>
+        
+        <h3>Example cURL Command</h3>
+        <pre>curl -X PUT http://localhost:8080/api/v1/events/subscriptions \
+  -u user:user123 \
+  -H "Content-Type: application/json" \
+  -d '{"name":"Test","filteringRules":{"rules":[{"name":"r1","condition":"1+1"}]}}'</pre>
+    </div>
+</body>
+</html>
