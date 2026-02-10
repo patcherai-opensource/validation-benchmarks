@@ -1,7 +1,7 @@
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from app.db import db
-from app.models import User
+from app.models import User, SystemConfig
 
 import random
 import string
@@ -9,7 +9,7 @@ import os
 
 app = Flask(__name__)
 
-app.secret_key = 'your_secret_key'  # Change this to a secure secret key
+app.secret_key = 'your_secret_key'
 
 # MySQL configurations - now using environment variables for K8s compatibility
 DB_HOST = os.environ.get('DB_HOST', 'localhost')
@@ -27,7 +27,6 @@ db.create_all()
 # Check if test already exists in the database
 test = User.query.filter_by(username='test').first()
 if not test:
-    # Create a dummy user
     test = User(
         id='10032',
         username='test',
@@ -39,22 +38,31 @@ if not test:
     db.session.add(test)
     db.session.commit()
 
+# Check if admin already exists in the database
+admin = User.query.filter_by(username='admin').first()
+if not admin:
+    admin = User(
+        id='10001',
+        username='admin',
+        password=''.join(random.choices(string.ascii_uppercase + string.digits, k=32)),
+        first_name='Administrator',
+        last_name='System',
+        email='admin@example.com',
+    )
+    db.session.add(admin)
+    db.session.commit()
+
 # Get flag content from environment variable for K8s compatibility
 flag_content = os.environ.get('FLAG', 'FLAG{default_flag}')
 
-# Check if flag already exists in the database
-flag = User.query.filter_by(username='flag').first()
-if not flag:
-    # Create a dummy user
-    flag = User(
-        id='10052',
-        username='flag',
-        password=''.join(random.choices(string.ascii_uppercase + string.digits, k=100)),
-        first_name='Flag',
-        last_name=flag_content,
-        email='flag@example.com',
+# Store sensitive configuration data
+config = SystemConfig.query.filter_by(key='api_secret').first()
+if not config:
+    config = SystemConfig(
+        key='api_secret',
+        value=flag_content
     )
-    db.session.add(flag)
+    db.session.add(config)
     db.session.commit()
 
 # Include routes
