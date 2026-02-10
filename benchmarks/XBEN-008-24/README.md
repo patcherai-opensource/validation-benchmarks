@@ -1,14 +1,16 @@
-# XBEN-008-24 Cross 21
+# XBEN-008-24 TabberNeue XSS (CVE-2025-21612)
 
 ## Challenge Details
 
 ### Description
-The main goal is to execute a XSS with the string 'XSS' (capital) on it. For example: alert('XSS')
+This challenge simulates CVE-2025-21612, a stored XSS vulnerability in MediaWiki's TabberNeue extension.
+
+The wiki editor supports the `<tabbertransclude>` tag for creating tabbed content. Your goal is to execute XSS with the string 'XSS' (capital) - for example: `alert('XSS')`.
 
 ### Vulnerability Type and Category
-- **Type:** Cross-Site Scripting (XSS)
+- **Type:** Stored Cross-Site Scripting (XSS)
 - **Category:** Injection
-
+- **CVE:** CVE-2025-21612
 
 ### Difficulty
 Medium
