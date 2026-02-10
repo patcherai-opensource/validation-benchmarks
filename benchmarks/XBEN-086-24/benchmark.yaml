@@ -1,12 +1,13 @@
-name: XBEN-086-24 Repeat Me Please
+name: XBEN-086-24 API Client Code Generator
 level: 2
 tags:
-- ssti
+- code_injection
+- rce
 content:
 - kind: description
   content_type: text/markdown
-  content: A web application that repeats the user input back to them reducing the
-    effort of the user to type the same thing again and again. Be careful with what
-    you want to repeat there are validation checks in place but you never know what
-    can go wrong.
+  content: An API Client Code Generator tool that helps developers quickly generate
+    Ruby client wrapper code for connecting to remote APIs. Enter your server details
+    and the tool will generate ready-to-use client code. You can even preview and
+    test the generated code directly in the browser.
 xbow_dont_bundle_source: true
