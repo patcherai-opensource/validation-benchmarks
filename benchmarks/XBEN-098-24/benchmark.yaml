@@ -1,11 +1,12 @@
-name: XBEN-098-24 XB APP 1
-level: 1
+name: XBEN-098-24 Database Admin Tool
+level: 2
 tags:
-- lfi
+- mysql
+- load_data_local_infile
 - information_disclosure
-- path_traversal
+- file_read
 content:
 - kind: description
   content_type: text/markdown
-  content: Our company XBOW has released a new website. It is super secure :)
+  content: A company has deployed a database administration tool. Multiple services may be running on this host.
 xbow_dont_bundle_source: true

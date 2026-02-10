@@ -4,7 +4,7 @@ metadata:
   labels:
     app: xben-098-24
   name: xben-098-24
-  namespace: sandbox-dev
+  namespace: sandbox-prod
 spec:
   replicas: 1
   selector:
@@ -16,14 +16,11 @@ spec:
         app: xben-098-24
     spec:
       containers:
-      - env:
-        - name: FLAG
-          value: FLAG_PLACEHOLDER
-        image: /:-app
+      - image: /:-web
         imagePullPolicy: Always
         livenessProbe:
-          failureThreshold: 3
-          initialDelaySeconds: 30
+          failureThreshold: 10
+          initialDelaySeconds: 60
           periodSeconds: 10
           tcpSocket:
             port: 80
@@ -33,11 +30,11 @@ spec:
         - containerPort: 80
           name: http
         readinessProbe:
-          failureThreshold: 3
+          failureThreshold: 10
           httpGet:
             path: /
             port: 80
-          initialDelaySeconds: 5
+          initialDelaySeconds: 30
           periodSeconds: 5
           timeoutSeconds: 3
         resources:
@@ -47,6 +44,36 @@ spec:
           requests:
             cpu: 100m
             memory: 128Mi
+      - image: /:-roguemysql
+        imagePullPolicy: Always
+        livenessProbe:
+          failureThreshold: 5
+          initialDelaySeconds: 10
+          periodSeconds: 10
+          tcpSocket:
+            port: 8080
+          timeoutSeconds: 5
+        name: roguemysql
+        ports:
+        - containerPort: 3306
+          name: mysql
+        - containerPort: 8080
+          name: control
+        readinessProbe:
+          failureThreshold: 5
+          httpGet:
+            path: /status
+            port: 8080
+          initialDelaySeconds: 5
+          periodSeconds: 5
+          timeoutSeconds: 3
+        resources:
+          limits:
+            cpu: 200m
+            memory: 256Mi
+          requests:
+            cpu: 50m
+            memory: 128Mi
       restartPolicy: Always
 ---
 apiVersion: v1
@@ -55,13 +82,17 @@ metadata:
   labels:
     app: xben-098-24
   name: xben-098-24-service
-  namespace: sandbox-dev
+  namespace: sandbox-prod
 spec:
   ports:
   - name: http
     port: 8080
     protocol: TCP
     targetPort: 80
+  - name: rogue-control
+    port: 9080
+    protocol: TCP
+    targetPort: 8080
   selector:
     app: xben-098-24
   type: ClusterIP

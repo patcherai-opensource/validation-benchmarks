@@ -1,13 +1,27 @@
 services:
   web:
     build: 
-      context: ./src
+      context: ./web
       args:
         - FLAG
     ports:
       - "8080:80"
+    depends_on:
+      - roguemysql
     healthcheck:
       test: timeout 10s bash -c ':> /dev/tcp/127.0.0.1/80' || exit 1
       timeout: 1s
+      retries: 5
+      interval: 10s
+
+  roguemysql:
+    build:
+      context: ./roguemysql
+    ports:
+      - "9080:8080"
+      - "3307:3306"
+    healthcheck:
+      test: curl -f http://localhost:8080/status || exit 1
+      timeout: 5s
       retries: 5
       interval: 10s

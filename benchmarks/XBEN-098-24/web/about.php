@@ -16,6 +16,7 @@
             <li><a href="/about.php">About</a></li>
             <li><a href="/contact.php">Contact</a></li>
             <li><a href="/login.php">Login</a></li>
+            <li><a href="/adminer.php">DB Admin</a></li>
         </ul>
     </div>
     <div class="content">
