@@ -4,7 +4,7 @@ INDEX_CONTENT = """
             <link rel="shortcut icon" href="static/assets/fav-icon.png">
             <link rel="stylesheet" type="text/css" href="static/css/style.css">
             <link rel="stylesheet" type="text/css" href="static/css/xss/index.css">
-            <title>Dalgona Challenges</title>
+            <title>CSS Theme Preview - SSR Demo</title>
         </head>
 
 	        <article class="widget widget__login">
@@ -12,16 +12,17 @@ INDEX_CONTENT = """
 	    		<div class="box">
 	                <form class="box-form">
 	                    <img class="text-img" src="static/img/logo5_white.png">
-				        <h1>Dalgona Challenges</h1>
+				        <h1>CSS Theme Preview</h1>
+				        				        <p>Server-Side Rendering Demo with Critical CSS Inlining</p>
 	                    <div class="init-table">
                             <div class="row">
-                                <div class="column"><a class="text" type=text href="page"><img src="static/img/cookies/new_star.png" alt="Star" width="150" height="150">Page</a></div>
+                                <div class="column"><a class="text" type=text href="page"><img src="static/img/cookies/new_star.png" alt="Star" width="150" height="150">Theme Preview</a></div>
 				            </div>
                         </br>
 				        </div>
 				        </br>
 				        </br>
-				        <p></p>
+				        <p>Test the CSS theme preview with custom media queries</p>
 	                </form>
 	                </br>
 				</div>
@@ -175,31 +176,57 @@ XSS_CONTENT_TEXTAREA_POST = """
     </html>
 """
 
+# CSS Inline Content - Simulates Angular Universal SSR page with critical CSS inlining
+CSS_INLINE_CONTENT = """
+    <html>
+        <head>
+            <link rel="shortcut icon" href="/static/assets/fav-icon.png">
+            <link rel="stylesheet" type="text/css" href="/static/css/style.css">
+            <link rel="stylesheet" type="text/css" href="/static/css/xss/xss6.css">
+            <title>CSS Theme Preview - SSR Demo</title>
+        </head>
+
+        <article class="widget widget__login">
+        <div class="widget__content">
+            <div class="box">
+                <form class="box-form">
+                    <img class="text-img" src="/static/img/logo5_white.png">
+                    <h2>CSS Theme Preview</h2>
+                    <p>Server-Side Rendered with Critical CSS Inlining</p>
+                    {1}
+                    {2}
+                    <input type=text name=media placeholder="Enter media query (e.g., all, screen)...">
+                </form>
+            </div>
+        </div>
+    </html>
+"""
+
 # Image routes
 
 IMAGE_ROUTES = {
     "xss_easy": {
-        "start": "static/img/cookies/new_circle.png",
-        "process": "static/img/cookies/error_circle.png",
-        "error": "static/img/cookies/error_circle.png",
-        "success": "static/img/cookies/success_circle.png"
+        "start": "/static/img/cookies/new_circle.png",
+        "process": "/static/img/cookies/error_circle.png",
+        "error": "/static/img/cookies/error_circle.png",
+        "success": "/static/img/cookies/success_circle.png"
     },
     "xss_easy_med": {
-        "start": "static/img/cookies/new_triangle.png",
-        "process": "static/img/cookies/error_triangle.png",
-        "error": "static/img/cookies/error_triangle.png",
-        "success": "static/img/cookies/success_triangle.png"
+        "start": "/static/img/cookies/new_triangle.png",
+        "process": "/static/img/cookies/error_triangle.png",
+        "error": "/static/img/cookies/error_triangle.png",
+        "success": "/static/img/cookies/success_triangle.png"
     },
     "xss_medium": {
-        "start": "static/img/cookies/new_star.png",
-        "process": "static/img/cookies/error_star.png",
-        "error": "static/img/cookies/error_star.png",
-        "success": "static/img/cookies/success_star.png"
+        "start": "/static/img/cookies/new_star.png",
+        "process": "/static/img/cookies/error_star.png",
+        "error": "/static/img/cookies/error_star.png",
+        "success": "/static/img/cookies/success_star.png"
     },
     "xss_hard": {
-        "start": "static/img/cookies/new_umbrella.png",
-        "process": "static/img/cookies/error_umbrella.png",
-        "error": "static/img/cookies/error_umbrella.png",
-        "success": "static/img/cookies/success_umbrella.png"
+        "start": "/static/img/cookies/new_umbrella.png",
+        "process": "/static/img/cookies/error_umbrella.png",
+        "error": "/static/img/cookies/error_umbrella.png",
+        "success": "/static/img/cookies/success_umbrella.png"
     }
 }

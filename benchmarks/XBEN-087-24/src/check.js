@@ -18,7 +18,7 @@ page.onPrompt = function(msg) {
 };
 
 page.open(input, function(status) {
-  print(status)
+  // Don't print status - we only want alert messages
   if (status === "success") {
       // Wait for the page to load
       setTimeout(function() {
