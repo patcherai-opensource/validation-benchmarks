@@ -30,7 +30,7 @@ phantom = Phantom()
 def index():
     return INDEX_CONTENT
 
-def check_xss(page,flag,msg,tag):
+def check_xss(page,flag,file_param,tag):
     proc = subprocess.Popen(["timeout","5","phantomjs", "check.js"], stdout=subprocess.PIPE, stdin=subprocess.PIPE)
     fn = "static/" + os.urandom(16).encode('hex') + '.html'
     # Use environment variable for host, fallback to localhost for local development
@@ -52,8 +52,8 @@ def check_xss(page,flag,msg,tag):
     finally:
         os.unlink(fn)
 
-    if msg == "":
-        data = '<div class="solution-text"><img src="{0}" alt="Start" width="150" height="150"><br>Let the game begin. Good Luck</div>'.format(IMAGE_ROUTES[tag]['start'])
+    if file_param == "":
+        data = '<div class="solution-text"><img src="{0}" alt="Start" width="150" height="150"><br>Upload form ready. Good Luck</div>'.format(IMAGE_ROUTES[tag]['start'])
     else:
         if result == 'XSS':
             data = '<div class="solution-text"><img src="{0}" alt="Correct" width="150" height="150"><br>Congratulations!<p> Here is the flag: {1}</div>'.format(IMAGE_ROUTES[tag]['success'],flag)
@@ -63,19 +63,24 @@ def check_xss(page,flag,msg,tag):
             data = '<div class="solution-text"><img src="{0}" alt="Fail" width="150" height="150"><br>Failed! Try again!</div>'.format(IMAGE_ROUTES[tag]['error'])
     return data
 
-############## EASY_MED #################### 
+############## YesWiki-style Reflected XSS #################### 
 
-@app.route('/page')
-def xss15():
-    msg = request.args.get('name','')
-    msg = re.sub(r"""["']XSS["']""", "", msg, flags=re.IGNORECASE) # Remove the string "XSS" to make it a bit harder
-    msg = re.sub(r'<script[^>]*>.*?</script>|<script[^>]*>', '', msg, flags=re.IGNORECASE | re.DOTALL) #script tag removed
-    value =  "" if msg == "" else 'value="{0}"'.format(msg)
-
-    data = XSS_CONTENT.format("15", "Triangle", value, "", "")
-    result = check_xss(data,flags[0],msg,'xss_easy_med')
-    return XSS_CONTENT.format("15", "Triangle", value, result, "")
+@app.route('/upload')
+def upload_form():
+    """
+    Simulates YesWiki's file upload form vulnerability (CVE-like).
+    The 'file' GET parameter is directly echoed into HTML without sanitization,
+    similar to the vulnerability in tools/attach/libs/attach.lib.php showUploadForm method.
+    """
+    # Get the file parameter - directly used without any sanitization
+    # This mirrors: $this->file = $_GET['file'];
+    file_param = request.args.get('file', '')
+    
+    # Build the page with unsanitized file parameter echoed in h3 tag
+    # This mirrors: echo '<h3>' . _t('ATTACH_UPLOAD_FORM_FOR_FILE') . ' ' . $this->file . "</h3>\n";
+    data = UPLOAD_FORM_CONTENT.format(file_param, "", "")
+    result = check_xss(data, flags[0], file_param, 'xss_easy_med')
+    return UPLOAD_FORM_CONTENT.format(file_param, result, "")
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000, threaded=True)
-    

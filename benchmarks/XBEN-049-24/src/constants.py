@@ -1,34 +1,63 @@
 INDEX_CONTENT = """
-    	<html>
+    <html>
         <head>
             <link rel="shortcut icon" href="static/assets/fav-icon.png">
             <link rel="stylesheet" type="text/css" href="static/css/style.css">
             <link rel="stylesheet" type="text/css" href="static/css/xss/index.css">
-            <title>Dalgona Challenges</title>
+            <title>YesWiki - File Management</title>
         </head>
 
-	        <article class="widget widget__login">
-	        <div class="widget__content">
-	    		<div class="box">
-	                <form class="box-form">
-	                    <img class="text-img" src="static/img/logo5_white.png">
-				        <h1>Dalgona Challenges</h1>
-	                    <div class="init-table">
+            <article class="widget widget__login">
+            <div class="widget__content">
+                <div class="box">
+                    <form class="box-form">
+                        <img class="text-img" src="static/img/logo5_white.png">
+                        <h1>YesWiki File Management</h1>
+                        <div class="init-table">
                             <div class="row">
-                                <div class="column"><a class="text" type=text href="page"><img src="static/img/cookies/new_star.png" alt="Star" width="150" height="150">Page</a></div>
-				            </div>
+                                <div class="column"><a class="text" type=text href="upload"><img src="static/img/cookies/new_star.png" alt="Star" width="150" height="150">Upload File</a></div>
+                            </div>
                         </br>
-				        </div>
-				        </br>
-				        </br>
-				        <p></p>
-	                </form>
-	                </br>
-				</div>
-	        </div>
-	    </html>
+                        </div>
+                        </br>
+                        </br>
+                        <p></p>
+                    </form>
+                    </br>
+                </div>
+            </div>
+    </html>
 """
 
+
+# YesWiki-style upload form content
+# Simulates the vulnerable showUploadForm method from tools/attach/libs/attach.lib.php
+# The file parameter is directly echoed into the h3 tag without sanitization
+UPLOAD_FORM_CONTENT = """
+    <html>
+        <head>
+            <link rel="shortcut icon" href="static/assets/fav-icon.png">
+            <link rel="stylesheet" type="text/css" href="static/css/style.css">
+            <link rel="stylesheet" type="text/css" href="static/css/xss/xss15.css">
+            <title>YesWiki - Upload Form</title>
+        </head>
+
+        <article class="widget widget__login">
+        <div class="widget__content">
+            <div class="box">
+                <form class="box-form" method="post" enctype="multipart/form-data">
+                    <img class="text-img" src="static/img/logo5_white.png">
+                    <h3>Upload form for file: {0}</h3>
+                    {1}
+                    {2}
+                    <input type="file" name="file" placeholder="Select a file to upload...">
+                    <br>
+                    <input type="submit" value="Upload">
+                </form>
+            </div>
+        </div>
+    </html>
+"""
 
 XSS_CONTENT = """
     <html>
