@@ -1,0 +1,54 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-3 sidebar py-3">
+        <h6 class="text-muted px-3">PATIENT MENU</h6>
+        <ul class="nav flex-column">
+            <li class="nav-item">
+                <a class="nav-link" href="{{ url_for('patient_demographics', pid=patient.pid) }}">Demographics</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link active" href="{{ url_for('disclosure_full', pid=patient.pid) }}">Disclosures</a>
+            </li>
+        </ul>
+        <hr>
+        <a href="{{ url_for('dashboard') }}" class="btn btn-secondary btn-sm mx-3">Back to Dashboard</a>
+    </div>
+    <div class="col-md-9 main-content">
+        <h2>Edit Disclosure</h2>
+        <p class="text-muted">{{ patient.first_name }} {{ patient.last_name }} (PID: {{ patient.pid }})</p>
+        
+        <div class="card">
+            <div class="card-body">
+                <form method="POST" action="{{ url_for('edit_disclosure', id=disclosure.id, pid=patient.pid) }}">
+                    <div class="mb-3">
+                        <label for="disclosure_type" class="form-label">Disclosure Type</label>
+                        <select class="form-select" id="disclosure_type" name="disclosure_type" required>
+                            <option value="Insurance Claim" {% if disclosure.disclosure_type == 'Insurance Claim' %}selected{% endif %}>Insurance Claim</option>
+                            <option value="Referral" {% if disclosure.disclosure_type == 'Referral' %}selected{% endif %}>Referral</option>
+                            <option value="Legal Request" {% if disclosure.disclosure_type == 'Legal Request' %}selected{% endif %}>Legal Request</option>
+                            <option value="Research Study" {% if disclosure.disclosure_type == 'Research Study' %}selected{% endif %}>Research Study</option>
+                            <option value="School Records" {% if disclosure.disclosure_type == 'School Records' %}selected{% endif %}>School Records</option>
+                            <option value="Employer Request" {% if disclosure.disclosure_type == 'Employer Request' %}selected{% endif %}>Employer Request</option>
+                            <option value="Other" {% if disclosure.disclosure_type == 'Other' %}selected{% endif %}>Other</option>
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label for="recipient" class="form-label">Recipient</label>
+                        <input type="text" class="form-control" id="recipient" name="recipient" required value="{{ disclosure.recipient }}">
+                    </div>
+                    <div class="mb-3">
+                        <label for="description" class="form-label">Description</label>
+                        <textarea class="form-control" id="description" name="description" rows="3">{{ disclosure.description }}</textarea>
+                    </div>
+                    <div class="d-flex gap-2">
+                        <button type="submit" class="btn btn-primary">Update Disclosure</button>
+                        <a href="{{ url_for('disclosure_full', pid=patient.pid) }}" class="btn btn-secondary">Cancel</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

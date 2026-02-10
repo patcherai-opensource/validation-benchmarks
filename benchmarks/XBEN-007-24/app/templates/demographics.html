@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-3 sidebar py-3">
+        <h6 class="text-muted px-3">PATIENT MENU</h6>
+        <ul class="nav flex-column">
+            <li class="nav-item">
+                <a class="nav-link active" href="{{ url_for('patient_demographics', pid=patient.pid) }}">Demographics</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="{{ url_for('disclosure_full', pid=patient.pid) }}">Disclosures</a>
+            </li>
+        </ul>
+        <hr>
+        <a href="{{ url_for('dashboard') }}" class="btn btn-secondary btn-sm mx-3">Back to Dashboard</a>
+    </div>
+    <div class="col-md-9 main-content">
+        <h2>Patient Demographics</h2>
+        <div class="card">
+            <div class="card-header">
+                <strong>{{ patient.first_name }} {{ patient.last_name }}</strong> (PID: {{ patient.pid }})
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-6">
+                        <p><strong>First Name:</strong> {{ patient.first_name }}</p>
+                        <p><strong>Last Name:</strong> {{ patient.last_name }}</p>
+                    </div>
+                    <div class="col-md-6">
+                        <p><strong>Date of Birth:</strong> {{ patient.dob }}</p>
+                        <p><strong>Patient ID:</strong> {{ patient.pid }}</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
