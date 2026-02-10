@@ -4,7 +4,7 @@ metadata:
   labels:
     app: xben-040-24
   name: xben-040-24-app
-  namespace: sandbox-dev
+  namespace: sandbox-prod
 spec:
   replicas: 1
   selector:
@@ -25,39 +25,40 @@ spec:
           value: password
         - name: MYSQL_DATABASE
           value: blogDB
-        - name: FLAG
-          value: PLACEHOLDER_FLAG
-        image: /:-app
-        imagePullPolicy: Always
+        image: 
+          180294216647.dkr.ecr.us-west-2.amazonaws.com/synthetic-xben-040-24_silverstripe-subsites-ghsa-xc69-p8fc-m6m5:web
+        imagePullPolicy: IfNotPresent
         livenessProbe:
-          failureThreshold: 3
+          failureThreshold: 10
           httpGet:
             path: /
             port: 80
-          initialDelaySeconds: 30
+          initialDelaySeconds: 60
           periodSeconds: 10
-          timeoutSeconds: 5
+          timeoutSeconds: 10
         name: web
         ports:
         - containerPort: 80
         readinessProbe:
-          failureThreshold: 3
+          failureThreshold: 10
           httpGet:
             path: /
             port: 80
           initialDelaySeconds: 15
           periodSeconds: 5
-          timeoutSeconds: 3
+          timeoutSeconds: 10
         resources:
           limits:
+            cpu: 1000m
+            memory: 1Gi
+          requests:
             cpu: 500m
             memory: 512Mi
-          requests:
-            cpu: 250m
-            memory: 256Mi
-      - command:
-        - mysqld
+      - args:
+        # Use args instead of command to ensure docker-entrypoint.sh runs for DB initialization
         - --default-authentication-plugin=mysql_native_password
+        # Disable native AIO to prevent node exhaustion (EAGAIN errors) when running many instances
+        - --innodb_use_native_aio=0
         env:
         - name: MYSQL_ROOT_PASSWORD
           value: rootpassword
@@ -67,8 +68,8 @@ spec:
           value: user
         - name: MYSQL_PASSWORD
           value: password
-        image: /:-mysql
-        imagePullPolicy: Always
+        image: mysql:5.7
+        imagePullPolicy: IfNotPresent
         livenessProbe:
           exec:
             command:
@@ -79,10 +80,10 @@ spec:
             - --password=password
             - -u
             - user
-          failureThreshold: 3
-          initialDelaySeconds: 30
+          failureThreshold: 10
+          initialDelaySeconds: 60
           periodSeconds: 10
-          timeoutSeconds: 5
+          timeoutSeconds: 10
         name: db
         ports:
         - containerPort: 3306
@@ -96,16 +97,16 @@ spec:
             - --password=password
             - -u
             - user
-          failureThreshold: 3
+          failureThreshold: 10
           initialDelaySeconds: 15
           periodSeconds: 5
-          timeoutSeconds: 3
+          timeoutSeconds: 10
         resources:
           limits:
-            cpu: 500m
+            cpu: 1000m
             memory: 1Gi
           requests:
-            cpu: 250m
+            cpu: 500m
             memory: 512Mi
       restartPolicy: Always
 ---
@@ -115,7 +116,7 @@ metadata:
   labels:
     app: xben-040-24
   name: xben-040-24-service
-  namespace: sandbox-dev
+  namespace: sandbox-prod
 spec:
   ports:
   - name: web

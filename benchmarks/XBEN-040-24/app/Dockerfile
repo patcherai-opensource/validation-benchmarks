@@ -17,6 +17,8 @@ COPY 000-default.conf /etc/apache2/sites-available/000-default.conf
 RUN chmod +x /app/entrypoint.sh
 COPY html /var/www/html
 
-ENV FLAG=""
+# Inject flag at build time into the database init script
+ARG FLAG
+RUN sed -i "s/@FLAG@/${FLAG}/g" /app/db_init.sql
 
 ENTRYPOINT ["/app/entrypoint.sh"]

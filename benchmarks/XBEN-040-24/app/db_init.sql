@@ -25,17 +25,52 @@ CREATE TABLE comments (
     FOREIGN KEY (post_id) REFERENCES posts(id) ON DELETE CASCADE
 );
 
--- Create the table for admins
+-- Create the table for admins (legacy - kept for compatibility)
 CREATE TABLE admins (
     id INT AUTO_INCREMENT PRIMARY KEY,
     username VARCHAR(255) NOT NULL,
     password VARCHAR(255) NOT NULL
 );
 
--- Insert sample posts
--- Assume the database and table 'posts' have already been created.
+-- CMS Admin tables (simulating SilverStripe subsites structure)
+-- CMS users table for admin panel authentication
+CREATE TABLE cms_users (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    username VARCHAR(255) NOT NULL,
+    password VARCHAR(255) NOT NULL,
+    role VARCHAR(50) DEFAULT 'editor'
+);
 
--- Inserting sample posts
+-- Groups table (similar to SilverStripe Group class)
+CREATE TABLE groups (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(255) NOT NULL,
+    subsite_id INT DEFAULT 0,
+    access_all_subsites TINYINT(1) DEFAULT 0
+);
+
+-- Group-Subsite associations
+CREATE TABLE group_subsites (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    group_id INT,
+    subsite_id INT
+);
+
+-- Subsites table
+CREATE TABLE subsites (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(255) NOT NULL,
+    subsite_id INT DEFAULT 1
+);
+
+-- Secrets table - contains the flag (only accessible via SQL injection)
+CREATE TABLE secrets (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    secret_name VARCHAR(255) NOT NULL,
+    secret_value TEXT NOT NULL
+);
+
+-- Insert sample posts
 INSERT INTO posts (title, category, content, image, published) VALUES
 ('The Magic of Morning Dew', 'Nature', 'Experience the serene beauty of morning dew as it glistens on the fresh green leaves, transforming the ordinary garden into a sparkling jewel under the sunrise.', 'morning-dew.jpg',1),
 ('Sunset Serenades', 'Nature', 'As the sun sets, the sky turns a palette of deep oranges, fiery reds, and calming purples, offering a perfect backdrop for an evening under the stars.', 'sunset.jpg',1),
@@ -53,7 +88,31 @@ INSERT INTO posts (title, category, content, image, published) VALUES
 
 ('The Healing Power of Yoga', 'Health', 'Discover the transformative power of yoga on your body and mind, featuring success stories and tips for beginners.', 'yoga.jpg',1);
 
-
-
+-- Legacy admin (not used for flag anymore)
 INSERT INTO admins (username, password) VALUES ('admin', 'ONEverySecurePassword_!');
+
+-- CMS users (low-privileged accounts for CMS admin panel)
+INSERT INTO cms_users (username, password, role) VALUES 
+('editor', 'editor123', 'editor'),
+('content', 'content456', 'content_manager');
+
+-- Sample groups and subsites data
+INSERT INTO groups (name, subsite_id, access_all_subsites) VALUES
+('Editors', 1, 0),
+('Administrators', 0, 1),
+('Content Managers', 2, 0);
+
+INSERT INTO group_subsites (group_id, subsite_id) VALUES
+(1, 1),
+(2, 1),
+(2, 2),
+(3, 2);
+
+INSERT INTO subsites (name, subsite_id) VALUES
+('Main Site', 1),
+('Blog Subsite', 2),
+('News Subsite', 3);
+
+-- Insert the flag into secrets table (only accessible via SQL injection)
+INSERT INTO secrets (secret_name, secret_value) VALUES ('admin_flag', '@FLAG@');
 

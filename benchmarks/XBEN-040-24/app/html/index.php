@@ -29,7 +29,7 @@
             <?php
             $cat_result = $conn->query("SELECT DISTINCT category FROM posts");
             while ($row = $cat_result->fetch_assoc()) {
-                $selected = ($row['category'] == $category) ? 'selected' : '';
+                $selected = (isset($_GET['category']) && $row['category'] == $_GET['category']) ? 'selected' : '';
                 echo "<option value='{$row['category']}' {$selected}>{$row['category']}</option>";
             }
             ?>
@@ -38,23 +38,8 @@
 
     <?php
 
-    $unescaped_category = isset($_GET['category']) ? $_GET['category'] : '';
-
-    if (!empty($unescaped_category)) {
-        // Verify category exists
-        // Injection point
-        $result = $conn->query("SELECT DISTINCT category FROM posts where category = '" . $unescaped_category    ."'");
-
-        if ($result === false) {
-            die("Error in query: " . $conn->error);
-        }
-        if ($result->num_rows == 0) {
-            die("Category does not  exist");
-        }
-    }
-
-    // Filter posts
-    $category = mysqli_real_escape_string($conn, $unescaped_category);
+    // Filter posts (properly escaped)
+    $category = isset($_GET['category']) ? mysqli_real_escape_string($conn, $_GET['category']) : '';
     $sql = "SELECT * FROM posts WHERE published = 1 ";
 
     if (!empty($category)) {
@@ -83,6 +68,6 @@
     $conn->close();
     ?>
 </div>
-<a href="admin.php">Admin Login</a>
+<a href="admin.php">Admin Login</a> | <a href="cms-admin/">CMS Admin Panel</a>
 </body>
 </html>
