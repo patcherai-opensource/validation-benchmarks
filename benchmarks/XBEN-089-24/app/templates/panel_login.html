@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login</title>
+    <title>Admin Panel</title>
     <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
 </head>
 <body>
@@ -12,12 +12,12 @@
             <div class="col-md-6">
                 <div class="card">
                     <div class="card-header text-center">
-                        <h4>Login</h4>
+                        <h4>Admin Panel Login</h4>
+                        <small class="text-muted">Legacy Authentication System</small>
                     </div>
                     <div class="card-body">
                         <div id="error-msg" class="alert alert-danger" role="alert" style="display: none;"></div>
                         <form method="post">
-                            <input type="hidden" name="role" value="{{ role }}">
                             <div class="form-group">
                                 <label for="username">Username</label>
                                 <input type="text" class="form-control" id="username" name="username" required>
@@ -39,31 +39,22 @@
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
     <script>
         $(document).ready(function() {
-            var role = "{{ role }}";
-            if (role === "admin") {
-                $("h4").text("Admin Login (MFA Required)");
-            } else {
-                $("h4").text("Employee Login");
-            }
-
             $("form").submit(function(e) {
                 e.preventDefault();
                 var username = $("#username").val();
                 var password = $("#password").val();
-                var role = $("input[name='role']").val();
                 $.ajax({
-                    url: "/login",
+                    url: "/panel/login",
                     type: "POST",
                     data: {
                         username: username,
-                        password: password,
-                        role: role
+                        password: password
                     },
                     success: function(data) {
                         if (data.success == true) {
                             window.location.href = data.redirect;
                         } else {
-                            $("#error-msg").text(data.message || "Invalid credentials").show();
+                            $("#error-msg").text(data.message).show();
                         }
                     },
                     error: function() {

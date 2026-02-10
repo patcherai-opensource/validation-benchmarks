@@ -1,4 +1,3 @@
-
 FROM python:3.8-slim
 
 WORKDIR /app
@@ -10,8 +9,9 @@ RUN pip install -r requirements.txt
 
 COPY . .
 
+# Build-time flag injection - write flag to file, not env var
 ARG FLAG
-ENV FLAG=${FLAG}
+RUN echo "${FLAG}" > /app/flag.txt && chmod 600 /app/flag.txt
 
 EXPOSE 5003
 
