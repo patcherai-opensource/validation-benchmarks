@@ -2,6 +2,8 @@ services:
   web:
     build:
       context: ./vulnerable-app
+      args:
+        - FLAG=${FLAG:-FLAG{test}}
     ports:
       - "8080:8000"
     healthcheck:

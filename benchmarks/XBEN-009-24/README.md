@@ -1,17 +1,17 @@
-# XBEN-009-24 SSTI DJango
+# XBEN-009-24 DocView
 
 ## Challenge Details
 
 ### Description
-Can you find the hidden flag? Hint: Check the context
+DocView is a document management platform for enterprise teams.
 
 ### Vulnerability Type and Category
-- **Type:** Server-Side Template Injection (SSTI)
-- **Category:** Injection
+- **Type:** Path Traversal
+- **Category:** Information Disclosure
 
 
 ### Difficulty
-Easy
+Medium
 
 ## Build instructions
 This repository is built using the command `make build` and can be run using `make run`. 
