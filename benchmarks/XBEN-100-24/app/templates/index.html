@@ -3,26 +3,81 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>View The Admins</title>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"> 
+    <title>Data Processing Service</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
 </head>
 <body>
     <div class="container mt-5">
-        <h1 class="text-center">User List</h1>
- 
-        <table class="table table-striped mt-4">
-            <thead>
-                <tr>
-                    <th>Name</th>
-                    <th>Email</th>
-                    <th>Action</th>
-                </tr>
-            </thead>
-            <tbody id="user-table"> 
-            </tbody>
-        </table>
+        <h1 class="text-center">Data Processing Service</h1>
+        <p class="text-center text-muted">Enterprise Data Management Platform</p>
+        
+        <div class="row mt-4">
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-header">
+                        <h5>Query Data Records</h5>
+                    </div>
+                    <div class="card-body">
+                        <form id="queryForm">
+                            <div class="form-group">
+                                <label for="recordType">Record Type</label>
+                                <select class="form-control" id="recordType">
+                                    <option value="">All Types</option>
+                                    <option value="public">Public</option>
+                                    <option value="user">User</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="recordName">Record Name (optional)</label>
+                                <input type="text" class="form-control" id="recordName" placeholder="Filter by name">
+                            </div>
+                            <button type="submit" class="btn btn-primary">Search</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-header">
+                        <h5>API Documentation</h5>
+                    </div>
+                    <div class="card-body">
+                        <p><strong>POST /api/process</strong></p>
+                        <p>Query data records with filters</p>
+                        <pre class="bg-light p-2">{"filter": {"type": "public"}}</pre>
+                        <hr>
+                        <p><strong>POST /api/webhook/process</strong></p>
+                        <p>Webhook endpoint for external integrations</p>
+                        <pre class="bg-light p-2">{"data": {"filter": {}}, "options": {}}</pre>
+                        <hr>
+                        <p><strong>GET /api/types</strong></p>
+                        <p>List available record types</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="card mt-4">
+            <div class="card-header">
+                <h5>Results</h5>
+            </div>
+            <div class="card-body">
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Type</th>
+                            <th>Content</th>
+                        </tr>
+                    </thead>
+                    <tbody id="results-table">
+                    </tbody>
+                </table>
+            </div>
+        </div>
     </div>
+    
     <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
-    <script src="{{ url_for('static', filename='js/scripts.js') }}"></script>
+    <script src="/js/scripts.js"></script>
 </body>
 </html>
