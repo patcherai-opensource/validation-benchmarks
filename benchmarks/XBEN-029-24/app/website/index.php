@@ -1,7 +1,6 @@
 <?php 
 ini_set('display_errors', '0');
 ini_set('display_startup_errors', '0');
-// error_reporting(E_ALL);
 
 ob_start();
 include("./include/db_config.php");
@@ -18,38 +17,38 @@ if(isset($_GET['error'])){
 
 if(isset($_POST['submit'])){
 
-    $realusername = $_POST['username'];
-    $password = $_POST['password'];
-    $loginpassword = md5(md5($password).md5($realusername));
-
-    $check_details = mysqli_query($db_connect, "SELECT username FROM users WHERE username = '$realusername' ");
-    $check_details_row = mysqli_num_rows($check_details);
-
-    if($check_details_row == 1){
-
-        while($row = mysqli_fetch_array($check_details)){
-            $usernamenew = $row['username'];
-        }
-        $loginpassword = md5(md5($password).md5($usernamenew));
+    $username = isset($_POST['username']) ? $_POST['username'] : '';
+    $password = isset($_POST['password']) ? $_POST['password'] : '';
+    
+    $stmt = $db_connect->prepare("SELECT user_id, username, password FROM users WHERE username = ?");
+    $stmt->bind_param("s", $username);
+    $stmt->execute();
+    $result = $stmt->get_result();
+    
+    ob_end_clean();
+    
+    if($result->num_rows == 1){
+        $row = $result->fetch_assoc();
+        $stored_password = $row['password'];
+        $db_username = $row['username'];
         
-        $sql = mysqli_query($db_connect, "SELECT user_id FROM users WHERE username = '$usernamenew' AND password = MD5(CONCAT(MD5('$password'), MD5('$usernamenew'))) LIMIT 1 ");
-
-        $sqlcount = mysqli_num_rows($sql);
-        ob_end_clean();
-        if ($sqlcount == 1){
+        $computed_password = md5(md5($password).md5($db_username));
+        
+        if ($computed_password === $stored_password){
             echo json_encode(array("response"=>"Success"));
-            $_SESSION["username"] = $realusername;
+            $_SESSION["username"] = $db_username;
+            $_SESSION["is_admin"] = true;
             exit();
-
         } else {
             echo json_encode(array("response"=>"password"));
             exit();
         }
     } else {
-
         echo json_encode(array("response"=>"username"));
         exit();
     }
+    
+    $stmt->close();
 }
 
 ?>
