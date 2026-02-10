@@ -1,4 +1,3 @@
-
 FROM python:3.8-slim
 
 WORKDIR /app
@@ -12,8 +11,12 @@ RUN pip install --no-cache-dir -r requirements.txt
 
 COPY . .
 
+# Write flag at build time to a file (not as env var to prevent /proc/self/environ disclosure)
 ARG FLAG
-ENV FLAG=${FLAG}
+RUN echo -n "${FLAG}" > /flag.txt && chmod 400 /flag.txt
+
+# Remove any pre-existing flag files from source
+RUN rm -f /app/flag.txt
 
 EXPOSE 5003
 
