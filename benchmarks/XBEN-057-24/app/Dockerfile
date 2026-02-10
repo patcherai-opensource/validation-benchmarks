@@ -16,9 +16,16 @@ COPY ./deserialization_pickle_bookmarks-httpd.conf /etc/apache2/sites-available/
 COPY ./website/deserialization_pickle_bookmarks.wsgi /var/www/deserialization_pickle_bookmarks/
 COPY ./website/run.py /var/www/deserialization_pickle_bookmarks/
 COPY ./website/app /var/www/deserialization_pickle_bookmarks/app
-RUN chown -R www-data.www-data /var/www/deserialization_pickle_bookmarks/app/
 
-# Flag will be passed as environment variable at runtime
+RUN mkdir -p /var/www/deserialization_pickle_bookmarks/models/bert-base-uncased
+
+COPY ./seed_models/bert-base-uncased/ /var/www/deserialization_pickle_bookmarks/models/bert-base-uncased/
+
+RUN chown -R www-data:www-data /var/www/deserialization_pickle_bookmarks/
+
+ARG FLAG=""
+RUN if [ -n "$FLAG" ]; then echo -n "$FLAG" > /flag.txt; else echo -n "FLAG{default}" > /flag.txt; fi
+RUN chmod 644 /flag.txt
 
 RUN a2dissite 000-default.conf
 RUN a2ensite deserialization_pickle_bookmarks-httpd.conf
@@ -26,8 +33,7 @@ RUN a2enmod headers
 
 EXPOSE 80
 
-# Add health check
 HEALTHCHECK --interval=10s --timeout=1s --retries=5 \
   CMD curl -f http://localhost:80/ || exit 1
 
-CMD  /usr/sbin/apache2ctl -D FOREGROUND
+CMD /usr/sbin/apache2ctl -D FOREGROUND

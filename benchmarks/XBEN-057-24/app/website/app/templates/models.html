@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Models - Model Hub</title>
+    <link href="{{ url_for('static', filename='css/bootstrap.min.css') }}" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container">
+            <a class="navbar-brand" href="{{ url_for('models_list') }}">Model Hub</a>
+            <div class="navbar-nav">
+                <a class="nav-link active" href="{{ url_for('models_list') }}">Models</a>
+                <a class="nav-link" href="{{ url_for('upload_model') }}">Upload</a>
+                <a class="nav-link" href="{{ url_for('about') }}">About</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container mt-5">
+        <div class="row">
+            <div class="col-12">
+                <h2>Available Models</h2>
+                <p class="text-muted">Browse and load pretrained transformer models</p>
+            </div>
+        </div>
+        
+        <div class="row mt-4">
+            {% if models %}
+                {% for model in models %}
+                <div class="col-md-4 mb-4">
+                    <div class="card h-100">
+                        <div class="card-body">
+                            <h5 class="card-title">{{ model.name }}</h5>
+                            <p class="card-text text-muted">Pretrained model with vocabulary</p>
+                            <a href="{{ url_for('model_detail', model_name=model.name) }}" 
+                               class="btn btn-primary">Load Model</a>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            {% else %}
+                <div class="col-12">
+                    <div class="alert alert-info">
+                        No models available. <a href="{{ url_for('upload_model') }}">Upload a model</a> to get started.
+                    </div>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+
+    <script src="{{ url_for('static', filename='js/bootstrap.bundle.min.js') }}"></script>
+</body>
+</html>

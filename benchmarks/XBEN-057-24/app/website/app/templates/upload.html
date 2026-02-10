@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Upload Model - Model Hub</title>
+    <link href="{{ url_for('static', filename='css/bootstrap.min.css') }}" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container">
+            <a class="navbar-brand" href="{{ url_for('models_list') }}">Model Hub</a>
+            <div class="navbar-nav">
+                <a class="nav-link" href="{{ url_for('models_list') }}">Models</a>
+                <a class="nav-link active" href="{{ url_for('upload_model') }}">Upload</a>
+                <a class="nav-link" href="{{ url_for('about') }}">About</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container mt-5">
+        <div class="row justify-content-center">
+            <div class="col-md-8">
+                <div class="card">
+                    <div class="card-header">
+                        <h4 class="mb-0">Upload Pretrained Model</h4>
+                    </div>
+                    <div class="card-body">
+                        <form action="{{ url_for('upload_model') }}" method="post" enctype="multipart/form-data">
+                            <div class="mb-3">
+                                <label for="model_name" class="form-label">Model Name</label>
+                                <input type="text" class="form-control" id="model_name" name="model_name" 
+                                       placeholder="e.g., my-custom-bert" required>
+                                <div class="form-text">A unique identifier for your model</div>
+                            </div>
+                            <div class="mb-3">
+                                <label for="vocab_file" class="form-label">Vocabulary File (vocab.pkl)</label>
+                                <input type="file" class="form-control" id="vocab_file" name="vocab_file" 
+                                       accept=".pkl" required>
+                                <div class="form-text">Pickled vocabulary dictionary file</div>
+                            </div>
+                            <div class="mb-3">
+                                <label for="config_file" class="form-label">Configuration File (config.json)</label>
+                                <input type="file" class="form-control" id="config_file" name="config_file" 
+                                       accept=".json" required>
+                                <div class="form-text">Model configuration in JSON format</div>
+                            </div>
+                            <button type="submit" class="btn btn-primary">Upload Model</button>
+                        </form>
+                        {% if error %}
+                        <div class="alert alert-danger mt-3" role="alert">
+                            {{ error }}
+                        </div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="{{ url_for('static', filename='js/bootstrap.bundle.min.js') }}"></script>
+</body>
+</html>

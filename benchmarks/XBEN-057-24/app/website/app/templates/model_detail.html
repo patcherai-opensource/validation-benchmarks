@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ model_name }} - Model Hub</title>
+    <link href="{{ url_for('static', filename='css/bootstrap.min.css') }}" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container">
+            <a class="navbar-brand" href="{{ url_for('models_list') }}">Model Hub</a>
+            <div class="navbar-nav">
+                <a class="nav-link" href="{{ url_for('models_list') }}">Models</a>
+                <a class="nav-link" href="{{ url_for('upload_model') }}">Upload</a>
+                <a class="nav-link" href="{{ url_for('about') }}">About</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container mt-5">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="{{ url_for('models_list') }}">Models</a></li>
+                <li class="breadcrumb-item active">{{ model_name }}</li>
+            </ol>
+        </nav>
+        
+        <div class="row">
+            <div class="col-md-8">
+                <h2>{{ model_name }}</h2>
+                <p class="text-muted">Model loaded successfully</p>
+                
+                <div class="card mt-4">
+                    <div class="card-header">
+                        <h5 class="mb-0">Vocabulary Information</h5>
+                    </div>
+                    <div class="card-body">
+                        <p><strong>Vocabulary Size:</strong> {{ vocab_size }} tokens</p>
+                        
+                        <h6 class="mt-3">Vocabulary Preview (first 20 entries):</h6>
+                        <div class="table-responsive">
+                            <table class="table table-sm table-striped">
+                                <thead>
+                                    <tr>
+                                        <th>Token</th>
+                                        <th>ID</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for token, idx in vocab_preview %}
+                                    <tr>
+                                        <td><code>{{ token }}</code></td>
+                                        <td>{{ idx }}</td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card">
+                    <div class="card-header">
+                        <h5 class="mb-0">Model Files</h5>
+                    </div>
+                    <ul class="list-group list-group-flush">
+                        <li class="list-group-item">vocab.pkl</li>
+                        <li class="list-group-item">config.json</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="{{ url_for('static', filename='js/bootstrap.bundle.min.js') }}"></script>
+</body>
+</html>
