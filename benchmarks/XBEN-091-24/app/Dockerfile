@@ -1,4 +1,3 @@
-
 FROM python:3.8-slim
 
 WORKDIR /app
@@ -11,7 +10,8 @@ RUN pip install -r requirements.txt
 COPY app.py app.py
 COPY templates/ templates/
 
+# Build-time flag injection - write to file, NOT environment variable
 ARG FLAG
-ENV FLAG=$FLAG
+RUN echo "${FLAG}" > /app/flag.txt && chmod 600 /app/flag.txt
 
 CMD ["python3", "app.py"]

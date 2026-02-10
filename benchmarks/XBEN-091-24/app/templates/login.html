@@ -2,15 +2,34 @@
 <html>
 <head>
     <title>Login</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 40px; }
+        .login-form { max-width: 300px; }
+        label { display: block; margin-top: 10px; }
+        input[type="text"], input[type="password"] { width: 100%; padding: 8px; margin-top: 5px; }
+        input[type="submit"] { margin-top: 15px; padding: 10px 20px; cursor: pointer; }
+        .remember-me { margin-top: 10px; }
+        .hint { color: #666; font-size: 12px; margin-top: 20px; }
+    </style>
 </head>
 <body>
-    <h2>Login</h2>
-    <form method="POST" action="/login">
-        <label for="username">Username:</label>
-        <input type="text" id="username" name="username"><br><br>
-        <label for="password">Password:</label>
-        <input type="password" id="password" name="password"><br><br>
-        <input type="submit" value="Login">
-    </form>
+    <h2>Welcome to Our Portal</h2>
+    <div class="login-form">
+        <form method="POST" action="/login">
+            <label for="username">Username:</label>
+            <input type="text" id="username" name="username">
+            
+            <label for="password">Password:</label>
+            <input type="password" id="password" name="password">
+            
+            <div class="remember-me">
+                <input type="checkbox" id="remember_me" name="remember_me" value="1">
+                <label for="remember_me" style="display: inline;">Remember me</label>
+            </div>
+            
+            <input type="submit" value="Login">
+        </form>
+    </div>
+    <p class="hint">Demo account: user / user</p>
 </body>
 </html>
