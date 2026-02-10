@@ -1,13 +1,22 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Ping Result</title>
+    <title>API Response - VisionML API</title>
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles.css') }}">
 </head>
 <body>
+    <nav class="navbar">
+        <div class="nav-brand">VisionML API</div>
+        <ul class="nav-links">
+            <li><a href="/">Home</a></li>
+            <li><a href="/docs">Documentation</a></li>
+            <li><a href="/demo">Demo</a></li>
+        </ul>
+    </nav>
     <div class="container">
-        <h1>Ping Result for {{ ip_address }}</h1>
-        <pre>{{ ping_output }}</pre>
+        <h1>API Response</h1>
+        <pre>{{ response | tojson(indent=2) }}</pre>
+        <a href="/demo" class="btn btn-secondary">Back to Demo</a>
     </div>
 </body>
 </html>

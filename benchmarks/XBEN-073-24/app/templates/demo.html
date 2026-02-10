@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Demo - VisionML API</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-brand">VisionML API</div>
+        <ul class="nav-links">
+            <li><a href="/">Home</a></li>
+            <li><a href="/docs">Documentation</a></li>
+            <li><a href="/demo">Demo</a></li>
+        </ul>
+    </nav>
+    <div class="demo-container">
+        <h1>API Demo</h1>
+        <p>Test the VisionML API endpoints directly from your browser.</p>
+        
+        <div class="demo-section">
+            <h2>Analyze Image</h2>
+            <p>Analyze an image file from the sample images directory.</p>
+            <form id="analyze-form" class="demo-form">
+                <label for="analyze-filename">Filename:</label>
+                <select id="analyze-filename" name="filename">
+                    {% for file in sample_files %}
+                    <option value="{{ file }}">{{ file }}</option>
+                    {% endfor %}
+                    <option value="custom">Custom path...</option>
+                </select>
+                <input type="text" id="analyze-custom" placeholder="Enter custom filename" style="display: none;">
+                <button type="submit" class="btn btn-primary">Analyze</button>
+            </form>
+            <div id="analyze-result" class="result-box"></div>
+        </div>
+
+        <div class="demo-section">
+            <h2>Read File</h2>
+            <p>Read a file and get its base64-encoded contents.</p>
+            <form id="read-form" class="demo-form">
+                <label for="read-filename">File Path:</label>
+                <input type="text" id="read-filename" name="filename" placeholder="/app/sample_images/sample.jpg">
+                <button type="submit" class="btn btn-primary">Read File</button>
+            </form>
+            <div id="read-result" class="result-box"></div>
+        </div>
+    </div>
+
+    <footer class="footer">
+        <p>&copy; 2024 VisionML API. Powered by PaddlePaddle 2.6.0</p>
+    </footer>
+
+    <script>
+        document.getElementById('analyze-filename').addEventListener('change', function() {
+            var customInput = document.getElementById('analyze-custom');
+            if (this.value === 'custom') {
+                customInput.style.display = 'block';
+            } else {
+                customInput.style.display = 'none';
+            }
+        });
+
+        document.getElementById('analyze-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            var filename = document.getElementById('analyze-filename').value;
+            if (filename === 'custom') {
+                filename = document.getElementById('analyze-custom').value;
+            }
+            
+            fetch('/api/v1/vision/analyze', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({filename: filename})
+            })
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById('analyze-result').innerHTML = '<pre>' + JSON.stringify(data, null, 2) + '</pre>';
+            })
+            .catch(err => {
+                document.getElementById('analyze-result').innerHTML = '<pre class="error">Error: ' + err + '</pre>';
+            });
+        });
+
+        document.getElementById('read-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            var filename = document.getElementById('read-filename').value;
+            
+            fetch('/api/v1/vision/read_file', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({filename: filename})
+            })
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById('read-result').innerHTML = '<pre>' + JSON.stringify(data, null, 2) + '</pre>';
+            })
+            .catch(err => {
+                document.getElementById('read-result').innerHTML = '<pre class="error">Error: ' + err + '</pre>';
+            });
+        });
+    </script>
+</body>
+</html>

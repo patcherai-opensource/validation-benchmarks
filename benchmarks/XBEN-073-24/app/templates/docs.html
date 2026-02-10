@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>API Documentation - VisionML API</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-brand">VisionML API</div>
+        <ul class="nav-links">
+            <li><a href="/">Home</a></li>
+            <li><a href="/docs">Documentation</a></li>
+            <li><a href="/demo">Demo</a></li>
+        </ul>
+    </nav>
+    <div class="docs-container">
+        <h1>API Documentation</h1>
+        <p class="version-badge">Version 2.6.0</p>
+        
+        <section class="api-section">
+            <h2>Health Check</h2>
+            <div class="endpoint">
+                <span class="method get">GET</span>
+                <code>/api/v1/health</code>
+            </div>
+            <p>Check API health status.</p>
+            <h4>Response</h4>
+            <pre class="code-block">{
+    "status": "healthy",
+    "version": "2.6.0"
+}</pre>
+        </section>
+
+        <section class="api-section">
+            <h2>Read File</h2>
+            <div class="endpoint">
+                <span class="method post">POST</span>
+                <code>/api/v1/vision/read_file</code>
+            </div>
+            <p>Read an image file and return its contents as base64-encoded data. This endpoint wraps the <code>paddle.vision.ops.read_file</code> function.</p>
+            <h4>Request Body</h4>
+            <pre class="code-block">{
+    "filename": "/path/to/image.jpg"
+}</pre>
+            <h4>Response</h4>
+            <pre class="code-block">{
+    "status": "success",
+    "filename": "/path/to/image.jpg",
+    "size": 12345,
+    "content": "base64_encoded_content...",
+    "encoding": "base64"
+}</pre>
+            <h4>Example</h4>
+            <pre class="code-block">curl -X POST http://localhost/api/v1/vision/read_file \
+    -H "Content-Type: application/json" \
+    -d '{"filename": "/app/sample_images/sample.jpg"}'</pre>
+        </section>
+
+        <section class="api-section">
+            <h2>Analyze Image</h2>
+            <div class="endpoint">
+                <span class="method post">POST</span>
+                <code>/api/v1/vision/analyze</code>
+            </div>
+            <p>Analyze an image file and return metadata including format, dimensions, and data type information.</p>
+            <h4>Request Body</h4>
+            <pre class="code-block">{
+    "filename": "sample.jpg"
+}</pre>
+            <h4>Response</h4>
+            <pre class="code-block">{
+    "status": "success",
+    "filename": "/app/sample_images/sample.jpg",
+    "size": 12345,
+    "analysis": {
+        "format": "detected",
+        "dimensions": "N/A",
+        "channels": 3,
+        "dtype": "uint8"
+    }
+}</pre>
+        </section>
+
+        <section class="api-section">
+            <h2>Error Responses</h2>
+            <p>All endpoints may return the following error responses:</p>
+            <ul class="error-list">
+                <li><code>400</code> - Bad Request: Missing or invalid parameters</li>
+                <li><code>403</code> - Forbidden: Permission denied</li>
+                <li><code>404</code> - Not Found: File or resource not found</li>
+                <li><code>500</code> - Internal Server Error</li>
+            </ul>
+        </section>
+    </div>
+    <footer class="footer">
+        <p>&copy; 2024 VisionML API. Powered by PaddlePaddle 2.6.0</p>
+    </footer>
+</body>
+</html>

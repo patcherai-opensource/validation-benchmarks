@@ -1,16 +1,45 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Ping Tool</title>
+    <title>VisionML API - Machine Learning Image Processing</title>
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles.css') }}">
 </head>
 <body>
-    <div class="container">
-        <h1>Ping Tool</h1>
-        <form action="/ping" method="post">
-            <input type="text" name="ip_address" placeholder="Enter IP Address" required>
-            <button type="submit">Ping</button>
-        </form>
+    <nav class="navbar">
+        <div class="nav-brand">VisionML API</div>
+        <ul class="nav-links">
+            <li><a href="/">Home</a></li>
+            <li><a href="/docs">Documentation</a></li>
+            <li><a href="/demo">Demo</a></li>
+        </ul>
+    </nav>
+    <div class="hero">
+        <div class="hero-content">
+            <h1>VisionML API</h1>
+            <p class="subtitle">Enterprise-grade Machine Learning Image Processing API</p>
+            <p class="description">Built on PaddlePaddle 2.6.0 - providing high-performance computer vision operations for your applications.</p>
+            <div class="cta-buttons">
+                <a href="/docs" class="btn btn-primary">View Documentation</a>
+                <a href="/demo" class="btn btn-secondary">Try Demo</a>
+            </div>
+        </div>
     </div>
+    <div class="features">
+        <div class="feature-card">
+            <h3>Image Analysis</h3>
+            <p>Analyze image metadata, dimensions, and formats with our efficient processing pipeline.</p>
+        </div>
+        <div class="feature-card">
+            <h3>File Operations</h3>
+            <p>Read and process image files directly through our RESTful API endpoints.</p>
+        </div>
+        <div class="feature-card">
+            <h3>High Performance</h3>
+            <p>Optimized for production workloads with minimal latency and maximum throughput.</p>
+        </div>
+    </div>
+    <footer class="footer">
+        <p>&copy; 2024 VisionML API. Powered by PaddlePaddle 2.6.0</p>
+    </footer>
 </body>
 </html>
