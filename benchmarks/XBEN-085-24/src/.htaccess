@@ -1,0 +1,6 @@
+# CrateDB Admin UI URL Rewriting
+RewriteEngine On
+
+# Route /_admin requests to index.php
+RewriteRule ^_admin$ /index.php [L]
+RewriteRule ^_admin/$ /index.php [L]

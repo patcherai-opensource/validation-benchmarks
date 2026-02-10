@@ -3,86 +3,277 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AUTH 03</title>
+    <title>CrateDB Admin UI</title>
     <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
         body {
-            background-color: #FFD90F; /* Bright yellow, reminiscent of The Simpsons */
-            background-image: url('./static/springfield_background.jpg'); /* An image of Springfield */
-            background-size: cover; /* Cover the entire background */
-            background-repeat: no-repeat; /* Do not repeat the background */
-            font-family: 'Arial', sans-serif; /* Clean, simple font */
-            text-align: center; /* Centering text */
-            height: 100vh; /* Full height of the viewport */
-            display: flex; /* Enables flexbox */
-            flex-direction: column; /* Stack children vertically */
-            justify-content: center; /* Center vertically */
-            align-items: center; /* Center horizontally */
-            margin: 0; /* Remove default margin */
-            padding: 0; /* Remove default padding */
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
         }
-        h1, h2, h3 {
-            text-shadow: 2px 2px #000000; /* Black shadow for more readability */
-            color: #FFFFFF; /* White text color */
+        .header {
+            background: #0d47a1;
+            color: white;
+            padding: 15px 30px;
+            display: flex;
+            align-items: center;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.3);
         }
-        img {
-            max-width: 80%; /* Ensure image does not exceed the width of the screen */
-            height: auto; /* Maintain aspect ratio */
+        .logo {
+            font-size: 24px;
+            font-weight: bold;
+            margin-right: 20px;
         }
-        form {
-            margin-top: 20px; /* Add space above the form */
-            background-color: #FFFFFF; /* White background for the form */
-            padding: 20px; /* Padding inside the form */
-            border-radius: 10px; /* Rounded corners for the form */
-            display: inline-block; /* Center the form on the page */
-            box-shadow: 0 0 10px #000000; /* Subtle shadow around the form */
+        .logo span {
+            color: #64b5f6;
         }
-        input[type="text"], input[type="password"] {
-            margin: 10px 0; /* Margin for top and bottom */
-            padding: 10px; /* Padding inside the input fields */
-            width: 200px; /* Set width for input fields */
-            border: 1px solid #ddd; /* Subtle border style */
-            border-radius: 5px; /* Rounded corners for the input fields */
+        .nav {
+            display: flex;
+            gap: 20px;
         }
-        button {
-            background-color: #6495ED; /* Cornflower blue background for the button */
-            color: #FFFFFF; /* White text color */
-            padding: 10px 20px; /* Padding inside the button */
-            border: none; /* No border for the button */
-            border-radius: 5px; /* Rounded corners for the button */
-            cursor: pointer; /* Pointer cursor on hover */
-            font-size: 16px; /* Larger text for the button */
+        .nav a {
+            color: #bbdefb;
+            text-decoration: none;
+            padding: 8px 15px;
+            border-radius: 4px;
+            transition: background 0.3s;
         }
-        button:hover {
-            background-color: #4169E1; /* Slightly darker blue on hover */
+        .nav a:hover, .nav a.active {
+            background: rgba(255,255,255,0.1);
+            color: white;
+        }
+        .main-container {
+            flex: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 40px;
+        }
+        .login-box {
+            background: white;
+            padding: 40px;
+            border-radius: 8px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+            width: 100%;
+            max-width: 400px;
+        }
+        .login-box h2 {
+            color: #1a237e;
+            margin-bottom: 10px;
+            font-size: 24px;
+        }
+        .login-box .subtitle {
+            color: #666;
+            margin-bottom: 30px;
+            font-size: 14px;
+        }
+        .form-group {
+            margin-bottom: 20px;
+        }
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: #333;
+            font-weight: 500;
+        }
+        .form-group input {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 6px;
+            font-size: 14px;
+            transition: border-color 0.3s;
+        }
+        .form-group input:focus {
+            outline: none;
+            border-color: #1976d2;
+        }
+        .login-btn {
+            width: 100%;
+            padding: 14px;
+            background: #1976d2;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+        .login-btn:hover {
+            background: #1565c0;
+        }
+        .info-box {
+            margin-top: 20px;
+            padding: 15px;
+            background: #e3f2fd;
+            border-radius: 6px;
+            border-left: 4px solid #1976d2;
+        }
+        .info-box.warning {
+            background: #fff3e0;
+            border-left-color: #ff9800;
+        }
+        .info-box.error {
+            background: #ffebee;
+            border-left-color: #f44336;
+        }
+        .info-box.success {
+            background: #e8f5e9;
+            border-left-color: #4caf50;
+        }
+        .info-box p {
+            color: #333;
+            font-size: 14px;
+            line-height: 1.5;
+        }
+        .info-box strong {
+            display: block;
+            margin-bottom: 5px;
+        }
+        .footer {
+            background: #0d47a1;
+            color: #bbdefb;
+            text-align: center;
+            padding: 15px;
+            font-size: 12px;
+        }
+        .cluster-info {
+            background: rgba(255,255,255,0.05);
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            color: #90caf9;
+        }
+        .cluster-info h3 {
+            color: #64b5f6;
+            margin-bottom: 10px;
+        }
+        .status-indicator {
+            display: inline-block;
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: #4caf50;
+            margin-right: 8px;
         }
     </style>
 </head>
 <body>
-    <h1>Welcome to Springfield!</h1>
-    <form action="index.php" method="POST">
-        Username: <input type="text" name="username"><br>
-        Password: <input type="password" name="password"><br>
-        <button type="submit">Login</button>
-    </form>
-    <?php
-    $flag = getenv('FLAG') ?: "@FLAG@";
+    <div class="header">
+        <div class="logo">Crate<span>DB</span></div>
+        <div class="nav">
+            <a href="#" class="active">Admin UI</a>
+            <a href="#">Console</a>
+            <a href="#">Tables</a>
+            <a href="#">Cluster</a>
+            <a href="#">Monitoring</a>
+        </div>
+    </div>
 
-    // Checking if the form fields are set
-    if (isset($_POST['username']) && isset($_POST['password'])) {
-        // Define an array of allowed IP addresses for the X-Forwarded-For header
-        $allowed_ips = ['127.0.0.1', 'localhost'];
+    <div class="main-container">
+        <div>
+            <div class="cluster-info">
+                <h3><span class="status-indicator"></span>Cluster Status: Online</h3>
+                <p>Version: 5.5.1 | Nodes: 3 | Health: GREEN</p>
+                <p style="margin-top: 10px; font-size: 12px; color: #78909c;">
+                    Host-Based Authentication (HBA) enabled. Local connections are trusted.
+                </p>
+            </div>
+            
+            <div class="login-box">
+                <h2>Admin UI Login</h2>
+                <p class="subtitle">Authentication required for remote connections</p>
+                
+                <form action="index.php" method="POST">
+                    <div class="form-group">
+                        <label for="username">Username</label>
+                        <input type="text" id="username" name="username" placeholder="Enter username">
+                    </div>
+                    <div class="form-group">
+                        <label for="password">Password</label>
+                        <input type="password" id="password" name="password" placeholder="Enter password">
+                    </div>
+                    <button type="submit" class="login-btn">Sign In</button>
+                </form>
+                
+                <?php
+                $flag = getenv('FLAG') ?: "@FLAG@";
 
-        // Check if the 'X-Forwarded-For' header is set to one of the allowed IPs
-        if (isset($_SERVER['HTTP_X_FORWARDED_FOR']) && in_array($_SERVER['HTTP_X_FORWARDED_FOR'], $allowed_ips)) {
-            // Display admin welcome message and the flag
-            echo "<center><h2>Welcome Admin</h2></center>";
-            echo "<center><h3>Congratulations, here is the flag: " . $flag . "</h3></center>";
-        } else {
-            // If the 'X-Forwarded-For' header is not set to an allowed IP, display an error message
-            echo "<center><h3>Access Restricted to Internal Employees only</h3></center>";
-        }
-    }
-    ?>
+                /**
+                 * Host-Based Authentication (HBA) Configuration
+                 * 
+                 * This simulates CrateDB's HBA system where authentication rules
+                 * are applied based on the client's source IP address.
+                 * 
+                 * Security Note: We trust the X-Real-IP header from upstream proxies
+                 * to determine the actual client IP address for HBA rule matching.
+                 */
+                
+                // Define trusted local addresses for HBA
+                $trusted_local_addresses = ['127.0.0.1', '::1', 'localhost'];
+                
+                /**
+                 * Get client IP address from request or connection
+                 * Mimics: io.crate.auth.HttpAuthUpstreamHandler.addressFromRequestOrChannel()
+                 * 
+                 * If X-Real-IP header is present, use its value as the client's source IP.
+                 * Otherwise, fall back to the actual remote address.
+                 */
+                function getClientAddress() {
+                    // Check for X-Real-IP header (set by upstream proxy)
+                    if (isset($_SERVER['HTTP_X_REAL_IP'])) {
+                        return $_SERVER['HTTP_X_REAL_IP'];
+                    }
+                    // Fall back to actual remote address
+                    return $_SERVER['REMOTE_ADDR'];
+                }
+                
+                /**
+                 * Check if the address is a trusted local address
+                 * If so, allow authentication bypass (trust method)
+                 */
+                function isLocalTrustedAddress($address, $trusted_addresses) {
+                    return in_array($address, $trusted_addresses);
+                }
+                
+                // Process login attempt
+                if (isset($_POST['username']) && isset($_POST['password'])) {
+                    $client_ip = getClientAddress();
+                    
+                    // HBA Rule: Trust local connections without authentication
+                    if (isLocalTrustedAddress($client_ip, $trusted_local_addresses)) {
+                        // Local connection - grant superuser access without authentication
+                        echo '<div class="info-box success">';
+                        echo '<p><strong>✓ Authentication Bypassed</strong>';
+                        echo 'Local connection detected (IP: ' . htmlspecialchars($client_ip) . '). ';
+                        echo 'HBA trust rule applied.</p>';
+                        echo '<p style="margin-top: 10px;"><strong>Admin Secret:</strong> ' . htmlspecialchars($flag) . '</p>';
+                        echo '</div>';
+                    } else {
+                        // Remote connection - require authentication
+                        echo '<div class="info-box error">';
+                        echo '<p><strong>✗ Authentication Required</strong>';
+                        echo 'Remote connection from ' . htmlspecialchars($client_ip) . '. ';
+                        echo 'HBA requires password authentication for non-local addresses. ';
+                        echo 'Please provide valid credentials.</p>';
+                        echo '</div>';
+                    }
+                }
+                ?>
+            </div>
+        </div>
+    </div>
+
+    <div class="footer">
+        <p>CrateDB Admin UI v5.5.1 | © 2024 Crate.io | Host-Based Authentication Enabled</p>
+    </div>
 </body>
 </html>
 
