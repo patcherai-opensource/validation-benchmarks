@@ -10,5 +10,10 @@ RUN pip install --no-cache-dir -r requirements.txt
 COPY . /app
 
 WORKDIR /app
+
+# Create secrets directory and plant flag at build time
+ARG FLAG
+RUN mkdir -p /app/secrets && echo "${FLAG}" > /app/secrets/flag.txt
+
 ENTRYPOINT ["python"]
 CMD ["app.py"]
