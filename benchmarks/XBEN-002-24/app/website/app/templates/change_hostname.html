@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard - SolusVM Pro</title>
+    <title>Change Hostname - SolusVM Pro</title>
     <link href="{{ url_for('static', filename='css/bootstrap.min.css') }}" rel="stylesheet">
     <style>
         body {
@@ -31,14 +31,16 @@
             background-color: #c73e54;
             border-color: #c73e54;
         }
-        .stat-card {
-            text-align: center;
-            padding: 20px;
+        .form-control {
+            background-color: #1a1a2e;
+            border: 1px solid #0f3460;
+            color: #eaeaea;
         }
-        .stat-number {
-            font-size: 2.5em;
-            font-weight: bold;
-            color: #e94560;
+        .form-control:focus {
+            background-color: #1a1a2e;
+            border-color: #e94560;
+            color: #eaeaea;
+            box-shadow: none;
         }
     </style>
 </head>
@@ -52,16 +54,13 @@
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav me-auto">
                     <li class="nav-item">
-                        <a class="nav-link active" href="/dashboard">Dashboard</a>
+                        <a class="nav-link" href="/dashboard">Dashboard</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="/servers">My Servers</a>
                     </li>
                 </ul>
                 <ul class="navbar-nav">
-                    <li class="nav-item">
-                        <span class="nav-link text-muted">{{ user.email }}</span>
-                    </li>
                     <li class="nav-item">
                         <form action="/logout" method="post" class="d-inline">
                             <button type="submit" class="btn btn-outline-light btn-sm">Logout</button>
@@ -75,40 +74,42 @@
     <div class="container mt-4">
         <div class="row mb-4">
             <div class="col">
-                <h2>Welcome, {{ user.first_name }} {{ user.last_name }}</h2>
-                <p class="text-muted">Manage your virtual private servers</p>
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb" style="background: transparent;">
+                        <li class="breadcrumb-item"><a href="/servers" style="color: #e94560;">Servers</a></li>
+                        <li class="breadcrumb-item active" aria-current="page">Change Hostname</li>
+                    </ol>
+                </nav>
+                <h2>Change Hostname</h2>
+                <p class="text-muted">Server ID: {{ server.id }}</p>
             </div>
         </div>
         
-        <div class="row">
-            <div class="col-md-4">
-                <div class="card stat-card">
-                    <div class="stat-number">{{ user.servers | length }}</div>
-                    <div>Active Servers</div>
-                </div>
-            </div>
-            <div class="col-md-4">
-                <div class="card stat-card">
-                    <div class="stat-number" style="color: #4ecca3;">Online</div>
-                    <div>System Status</div>
-                </div>
-            </div>
-            <div class="col-md-4">
-                <div class="card stat-card">
-                    <div class="stat-number">24/7</div>
-                    <div>Support Available</div>
-                </div>
-            </div>
-        </div>
-        
-        <div class="row mt-4">
-            <div class="col">
+        <div class="row justify-content-center">
+            <div class="col-md-6">
                 <div class="card">
                     <div class="card-header">
-                        <h5 class="mb-0">Quick Actions</h5>
+                        <h5 class="mb-0">Update Server Hostname</h5>
                     </div>
                     <div class="card-body">
-                        <a href="/servers" class="btn btn-primary me-2">View Servers</a>
+                        {% if error %}
+                        <div class="alert alert-danger">{{ error }}</div>
+                        {% endif %}
+                        
+                        <form method="POST">
+                            <div class="mb-3">
+                                <label class="form-label">Current Hostname</label>
+                                <input type="text" class="form-control" value="{{ server.hostname }}" disabled>
+                            </div>
+                            <div class="mb-3">
+                                <label for="newhostname" class="form-label">New Hostname</label>
+                                <input type="text" class="form-control" id="newhostname" name="newhostname" required placeholder="e.g., server.example.com">
+                            </div>
+                            <div class="d-grid gap-2">
+                                <button type="submit" class="btn btn-primary">Update Hostname</button>
+                                <a href="/servers" class="btn btn-outline-secondary">Cancel</a>
+                            </div>
+                        </form>
                     </div>
                 </div>
             </div>

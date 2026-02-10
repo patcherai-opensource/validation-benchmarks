@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Servers - SolusVM Pro</title>
+    <link href="{{ url_for('static', filename='css/bootstrap.min.css') }}" rel="stylesheet">
+    <style>
+        body {
+            background-color: #1a1a2e;
+            color: #eaeaea;
+        }
+        .navbar {
+            background-color: #16213e !important;
+            border-bottom: 1px solid #0f3460;
+        }
+        .card {
+            background-color: #16213e;
+            border: 1px solid #0f3460;
+            color: #eaeaea;
+        }
+        .card-header {
+            background-color: #0f3460;
+            border-bottom: 1px solid #0f3460;
+        }
+        .btn-primary {
+            background-color: #e94560;
+            border-color: #e94560;
+        }
+        .btn-primary:hover {
+            background-color: #c73e54;
+            border-color: #c73e54;
+        }
+        .table {
+            color: #eaeaea;
+        }
+        .table thead th {
+            border-color: #0f3460;
+            background-color: #0f3460;
+        }
+        .table td {
+            border-color: #0f3460;
+        }
+        .status-running {
+            color: #4ecca3;
+        }
+        .status-stopped {
+            color: #e94560;
+        }
+        .btn-action {
+            padding: 0.25rem 0.5rem;
+            font-size: 0.75rem;
+            margin: 0.1rem;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark">
+        <div class="container">
+            <a class="navbar-brand" href="/dashboard">SolusVM Pro</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="/dashboard">Dashboard</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" href="/servers">My Servers</a>
+                    </li>
+                </ul>
+                <ul class="navbar-nav">
+                    <li class="nav-item">
+                        <form action="/logout" method="post" class="d-inline">
+                            <button type="submit" class="btn btn-outline-light btn-sm">Logout</button>
+                        </form>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+    
+    <div class="container mt-4">
+        {% if request.args.get('msg') %}
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            {{ request.args.get('msg') }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+        {% endif %}
+        
+        <div class="row mb-4">
+            <div class="col">
+                <h2>My Virtual Servers</h2>
+                <p class="text-muted">Manage and configure your VPS instances</p>
+            </div>
+        </div>
+        
+        <div class="card">
+            <div class="card-header">
+                <h5 class="mb-0">Server List</h5>
+            </div>
+            <div class="card-body">
+                {% if servers %}
+                <div class="table-responsive">
+                    <table class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Hostname</th>
+                                <th>IP Address</th>
+                                <th>Plan</th>
+                                <th>OS</th>
+                                <th>Status</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for server in servers %}
+                            <tr>
+                                <td>{{ server.id }}</td>
+                                <td>{{ server.hostname }}</td>
+                                <td>{{ server.ip_address }}</td>
+                                <td>{{ server.plan }}</td>
+                                <td>{{ server.os_type }}</td>
+                                <td class="status-{{ server.status }}">{{ server.status | capitalize }}</td>
+                                <td>
+                                    <a href="/server/{{ server.id }}" class="btn btn-sm btn-outline-info btn-action">Details</a>
+                                    <a href="/server/{{ server.id }}/change-hostname" class="btn btn-sm btn-outline-warning btn-action">Hostname</a>
+                                    <a href="/server/{{ server.id }}/change-root-password" class="btn btn-sm btn-outline-danger btn-action">Root Pass</a>
+                                    <a href="/server/{{ server.id }}/change-vnc-password" class="btn btn-sm btn-outline-secondary btn-action">VNC Pass</a>
+                                    <a href="/server/{{ server.id }}/console" class="btn btn-sm btn-outline-success btn-action">Console</a>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                {% else %}
+                <p class="text-muted">No servers found. Contact support to provision a new VPS.</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+    
+    <script src="{{ url_for('static', filename='js/jquery-3.5.1.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/bootstrap.bundle.min.js') }}"></script>
+</body>
+</html>
