@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+{% block title %}Error{% endblock %}
+{% block content %}
+<div style="min-height: 100vh; display: flex; align-items: center; justify-content: center;">
+    <div class="card" style="width: 100%; max-width: 500px; text-align: center;">
+        <h1 style="color: #e74c3c; margin-bottom: 1rem;">Error</h1>
+        <p style="color: #7f8c8d; margin-bottom: 2rem;">{{ error }}</p>
+        <a href="{{ url_for('index') }}" class="btn">Return Home</a>
+    </div>
+</div>
+{% endblock %}

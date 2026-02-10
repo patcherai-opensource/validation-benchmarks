@@ -1,0 +1,54 @@
+{% extends "base.html" %}
+{% block title %}{{ dataset_name }}{% endblock %}
+{% block content %}
+<nav class="navbar">
+    <h1>DataView Analytics</h1>
+    <div>
+        <a href="{{ url_for('dashboard') }}">Dashboard</a>
+        <a href="{{ url_for('logout') }}">Logout</a>
+    </div>
+</nav>
+
+<div class="container">
+    <div class="card">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+            <h2>{{ dataset_name }}</h2>
+            <a href="{{ url_for('dashboard') }}" class="btn btn-secondary">Back to Dashboard</a>
+        </div>
+        
+        <table>
+            <thead>
+                <tr>
+                    {% for col in columns %}
+                    <th>{{ col }}</th>
+                    {% endfor %}
+                </tr>
+            </thead>
+            <tbody>
+                {% for row in rows %}
+                <tr>
+                    {% for cell in row %}
+                    <td>{{ cell }}</td>
+                    {% endfor %}
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    
+    <div class="card">
+        <h3 style="margin-bottom: 1rem;">Dataset Settings</h3>
+        <p style="color: #7f8c8d;">
+            <strong>Custom Filters:</strong> 
+            {% if settings.enable_custom_filters %}
+            <span style="color: #27ae60;">Enabled</span>
+            {% else %}
+            <span style="color: #e74c3c;">Disabled</span>
+            {% endif %}
+        </p>
+        <p style="color: #7f8c8d; font-size: 0.9rem; margin-top: 0.5rem;">
+            Use the API endpoint <code>/update-settings/{{ data_id }}</code> to modify dataset settings.
+        </p>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,70 @@
+{% extends "base.html" %}
+{% block title %}Dashboard{% endblock %}
+{% block content %}
+<nav class="navbar">
+    <h1>DataView Analytics</h1>
+    <div>
+        <span style="margin-right: 1rem;">
+            {{ username }}
+            {% if is_admin %}
+            <span class="badge badge-admin">Admin</span>
+            {% else %}
+            <span class="badge badge-user">Analyst</span>
+            {% endif %}
+        </span>
+        <a href="{{ url_for('logout') }}">Logout</a>
+    </div>
+</nav>
+
+<div class="container">
+    <div class="card">
+        <h2 style="margin-bottom: 1rem;">Your Datasets</h2>
+        <p style="color: #7f8c8d; margin-bottom: 1.5rem;">
+            Access and manage your data visualizations
+        </p>
+        
+        {% if datasets %}
+        <table>
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Dataset Name</th>
+                    <th>Owner</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for ds in datasets %}
+                <tr>
+                    <td>{{ ds.id }}</td>
+                    <td>{{ ds.name }}</td>
+                    <td>{{ ds.owner }}</td>
+                    <td>
+                        <a href="{{ url_for('view_data', data_id=ds.id) }}" class="btn" style="padding: 0.5rem 1rem; font-size: 0.9rem;">
+                            View Data
+                        </a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        {% else %}
+        <p style="color: #7f8c8d;">No datasets available.</p>
+        {% endif %}
+    </div>
+    
+    <div class="card">
+        <h3 style="margin-bottom: 1rem;">Quick Stats</h3>
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem;">
+            <div style="padding: 1rem; background: #f8f9fa; border-radius: 8px; text-align: center;">
+                <div style="font-size: 2rem; font-weight: bold; color: #667eea;">{{ datasets|length }}</div>
+                <div style="color: #7f8c8d;">Available Datasets</div>
+            </div>
+            <div style="padding: 1rem; background: #f8f9fa; border-radius: 8px; text-align: center;">
+                <div style="font-size: 2rem; font-weight: bold; color: #27ae60;">Active</div>
+                <div style="color: #7f8c8d;">System Status</div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
