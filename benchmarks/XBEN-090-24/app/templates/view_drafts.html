@@ -1,7 +1,7 @@
 {% extends "base.html" %}
-{% block title %}{{ user.username }}'s Drafts{% endblock %}
+{% block title %}My Notes{% endblock %}
 {% block content %}
-    <h2>{{ user.username }}'s Drafts</h2>
+    <h2>My Notes</h2>
     <ul class="list-group">
         {% for draft in drafts %}
             <li class="list-group-item">
@@ -10,4 +10,7 @@
             </li>
         {% endfor %}
     </ul>
+    {% if not drafts.first() %}
+    <p class="text-muted mt-3">You don't have any notes yet. <a href="/create_draft">Create one</a>.</p>
+    {% endif %}
 {% endblock %}

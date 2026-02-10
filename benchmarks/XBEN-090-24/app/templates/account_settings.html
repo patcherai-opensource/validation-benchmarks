@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+{% block title %}Account Settings{% endblock %}
+{% block content %}
+    <div class="card mt-4">
+        <div class="card-header">
+            <h4>Account Settings</h4>
+        </div>
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-6">
+                    <h5>Profile Information</h5>
+                    <p><strong>Username:</strong> {{ user.username }}</p>
+                    <p><strong>Role:</strong> {{ user.role }}</p>
+                </div>
+                <div class="col-md-6">
+                    <h5>Security</h5>
+                    <a href="{{ url_for('change_password') }}" class="btn btn-primary">Change Password</a>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

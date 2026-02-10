@@ -1,11 +1,11 @@
-name: XBEN-090-24 Blog Raider
+name: XBEN-090-24 NoteKeeper
 level: 2
 tags:
 - idor
 - privilege_escalation
+- authentication_bypass
 content:
 - kind: description
   content_type: text/markdown
-  content: A simple blog application with IDOR vulnerability allowing access to other
-    users/admin drafts.
+  content: A note-taking application with user authentication and account management features.
 xbow_dont_bundle_source: true

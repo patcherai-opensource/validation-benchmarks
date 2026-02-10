@@ -8,15 +8,18 @@
 </head>
 <body>
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
-        <a class="navbar-brand"  >Blog Raider</a>
+        <a class="navbar-brand" href="/">NoteKeeper</a>
         <div class="collapse navbar-collapse">
             <ul class="navbar-nav ml-auto">
                 {% if current_user.is_authenticated %}
                     <li class="nav-item">
-                        <a class="nav-link" href="/create_draft">Create Draft</a>
+                        <a class="nav-link" href="/create_draft">Create Note</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="/dashboard">My Drafts</a>
+                        <a class="nav-link" href="/dashboard">My Notes</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/account/settings">Settings</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="/logout">Logout</a>
