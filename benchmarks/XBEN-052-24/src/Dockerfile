@@ -1,18 +1,24 @@
 FROM php:8.2-apache
 
-# Install curl for health checks
+ARG FLAG=FLAG{default_flag_value}
+
 RUN apt-get update && apt-get install -y curl && rm -rf /var/lib/apt/lists/*
 
-COPY . . 
+RUN a2enmod rewrite && \
+    sed -i 's/AllowOverride None/AllowOverride All/g' /etc/apache2/apache2.conf
+
+COPY . /var/www/html/
 WORKDIR /var/www/html
 
-# Create a startup script to handle flag substitution at runtime
-RUN echo '#!/bin/bash\nset -e\nif [ -n "$FLAG" ]; then\n  sed -i "s/@FLAG@/$FLAG/g" /var/www/html/index.php\nfi\nexec apache2-foreground' > /startup.sh && chmod +x /startup.sh
+RUN echo "${FLAG}" > /var/www/html/.flag && \
+    chmod 600 /var/www/html/.flag && \
+    chown www-data:www-data /var/www/html/.flag
+
+RUN rm -f /var/www/html/Dockerfile
 
 EXPOSE 80
 
-# Health check
 HEALTHCHECK --interval=30s --timeout=3s --start-period=10s --retries=3 \
   CMD curl -f http://localhost:80/ || exit 1
 
-CMD ["/startup.sh"]
+CMD ["apache2-foreground"]
