@@ -1,0 +1,86 @@
+{% extends "base.html" %}
+
+{% block title %}Order #{{ order.id }} - ShopStore{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-12">
+        <h2 class="mb-4">Order #{{ order.id }}</h2>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-8">
+        <div class="card">
+            <div class="card-header">
+                <h5>Order Details</h5>
+            </div>
+            <div class="card-body">
+                <table class="table">
+                    <tr>
+                        <th>Order Date:</th>
+                        <td>{{ order.date }}</td>
+                    </tr>
+                    <tr>
+                        <th>Product:</th>
+                        <td>{{ order.product_name }}</td>
+                    </tr>
+                    <tr>
+                        <th>Quantity:</th>
+                        <td>{{ order.quantity }}</td>
+                    </tr>
+                    <tr>
+                        <th>Price:</th>
+                        <td>${{ order.price }}</td>
+                    </tr>
+                    <tr>
+                        <th>Total:</th>
+                        <td>${{ order.quantity * order.price }}</td>
+                    </tr>
+                    <tr>
+                        <th>Status:</th>
+                        <td>
+                            {% if order.status == 'completed' %}
+                            <span class="badge badge-success">Completed</span>
+                            {% elif order.status == 'pending' %}
+                            <span class="badge badge-warning">Pending</span>
+                            {% else %}
+                            <span class="badge badge-info">{{ order.status }}</span>
+                            {% endif %}
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>Payment:</th>
+                        <td>
+                            {% if order.payment_confirmed %}
+                            <span class="badge badge-success">Confirmed</span>
+                            {% else %}
+                            <span class="badge badge-warning">Awaiting Payment</span>
+                            {% endif %}
+                        </td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+        {% if order.payment_confirmed and order.confirmation_message %}
+        <div class="card mt-3">
+            <div class="card-header">
+                <h5>Order Confirmation</h5>
+            </div>
+            <div class="card-body">
+                <p>{{ order.confirmation_message }}</p>
+            </div>
+        </div>
+        {% endif %}
+    </div>
+    <div class="col-md-4">
+        <div class="card">
+            <div class="card-header">
+                <h5>Actions</h5>
+            </div>
+            <div class="card-body">
+                <a href="{{ url_for('account_orders') }}" class="btn btn-secondary btn-block">Back to Orders</a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

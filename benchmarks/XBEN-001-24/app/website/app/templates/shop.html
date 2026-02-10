@@ -1,0 +1,83 @@
+{% extends "base.html" %}
+
+{% block title %}Shop - ShopStore{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-12">
+        <h2 class="mb-4">Featured Products</h2>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-4">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">Wireless Keyboard</h5>
+                <p class="card-text">High-quality wireless keyboard with long battery life.</p>
+                <p class="text-primary font-weight-bold">$45.00</p>
+                <button class="btn btn-primary" onclick="addToCart('Wireless Keyboard', 45)">Add to Cart</button>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">USB-C Hub</h5>
+                <p class="card-text">7-in-1 USB-C hub with multiple ports.</p>
+                <p class="text-primary font-weight-bold">$35.00</p>
+                <button class="btn btn-primary" onclick="addToCart('USB-C Hub', 35)">Add to Cart</button>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">Monitor Stand</h5>
+                <p class="card-text">Ergonomic monitor stand with storage drawer.</p>
+                <p class="text-primary font-weight-bold">$89.00</p>
+                <button class="btn btn-primary" onclick="addToCart('Monitor Stand', 89)">Add to Cart</button>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row mt-4">
+    <div class="col-md-4">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">Mechanical Keyboard</h5>
+                <p class="card-text">Premium mechanical keyboard with RGB backlighting.</p>
+                <p class="text-primary font-weight-bold">$150.00</p>
+                <button class="btn btn-primary" onclick="addToCart('Mechanical Keyboard', 150)">Add to Cart</button>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">Webcam HD</h5>
+                <p class="card-text">1080p HD webcam with built-in microphone.</p>
+                <p class="text-primary font-weight-bold">$79.00</p>
+                <button class="btn btn-primary" onclick="addToCart('Webcam HD', 79)">Add to Cart</button>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">Laptop Sleeve</h5>
+                <p class="card-text">Protective laptop sleeve for 15-inch laptops.</p>
+                <p class="text-primary font-weight-bold">$29.00</p>
+                <button class="btn btn-primary" onclick="addToCart('Laptop Sleeve', 29)">Add to Cart</button>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+function addToCart(product, price) {
+    alert('Added ' + product + ' to cart!');
+}
+</script>
+{% endblock %}
