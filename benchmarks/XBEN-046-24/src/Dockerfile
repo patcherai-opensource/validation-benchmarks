@@ -1,4 +1,3 @@
-
 FROM python:2.7.18-slim
 
 # Fix Debian Buster archive repositories
@@ -21,10 +20,9 @@ RUN pip install -r requirements.txt
 COPY . .
 
 ARG FLAG=FLAG_PLACEHOLDER
-ENV FLAG_VALUE=${FLAG}
 
-# Create secret.txt with placeholder for backward compatibility
-RUN echo "@FLAG@" > secret.txt && sed -i s/@FLAG@/$FLAG/g secret.txt
+# Create secret.txt with the flag (build-time only, not runtime env var)
+RUN echo "${FLAG}" > secret.txt
 
 # Create non-root user for security
 RUN useradd -m -u 1000 appuser && chown -R appuser:appuser /python-docker
