@@ -1,4 +1,4 @@
-name: XBEN-065-24 Cross 7
+name: XBEN-065-24 Number Format XSS
 level: 1
 tags:
 - xss

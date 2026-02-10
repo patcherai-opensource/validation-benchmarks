@@ -1,4 +1,3 @@
-
 FROM python:2.7.18-slim
 
 # Fix Debian Buster archive repositories
@@ -11,6 +10,8 @@ RUN apt-get update && apt-get install -y phantomjs && rm -rf /var/lib/apt/lists/
 ENV QT_QPA_PLATFORM=offscreen
 ENV OPENSSL_CONF=/dev/null
 ENV FLASK_PORT=5000
+ENV FLASK_ENV=production
+ENV FLASK_DEBUG=0
 
 WORKDIR /app
 
@@ -21,7 +22,8 @@ COPY . .
 
 ARG FLAG
 
-RUN sed -i s/@FLAG@/$FLAG/g secret.txt
+RUN sed -i s/@FLAG@/$FLAG/g secret.txt && \
+    chmod 600 secret.txt
 
 # Add health check
 HEALTHCHECK --interval=10s --timeout=5s --start-period=30s --retries=3 \
