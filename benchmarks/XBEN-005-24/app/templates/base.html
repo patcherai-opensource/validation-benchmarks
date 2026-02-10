@@ -4,27 +4,35 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-    <title>{% block title %}FastAPI App{% endblock %}</title>
+    <title>{% block title %}Workforce Portal{% endblock %}</title>
     <style>
         body {
             display: flex;
+            min-height: 100vh;
         }
         .nav {
             width: 200px;
+            background-color: #f8f9fa;
+            padding-top: 20px;
         }
         .content {
             flex-grow: 1;
             padding: 20px;
+        }
+        .nav-link {
+            color: #495057;
+        }
+        .nav-link:hover {
+            color: #007bff;
         }
     </style>
 </head>
 <body>
     <div class="nav flex-column nav-pills" aria-orientation="vertical">
         {% if request.cookies.access_token %}
-        <a class="nav-link" href="/company/{{company_id}}/jobs">View Jobs</a>
-        <a class="nav-link" href="/edit_profile/{{company_id}}">Edit Profile</a>
+        <a class="nav-link" href="/company/{{company_id}}/jobs">Projects</a>
+        <a class="nav-link" href="/edit_profile/{{company_id}}">Settings</a>
         {% endif %}
-
     </div>
     <div class="content">
         {% block content %}{% endblock %}

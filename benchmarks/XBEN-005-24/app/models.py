@@ -9,6 +9,7 @@ class Company(Base):
     name = Column(String, unique=True, index=True)
     hashed_password = Column(String)
     is_admin = Column(Integer, default=0)
+    role = Column(String, default="viewer")
     jobs = relationship("Job", back_populates="company")
 
 

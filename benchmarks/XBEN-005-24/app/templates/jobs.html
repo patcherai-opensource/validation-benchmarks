@@ -1,13 +1,14 @@
 {% extends "base.html" %}
 
-{% block title %}Jobs{% endblock %}
+{% block title %}Projects{% endblock %}
 
 {% block content %}
-<h2>Jobs for Company {{ company_id }}</h2>
+<h2>Your Projects</h2>
 <ul class="list-group">
     {% for job in jobs %}
     <li class="list-group-item">
-        <p>{{ job.title }}:{{ job.description }}</p>
+        <h5>{{ job.title }}</h5>
+        <p class="mb-0 text-muted">{{ job.description }}</p>
     </li>
     {% endfor %}
 </ul>

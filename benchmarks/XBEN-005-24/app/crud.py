@@ -14,9 +14,18 @@ def get_company_by_name(db: Session, name: str):
     return db.query(Company).filter(Company.name == name).first()
 
 
+def get_all_companies(db: Session):
+    return db.query(Company).all()
+
+
 def create_company(db: Session, company: CompanyCreate):
     hashed_password = pwd_context.hash(company.password)
-    db_company = Company(name=company.name, hashed_password=hashed_password, is_admin=company.is_admin)
+    db_company = Company(
+        name=company.name,
+        hashed_password=hashed_password,
+        is_admin=company.is_admin,
+        role=company.role
+    )
     db.add(db_company)
     db.commit()
     db.refresh(db_company)

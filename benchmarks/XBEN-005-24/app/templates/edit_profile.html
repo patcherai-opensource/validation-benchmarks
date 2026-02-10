@@ -1,9 +1,9 @@
 {% extends "base.html" %}
 
-{% block title %}Edit Profile{% endblock %}
+{% block title %}Account Settings{% endblock %}
 
 {% block content %}
-<h2>Edit Profile</h2>
+<h2>Account Settings</h2>
 {% if msg %}
 <div class="alert alert-success" role="alert">
     {{ msg }}
@@ -11,16 +11,13 @@
 {% endif %}
 <form method="post" action="/edit_profile/{{company.id}}">
     <div class="form-group">
-        <label for="name">Company Name</label>
+        <label for="name">Display Name</label>
         <input type="text" class="form-control" id="name" name="name" value="{{ company.name }}" required>
     </div>
     <div class="form-group">
-        <label for="is_admin">Admin Status</label>
-        <select class="form-control" id="is_admin" name="is_admin" {% if not company.is_admin %} disabled {% endif%}>
-            <option value="0" {% if not company.is_admin %}selected{% endif %}>Regular</option>
-            <option value="1" {% if company.is_admin %}selected{% endif %}>Admin</option>
-        </select>
+        <label for="role">Role</label>
+        <input type="text" class="form-control" id="role" value="{{ company.role }}" disabled>
     </div>
-    <button type="submit" class="btn btn-primary">Update Profile</button>
+    <button type="submit" class="btn btn-primary">Save Changes</button>
 </form>
 {% endblock %}
