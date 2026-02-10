@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Orders - Trading Platform</title>
+    <title>Network Devices - Trading Platform</title>
     <link href="{{ url_for('static', filename='css/bootstrap.min.css') }}" rel="stylesheet">
     <style>
         body {
@@ -36,13 +36,16 @@
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav ml-auto">
                     <li class="nav-item">
+                        <a class="nav-link" href="/dashboard">Dashboard</a>
+                    </li>
+                    <li class="nav-item">
                         <a class="nav-link" href="/orders">Orders</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="/orders_archive">Orders Archive</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="/devices">Devices</a>
+                        <a class="nav-link active" href="/devices">Devices</a>
                     </li>
                     <li class="nav-item">
                         <form action="/logout" method="post">
@@ -55,34 +58,33 @@
     </nav>
     <div class="container mt-3">
         <div class="row justify-content-center">
-            <div class="col-md-8">
-                <h2 class="text-center mb-4">Archived Orders</h2>
+            <div class="col-md-10">
+                <h2 class="text-center mb-4">Network Device Inventory</h2>
+                <div class="mb-3">
+                    <a href="/devices/search" class="btn btn-primary">Search by MAC Address</a>
+                </div>
                 <div class="card">
                     <div class="card-body">
                         <table>
                             <thead>
                                 <tr>
-                                    <th>Date</th>
-                                    <th>Ticker</th>
-                                    <th>Operation Type</th>
-                                    <th>Quantity</th>
-                                    <th>Price</th>
-                                    <th>Total</th>
-                                    <th>Receipt</th>
+                                    <th>Hostname</th>
+                                    <th>MAC Address</th>
+                                    <th>IP Address</th>
+                                    <th>Type</th>
+                                    <th>Location</th>
+                                    <th>Status</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                {% for order in orders %}
+                                {% for device in devices %}
                                 <tr>
-                                    <td>{{ order.date }}</td>
-                                    <td>{{ order.ticker }}</td>
-                                    <td>{{ order.operation_type }}</td>
-                                    <td>{{ order.quantity }}</td>
-                                    <td>$ {{ order.price }}</td>
-                                    <td>$ {{ order.quantity * order.price }}</td>
-                                    <td>
-                                        <a href="#" class="receipt-link" data-order-id="{{ order.id }}">Receipt</a>
-                                    </td>
+                                    <td>{{ device.hostname }}</td>
+                                    <td>{{ device.mac_address }}</td>
+                                    <td>{{ device.ip_address }}</td>
+                                    <td>{{ device.device_type }}</td>
+                                    <td>{{ device.location }}</td>
+                                    <td>{{ device.status }}</td>
                                 </tr>
                                 {% endfor %}
                             </tbody>
@@ -92,37 +94,5 @@
             </div>
         </div>
     </div>
-
-    <!-- Modal -->
-    <div class="modal fade" id="receiptModal" tabindex="-1" role="dialog" aria-labelledby="receiptModalLabel" aria-hidden="true">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <!-- Receipt content will be loaded here dynamically -->
-            </div>
-        </div>
-    </div>
-
-    <script src="{{ url_for('static', filename='js/jquery-3.5.1.min.js') }}"></script>
-    <script src="{{ url_for('static', filename='js/bootstrap.bundle.min.js') }}"></script>
-    <script>
-        // JavaScript to handle dynamic receipt loading
-        $(document).ready(function () {
-            $('.receipt-link').click(function (event) {
-                event.preventDefault();
-                var orderId = $(this).data('order-id');
-                $.ajax({
-                    url: '/order/' + orderId + '/receipt',
-                    method: 'GET',
-                    success: function (data) {
-                        $('#receiptModal .modal-content').html(data);
-                        $('#receiptModal').modal('show');
-                    },
-                    error: function (xhr, status, error) {
-                        console.error('Error fetching receipt:', error);
-                    }
-                });
-            });
-        });
-    </script>
 </body>
 </html>

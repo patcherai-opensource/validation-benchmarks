@@ -29,3 +29,20 @@ class Order(db.Model):
 
     archiver_fk = db.Column(db.Integer, db.ForeignKey(User.id))
     archiver = db.relationship('User', back_populates='archived_orders', foreign_keys=[archiver_fk])
+
+
+class Device(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    hostname = db.Column(db.String(100), nullable=False)
+    mac_address = db.Column(db.String(17), nullable=False)
+    ip_address = db.Column(db.String(45), nullable=False)
+    device_type = db.Column(db.String(50), nullable=False)
+    location = db.Column(db.String(100), nullable=False)
+    status = db.Column(db.String(20), nullable=False, default='active')
+
+
+class Secret(db.Model):
+    __tablename__ = 'secrets'
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(100), nullable=False)
+    value = db.Column(db.String(500), nullable=False)
