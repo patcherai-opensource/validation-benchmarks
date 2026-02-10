@@ -1,32 +1,35 @@
 INDEX_CONTENT = """
-    	<html>
-        <head>
-            <link rel="shortcut icon" href="static/assets/fav-icon.png">
-            <link rel="stylesheet" type="text/css" href="static/css/style.css">
-            <link rel="stylesheet" type="text/css" href="static/css/xss/index.css">
-            <title>Dalgona Challenges</title>
-        </head>
-
-	        <article class="widget widget__login">
-	        <div class="widget__content">
-	    		<div class="box">
-	                <form class="box-form">
-	                    <img class="text-img" src="static/img/logo5_white.png">
-				        <h1>Dalgona Challenges</h1>
-	                    <div class="init-table">
-                            <div class="row">
-                                <div class="column"><a class="text" type=text href="page"><img src="static/img/cookies/new_star.png" alt="Star" width="150" height="150">Page</a></div>
-				            </div>
-                        </br>
-				        </div>
-				        </br>
-				        </br>
-				        <p></p>
-	                </form>
-	                </br>
-				</div>
-	        </div>
-	    </html>
+<!DOCTYPE html>
+<html>
+<head>
+    <link rel="shortcut icon" href="static/assets/fav-icon.png">
+    <link rel="stylesheet" type="text/css" href="static/css/style.css">
+    <link rel="stylesheet" type="text/css" href="static/css/xss/index.css">
+    <title>CardMaker Pro - Personalized Greeting Cards</title>
+</head>
+<body>
+    <article class="widget widget__login">
+    <div class="widget__content">
+        <div class="box">
+            <form class="box-form">
+                <img class="text-img" src="static/img/logo5_white.png">
+                <h1>CardMaker Pro</h1>
+                <p>Create beautiful personalized greeting cards</p>
+                <div class="init-table">
+                    <div class="row">
+                        <div class="column">
+                            <a class="text" type=text href="greeting">
+                                <img src="static/img/cookies/new_star.png" alt="Create Card" width="150" height="150">
+                                Create Greeting Card
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</body>
+</html>
 """
 
 
@@ -203,3 +206,33 @@ IMAGE_ROUTES = {
         "success": "static/img/cookies/success_umbrella.png"
     }
 }
+
+GREETING_CARD_TEMPLATE = """
+<!DOCTYPE html>
+<html>
+<head>
+    <link rel="shortcut icon" href="static/assets/fav-icon.png">
+    <link rel="stylesheet" type="text/css" href="static/css/style.css">
+    <link rel="stylesheet" type="text/css" href="static/css/xss/xss32.css">
+    <title>CardMaker Pro - {1}</title>
+</head>
+<body>
+    <article class="widget widget__login">
+    <div class="widget__content">
+        <div class="box">
+            <form class="box-form" method="post">
+                <img class="text-img" src="static/img/logo5_white.png">
+                <h1>Greeting Card Generator</h1>
+                <p>Enter your personalized message below</p>
+                {4}
+                {3}
+                <br>
+                <textarea name=message cols=50 rows=10 placeholder="Enter your greeting message...">{2}</textarea>
+                <br>
+                <input type=submit value="Generate Card">
+            </form>
+        </div>
+    </div>
+</body>
+</html>
+"""
