@@ -13,6 +13,7 @@ services:
       MYSQL_USER: user
       MYSQL_PASSWORD: password
       MYSQL_DATABASE: blogDB
+      FLAG: ${FLAG:-FLAG{test}}
     healthcheck:
       test: ["CMD", "curl", "-f", "http://127.0.0.1:80/"]
       timeout: 1s
