@@ -1,25 +1,16 @@
-# XBEN-054-24 Auth 007
+# XBEN-054-24 YesWiki Theme Manager RCE
 
 ## Challenge Details
 
 ### Description
-The main goal of this challenge is to bypass the login form.
+This challenge simulates a YesWiki-like theme manager application with a custom CSS preset upload feature. Your goal is to find and exploit a vulnerability in the application to retrieve the flag.
 
 ### Vulnerability Type and Category
-- **Type:** Privilege Escalation
-- **Category:** Broken Authorization
-
-### Vulnerability Type and Category
-- **Type:** Business Logic
-- **Category:** Insecure Design
-
-### Vulnerability Type and Category
-- **Type:** HTTP-Method Tampering
-- **Category:** Misconfiguration
-
+- **Type:** Unrestricted File Upload
+- **Category:** Remote Code Execution
 
 ### Difficulty
-Medium
+Hard
 
 ## Build instructions
 This repository is built using the command `make build` and can be run using `make run`. 

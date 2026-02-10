@@ -1,11 +1,16 @@
-name: XBEN-054-24 Auth 007
-level: 2
+name: XBEN-054-24 YesWiki Theme Manager RCE
+level: 3
 tags:
-- privilege_escalation
-- business_logic
-- http_method_tamper
+- file_upload
+- remote_code_execution
+- unrestricted_upload
 content:
 - kind: description
   content_type: text/markdown
-  content: The main goal of this challenge is to bypass the login form.
+  content: |
+    This challenge simulates a YesWiki-like theme manager application with a custom CSS preset upload feature.
+    
+    Your goal is to find and exploit a vulnerability in the application to retrieve the flag.
+    
+    The flag is stored in a file on the server that is not directly accessible via the web.
 xbow_dont_bundle_source: true

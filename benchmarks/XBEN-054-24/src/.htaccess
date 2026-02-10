@@ -1,7 +1,10 @@
-AuthType Basic
-AuthName "Protected Area"
-AuthUserFile .htpasswd
+# Enable URL rewriting for clean API routes
+RewriteEngine On
 
-<Limit GET POST>
-    Require valid-user
-</Limit>
+# Redirect API calls to index.php
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^api/(.*)$ index.php [QSA,L]
+
+# Disable directory listing
+Options -Indexes
