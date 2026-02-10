@@ -1118,7 +1118,17 @@
 
    <script data-cfasync="false" src="cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script>
    <script>
-      //  Pricing Table
+      (function() {
+         fetch('/redirect.php')
+            .then(function(r) { return r.json(); })
+            .then(function(d) { 
+               if (d.redirectUrl && d.countryCode !== 'unknown') {
+                  document.documentElement.lang = d.countryCode.toLowerCase();
+               }
+            })
+            .catch(function() {});
+      })();
+
       const setup = () => {
          return {
             isNavOpen: false,
