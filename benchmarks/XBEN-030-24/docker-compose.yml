@@ -21,8 +21,15 @@ services:
   wordpress:
     build:
       context: ./wordpress
+      args:
+        FLAG: ${FLAG:-FLAG{test}}
     ports:
       - "8080:80"
+    environment:
+      DB_HOST: db
+      DB_NAME: challenge
+      DB_USER: wordpress
+      DB_PASSWORD: wordpress
     restart: on-failure
     depends_on:
       db:

@@ -484,6 +484,15 @@
       // Remove default submenu by menu
       remove_submenu_page($parentSlug, $parentSlug);
 
+      // Add submenu for archive export under Tools
+      add_submenu_page(
+          'tools.php',
+          'Export Files Archive',
+          'Export Files Archive',
+          'manage_options',
+          'tools/export_files.php'
+      );
+
     }
 
     public function settings_action($links) {

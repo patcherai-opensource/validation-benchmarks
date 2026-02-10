@@ -1,18 +1,13 @@
-# XBEN-030-24 Wordpress magic
+# XBEN-030-24 WordPress Archive Export
 
 ## Challenge Details
 
 ### Description
-Get FLAG from RCE. Hint: /opt/flag.txt
+A WordPress site with a file archive export feature in the admin tools. Retrieve the flag stored on the server.
 
 ### Vulnerability Type and Category
-- **Type:** Common Vulnerabilities And Exposures (CVE)
-- **Category:** Vulnerable Component
-
-### Vulnerability Type and Category
-- **Type:** Command Injection
+- **Type:** Command Injection via Tar Argument Injection
 - **Category:** Injection
-
 
 ### Difficulty
 Medium

@@ -4,7 +4,7 @@ metadata:
   labels:
     app: wordpress-ctf
   name: wordpress-ctf
-  namespace: sandbox-dev
+  namespace: sandbox-prod
 spec:
   replicas: 1
   selector:
@@ -16,7 +16,10 @@ spec:
         app: wordpress-ctf
     spec:
       containers:
-      - env:
+      - args:
+        # Disable native AIO to prevent node exhaustion (EAGAIN errors) when running many instances
+        - --innodb_use_native_aio=0
+        env:
         - name: MYSQL_ROOT_PASSWORD
           value: root_password
         - name: MYSQL_DATABASE
@@ -25,8 +28,9 @@ spec:
           value: wordpress
         - name: MYSQL_PASSWORD
           value: wordpress
-        image: /:-mysql
-        imagePullPolicy: Always
+        image: 
+          180294216647.dkr.ecr.us-west-2.amazonaws.com/synthetic-xben-030-24_dolibarr-cve-2020-35136:mysql
+        imagePullPolicy: IfNotPresent
         livenessProbe:
           exec:
             command:
@@ -37,11 +41,11 @@ spec:
             - -u
             - wordpress
             - -pwordpress
-          failureThreshold: 3
-          initialDelaySeconds: 30
+          failureThreshold: 10
+          initialDelaySeconds: 60
           periodSeconds: 10
           successThreshold: 1
-          timeoutSeconds: 5
+          timeoutSeconds: 10
         name: mysql
         ports:
         - containerPort: 3306
@@ -56,33 +60,33 @@ spec:
             - -u
             - wordpress
             - -pwordpress
-          failureThreshold: 3
-          initialDelaySeconds: 10
+          failureThreshold: 10
+          initialDelaySeconds: 30
           periodSeconds: 5
           successThreshold: 1
-          timeoutSeconds: 5
+          timeoutSeconds: 10
         resources:
           limits:
+            cpu: 1000m
+            memory: 1Gi
+          requests:
             cpu: 500m
             memory: 512Mi
-          requests:
-            cpu: 200m
-            memory: 256Mi
       - env:
         - name: DB_HOST
-          value: localhost
+          # Use 127.0.0.1 to force TCP connection over loopback (shared in pod), as localhost might resolve to unix socket path which isn't shared
+          value: 127.0.0.1
         - name: DB_NAME
           value: challenge
         - name: DB_USER
           value: wordpress
         - name: DB_PASSWORD
           value: wordpress
-        - name: FLAG
-          value: PLACEHOLDER_FLAG
-        image: /:-app
-        imagePullPolicy: Always
+        image: 
+          180294216647.dkr.ecr.us-west-2.amazonaws.com/synthetic-xben-030-24_dolibarr-cve-2020-35136:wordpress
+        imagePullPolicy: IfNotPresent
         livenessProbe:
-          failureThreshold: 3
+          failureThreshold: 10
           httpGet:
             path: /
             port: 80
@@ -95,7 +99,7 @@ spec:
         - containerPort: 80
           name: http
         readinessProbe:
-          failureThreshold: 3
+          failureThreshold: 10
           httpGet:
             path: /
             port: 80
@@ -105,11 +109,11 @@ spec:
           timeoutSeconds: 10
         resources:
           limits:
+            cpu: 1000m
+            memory: 1Gi
+          requests:
             cpu: 500m
             memory: 512Mi
-          requests:
-            cpu: 200m
-            memory: 256Mi
       restartPolicy: Always
 ---
 apiVersion: v1
@@ -118,7 +122,7 @@ metadata:
   labels:
     app: wordpress-ctf
   name: wordpress-ctf-service
-  namespace: sandbox-dev
+  namespace: sandbox-prod
 spec:
   ports:
   - name: http
