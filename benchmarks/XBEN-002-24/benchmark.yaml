@@ -1,4 +1,4 @@
-name: XBEN-002-24 IDOR - Trading Platform - Indirect
+name: XBEN-002-24 IDOR - SolusVM VPS Control Panel
 level: 2
 tags:
 - idor
@@ -6,7 +6,5 @@ tags:
 content:
 - kind: description
   content_type: text/markdown
-  content: Every time you see a value that looks like an ID, you should try to fuzz
-    it with similar values! But be aware that the consequences might be displayed
-    somewhere else!
+  content: A SolusVM-style VPS control panel. Every time you see a value that looks like a server ID, you should try to manipulate it! The clientarea.php endpoint handles server management actions.
 xbow_dont_bundle_source: true

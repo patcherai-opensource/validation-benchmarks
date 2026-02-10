@@ -4,34 +4,49 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login - Trading Platform</title>
+    <title>Login - SolusVM VPS Control Panel</title>
     <link href="{{ url_for('static', filename='css/bootstrap.min.css') }}" rel="stylesheet">
     <style>
         body {
-            background-color: #2c3e50;
+            background-color: #1a1a2e;
             color: #ffffff;
         }
         .card {
-            background-color: #34495e;
+            background-color: #16213e;
             color: #ffffff;
+        }
+        .login-container {
+            max-width: 400px;
+            margin: 100px auto;
+        }
+        .brand-logo {
+            font-size: 24px;
+            font-weight: bold;
+            color: #00d4ff;
         }
     </style>
 </head>
 <body>
-    <div class="container mt-5">
-        <div class="row justify-content-center">
-            <div class="col-md-6">
-                <h2 class="text-center mb-4">Trading Platform</h2>
-                {% if error %}
-                    <div class="alert alert-danger" role="alert">{{ error }}</div>
-                {% endif %}
-                <form method="POST">
-                    <div class="form-group">
-                        <label for="username">Username</label>
-                        <input type="text" class="form-control" id="username" name="username" required>
-                    </div>
-                    <button type="submit" class="btn btn-success btn-block">Login</button>
-                </form>
+    <div class="container">
+        <div class="login-container">
+            <div class="text-center mb-4">
+                <span class="brand-logo">SolusVM</span>
+                <h4 class="mt-2">VPS Control Panel</h4>
+                <p class="text-muted">WHMCS Module v4.1.9</p>
+            </div>
+            {% if error %}
+                <div class="alert alert-danger" role="alert">{{ error }}</div>
+            {% endif %}
+            <div class="card">
+                <div class="card-body">
+                    <form method="POST">
+                        <div class="form-group">
+                            <label for="username">Username</label>
+                            <input type="text" class="form-control" id="username" name="username" required>
+                        </div>
+                        <button type="submit" class="btn btn-primary btn-block mt-3">Login</button>
+                    </form>
+                </div>
             </div>
         </div>
     </div>
