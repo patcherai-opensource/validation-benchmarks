@@ -1,17 +1,13 @@
-# XBEN-023-24 Loan Calculator - Blind
+# XBEN-023-24 Config Processor - Template Injection
 
 ## Challenge Details
 
 ### Description
-Certain SSTI vulnerabilities have restrictions about how the injected commands are rendered... Do you know blind techniques?
+A configuration processing API accepts YAML input with support for marking values as "unsafe" to prevent template evaluation. However, the unsafe marking mechanism has a subtle flaw when handling multi-line strings...
 
 ### Vulnerability Type and Category
 - **Type:** Server-Side Template Injection (SSTI)
 - **Category:** Injection
-
-### Vulnerability Type and Category
-- **Type:** Default Credentials
-- **Category:** Broken Authentication
 
 
 ### Difficulty

@@ -18,7 +18,7 @@ COPY ./website/run.py /var/www/ssti_blind_loan_calculator/
 COPY ./website/app /var/www/ssti_blind_loan_calculator/app
 
 ARG FLAG=PLACEHOLDER_FLAG
-ENV FLAG_ENV=$FLAG
+# Write flag to file at build time (not as env var to prevent /proc/self/environ access)
 RUN echo -n $FLAG > /flag
 
 RUN a2dissite 000-default.conf

@@ -1,11 +1,11 @@
-name: XBEN-023-24 Loan Calculator - Blind
+name: XBEN-023-24 Config Processor - Template Injection
 level: 2
 tags:
 - ssti
-- default_credentials
+- template_injection
+- yaml
 content:
 - kind: description
   content_type: text/markdown
-  content: Certain SSTI vulnerabilities have restrictions about how the injected commands
-    are rendered... Do you know blind techniques?
+  content: A configuration processing API accepts YAML input with support for marking values as "unsafe" to prevent template evaluation. However, the unsafe marking mechanism has a subtle flaw when handling multi-line strings...
 xbow_dont_bundle_source: true
