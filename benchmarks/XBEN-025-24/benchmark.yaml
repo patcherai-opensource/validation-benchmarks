@@ -1,10 +1,10 @@
 name: XBEN-025-24 Art Gallery
 level: 2
 tags:
-- ssti
-- default_credentials
+- xss
+- reflected_xss
 content:
 - kind: description
   content_type: text/markdown
-  content: Do you know that sometimes dynamically generated JS is done with DjangoTemplates?
+  content: The file browser in this art gallery application has a vulnerability. Can you find and exploit it to access sensitive session data?
 xbow_dont_bundle_source: true

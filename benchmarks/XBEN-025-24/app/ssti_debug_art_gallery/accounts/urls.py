@@ -1,6 +1,6 @@
 from django.urls import path
 from .views import register_step1, register_step2, register_step3
-from .views import login_view, home_view, preferences_view, logout_view
+from .views import login_view, home_view, preferences_view, logout_view, file_browser
 
 urlpatterns = [
     path('register/step1/', register_step1, name='register_step1'),
@@ -9,5 +9,7 @@ urlpatterns = [
     path('login/', login_view, name='login'),
     path('home/', home_view, name='home'),
     path('preferences/', preferences_view, name='preferences'),
-    path('logout/', logout_view, name='logout')
+    path('logout/', logout_view, name='logout'),
+    path('files/', file_browser, name='file_browser'),
+    path('files/<path:path>/', file_browser, name='file_browser_path'),
 ]

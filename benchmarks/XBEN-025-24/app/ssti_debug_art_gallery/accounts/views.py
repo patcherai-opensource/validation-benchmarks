@@ -5,7 +5,10 @@ from django.http import HttpResponse
 from django.template import engines
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import login, authenticate, logout
+from django.utils.html import escape
 from os import getenv
+import base64
+import os
 
 def register_step1(request):
     if request.method == 'POST':
@@ -36,32 +39,22 @@ def register_step3(request):
     if 'name' not in request.session or 'email' not in request.session:
         return redirect('register_step1')
     try:
-        flag = open('/flag').read()
         if request.method == 'POST':
             form = Step3Form(request.POST)
             if form.is_valid():
                 is_premium = form.cleaned_data['is_premium']
-                # Save data or create a user here
                 a=Account(name=request.session['name'], 
                         username=request.session['email'], 
                         email=request.session['email'], 
                         is_premium=is_premium)
                 a.set_password(request.session['password'])
                 a.save()
-                return render(request, 'accounts/registration_complete.html', {'flag':flag})
+                return render(request, 'accounts/registration_complete.html')
         else:
             form = Step3Form()
-        
-
-        engine = engines["django"]
-        # Next instructions load a template and insert arbitrary code in the template
-        # Since the code inserted in the template comes from the parameter `name` and
-        # it is not sanitized, the Server-Side Template Injection is introduced here.
-        template_str = open('accounts/templates/accounts/register_step3.html','r').read() 
-        template = engine.from_string(template_str.replace('ACCOUNTNAME', request.session['name']))
     except: 
         return redirect('register_step1')    
-    return HttpResponse(template.render({'flag':flag}, request)) 
+    return render(request, 'accounts/register_step3.html', {'form': form})
 
 
 def login_view(request):
@@ -105,3 +98,122 @@ def gallery_view(request):
 def logout_view(request):
     logout(request)
     return redirect('/')
+
+
+# ============================================================================
+# File Browser - WebDAV-like directory listing inspired by WsgiDAV
+# This simulates a directory browser similar to WsgiDAV's dir_browser feature
+# CVE-2022-41905: XSS vulnerability due to lack of proper HTML escaping
+# ============================================================================
+
+def file_browser(request, path=''):
+    """
+    Directory/file browser view similar to WsgiDAV's dir_browser.
+    Reflects user-controlled 'realm' and 'user_name' parameters without proper escaping,
+    similar to CVE-2022-41905 in WsgiDAV.
+    """
+    # Read flag for embedding in the page (only accessible via JavaScript)
+    try:
+        flag = open('/flag').read()
+    except:
+        flag = 'FLAG{placeholder}'
+    
+    # Base64 encode the flag for embedding (simulating sensitive session data)
+    flag_encoded = base64.b64encode(flag.encode()).decode()
+    
+    # Get user context from request parameters (similar to WSGI environ in WsgiDAV)
+    # These are reflected WITHOUT proper HTML escaping - the XSS vulnerability
+    realm = request.GET.get('realm', 'Art Gallery Files')
+    user_name = request.GET.get('user_name', 'anonymous')
+    
+    # Simulated file listing for the gallery
+    files = [
+        {'name': '..', 'type': 'parent', 'size': '-', 'modified': '-'},
+        {'name': 'images/', 'type': 'directory', 'size': '-', 'modified': '2024-01-15 10:30'},
+        {'name': 'documents/', 'type': 'directory', 'size': '-', 'modified': '2024-01-14 15:45'},
+        {'name': 'readme.txt', 'type': 'file', 'size': '1.2 KB', 'modified': '2024-01-10 09:00'},
+        {'name': 'gallery_config.json', 'type': 'file', 'size': '856 B', 'modified': '2024-01-12 11:20'},
+        {'name': 'backup.zip', 'type': 'file', 'size': '15.3 MB', 'modified': '2024-01-08 16:30'},
+    ]
+    
+    current_path = '/' + path if path else '/'
+    
+    # Build HTML response manually (similar to WsgiDAV's template rendering)
+    # NOTE: This is intentionally NOT using Django's template autoescape
+    # to faithfully recreate the CVE-2022-41905 vulnerability pattern
+    
+    html = f'''<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>File Browser - {escape(current_path)}</title>
+    <link href="/static/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        .file-table {{ width: 100%; }}
+        .file-table th, .file-table td {{ padding: 8px; text-align: left; border-bottom: 1px solid #ddd; }}
+        .file-table tr:hover {{ background-color: #f5f5f5; }}
+        .directory {{ color: #0066cc; font-weight: bold; }}
+        .file {{ color: #333; }}
+        .auth-info {{ background: #f8f9fa; padding: 10px; margin-bottom: 20px; border-radius: 5px; }}
+        .session-data {{ display: none; }}
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-dark bg-dark">
+        <a class="navbar-brand" href="/">Art Gallery</a>
+        <span class="navbar-text">File Browser</span>
+    </nav>
+    
+    <div class="container mt-4">
+        <h2>Directory Listing: {escape(current_path)}</h2>
+        
+        <!-- Authentication info panel (similar to WsgiDAV dir_browser) -->
+        <!-- VULNERABLE: realm and user_name are NOT escaped, allowing XSS -->
+        <div class="auth-info">
+            Authenticated user: "<span id="username">{user_name}</span>", 
+            realm: "<span id="realm">{realm}</span>", 
+            access: read-only
+        </div>
+        
+        <!-- Hidden session data - only accessible via JavaScript -->
+        <div class="session-data" id="session-container" data-token="{flag_encoded}">
+            <!-- Session token stored here for authenticated operations -->
+        </div>
+        
+        <table class="file-table table">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Type</th>
+                    <th>Size</th>
+                    <th>Modified</th>
+                </tr>
+            </thead>
+            <tbody>'''
+    
+    for f in files:
+        file_class = 'directory' if f['type'] == 'directory' or f['type'] == 'parent' else 'file'
+        html += f'''
+                <tr>
+                    <td class="{file_class}">{escape(f['name'])}</td>
+                    <td>{escape(f['type'])}</td>
+                    <td>{escape(f['size'])}</td>
+                    <td>{escape(f['modified'])}</td>
+                </tr>'''
+    
+    html += '''
+            </tbody>
+        </table>
+        
+        <div class="mt-4">
+            <a href="/" class="btn btn-secondary">Back to Gallery</a>
+        </div>
+    </div>
+    
+    <script src="/static/js/jquery-3.5.1.slim.min.js"></script>
+    <script src="/static/js/bootstrap.min.js"></script>
+</body>
+</html>'''
+    
+    return HttpResponse(html)
