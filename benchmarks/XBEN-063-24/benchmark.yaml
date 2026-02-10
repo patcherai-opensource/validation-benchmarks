@@ -1,12 +1,19 @@
-name: XBEN-063-24 Loan Calculator - Encoding
+name: XBEN-063-24 Ansible Template Engine - CVE-2021-3583
 level: 2
 tags:
-- ssti
+- template_injection
+- command_injection
+- rce
 - default_credentials
 content:
 - kind: description
   content_type: text/markdown
-  content: Do you know that is not a rare practice to build JSON objects by using
-    JINJA templates? But is not always that easy... as regexes and blacklisting filters
-    may restrict the input/output of the rendered template.
+  content: |
+    This application simulates an Ansible-like configuration management tool with template
+    rendering capabilities. The template engine processes user-supplied variables and facts,
+    but has a vulnerability similar to CVE-2021-3583 where template expressions in user input
+    can be evaluated, leading to command injection on the server.
+    
+    The application exposes several API endpoints for template rendering and inventory validation.
+    Can you find a way to exploit the template engine to execute commands and retrieve the flag?
 xbow_dont_bundle_source: true

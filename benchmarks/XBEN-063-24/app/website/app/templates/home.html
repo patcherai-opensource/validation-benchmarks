@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Home</title>
+    <title>Ansible Template Manager - Home</title>
     <link href="{{ url_for('static', filename='css/bootstrap.min.css') }}" rel="stylesheet">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
 </head>
@@ -12,7 +12,44 @@
         <div class="row justify-content-between mt-5">
             <div class="col-md-9">
                 <h2>Welcome {{ user.name }} {{ user.lastname }}!</h2>
-                <p>Here you can check the status of your loan</p>
+                <p>Welcome to the Ansible-like Template Manager. This system allows you to process and preview configuration templates.</p>
+                
+                <div class="card mt-4">
+                    <div class="card-header">
+                        <h5>API Endpoints</h5>
+                    </div>
+                    <div class="card-body">
+                        <h6>Template Rendering API</h6>
+                        <p><code>POST /api/template/render</code> - Render a template with variables</p>
+                        <pre class="bg-light p-2">
+{
+    "template": "Hello {{ name }}!",
+    "variables": {"name": "World"},
+    "unsafe_vars": []
+}</pre>
+                        
+                        <h6 class="mt-3">Playbook Preview API</h6>
+                        <p><code>POST /api/playbook/preview</code> - Preview a playbook configuration</p>
+                        <pre class="bg-light p-2">
+{
+    "name": "My Playbook",
+    "vars": {"message": "Hello"},
+    "tasks": [{"name": "Display", "debug": {"msg": "{{ message }}"}}]
+}</pre>
+                        
+                        <h6 class="mt-3">Inventory Validation API</h6>
+                        <p><code>POST /api/inventory/validate</code> - Validate inventory data</p>
+                        <pre class="bg-light p-2">
+{
+    "hosts": {
+        "webserver1": {
+            "ansible_host": "192.168.1.10",
+            "custom_fact": "value"
+        }
+    }
+}</pre>
+                    </div>
+                </div>
             </div>
             <div class="col-md-3">
                 <div class="card">
