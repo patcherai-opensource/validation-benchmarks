@@ -3,89 +3,243 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Service Status Dashboard</title>
+    <title>TaskRunner - Network Diagnostics Platform</title>
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            background: #f4f4f9;
+        * {
             margin: 0;
             padding: 0;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
+            box-sizing: border-box;
         }
-
-        #service-container {
-            width: 80%;
-            max-width: 600px;
-            background: white;
-            border-radius: 8px;
-            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-            padding: 20px;
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            min-height: 100vh;
+            color: #e4e4e4;
         }
-
-        .service {
-            padding: 10px 20px;
-            border-radius: 5px;
+        .navbar {
+            background: rgba(0,0,0,0.3);
+            padding: 1rem 2rem;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            font-size: 16px;
-            transition: background-color 0.3s;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
         }
-
-        .red {
-            background-color: #ffdddd;
-            color: #d04437;
+        .logo {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #4ecca3;
         }
-
-        .green {
-            background-color: #ddffdd;
-            color: #4a934a;
+        .nav-links a {
+            color: #a4a4a4;
+            text-decoration: none;
+            margin-left: 2rem;
+            transition: color 0.2s;
+        }
+        .nav-links a:hover {
+            color: #4ecca3;
+        }
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+        .hero {
+            text-align: center;
+            padding: 3rem 0;
+        }
+        .hero h1 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+        .hero p {
+            color: #a4a4a4;
+            font-size: 1.1rem;
+        }
+        .card {
+            background: rgba(255,255,255,0.05);
+            border-radius: 12px;
+            padding: 2rem;
+            margin: 1.5rem 0;
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+        .card h2 {
+            color: #4ecca3;
+            margin-bottom: 1rem;
+        }
+        .form-group {
+            margin-bottom: 1rem;
+        }
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: #a4a4a4;
+        }
+        .form-group select, .form-group input {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid rgba(255,255,255,0.2);
+            border-radius: 6px;
+            background: rgba(0,0,0,0.3);
+            color: #fff;
+            font-size: 1rem;
+        }
+        .btn {
+            background: #4ecca3;
+            color: #1a1a2e;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: bold;
+            transition: background 0.2s;
+        }
+        .btn:hover {
+            background: #3db892;
+        }
+        .output {
+            background: #0a0a0f;
+            border-radius: 6px;
+            padding: 1rem;
+            margin-top: 1rem;
+            font-family: 'Monaco', 'Consolas', monospace;
+            font-size: 0.9rem;
+            white-space: pre-wrap;
+            max-height: 400px;
+            overflow-y: auto;
+            display: none;
+        }
+        .status-badge {
+            display: inline-block;
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            margin-bottom: 1rem;
+        }
+        .status-success {
+            background: rgba(78, 204, 163, 0.2);
+            color: #4ecca3;
+        }
+        .status-failed {
+            background: rgba(255, 99, 71, 0.2);
+            color: #ff6347;
+        }
+        .features {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+            margin-top: 2rem;
+        }
+        .feature {
+            background: rgba(255,255,255,0.03);
+            padding: 1.5rem;
+            border-radius: 8px;
+            border: 1px solid rgba(255,255,255,0.05);
+        }
+        .feature h3 {
+            color: #4ecca3;
+            margin-bottom: 0.5rem;
+        }
+        .feature p {
+            color: #888;
+            font-size: 0.9rem;
         }
     </style>
 </head>
 <body>
-    <div id="service-container">
-        <div id="apache" class="service">Apache: Loading...</div>
-        <div id="mysql" class="service">MySQL: Loading...</div>
-        <div id="nginx" class="service">Nginx: Loading...</div>
-        <div id="ssh" class="service">SSH: Loading...</div>
+    <nav class="navbar">
+        <div class="logo">TaskRunner</div>
+        <div class="nav-links">
+            <a href="/">Dashboard</a>
+            <a href="/docs">API Docs</a>
+            <a href="/api/v1/commands">Commands</a>
+        </div>
+    </nav>
+
+    <div class="container">
+        <div class="hero">
+            <h1>Network Diagnostics Platform</h1>
+            <p>Execute network diagnostic commands through our secure task runner interface</p>
+        </div>
+
+        <div class="card">
+            <h2>Run Diagnostic Task</h2>
+            <form id="task-form">
+                <div class="form-group">
+                    <label for="command">Command</label>
+                    <select id="command" name="command">
+                        <option value="ping">ping</option>
+                        <option value="nslookup">nslookup</option>
+                        <option value="curl">curl</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="target">Target / Arguments</label>
+                    <input type="text" id="target" name="target" placeholder="e.g., google.com or -c 4 google.com">
+                </div>
+                <button type="submit" class="btn">Execute Task</button>
+            </form>
+            <div id="output" class="output"></div>
+        </div>
+
+        <div class="features">
+            <div class="feature">
+                <h3>Secure Execution</h3>
+                <p>Commands run in isolated subprocess environments with controlled permissions.</p>
+            </div>
+            <div class="feature">
+                <h3>API Access</h3>
+                <p>Full REST API available for automation and integration with your workflows.</p>
+            </div>
+            <div class="feature">
+                <h3>Audit Trail</h3>
+                <p>All task executions are logged with unique task IDs for tracking.</p>
+            </div>
+        </div>
     </div>
 
     <script>
-        document.addEventListener("DOMContentLoaded", function() {
-            const services = ['apache', 'mysql', 'nginx', 'ssh'];
-
-            services.forEach(service => {
-                fetch('/check_service', {
+        document.getElementById('task-form').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const command = document.getElementById('command').value;
+            const target = document.getElementById('target').value;
+            const outputDiv = document.getElementById('output');
+            
+            outputDiv.style.display = 'block';
+            outputDiv.textContent = 'Executing task...';
+            
+            const args = target.split(/\s+/).filter(a => a.length > 0);
+            
+            try {
+                const response = await fetch('/api/v1/tasks/run', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
                     },
-                    body: JSON.stringify({ service_name: service })
-                })
-                .then(response => response.json())
-                .then(data => {
-                    const element = document.getElementById(service);
-                    if (data.status === "true") {
-                        element.classList.add('green');
-                        element.textContent = service.toUpperCase() + ": Running";
-                    } else {
-                        element.classList.add('red');
-                        element.textContent = service.toUpperCase() + ": Stopped";
-                    }
-                })
-                .catch(error => {
-                    console.error('Error:', error);
-                    const element = document.getElementById(service);
-                    element.textContent = service.toUpperCase() + ": Error";
+                    body: JSON.stringify({
+                        command: command,
+                        args: args
+                    })
                 });
-            });
+                
+                const data = await response.json();
+                
+                if (response.ok) {
+                    let output = `Task ID: ${data.task_id}\n`;
+                    output += `Status: ${data.result.status}\n`;
+                    output += `Return Code: ${data.result.rc}\n`;
+                    output += `\n--- stdout ---\n${data.result.stdout || '(empty)'}`;
+                    if (data.result.stderr) {
+                        output += `\n--- stderr ---\n${data.result.stderr}`;
+                    }
+                    outputDiv.textContent = output;
+                } else {
+                    outputDiv.textContent = `Error: ${data.error}`;
+                }
+            } catch (err) {
+                outputDiv.textContent = `Request failed: ${err.message}`;
+            }
         });
     </script>
 </body>

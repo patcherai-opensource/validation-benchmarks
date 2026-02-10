@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>API Documentation - TaskRunner</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            min-height: 100vh;
+            color: #e4e4e4;
+        }
+        .navbar {
+            background: rgba(0,0,0,0.3);
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+        .logo {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #4ecca3;
+        }
+        .nav-links a {
+            color: #a4a4a4;
+            text-decoration: none;
+            margin-left: 2rem;
+            transition: color 0.2s;
+        }
+        .nav-links a:hover {
+            color: #4ecca3;
+        }
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+        h1 {
+            margin-bottom: 2rem;
+            color: #4ecca3;
+        }
+        h2 {
+            color: #4ecca3;
+            margin: 2rem 0 1rem 0;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+            padding-bottom: 0.5rem;
+        }
+        h3 {
+            color: #fff;
+            margin: 1.5rem 0 0.5rem 0;
+        }
+        p {
+            color: #a4a4a4;
+            line-height: 1.6;
+            margin-bottom: 1rem;
+        }
+        code {
+            background: rgba(0,0,0,0.3);
+            padding: 0.2rem 0.5rem;
+            border-radius: 4px;
+            font-family: 'Monaco', 'Consolas', monospace;
+            color: #4ecca3;
+        }
+        pre {
+            background: #0a0a0f;
+            padding: 1rem;
+            border-radius: 8px;
+            overflow-x: auto;
+            margin: 1rem 0;
+            font-family: 'Monaco', 'Consolas', monospace;
+            font-size: 0.9rem;
+            line-height: 1.5;
+        }
+        .method {
+            display: inline-block;
+            padding: 0.25rem 0.5rem;
+            border-radius: 4px;
+            font-weight: bold;
+            font-size: 0.85rem;
+            margin-right: 0.5rem;
+        }
+        .method-get { background: #61affe; color: #000; }
+        .method-post { background: #49cc90; color: #000; }
+        .endpoint {
+            background: rgba(255,255,255,0.1);
+            padding: 1rem;
+            border-radius: 8px;
+            margin: 1rem 0;
+        }
+        .endpoint-path {
+            font-family: 'Monaco', 'Consolas', monospace;
+            font-size: 1.1rem;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1rem 0;
+        }
+        th, td {
+            text-align: left;
+            padding: 0.75rem;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+        th {
+            color: #4ecca3;
+        }
+        td {
+            color: #a4a4a4;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="logo">TaskRunner</div>
+        <div class="nav-links">
+            <a href="/">Dashboard</a>
+            <a href="/docs">API Docs</a>
+            <a href="/api/v1/commands">Commands</a>
+        </div>
+    </nav>
+
+    <div class="container">
+        <h1>API Documentation</h1>
+        
+        <p>TaskRunner provides a REST API for executing network diagnostic commands in a controlled environment. 
+        This API allows automation tools to integrate with TaskRunner for scheduled diagnostics and monitoring.</p>
+
+        <h2>Authentication</h2>
+        <p>Currently, the API does not require authentication. This is intended for internal network use only.</p>
+
+        <h2>Endpoints</h2>
+
+        <div class="endpoint">
+            <h3><span class="method method-post">POST</span> <span class="endpoint-path">/api/v1/tasks/run</span></h3>
+            <p>Execute a diagnostic command with specified arguments.</p>
+            
+            <h4>Request Body</h4>
+            <table>
+                <tr>
+                    <th>Field</th>
+                    <th>Type</th>
+                    <th>Required</th>
+                    <th>Description</th>
+                </tr>
+                <tr>
+                    <td><code>command</code></td>
+                    <td>string</td>
+                    <td>Yes</td>
+                    <td>The command to execute (must be in allowed list)</td>
+                </tr>
+                <tr>
+                    <td><code>args</code></td>
+                    <td>array</td>
+                    <td>No</td>
+                    <td>List of command arguments</td>
+                </tr>
+            </table>
+
+            <h4>Example Request</h4>
+            <pre>curl -X POST http://localhost:8080/api/v1/tasks/run \
+  -H "Content-Type: application/json" \
+  -d '{"command": "ping", "args": ["-c", "4", "google.com"]}'</pre>
+
+            <h4>Example Response</h4>
+            <pre>{
+  "task_id": "a1b2c3d4",
+  "command": "ping",
+  "result": {
+    "status": "successful",
+    "rc": 0,
+    "stdout": "PING google.com (142.250.80.46)...",
+    "stderr": ""
+  }
+}</pre>
+        </div>
+
+        <div class="endpoint">
+            <h3><span class="method method-get">GET</span> <span class="endpoint-path">/api/v1/commands</span></h3>
+            <p>List all available commands that can be executed.</p>
+            
+            <h4>Example Response</h4>
+            <pre>{
+  "available_commands": ["ping", "nslookup", "dig", "traceroute", "curl", "wget"],
+  "description": "These commands are available for network diagnostics"
+}</pre>
+        </div>
+
+        <div class="endpoint">
+            <h3><span class="method method-get">GET</span> <span class="endpoint-path">/api/v1/tasks/status/{task_id}</span></h3>
+            <p>Get the status of a previously executed task.</p>
+            
+            <h4>Path Parameters</h4>
+            <table>
+                <tr>
+                    <th>Parameter</th>
+                    <th>Type</th>
+                    <th>Description</th>
+                </tr>
+                <tr>
+                    <td><code>task_id</code></td>
+                    <td>string</td>
+                    <td>The unique task identifier returned from the run endpoint</td>
+                </tr>
+            </table>
+        </div>
+
+        <h2>Error Responses</h2>
+        <p>All error responses follow this format:</p>
+        <pre>{
+  "error": "Description of the error"
+}</pre>
+        
+        <table>
+            <tr>
+                <th>Status Code</th>
+                <th>Description</th>
+            </tr>
+            <tr>
+                <td>400</td>
+                <td>Bad Request - Invalid JSON or missing required fields</td>
+            </tr>
+            <tr>
+                <td>403</td>
+                <td>Forbidden - Command not in allowed list</td>
+            </tr>
+            <tr>
+                <td>404</td>
+                <td>Not Found - Endpoint or resource not found</td>
+            </tr>
+            <tr>
+                <td>500</td>
+                <td>Internal Server Error</td>
+            </tr>
+        </table>
+
+        <h2>Rate Limits</h2>
+        <p>There are currently no rate limits imposed on the API.</p>
+    </div>
+</body>
+</html>
