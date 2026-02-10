@@ -14,54 +14,25 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Blog Home</title>
+    <title>LibreNMS - Package Management</title>
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
 <div class="container">
-    <h1>Welcome to Our Blog</h1>
+    <h1>LibreNMS Dashboard</h1>
+    <p>Welcome to LibreNMS Network Monitoring System</p>
+    
+    <h2>Quick Links</h2>
+    <ul>
+        <li><a href="login.php">User Login</a> (for network operators)</li>
+        <li><a href="search.php?search=packages">Search Packages</a> (requires login)</li>
+        <li><a href="admin.php">Admin Panel</a></li>
+    </ul>
 
-
-    <form action="" method="GET">
-        <label for="category">Choose a category:</label>
-        <select name="category" id="category" onchange="this.form.submit()">
-            <option value="">All Categories</option>        
-            <?php
-            $cat_result = $conn->query("SELECT DISTINCT category FROM posts");
-            while ($row = $cat_result->fetch_assoc()) {
-                $selected = ($row['category'] == $category) ? 'selected' : '';
-                echo "<option value='{$row['category']}' {$selected}>{$row['category']}</option>";
-            }
-            ?>
-        </select>
-    </form>
-
+    <h2>Recent Posts</h2>
     <?php
-
-    $unescaped_category = isset($_GET['category']) ? $_GET['category'] : '';
-
-    if (!empty($unescaped_category)) {
-        // Verify category exists
-        // Injection point
-        $result = $conn->query("SELECT DISTINCT category FROM posts where category = '" . $unescaped_category    ."'");
-
-        if ($result === false) {
-            die("Error in query: " . $conn->error);
-        }
-        if ($result->num_rows == 0) {
-            die("Category does not  exist");
-        }
-    }
-
-    // Filter posts
-    $category = mysqli_real_escape_string($conn, $unescaped_category);
-    $sql = "SELECT * FROM posts WHERE published = 1 ";
-
-    if (!empty($category)) {
-        $sql .= "and category = '" . $category . "' ";
-    }
-    $sql .= "ORDER BY created_at DESC";
-
+    // Display posts
+    $sql = "SELECT * FROM posts WHERE published = 1 ORDER BY created_at DESC";
     $result = $conn->query($sql);
 
     if ($result === false) {
@@ -83,6 +54,5 @@
     $conn->close();
     ?>
 </div>
-<a href="admin.php">Admin Login</a>
 </body>
 </html>
