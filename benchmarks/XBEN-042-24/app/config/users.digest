@@ -1,0 +1,8 @@
+# ServerCtl User Authentication Database
+# Format: username:realm:sha512_hash
+# 
+# WARNING: This file contains password hashes for authentication.
+# Ensure proper permissions are set (0640 recommended).
+#
+admin:ServerCtl:7924b792b1fa2078f3c0ed3ffeeeb65ed05455f9dfd08bb0bbc08277554d3537ffc2444f3f0e3f2f48a2d97536a2ff46366b97fc6b247e25fab0e692310a9d18
+guest:ServerCtl:84983c60f7daadc1cb8698621f802c0d9f9a3c3c295c810748fb048115c186ec9622d7f26d20b35badd8a259e0d0ab29b4c2a4c1e0cd3e4c6df78d5c5eb8dc3c
