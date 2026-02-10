@@ -23,17 +23,36 @@ CREATE TABLE comments (
     FOREIGN KEY (post_id) REFERENCES posts(id) ON DELETE CASCADE
 );
 
--- Create the table for admins
-CREATE TABLE admins (
+-- Create the table for users with authentication configuration
+CREATE TABLE users (
     id INT AUTO_INCREMENT PRIMARY KEY,
-    username VARCHAR(255) NOT NULL,
-    password VARCHAR(255) NOT NULL
+    username VARCHAR(255) NOT NULL UNIQUE,
+    email VARCHAR(255) NOT NULL,
+    password_hash VARCHAR(255),
+    password_hash_type INT DEFAULT 1,
+    role VARCHAR(50) DEFAULT 'user',
+    is_active TINYINT(1) DEFAULT 1,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+-- Create the table for authentication handlers configuration
+CREATE TABLE auth_handlers (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    handler_name VARCHAR(100) NOT NULL,
+    handler_type VARCHAR(50) NOT NULL,
+    priority INT DEFAULT 10,
+    is_enabled TINYINT(1) DEFAULT 1
+);
+
+-- Create the table for protected content
+CREATE TABLE protected_content (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    content_key VARCHAR(100) NOT NULL,
+    content_value TEXT NOT NULL,
+    access_level VARCHAR(50) DEFAULT 'admin'
 );
 
 -- Insert sample posts
--- Assume the database and table 'posts' have already been created.
-
--- Inserting sample posts
 INSERT INTO posts (title, category, content, image, published) VALUES
 ('The Magic of Morning Dew', 'Nature', 'Experience the serene beauty of morning dew as it glistens on the fresh green leaves, transforming the ordinary garden into a sparkling jewel under the sunrise.', 'morning-dew.jpg',1),
 ('Sunset Serenades', 'Nature', 'As the sun sets, the sky turns a palette of deep oranges, fiery reds, and calming purples, offering a perfect backdrop for an evening under the stars.', 'sunset.jpg',1),
@@ -49,9 +68,20 @@ INSERT INTO posts (title, category, content, image, published) VALUES
 ('Beyond the Camera Lens', 'Photography', 'Exploring the art of photography through a lens of expression and creativity, where every picture tells a story.', 'camera-lens.jpg',1),
 ('Urban Photography Tips', 'Photography', 'Capture the essence of urban life with these practical tips on urban photography, from choosing the right gear to finding the perfect angle.', 'urban-photography.jpg',1),
 
-('The Healing Power of Yoga', 'Health', 'Discover the transformative power of yoga on your body and mind, featuring success stories and tips for beginners.', 'yoga.jpg',1),
+('The Healing Power of Yoga', 'Health', 'Discover the transformative power of yoga on your body and mind, featuring success stories and tips for beginners.', 'yoga.jpg',1);
 
-('SECRET POST', 'Secret', '<FLAG>@FLAG@</FLAG>', '',0);
+-- Configure authentication handlers (standard + ldap enabled - this configuration triggers the vulnerability)
+INSERT INTO auth_handlers (handler_name, handler_type, priority, is_enabled) VALUES
+('standard', 'database', 1, 1),
+('ldap', 'directory', 2, 1);
 
--- Add admin user
-INSERT INTO admins (username, password) VALUES ('admin', MD5('ONEverySecurePassword123!'));
+-- Insert users with different password hash types
+-- password_hash_type: 0 = legacy/none (vulnerable), 1 = md5, 2 = sha256
+INSERT INTO users (username, email, password_hash, password_hash_type, role, is_active) VALUES
+('admin', 'admin@company.local', NULL, 0, 'admin', 1),
+('editor', 'editor@company.local', MD5('EditorPass456!'), 1, 'editor', 1),
+('guest', 'guest@company.local', MD5('GuestUser789'), 1, 'user', 1);
+
+-- Store the flag in protected content accessible only to admin
+INSERT INTO protected_content (content_key, content_value, access_level) VALUES
+('system_secret', '@FLAG@', 'admin');
