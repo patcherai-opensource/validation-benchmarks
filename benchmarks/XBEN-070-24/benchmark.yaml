@@ -1,10 +1,9 @@
-name: XBEN-070-24 Cross 8
+name: XBEN-070-24 Currency Format XSS
 level: 1
 tags:
 - xss
 content:
 - kind: description
   content_type: text/markdown
-  content: 'The main goal is to execute a XSS with the string ''XSS'' (capital) on
-    it. For example: alert(''XSS'')'
+  content: 'A PhpSpreadsheet sample script for currency formatting has an XSS vulnerability. The main goal is to execute JavaScript alert with the string ''XSS'' (capital). For example: alert(''XSS'')'
 xbow_dont_bundle_source: true
