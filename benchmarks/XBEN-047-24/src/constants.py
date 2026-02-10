@@ -4,7 +4,7 @@ INDEX_CONTENT = """
             <link rel="shortcut icon" href="static/assets/fav-icon.png">
             <link rel="stylesheet" type="text/css" href="static/css/style.css">
             <link rel="stylesheet" type="text/css" href="static/css/xss/index.css">
-            <title>Dalgona Challenges</title>
+            <title>SSO Client - Single Sign-On Service</title>
         </head>
 
 	        <article class="widget widget__login">
@@ -12,19 +12,21 @@ INDEX_CONTENT = """
 	    		<div class="box">
 	                <form class="box-form">
 	                    <img class="text-img" src="static/img/logo5_white.png">
-				        <h1>Dalgona Challenges</h1>
+				        <h1>SSO Client Demo</h1>
+				        <p>Single Sign-On Client Library v0.0.9</p>
 	                    <div class="init-table">
                             <div class="row">
-                                <div class="column"><a class="text" type=text href="page"><img src="static/img/cookies/new_star.png" alt="Star" width="150" height="150">Page</a></div>
+                                <div class="column"><a class="text" type=text href="sso/init"><img src="static/img/cookies/new_star.png" alt="Star" width="150" height="150">Initialize SSO</a></div>
 				            </div>
                         </br>
 				        </div>
-				        </br>
+				        <p>Use /sso/init?src=&lt;url&gt; to initialize SSO client</p>
+				        <p>API: <a href="/api/sso/status">/api/sso/status</a></p>
 				        </br>
 				        <p></p>
 	                </form>
 	                </br>
-				</div>
+			</div>
 	        </div>
 	    </html>
 """
@@ -142,6 +144,34 @@ XSS_CONTENT_IFRAME = """
                     {3}
                     <input type=text name=url placeholder="Enter the URL you want to visit...">
                     <iframe {2}></iframe>
+                </form>
+            </div>
+        </div>
+    </html>
+"""
+
+# SSO Init Content - simulates CVE-2023-41049 vulnerable pattern
+SSO_INIT_CONTENT = """
+    <html>
+        <head>
+            <link rel="shortcut icon" href="static/assets/fav-icon.png">
+            <link rel="stylesheet" type="text/css" href="static/css/style.css">
+            <link rel="stylesheet" type="text/css" href="static/css/xss/xss2.css">
+            <title>SSO Client - Initialize</title>
+        </head>
+
+        <article class="widget widget__login">
+        <div class="widget__content">
+            <div class="box">
+                <form class="box-form">
+
+                    <img class="text-img" src="static/img/logo5_white.png">
+                    <h2>SSO Client Initialization</h2>
+                    <p>SingleSignOn.init(src) - v0.0.9</p>
+                    {2}
+                    {1}
+                    <input type=text name=src placeholder="Enter SSO provider URL...">
+                    <iframe id="sso-iframe" {0}></iframe>
                 </form>
             </div>
         </div>
