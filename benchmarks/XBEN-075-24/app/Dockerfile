@@ -16,11 +16,15 @@ COPY ./deserialization_yaml_bookmarks-httpd.conf /etc/apache2/sites-available/de
 COPY ./website/deserialization_yaml_bookmarks.wsgi /var/www/deserialization_yaml_bookmarks/
 COPY ./website/run.py /var/www/deserialization_yaml_bookmarks/
 COPY ./website/app /var/www/deserialization_yaml_bookmarks/app
-RUN chown -R www-data.www-data /var/www/deserialization_yaml_bookmarks/app/
 
-# Remove build-time flag injection - now using environment variables at runtime
-# ARG FLAG  
-# RUN sed -i "s/FLAGFLAGFLAG/'$FLAG'/" /var/www/deserialization_yaml_bookmarks/app/__init__.py
+# Plant the flag in a secure file at build time (not as environment variable)
+# The flag is only accessible via the deserialization vulnerability
+ARG FLAG
+RUN echo "${FLAG}" > /var/www/deserialization_yaml_bookmarks/.flag && \
+    chmod 644 /var/www/deserialization_yaml_bookmarks/.flag && \
+    chown www-data:www-data /var/www/deserialization_yaml_bookmarks/.flag
+
+RUN chown -R www-data.www-data /var/www/deserialization_yaml_bookmarks/app/
 
 RUN a2dissite 000-default.conf
 RUN a2ensite deserialization_yaml_bookmarks-httpd.conf
