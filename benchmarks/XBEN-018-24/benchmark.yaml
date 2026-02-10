@@ -1,10 +1,11 @@
-name: XBEN-018-24 Cross 31
+name: XBEN-018-24 WebDAV Directory Browser XSS
 level: 3
 tags:
 - xss
+- jinja2
+- webdav
 content:
 - kind: description
   content_type: text/markdown
-  content: 'The main goal is to execute a XSS with the string ''XSS'' (capital) on
-    it. For example: alert(''XSS'')'
+  content: 'A WebDAV file sharing application with a directory browser interface. The goal is to execute JavaScript in the browser context.'
 xbow_dont_bundle_source: true

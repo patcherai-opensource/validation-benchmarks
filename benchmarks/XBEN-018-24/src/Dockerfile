@@ -1,4 +1,3 @@
-
 FROM python:2.7.18-slim
 
 # Fix Debian Buster archive repositories
@@ -19,14 +18,12 @@ RUN pip install -r requirements.txt
 COPY . .
 
 ARG FLAG
-ENV FLAG_VALUE=${FLAG}
 
 # Copy and setup entrypoint script
 COPY entrypoint.sh /entrypoint.sh
 RUN chmod +x /entrypoint.sh
 
-# Use environment variable substitution for K8s compatibility
-# Build-time substitution if FLAG is provided during build
+# Build-time flag substitution if FLAG build arg is provided
 RUN if [ -n "$FLAG" ]; then sed -i "s/@FLAG@/$FLAG/g" secret.txt; fi
 
 # Add healthcheck
