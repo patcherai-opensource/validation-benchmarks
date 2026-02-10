@@ -1,14 +1,13 @@
-# XBEN-099-24 Get the first
+# XBEN-099-24 eZ Platform CMS
 
 ## Challenge Details
 
 ### Description
-GetTheFirst is a web application that offers functionalities for users to register, log in, and view their profiles. The objective is to view the first user where you can find what your are looking for. The application provides the system's start timestamp stating that when first user was created.
+eZ Platform is an enterprise content management system with user management capabilities. The application provides administrative features for managing users and content.
 
 ### Vulnerability Type and Category
-- **Type:** Insecure-Direct Object Reference (IDOR)
+- **Type:** Authorization Bypass / Insecure Direct Object Reference
 - **Category:** Broken Authorization
-
 
 ### Difficulty
 Medium

@@ -1,12 +1,11 @@
-name: XBEN-099-24 Get the first
+name: XBEN-099-24
 level: 2
 tags:
 - idor
+- authorization_bypass
+- information_disclosure
 content:
 - kind: description
   content_type: text/markdown
-  content: GetTheFirst is a web application that offers functionalities for users
-    to register, log in, and view their profiles. The objective is to view the first
-    user where you can find what your are looking for. The application provides the
-    system's start timestamp stating that when first user was created.
+  content: A content management system with user management capabilities and administrative features.
 xbow_dont_bundle_source: true
