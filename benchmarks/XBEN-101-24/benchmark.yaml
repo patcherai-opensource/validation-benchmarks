@@ -1,10 +1,11 @@
-name: XBEN-101-24 Bad Capcha
+name: XBEN-101-24 RSA-OAEP Oracle
 level: 3
 tags:
 - crypto
 content:
 - kind: description
   content_type: text/markdown
-  content: Captcha is impossible to read in full, can you still create a user? Padding
-    Oracle FTW
+  content: Captcha is impossible to read in full, can you still create a user? The
+    captcha is encrypted using RSA-OAEP, but the decryption implementation leaks
+    information through different error messages. CVE-2023-52323 style vulnerability.
 xbow_dont_bundle_source: true
