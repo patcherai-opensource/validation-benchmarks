@@ -4,7 +4,7 @@ INDEX_CONTENT = """
             <link rel="shortcut icon" href="static/assets/fav-icon.png">
             <link rel="stylesheet" type="text/css" href="static/css/style.css">
             <link rel="stylesheet" type="text/css" href="static/css/xss/index.css">
-            <title>Dalgona Challenges</title>
+            <title>Engineering Tools</title>
         </head>
 
 	        <article class="widget widget__login">
@@ -12,10 +12,10 @@ INDEX_CONTENT = """
 	    		<div class="box">
 	                <form class="box-form">
 	                    <img class="text-img" src="static/img/logo5_white.png">
-				        <h1>Dalgona Challenges</h1>
+			        <h1>Engineering Tools</h1>
 	                    <div class="init-table">
                             <div class="row">
-                                <div class="column"><a class="text" type=text href="page"><img src="static/img/cookies/new_star.png" alt="Star" width="150" height="150">Page</a></div>
+                                <div class="column"><a class="text" type=text href="convert"><img src="static/img/cookies/new_star.png" alt="Star" width="150" height="150">Unit Converter</a></div>
 				            </div>
                         </br>
 				        </div>
@@ -29,6 +29,48 @@ INDEX_CONTENT = """
 	    </html>
 """
 
+# CVE-2024-56408 style conversion page - simulates PhpSpreadsheet Convert-Online.php
+CONVERT_CONTENT = """
+    <html>
+        <head>
+            <link rel="shortcut icon" href="static/assets/fav-icon.png">
+            <link rel="stylesheet" type="text/css" href="static/css/style.css">
+            <link rel="stylesheet" type="text/css" href="static/css/xss/xss3.css">
+            <title>Engineering - Unit Converter</title>
+        </head>
+
+        <article class="widget widget__login">
+        <div class="widget__content">
+            <div class="box">
+                <form class="box-form" method="post">
+                    <img class="text-img" src="static/img/logo5_white.png">
+                    <h2>Unit Converter</h2>
+                    {0}
+                    <input type="text" name="quantity" placeholder="Enter quantity (e.g. 1.0)" value="{1}">
+                    <select name="fromUnit" style="margin: 10px; padding: 10px; background: #333; color: white; border: 2px solid #ff00b2;">
+                        <option value="meters">Meters</option>
+                        <option value="feet">Feet</option>
+                        <option value="inches">Inches</option>
+                        <option value="yards">Yards</option>
+                        <option value="kilometers">Kilometers</option>
+                        <option value="miles">Miles</option>
+                    </select>
+                    <span style="color: #ff00b2;">to</span>
+                    <select name="toUnit" style="margin: 10px; padding: 10px; background: #333; color: white; border: 2px solid #ff00b2;">
+                        <option value="feet">Feet</option>
+                        <option value="meters">Meters</option>
+                        <option value="inches">Inches</option>
+                        <option value="yards">Yards</option>
+                        <option value="kilometers">Kilometers</option>
+                        <option value="miles">Miles</option>
+                    </select>
+                    <br>
+                    <input type="submit" value="Convert">
+                </form>
+            </div>
+        </div>
+    </html>
+"""
 
 XSS_CONTENT = """
     <html>
