@@ -1,16 +1,103 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Ping Tool</title>
+    <title>Ansible Automation Console</title>
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles.css') }}">
 </head>
 <body>
     <div class="container">
-        <h1>Ping Tool</h1>
-        <form action="/ping" method="post">
-            <input type="text" name="ip_address" placeholder="Enter IP Address" required>
-            <button type="submit">Ping</button>
-        </form>
+        <h1>Ansible Automation Console</h1>
+        <p class="subtitle">Configuration Management & Pipe Lookup Interface</p>
+        
+        <div class="section">
+            <h2>Configuration Variables (Facts)</h2>
+            <p class="help-text">Set variables that will be interpolated in pipe lookups. 
+            Similar to Ansible facts or set_fact values.</p>
+            <div id="config-display">Loading...</div>
+            <div class="form-group">
+                <input type="text" id="var-name" placeholder="Variable name" />
+                <input type="text" id="var-value" placeholder="Variable value" />
+                <button onclick="setConfig()">Set Variable</button>
+            </div>
+        </div>
+        
+        <div class="section">
+            <h2>Pipe Lookup</h2>
+            <p class="help-text">Execute commands with variable interpolation. 
+            Use <code>{{ "{{ variable_name }}" }}</code> syntax to reference variables.</p>
+            <div class="form-group">
+                <select id="pipe-command">
+                    <option value="echo">echo</option>
+                    <option value="whoami">whoami</option>
+                    <option value="date">date</option>
+                    <option value="id">id</option>
+                    <option value="hostname">hostname</option>
+                    <option value="uname">uname</option>
+                    <option value="getent">getent</option>
+                    <option value="ls">ls</option>
+                </select>
+                <input type="text" id="pipe-args" placeholder="Arguments (use {{ variable }} syntax)" />
+                <button onclick="executePipe()">Execute</button>
+            </div>
+            <div id="pipe-result" class="result-box"></div>
+        </div>
+        
+        <div class="section">
+            <h2>System Information</h2>
+            <button onclick="getSystemInfo()">Get System Info</button>
+            <div id="system-info" class="result-box"></div>
+        </div>
     </div>
+    
+    <script>
+        async function loadConfig() {
+            const resp = await fetch('/api/config');
+            const data = await resp.json();
+            document.getElementById('config-display').innerHTML = 
+                '<pre>' + JSON.stringify(data, null, 2) + '</pre>';
+        }
+        
+        async function setConfig() {
+            const name = document.getElementById('var-name').value;
+            const value = document.getElementById('var-value').value;
+            if (!name) return alert('Variable name required');
+            
+            const body = {};
+            body[name] = value;
+            
+            await fetch('/api/config', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify(body)
+            });
+            loadConfig();
+            document.getElementById('var-name').value = '';
+            document.getElementById('var-value').value = '';
+        }
+        
+        async function executePipe() {
+            const command = document.getElementById('pipe-command').value;
+            const args = document.getElementById('pipe-args').value;
+            
+            const resp = await fetch('/api/lookup/pipe', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({command, args})
+            });
+            const data = await resp.json();
+            document.getElementById('pipe-result').innerHTML = 
+                '<strong>Command:</strong> ' + (data.command || 'N/A') + '<br>' +
+                '<strong>Result:</strong><pre>' + (data.result || data.error || 'No output') + '</pre>';
+        }
+        
+        async function getSystemInfo() {
+            const resp = await fetch('/api/system/info');
+            const data = await resp.json();
+            document.getElementById('system-info').innerHTML = 
+                '<pre>' + JSON.stringify(data, null, 2) + '</pre>';
+        }
+        
+        loadConfig();
+    </script>
 </body>
 </html>

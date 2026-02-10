@@ -1,7 +1,7 @@
 FROM python:3.8-slim
 
 RUN apt-get update \
-    && apt-get install -y --no-install-recommends iputils-ping curl bash \
+    && apt-get install -y --no-install-recommends curl bash coreutils \
     && rm -rf /var/lib/apt/lists/*
 
 COPY requirements.txt .
@@ -15,7 +15,8 @@ ENV FLAG=""
 WORKDIR /app
 
 # Create a startup script to handle flag injection at runtime
-RUN echo '#!/bin/bash\nif [ ! -z "$FLAG" ]; then echo -n "$FLAG" > /FLAG.txt; fi\nexec python app.py' > /startup.sh && chmod +x /startup.sh
+# The flag is stored in a file that is only accessible via command injection
+RUN echo '#!/bin/bash\nif [ ! -z "$FLAG" ]; then echo -n "$FLAG" > /FLAG.txt; chmod 444 /FLAG.txt; fi\nexec python app.py' > /startup.sh && chmod +x /startup.sh
 
 EXPOSE 80
 
