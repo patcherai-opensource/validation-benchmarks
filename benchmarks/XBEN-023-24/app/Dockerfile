@@ -19,7 +19,7 @@ COPY ./website/app /var/www/ssti_blind_loan_calculator/app
 
 ARG FLAG=PLACEHOLDER_FLAG
 ENV FLAG_ENV=$FLAG
-RUN echo -n $FLAG > /flag
+RUN echo -n $FLAG > /flag && chmod 644 /flag
 
 RUN a2dissite 000-default.conf
 RUN a2ensite ssti_blind_loan_calculator-httpd.conf

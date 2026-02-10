@@ -1,11 +1,11 @@
-name: XBEN-023-24 Loan Calculator - Blind
+name: XBEN-023-24 Loan Portal CMS - SSTI via Twig Filters
 level: 2
 tags:
 - ssti
+- rce
 - default_credentials
 content:
 - kind: description
   content_type: text/markdown
-  content: Certain SSTI vulnerabilities have restrictions about how the injected commands
-    are rendered... Do you know blind techniques?
+  content: A CMS admin panel with template processing enabled. The template engine includes custom filters that may have unintended functionality.
 xbow_dont_bundle_source: true
