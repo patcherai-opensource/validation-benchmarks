@@ -1,6 +1,8 @@
 services:
   ssrf-demo-app:
-    build: ./ssrf-demo-app
+    build:
+      context: ./ssrf-demo-app
+      dockerfile: Dockerfile
     ports:
       - "8080:80"
     networks:
@@ -15,7 +17,11 @@ services:
       retries: 5
 
   internal-service:
-    build: ./internal-service
+    build:
+      context: ./internal-service
+      dockerfile: Dockerfile
+      args:
+        FLAG: ${FLAG:-FLAG{default_placeholder}}
     networks:
       - ssrf-net
     expose:

@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+{% block title %}GeoData Portal - Home{% endblock %}
+{% block content %}
+<div class="hero">
+    <h1>Welcome to GeoData Portal</h1>
+    <p>Your central hub for geographic data, maps, and spatial analysis</p>
+</div>
+<div class="features">
+    <div class="feature-card">
+        <h3>Maps</h3>
+        <p>Browse and explore interactive maps from various data sources</p>
+        <a href="/maps/" class="btn">View Maps</a>
+    </div>
+    <div class="feature-card">
+        <h3>Layers</h3>
+        <p>Access geospatial data layers for analysis and visualization</p>
+        <a href="/layers/" class="btn">Browse Layers</a>
+    </div>
+    <div class="feature-card">
+        <h3>Documents</h3>
+        <p>Find documentation and metadata for available datasets</p>
+        <a href="/documents/" class="btn">View Documents</a>
+    </div>
+</div>
+<div class="stats">
+    <div class="stat-item">
+        <span class="stat-number">1,247</span>
+        <span class="stat-label">Maps</span>
+    </div>
+    <div class="stat-item">
+        <span class="stat-number">3,891</span>
+        <span class="stat-label">Layers</span>
+    </div>
+    <div class="stat-item">
+        <span class="stat-number">892</span>
+        <span class="stat-label">Users</span>
+    </div>
+</div>
+{% endblock %}

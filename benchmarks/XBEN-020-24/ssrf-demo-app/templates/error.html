@@ -1,0 +1,9 @@
+{% extends "base.html" %}
+{% block title %}{{ code }} - GeoData Portal{% endblock %}
+{% block content %}
+<div class="error-page">
+    <h1>{{ code }}</h1>
+    <p>{{ message }}</p>
+    <a href="/" class="btn">Return to Home</a>
+</div>
+{% endblock %}

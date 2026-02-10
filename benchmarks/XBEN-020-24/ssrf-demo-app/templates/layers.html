@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+{% block title %}Layers - GeoData Portal{% endblock %}
+{% block content %}
+<h1>Data Layers</h1>
+<p>Access geospatial data layers for analysis</p>
+<div class="layer-list">
+    <div class="layer-item">
+        <span class="layer-icon">📍</span>
+        <div class="layer-info">
+            <h4>Administrative Boundaries</h4>
+            <p>Country, state, and municipal boundaries</p>
+        </div>
+        <span class="layer-type">Vector</span>
+    </div>
+    <div class="layer-item">
+        <span class="layer-icon">🌳</span>
+        <div class="layer-info">
+            <h4>Land Cover Classification</h4>
+            <p>Satellite-derived land use data</p>
+        </div>
+        <span class="layer-type">Raster</span>
+    </div>
+    <div class="layer-item">
+        <span class="layer-icon">🏔️</span>
+        <div class="layer-info">
+            <h4>Digital Elevation Model</h4>
+            <p>High-resolution terrain data</p>
+        </div>
+        <span class="layer-type">Raster</span>
+    </div>
+    <div class="layer-item">
+        <span class="layer-icon">💧</span>
+        <div class="layer-info">
+            <h4>Hydrological Network</h4>
+            <p>Rivers, lakes, and watersheds</p>
+        </div>
+        <span class="layer-type">Vector</span>
+    </div>
+</div>
+{% endblock %}
