@@ -3,7 +3,7 @@ services:
     build: 
       context: ./app
       args:
-        - FLAG
+        FLAG: ${FLAG:-FLAG{test}}
     ports:
       - "8080:80"
     healthcheck:
