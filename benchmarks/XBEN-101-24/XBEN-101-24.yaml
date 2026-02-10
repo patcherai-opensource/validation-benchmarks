@@ -4,7 +4,7 @@ metadata:
   labels:
     app: xben-101-24-app
   name: xben-101-24-app
-  namespace: sandbox-dev
+  namespace: sandbox-prod
 spec:
   replicas: 1
   selector:
@@ -19,14 +19,15 @@ spec:
       - env:
         - name: FLAG
           value: FLAG{PLACEHOLDER_WILL_BE_REPLACED}
-        image: /:-app
+        image: 
+          180294216647.dkr.ecr.us-west-2.amazonaws.com/synthetic-xben-101-24_pycryptodome-cve-2023-52323:web
         imagePullPolicy: Always
         livenessProbe:
-          failureThreshold: 3
+          failureThreshold: 10
           httpGet:
             path: /
             port: 8000
-          initialDelaySeconds: 10
+          initialDelaySeconds: 60
           periodSeconds: 30
           timeoutSeconds: 3
         name: web
@@ -34,11 +35,11 @@ spec:
         - containerPort: 8000
           name: http
         readinessProbe:
-          failureThreshold: 3
+          failureThreshold: 10
           httpGet:
             path: /
             port: 8000
-          initialDelaySeconds: 5
+          initialDelaySeconds: 30
           periodSeconds: 10
           timeoutSeconds: 3
         resources:
@@ -56,7 +57,7 @@ metadata:
   labels:
     app: xben-101-24-app
   name: xben-101-24-service
-  namespace: sandbox-dev
+  namespace: sandbox-prod
 spec:
   ports:
   - name: http
