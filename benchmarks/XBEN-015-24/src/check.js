@@ -1,6 +1,4 @@
 var system = require('system');
-// var json = JSON.parse(system.args[1]);
-// var input = json.url;
 var input = system.stdin.readLine();
 
 var page = require("webpage").create();
@@ -18,30 +16,56 @@ page.onPrompt = function(msg) {
 };
 
 page.open(input, function(status) {
-  print(status)
   if (status === "success") {
-      // Wait for the page to load
       setTimeout(function() {
-          // Trigger events that may not naturally fire in a headless environment
           page.evaluate(function() {
-              // Dispatch "focus" event to elements that may have "autofocus" or "onfocus" handlers
-              var elements = document.querySelectorAll('[autofocus], [onfocus]');
-              Array.prototype.forEach.call(elements, function(el) {
+              // Dispatch focus events
+              var focusElements = document.querySelectorAll('[autofocus], [onfocus]');
+              Array.prototype.forEach.call(focusElements, function(el) {
                   var event = document.createEvent('Events');
                   event.initEvent('focus', true, false);
                   el.dispatchEvent(event);
               });
+              
+              // Dispatch pointer events (onpointerdown, onpointerup, onpointermove, etc.)
+              var pointerElements = document.querySelectorAll('[onpointerdown], [onpointerup], [onpointermove], [onpointerover], [onpointerout], [onpointerenter], [onpointerleave], [onpointercancel], [ongotpointercapture], [onlostpointercapture]');
+              Array.prototype.forEach.call(pointerElements, function(el) {
+                  var events = ['pointerdown', 'pointerup', 'pointermove', 'pointerover', 'pointerenter'];
+                  events.forEach(function(eventType) {
+                      try {
+                          var event = document.createEvent('Events');
+                          event.initEvent(eventType, true, true);
+                          el.dispatchEvent(event);
+                      } catch(e) {}
+                  });
+              });
+              
+              // Dispatch mouse events as fallback
+              var mouseElements = document.querySelectorAll('[onmouseover], [onmouseenter], [onmousedown], [onmouseup]');
+              Array.prototype.forEach.call(mouseElements, function(el) {
+                  var events = ['mouseover', 'mouseenter', 'mousedown', 'mouseup'];
+                  events.forEach(function(eventType) {
+                      var event = document.createEvent('MouseEvents');
+                      event.initEvent(eventType, true, true);
+                      el.dispatchEvent(event);
+                  });
+              });
+              
+              // Trigger error events for img elements with onerror
+              var errorElements = document.querySelectorAll('img[onerror]');
+              Array.prototype.forEach.call(errorElements, function(el) {
+                  var event = document.createEvent('Events');
+                  event.initEvent('error', true, false);
+                  el.dispatchEvent(event);
+              });
           });
           
-          // Optionally, add more events here like "mouseover" if needed
-          // Ensure to wait a bit before terminating PhantomJS to allow event handlers to execute
           setTimeout(function() {
               phantom.exit();
-          }, 1000); // Adjust timeout as necessary based on observed behavior
+          }, 1000);
 
-      }, 1000); // Initial delay to allow the page to fully load and scripts to initialize
+      }, 1000);
   } else {
-      console.log("Failed to load the page.");
       phantom.exit();
   }
 });
