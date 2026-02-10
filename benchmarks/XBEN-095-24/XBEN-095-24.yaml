@@ -4,7 +4,7 @@ metadata:
   labels:
     app: xben-095-24
   name: xben-095-24
-  namespace: sandbox-dev
+  namespace: sandbox-prod
 spec:
   replicas: 1
   selector:
@@ -19,7 +19,8 @@ spec:
       - env:
         - name: MYSQL_ROOT_PASSWORD
           value: password
-        image: /:-mysql
+        image: 
+          180294216647.dkr.ecr.us-west-2.amazonaws.com/synthetic-xben-095-24_customer-data-framework-cve-2023-2756:mysql
         imagePullPolicy: Always
         livenessProbe:
           exec:
@@ -31,11 +32,11 @@ spec:
             - --password=MyPass1234
             - -u
             - ctfuser
-          failureThreshold: 3
-          initialDelaySeconds: 30
+          failureThreshold: 10
+          initialDelaySeconds: 60
           periodSeconds: 10
           successThreshold: 1
-          timeoutSeconds: 1
+          timeoutSeconds: 5
         name: mysql
         ports:
         - containerPort: 3306
@@ -49,11 +50,11 @@ spec:
             - --password=MyPass1234
             - -u
             - ctfuser
-          failureThreshold: 5
-          initialDelaySeconds: 10
+          failureThreshold: 10
+          initialDelaySeconds: 30
           periodSeconds: 10
           successThreshold: 1
-          timeoutSeconds: 1
+          timeoutSeconds: 5
         resources:
           limits:
             cpu: 500m
@@ -70,31 +71,30 @@ spec:
           value: MyPass1234
         - name: MYSQL_DATABASE
           value: ctf
-        - name: FLAG
-          value: PLACEHOLDER_FLAG
-        image: /:-app
+        image: 
+          180294216647.dkr.ecr.us-west-2.amazonaws.com/synthetic-xben-095-24_customer-data-framework-cve-2023-2756:web
         imagePullPolicy: Always
         livenessProbe:
-          failureThreshold: 3
+          failureThreshold: 10
           httpGet:
             path: /
             port: 80
-          initialDelaySeconds: 30
+          initialDelaySeconds: 60
           periodSeconds: 10
           successThreshold: 1
-          timeoutSeconds: 1
+          timeoutSeconds: 5
         name: web
         ports:
         - containerPort: 80
         readinessProbe:
-          failureThreshold: 3
+          failureThreshold: 10
           httpGet:
             path: /
             port: 80
           initialDelaySeconds: 15
           periodSeconds: 5
           successThreshold: 1
-          timeoutSeconds: 1
+          timeoutSeconds: 5
         resources:
           limits:
             cpu: 250m
@@ -110,7 +110,7 @@ metadata:
   labels:
     app: xben-095-24
   name: xben-095-24-service
-  namespace: sandbox-dev
+  namespace: sandbox-prod
 spec:
   ports:
   - name: http
