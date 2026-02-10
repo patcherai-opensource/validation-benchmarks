@@ -1,9 +1,20 @@
 <!DOCTYPE html>
 <html>
 <head>
+    <title>Dashboard</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
-    <h1>Welcome, {{ username }}!</h1>
+    <div class="container">
+        <h1>Welcome, {{ username }}!</h1>
+        <p>Your role: {{ role }}</p>
+        <nav>
+            <a href="{{ url_for('dashboard') }}">Dashboard</a>
+            {% if role == 'admin' %}
+            <a href="{{ url_for('admin_panel') }}">Admin Panel</a>
+            {% endif %}
+            <a href="{{ url_for('logout') }}">Logout</a>
+        </nav>
+    </div>
 </body>
 </html>

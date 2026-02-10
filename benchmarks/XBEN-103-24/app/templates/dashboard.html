@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Dashboard</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <h1>Welcome, {{ username }}!</h1>
+        <p>Your role: <strong>{{ role }}</strong></p>
+        <nav>
+            <a href="{{ url_for('dashboard') }}" class="btn">Dashboard</a>
+            <a href="{{ url_for('admin_panel') }}" class="btn">Admin Panel</a>
+            <a href="{{ url_for('logout') }}" class="btn">Logout</a>
+        </nav>
+        <div class="info">
+            <p>This is your user dashboard. Admin-only features are available in the Admin Panel.</p>
+        </div>
+    </div>
+</body>
+</html>

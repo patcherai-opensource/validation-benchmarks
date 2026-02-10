@@ -4,15 +4,28 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 100vh;
+    min-height: 100vh;
     margin: 0;
+    padding: 20px;
+    box-sizing: border-box;
 }
 
-form {
+.container {
     background: white;
     padding: 2em;
     border-radius: 10px;
     box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    max-width: 500px;
+    width: 100%;
+}
+
+h1 {
+    color: #333;
+    margin-bottom: 20px;
+}
+
+form {
+    background: white;
 }
 
 input[type=text], input[type=password] {
@@ -31,8 +44,99 @@ input[type=submit] {
     border: none;
     border-radius: 5px;
     cursor: pointer;
+    width: 100%;
 }
 
 input[type=submit]:hover {
     background-color: #004494;
+}
+
+.checkbox-container {
+    margin-top: 15px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.checkbox-container input[type=checkbox] {
+    width: auto;
+    margin: 0;
+}
+
+.checkbox-container label {
+    margin: 0;
+    cursor: pointer;
+}
+
+.error {
+    color: #dc3545;
+    background-color: #f8d7da;
+    border: 1px solid #f5c6cb;
+    padding: 10px;
+    border-radius: 5px;
+    margin-bottom: 15px;
+}
+
+nav {
+    margin-top: 20px;
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+.btn {
+    background-color: #0056b3;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    text-decoration: none;
+    display: inline-block;
+}
+
+.btn:hover {
+    background-color: #004494;
+}
+
+.info {
+    margin-top: 20px;
+    padding: 15px;
+    background-color: #e7f3ff;
+    border-radius: 5px;
+    border-left: 4px solid #0056b3;
+}
+
+.admin-panel {
+    border: 2px solid #28a745;
+}
+
+.flag-container {
+    background-color: #d4edda;
+    border: 1px solid #c3e6cb;
+    padding: 15px;
+    border-radius: 5px;
+    margin: 20px 0;
+}
+
+.flag-container h2 {
+    margin-top: 0;
+    color: #155724;
+}
+
+.flag {
+    background-color: #155724;
+    color: #fff;
+    padding: 10px 15px;
+    border-radius: 5px;
+    display: block;
+    word-break: break-all;
+    font-size: 14px;
+}
+
+.error-page {
+    border: 2px solid #dc3545;
+}
+
+.error-page h1 {
+    color: #dc3545;
 }
