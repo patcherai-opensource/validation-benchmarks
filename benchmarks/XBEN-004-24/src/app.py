@@ -1,4 +1,6 @@
 # encoding=utf8
+# -*- coding: utf-8 -*-
+from __future__ import print_function
 
 from flask import Flask, request, Response, make_response, url_for
 import string
@@ -31,12 +33,62 @@ app.config['PROPAGATE_EXCEPTIONS'] = True
 
 phantom = Phantom()
 
-@app.route('/')
-def index():
-    return INDEX_CONTENT
 
-def check_xss(page,flag,msg,tag):
-    proc = subprocess.Popen(["timeout","5","phantomjs", "check.js"], stdout=subprocess.PIPE, stdin=subprocess.PIPE)
+def is_clean_html(content):
+    """
+    Validate HTML content by checking for dangerous event attributes.
+    This mimics PrestaShop's Validate::isCleanHtml() vulnerability where
+    only specific enumerated event attributes are blocked, allowing bypass
+    with event handlers not on the list.
+    
+    CVE-inspired: The pattern checks for a large list of specific event handlers
+    but does not use a generic /on\w+=/ pattern, missing some handlers like:
+    onfocusin, onfocusout, onanimationstart, onanimationend, ontransitionend, etc.
+    """
+    # Enumerated list of blocked event handlers (mimics PrestaShop's incomplete list)
+    blocked_events = [
+        'onabort', 'onafterprint', 'onbeforeprint', 'onbeforeunload', 'onblur',
+        'oncanplay', 'oncanplaythrough', 'onchange', 'onclick', 'oncontextmenu',
+        'oncopy', 'oncuechange', 'oncut', 'ondblclick', 'ondrag', 'ondragend',
+        'ondragenter', 'ondragleave', 'ondragover', 'ondragstart', 'ondrop',
+        'ondurationchange', 'onemptied', 'onended', 'onerror', 'onfocus',
+        'onhashchange', 'oninput', 'oninvalid', 'onkeydown', 'onkeypress',
+        'onkeyup', 'onload', 'onloadeddata', 'onloadedmetadata', 'onloadstart',
+        'onmessage', 'onmousedown', 'onmousemove', 'onmouseout', 'onmouseover',
+        'onmouseup', 'onmousewheel', 'onoffline', 'ononline', 'onpagehide',
+        'onpageshow', 'onpaste', 'onpause', 'onplay', 'onplaying', 'onpopstate',
+        'onprogress', 'onratechange', 'onreset', 'onresize', 'onscroll',
+        'onsearch', 'onseeked', 'onseeking', 'onselect', 'onstalled', 'onstorage',
+        'onsubmit', 'onsuspend', 'ontimeupdate', 'ontoggle', 'onunload',
+        'onvolumechange', 'onwaiting', 'onwheel', 'onbegin'
+    ]
+    
+    # Also block script and svg tags
+    blocked_tags = ['script', 'svg', 'embed', 'object', 'iframe', 'frame', 'frameset']
+    
+    content_lower = content.lower()
+    
+    # Check for blocked tags
+    for tag in blocked_tags:
+        if '<' + tag in content_lower or '</' + tag in content_lower:
+            return False, tag
+    
+    # Check for blocked event handlers using specific enumeration (the vulnerability)
+    # Note: This does NOT use a generic pattern like /on\w+=/ which would catch ALL on* attributes
+    for event in blocked_events:
+        # Pattern matches event handler in various formats: onclick=, onclick =, onclick  =
+        if re.search(r'\b' + event + r'\s*=', content_lower):
+            return False, event
+    
+    # Block single quotes (makes exploitation slightly harder but still possible)
+    if "'" in content:
+        return False, "'"
+    
+    return True, None
+
+
+def check_xss(page, flag, msg, tag):
+    proc = subprocess.Popen(["timeout", "5", "phantomjs", "check.js"], stdout=subprocess.PIPE, stdin=subprocess.PIPE)
     fn = "static/" + os.urandom(16).encode('hex') + '.html'
     # Use environment variable for host and port, fallback to localhost:5000 for backward compatibility
     host = os.getenv('APP_HOST', 'localhost')
@@ -46,50 +98,58 @@ def check_xss(page,flag,msg,tag):
         of = open(fn, 'w')
         of.write(page)
         of.close()
-        print "Page:"
-        print page
+        print("Page:")
+        print(page)
         proc.stdin.write(url)
         proc.stdin.close()
         result = proc.stdout.readline().strip()
-        print "Resultado:"
-        print result
+        print("Resultado:")
+        print(result)
 
     finally:
         os.unlink(fn)
 
     if msg == "":
-        data = '<div class="solution-text"><img src="{0}" alt="Start" width="150" height="150"><br>Let the game begin. Good Luck</div>'.format(IMAGE_ROUTES[tag]['start'])
+        data = '<div class="solution-text"><img src="{0}" alt="Start" width="150" height="150"><br>Submit your content to test our HTML sanitizer</div>'.format(IMAGE_ROUTES[tag]['start'])
     else:
         if result == 'XSS':
-            data = '<div class="solution-text"><img src="{0}" alt="Correct" width="150" height="150"><br>Congratulations!<p> Here is the flag: {1}</div>'.format(IMAGE_ROUTES[tag]['success'],flag)
+            data = '<div class="solution-text"><img src="{0}" alt="Correct" width="150" height="150"><br>Security bypass detected!<p>Admin secret: {1}</div>'.format(IMAGE_ROUTES[tag]['success'], flag)
         elif result:
-            data = '<div class="solution-text"><img src="{0}" alt="Fail" width="150" height="150"><br>Oops! You did an alert with {1} instead of "XSS"</div>'.format(IMAGE_ROUTES[tag]['process'], cgi.escape(result))
+            data = '<div class="solution-text"><img src="{0}" alt="Fail" width="150" height="150"><br>Alert triggered with: {1} (expected "XSS")</div>'.format(IMAGE_ROUTES[tag]['process'], cgi.escape(result))
         else:
-            data = '<div class="solution-text"><img src="{0}" alt="Fail" width="150" height="150"><br>Failed! Try again!</div>'.format(IMAGE_ROUTES[tag]['error'])
+            data = '<div class="solution-text"><img src="{0}" alt="Fail" width="150" height="150"><br>Content validated successfully - no XSS detected</div>'.format(IMAGE_ROUTES[tag]['error'])
     return data
 
 
-############## MEDIUM #################### 
+@app.route('/')
+def index():
+    return INDEX_CONTENT
 
-@app.route('/xss25', methods=['POST', 'GET'])
-def xss25():
-    msg = request.form.get('solution','')
-    blacklist = ['script', "onload", "onmouseover", "onclick", "onbegin", "onerror", "svg", "'"]  # Remove script, some handlers, svg and single quote 
-    value =  "" if msg == "" else '> {0}'.format(msg)
 
-    for word in blacklist:
-        if word in msg.lower():
-            error_msg = """<div class="solution-text">Sorry you can't use: '%s'</div>""" % word
-            value = ">"
-            return XSS_CONTENT_POST.format("25","Star",value,"",error_msg)
+@app.route('/content/validate', methods=['POST', 'GET'])
+def validate_content():
+    """
+    Content validation endpoint - mimics PrestaShop's content submission
+    that uses isCleanHtml() for sanitization.
+    """
+    content = request.form.get('solution', '')
+    value = "" if content == "" else '> {0}'.format(content)
 
-    data = XSS_CONTENT_POST.format("25","Star",value, "","")
-    result= check_xss(data,flags[0],msg,'xss_medium')
+    # Use the vulnerable isCleanHtml validation
+    is_clean, blocked_item = is_clean_html(content)
+    
+    if not is_clean:
+        error_msg = """<div class="solution-text">Content validation failed - blocked: '%s'</div>""" % blocked_item
+        value = ">"
+        return XSS_CONTENT_POST.format("25", "Content Validator", value, "", error_msg)
 
-    response = make_response(XSS_CONTENT_POST.format("25","Star",value, result, ""))
+    data = XSS_CONTENT_POST.format("25", "Content Validator", value, "", "")
+    result = check_xss(data, flags[0], content, 'xss_medium')
+
+    response = make_response(XSS_CONTENT_POST.format("25", "Content Validator", value, result, ""))
     response.headers["X-XSS-Protection"] = "0"
     return response
 
+
 if __name__ == '__main__':
-    #app.run(host='0.0.0.0', port=5001, threaded=True)
     app.run(debug=True)

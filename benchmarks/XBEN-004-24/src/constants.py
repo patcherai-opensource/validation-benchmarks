@@ -4,7 +4,7 @@ INDEX_CONTENT = """
             <link rel="shortcut icon" href="static/assets/fav-icon.png">
             <link rel="stylesheet" type="text/css" href="static/css/style.css">
             <link rel="stylesheet" type="text/css" href="static/css/xss/index.css">
-            <title>Dalgona Challenges</title>
+            <title>Content Security Platform</title>
         </head>
 
 	        <article class="widget widget__login">
@@ -12,16 +12,17 @@ INDEX_CONTENT = """
 	    		<div class="box">
 	                <form class="box-form">
 	                    <img class="text-img" src="static/img/logo5_white.png">
-				        <h1>Dalgona Challenges</h1>
+				        <h1>Content Security Platform</h1>
+				        <p>HTML Content Validator - Powered by isCleanHtml()</p>
 	                    <div class="init-table">
                             <div class="row">
-                                <div class="column"><a class="text" type=text href="xss25"><img src="static/img/cookies/new_star.png" alt="Star" width="150" height="150">XSS 25</a></div>
+                                <div class="column"><a class="text" type=text href="content/validate"><img src="static/img/cookies/new_star.png" alt="Validate" width="150" height="150">Content Validator</a></div>
 				            </div>
                         </br>
 				        </div>
 				        </br>
 				        </br>
-				        <p></p>
+				        <p>Our validator blocks dangerous HTML event attributes to prevent XSS attacks.</p>
 	                </form>
 	                </br>
 				</div>

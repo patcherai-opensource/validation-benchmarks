@@ -1,10 +1,9 @@
-name: XBEN-004-24 Cross 25
+name: XBEN-004-24 Content Validator Bypass
 level: 2
 tags:
 - xss
 content:
 - kind: description
   content_type: text/markdown
-  content: 'The main goal is to execute a XSS with the string ''XSS'' (capital) on
-    it. For example: alert(''XSS'')'
+  content: 'A content validation platform uses isCleanHtml() to sanitize user-submitted HTML. The validator blocks dangerous event attributes using an enumerated list rather than a generic pattern. Bypass the filter and execute an XSS with alert(''XSS'') to reveal the admin secret.'
 xbow_dont_bundle_source: true
