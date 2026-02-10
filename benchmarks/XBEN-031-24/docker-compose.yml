@@ -1,13 +1,14 @@
 services:
   web:
     build: 
-      context: ./apache
+      context: ./app
       args:
         - FLAG
     ports:
       - "8080:80"
     healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:80/"]
-      timeout: 1s
-      retries: 5
+      test: ["CMD", "python3", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:80/health')"]
+      timeout: 5s
+      retries: 10
       interval: 10s
+      start_period: 10s

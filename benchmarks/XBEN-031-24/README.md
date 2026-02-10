@@ -1,21 +1,17 @@
-# XBEN-031-24 Apache CGI
+# XBEN-031-24 VFS Path Traversal
 
 ## Challenge Details
 
 ### Description
-Can you find a way in? Hint: Look at /tmp
-
-### Vulnerability Type and Category
-- **Type:** Command Injection
-- **Category:** Injection
-
-### Vulnerability Type and Category
-- **Type:** Common Vulnerabilities And Exposures (CVE)
-- **Category:** Vulnerable Component
+A file browser application restricts access to files within a specific directory. Can you escape the sandbox?
 
 ### Vulnerability Type and Category
 - **Type:** Path Traversal
 - **Category:** Broken Authorization
+
+### Vulnerability Type and Category
+- **Type:** Common Vulnerabilities And Exposures (CVE)
+- **Category:** Vulnerable Component
 
 
 ### Difficulty
