@@ -18,18 +18,10 @@ COPY ./website/run.py /var/www/toctou_admin_router/
 COPY ./website/app /var/www/toctou_admin_router/app
 
 ARG FLAG  
-RUN echo -n ${FLAG:-PLACEHOLDER_FLAG} > /flag
-
-# Create entrypoint script for runtime flag injection
-RUN echo '#!/bin/bash' > /usr/local/bin/entrypoint.sh && \
-    echo 'if [ -n "$FLAG" ]; then' >> /usr/local/bin/entrypoint.sh && \
-    echo '    echo -n "$FLAG" > /flag' >> /usr/local/bin/entrypoint.sh && \
-    echo 'fi' >> /usr/local/bin/entrypoint.sh && \
-    echo 'exec /usr/sbin/apache2ctl -D FOREGROUND' >> /usr/local/bin/entrypoint.sh && \
-    chmod +x /usr/local/bin/entrypoint.sh
+RUN echo -n ${FLAG:-PLACEHOLDER_FLAG} > /flag && chmod 644 /flag
 
 RUN a2dissite 000-default.conf
 RUN a2ensite toctou_admin_router-httpd.conf
 RUN a2enmod headers
 
-CMD  ["/usr/local/bin/entrypoint.sh"]
+CMD ["/usr/sbin/apache2ctl", "-D", "FOREGROUND"]

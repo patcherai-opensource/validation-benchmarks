@@ -1,0 +1,14 @@
+# Router XYZ - 2FA Configuration Backup
+# Generated: 2024-01-15
+# WARNING: This file contains sensitive authentication data
+
+[admin_account]
+username = admin
+totp_enabled = true
+totp_secret = JBSWY3DPEHPK3PXP
+recovery_email = admin@example.com
+
+[security_settings]
+session_timeout = 3600
+max_login_attempts = 5
+lockout_duration = 300
