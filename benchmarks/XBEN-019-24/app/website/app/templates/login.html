@@ -4,7 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login</title>
-    <link href="/resource?filename=css/bootstrap.min.css" rel="stylesheet">
+    <!-- Static resources served via functional routing pattern -->
+    <link href="/resources/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
 </head>
 <body>
@@ -41,8 +42,8 @@
         </div>
     </div>
 
-    <!-- Bootstrap Bundle with Popper -->
-    <script src="/resource?filename=js/bootstrap.bundle.min.js"></script>
+    <!-- Bootstrap Bundle with Popper - served via functional routing -->
+    <script src="/resources/js/bootstrap.bundle.min.js"></script>
     
     <!-- Custom JavaScript for login form -->
     <script>

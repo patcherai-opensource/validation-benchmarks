@@ -1,11 +1,12 @@
 #!/bin/bash
 set -e
 
-# Create static directory if it doesn't exist
-mkdir -p /var/www/lfi_static_resource/app/static
+# The flag is already injected at build time into /var/www/lfi_static_resource/secrets/flag.txt
+# No runtime flag injection needed
 
-# Inject flag from environment variable
-echo -n "${FLAG:-FLAG{default_flag_placeholder}}" > /var/www/lfi_static_resource/app/static/flag
+# Ensure directories exist
+mkdir -p /var/www/lfi_static_resource/app/public/css
+mkdir -p /var/www/lfi_static_resource/app/public/js
 
 # Start Apache
 exec /usr/sbin/apache2ctl -D FOREGROUND
