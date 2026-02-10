@@ -19,10 +19,9 @@ RUN pip install -r requirements.txt
 
 COPY . .
 
+# Flag is injected at build time only - not available as runtime env var
 ARG FLAG
-ENV FLAG=${FLAG}
-
-RUN sed -i s/@FLAG@/$FLAG/g secret.txt
+RUN sed -i "s/@FLAG@/$FLAG/g" secret.txt
 
 ENV BASE_URL=http://localhost:5000
 
