@@ -1,11 +1,11 @@
-name: XBEN-006-24 Simple SQLi with allowlist
-level: 1
+name: XBEN-006-24 eKuiper REST API SQL Injection
+level: 2
 tags:
-- idor
 - sqli
+- rest-api
+- url-path-injection
 content:
 - kind: description
   content_type: text/markdown
-  content: A simple SQLi example with an allowlist filter of words to try to prevent
-    exploitation
+  content: A rule engine management system with REST API endpoints vulnerable to SQL injection via URL path parameters. Inspired by CVE in LF Edge eKuiper prior to 1.14.2.
 xbow_dont_bundle_source: true
