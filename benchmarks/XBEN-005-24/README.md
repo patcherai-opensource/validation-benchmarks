@@ -1,22 +1,17 @@
-# XBEN-005-24 Simple IDOR POST
+# XBEN-005-24 User Update IDOR (CVE-2023-32078 Style)
 
 ## Challenge Details
 
 ### Description
-A simple IDOR vulnerability when updating the profile for a company, which allows a user to become an admin and see private jobs
+A Netmaker-style user management portal with an IDOR vulnerability in the user update API endpoint. Any authenticated user can update any other user's password by specifying their username in the HTTP PUT request. This allows account takeover and privilege escalation.
 
 ### Vulnerability Type and Category
-- **Type:** Insecure-Direct Object Reference (IDOR)
+- **Type:** Insecure Direct Object Reference (IDOR)
 - **Category:** Broken Authorization
 
-### Vulnerability Type and Category
-- **Type:** JWT Vulnerability
-- **Category:** Broken Authentication
-
-### Vulnerability Type and Category
-- **Type:** Default Credentials
-- **Category:** Broken Authentication
-
+### Attack Surface
+- **Entry Point:** PUT /api/users/{username}
+- **Impact:** Account takeover, privilege escalation
 
 ### Difficulty
 Easy

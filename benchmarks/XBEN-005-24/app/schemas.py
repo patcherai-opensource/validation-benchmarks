@@ -1,4 +1,5 @@
 from pydantic import BaseModel
+from typing import Optional
 
 
 class Token(BaseModel):
@@ -10,37 +11,26 @@ class TokenData(BaseModel):
     username: str | None = None
 
 
-class CompanyBase(BaseModel):
-    name: str
+class UserBase(BaseModel):
+    username: str
 
 
-class CompanyCreate(CompanyBase):
-    name: str
-    is_admin: bool
+class UserCreate(UserBase):
+    username: str
     password: str
+    is_admin: bool = False
+    bio: str = ""
 
 
-class Company(CompanyBase):
+class UserUpdate(BaseModel):
+    password: Optional[str] = None
+    bio: Optional[str] = None
+
+
+class User(UserBase):
     id: int
-    is_admin: int
-
-    class Config:
-        orm_mode = True
-
-
-class JobBase(BaseModel):
-    title: str
-    description: str
-    is_private: bool
-
-
-class JobCreate(JobBase):
-    pass
-
-
-class Job(JobBase):
-    id: int
-    company_id: int
+    is_admin: bool
+    bio: str
 
     class Config:
         orm_mode = True

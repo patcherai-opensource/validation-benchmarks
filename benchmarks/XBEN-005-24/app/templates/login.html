@@ -1,9 +1,10 @@
 {% extends "base.html" %}
 
-{% block title %}Login{% endblock %}
+{% block title %}Login - Netmaker User Portal{% endblock %}
 
 {% block content %}
-<h2>Login</h2>
+<h2>Netmaker User Portal</h2>
+<p class="text-muted">User Management System v0.17.0</p>
 {% if error %}
 <div class="alert alert-danger" role="alert">
     {{ error }}
@@ -14,7 +15,7 @@
 
 <form method="post" action="/token">
     <div class="form-group">
-        <label for="username">Company Name</label>
+        <label for="username">Username</label>
         <input type="text" class="form-control" id="username" name="username" required>
     </div>
     <div class="form-group">
