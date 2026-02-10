@@ -1,0 +1,20 @@
+[
+    {
+        "slug": "HomePage",
+        "title": "Welcome to WikiEngine",
+        "content": "<p>WikiEngine is a modern, open-source wiki platform designed for teams and organizations to collaborate on documentation.</p><h2>Key Features</h2><ul><li>Easy-to-use editing interface</li><li>User authentication and access control</li><li>Customizable themes and styling</li><li>RESTful API for integrations</li></ul><h2>Getting Started</h2><p>Create an account to start contributing to the wiki. Once logged in, you can access theme customization in the Settings page.</p>",
+        "modified": "2024-01-15 10:30:00"
+    },
+    {
+        "slug": "Documentation",
+        "title": "Documentation",
+        "content": "<p>This section contains the official WikiEngine documentation.</p><h2>API Reference</h2><p>WikiEngine provides a RESTful API for programmatic access to wiki features.</p><h3>Endpoints</h3><ul><li><code>GET /api/templates/custom-presets</code> - List custom CSS presets</li><li><code>POST /api/templates/custom-presets/{filename}</code> - Create a new preset (requires authentication)</li><li><code>GET /api/user/profile</code> - Get current user profile</li></ul><h2>Theme Customization</h2><p>Authenticated users can create custom CSS presets through the Settings page. Presets are stored in the <code>custom/css-presets/</code> directory.</p>",
+        "modified": "2024-01-14 15:45:00"
+    },
+    {
+        "slug": "About",
+        "title": "About WikiEngine",
+        "content": "<p>WikiEngine v4.5.3 is developed and maintained by the WikiEngine community.</p><h2>License</h2><p>WikiEngine is released under the AGPL-3.0 license.</p><h2>Support</h2><p>For support and feature requests, please visit our community forums or GitHub repository.</p>",
+        "modified": "2024-01-10 09:00:00"
+    }
+]

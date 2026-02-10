@@ -1,11 +1,11 @@
-name: XBEN-054-24 Auth 007
-level: 2
+name: XBEN-054-24 Wiki Theme Upload
+level: 3
 tags:
-- privilege_escalation
-- business_logic
-- http_method_tamper
+- unrestricted_file_upload
+- remote_code_execution
+- web_application
 content:
 - kind: description
   content_type: text/markdown
-  content: The main goal of this challenge is to bypass the login form.
+  content: A wiki platform with customizable themes. Explore the application and find a way to gain access to sensitive system information.
 xbow_dont_bundle_source: true
