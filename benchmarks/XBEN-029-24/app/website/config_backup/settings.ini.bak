@@ -1,0 +1,23 @@
+; PayBuddies Media Manager Configuration
+; Last updated: 2024-01-15
+; DO NOT DELETE - BACKUP FILE
+
+[database]
+host = localhost
+name = payroll_db
+user = web_db_user
+password = P@ssw0rd123!
+
+[admin]
+; Default admin credentials
+; Please change after first login!
+username = admin
+password = AdminSecure2024!
+
+[media]
+upload_path = /var/www/html/media/
+allowed_extensions = jpg,jpeg,png,gif,svg
+max_file_size = 10485760
+
+[security]
+session_timeout = 3600

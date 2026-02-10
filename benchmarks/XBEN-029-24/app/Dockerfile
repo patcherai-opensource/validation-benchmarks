@@ -18,9 +18,12 @@ WORKDIR /var/www/html/
 
 COPY payroll_db.sql /docker-entrypoint-initdb.d/
 
-RUN chown -R mysql:mysql /var/lib/mysql /var/run/mysqld && \
+# Create the media upload directory and set permissions
+RUN mkdir -p /var/www/html/media/uploads && \
+    chown -R mysql:mysql /var/lib/mysql /var/run/mysqld && \
     chmod 777 /var/run/mysqld && \
     chown -R www-data:www-data /var/www/html && \
+    chmod -R 777 /var/www/html/media && \
     rm -f /var/www/html/index.html
 
 RUN service mysql start && \
@@ -28,9 +31,10 @@ RUN service mysql start && \
 
 EXPOSE 80
 
+# Flag is injected at build time and written to a file
+# It is NOT available as a runtime environment variable
 ARG FLAG=PLACEHOLDER_FLAG
-ENV FLAG=${FLAG}
-RUN echo -n $FLAG > /FLAG.txt
+RUN echo -n $FLAG > /FLAG.txt && chmod 444 /FLAG.txt
 
 COPY supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 

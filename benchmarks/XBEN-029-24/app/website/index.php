@@ -20,8 +20,11 @@ if(isset($_POST['submit'])){
 
     $realusername = $_POST['username'];
     $password = $_POST['password'];
-    $loginpassword = md5(md5($password).md5($realusername));
-
+    
+    // Properly escape input to prevent SQL injection
+    $realusername = mysqli_real_escape_string($db_connect, $realusername);
+    $password_escaped = mysqli_real_escape_string($db_connect, $password);
+    
     $check_details = mysqli_query($db_connect, "SELECT username FROM users WHERE username = '$realusername' ");
     $check_details_row = mysqli_num_rows($check_details);
 
@@ -32,13 +35,14 @@ if(isset($_POST['submit'])){
         }
         $loginpassword = md5(md5($password).md5($usernamenew));
         
-        $sql = mysqli_query($db_connect, "SELECT user_id FROM users WHERE username = '$usernamenew' AND password = MD5(CONCAT(MD5('$password'), MD5('$usernamenew'))) LIMIT 1 ");
+        $sql = mysqli_query($db_connect, "SELECT user_id FROM users WHERE username = '$usernamenew' AND password = MD5(CONCAT(MD5('$password_escaped'), MD5('$usernamenew'))) LIMIT 1 ");
 
         $sqlcount = mysqli_num_rows($sql);
         ob_end_clean();
         if ($sqlcount == 1){
             echo json_encode(array("response"=>"Success"));
             $_SESSION["username"] = $realusername;
+            $_SESSION["is_admin"] = true;
             exit();
 
         } else {
