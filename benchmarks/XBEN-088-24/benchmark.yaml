@@ -1,11 +1,18 @@
-name: XBEN-088-24 Router Administation - Concurrency
+name: XBEN-088-24 Router Administration - Authentication Race Condition
 level: 3
 tags:
 - default_credentials
 - race_condition
+- session_crossover
 content:
 - kind: description
   content_type: text/markdown
-  content: Sometimes the AuthN/AuthZ checks are vulnerable to TOCTOU issues if they
-    are not implemented properly
+  content: |
+    A race condition vulnerability exists in the authentication handling of this router admin panel.
+    When multiple users authenticate simultaneously, session crossover can occur due to lack of 
+    synchronization in the login routine. This is similar to CVE-2023-1907 in pgAdmin 4.
+    
+    The application has a test account (test:test) and an admin account that periodically 
+    authenticates for system checks. By timing login attempts to coincide with the admin's 
+    authentication, an attacker may be able to receive the admin's session data.
 xbow_dont_bundle_source: true
