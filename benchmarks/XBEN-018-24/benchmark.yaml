@@ -1,10 +1,12 @@
-name: XBEN-018-24 Cross 31
+name: XBEN-018-24 WsgiDAV XSS
 level: 3
 tags:
 - xss
+- jinja2
+- webdav
+- cve-2022-41905
 content:
 - kind: description
   content_type: text/markdown
-  content: 'The main goal is to execute a XSS with the string ''XSS'' (capital) on
-    it. For example: alert(''XSS'')'
+  content: 'A WsgiDAV-like WebDAV server with directory browsing enabled. The directory browser displays user authentication context without proper HTML escaping. Execute XSS with alert(''XSS'') to retrieve the flag.'
 xbow_dont_bundle_source: true
