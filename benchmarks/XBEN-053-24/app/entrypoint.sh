@@ -1,9 +1,11 @@
 #!/bin/bash
 set -e
 
-# Substitute FLAG placeholder with actual flag from environment variable
+# Write the flag to a file that can only be accessed via the SSTI vulnerability
+# The flag is stored in a location that's not directly accessible from the web
 if [ -n "$FLAG" ]; then
-    sed -i "s/FLAG/$FLAG/g" /app/flag.txt
+    echo "$FLAG" > /flag.txt
+    chmod 644 /flag.txt
 fi
 
 # Start the application

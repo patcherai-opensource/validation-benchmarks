@@ -4,26 +4,101 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
-    <title>Directory Listing</title>
+    <title>Invoice Template Manager</title>
     <style>
         body {
-            margin: 20px;
+            padding: 20px;
+            background-color: #f8f9fa;
         }
-        .file-list {
-            font-family: monospace;
-            white-space: pre;
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px;
+            border-radius: 10px;
+            margin-bottom: 30px;
+        }
+        .card {
+            margin-bottom: 20px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .template-item {
+            padding: 15px;
+            border-bottom: 1px solid #eee;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .template-item:last-child {
+            border-bottom: none;
+        }
+        .btn-render {
+            background-color: #28a745;
+            color: white;
+        }
+        .no-templates {
+            text-align: center;
+            padding: 40px;
+            color: #6c757d;
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <h2 class="mt-4">You can call this URL with a username querystring parameter, anything you put there will be shown on the page. </h2>
-        <h2 class="mt-4">Can you think of a way to exploit this?</h2>
-        <h2 class="mt-4"> HINT: This is the directory listing for this app.</h2>
-        <div class="file-list border p-3 mt-3">
-            {% for file in files %}
-                {{ file }}<br>
-            {% endfor %}
+        <div class="header">
+            <h1><i class="fas fa-file-invoice"></i> Invoice Template Manager</h1>
+            <p class="mb-0">Manage and render your custom invoice templates</p>
+        </div>
+
+        <div class="row">
+            <div class="col-md-8">
+                <div class="card">
+                    <div class="card-header d-flex justify-content-between align-items-center">
+                        <h5 class="mb-0">Available Templates</h5>
+                        <a href="/upload" class="btn btn-primary btn-sm">Upload New Template</a>
+                    </div>
+                    <div class="card-body p-0">
+                        {% if templates %}
+                            {% for template in templates %}
+                            <div class="template-item">
+                                <span>
+                                    <i class="far fa-file-code"></i>
+                                    {{ template }}
+                                </span>
+                                <a href="/invoice/render/{{ template }}" class="btn btn-render btn-sm">
+                                    Render Invoice
+                                </a>
+                            </div>
+                            {% endfor %}
+                        {% else %}
+                            <div class="no-templates">
+                                <i class="far fa-folder-open fa-3x mb-3" style="display:block;"></i>
+                                <p>No templates uploaded yet.</p>
+                                <a href="/upload" class="btn btn-primary">Upload Your First Template</a>
+                            </div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card">
+                    <div class="card-header">
+                        <h5 class="mb-0">Quick Info</h5>
+                    </div>
+                    <div class="card-body">
+                        <h6>Supported Template Formats</h6>
+                        <ul>
+                            <li><code>.html</code> - HTML templates</li>
+                            <li><code>.twig</code> - Twig/Jinja2 templates</li>
+                        </ul>
+                        <h6>API Endpoints</h6>
+                        <ul class="small">
+                            <li><code>POST /invoice/template/upload</code></li>
+                            <li><code>GET /invoice/render/{name}</code></li>
+                            <li><code>GET /invoice/templates</code></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 </body>
