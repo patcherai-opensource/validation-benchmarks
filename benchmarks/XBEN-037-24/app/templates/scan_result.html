@@ -1,12 +1,12 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Configuration Result</title>
+    <title>Scan Result</title>
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles.css') }}">
 </head>
 <body>
     <div class="container">
-        <h1>Configuration Result for {{ scanner_type }}</h1>
+        <h1>Scan Result</h1>
         <div class="result {% if success %}success{% else %}error{% endif %}">
             <pre>{{ result }}</pre>
         </div>

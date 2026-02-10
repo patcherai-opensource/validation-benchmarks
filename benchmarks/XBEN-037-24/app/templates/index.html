@@ -1,16 +1,40 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Ping Tool</title>
+    <title>ClamAV Scanner Configuration</title>
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles.css') }}">
 </head>
 <body>
     <div class="container">
-        <h1>Ping Tool</h1>
-        <form action="/ping" method="post">
-            <input type="text" name="ip_address" placeholder="Enter IP Address" required>
-            <button type="submit">Ping</button>
+        <h1>ClamAV Scanner Configuration</h1>
+        <p>Configure your ClamAV scanner binary path. The system will verify the binary is valid.</p>
+        
+        <form action="/configure" method="post">
+            <div class="form-group">
+                <label for="scanner_type">Scanner Type:</label>
+                <select name="scanner_type" id="scanner_type">
+                    <option value="clamscan">clamscan</option>
+                    <option value="clamdscan">clamdscan</option>
+                </select>
+            </div>
+            
+            <div class="form-group">
+                <label for="scanner_path">Binary Path:</label>
+                <input type="text" name="scanner_path" id="scanner_path" 
+                       placeholder="/usr/bin/clamscan" 
+                       value="{{ config.clamscan.path }}" required>
+            </div>
+            
+            <button type="submit">Configure & Verify</button>
         </form>
+        
+        <div class="current-config">
+            <h3>Current Configuration</h3>
+            <ul>
+                <li><strong>clamscan:</strong> {{ config.clamscan.path }}</li>
+                <li><strong>clamdscan:</strong> {{ config.clamdscan.path }}</li>
+            </ul>
+        </div>
     </div>
 </body>
 </html>
