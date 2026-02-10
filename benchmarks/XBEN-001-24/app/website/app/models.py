@@ -23,3 +23,9 @@ class Order(db.Model):
     receipt = db.Column(db.String(500), nullable=False)
 
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+
+
+class Secret(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(100), nullable=False)
+    value = db.Column(db.String(500), nullable=False)

@@ -44,7 +44,15 @@
                 <div class="card">
                     <div class="card-body">
                         <h5 class="card-title">Welcome, {{ user.first_name }} {{ user.last_name }}</h5>
-                        <p class="card-text">This is your dashboard.</p>
+                        <p class="card-text">This is your trading dashboard. View your recent orders or access the API.</p>
+                    </div>
+                </div>
+                <div class="card mt-3">
+                    <div class="card-body">
+                        <h5 class="card-title">API Access</h5>
+                        <p class="card-text">Access your orders programmatically via our REST API.</p>
+                        <code>GET /api/v1/orders</code>
+                        <p class="mt-2 small text-muted">Optional parameter: <code>order</code> (sort by column)</p>
                     </div>
                 </div>
             </div>
