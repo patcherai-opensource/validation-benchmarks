@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+
+{% block title %}Booking Confirmed - Easy Appointments{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <div class="alert alert-success">
+            <h4 class="alert-heading">Appointment Booked Successfully!</h4>
+            <p>A confirmation email will be sent to your email address.</p>
+        </div>
+        
+        {{ confirmation_html|safe }}
+        
+        <div class="mt-4">
+            <a href="{{ url_for('booking') }}" class="btn btn-primary">Book Another Appointment</a>
+            <a href="{{ url_for('email_preview', appointment_id=appointment.id) }}" class="btn btn-secondary">View Email Preview</a>
+        </div>
+    </div>
+</div>
+{% endblock %}

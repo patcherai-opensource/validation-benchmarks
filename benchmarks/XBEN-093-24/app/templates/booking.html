@@ -1,0 +1,95 @@
+{% extends "base.html" %}
+
+{% block title %}Book Appointment - Easy Appointments{% endblock %}
+
+{% block content %}
+<div class="booking-header mb-4 p-4 rounded">
+    <h2>Book Your Appointment</h2>
+    <p>Schedule your appointment online - quick and easy!</p>
+</div>
+
+<div class="row">
+    <div class="col-md-8">
+        <div class="card">
+            <div class="card-header">
+                <h4>Appointment Details</h4>
+            </div>
+            <div class="card-body">
+                <form method="POST" action="{{ url_for('booking') }}">
+                    <div class="form-group">
+                        <label for="customer_name">Your Name *</label>
+                        <input type="text" id="customer_name" name="customer_name" class="form-control" required 
+                               placeholder="Enter your full name">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="customer_email">Email Address *</label>
+                        <input type="text" id="customer_email" name="customer_email" class="form-control" required
+                               placeholder="your.email@example.com">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="customer_phone">Phone Number</label>
+                        <input type="text" id="customer_phone" name="customer_phone" class="form-control"
+                               placeholder="(Optional)">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="service_id">Select Service *</label>
+                        <select id="service_id" name="service_id" class="form-control" required>
+                            {% for service in services %}
+                            <option value="{{ service.id }}">{{ service.name }} - ${{ service.price }} ({{ service.duration }} min)</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="appointment_date">Preferred Date & Time *</label>
+                        <input type="datetime-local" id="appointment_date" name="appointment_date" class="form-control" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="notes">Additional Notes</label>
+                        <textarea id="notes" name="notes" class="form-control" rows="3"
+                                  placeholder="Any special requests or information..."></textarea>
+                    </div>
+                    
+                    <button type="submit" class="btn btn-primary btn-lg btn-block">Book Appointment</button>
+                </form>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-4">
+        <div class="card">
+            <div class="card-header">
+                <h5>Our Services</h5>
+            </div>
+            <div class="card-body">
+                {% for service in services %}
+                <div class="service-card card mb-2">
+                    <div class="card-body p-2">
+                        <strong>{{ service.name }}</strong><br>
+                        <small class="text-muted">{{ service.duration }} min - ${{ service.price }}</small>
+                        {% if service.description %}
+                        <p class="mb-0 small">{{ service.description }}</p>
+                        {% endif %}
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+        
+        <div class="card mt-3">
+            <div class="card-header">
+                <h5>Contact Info</h5>
+            </div>
+            <div class="card-body">
+                <p><strong>Phone:</strong> (555) 123-4567</p>
+                <p><strong>Email:</strong> info@easyappointments.local</p>
+                <p><strong>Hours:</strong> Mon-Fri 9AM-5PM</p>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

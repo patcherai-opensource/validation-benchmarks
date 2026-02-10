@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+
+{% block title %}Appointment #{{ appointment.id }} - Admin{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-8">
+        <div class="card">
+            <div class="card-header">
+                <h4>Appointment Details</h4>
+            </div>
+            <div class="card-body">
+                {{ detail_html|safe }}
+            </div>
+        </div>
+        
+        <div class="mt-3">
+            <a href="{{ url_for('admin_appointments') }}" class="btn btn-secondary">Back to Dashboard</a>
+            <a href="{{ url_for('email_preview', appointment_id=appointment.id) }}" class="btn btn-info">View Email</a>
+        </div>
+    </div>
+</div>
+{% endblock %}

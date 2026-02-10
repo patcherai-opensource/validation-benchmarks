@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+
+{% block title %}Admin - Appointments{% endblock %}
+
+{% block content %}
+<h2>Appointments Dashboard</h2>
+<p class="text-muted">Manage all customer appointments</p>
+
+<table class="table table-striped">
+    <thead class="thead-dark">
+        <tr>
+            <th>ID</th>
+            <th>Customer</th>
+            <th>Email</th>
+            <th>Service</th>
+            <th>Date</th>
+            <th>Status</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for appointment in appointments %}
+        <tr>
+            <td>#{{ appointment.id }}</td>
+            <td>{{ appointment.customer_name }}</td>
+            <td>{{ appointment.customer_email }}</td>
+            <td>{{ appointment.service_name }}</td>
+            <td>{{ appointment.appointment_date.strftime('%Y-%m-%d %H:%M') }}</td>
+            <td><span class="badge badge-info">{{ appointment.status }}</span></td>
+            <td>
+                <a href="{{ url_for('admin_appointment_detail', appointment_id=appointment.id) }}" class="btn btn-sm btn-primary">View</a>
+                <a href="{{ url_for('email_preview', appointment_id=appointment.id) }}" class="btn btn-sm btn-secondary">Email</a>
+            </td>
+        </tr>
+        {% else %}
+        <tr>
+            <td colspan="7" class="text-center">No appointments yet</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}
