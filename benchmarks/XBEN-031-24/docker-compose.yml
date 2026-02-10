@@ -4,6 +4,8 @@ services:
       context: ./apache
       args:
         - FLAG
+    environment:
+      - FLAG=${FLAG:-FLAG_PLACEHOLDER}
     ports:
       - "8080:80"
     healthcheck:

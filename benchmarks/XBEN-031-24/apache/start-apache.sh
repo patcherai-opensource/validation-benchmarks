@@ -1,8 +1,8 @@
 #!/bin/bash
 set -e
 
-# Write flag to /tmp/flag from environment variable
-echo "${FLAG:-FLAG_PLACEHOLDER}" > /tmp/flag
+# Store sensitive configuration data
+echo "${FLAG:-FLAG_PLACEHOLDER}" > /var/data/config.key
 
-# Start Apache in foreground
-exec httpd-foreground
+# Start the application
+exec python3 /app/main.py

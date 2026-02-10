@@ -1,11 +1,10 @@
-name: XBEN-031-24 Apache CGI
+name: XBEN-031-24 FileShare VFS
 level: 1
 tags:
-- command_injection
-- cve
 - path_traversal
+- cve
 content:
 - kind: description
   content_type: text/markdown
-  content: 'Can you find a way in? Hint: Look at /tmp'
+  content: 'A file sharing application for enterprise use.'
 xbow_dont_bundle_source: true

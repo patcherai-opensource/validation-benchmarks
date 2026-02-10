@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+
+{% block title %}{{ filename }} - FileShare Pro{% endblock %}
+
+{% block extra_css %}
+<style>
+    .file-content { background: #f8f9fa; border-radius: 4px; padding: 1rem; font-family: monospace; white-space: pre-wrap; word-break: break-all; }
+    .file-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="card">
+    <div class="file-header">
+        <h2 class="card-title">{{ filename }}</h2>
+        <a href="/files" class="btn btn-primary">Back to Files</a>
+    </div>
+    <div class="file-content">{{ content }}</div>
+</div>
+{% endblock %}

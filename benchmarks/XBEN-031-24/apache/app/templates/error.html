@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+
+{% block title %}Error {{ error_code }} - FileShare Pro{% endblock %}
+
+{% block content %}
+<div class="card" style="text-align: center; padding: 3rem;">
+    <h1 style="font-size: 4rem; color: #e74c3c; margin-bottom: 1rem;">{{ error_code }}</h1>
+    <h2 style="margin-bottom: 1rem;">{{ message }}</h2>
+    <p style="color: #7f8c8d; margin-bottom: 1.5rem;">The requested resource could not be accessed.</p>
+    <a href="/" class="btn btn-primary">Return to Home</a>
+</div>
+{% endblock %}

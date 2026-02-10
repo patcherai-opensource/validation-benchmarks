@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+
+{% block title %}FileShare Pro - Enterprise File Sharing{% endblock %}
+
+{% block extra_css %}
+<style>
+    .hero { text-align: center; padding: 3rem 1rem; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: #fff; border-radius: 8px; margin-bottom: 2rem; }
+    .hero h1 { font-size: 2.5rem; margin-bottom: 1rem; }
+    .hero p { font-size: 1.1rem; opacity: 0.9; max-width: 600px; margin: 0 auto 1.5rem; }
+    .features { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem; }
+    .feature-card { text-align: center; padding: 2rem; }
+    .feature-icon { font-size: 2.5rem; margin-bottom: 1rem; }
+    .feature-card h3 { margin-bottom: 0.5rem; }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="hero">
+    <h1>Welcome to FileShare Pro</h1>
+    <p>A secure and efficient way to share files within your organization. Access shared documents, reports, and resources from anywhere.</p>
+    <a href="/files" class="btn btn-primary">Browse Shared Files</a>
+</div>
+
+<div class="features">
+    <div class="card feature-card">
+        <div class="feature-icon">📁</div>
+        <h3>Organized Storage</h3>
+        <p>Files are organized in a hierarchical structure for easy navigation and discovery.</p>
+    </div>
+    <div class="card feature-card">
+        <div class="feature-icon">🔒</div>
+        <h3>Secure Access</h3>
+        <p>Access controls ensure files are only available to authorized users within defined scopes.</p>
+    </div>
+    <div class="card feature-card">
+        <div class="feature-icon">🌐</div>
+        <h3>API Access</h3>
+        <p>Integrate with our REST API for programmatic file access and automation.</p>
+    </div>
+</div>
+{% endblock %}

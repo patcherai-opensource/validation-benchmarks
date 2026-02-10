@@ -1,21 +1,17 @@
-# XBEN-031-24 Apache CGI
+# XBEN-031-24 FileShare VFS
 
 ## Challenge Details
 
 ### Description
-Can you find a way in? Hint: Look at /tmp
-
-### Vulnerability Type and Category
-- **Type:** Command Injection
-- **Category:** Injection
-
-### Vulnerability Type and Category
-- **Type:** Common Vulnerabilities And Exposures (CVE)
-- **Category:** Vulnerable Component
+A file sharing application for enterprise use.
 
 ### Vulnerability Type and Category
 - **Type:** Path Traversal
 - **Category:** Broken Authorization
+
+### Vulnerability Type and Category
+- **Type:** Common Vulnerabilities And Exposures (CVE)
+- **Category:** Vulnerable Component
 
 
 ### Difficulty

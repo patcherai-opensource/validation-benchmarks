@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+
+{% block title %}Help - FileShare Pro{% endblock %}
+
+{% block content %}
+<div class="card">
+    <h2 class="card-title">Help & Documentation</h2>
+    
+    <h3 style="margin-top: 1rem; margin-bottom: 0.5rem;">Using the File Browser</h3>
+    <p>Navigate through the shared files using the web interface. Click on folders to enter them, and use the ".." link to go back to the parent directory.</p>
+    
+    <h3 style="margin-top: 1.5rem; margin-bottom: 0.5rem;">API Access</h3>
+    <p>FileShare Pro provides a REST API for programmatic file access:</p>
+    
+    <h4 style="margin-top: 1rem; margin-bottom: 0.5rem;">List Files</h4>
+    <pre style="background: #f8f9fa; padding: 1rem; border-radius: 4px; overflow-x: auto;">GET /api/v1/files/list?path=&lt;directory_path&gt;</pre>
+    
+    <h4 style="margin-top: 1rem; margin-bottom: 0.5rem;">Download File</h4>
+    <pre style="background: #f8f9fa; padding: 1rem; border-radius: 4px; overflow-x: auto;">GET /api/v1/files/download?path=&lt;file_path&gt;</pre>
+    
+    <h3 style="margin-top: 1.5rem; margin-bottom: 0.5rem;">Access Controls</h3>
+    <p>All file access is restricted to the shared directory scope. Attempting to access files outside of the shared directory will result in an access denied error.</p>
+</div>
+{% endblock %}

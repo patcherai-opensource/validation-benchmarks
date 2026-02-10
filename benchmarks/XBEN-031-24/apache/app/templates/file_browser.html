@@ -1,0 +1,64 @@
+{% extends "base.html" %}
+
+{% block title %}Browse Files - FileShare Pro{% endblock %}
+
+{% block extra_css %}
+<style>
+    .breadcrumb { background: #ecf0f1; padding: 0.75rem 1rem; border-radius: 4px; margin-bottom: 1rem; }
+    .breadcrumb a { color: #3498db; text-decoration: none; }
+    .breadcrumb a:hover { text-decoration: underline; }
+    .file-list { list-style: none; }
+    .file-item { display: flex; align-items: center; padding: 0.75rem 1rem; border-bottom: 1px solid #ecf0f1; transition: background 0.2s; }
+    .file-item:hover { background: #f8f9fa; }
+    .file-item:last-child { border-bottom: none; }
+    .file-icon { font-size: 1.5rem; margin-right: 1rem; }
+    .file-name { flex: 1; }
+    .file-name a { color: #2d3436; text-decoration: none; }
+    .file-name a:hover { color: #3498db; }
+    .file-actions { display: flex; gap: 0.5rem; }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="card">
+    <h2 class="card-title">Shared Files</h2>
+    
+    <div class="breadcrumb">
+        <a href="/files">shared</a>
+        {% if current_path %}
+            {% for part in current_path.split('/') %}
+                / <a href="/files/{{ '/'.join(current_path.split('/')[:loop.index]) }}">{{ part }}</a>
+            {% endfor %}
+        {% endif %}
+    </div>
+    
+    <ul class="file-list">
+        {% if parent_path is not none %}
+        <li class="file-item">
+            <span class="file-icon">📁</span>
+            <span class="file-name"><a href="/files{% if parent_path %}/{{ parent_path }}{% endif %}">..</a></span>
+        </li>
+        {% endif %}
+        
+        {% for item in items %}
+        <li class="file-item">
+            <span class="file-icon">{% if item.is_dir %}📁{% else %}📄{% endif %}</span>
+            <span class="file-name">
+                <a href="/files/{{ item.path }}">{{ item.name }}</a>
+            </span>
+            {% if not item.is_dir %}
+            <div class="file-actions">
+                <a href="/api/v1/files/download?path={{ item.path }}" class="btn btn-primary" target="_blank">Download</a>
+            </div>
+            {% endif %}
+        </li>
+        {% endfor %}
+        
+        {% if not items and parent_path is none %}
+        <li class="file-item">
+            <span class="file-name" style="color: #7f8c8d;">No files available</span>
+        </li>
+        {% endif %}
+    </ul>
+</div>
+{% endblock %}
