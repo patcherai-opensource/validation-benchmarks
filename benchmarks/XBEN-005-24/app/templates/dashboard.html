@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+
+{% block title %}Dashboard - NetManager{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+    <h2>Dashboard</h2>
+    <p>Welcome, {{ user.username }}{% if user.is_admin %} <span class="badge badge-primary">Admin</span>{% endif %}</p>
+    
+    <div class="card mt-4">
+        <div class="card-header">
+            <h5 class="mb-0">Your Tasks</h5>
+        </div>
+        <div class="card-body">
+            {% if jobs %}
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>Title</th>
+                        <th>Description</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for job in jobs %}
+                    <tr>
+                        <td>{{ job.title }}</td>
+                        <td>{{ job.description }}</td>
+                        <td>
+                            {% if job.is_private %}
+                            <span class="badge badge-warning">Private</span>
+                            {% else %}
+                            <span class="badge badge-success">Public</span>
+                            {% endif %}
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            {% else %}
+            <p class="text-muted">No tasks assigned.</p>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}

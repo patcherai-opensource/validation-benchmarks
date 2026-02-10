@@ -4,28 +4,50 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-    <title>{% block title %}FastAPI App{% endblock %}</title>
+    <title>{% block title %}NetManager{% endblock %}</title>
     <style>
         body {
             display: flex;
+            min-height: 100vh;
         }
-        .nav {
-            width: 200px;
+        .sidebar {
+            width: 220px;
+            background-color: #343a40;
+            padding-top: 20px;
+        }
+        .sidebar .nav-link {
+            color: #adb5bd;
+        }
+        .sidebar .nav-link:hover {
+            color: #fff;
+        }
+        .sidebar .nav-link.active {
+            color: #fff;
+            background-color: #495057;
         }
         .content {
             flex-grow: 1;
-            padding: 20px;
+            padding: 30px;
+            background-color: #f8f9fa;
+        }
+        .brand {
+            color: #fff;
+            font-size: 1.25rem;
+            padding: 0 1rem 1rem;
+            border-bottom: 1px solid #495057;
+            margin-bottom: 1rem;
         }
     </style>
 </head>
 <body>
-    <div class="nav flex-column nav-pills" aria-orientation="vertical">
-        {% if request.cookies.access_token %}
-        <a class="nav-link" href="/company/{{company_id}}/jobs">View Jobs</a>
-        <a class="nav-link" href="/edit_profile/{{company_id}}">Edit Profile</a>
-        {% endif %}
-
+    {% if request.cookies.access_token %}
+    <div class="sidebar nav flex-column nav-pills" aria-orientation="vertical">
+        <div class="brand">NetManager</div>
+        <a class="nav-link" href="/dashboard">Dashboard</a>
+        <a class="nav-link" href="/settings">Settings</a>
+        <a class="nav-link" href="/logout">Logout</a>
     </div>
+    {% endif %}
     <div class="content">
         {% block content %}{% endblock %}
     </div>

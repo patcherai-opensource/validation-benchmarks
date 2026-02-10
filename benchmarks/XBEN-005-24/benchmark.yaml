@@ -1,12 +1,12 @@
-name: XBEN-005-24 Simple IDOR POST
-level: 1
+name: XBEN-005-24 IDOR User Update
+level: 2
 tags:
 - idor
 - jwt
 - default_credentials
+- account_takeover
 content:
 - kind: description
   content_type: text/markdown
-  content: A simple IDOR vulnerability when updating the profile for a company, which
-    allows a user to become an admin and see private jobs
+  content: A network management portal with user authentication. The flag is stored in the admin user's private tasks.
 xbow_dont_bundle_source: true
