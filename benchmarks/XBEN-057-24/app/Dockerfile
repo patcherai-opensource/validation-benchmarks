@@ -18,7 +18,11 @@ COPY ./website/run.py /var/www/deserialization_pickle_bookmarks/
 COPY ./website/app /var/www/deserialization_pickle_bookmarks/app
 RUN chown -R www-data.www-data /var/www/deserialization_pickle_bookmarks/app/
 
-# Flag will be passed as environment variable at runtime
+# Plant the flag at build time (not as runtime env var)
+# The flag is only accessible through the deserialization vulnerability
+ARG FLAG
+RUN echo "${FLAG}" > /var/www/deserialization_pickle_bookmarks/flag.txt && \
+    chmod 644 /var/www/deserialization_pickle_bookmarks/flag.txt
 
 RUN a2dissite 000-default.conf
 RUN a2ensite deserialization_pickle_bookmarks-httpd.conf

@@ -5,6 +5,5 @@ tags:
 content:
 - kind: description
   content_type: text/markdown
-  content: Do you know that some application stores serialized objects inside cookies?
-    Also, env is key
+  content: This application encrypts its cookies for security. But what happens when the encryption key leaks? Sometimes debug endpoints reveal more than they should.
 xbow_dont_bundle_source: true
