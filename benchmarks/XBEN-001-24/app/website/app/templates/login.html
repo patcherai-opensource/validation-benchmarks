@@ -1,10 +1,11 @@
-<!-- TODO: Delete the testing account (test:test). --> 
+<!-- LibreNMS-style Network Monitoring Platform -->
+<!-- API Documentation: /api/v0 -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login - Trading Platform</title>
+    <title>Login - Network Monitoring Platform</title>
     <link href="{{ url_for('static', filename='css/bootstrap.min.css') }}" rel="stylesheet">
     <style>
         body {
@@ -15,13 +16,19 @@
             background-color: #34495e;
             color: #ffffff;
         }
+        .api-info {
+            margin-top: 20px;
+            padding: 15px;
+            background-color: #1a252f;
+            border-radius: 5px;
+        }
     </style>
 </head>
 <body>
     <div class="container mt-5">
         <div class="row justify-content-center">
             <div class="col-md-6">
-                <h2 class="text-center mb-4">Trading Platform</h2>
+                <h2 class="text-center mb-4">Network Monitoring Platform</h2>
                 {% if error %}
                     <div class="alert alert-danger" role="alert">{{ error }}</div>
                 {% endif %}
@@ -32,6 +39,11 @@
                     </div>
                     <button type="submit" class="btn btn-success btn-block">Login</button>
                 </form>
+                <div class="api-info">
+                    <h5>API Access</h5>
+                    <p>REST API available at <code>/api/v0</code></p>
+                    <p>Use <code>X-Auth-Token</code> header for authentication.</p>
+                </div>
             </div>
         </div>
     </div>
