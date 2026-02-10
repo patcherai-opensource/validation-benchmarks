@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Details - Event Management Backoffice</title>
+    <link href="{{ url_for('static', filename='css/bootstrap.min.css') }}" rel="stylesheet">
+    <style>
+        body {
+            background-color: #1a1a2e;
+            color: #eaeaea;
+        }
+        .navbar {
+            background-color: #16213e !important;
+            border-bottom: 1px solid #0f3460;
+        }
+        .navbar-brand {
+            color: #e94560 !important;
+            font-weight: bold;
+        }
+        .nav-link {
+            color: #eaeaea !important;
+        }
+        .nav-link:hover {
+            color: #e94560 !important;
+        }
+        .card {
+            background-color: #16213e;
+            border: 1px solid #0f3460;
+            border-radius: 8px;
+        }
+        .btn-outline-danger {
+            color: #e94560;
+            border-color: #e94560;
+        }
+        .btn-outline-danger:hover {
+            background-color: #e94560;
+            color: #fff;
+        }
+        .btn-outline-warning {
+            color: #ffc107;
+            border-color: #ffc107;
+        }
+        .btn-outline-warning:hover {
+            background-color: #ffc107;
+            color: #000;
+        }
+        .btn-outline-info {
+            color: #17a2b8;
+            border-color: #17a2b8;
+        }
+        .btn-outline-info:hover {
+            background-color: #17a2b8;
+            color: #fff;
+        }
+        .detail-row {
+            padding: 12px 0;
+            border-bottom: 1px solid #0f3460;
+        }
+        .detail-label {
+            color: #888;
+            font-size: 0.85rem;
+            text-transform: uppercase;
+        }
+        .detail-value {
+            font-size: 1rem;
+        }
+        .badge-success {
+            background-color: #28a745;
+        }
+        .badge-danger {
+            background-color: #dc3545;
+        }
+        .page-header {
+            background-color: #0f3460;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+        .action-buttons {
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 1px solid #0f3460;
+        }
+        .api-key-box {
+            background-color: #0f3460;
+            padding: 10px;
+            border-radius: 4px;
+            font-family: monospace;
+            word-break: break-all;
+        }
+        .alert {
+            background-color: #0f3460;
+            border: 1px solid #e94560;
+            color: #eaeaea;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark">
+        <div class="container">
+            <a class="navbar-brand" href="/dashboard">alf.io</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="/dashboard">Dashboard</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/events">Events</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" href="/admin/users">User Management</a>
+                    </li>
+                </ul>
+                <ul class="navbar-nav">
+                    <li class="nav-item">
+                        <span class="nav-link">{{ current_user.first_name }} {{ current_user.last_name }}</span>
+                    </li>
+                    <li class="nav-item">
+                        <form action="/logout" method="post" class="d-inline">
+                            <button type="submit" class="btn btn-outline-danger btn-sm">Logout</button>
+                        </form>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+    
+    <div class="container mt-4">
+        <div class="page-header">
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb bg-transparent p-0 mb-2">
+                    <li class="breadcrumb-item"><a href="/admin/users" style="color: #e94560;">User Management</a></li>
+                    <li class="breadcrumb-item active text-muted">User Details</li>
+                </ol>
+            </nav>
+            <h4>User Details</h4>
+        </div>
+        
+        <div id="message-area"></div>
+        
+        <div class="row">
+            <div class="col-md-8">
+                <div class="card">
+                    <div class="card-header">
+                        <h5 class="mb-0">{{ target_user.first_name }} {{ target_user.last_name }}</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="detail-row">
+                            <div class="detail-label">User ID</div>
+                            <div class="detail-value">{{ target_user.id }}</div>
+                        </div>
+                        <div class="detail-row">
+                            <div class="detail-label">Username</div>
+                            <div class="detail-value">{{ target_user.username }}</div>
+                        </div>
+                        <div class="detail-row">
+                            <div class="detail-label">Email</div>
+                            <div class="detail-value">{{ target_user.email }}</div>
+                        </div>
+                        <div class="detail-row">
+                            <div class="detail-label">Role</div>
+                            <div class="detail-value">{{ target_user.role | capitalize }}</div>
+                        </div>
+                        <div class="detail-row">
+                            <div class="detail-label">Organization</div>
+                            <div class="detail-value">{{ target_user.organization.name }}</div>
+                        </div>
+                        <div class="detail-row">
+                            <div class="detail-label">Status</div>
+                            <div class="detail-value">
+                                {% if target_user.enabled %}
+                                <span class="badge badge-success" id="status-badge">Enabled</span>
+                                {% else %}
+                                <span class="badge badge-danger" id="status-badge">Disabled</span>
+                                {% endif %}
+                            </div>
+                        </div>
+                        
+                        <div class="action-buttons">
+                            <h6 class="mb-3">Actions</h6>
+                            <button class="btn btn-outline-warning me-2" id="reset-password-btn">Reset Password</button>
+                            {% if target_user.enabled %}
+                            <button class="btn btn-outline-danger me-2" id="toggle-status-btn" data-enabled="1">Disable User</button>
+                            {% else %}
+                            <button class="btn btn-outline-success me-2" id="toggle-status-btn" data-enabled="0">Enable User</button>
+                            {% endif %}
+                            <button class="btn btn-outline-info" id="view-api-key-btn">View API Key</button>
+                        </div>
+                        
+                        <div id="api-key-section" class="mt-4" style="display: none;">
+                            <h6>API Key</h6>
+                            <div class="api-key-box" id="api-key-value">Loading...</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script src="{{ url_for('static', filename='js/jquery-3.5.1.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/bootstrap.bundle.min.js') }}"></script>
+    <script>
+        $(document).ready(function() {
+            var userId = {{ target_user.id }};
+            
+            function showMessage(message, type) {
+                var alertClass = type === 'success' ? 'alert-success' : 'alert-danger';
+                $('#message-area').html('<div class="alert ' + alertClass + ' alert-dismissible fade show">' + 
+                    message + '<button type="button" class="btn-close" data-bs-dismiss="alert"></button></div>');
+            }
+            
+            $('#reset-password-btn').click(function() {
+                $.ajax({
+                    url: '/admin/api/users/' + userId + '/reset-password',
+                    method: 'POST',
+                    success: function(data) {
+                        showMessage('Password reset initiated. User will receive an email.', 'success');
+                    },
+                    error: function(xhr) {
+                        showMessage('Failed to reset password.', 'error');
+                    }
+                });
+            });
+            
+            $('#toggle-status-btn').click(function() {
+                var currentEnabled = $(this).data('enabled');
+                var newStatus = currentEnabled ? 0 : 1;
+                $.ajax({
+                    url: '/admin/api/users/' + userId + '/enable/' + newStatus,
+                    method: 'POST',
+                    success: function(data) {
+                        if (data.enabled) {
+                            $('#status-badge').removeClass('badge-danger').addClass('badge-success').text('Enabled');
+                            $('#toggle-status-btn').removeClass('btn-outline-success').addClass('btn-outline-danger')
+                                .text('Disable User').data('enabled', 1);
+                        } else {
+                            $('#status-badge').removeClass('badge-success').addClass('badge-danger').text('Disabled');
+                            $('#toggle-status-btn').removeClass('btn-outline-danger').addClass('btn-outline-success')
+                                .text('Enable User').data('enabled', 0);
+                        }
+                        showMessage('User status updated successfully.', 'success');
+                    },
+                    error: function(xhr) {
+                        showMessage('Failed to update user status.', 'error');
+                    }
+                });
+            });
+            
+            $('#view-api-key-btn').click(function() {
+                $.ajax({
+                    url: '/admin/api/users/' + userId + '/api-key',
+                    method: 'GET',
+                    success: function(data) {
+                        $('#api-key-value').text(data.api_key || 'No API key assigned');
+                        $('#api-key-section').show();
+                    },
+                    error: function(xhr) {
+                        showMessage('Failed to retrieve API key.', 'error');
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>

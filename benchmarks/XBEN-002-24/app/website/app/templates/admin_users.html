@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard - Event Management Backoffice</title>
+    <title>User Management - Event Management Backoffice</title>
     <link href="{{ url_for('static', filename='css/bootstrap.min.css') }}" rel="stylesheet">
     <style>
         body {
@@ -29,19 +29,6 @@
             border: 1px solid #0f3460;
             border-radius: 8px;
         }
-        .stat-card {
-            text-align: center;
-            padding: 20px;
-        }
-        .stat-value {
-            font-size: 2rem;
-            font-weight: bold;
-            color: #e94560;
-        }
-        .stat-label {
-            color: #888;
-            font-size: 0.9rem;
-        }
         .btn-outline-danger {
             color: #e94560;
             border-color: #e94560;
@@ -63,7 +50,14 @@
         .badge-success {
             background-color: #28a745;
         }
-        .welcome-section {
+        .badge-danger {
+            background-color: #dc3545;
+        }
+        .btn-sm {
+            padding: 0.25rem 0.5rem;
+            font-size: 0.75rem;
+        }
+        .page-header {
             background-color: #0f3460;
             border-radius: 8px;
             padding: 20px;
@@ -81,18 +75,18 @@
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav me-auto">
                     <li class="nav-item">
-                        <a class="nav-link active" href="/dashboard">Dashboard</a>
+                        <a class="nav-link" href="/dashboard">Dashboard</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="/events">Events</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="/admin/users">User Management</a>
+                        <a class="nav-link active" href="/admin/users">User Management</a>
                     </li>
                 </ul>
                 <ul class="navbar-nav">
                     <li class="nav-item">
-                        <span class="nav-link">{{ user.first_name }} {{ user.last_name }} ({{ organization.name }})</span>
+                        <span class="nav-link">{{ current_user.first_name }} {{ current_user.last_name }}</span>
                     </li>
                     <li class="nav-item">
                         <form action="/logout" method="post" class="d-inline">
@@ -105,57 +99,46 @@
     </nav>
     
     <div class="container mt-4">
-        <div class="welcome-section">
-            <h4>Welcome back, {{ user.first_name }}!</h4>
-            <p class="mb-0 text-muted">Organization: {{ organization.name }} | Role: {{ user.role | capitalize }}</p>
-        </div>
-        
-        <div class="row mb-4">
-            <div class="col-md-4">
-                <div class="card stat-card">
-                    <div class="stat-value">{{ events | length }}</div>
-                    <div class="stat-label">Active Events</div>
-                </div>
-            </div>
-            <div class="col-md-4">
-                <div class="card stat-card">
-                    <div class="stat-value">{{ total_tickets }}</div>
-                    <div class="stat-label">Tickets Sold</div>
-                </div>
-            </div>
-            <div class="col-md-4">
-                <div class="card stat-card">
-                    <div class="stat-value">${{ "%.2f"|format(total_revenue) }}</div>
-                    <div class="stat-label">Total Revenue</div>
-                </div>
-            </div>
+        <div class="page-header">
+            <h4>User Management</h4>
+            <p class="mb-0 text-muted">Manage users in your organization</p>
         </div>
         
         <div class="card">
-            <div class="card-header">
-                <h5 class="mb-0">Recent Events</h5>
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <h5 class="mb-0">Organization Users</h5>
             </div>
             <div class="card-body">
                 <table class="table table-hover mb-0">
                     <thead>
                         <tr>
-                            <th>Event Name</th>
-                            <th>Date</th>
-                            <th>Location</th>
-                            <th>Capacity</th>
-                            <th>Sold</th>
-                            <th>Revenue</th>
+                            <th>ID</th>
+                            <th>Username</th>
+                            <th>Name</th>
+                            <th>Email</th>
+                            <th>Role</th>
+                            <th>Status</th>
+                            <th>Actions</th>
                         </tr>
                     </thead>
                     <tbody>
-                        {% for event in events %}
+                        {% for user in users %}
                         <tr>
-                            <td>{{ event.name }}</td>
-                            <td>{{ event.date }}</td>
-                            <td>{{ event.location }}</td>
-                            <td>{{ event.capacity }}</td>
-                            <td>{{ event.tickets_sold }}</td>
-                            <td>${{ "%.2f"|format(event.tickets_sold * event.price) }}</td>
+                            <td>{{ user.id }}</td>
+                            <td>{{ user.username }}</td>
+                            <td>{{ user.first_name }} {{ user.last_name }}</td>
+                            <td>{{ user.email }}</td>
+                            <td>{{ user.role | capitalize }}</td>
+                            <td>
+                                {% if user.enabled %}
+                                <span class="badge badge-success">Enabled</span>
+                                {% else %}
+                                <span class="badge badge-danger">Disabled</span>
+                                {% endif %}
+                            </td>
+                            <td>
+                                <a href="/admin/api/users/{{ user.id }}" class="btn btn-sm btn-outline-info">View</a>
+                            </td>
                         </tr>
                         {% endfor %}
                     </tbody>
