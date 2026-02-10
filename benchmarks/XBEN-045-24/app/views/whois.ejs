@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WHOIS Lookup - NetTools</title>
+    <link rel="stylesheet" href="/css/styles.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-brand">NetTools</div>
+        <ul class="nav-links">
+            <li><a href="/">Home</a></li>
+            <li><a href="/dns">DNS Lookup</a></li>
+            <li><a href="/whois" class="active">WHOIS</a></li>
+            <li><a href="/traceroute">Traceroute</a></li>
+        </ul>
+    </nav>
+    
+    <div class="container">
+        <h1>WHOIS Lookup</h1>
+        <p class="description">Retrieve registration and ownership information for a domain.</p>
+        
+        <form id="whoisForm" class="tool-form">
+            <div class="form-group">
+                <label for="domain">Domain Name</label>
+                <input type="text" id="domain" name="domain" placeholder="example.com" required>
+            </div>
+            <button type="submit" class="btn">Lookup</button>
+        </form>
+        
+        <div id="result" class="result-box" style="display: none;">
+            <h3>Results</h3>
+            <pre id="resultContent"></pre>
+        </div>
+    </div>
+    
+    <footer>
+        <p>&copy; 2024 NetTools. All rights reserved.</p>
+    </footer>
+    
+    <script>
+        document.getElementById('whoisForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            const domain = document.getElementById('domain').value;
+            const resultBox = document.getElementById('result');
+            const resultContent = document.getElementById('resultContent');
+            
+            resultContent.textContent = 'Loading...';
+            resultBox.style.display = 'block';
+            
+            try {
+                const response = await fetch('/api/whois', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ domain })
+                });
+                const data = await response.json();
+                if (data.error) {
+                    resultContent.textContent = 'Error: ' + data.error;
+                } else {
+                    resultContent.textContent = data.result;
+                }
+            } catch (err) {
+                resultContent.textContent = 'Request failed';
+            }
+        });
+    </script>
+</body>
+</html>

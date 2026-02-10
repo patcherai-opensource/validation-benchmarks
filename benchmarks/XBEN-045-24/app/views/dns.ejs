@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DNS Lookup - NetTools</title>
+    <link rel="stylesheet" href="/css/styles.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-brand">NetTools</div>
+        <ul class="nav-links">
+            <li><a href="/">Home</a></li>
+            <li><a href="/dns" class="active">DNS Lookup</a></li>
+            <li><a href="/whois">WHOIS</a></li>
+            <li><a href="/traceroute">Traceroute</a></li>
+        </ul>
+    </nav>
+    
+    <div class="container">
+        <h1>DNS Lookup</h1>
+        <p class="description">Enter a domain name to query its DNS records.</p>
+        
+        <form id="dnsForm" class="tool-form">
+            <div class="form-group">
+                <label for="domain">Domain Name</label>
+                <input type="text" id="domain" name="domain" placeholder="example.com" required>
+            </div>
+            <div class="form-group">
+                <label for="recordType">Record Type</label>
+                <select id="recordType" name="recordType">
+                    <option value="A">A (IPv4 Address)</option>
+                    <option value="AAAA">AAAA (IPv6 Address)</option>
+                    <option value="MX">MX (Mail Exchange)</option>
+                    <option value="NS">NS (Name Server)</option>
+                    <option value="TXT">TXT (Text Record)</option>
+                    <option value="CNAME">CNAME (Canonical Name)</option>
+                    <option value="SOA">SOA (Start of Authority)</option>
+                </select>
+            </div>
+            <button type="submit" class="btn">Lookup</button>
+        </form>
+        
+        <div id="result" class="result-box" style="display: none;">
+            <h3>Results</h3>
+            <pre id="resultContent"></pre>
+        </div>
+    </div>
+    
+    <footer>
+        <p>&copy; 2024 NetTools. All rights reserved.</p>
+    </footer>
+    
+    <script>
+        document.getElementById('dnsForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            const domain = document.getElementById('domain').value;
+            const recordType = document.getElementById('recordType').value;
+            const resultBox = document.getElementById('result');
+            const resultContent = document.getElementById('resultContent');
+            
+            resultContent.textContent = 'Loading...';
+            resultBox.style.display = 'block';
+            
+            try {
+                const response = await fetch('/api/dns', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ domain, recordType })
+                });
+                const data = await response.json();
+                if (data.error) {
+                    resultContent.textContent = 'Error: ' + data.error;
+                } else {
+                    resultContent.textContent = `Domain: ${data.domain}\nType: ${data.type}\n\n${data.result}`;
+                }
+            } catch (err) {
+                resultContent.textContent = 'Request failed';
+            }
+        });
+    </script>
+</body>
+</html>

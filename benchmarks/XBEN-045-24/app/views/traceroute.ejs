@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Traceroute - NetTools</title>
+    <link rel="stylesheet" href="/css/styles.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-brand">NetTools</div>
+        <ul class="nav-links">
+            <li><a href="/">Home</a></li>
+            <li><a href="/dns">DNS Lookup</a></li>
+            <li><a href="/whois">WHOIS</a></li>
+            <li><a href="/traceroute" class="active">Traceroute</a></li>
+        </ul>
+    </nav>
+    
+    <div class="container">
+        <h1>Traceroute</h1>
+        <p class="description">Trace the network path to a remote host.</p>
+        
+        <form id="tracerouteForm" class="tool-form">
+            <div class="form-group">
+                <label for="host">Destination Host</label>
+                <input type="text" id="host" name="host" placeholder="example.com or 8.8.8.8" required>
+            </div>
+            <div class="form-group">
+                <label for="maxHops">Maximum Hops</label>
+                <input type="number" id="maxHops" name="maxHops" value="10" min="1" max="15">
+            </div>
+            <button type="submit" class="btn">Trace Route</button>
+        </form>
+        
+        <div id="result" class="result-box" style="display: none;">
+            <h3>Results</h3>
+            <pre id="resultContent"></pre>
+        </div>
+    </div>
+    
+    <footer>
+        <p>&copy; 2024 NetTools. All rights reserved.</p>
+    </footer>
+    
+    <script>
+        document.getElementById('tracerouteForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            const host = document.getElementById('host').value;
+            const maxHops = document.getElementById('maxHops').value;
+            const resultBox = document.getElementById('result');
+            const resultContent = document.getElementById('resultContent');
+            
+            resultContent.textContent = 'Tracing route... This may take a moment.';
+            resultBox.style.display = 'block';
+            
+            try {
+                const response = await fetch('/api/traceroute', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ host, maxHops })
+                });
+                const data = await response.json();
+                if (data.error) {
+                    resultContent.textContent = 'Error: ' + data.error;
+                } else {
+                    resultContent.textContent = `Host: ${data.host}\nMax Hops: ${data.maxHops}\n\n${data.result}`;
+                }
+            } catch (err) {
+                resultContent.textContent = 'Request failed';
+            }
+        });
+    </script>
+</body>
+</html>
