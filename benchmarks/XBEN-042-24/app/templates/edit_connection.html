@@ -1,0 +1,60 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h2 class="page-title">Edit Connection: {{ connection.conn_id }}</h2>
+
+<div class="card">
+    <form method="POST">
+        <div class="form-row">
+            <div class="form-group">
+                <label for="conn_id">Connection ID</label>
+                <input type="text" id="conn_id" value="{{ connection.conn_id }}" disabled>
+                <p class="help-text">Connection ID cannot be changed</p>
+            </div>
+            <div class="form-group">
+                <label for="conn_type">Connection Type</label>
+                <input type="text" id="conn_type" value="{{ connection.conn_type }}" disabled>
+            </div>
+        </div>
+        
+        <div class="form-row">
+            <div class="form-group">
+                <label for="host">Host</label>
+                <input type="text" id="host" name="host" value="{{ connection.host or '' }}">
+            </div>
+            <div class="form-group">
+                <label for="port">Port</label>
+                <input type="number" id="port" name="port" value="{{ connection.port or '' }}">
+            </div>
+        </div>
+        
+        <div class="form-row">
+            <div class="form-group">
+                <label for="login">Login</label>
+                <input type="text" id="login" name="login" value="{{ connection.login or '' }}">
+            </div>
+            <div class="form-group">
+                <label for="password">Password</label>
+                <input type="password" id="password" name="password" value="********">
+                <p class="help-text">Leave as ******** to keep current password</p>
+            </div>
+        </div>
+        
+        <div class="form-group">
+            <label for="extra">Extra (JSON)</label>
+            <textarea id="extra" name="extra">{{ connection.extra or '{}' }}</textarea>
+            <p class="help-text">Additional configuration in JSON format</p>
+        </div>
+        
+        <div class="form-group">
+            <label for="description">Description</label>
+            <input type="text" id="description" name="description" value="{{ connection.description or '' }}">
+        </div>
+        
+        <div class="form-actions">
+            <button type="submit" class="btn btn-primary">Save Changes</button>
+            <a href="{{ url_for('connections_list') }}" class="btn btn-secondary">Cancel</a>
+        </div>
+    </form>
+</div>
+{% endblock %}

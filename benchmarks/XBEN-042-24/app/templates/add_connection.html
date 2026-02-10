@@ -1,0 +1,70 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h2 class="page-title">Add New Connection</h2>
+
+<div class="card">
+    <form method="POST">
+        <div class="form-row">
+            <div class="form-group">
+                <label for="conn_id">Connection ID</label>
+                <input type="text" id="conn_id" name="conn_id" required placeholder="e.g., postgres_default">
+                <p class="help-text">Unique identifier for this connection</p>
+            </div>
+            <div class="form-group">
+                <label for="conn_type">Connection Type</label>
+                <select id="conn_type" name="conn_type" required>
+                    <option value="">Select type...</option>
+                    <option value="postgres">PostgreSQL</option>
+                    <option value="mysql">MySQL</option>
+                    <option value="redis">Redis</option>
+                    <option value="http">HTTP</option>
+                    <option value="aws">AWS</option>
+                    <option value="gcp">Google Cloud</option>
+                    <option value="azure">Azure</option>
+                    <option value="ssh">SSH</option>
+                    <option value="ftp">FTP</option>
+                </select>
+            </div>
+        </div>
+        
+        <div class="form-row">
+            <div class="form-group">
+                <label for="host">Host</label>
+                <input type="text" id="host" name="host" placeholder="e.g., db.example.com">
+            </div>
+            <div class="form-group">
+                <label for="port">Port</label>
+                <input type="number" id="port" name="port" placeholder="e.g., 5432">
+            </div>
+        </div>
+        
+        <div class="form-row">
+            <div class="form-group">
+                <label for="login">Login</label>
+                <input type="text" id="login" name="login" placeholder="Username">
+            </div>
+            <div class="form-group">
+                <label for="password">Password</label>
+                <input type="password" id="password" name="password" placeholder="Password">
+            </div>
+        </div>
+        
+        <div class="form-group">
+            <label for="extra">Extra (JSON)</label>
+            <textarea id="extra" name="extra" placeholder='{"key": "value"}'>{}</textarea>
+            <p class="help-text">Additional configuration in JSON format</p>
+        </div>
+        
+        <div class="form-group">
+            <label for="description">Description</label>
+            <input type="text" id="description" name="description" placeholder="Brief description of this connection">
+        </div>
+        
+        <div class="form-actions">
+            <button type="submit" class="btn btn-primary">Create Connection</button>
+            <a href="{{ url_for('connections_list') }}" class="btn btn-secondary">Cancel</a>
+        </div>
+    </form>
+</div>
+{% endblock %}

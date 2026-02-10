@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+    <h2 class="page-title" style="margin-bottom: 0;">Connections</h2>
+    {% if session.role in ['admin', 'editor'] %}
+    <a href="{{ url_for('add_connection') }}" class="btn btn-primary">+ Add Connection</a>
+    {% endif %}
+</div>
+
+<div class="card">
+    <table>
+        <thead>
+            <tr>
+                <th>Connection ID</th>
+                <th>Type</th>
+                <th>Host</th>
+                <th>Port</th>
+                <th>Login</th>
+                <th>Password</th>
+                <th>Description</th>
+                {% if session.role in ['admin', 'editor'] %}
+                <th>Actions</th>
+                {% endif %}
+            </tr>
+        </thead>
+        <tbody>
+            {% for conn in connections %}
+            <tr>
+                <td><strong>{{ conn.conn_id }}</strong></td>
+                <td><span class="conn-type">{{ conn.conn_type }}</span></td>
+                <td>{{ conn.host or '-' }}</td>
+                <td>{{ conn.port or '-' }}</td>
+                <td>{{ conn.login or '-' }}</td>
+                <td class="masked">{{ mask_value(conn.password) if conn.password else '-' }}</td>
+                <td>{{ conn.description or '-' }}</td>
+                {% if session.role in ['admin', 'editor'] %}
+                <td class="actions">
+                    <a href="{{ url_for('edit_connection', conn_id=conn.id) }}" class="btn btn-primary">Edit</a>
+                    <form method="POST" action="{{ url_for('delete_connection', conn_id=conn.id) }}" style="display:inline;" onsubmit="return confirm('Delete this connection?');">
+                        <button type="submit" class="btn btn-danger">Delete</button>
+                    </form>
+                </td>
+                {% endif %}
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}
