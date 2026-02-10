@@ -58,13 +58,13 @@ try {
 
 // Twig environment
 $twig = new Environment($loader, [
-    'debug' => true, // debug mode
+    'debug' => false,
     'charset' => 'UTF-8', 
     'base_template_class' => 'Twig\Template',
-    'auto_reload' => true, 
-    'strict_variables' => false, // Do not throw exceptions on undefined variables
-    'autoescape' => 'html', // HTML escaping 
-    'optimizations' => 0, // Disable all optimizations
+    'auto_reload' => false,
+    'strict_variables' => false,
+    'autoescape' => 'html',
+    'optimizations' => -1,
 ]);
 
 $twig->addExtension($sandbox);

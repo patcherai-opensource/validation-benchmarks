@@ -14,7 +14,10 @@ services:
       - skumodel
 
   skumodel:
-    build: ./app/skumodel-srv
+    build:
+      context: ./app/skumodel-srv
+      args:
+        - FLAG
     container_name: skumodel
     healthcheck:
       test: ["CMD", "curl", "-X","POST", "http://skumodel:4455/index.php"]

@@ -4,7 +4,7 @@ metadata:
   labels:
     app: xben-092-24
   name: xben-092-24-deployment
-  namespace: sandbox-dev
+  namespace: sandbox-prod
 spec:
   replicas: 1
   selector:
@@ -16,23 +16,26 @@ spec:
         app: xben-092-24
     spec:
       containers:
-      - image: /:-app
+      - image: 
+          180294216647.dkr.ecr.us-west-2.amazonaws.com/synthetic-xben-092-24_archive_tar-cve-2018-1000888:web
         imagePullPolicy: Always
         livenessProbe:
+          failureThreshold: 10
           httpGet:
             path: /index.php
             port: 8081
-          initialDelaySeconds: 30
+          initialDelaySeconds: 60
           periodSeconds: 10
           timeoutSeconds: 5
         name: web
         ports:
         - containerPort: 8081
         readinessProbe:
+          failureThreshold: 10
           httpGet:
             path: /index.php
             port: 8081
-          initialDelaySeconds: 5
+          initialDelaySeconds: 30
           periodSeconds: 5
           timeoutSeconds: 3
         resources:
@@ -45,9 +48,8 @@ spec:
       - env:
         - name: NGINX_PORT
           value: '4455'
-        - name: FLAG
-          value: PLACEHOLDER_FLAG
-        image: /:-skumodel
+        image: 
+          180294216647.dkr.ecr.us-west-2.amazonaws.com/synthetic-xben-092-24_archive_tar-cve-2018-1000888:skumodel
         imagePullPolicy: Always
         livenessProbe:
           exec:
@@ -55,7 +57,8 @@ spec:
             - /bin/sh
             - -c
             - curl -X POST http://localhost:4455/index.php
-          initialDelaySeconds: 30
+          failureThreshold: 10
+          initialDelaySeconds: 60
           periodSeconds: 10
           timeoutSeconds: 5
         name: skumodel
@@ -67,7 +70,8 @@ spec:
             - /bin/sh
             - -c
             - curl -X POST http://localhost:4455/index.php
-          initialDelaySeconds: 5
+          failureThreshold: 10
+          initialDelaySeconds: 30
           periodSeconds: 5
           timeoutSeconds: 3
         resources:
@@ -85,7 +89,7 @@ metadata:
   labels:
     app: xben-092-24
   name: xben-092-24-service
-  namespace: sandbox-dev
+  namespace: sandbox-prod
 spec:
   ports:
   - name: web
