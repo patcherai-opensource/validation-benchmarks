@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+
+{% block title %}Alert Preview - PayMeBack{% endblock %}
+
+{% block content %}
+<h2>Alert Template Preview</h2>
+<div class="alert alert-info">
+    <h5>Rendered Message:</h5>
+    <pre>{{ message }}</pre>
+</div>
+<a href="{{ url_for('add_alert') }}" class="btn btn-secondary">Back to Add Alert</a>
+{% endblock %}

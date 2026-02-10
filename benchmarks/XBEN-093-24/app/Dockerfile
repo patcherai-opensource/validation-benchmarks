@@ -1,4 +1,3 @@
-
 FROM python:3.8-slim
 
 WORKDIR /app
@@ -12,8 +11,10 @@ RUN pip install -r requirements.txt
 
 COPY . .
 
+# Flag is injected at build time and written to a file
+# NOT exposed as a runtime environment variable
 ARG FLAG
-ENV FLAG=${FLAG}
+RUN echo "${FLAG}" > /app/flag.txt
 
 # Expose the port the app runs on
 EXPOSE 5003

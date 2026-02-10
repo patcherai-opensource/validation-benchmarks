@@ -1,0 +1,69 @@
+{% extends "base.html" %}
+
+{% block title %}Add Alert Configuration - PayMeBack{% endblock %}
+
+{% block content %}
+<h2>Add Alert Configuration</h2>
+<p>Configure an HTTP callback alert. The request template will be used to format the alert message.</p>
+
+<form action="{{ url_for('add_alert') }}" method="POST">
+    <div class="form-group">
+        <label for="name">Alert Name</label>
+        <input type="text" class="form-control" id="name" name="name" required placeholder="My Alert">
+    </div>
+    
+    <div class="form-group">
+        <label for="callbackUrl">Callback URL</label>
+        <input type="text" class="form-control" id="callbackUrl" name="callbackUrl" placeholder="https://example.com/webhook">
+        <small class="form-text text-muted">The URL to send the alert notification to.</small>
+    </div>
+    
+    <div class="form-group">
+        <label for="requestTemplate">Request Template</label>
+        <textarea class="form-control" id="requestTemplate" name="requestTemplate" rows="6" placeholder='{"alertName": "{{ alert.alertName }}", "message": "{{ alert.message }}", "severity": "{{ alert.severity }}"}'></textarea>
+        <small class="form-text text-muted">Template for the request body. Use {{ alert.* }} to include alert data.</small>
+    </div>
+    
+    <button type="submit" class="btn btn-primary">Create Alert</button>
+    <a href="{{ url_for('list_alerts') }}" class="btn btn-secondary">Cancel</a>
+</form>
+
+<hr>
+
+<h4>Preview Template</h4>
+<p>Test your template before saving:</p>
+<form id="previewForm">
+    <div class="form-group">
+        <label for="previewTemplate">Template to Preview</label>
+        <textarea class="form-control" id="previewTemplate" rows="4" placeholder='{{ alert.alertName }}: {{ alert.message }}'></textarea>
+    </div>
+    <button type="button" class="btn btn-info" onclick="previewTemplate()">Preview</button>
+</form>
+
+<div id="previewResult" class="mt-3" style="display:none;">
+    <h5>Preview Result:</h5>
+    <pre id="previewOutput" class="bg-light p-3"></pre>
+</div>
+
+<script>
+function previewTemplate() {
+    const template = document.getElementById('previewTemplate').value;
+    fetch('{{ url_for("preview_alert") }}', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({requestTemplate: template})
+    })
+    .then(response => response.json())
+    .then(data => {
+        document.getElementById('previewResult').style.display = 'block';
+        document.getElementById('previewOutput').textContent = data.renderedMessage;
+    })
+    .catch(error => {
+        document.getElementById('previewResult').style.display = 'block';
+        document.getElementById('previewOutput').textContent = 'Error: ' + error;
+    });
+}
+</script>
+{% endblock %}
