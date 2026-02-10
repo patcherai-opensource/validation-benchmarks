@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Settings</title>
+    <link href="{{ url_for('static', filename='css/bootstrap.min.css') }}" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <div class="row justify-content-between mt-5">
+            <div class="col-md-9">
+                <h2>Account Settings</h2>
+                
+                <div class="card mt-4">
+                    <div class="card-header">
+                        <h5>Notification Preferences</h5>
+                    </div>
+                    <div class="card-body">
+                        <form>
+                            <div class="form-check mb-2">
+                                <input class="form-check-input" type="checkbox" id="emailNotif" checked>
+                                <label class="form-check-label" for="emailNotif">
+                                    Email notifications for payment reminders
+                                </label>
+                            </div>
+                            <div class="form-check mb-2">
+                                <input class="form-check-input" type="checkbox" id="smsNotif">
+                                <label class="form-check-label" for="smsNotif">
+                                    SMS notifications for payment due dates
+                                </label>
+                            </div>
+                            <button type="button" class="btn btn-secondary mt-2" disabled>Save (Coming Soon)</button>
+                        </form>
+                    </div>
+                </div>
+
+                <div class="card mt-4">
+                    <div class="card-header">
+                        <h5>Configuration Templates</h5>
+                    </div>
+                    <div class="card-body">
+                        <p>Preview your custom configuration templates before applying them to your account.</p>
+                        <form id="configForm" method="post" action="/api/config/preview">
+                            <div class="mb-3">
+                                <label for="config" class="form-label">Configuration (YAML format):</label>
+                                <textarea class="form-control" id="config" name="config" rows="6" placeholder="Enter your configuration here...
+name: My Config
+notification_email: user@example.com
+payment_reminder: 3"></textarea>
+                            </div>
+                            <div class="mb-3">
+                                <label for="template" class="form-label">Template:</label>
+                                <select class="form-select" id="template" name="template">
+                                    <option value="default">Default</option>
+                                    <option value="minimal">Minimal</option>
+                                    <option value="detailed">Detailed</option>
+                                </select>
+                            </div>
+                            <button type="submit" class="btn btn-primary">Preview Configuration</button>
+                        </form>
+                    </div>
+                </div>
+
+                <div class="card mt-4">
+                    <div class="card-header">
+                        <h5>Security Settings</h5>
+                    </div>
+                    <div class="card-body">
+                        <p>Two-factor authentication: <span class="badge bg-secondary">Not Enabled</span></p>
+                        <button type="button" class="btn btn-outline-primary" disabled>Enable 2FA (Coming Soon)</button>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">Navigation</h5>
+                        <ul class="list-group">
+                            <li class="list-group-item"><a href="{{ url_for('home') }}">Home</a></li>
+                            <li class="list-group-item"><a href="{{ url_for('profile') }}">Profile</a></li>
+                            <li class="list-group-item"><a href="{{ url_for('loan_details') }}">Loan Details</a></li>
+                            <li class="list-group-item"><a href="{{ url_for('settings') }}">Settings</a></li>
+                            <li class="list-group-item"><a href="{{ url_for('logout') }}">Exit</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="{{ url_for('static', filename='js/bootstrap.bundle.min.js') }}"></script>
+</body>
+</html>
