@@ -3,91 +3,194 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Service Status Dashboard</title>
+    <title>SuperAGI - Agent Template Manager</title>
     <style>
         body {
-            font-family: Arial, sans-serif;
-            background: #f4f4f9;
+            font-family: 'Segoe UI', Arial, sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
             margin: 0;
-            padding: 0;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-        }
-
-        #service-container {
-            width: 80%;
-            max-width: 600px;
-            background: white;
-            border-radius: 8px;
-            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
             padding: 20px;
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
+            min-height: 100vh;
+            color: #e0e0e0;
         }
 
-        .service {
-            padding: 10px 20px;
-            border-radius: 5px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            font-size: 16px;
-            transition: background-color 0.3s;
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
         }
 
-        .red {
-            background-color: #ffdddd;
-            color: #d04437;
+        header {
+            text-align: center;
+            padding: 20px 0;
+            margin-bottom: 30px;
         }
 
-        .green {
-            background-color: #ddffdd;
-            color: #4a934a;
+        h1 {
+            color: #7c3aed;
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+
+        .subtitle {
+            color: #a78bfa;
+            font-size: 1.1rem;
+        }
+
+        .card {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 12px;
+            padding: 25px;
+            margin-bottom: 20px;
+            border: 1px solid rgba(124, 58, 237, 0.3);
+        }
+
+        .card h2 {
+            color: #a78bfa;
+            margin-top: 0;
+            border-bottom: 1px solid rgba(124, 58, 237, 0.3);
+            padding-bottom: 10px;
+        }
+
+        .api-endpoint {
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 8px;
+            padding: 15px;
+            margin: 10px 0;
+            font-family: 'Consolas', monospace;
+        }
+
+        .method {
+            display: inline-block;
+            padding: 4px 10px;
+            border-radius: 4px;
+            font-weight: bold;
+            margin-right: 10px;
+        }
+
+        .method-post { background: #22c55e; color: white; }
+        .method-get { background: #3b82f6; color: white; }
+        .method-put { background: #f59e0b; color: white; }
+
+        .endpoint-path {
+            color: #e0e0e0;
+        }
+
+        .example {
+            background: rgba(0, 0, 0, 0.4);
+            border-radius: 6px;
+            padding: 12px;
+            margin-top: 10px;
+            font-size: 0.9rem;
+            overflow-x: auto;
+        }
+
+        .example code {
+            color: #a5f3fc;
+        }
+
+        .feature-list {
+            list-style: none;
+            padding: 0;
+        }
+
+        .feature-list li {
+            padding: 8px 0;
+            padding-left: 25px;
+            position: relative;
+        }
+
+        .feature-list li::before {
+            content: "✓";
+            color: #22c55e;
+            position: absolute;
+            left: 0;
+        }
+
+        .warning {
+            background: rgba(245, 158, 11, 0.2);
+            border-left: 4px solid #f59e0b;
+            padding: 15px;
+            border-radius: 0 8px 8px 0;
+            margin: 15px 0;
         }
     </style>
 </head>
 <body>
-    <div id="service-container">
-        <div id="apache" class="service">Apache: Loading...</div>
-        <div id="mysql" class="service">MySQL: Loading...</div>
-        <div id="nginx" class="service">Nginx: Loading...</div>
-        <div id="ssh" class="service">SSH: Loading...</div>
+    <div class="container">
+        <header>
+            <h1>🤖 SuperAGI</h1>
+            <p class="subtitle">Autonomous AI Agent Template Management Platform</p>
+        </header>
+
+        <div class="card">
+            <h2>📋 Overview</h2>
+            <p>Welcome to the SuperAGI Agent Template Management API. Create, configure, and manage AI agent templates with customizable goals, constraints, and instructions.</p>
+            <ul class="feature-list">
+                <li>Create custom agent templates</li>
+                <li>Configure agent goals and constraints</li>
+                <li>Import templates from marketplace</li>
+                <li>Dynamic configuration evaluation</li>
+            </ul>
+        </div>
+
+        <div class="card">
+            <h2>🔌 API Endpoints</h2>
+            
+            <div class="api-endpoint">
+                <span class="method method-post">POST</span>
+                <span class="endpoint-path">/api/agent_templates/create</span>
+                <p style="margin: 10px 0 5px 0; color: #9ca3af;">Create a new agent template</p>
+                <div class="example">
+                    <code>{"name": "Research Agent", "description": "Agent for research tasks"}</code>
+                </div>
+            </div>
+
+            <div class="api-endpoint">
+                <span class="method method-put">PUT</span>
+                <span class="endpoint-path">/api/agent_templates/update_agent_template/{id}</span>
+                <p style="margin: 10px 0 5px 0; color: #9ca3af;">Update agent template configuration</p>
+                <div class="example">
+                    <code>{"agent_configs": {"goal": "\"Research AI safety\"", "constraints": "\"Be ethical\""}}</code>
+                </div>
+            </div>
+
+            <div class="api-endpoint">
+                <span class="method method-get">GET</span>
+                <span class="endpoint-path">/api/agent_templates/{id}</span>
+                <p style="margin: 10px 0 5px 0; color: #9ca3af;">Get agent template by ID</p>
+            </div>
+
+            <div class="api-endpoint">
+                <span class="method method-get">GET</span>
+                <span class="endpoint-path">/api/agent_templates</span>
+                <p style="margin: 10px 0 5px 0; color: #9ca3af;">List all agent templates</p>
+            </div>
+
+            <div class="api-endpoint">
+                <span class="method method-post">POST</span>
+                <span class="endpoint-path">/api/marketplace/clone_template</span>
+                <p style="margin: 10px 0 5px 0; color: #9ca3af;">Clone template from marketplace</p>
+                <div class="example">
+                    <code>{"name": "Imported Agent", "agent_configs": {"goal": "\"Complete tasks\""}}</code>
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <h2>⚙️ Configuration Fields</h2>
+            <p>Agent templates support the following configuration fields:</p>
+            <ul class="feature-list">
+                <li><strong>goal</strong> - The primary objective of the agent</li>
+                <li><strong>constraints</strong> - Behavioral constraints for the agent</li>
+                <li><strong>instruction</strong> - Specific instructions for task execution</li>
+                <li><strong>model</strong> - The AI model to use</li>
+                <li><strong>tools</strong> - Available tools for the agent</li>
+            </ul>
+            <div class="warning">
+                <strong>Note:</strong> Configuration values for goal, constraints, and instruction fields support dynamic evaluation for advanced configuration expressions.
+            </div>
+        </div>
     </div>
-
-    <script>
-        document.addEventListener("DOMContentLoaded", function() {
-            const services = ['apache', 'mysql', 'nginx', 'ssh'];
-
-            services.forEach(service => {
-                fetch('/check_service', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({ service_name: service })
-                })
-                .then(response => response.json())
-                .then(data => {
-                    const element = document.getElementById(service);
-                    if (data.status === "true") {
-                        element.classList.add('green');
-                        element.textContent = service.toUpperCase() + ": Running";
-                    } else {
-                        element.classList.add('red');
-                        element.textContent = service.toUpperCase() + ": Stopped";
-                    }
-                })
-                .catch(error => {
-                    console.error('Error:', error);
-                    const element = document.getElementById(service);
-                    element.textContent = service.toUpperCase() + ": Error";
-                });
-            });
-        });
-    </script>
 </body>
 </html>
 
