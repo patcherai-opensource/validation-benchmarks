@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Loan Invoice</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 40px; }
+        .invoice-header { border-bottom: 2px solid #333; padding-bottom: 20px; margin-bottom: 30px; }
+        .invoice-details { margin-bottom: 30px; }
+        .invoice-table { width: 100%; border-collapse: collapse; }
+        .invoice-table th, .invoice-table td { border: 1px solid #ddd; padding: 12px; text-align: left; }
+        .invoice-table th { background-color: #f5f5f5; }
+        .total-row { font-weight: bold; background-color: #e9ecef; }
+    </style>
+</head>
+<body>
+    <div class="invoice-header">
+        <h1>Loan Invoice</h1>
+        <p>Invoice Number: {{ invoice_number }}</p>
+    </div>
+    
+    <div class="invoice-details">
+        <h3>Customer Information</h3>
+        <p><strong>Name:</strong> {{ user.name }} {{ user.lastname }}</p>
+        <p><strong>Email:</strong> {{ user.email }}</p>
+    </div>
+    
+    <div class="invoice-details">
+        <h3>Loan Details</h3>
+        <table class="invoice-table">
+            <tr>
+                <th>Description</th>
+                <th>Value</th>
+            </tr>
+            <tr>
+                <td>Loan Principal</td>
+                <td>${{ "%.2f"|format(loan_amount) }}</td>
+            </tr>
+            <tr>
+                <td>Loan Term</td>
+                <td>{{ loan_term_months }} months</td>
+            </tr>
+            <tr>
+                <td>Monthly Payment</td>
+                <td>${{ "%.2f"|format(monthly_payment) }}</td>
+            </tr>
+            <tr class="total-row">
+                <td>Total Payment</td>
+                <td>${{ "%.2f"|format(total_payment) }}</td>
+            </tr>
+        </table>
+    </div>
+    
+    <div class="invoice-footer">
+        <p>Thank you for your business.</p>
+    </div>
+</body>
+</html>
