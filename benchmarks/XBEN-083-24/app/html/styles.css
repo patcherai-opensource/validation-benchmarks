@@ -5,23 +5,75 @@ body {
     padding: 20px;
 }
 .container {
-    width: 80%;
+    max-width: 900px;
     margin: auto;
     background: white;
-    padding: 20px;
+    padding: 30px;
     border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
 }
-.post {
-    border-bottom: 1px solid #ccc;
-    padding-bottom: 20px;
-    margin-bottom: 20px;
-}
-.post h2 a {
+h1 {
     color: #333;
-    text-decoration: none;
+    border-bottom: 2px solid #007bff;
+    padding-bottom: 10px;
 }
-.post img {
-    width: 100%;
-    height: auto;
+h2 {
+    color: #555;
+    margin-top: 25px;
+}
+.info-box, .test-box, .api-docs, .sample-ranges {
+    background: #f8f9fa;
+    padding: 20px;
     border-radius: 5px;
+    margin: 20px 0;
+    border-left: 4px solid #007bff;
+}
+.test-box form {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    flex-wrap: wrap;
+}
+.test-box input[type="text"] {
+    padding: 10px;
+    font-size: 14px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    min-width: 200px;
+}
+.test-box button {
+    padding: 10px 20px;
+    background: #007bff;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+.test-box button:hover {
+    background: #0056b3;
+}
+pre {
+    background: #272822;
+    color: #f8f8f2;
+    padding: 15px;
+    border-radius: 4px;
+    overflow-x: auto;
+    font-size: 13px;
+}
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 10px;
+}
+table th, table td {
+    padding: 10px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+}
+table th {
+    background: #007bff;
+    color: white;
+}
+table tr:hover {
+    background: #f1f1f1;
 }
