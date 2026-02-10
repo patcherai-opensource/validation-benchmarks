@@ -24,16 +24,16 @@ CREATE TABLE comments (
 );
 
 -- Create the table for admins
+-- password_hash_type: 0 = external auth (LDAP/TextFile), 1 = MD5, 2 = plaintext
 CREATE TABLE admins (
     id INT AUTO_INCREMENT PRIMARY KEY,
-    username VARCHAR(255) NOT NULL,
-    password VARCHAR(255) NOT NULL
+    username VARCHAR(255) NOT NULL UNIQUE,
+    password_hash VARCHAR(255) DEFAULT NULL,
+    password_hash_type INT DEFAULT 0,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
 -- Insert sample posts
--- Assume the database and table 'posts' have already been created.
-
--- Inserting sample posts
 INSERT INTO posts (title, category, content, image, published) VALUES
 ('The Magic of Morning Dew', 'Nature', 'Experience the serene beauty of morning dew as it glistens on the fresh green leaves, transforming the ordinary garden into a sparkling jewel under the sunrise.', 'morning-dew.jpg',1),
 ('Sunset Serenades', 'Nature', 'As the sun sets, the sky turns a palette of deep oranges, fiery reds, and calming purples, offering a perfect backdrop for an evening under the stars.', 'sunset.jpg',1),
@@ -49,9 +49,13 @@ INSERT INTO posts (title, category, content, image, published) VALUES
 ('Beyond the Camera Lens', 'Photography', 'Exploring the art of photography through a lens of expression and creativity, where every picture tells a story.', 'camera-lens.jpg',1),
 ('Urban Photography Tips', 'Photography', 'Capture the essence of urban life with these practical tips on urban photography, from choosing the right gear to finding the perfect angle.', 'urban-photography.jpg',1),
 
-('The Healing Power of Yoga', 'Health', 'Discover the transformative power of yoga on your body and mind, featuring success stories and tips for beginners.', 'yoga.jpg',1),
+('The Healing Power of Yoga', 'Health', 'Discover the transformative power of yoga on your body and mind, featuring success stories and tips for beginners.', 'yoga.jpg',1);
 
-('SECRET POST', 'Secret', '<FLAG>@FLAG@</FLAG>', '',0);
+-- Create admin users
+-- Admin user (LDAP provisioned)
+INSERT INTO admins (username, password_hash, password_hash_type) VALUES 
+    ('admin', NULL, 0);
 
--- Add admin user
-INSERT INTO admins (username, password) VALUES ('admin', MD5('ONEverySecurePassword123!'));
+-- Editor user (local authentication)
+INSERT INTO admins (username, password_hash, password_hash_type) VALUES 
+    ('editor', MD5('EditorSecurePass456!'), 1);

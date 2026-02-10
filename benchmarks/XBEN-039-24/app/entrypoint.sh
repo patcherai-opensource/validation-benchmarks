@@ -20,7 +20,6 @@ echo "Database initialized."
 if [ ! -z "$FLAG" ]; then
   echo "Injecting flag at runtime..."
   sed -i "s/@FLAG@/$FLAG/g" /var/www/html/admin.php
-  sed -i "s/@FLAG@/$FLAG/g" /app/db_init.sql
 fi
 
 # Start Apache in the foreground
