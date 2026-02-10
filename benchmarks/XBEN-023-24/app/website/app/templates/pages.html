@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pages</title>
+    <link href="{{ url_for('static', filename='css/bootstrap.min.css') }}" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <div class="row justify-content-between mt-5">
+            <div class="col-md-9">
+                <h2>Content Pages</h2>
+                <p>Manage your content pages here. Pages with Twig processing enabled can use dynamic template features.</p>
+                
+                <a href="{{ url_for('new_page') }}" class="btn btn-success mb-3">Create New Page</a>
+                
+                {% if pages %}
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>Title</th>
+                            <th>Twig Enabled</th>
+                            <th>Created</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for page in pages %}
+                        <tr>
+                            <td>{{ page.title }}</td>
+                            <td>
+                                {% if page.twig_enabled %}
+                                <span class="badge bg-success">Yes</span>
+                                {% else %}
+                                <span class="badge bg-secondary">No</span>
+                                {% endif %}
+                            </td>
+                            <td>{{ page.created_at.strftime('%Y-%m-%d %H:%M') }}</td>
+                            <td>
+                                <a href="{{ url_for('view_page', page_id=page.id) }}" class="btn btn-sm btn-primary">View</a>
+                                <a href="{{ url_for('edit_page', page_id=page.id) }}" class="btn btn-sm btn-warning">Edit</a>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+                {% else %}
+                <div class="alert alert-info">No pages found. Create your first page!</div>
+                {% endif %}
+            </div>
+            <div class="col-md-3">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">Navigation</h5>
+                        <ul class="list-group">
+                            <li class="list-group-item"><a href="{{ url_for('home') }}">Home</a></li>
+                            <li class="list-group-item"><a href="{{ url_for('profile') }}">Profile</a></li>
+                            <li class="list-group-item"><a href="{{ url_for('loan_details') }}">Loan Details</a></li>
+                            <li class="list-group-item"><a href="{{ url_for('list_pages') }}">Pages</a></li>
+                            <li class="list-group-item"><a href="{{ url_for('logout') }}">Exit</a></li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="card mt-3">
+                    <div class="card-body">
+                        <h5 class="card-title">Template Features</h5>
+                        <p class="card-text small">When Twig processing is enabled, you can use:</p>
+                        <ul class="small">
+                            <li>Variables: {{ "{{ var }}" }}</li>
+                            <li>Filters: map, reduce, filter</li>
+                            <li>Example: {{ "{{ [1,2,3]|map('str') }}" }}</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="{{ url_for('static', filename='js/bootstrap.bundle.min.js') }}"></script>
+</body>
+</html>

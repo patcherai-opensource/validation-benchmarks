@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% if page %}Edit Page{% else %}New Page{% endif %}</title>
+    <link href="{{ url_for('static', filename='css/bootstrap.min.css') }}" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <div class="row justify-content-between mt-5">
+            <div class="col-md-9">
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item"><a href="{{ url_for('list_pages') }}">Pages</a></li>
+                        <li class="breadcrumb-item active" aria-current="page">{% if page %}Edit: {{ page.title }}{% else %}New Page{% endif %}</li>
+                    </ol>
+                </nav>
+                
+                <h2>{% if page %}Edit Page{% else %}Create New Page{% endif %}</h2>
+                
+                <form method="post" id="pageForm">
+                    <div class="mb-3">
+                        <label for="title" class="form-label">Page Title:</label>
+                        <input type="text" class="form-control" id="title" name="title" 
+                               value="{% if page %}{{ page.title }}{% endif %}" required>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="content" class="form-label">Page Content:</label>
+                        <textarea class="form-control" id="content" name="content" rows="15" 
+                                  placeholder="Enter your page content here. HTML is supported.">{% if page %}{{ page.content }}{% endif %}</textarea>
+                    </div>
+                    
+                    <div class="mb-3 form-check">
+                        <input type="checkbox" class="form-check-input" id="twig_enabled" name="twig_enabled"
+                               {% if page and page.twig_enabled %}checked{% endif %}>
+                        <label class="form-check-label" for="twig_enabled">
+                            Enable Twig/Template Processing
+                        </label>
+                        <div class="form-text">
+                            When enabled, template syntax like {{ "{{ }}" }} will be processed. 
+                            Use filters like <code>map</code>, <code>reduce</code>, and <code>filter</code>.
+                        </div>
+                    </div>
+                    
+                    <div class="d-flex gap-2">
+                        <button type="submit" class="btn btn-primary">
+                            {% if page %}Update Page{% else %}Create Page{% endif %}
+                        </button>
+                        {% if page %}
+                        <button type="button" class="btn btn-secondary" id="previewBtn">Preview</button>
+                        {% endif %}
+                        <a href="{{ url_for('list_pages') }}" class="btn btn-outline-secondary">Cancel</a>
+                    </div>
+                </form>
+                
+                {% if page %}
+                <div class="mt-4" id="previewContainer" style="display: none;">
+                    <h4>Preview:</h4>
+                    <div class="card">
+                        <div class="card-body" id="previewContent">
+                        </div>
+                    </div>
+                </div>
+                {% endif %}
+            </div>
+            <div class="col-md-3">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">Navigation</h5>
+                        <ul class="list-group">
+                            <li class="list-group-item"><a href="{{ url_for('home') }}">Home</a></li>
+                            <li class="list-group-item"><a href="{{ url_for('profile') }}">Profile</a></li>
+                            <li class="list-group-item"><a href="{{ url_for('loan_details') }}">Loan Details</a></li>
+                            <li class="list-group-item"><a href="{{ url_for('list_pages') }}">Pages</a></li>
+                            <li class="list-group-item"><a href="{{ url_for('logout') }}">Exit</a></li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="card mt-3">
+                    <div class="card-body">
+                        <h5 class="card-title">Template Syntax Help</h5>
+                        <p class="card-text small">Available filters when Twig is enabled:</p>
+                        <ul class="small">
+                            <li><code>map</code> - Apply function to each element</li>
+                            <li><code>reduce</code> - Reduce array with function</li>
+                            <li><code>filter</code> - Filter array elements</li>
+                        </ul>
+                        <p class="card-text small">Examples:</p>
+                        <code class="small">{{ "{{ ['a','b']|map('upper') }}" }}</code><br>
+                        <code class="small">{{ "{{ [1,2,3]|reduce('sum') }}" }}</code>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="{{ url_for('static', filename='js/bootstrap.bundle.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/jquery.min.js') }}"></script>
+    
+    {% if page %}
+    <script>
+        $(document).ready(function() {
+            $('#previewBtn').click(function() {
+                var content = $('#content').val();
+                var twigEnabled = $('#twig_enabled').is(':checked');
+                
+                $.post('{{ url_for("preview_page", page_id=page.id) }}', {
+                    content: content,
+                    twig_enabled: twigEnabled ? 'on' : ''
+                }, function(data) {
+                    $('#previewContent').html(data);
+                    $('#previewContainer').show();
+                });
+            });
+        });
+    </script>
+    {% endif %}
+</body>
+</html>

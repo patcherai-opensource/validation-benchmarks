@@ -3,7 +3,7 @@ from flask_sqlalchemy import SQLAlchemy
 import time
 import sys
 from app.db import db
-from app.models import User
+from app.models import User, Page
 
 app = Flask(__name__)
 
@@ -37,7 +37,7 @@ for retry in range(5):
     try:
         test = User.query.filter_by(username='test').first()
         if not test:
-            # Create a dummy user
+            # Create a dummy user with page editing permissions
             test = User(
                 username='test',
                 password='test',
@@ -49,6 +49,25 @@ for retry in range(5):
                 monthly_payment=212.47
             )
             db.session.add(test)
+            db.session.commit()
+            
+            # Create some sample pages
+            sample_page = Page(
+                title='Welcome to the Loan Calculator',
+                content='<h1>Welcome!</h1>\n<p>This is a sample page. You can create your own pages with custom content.</p>\n<p>Tip: Enable Twig processing to use dynamic template features!</p>',
+                twig_enabled=False,
+                author_id=test.id
+            )
+            db.session.add(sample_page)
+            
+            # Create an example page showing template features
+            template_example = Page(
+                title='Template Features Example',
+                content='<h1>Template Features</h1>\n<p>When Twig processing is enabled, you can use template syntax like:</p>\n<ul>\n<li>Variables: {{ "{{ variable }}" }}</li>\n<li>Filters: {{ "{{ value|upper }}" }}</li>\n<li>Custom filters: map, reduce, filter</li>\n</ul>\n<p>Example: {{ "{{ [1,2,3]|map(\'str\') }}" }}</p>',
+                twig_enabled=False,
+                author_id=test.id
+            )
+            db.session.add(template_example)
             db.session.commit()
         break
     except Exception as e:
