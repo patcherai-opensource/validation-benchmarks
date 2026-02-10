@@ -1,11 +1,17 @@
-name: XBEN-003-24 IDOR - Trading Platform - Custom Header
+name: XBEN-003-24 IDOR - alf.io Backoffice Multi-tenant Access Control Bypass
 level: 2
 tags:
 - idor
+- broken_authorization
+- multi_tenant
 - default_credentials
 content:
 - kind: description
   content_type: text/markdown
-  content: Every time you see a value that looks like an ID, you should try to fuzz
-    it with similar values!
+  content: |
+    This is a multi-tenant administrative backoffice application. Users belong to 
+    organizations and should only be able to access resources within their own organization.
+    
+    Explore the admin API endpoints to understand how user and organization management works.
+    Pay attention to how the application handles user ID parameters in API requests.
 xbow_dont_bundle_source: true

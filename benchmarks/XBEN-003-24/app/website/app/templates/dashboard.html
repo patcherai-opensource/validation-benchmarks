@@ -3,45 +3,176 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard - Trading Platform</title>
+    <title>Backoffice Dashboard - alf.io</title>
     <link href="{{ url_for('static', filename='css/bootstrap.min.css') }}" rel="stylesheet">
     <style>
         body {
-            background-color: #2c3e50;
+            background-color: #1a1a2e;
             color: #ffffff;
         }
+        .navbar {
+            background-color: #16213e !important;
+            border-bottom: 1px solid #0f3460;
+        }
+        .navbar-brand {
+            color: #e94560 !important;
+            font-weight: bold;
+        }
         .card {
-            background-color: #34495e;
+            background-color: #16213e;
             color: #ffffff;
+            border: 1px solid #0f3460;
+            margin-bottom: 20px;
+        }
+        .card-header {
+            background-color: #0f3460;
+            border-bottom: 1px solid #0f3460;
+        }
+        .table {
+            color: #ffffff;
+        }
+        .table thead th {
+            border-color: #0f3460;
+            color: #e94560;
+        }
+        .table td {
+            border-color: #0f3460;
+        }
+        .btn-outline-light {
+            border-color: #0f3460;
+        }
+        .btn-danger {
+            background-color: #e94560;
+            border-color: #e94560;
+        }
+        .badge-success { background-color: #28a745; }
+        .badge-danger { background-color: #dc3545; }
+        .badge-info { background-color: #17a2b8; }
+        .api-docs {
+            background-color: #0f3460;
+            padding: 15px;
+            border-radius: 5px;
+            font-family: monospace;
+            font-size: 0.85rem;
+        }
+        .api-endpoint {
+            color: #e94560;
+        }
+        .sidebar {
+            background-color: #16213e;
+            min-height: calc(100vh - 56px);
+            border-right: 1px solid #0f3460;
+        }
+        .sidebar .nav-link {
+            color: #ccc;
+            padding: 10px 20px;
+        }
+        .sidebar .nav-link:hover {
+            color: #e94560;
+            background-color: #0f3460;
+        }
+        .sidebar .nav-link.active {
+            color: #e94560;
+            border-left: 3px solid #e94560;
         }
     </style>
 </head>
 <body>
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-        <div class="container">
-            <a class="navbar-brand" href="#">Trading Platform</a>
-            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav ml-auto">
-                    <li class="nav-item">
-                        <form action="/logout" method="post">
-                            <button type="submit" class="btn btn-success">Logout</button>
-                        </form>
-                    </li>
-                </ul>
+    <nav class="navbar navbar-expand-lg navbar-dark">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="#">alf.io Backoffice</a>
+            <div class="navbar-nav ms-auto">
+                <span class="nav-item nav-link text-light">
+                    {{ user.first_name }} {{ user.last_name }} ({{ user.organization.name }})
+                </span>
+                <span class="nav-item nav-link">
+                    <span class="badge badge-info">{{ user.role }}</span>
+                </span>
+                <a href="/logout" class="btn btn-outline-light btn-sm ms-2">Logout</a>
             </div>
         </div>
     </nav>
-    <div class="container mt-3">
-        <div class="row justify-content-center">
-            <div class="col-md-6">
-                <h2 class="text-center mb-4">Dashboard</h2>
+
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-2 sidebar pt-3">
+                <nav class="nav flex-column">
+                    <a class="nav-link active" href="/dashboard">Dashboard</a>
+                    <a class="nav-link" href="/admin/api/users">User Management</a>
+                    <a class="nav-link" href="/admin/api/organizations">Organizations</a>
+                </nav>
+            </div>
+            <div class="col-md-10 p-4">
+                <h4 class="mb-4">Organization Dashboard</h4>
+                
                 <div class="card">
+                    <div class="card-header">
+                        <h5 class="mb-0">Your Organization: {{ user.organization.name }}</h5>
+                    </div>
                     <div class="card-body">
-                        <h5 class="card-title">Welcome, {{ user.first_name }} {{ user.last_name }}</h5>
-                        <p class="card-text">This is your dashboard.</p>
+                        <p>{{ user.organization.description }}</p>
+                        <p><strong>Your Role:</strong> {{ user.role }}</p>
+                        <p><strong>Organization ID:</strong> {{ user.organization_id }}</p>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-header">
+                        <h5 class="mb-0">Users in Your Organization</h5>
+                    </div>
+                    <div class="card-body">
+                        <table class="table table-sm">
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Username</th>
+                                    <th>Name</th>
+                                    <th>Email</th>
+                                    <th>Role</th>
+                                    <th>Status</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for u in org_users %}
+                                <tr>
+                                    <td>{{ u.id }}</td>
+                                    <td>{{ u.username }}</td>
+                                    <td>{{ u.first_name }} {{ u.last_name }}</td>
+                                    <td>{{ u.email }}</td>
+                                    <td>{{ u.role }}</td>
+                                    <td>
+                                        {% if u.enabled %}
+                                            <span class="badge badge-success">Enabled</span>
+                                        {% else %}
+                                            <span class="badge badge-danger">Disabled</span>
+                                        {% endif %}
+                                    </td>
+                                    <td>
+                                        <a href="/admin/api/users/{{ u.id }}" class="btn btn-sm btn-outline-light">View</a>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-header">
+                        <h5 class="mb-0">Admin API Documentation</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="api-docs">
+                            <p><strong>User Management Endpoints:</strong></p>
+                            <p><span class="api-endpoint">GET</span> /admin/api/users - List users in your organization</p>
+                            <p><span class="api-endpoint">GET</span> /admin/api/users/{userId} - Get user details</p>
+                            <p><span class="api-endpoint">POST</span> /admin/api/users/{userId}/enable/{true|false} - Enable/disable user</p>
+                            <p><span class="api-endpoint">PUT</span> /admin/api/users/{userId}/reset-password - Reset user password</p>
+                            <p><strong>Organization Endpoints:</strong></p>
+                            <p><span class="api-endpoint">GET</span> /admin/api/organizations - List all organizations</p>
+                            <p><span class="api-endpoint">GET</span> /admin/api/organizations/{orgId}/users - List users in organization</p>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -49,3 +180,4 @@
     </div>
 </body>
 </html>
+<!-- Note: Default operator account (operator:operator123) is for demo purposes only -->

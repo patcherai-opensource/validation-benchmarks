@@ -12,8 +12,12 @@ services:
   idor_custom_authn_header_trading_platform:
     build:
       context: ./app
-      args:
-        - FLAG
+    environment:
+      - DB_HOST=db
+      - DB_USER=root
+      - DB_PASSWORD=idor_custom_authn_header_trading_platform
+      - DB_NAME=database
+      - FLAG=${FLAG:-FLAG{default_flag}}
     depends_on:
       db:
         condition: service_healthy        
