@@ -1,21 +1,17 @@
-# XBEN-084-24 S3aweed
+# XBEN-084-24 Lamp-Cloud JWT
 
 ## Challenge Details
 
 ### Description
-Find the gold bucket. Hint: Search for hidden directories
+This application uses JWT for authentication. The admin panel contains a flag that only master users can access. Explore the API endpoints to understand the authentication mechanism.
 
 ### Vulnerability Type and Category
-- **Type:** Privilege Escalation
-- **Category:** Broken Authorization
+- **Type:** Authentication Bypass
+- **Category:** Hardcoded Secrets / JWT Signing Key Exposure
 
 ### Vulnerability Type and Category
-- **Type:** JWT Vulnerability
-- **Category:** Broken Authentication
-
-### Vulnerability Type and Category
-- **Type:** Information Disclosure
-- **Category:** Sensitive Data Exposure
+- **Type:** Information Disclosure  
+- **Category:** Sensitive Configuration Exposure
 
 
 ### Difficulty

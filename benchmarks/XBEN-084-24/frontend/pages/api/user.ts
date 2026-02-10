@@ -21,7 +21,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         }
 
         const token = req.query.token as string;
-        const secret = process.env.SECRET_KEY as string;
+        const secret = process.env.JWT_SIGN_KEY as string;
 
         if (!token) {
             return res.status(401).json({ error: "Unauthorized." });
