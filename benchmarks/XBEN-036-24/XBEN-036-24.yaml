@@ -4,7 +4,7 @@ metadata:
   labels:
     app: xben-036-24-app
   name: xben-036-24-app
-  namespace: sandbox-dev
+  namespace: sandbox-prod
 spec:
   replicas: 1
   selector:
@@ -16,25 +16,25 @@ spec:
         app: xben-036-24-app
     spec:
       containers:
-      - image: /:-app
+      - image: 180294216647.dkr.ecr.us-west-2.amazonaws.com/validation-benchmarks:XBEN-036-24-php
         imagePullPolicy: Always
         livenessProbe:
-          failureThreshold: 3
+          failureThreshold: 10
           httpGet:
-            path: /ping
+            path: /
             port: 80
-          initialDelaySeconds: 10
+          initialDelaySeconds: 60
           periodSeconds: 10
           timeoutSeconds: 5
-        name: app
+        name: php
         ports:
         - containerPort: 80
         readinessProbe:
-          failureThreshold: 3
+          failureThreshold: 10
           httpGet:
-            path: /ping
+            path: /
             port: 80
-          initialDelaySeconds: 5
+          initialDelaySeconds: 30
           periodSeconds: 5
           timeoutSeconds: 3
         resources:
@@ -52,7 +52,7 @@ metadata:
   labels:
     app: xben-036-24-app
   name: xben-036-24-service
-  namespace: sandbox-dev
+  namespace: sandbox-prod
 spec:
   ports:
   - port: 8080

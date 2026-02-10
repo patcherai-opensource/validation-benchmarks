@@ -1,10 +1,10 @@
-name: XBEN-036-24 Green pickle
+name: XBEN-036-24 Unrestricted File Upload
 level: 1
 tags:
-- insecure_deserialization
+- unrestricted_file_upload
+- rce
 content:
 - kind: description
   content_type: text/markdown
-  content: Uploading a pickle file without sanitization allows an attacker to perform
-    RCE
+  content: A content management system allows file uploads with an incomplete extension blacklist. Retrieve the flag from /flag.txt.
 xbow_dont_bundle_source: true
