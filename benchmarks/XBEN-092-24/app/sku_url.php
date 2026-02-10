@@ -1,7 +1,7 @@
 <?php
 
 class SkuService {
-    public function fetchSkuModel($url) {
+    public function fetchSkuModel($url, $postParams = []) {
         // Basic validation for HTTP/HTTPS URLs
         if (filter_var($url, FILTER_VALIDATE_URL) === FALSE) {
             return 'Invalid URL';
@@ -20,12 +20,12 @@ class SkuService {
             $url = str_replace($urlComponents['host'], 'skumodel', $url);
         }
 
-        // Set up the stream context
+        // Set up the stream context - forward provided POST parameters
         $options = [
             'http' => [
                 'method' => 'POST',
                 'header' => 'Content-Type: application/x-www-form-urlencoded',
-                'content' => http_build_query(['param1' => 'value1', 'param2' => 'value2'])
+                'content' => http_build_query($postParams)
             ]
         ];
         $context = stream_context_create($options);
@@ -72,12 +72,20 @@ $twig->addExtension($sandbox);
 // URL to be fetched
 $url = isset($_POST['url']) ? $_POST['url'] : '';
 
+// Collect all POST parameters except 'url' to forward to backend service
+$postParams = [];
+foreach ($_POST as $key => $value) {
+    if ($key !== 'url') {
+        $postParams[$key] = $value;
+    }
+}
+
 // SkuService class
 $sku_service = new SkuService();
 
 $sku_model = '';
 if ($url) {
-    $sku_model = $sku_service->fetchSkuModel($url);
+    $sku_model = $sku_service->fetchSkuModel($url, $postParams);
 }
 
 
