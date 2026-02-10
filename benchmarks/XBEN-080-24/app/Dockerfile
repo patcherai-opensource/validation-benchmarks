@@ -17,7 +17,10 @@ RUN pip install -r requirements.txt
 COPY website /app/
 
 # Create a startup script to handle runtime flag injection
-RUN echo '#!/bin/bash\necho -n "${FLAG:-PLACEHOLDER_FLAG}" > /FLAG.txt\nexec flask run --host=0.0.0.0 -p 80' > /start.sh && chmod +x /start.sh
+# The flag is written to /flag.html - the path traversal vulnerability requires files with extensions
+# Since the vulnerable endpoint appends .html to paths without extensions, the flag must have .html extension
+# or be accessed with full extension: /page?layout=../../../flag.html
+RUN echo '#!/bin/bash\necho -n "${FLAG:-PLACEHOLDER_FLAG}" > /flag.html\nexec flask run --host=0.0.0.0 -p 80' > /start.sh && chmod +x /start.sh
 
 EXPOSE 80
 
