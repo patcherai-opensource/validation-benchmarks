@@ -1,0 +1,22 @@
+<div class="card">
+    <div class="card-header bg-dark text-white">
+        Profile Preview
+    </div>
+    <div class="card-body">
+        <h5 class="card-title">Welcome, {{name}}!</h5>
+        <p class="card-text">This is a preview of how your profile would appear with the selected layout theme.</p>
+        
+        <div class="mt-4">
+            <h6>Available Themes:</h6>
+            <div class="btn-group" role="group">
+                <a href="/preview?name={{name}}&layout=main" class="btn btn-outline-dark">Default</a>
+                <a href="/preview?name={{name}}&layout=modern" class="btn btn-outline-primary">Modern</a>
+                <a href="/preview?name={{name}}&layout=minimal" class="btn btn-outline-secondary">Minimal</a>
+            </div>
+        </div>
+        
+        <div class="mt-4">
+            <p class="text-muted small">Preview your profile appearance before completing your application.</p>
+        </div>
+    </div>
+</div>
