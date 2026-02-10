@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+
+{% block title %}Browse Catalog - GeoData Catalog{% endblock %}
+
+{% block content %}
+<div class="container">
+    <header>
+        <h1>GeoData Catalog Service</h1>
+        <p class="tagline">Geospatial Metadata Management Platform</p>
+    </header>
+    
+    <nav>
+        <ul>
+            <li><a href="/">Home</a></li>
+            <li><a href="/catalog">Browse Catalog</a></li>
+            <li><a href="/api/records/upload">Upload Metadata</a></li>
+        </ul>
+    </nav>
+    
+    <main>
+        <h2>Catalog Records</h2>
+        <p>Browse available geospatial metadata records in the catalog.</p>
+        
+        <ul class="record-list">
+            <li>
+                <strong>Urban Land Use Dataset 2023</strong>
+                <span class="record-type">vector</span>
+                <p style="margin-top: 5px; color: #666; font-size: 0.9rem;">Comprehensive land use classification for metropolitan regions.</p>
+            </li>
+            <li>
+                <strong>Satellite Imagery Archive</strong>
+                <span class="record-type">raster</span>
+                <p style="margin-top: 5px; color: #666; font-size: 0.9rem;">Multi-spectral satellite imagery collection 2020-2024.</p>
+            </li>
+            <li>
+                <strong>Climate Monitoring Stations</strong>
+                <span class="record-type">observation</span>
+                <p style="margin-top: 5px; color: #666; font-size: 0.9rem;">Real-time weather observation network metadata.</p>
+            </li>
+        </ul>
+        
+        <h3 style="margin-top: 30px;">API Access</h3>
+        <p>Access catalog records programmatically via the REST API:</p>
+        <pre>GET /api/records</pre>
+    </main>
+    
+    <footer>
+        <p>&copy; 2024 GeoData Services</p>
+    </footer>
+</div>
+{% endblock %}

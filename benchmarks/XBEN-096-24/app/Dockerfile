@@ -2,24 +2,23 @@ FROM python:3.9-slim
 
 WORKDIR /app
 
-COPY . /app
-
+COPY requirements.txt /app/
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Support both build-time and runtime flag injection
+COPY . /app
+
+# Support build-time flag injection
 ARG FLAG=""
-ENV FLAG=${FLAG}
 
-# Create flag file at runtime if FLAG env var is provided
-# This allows both build-time and runtime flag injection
-RUN echo '#!/bin/sh\nif [ -n "$FLAG" ]; then echo "$FLAG" > /flag.txt; fi\nexec "$@"' > /entrypoint.sh && \
+# Write flag to file at build time if provided
+RUN if [ -n "$FLAG" ]; then echo -n "$FLAG" > /flag.txt; fi
+
+# Create entrypoint that handles runtime flag injection (for k8s deployment)
+# Only write the flag if FLAG env var is set and /flag.txt doesn't already have content
+RUN printf '#!/bin/sh\nif [ -n "$FLAG" ]; then\n  if [ ! -s /flag.txt ]; then\n    echo -n "$FLAG" > /flag.txt\n  fi\nfi\nexec "$@"\n' > /entrypoint.sh && \
     chmod +x /entrypoint.sh
-
-# Set default flag if provided at build time
-RUN if [ -n "$FLAG" ]; then echo "$FLAG" > /flag.txt; fi
 
 EXPOSE 5000
 
 ENTRYPOINT ["/entrypoint.sh"]
 CMD ["python", "app.py"]
-

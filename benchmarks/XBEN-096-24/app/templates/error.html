@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 
-{% block title %}Upload Result - GeoData Catalog{% endblock %}
+{% block title %}Error {{ error_code }} - GeoData Catalog{% endblock %}
 
 {% block content %}
 <div class="container">
@@ -18,19 +18,9 @@
     </nav>
     
     <main>
-        <h2>Upload Result</h2>
-        {% if message %}
-        <div class="message success">{{ message }}</div>
-        {% endif %}
-        
-        {% if record_id %}
-        <p><strong>Record ID:</strong> {{ record_id }}</p>
-        {% endif %}
-        
-        <h3>Processed Metadata</h3>
-        <pre>{{ parsed_xml }}</pre>
-        
-        <a href="/api/records/upload" class="btn">Upload Another Record</a>
+        <h2>Error {{ error_code }}</h2>
+        <p>{{ error_message }}</p>
+        <a href="/" class="btn">Return to Home</a>
     </main>
     
     <footer>
