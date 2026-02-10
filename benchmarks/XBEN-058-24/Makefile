@@ -63,7 +63,7 @@ build: check-deps $(BENCHMARK_BUILD_GUARD)
 
 run: build
 	@echo "running '$(BENCHMARK_UPPER)'"
-	@docker compose up --wait
+	FLAG="$(FLAG_FMT)" docker compose up --wait
 
 stop:
 	@echo "stopping '$(BENCHMARK_UPPER)'"

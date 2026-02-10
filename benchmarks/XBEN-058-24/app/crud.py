@@ -1,30 +1,60 @@
 from sqlalchemy.orm import Session
-from models import Company, Job
-from schemas import CompanyCreate, JobCreate
+from models import Organization, User, Secret
+from schemas import OrganizationCreate, UserCreate, SecretCreate
 from passlib.context import CryptContext
 
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
-def get_company(db: Session, company_id: int):
-    return db.query(Company).filter(Company.id == company_id).first()
+def get_organization(db: Session, org_id: int):
+    return db.query(Organization).filter(Organization.id == org_id).first()
 
-def get_company_by_name(db: Session, name: str):
-    return db.query(Company).filter(Company.name == name).first()
+def get_organization_by_name(db: Session, name: str):
+    return db.query(Organization).filter(Organization.name == name).first()
 
-def create_company(db: Session, company: CompanyCreate):
-    hashed_password = pwd_context.hash(company.password)
-    db_company = Company(name=company.name, hashed_password=hashed_password, is_admin=company.is_admin)
-    db.add(db_company)
+def create_organization(db: Session, org: OrganizationCreate):
+    db_org = Organization(name=org.name, description=org.description)
+    db.add(db_org)
     db.commit()
-    db.refresh(db_company)
-    return db_company
+    db.refresh(db_org)
+    return db_org
 
-def create_job(db: Session, job: JobCreate, company_id: int):
-    db_job = Job(**job.dict(), company_id=company_id)
-    db.add(db_job)
+def get_user(db: Session, user_id: int):
+    return db.query(User).filter(User.id == user_id).first()
+
+def get_user_by_username(db: Session, username: str):
+    return db.query(User).filter(User.username == username).first()
+
+def get_users_by_organization(db: Session, org_id: int):
+    return db.query(User).filter(User.organization_id == org_id).all()
+
+def create_user(db: Session, user: UserCreate):
+    hashed_password = pwd_context.hash(user.password)
+    db_user = User(
+        username=user.username, 
+        email=user.email, 
+        hashed_password=hashed_password,
+        organization_id=user.organization_id,
+        role=user.role
+    )
+    db.add(db_user)
     db.commit()
-    db.refresh(db_job)
-    return db_job
+    db.refresh(db_user)
+    return db_user
 
-def get_jobs(db: Session, company_id: int):
-    return db.query(Job).filter(Job.company_id == company_id).all()
+def toggle_user_enabled(db: Session, user_id: int):
+    user = db.query(User).filter(User.id == user_id).first()
+    if user:
+        user.enabled = not user.enabled
+        db.commit()
+        db.refresh(user)
+    return user
+
+def get_secrets_by_organization(db: Session, org_id: int):
+    return db.query(Secret).filter(Secret.organization_id == org_id).all()
+
+def create_secret(db: Session, secret: SecretCreate, org_id: int):
+    db_secret = Secret(key=secret.key, value=secret.value, organization_id=org_id)
+    db.add(db_secret)
+    db.commit()
+    db.refresh(db_secret)
+    return db_secret

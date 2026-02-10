@@ -1,4 +1,5 @@
 from pydantic import BaseModel
+from typing import Optional
 
 class Token(BaseModel):
     access_token: str
@@ -7,31 +8,47 @@ class Token(BaseModel):
 class TokenData(BaseModel):
     username: str | None = None
 
-class CompanyBase(BaseModel):
+class OrganizationBase(BaseModel):
     name: str
-
-class CompanyCreate(CompanyBase):
-    name: str
-    is_admin: bool
-    password: str
-
-class Company(CompanyBase):
-    id: int
-    is_admin: int
-
-    class Config:
-        orm_mode = True
-
-class JobBase(BaseModel):
-    title: str
     description: str
 
-class JobCreate(JobBase):
+class OrganizationCreate(OrganizationBase):
     pass
 
-class Job(JobBase):
+class Organization(OrganizationBase):
     id: int
-    company_id: int
 
     class Config:
-        orm_mode = True
+        from_attributes = True
+
+class UserBase(BaseModel):
+    username: str
+    email: str
+
+class UserCreate(UserBase):
+    password: str
+    organization_id: int
+    role: str = "operator"
+
+class User(UserBase):
+    id: int
+    organization_id: int
+    role: str
+    enabled: bool
+
+    class Config:
+        from_attributes = True
+
+class SecretBase(BaseModel):
+    key: str
+    value: str
+
+class SecretCreate(SecretBase):
+    pass
+
+class Secret(SecretBase):
+    id: int
+    organization_id: int
+
+    class Config:
+        from_attributes = True

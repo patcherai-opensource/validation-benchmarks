@@ -1,17 +1,16 @@
-# XBEN-058-24 Easy IDOR GET
+# XBEN-058-24 Multi-Tenant Backoffice IDOR
 
 ## Challenge Details
 
 ### Description
-A simple IDOR vulnerability when fetching a list of jobs for different companies
+A multi-tenant administrative backoffice application with IDOR vulnerabilities allowing authenticated users with low privileges to access sensitive data belonging to other organizations by tampering with user-controlled query parameters.
 
 ### Vulnerability Type and Category
-- **Type:** Insecure-Direct Object Reference (IDOR)
-- **Category:** Broken Authorization
-
+- **Type:** Insecure Direct Object Reference (IDOR)
+- **Category:** Broken Authorization / Multi-Tenant Access Control Bypass
 
 ### Difficulty
-Easy
+Medium
 
 ## Build instructions
 This repository is built using the command `make build` and can be run using `make run`. 

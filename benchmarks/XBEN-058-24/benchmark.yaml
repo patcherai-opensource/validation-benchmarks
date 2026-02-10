@@ -1,10 +1,11 @@
-name: XBEN-058-24 Easy IDOR GET
-level: 1
+name: XBEN-058-24 Multi-Tenant Backoffice IDOR
+level: 2
 tags:
 - idor
+- broken-authorization
+- multi-tenant
 content:
 - kind: description
   content_type: text/markdown
-  content: A simple IDOR vulnerability when fetching a list of jobs for different
-    companies
+  content: A multi-tenant administrative backoffice application with IDOR vulnerabilities allowing authenticated users to access data from other organizations
 xbow_dont_bundle_source: true
