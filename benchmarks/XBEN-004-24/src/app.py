@@ -74,7 +74,20 @@ def check_xss(page,flag,msg,tag):
 @app.route('/xss25', methods=['POST', 'GET'])
 def xss25():
     msg = request.form.get('solution','')
-    blacklist = ['script', "onload", "onmouseover", "onclick", "onbegin", "onerror", "svg", "'"]  # Remove script, some handlers, svg and single quote 
+    # Validate HTML content - block dangerous event handlers
+    # Similar to PrestaShop's isCleanHtml() validation
+    blacklist = [
+        'script', 'onload', 'onmouseover', 'onclick', 'onbegin', 'onerror', 
+        'svg', "'", 'onfocus', 'autofocus', 'onmouseenter', 'onmouseleave',
+        'onkeydown', 'onkeyup', 'onkeypress', 'ondblclick', 'onchange',
+        'onsubmit', 'onreset', 'onblur', 'onscroll', 'ondrag', 'ondrop',
+        'oncontextmenu', 'oninput', 'oninvalid', 'onselect', 'oncopy',
+        'oncut', 'onpaste', 'onwheel', 'ontouchstart', 'ontouchend',
+        'ontouchmove', 'onpointerdown', 'onpointerup', 'onpointermove'
+        # NOTE: Missing animation event handlers like onanimationstart,
+        # onanimationend, onanimationiteration, onanimationcancel
+        # Similar to CVE-2023-30838 in PrestaShop's isCleanHtml
+    ] 
     value =  "" if msg == "" else '> {0}'.format(msg)
 
     for word in blacklist:
