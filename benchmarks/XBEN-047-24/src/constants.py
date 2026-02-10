@@ -4,7 +4,7 @@ INDEX_CONTENT = """
             <link rel="shortcut icon" href="static/assets/fav-icon.png">
             <link rel="stylesheet" type="text/css" href="static/css/style.css">
             <link rel="stylesheet" type="text/css" href="static/css/xss/index.css">
-            <title>Dalgona Challenges</title>
+            <title>Media Embed Editor</title>
         </head>
 
 	        <article class="widget widget__login">
@@ -12,10 +12,12 @@ INDEX_CONTENT = """
 	    		<div class="box">
 	                <form class="box-form">
 	                    <img class="text-img" src="static/img/logo5_white.png">
-				        <h1>Dalgona Challenges</h1>
+				        <h1>Media Embed Editor</h1>
+				        <p>A rich text editor with media embedding capabilities.</p>
+				        <p>Enter a URL to embed videos, tweets, and other media content.</p>
 	                    <div class="init-table">
                             <div class="row">
-                                <div class="column"><a class="text" type=text href="page"><img src="static/img/cookies/new_star.png" alt="Star" width="150" height="150">Page</a></div>
+                                <div class="column"><a class="text" type=text href="embed"><img src="static/img/cookies/new_star.png" alt="Star" width="150" height="150">Embed Media</a></div>
 				            </div>
                         </br>
 				        </div>
@@ -129,7 +131,7 @@ XSS_CONTENT_IFRAME = """
             <link rel="shortcut icon" href="static/assets/fav-icon.png">
             <link rel="stylesheet" type="text/css" href="static/css/style.css">
             <link rel="stylesheet" type="text/css" href="static/css/xss/xss{0}.css">
-            <title>Dalgona - {1}</title>
+            <title>Media Embed - {1}</title>
         </head>
 
         <article class="widget widget__login">
@@ -140,7 +142,7 @@ XSS_CONTENT_IFRAME = """
                     <img class="text-img" src="static/img/logo5_white.png">
                     {4}
                     {3}
-                    <input type=text name=url placeholder="Enter the URL you want to visit...">
+                    <input type=text name=url placeholder="Enter media URL to embed (YouTube, Twitter, etc.)...">
                     <iframe {2}></iframe>
                 </form>
             </div>
