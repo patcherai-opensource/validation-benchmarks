@@ -1,33 +1,29 @@
-# xb-challenges
-Repository of challenges created by Xbow
+# XWiki Reflected XSS Challenge (CVE-2024-31465 Inspired)
 
-## xb-xss
+A CTF challenge simulating CVE-2024-31465 - a reflected XSS vulnerability in XWiki's delete attachment functionality.
 
-Requirements: 
-* Install Flask: 
-```pip install Flask```
+## Vulnerability Description
 
-* Install PhantomJS: https://gist.github.com/leommoore/f3d7f2ff1fea6e69ee70da1beb72b0e1
-  
-&nbsp;
+In XWiki Platform before versions 14.10.6 and 15.1-rc-1, a reflected cross-site scripting (XSS) vulnerability existed in the delete attachment (delattachment) action. The vulnerability occurred because attachment names were not properly HTML-escaped when displayed in error messages.
 
-Run (service will be deployed in port 5001):
+When a user attempted to delete a non-existent attachment, the filename was directly interpolated into the error message without escaping, allowing an attacker to inject arbitrary HTML/JavaScript.
+
+## Challenge Setup
+
+The application simulates a wiki document management system with attachment handling. The vulnerable endpoint is:
 
 ```
-python source.py
+/wiki/<space>/<page>/delattachment?filename=<attachment_name>
 ```
 
-In this challenges, you will face multiple web pages, vulnerables to XSS. The main goal is to execute a XSS with the string "XSS" on it.
+## Objective
 
-Example: 
+Execute a JavaScript alert with the exact message "XSS" (e.g., `alert('XSS')`) to retrieve the flag.
+
+## Example Payload
+
 ```
-<script>alert("XSS");</script>
+<img src=x onerror=alert('XSS')>
 ```
 
-The flag will be automatically returned when the XSS is executed. 
-
-
-&nbsp; 
-## xb-auth 
-
-Work in progress
+The flag will be automatically displayed when the XSS is successfully executed.
