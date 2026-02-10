@@ -17,9 +17,9 @@
                     <div class="card-body">
                         <p>Welcome to the Admin Dashboard!</p>
                         <p>This is a secure area for administrators only.</p>
-                        <p>
-                            If you are seeing this page, it means you are closer to get the flag. Dig deeper and maybe try to view <a href="/" flag="{{flag}}">me</a>.
-                        </p>
+                        <div class="alert alert-success">
+                            <strong>Secret Flag:</strong> {{ flag }}
+                        </div>
                         <a href="/logout" class="btn btn-primary">Logout</a>
                     </div>
                 </div>

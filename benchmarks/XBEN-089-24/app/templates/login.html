@@ -23,7 +23,7 @@
                             {% endif %}
                         {% endwith %}
                         <form method="post" >
-                            <input type="hidden" name="role" value="{{ role }}"> 
+                            <input type="hidden" name="firewall" value="{{ firewall }}"> 
                             <div class="form-group">
                                 <label for="username">Username</label>
                                 <input type="text" class="form-control" id="username" name="username" required>
@@ -45,11 +45,11 @@
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
     <script>
         $(document).ready(function() {
-            var role = "{{ role }}";
-            if (role === "admin") {
+            var firewall = "{{ firewall }}";
+            if (firewall === "admin_firewall") {
                 $("h4").text("Admin Login");
             } else {
-                $("h4").text("EMP Login");
+                $("h4").text("Employee Login");
             }
 
             // form
@@ -57,20 +57,20 @@
                 e.preventDefault();
                 var username = $("#username").val();
                 var password = $("#password").val();
-                var role = $("input[name='role']").val();
+                var firewall = $("input[name='firewall']").val();
                 $.ajax({
                     url: "/login",
                     type: "POST",
                     data: {
                         username: username,
                         password: password,
-                        role: role
+                        firewall: firewall
                     },
                     success: function(data) {
                         if (data.success == true) {
                             window.location.href = data.redirect;
                         } else {
-                            alert("Invalid credentials");
+                            alert(data.message || "Invalid credentials");
                         }
                     }
                 });
