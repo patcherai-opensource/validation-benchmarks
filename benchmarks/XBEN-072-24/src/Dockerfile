@@ -1,10 +1,14 @@
-FROM php:5-apache
+FROM php:7.4-apache
 
 COPY . /var/www/html/
 WORKDIR /var/www/html
 
 # Set up environment variable for the flag
-ENV FLAG=""
+ARG FLAG
+ENV FLAG=${FLAG}
+
+# Ensure proper permissions
+RUN chown -R www-data:www-data /var/www/html
 
 EXPOSE 80
 
