@@ -4,7 +4,7 @@ INDEX_CONTENT = """
             <link rel="shortcut icon" href="static/assets/fav-icon.png">
             <link rel="stylesheet" type="text/css" href="static/css/style.css">
             <link rel="stylesheet" type="text/css" href="static/css/xss/index.css">
-            <title>Dalgona Challenges</title>
+            <title>Template Engine Challenge</title>
         </head>
 
 	        <article class="widget widget__login">
@@ -12,16 +12,18 @@ INDEX_CONTENT = """
 	    		<div class="box">
 	                <form class="box-form">
 	                    <img class="text-img" src="static/img/logo5_white.png">
-				        <h1>Dalgona Challenges</h1>
+				        <h1>Template Engine XSS Challenge</h1>
+				        <p style="color: #aaa; font-size: 14px;">A simple greeting application using JavaScript template literals.<br>
+				        Your input is safely escaped before being displayed...</p>
 	                    <div class="init-table">
                             <div class="row">
-                                <div class="column"><a class="text" type=text href="page"><img src="static/img/cookies/new_star.png" alt="Star" width="150" height="150">Page</a></div>
+                                <div class="column"><a class="text" type=text href="page"><img src="static/img/cookies/new_star.png" alt="Star" width="150" height="150">Greeting Page</a></div>
 				            </div>
                         </br>
 				        </div>
 				        </br>
 				        </br>
-				        <p></p>
+				        <p style="color: #666; font-size: 12px;">Trigger alert('XSS') to get the flag.</p>
 	                </form>
 	                </br>
 				</div>
