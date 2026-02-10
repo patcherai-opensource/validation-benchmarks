@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - Enterprise Portal</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif; background: #f5f5f5; }
+        .navbar { background: #333; color: white; padding: 15px 30px; display: flex; justify-content: space-between; align-items: center; }
+        .navbar h1 { font-size: 20px; }
+        .navbar-right { display: flex; align-items: center; gap: 20px; }
+        .navbar-right span { font-size: 14px; }
+        .navbar-right a { color: #ccc; text-decoration: none; font-size: 14px; }
+        .navbar-right a:hover { color: white; }
+        .container { max-width: 1200px; margin: 30px auto; padding: 0 20px; }
+        .welcome-card { background: white; border-radius: 8px; padding: 30px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); margin-bottom: 30px; }
+        .welcome-card h2 { color: #333; margin-bottom: 10px; }
+        .welcome-card p { color: #666; }
+        .role-badge { display: inline-block; padding: 4px 12px; border-radius: 20px; font-size: 12px; font-weight: 600; text-transform: uppercase; }
+        .role-badge.admin { background: #fee2e2; color: #dc2626; }
+        .role-badge.user { background: #dbeafe; color: #2563eb; }
+        .cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; }
+        .card { background: white; border-radius: 8px; padding: 25px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+        .card h3 { color: #333; margin-bottom: 10px; font-size: 16px; }
+        .card p { color: #666; font-size: 14px; line-height: 1.6; }
+        .card a { display: inline-block; margin-top: 15px; color: #667eea; text-decoration: none; font-weight: 500; }
+        .card a:hover { text-decoration: underline; }
+        .admin-section { margin-top: 30px; padding-top: 30px; border-top: 1px solid #e5e5e5; }
+        .admin-section h3 { color: #333; margin-bottom: 20px; }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <h1>Enterprise Portal</h1>
+        <div class="navbar-right">
+            <span>{{ username }} <span class="role-badge {{ role }}">{{ role }}</span></span>
+            <a href="/logout">Sign Out</a>
+        </div>
+    </nav>
+    <div class="container">
+        <div class="welcome-card">
+            <h2>Welcome back, {{ username }}</h2>
+            <p>Access your resources and manage your account settings from this dashboard.</p>
+        </div>
+        <div class="cards">
+            <div class="card">
+                <h3>Account Profile</h3>
+                <p>View and update your personal information, contact details, and preferences.</p>
+                <a href="#">Manage Profile &rarr;</a>
+            </div>
+            <div class="card">
+                <h3>Documents</h3>
+                <p>Access shared documents, reports, and company resources.</p>
+                <a href="#">View Documents &rarr;</a>
+            </div>
+            <div class="card">
+                <h3>Support</h3>
+                <p>Get help with technical issues or contact our support team.</p>
+                <a href="#">Get Help &rarr;</a>
+            </div>
+        </div>
+        {% if role == 'admin' %}
+        <div class="admin-section">
+            <h3>Administration</h3>
+            <div class="cards">
+                <div class="card">
+                    <h3>User Management</h3>
+                    <p>Manage user accounts, permissions, and access control.</p>
+                    <a href="/admin/settings">Manage Users &rarr;</a>
+                </div>
+                <div class="card">
+                    <h3>System Configuration</h3>
+                    <p>View and modify system settings and configuration parameters.</p>
+                    <a href="/admin/system-config">System Config &rarr;</a>
+                </div>
+            </div>
+        </div>
+        {% endif %}
+    </div>
+</body>
+</html>
