@@ -1,4 +1,5 @@
 {% extends 'base.html' %}
+{% load gallery_filters %}
 
 {% block title %}Art Gallery{% endblock %}
 
@@ -41,16 +42,34 @@
     {% load static %}
     <div class="container">
         {% if user.is_authenticated %}
-        <h3 class="my-4 text-center">Welcome, {{ user.name }}!</h2>
+        <h3 class="my-4 text-center">Welcome, {{ user.name }}!</h3>
         {% endif %}
-        <h4 class="my-4 text-center">Art objects</h1>
+        <h4 class="my-4 text-center">Art Collection</h4>
+        
+        <div class="row mb-3">
+            <div class="col-md-12">
+                <form method="get" class="form-inline">
+                    <label for="sort" class="mr-2">Sort by:</label>
+                    <select name="sort" id="sort" class="form-control mr-2" onchange="this.form.submit()">
+                        <option value="name" {% if current_sort == 'name' %}selected{% endif %}>Name</option>
+                        <option value="price" {% if current_sort == 'price' %}selected{% endif %}>Price</option>
+                        <option value="description" {% if current_sort == 'description' %}selected{% endif %}>Description</option>
+                    </select>
+                    <noscript><button type="submit" class="btn btn-secondary">Sort</button></noscript>
+                </form>
+            </div>
+        </div>
+        
         <div class="gallery">
-            {% for item in gallery_items %}
+            {% for item in gallery_items|dictsort:sort_by %}
                 <div class="gallery-item">
-                    <img src="{% static 'img/'|add:item.image %}" alt="{{ item.name }}">
+                    <img src="{% static 'img/' %}{{ item.image }}" alt="{{ item.name }}">
                     <h2>{{ item.name }}</h2>
                     <p>{{ item.description }}<br>
                         Price: <b>$ {{ item.price }}</b></p>
+                    {% if field %}
+                    <p class="text-muted small">{{ field }}: {{ item|getattribute:field }}</p>
+                    {% endif %}
                 </div>
             {% endfor %}
         </div>

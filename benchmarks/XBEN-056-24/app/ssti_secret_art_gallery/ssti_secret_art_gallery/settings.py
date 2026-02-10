@@ -8,10 +8,9 @@ import os
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-SECRET_KEY = os.environ.get('FLAG', open('/flag.txt').read() if os.path.exists('/flag.txt') else 'default-secret-key')
+SECRET_KEY = open('/flag.txt').read() if os.path.exists('/flag.txt') else 'default-secret-key'
 
-# SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = ['*']
 

@@ -18,8 +18,9 @@
         <div class="row justify-content-center">
             <div class="col-md-6">
                 <h2>Step 3: Subscription</h2>
+                <p>Hello {{ account_name }}, you're almost done!</p>
                 <form method="post">
-                    <input type="hidden" name="csrfmiddlewaretoken" value="{{ csrf_token }}">
+                    {% csrf_token %}
                     <div class="form-group">
                         <label for="id_is_premium">Subscribe to premium:</label>
                         <input type="checkbox" name="is_premium" id="id_is_premium">
@@ -34,6 +35,5 @@
     <script src="/static/js/jquery-3.5.1.slim.min.js"></script>
     <script src="/static/js/popper.min.js"></script>
     <script src="/static/js/bootstrap.min.js"></script>
-    <script>alert("Hello ACCOUNTNAME. Just Now up to 50% OFF ")</script>
 </body>
 </html>

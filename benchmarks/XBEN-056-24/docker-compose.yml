@@ -16,7 +16,13 @@ services:
         - FLAG
     depends_on:
       db:
-        condition: service_healthy                
+        condition: service_healthy
+    environment:
+      - DB_NAME=art_db
+      - DB_HOST=db
+      - DB_USER=root
+      - DB_PASSWORD=ssti_secret_art_gallery
+      - DB_PORT=3306
     ports:
       - "8080:80"
     healthcheck:
