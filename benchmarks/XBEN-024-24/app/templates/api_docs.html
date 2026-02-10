@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>API Documentation - MLServe</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+            background: #1a1a2e;
+            min-height: 100vh;
+            color: #e8e8e8;
+        }
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 0;
+            border-bottom: 1px solid #2a2a4a;
+            margin-bottom: 40px;
+        }
+        .logo {
+            font-size: 1.5em;
+            font-weight: bold;
+            color: #00d4ff;
+            text-decoration: none;
+        }
+        nav a {
+            color: #e8e8e8;
+            text-decoration: none;
+            margin-left: 30px;
+        }
+        nav a:hover {
+            color: #00d4ff;
+        }
+        h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+        .subtitle {
+            color: #a0a0a0;
+            margin-bottom: 40px;
+        }
+        .endpoint-section {
+            background: rgba(255,255,255,0.03);
+            border-radius: 12px;
+            padding: 30px;
+            margin-bottom: 30px;
+            border: 1px solid #2a2a4a;
+        }
+        .endpoint-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        .method {
+            display: inline-block;
+            padding: 6px 14px;
+            border-radius: 4px;
+            font-size: 0.9em;
+            font-weight: bold;
+            margin-right: 15px;
+        }
+        .method.post {
+            background: #49cc90;
+            color: #1a1a2e;
+        }
+        .method.get {
+            background: #61affe;
+            color: #1a1a2e;
+        }
+        .endpoint-path {
+            font-family: monospace;
+            font-size: 1.1em;
+            color: #00d4ff;
+        }
+        .description {
+            color: #c0c0c0;
+            margin-bottom: 20px;
+            line-height: 1.6;
+        }
+        h3 {
+            color: #a0a0a0;
+            font-size: 0.9em;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 10px;
+        }
+        .code-block {
+            background: #0d0d1a;
+            border-radius: 8px;
+            padding: 20px;
+            font-family: 'Monaco', 'Menlo', monospace;
+            font-size: 0.9em;
+            overflow-x: auto;
+            margin-bottom: 20px;
+        }
+        .code-block pre {
+            margin: 0;
+            white-space: pre-wrap;
+        }
+        .params-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+        .params-table th,
+        .params-table td {
+            text-align: left;
+            padding: 12px;
+            border-bottom: 1px solid #2a2a4a;
+        }
+        .params-table th {
+            color: #a0a0a0;
+            font-size: 0.85em;
+            text-transform: uppercase;
+        }
+        .param-name {
+            font-family: monospace;
+            color: #00d4ff;
+        }
+        .param-type {
+            color: #a0a0a0;
+            font-size: 0.9em;
+        }
+        .param-required {
+            color: #f85149;
+            font-size: 0.8em;
+        }
+        .response-example {
+            background: #0d0d1a;
+            border-radius: 8px;
+            padding: 20px;
+            font-family: monospace;
+            font-size: 0.9em;
+        }
+        .note {
+            background: rgba(0, 212, 255, 0.1);
+            border-left: 4px solid #00d4ff;
+            padding: 15px;
+            border-radius: 4px;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <a href="/" class="logo">MLServe</a>
+            <nav>
+                <a href="/">Home</a>
+                <a href="/api/docs">API Documentation</a>
+            </nav>
+        </header>
+
+        <h1>API Documentation</h1>
+        <p class="subtitle">MLServe REST API v1.0</p>
+
+        <div class="endpoint-section">
+            <div class="endpoint-header">
+                <span class="method post">POST</span>
+                <span class="endpoint-path">/api/v1/process_image</span>
+            </div>
+            <p class="description">
+                Process an image through the ML inference pipeline. Accepts images via direct file upload 
+                or by providing a URL to fetch the image from. Returns image metadata and processing results.
+            </p>
+
+            <h3>Request Formats</h3>
+            <p class="description">This endpoint supports multiple input methods:</p>
+
+            <h3>Option 1: Multipart Form Upload</h3>
+            <div class="code-block">
+                <pre>curl -X POST http://localhost:8080/api/v1/process_image \
+  -F "image=@/path/to/image.jpg"</pre>
+            </div>
+
+            <h3>Option 2: URL Reference (Multipart)</h3>
+            <div class="code-block">
+                <pre>curl -X POST http://localhost:8080/api/v1/process_image \
+  -F "image=https://example.com/image.jpg"</pre>
+            </div>
+
+            <h3>Option 3: JSON Body</h3>
+            <div class="code-block">
+                <pre>curl -X POST http://localhost:8080/api/v1/process_image \
+  -H "Content-Type: application/json" \
+  -d '{"image_url": "https://example.com/image.jpg"}'</pre>
+            </div>
+
+            <h3>Parameters</h3>
+            <table class="params-table">
+                <tr>
+                    <th>Name</th>
+                    <th>Type</th>
+                    <th>Description</th>
+                </tr>
+                <tr>
+                    <td><span class="param-name">image</span></td>
+                    <td><span class="param-type">file / string</span></td>
+                    <td>Image file upload or URL reference</td>
+                </tr>
+                <tr>
+                    <td><span class="param-name">image_url</span></td>
+                    <td><span class="param-type">string</span></td>
+                    <td>URL to fetch the image from (JSON requests)</td>
+                </tr>
+            </table>
+
+            <h3>Response</h3>
+            <div class="response-example">
+<pre>{
+  "status": "success",
+  "result_id": "550e8400-e29b-41d4-a716-446655440000",
+  "image_info": {
+    "width": 1920,
+    "height": 1080,
+    "format": "JPEG",
+    "mode": "RGB",
+    "size_bytes": 245760
+  }
+}</pre>
+            </div>
+        </div>
+
+        <div class="endpoint-section">
+            <div class="endpoint-header">
+                <span class="method post">POST</span>
+                <span class="endpoint-path">/api/v1/analyze</span>
+            </div>
+            <p class="description">
+                Analyze a file from a URL and extract metadata. Useful for preprocessing files 
+                before running inference or validating input data.
+            </p>
+
+            <h3>Example Request</h3>
+            <div class="code-block">
+                <pre>curl -X POST http://localhost:8080/api/v1/analyze \
+  -H "Content-Type: application/json" \
+  -d '{"file_url": "https://example.com/data.txt"}'</pre>
+            </div>
+
+            <h3>Parameters</h3>
+            <table class="params-table">
+                <tr>
+                    <th>Name</th>
+                    <th>Type</th>
+                    <th>Description</th>
+                </tr>
+                <tr>
+                    <td><span class="param-name">file_url</span></td>
+                    <td><span class="param-type">string</span> <span class="param-required">required</span></td>
+                    <td>URL of the file to analyze</td>
+                </tr>
+            </table>
+
+            <h3>Response</h3>
+            <div class="response-example">
+<pre>{
+  "status": "success",
+  "analysis": {
+    "size_bytes": 1024,
+    "content_preview": "..."
+  }
+}</pre>
+            </div>
+        </div>
+
+        <div class="note">
+            <strong>Rate Limiting:</strong> API endpoints are rate-limited to 100 requests per minute per IP address.
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MLServe - Machine Learning Model Serving Platform</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            min-height: 100vh;
+            color: #e8e8e8;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 0;
+            border-bottom: 1px solid #2a2a4a;
+        }
+        .logo {
+            font-size: 1.8em;
+            font-weight: bold;
+            color: #00d4ff;
+        }
+        nav a {
+            color: #e8e8e8;
+            text-decoration: none;
+            margin-left: 30px;
+            transition: color 0.3s;
+        }
+        nav a:hover {
+            color: #00d4ff;
+        }
+        .hero {
+            text-align: center;
+            padding: 80px 0;
+        }
+        .hero h1 {
+            font-size: 3em;
+            margin-bottom: 20px;
+            background: linear-gradient(90deg, #00d4ff, #7b2cbf);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .hero p {
+            font-size: 1.2em;
+            color: #a0a0a0;
+            max-width: 600px;
+            margin: 0 auto 40px;
+        }
+        .features {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            padding: 60px 0;
+        }
+        .feature-card {
+            background: rgba(255,255,255,0.05);
+            border-radius: 12px;
+            padding: 30px;
+            border: 1px solid #2a2a4a;
+        }
+        .feature-card h3 {
+            color: #00d4ff;
+            margin-bottom: 15px;
+        }
+        .btn {
+            display: inline-block;
+            padding: 12px 30px;
+            background: linear-gradient(90deg, #00d4ff, #7b2cbf);
+            color: white;
+            text-decoration: none;
+            border-radius: 6px;
+            font-weight: bold;
+            transition: transform 0.3s;
+        }
+        .btn:hover {
+            transform: translateY(-2px);
+        }
+        .api-section {
+            background: rgba(255,255,255,0.03);
+            border-radius: 12px;
+            padding: 40px;
+            margin: 40px 0;
+        }
+        .api-section h2 {
+            margin-bottom: 20px;
+            color: #00d4ff;
+        }
+        .endpoint {
+            background: #1a1a2e;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 15px 0;
+            font-family: monospace;
+        }
+        .method {
+            display: inline-block;
+            padding: 4px 10px;
+            border-radius: 4px;
+            font-size: 0.85em;
+            font-weight: bold;
+            margin-right: 10px;
+        }
+        .method.post {
+            background: #49cc90;
+            color: #1a1a2e;
+        }
+        .method.get {
+            background: #61affe;
+            color: #1a1a2e;
+        }
+        footer {
+            text-align: center;
+            padding: 40px 0;
+            border-top: 1px solid #2a2a4a;
+            color: #666;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="logo">MLServe</div>
+            <nav>
+                <a href="/">Home</a>
+                <a href="/api/docs">API Documentation</a>
+            </nav>
+        </header>
+
+        <div class="hero">
+            <h1>Deploy ML Models with Ease</h1>
+            <p>MLServe is a high-performance serving platform for machine learning models. Process images, analyze files, and run inference at scale.</p>
+            <a href="/api/docs" class="btn">View API Documentation</a>
+        </div>
+
+        <div class="features">
+            <div class="feature-card">
+                <h3>Image Processing</h3>
+                <p>Process images through our inference pipeline. Supports multiple input formats including direct uploads and URL references.</p>
+            </div>
+            <div class="feature-card">
+                <h3>File Analysis</h3>
+                <p>Analyze files and extract metadata. Our analysis engine handles various file types and provides detailed insights.</p>
+            </div>
+            <div class="feature-card">
+                <h3>RESTful API</h3>
+                <p>Simple REST API that integrates seamlessly with your existing infrastructure. JSON and multipart support included.</p>
+            </div>
+        </div>
+
+        <div class="api-section">
+            <h2>Quick Start</h2>
+            <div class="endpoint">
+                <span class="method post">POST</span>
+                <span>/api/v1/process_image</span>
+                <p style="margin-top: 10px; color: #a0a0a0;">Process an image through the inference pipeline</p>
+            </div>
+            <div class="endpoint">
+                <span class="method post">POST</span>
+                <span>/api/v1/analyze</span>
+                <p style="margin-top: 10px; color: #a0a0a0;">Analyze a file and extract metadata</p>
+            </div>
+        </div>
+
+        <footer>
+            <p>&copy; 2024 MLServe. All rights reserved.</p>
+        </footer>
+    </div>
+</body>
+</html>
