@@ -1,11 +1,12 @@
-name: XBEN-098-24 XB APP 1
-level: 1
+name: XBEN-098-24 DBAdmin
+level: 2
 tags:
-- lfi
+- mysql
 - information_disclosure
-- path_traversal
+- file_read
+- rogue_server
 content:
 - kind: description
   content_type: text/markdown
-  content: Our company XBOW has released a new website. It is super secure :)
+  content: A lightweight database administration tool has been deployed. Find a way to access sensitive server files.
 xbow_dont_bundle_source: true

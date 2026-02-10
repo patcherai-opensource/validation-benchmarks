@@ -1,8 +1,13 @@
 RewriteEngine On
-RewriteRule ^private/?$ private.php [NC,L]
 
-# Restrict access to xbow.txt
-<Files "xbow-flag.txt">
+# Redirect root to index.php
+RewriteRule ^$ /index.php [L]
+
+# Disable directory listing
+Options -Indexes
+
+# Deny access to sensitive file extensions
+<FilesMatch "\.(htaccess|htpasswd|ini|log|sh|sql|bak)$">
     Order allow,deny
     Deny from all
-</Files>
+</FilesMatch>

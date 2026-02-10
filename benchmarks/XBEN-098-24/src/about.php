@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>About</title>
+    <title>About - DBAdmin</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -12,32 +12,44 @@
         <img src="images/logo.png" width="120" height="100">
         </div>
         <ul>
-            <li><a href="/home.php">Home</a></li>
+            <li><a href="/">Home</a></li>
             <li><a href="/about.php">About</a></li>
             <li><a href="/contact.php">Contact</a></li>
-            <li><a href="/login.php">Login</a></li>
+            <li><a href="/connect.php">Connect</a></li>
         </ul>
     </div>
     <div class="content">
-        <h1>About This Website</h1>
+        <h1>About DBAdmin</h1>
         <p>
-        Artificial Intelligence (AI) is revolutionizing the field of security by offering advanced tools and methodologies to safeguard sensitive information and critical infrastructures. The traditional methods of security, which often rely on manual monitoring and static rule-based systems, are increasingly inadequate in the face of evolving and sophisticated cyber threats. AI, with its ability to learn, adapt, and analyze vast amounts of data in real-time, provides a dynamic and robust approach to security.
-
-        One of the primary advantages of AI in security is its capability for real-time threat detection. AI algorithms can sift through enormous datasets to identify unusual patterns and behaviors that may signify a security breach. Unlike human analysts, AI systems do not suffer from fatigue and can operate continuously, ensuring constant vigilance. This allows organizations to detect threats more quickly and respond more effectively, potentially mitigating damage before it occurs.
-        <br/><br/>
-        AI also excels in predictive analytics, which is critical for preempting security incidents. By analyzing historical data and identifying trends, AI can forecast potential threats and vulnerabilities. This proactive stance allows organizations to bolster their defenses in anticipation of attacks, rather than merely reacting after the fact. This shift from reactive to proactive security measures represents a significant leap forward in safeguarding assets and information.
-
-        Furthermore, AI-driven security systems can automate routine tasks, freeing up human resources for more complex decision-making processes. For instance, AI can handle the initial analysis of security alerts, filtering out false positives and prioritizing genuine threats. This ensures that human analysts can focus their efforts on the most pressing issues, thereby enhancing overall efficiency and effectiveness.
-
-        The adaptive nature of AI is another critical benefit. Traditional security systems often require manual updates to address new threats. In contrast, AI systems can learn from each encounter with malicious activity, continuously improving their detection and response capabilities. This ability to evolve in response to emerging threats makes AI a formidable tool in the ever-changing landscape of cybersecurity.
-        <br/><br/><br/><br/>
-        Moreover, AI can enhance physical security through the use of facial recognition, anomaly detection in surveillance footage, and predictive maintenance of security equipment. These applications ensure a comprehensive security strategy that encompasses both digital and physical domains.
-
-        Despite its numerous advantages, the integration of AI in security also presents challenges. Issues such as data privacy, the potential for AI systems to be fooled by sophisticated attacks, and the ethical implications of automated decision-making need careful consideration. However, with proper oversight and continuous advancements in technology, these challenges can be managed.
-        <br/><br/>
-        In conclusion, the importance of AI in security cannot be overstated. Its capabilities in real-time threat detection, predictive analytics, automation, and adaptability make it an indispensable asset in the modern security toolkit. As cyber threats continue to evolve, the role of AI in maintaining the integrity, confidentiality, and availability of information and systems will only become more critical. Organizations that leverage AI for security stand to benefit from enhanced protection, reduced risk, and greater operational efficiency, positioning themselves well in an increasingly digital and interconnected world.
+        DBAdmin is a lightweight, web-based database administration tool designed for developers, database administrators, and DevOps engineers who need quick and efficient access to MySQL databases. Built with simplicity and performance in mind, DBAdmin provides essential database management functionality without the overhead of larger enterprise tools.
         </p>
-
+        
+        <h3>Why DBAdmin?</h3>
+        <p>
+        Managing databases across multiple environments can be challenging. Whether you're working with local development databases, staging servers, or production systems, DBAdmin provides a unified interface for all your database management needs. Simply point it to any MySQL-compatible server and start working immediately.
+        <br/><br/>
+        Unlike desktop-based tools, DBAdmin runs in your browser, making it accessible from anywhere. This is particularly useful for managing databases on remote servers or in cloud environments where installing local tools isn't practical.
+        </p>
+        
+        <h3>Features</h3>
+        <ul style="color: #ccc; line-height: 1.8;">
+            <li>Connect to any MySQL server (local, remote, cloud-hosted)</li>
+            <li>Browse and manage databases and tables</li>
+            <li>Execute SQL queries with syntax highlighting</li>
+            <li>Import and export data in multiple formats</li>
+            <li>View and edit table data directly</li>
+            <li>Manage user permissions and privileges</li>
+        </ul>
+        
+        <h3>System Requirements</h3>
+        <p>
+        DBAdmin requires PHP 7.0 or later with the mysqli extension enabled. It works with MySQL 5.6 and later, including MariaDB and other MySQL-compatible databases.
+        </p>
+        
+        <h3>Security</h3>
+        <p>
+        DBAdmin is designed for internal use within trusted networks. When deploying in production environments, ensure proper network security measures are in place, including firewalls and access controls. Never expose DBAdmin directly to the public internet without proper authentication.
+        </p>
     </div>
 </body>
 </html>

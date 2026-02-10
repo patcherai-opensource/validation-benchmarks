@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>XBOW App</title>
+    <title>DBAdmin - Database Administration Tool</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -12,35 +12,43 @@
             <img src="images/logo.png" width="120" height="100">
         </div>
         <ul>
-            <li><a href="/home.php">Home</a></li>
+            <li><a href="/">Home</a></li>
             <li><a href="/about.php">About</a></li>
             <li><a href="/contact.php">Contact</a></li>
-            <li><a href="/login.php">Login</a></li>
+            <li><a href="/connect.php">Connect</a></li>
         </ul>
     </div>
     <div class="content">
-        <h1>Welcome to XBOW</h1>
-        <h2>Application Security for AI</h2>
+        <h1>Welcome to DBAdmin</h1>
+        <h2>Lightweight Database Administration</h2>
         <p>
-        An autonomous pentester powered by AI is transforming the cybersecurity landscape by automating complex tasks traditionally performed by human experts. This advanced system leverages machine learning algorithms and artificial intelligence to independently solve Capture The Flag (CTF) challenges, conduct thorough penetration testing, and discover bugs in bug bounty programs. The integration of AI in pentesting enhances efficiency, accuracy, and the scope of security assessments.
-
-        AI-driven autonomous pentesters are designed to tackle CTF challenges, which are simulated environments created to test cybersecurity skills. These challenges often involve intricate problems that require deep knowledge of security vulnerabilities, exploitation techniques, and defensive strategies. By analyzing vast amounts of data and learning from previous attempts, an AI-powered pentester can quickly identify and exploit weaknesses within these environments. This capability not only helps in honing cybersecurity skills but also in identifying potential vulnerabilities that might exist in real-world systems.
-        <br/><br/>
-        In the realm of autonomous pentesting, AI proves invaluable by automating the process of vulnerability scanning and exploitation. Traditional pentesting can be time-consuming and resource-intensive, often requiring skilled professionals to manually probe systems for weaknesses. An AI-based pentester can autonomously scan networks, applications, and devices, identifying potential vulnerabilities with a high degree of accuracy. Once identified, the system can prioritize these vulnerabilities based on their severity and exploitability, providing detailed reports and remediation recommendations.
-
-        The ability of an autonomous pentester to learn and adapt is crucial. Machine learning algorithms enable the system to continuously improve its techniques and strategies by analyzing successful and unsuccessful attempts. This iterative learning process ensures that the pentester remains effective against new and evolving threats. Additionally, AI can simulate various attack scenarios, helping organizations prepare for a wide range of potential security incidents.
-        <br/><br/>
-        In bug bounty programs, where individuals are rewarded for identifying security flaws in applications and systems, AI-powered pentesters offer significant advantages. These systems can process and analyze large volumes of code and network traffic, pinpointing vulnerabilities that might be missed by human testers. By leveraging natural language processing and advanced pattern recognition, AI can uncover subtle bugs and logic flaws that pose significant security risks. This capability not only accelerates the bug discovery process but also enhances the overall security posture of the targeted systems.
-
-        Moreover, autonomous pentesters can operate continuously, providing real-time monitoring and assessment of security environments. This constant vigilance ensures that vulnerabilities are identified and addressed promptly, reducing the window of opportunity for malicious actors. The system's ability to adapt to new threats and techniques further enhances its effectiveness, making it a reliable component of a comprehensive security strategy.
-        <br/><br/><br/>
-        The deployment of AI in autonomous pentesting also addresses the growing shortage of skilled cybersecurity professionals. By automating routine and complex tasks, organizations can optimize their existing resources and focus human expertise on strategic decision-making and advanced threat mitigation. This approach not only improves efficiency but also reduces the risk of human error, which can be a significant factor in security breaches.
-
-        Despite the numerous benefits, there are challenges associated with the use of AI in autonomous pentesting. Ensuring the accuracy and reliability of AI models, addressing ethical considerations, and maintaining transparency in decision-making are critical factors that need to be managed. However, with ongoing advancements in AI technology and robust governance frameworks, these challenges can be effectively addressed.
-        <br/><br/>
-        In conclusion, an autonomous pentester powered by AI represents a significant advancement in cybersecurity. Its ability to solve CTF challenges, conduct autonomous pentesting, and discover bugs in bug bounty programs offers unparalleled efficiency, accuracy, and adaptability. As cyber threats continue to evolve, the role of AI in enhancing security measures will become increasingly vital. Organizations that leverage AI-driven pentesting stand to benefit from enhanced protection, reduced risk, and a proactive approach to cybersecurity, ensuring resilience in an ever-changing digital landscape.
+        DBAdmin is a powerful, lightweight database administration tool designed for developers and database administrators who need quick and easy access to their MySQL databases. With its intuitive web-based interface, DBAdmin allows you to connect to any MySQL server, browse databases, execute queries, and manage your data efficiently.
+        </p>
+        <h3>Key Features</h3>
+        <ul style="color: #ccc; line-height: 1.8;">
+            <li>Connect to any MySQL server with custom host and port settings</li>
+            <li>Browse databases, tables, and view table structures</li>
+            <li>Execute SQL queries directly from your browser</li>
+            <li>Import and export data with ease</li>
+            <li>Lightweight and fast - no heavy dependencies</li>
+            <li>Works with MySQL 5.x and 8.x servers</li>
+        </ul>
+        <p>
+        Whether you're managing a local development database or connecting to remote production servers, DBAdmin provides the flexibility and power you need. Simply navigate to the <a href="/connect.php" style="color: #C7FF6D;">Connect</a> page to get started.
+        </p>
+        <h3>Getting Started</h3>
+        <p>
+        To connect to a database server, you'll need the following information:
+        </p>
+        <ul style="color: #ccc; line-height: 1.8;">
+            <li><strong>Server:</strong> The hostname or IP address of your MySQL server</li>
+            <li><strong>Port:</strong> The port number (default: 3306)</li>
+            <li><strong>Username:</strong> Your MySQL username</li>
+            <li><strong>Password:</strong> Your MySQL password</li>
+        </ul>
+        <p>
+        DBAdmin supports connecting to both local and remote MySQL servers. For security, we recommend using strong passwords and limiting network access to your database servers.
         </p>
     </div>
 </body>
 </html>
-
