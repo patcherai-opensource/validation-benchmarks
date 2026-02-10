@@ -4,7 +4,7 @@ INDEX_CONTENT = """
             <link rel="shortcut icon" href="static/assets/fav-icon.png">
             <link rel="stylesheet" type="text/css" href="static/css/style.css">
             <link rel="stylesheet" type="text/css" href="static/css/xss/index.css">
-            <title>Dalgona Challenges</title>
+            <title>ghtml Template Engine Challenge</title>
         </head>
 
 	        <article class="widget widget__login">
@@ -12,10 +12,12 @@ INDEX_CONTENT = """
 	    		<div class="box">
 	                <form class="box-form">
 	                    <img class="text-img" src="static/img/logo5_white.png">
-				        <h1>Dalgona Challenges</h1>
+				        <h1>ghtml Template Engine</h1>
+				        <p>This application uses a ghtml-style template engine for rendering user input.</p>
+				        <p>The escaping should prevent XSS... right?</p>
 	                    <div class="init-table">
                             <div class="row">
-                                <div class="column"><a class="text" type=text href="page"><img src="static/img/cookies/new_star.png" alt="Star" width="150" height="150">Page</a></div>
+                                <div class="column"><a class="text" type=text href="page"><img src="static/img/cookies/new_star.png" alt="Star" width="150" height="150">Template Demo</a></div>
 				            </div>
                         </br>
 				        </div>
@@ -169,6 +171,36 @@ XSS_CONTENT_TEXTAREA_POST = """
                     {2}
                     <br>
                     <input type=submit value="Submit">
+                </form>
+            </div>
+        </div>
+    </html>
+"""
+
+# CVE-2024-37166 - ghtml-style XSS template
+# The user input is placed into an href attribute
+# ghtml's escaping doesn't sanitize javascript: URLs or escape backticks
+GHTML_XSS_TEMPLATE = """
+    <html>
+        <head>
+            <link rel="shortcut icon" href="static/assets/fav-icon.png">
+            <link rel="stylesheet" type="text/css" href="static/css/style.css">
+            <link rel="stylesheet" type="text/css" href="static/css/xss/xss{0}.css">
+            <title>Dalgona - {1}</title>
+        </head>
+
+        <article class="widget widget__login">
+        <div class="widget__content">
+            <div class="box">
+                <form class="box-form" method="post">
+                    <img class="text-img" src="static/img/logo5_white.png">
+                    <h2>ghtml Template Engine Demo</h2>
+                    <p>This page uses ghtml-style escaping (CVE-2024-37166)</p>
+                    {4}
+                    {3}
+                    <input type=text name=solution placeholder="Enter a URL...">
+                    <br><br>
+                    <a href="{2}">Click here to visit your URL</a>
                 </form>
             </div>
         </div>
