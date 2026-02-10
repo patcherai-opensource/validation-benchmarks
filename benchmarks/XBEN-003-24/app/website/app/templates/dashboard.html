@@ -3,45 +3,83 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard - Trading Platform</title>
+    <title>Dashboard - Alf.io Backoffice</title>
     <link href="{{ url_for('static', filename='css/bootstrap.min.css') }}" rel="stylesheet">
     <style>
-        body {
-            background-color: #2c3e50;
-            color: #ffffff;
-        }
-        .card {
-            background-color: #34495e;
-            color: #ffffff;
-        }
+        body { background-color: #f5f5f5; }
+        .sidebar { background: #2196F3; min-height: 100vh; padding-top: 20px; }
+        .sidebar a { color: rgba(255,255,255,0.8); padding: 10px 20px; display: block; text-decoration: none; }
+        .sidebar a:hover { background: rgba(255,255,255,0.1); color: white; }
+        .sidebar .active { background: rgba(255,255,255,0.2); }
+        .main-content { padding: 20px; }
+        .card { border: none; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
     </style>
 </head>
 <body>
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-        <div class="container">
-            <a class="navbar-brand" href="#">Trading Platform</a>
-            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav ml-auto">
-                    <li class="nav-item">
-                        <form action="/logout" method="post">
-                            <button type="submit" class="btn btn-success">Logout</button>
-                        </form>
-                    </li>
-                </ul>
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-2 sidebar">
+                <h5 class="text-white px-3 mb-4">Alf.io Backoffice</h5>
+                <a href="{{ url_for('dashboard') }}" class="active">Dashboard</a>
+                {% if user.role in ['admin', 'operator'] %}
+                <a href="{{ url_for('admin_panel') }}">User Management</a>
+                {% endif %}
+                <a href="{{ url_for('logout') }}">Logout</a>
             </div>
-        </div>
-    </nav>
-    <div class="container mt-3">
-        <div class="row justify-content-center">
-            <div class="col-md-6">
-                <h2 class="text-center mb-4">Dashboard</h2>
-                <div class="card">
+            <div class="col-md-10 main-content">
+                <h4>Welcome, {{ user.first_name }} {{ user.last_name }}</h4>
+                <p class="text-muted">Organization: {{ user.organization.name }} | Role: {{ user.role }}</p>
+                
+                <div class="row mt-4">
+                    <div class="col-md-4">
+                        <div class="card">
+                            <div class="card-body">
+                                <h6 class="card-title text-muted">Organization Users</h6>
+                                <h3>{{ org_users|length }}</h3>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="card">
+                            <div class="card-body">
+                                <h6 class="card-title text-muted">Your Role</h6>
+                                <h3>{{ user.role|capitalize }}</h3>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="card">
+                            <div class="card-body">
+                                <h6 class="card-title text-muted">Status</h6>
+                                <h3>{% if user.enabled %}Active{% else %}Disabled{% endif %}</h3>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="card mt-4">
+                    <div class="card-header">Organization Members</div>
                     <div class="card-body">
-                        <h5 class="card-title">Welcome, {{ user.first_name }} {{ user.last_name }}</h5>
-                        <p class="card-text">This is your dashboard.</p>
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>Name</th>
+                                    <th>Email</th>
+                                    <th>Role</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for u in org_users %}
+                                <tr>
+                                    <td>{{ u.first_name }} {{ u.last_name }}</td>
+                                    <td>{{ u.email }}</td>
+                                    <td>{{ u.role }}</td>
+                                    <td>{% if u.enabled %}<span class="badge bg-success">Active</span>{% else %}<span class="badge bg-danger">Disabled</span>{% endif %}</td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
                     </div>
                 </div>
             </div>
