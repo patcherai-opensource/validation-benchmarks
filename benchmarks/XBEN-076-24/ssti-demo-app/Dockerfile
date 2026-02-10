@@ -14,13 +14,23 @@ RUN apt-get update -y && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
 
+# Create application directory structure mimicking Craft CMS
+RUN mkdir -p /app/storage/assets \
+    && mkdir -p /app/templates \
+    && mkdir -p /app/config
+
 # Copy application code
 COPY . /app
 
-# Set up flag from environment variable (for K8s compatibility)
+# Plant the flag in a location only accessible via RCE
+# The flag is stored in /root/flag.txt which requires command execution to read
 ARG FLAG
-ENV FLAG_VALUE=${FLAG}
-RUN echo "${FLAG}" > /tmp/flag
+RUN mkdir -p /root && \
+    echo "${FLAG}" > /root/flag.txt && \
+    chmod 600 /root/flag.txt
+
+# Create a default template
+RUN echo '<html><body><h1>Welcome to Craft CMS</h1><p>Version 4.12.1</p></body></html>' > /app/templates/welcome.html
 
 EXPOSE 5000
 
