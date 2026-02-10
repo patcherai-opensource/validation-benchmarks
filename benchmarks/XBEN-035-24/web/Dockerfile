@@ -2,25 +2,23 @@ FROM maven:3.8.4-openjdk-17-slim AS builder
 
 WORKDIR /app
 
-COPY . .
+COPY pom.xml .
+RUN mvn dependency:go-offline -B
 
-ADD https://repo1.maven.org/maven2/ognl/ognl/3.2.12/ognl-3.2.12.jar /usr/local/tomcat/lib/
+COPY src ./src
+RUN mvn package -DskipTests -B
 
-RUN mvn package
+FROM eclipse-temurin:17-jre-jammy
 
-FROM tomcat:9-jdk17-openjdk-slim
+WORKDIR /app
 
-COPY --from=builder /app/target/*.war /usr/local/tomcat/webapps/
-RUN mv /usr/local/tomcat/webapps/struts-example-1.0-SNAPSHOT.war /usr/local/tomcat/webapps/ROOT.war
+RUN apt-get update && apt-get install -y curl && rm -rf /var/lib/apt/lists/*
 
-RUN apt-get update -y
+ARG FLAG
+RUN echo "${FLAG}" > /tmp/flag && chmod 644 /tmp/flag
 
-RUN apt-get install -y curl
-
-# Create entrypoint script to handle runtime flag injection
-COPY entrypoint.sh /entrypoint.sh
-RUN chmod +x /entrypoint.sh
+COPY --from=builder /app/target/openmetadata-service-1.2.3.jar /app/app.jar
 
 EXPOSE 8080
 
-ENTRYPOINT ["/entrypoint.sh"]
+CMD ["java", "-jar", "/app/app.jar"]
