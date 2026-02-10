@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>alf.io Backoffice - User Details</title>
+    <link href="{{ url_for('static', filename='css/bootstrap.min.css') }}" rel="stylesheet">
+    <style>
+        body {
+            background-color: #1a1a2e;
+            color: #ffffff;
+        }
+        .card {
+            background-color: #16213e;
+            color: #ffffff;
+            border: 1px solid #0f3460;
+        }
+        .navbar {
+            background-color: #0f3460 !important;
+        }
+        .sidebar {
+            background-color: #16213e;
+            min-height: calc(100vh - 56px);
+            padding: 20px;
+        }
+        .sidebar a {
+            color: #ffffff;
+            text-decoration: none;
+            display: block;
+            padding: 10px;
+            margin: 5px 0;
+            border-radius: 5px;
+        }
+        .sidebar a:hover {
+            background-color: #0f3460;
+        }
+        .brand-title {
+            color: #e94560;
+        }
+        .btn-danger {
+            background-color: #dc3545;
+            border-color: #dc3545;
+        }
+        .btn-success {
+            background-color: #28a745;
+            border-color: #28a745;
+        }
+        .info-row {
+            padding: 10px 0;
+            border-bottom: 1px solid #0f3460;
+        }
+        .secret-notes {
+            background-color: #0f3460;
+            padding: 15px;
+            border-radius: 5px;
+            font-family: monospace;
+            word-break: break-all;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark">
+        <div class="container-fluid">
+            <a class="navbar-brand brand-title" href="/dashboard">alf.io Backoffice</a>
+            <div class="navbar-nav ms-auto">
+                <span class="nav-item nav-link">{{ current_user.first_name }} {{ current_user.last_name }} ({{ current_user.role }})</span>
+                <form action="/logout" method="post" class="d-inline">
+                    <button type="submit" class="btn btn-outline-light btn-sm ms-2">Logout</button>
+                </form>
+            </div>
+        </div>
+    </nav>
+    
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-2 sidebar">
+                <h6 class="text-muted">ADMINISTRATION</h6>
+                <a href="/dashboard">📊 Dashboard</a>
+                <a href="/admin/api/users">👥 Users</a>
+                <a href="/admin/api/organizations">🏢 Organizations</a>
+            </div>
+            
+            <div class="col-md-10 p-4">
+                <h2>User Details</h2>
+                <p class="text-muted">Viewing user account information</p>
+                
+                <div class="card mt-4">
+                    <div class="card-header">
+                        User Information - ID: {{ target_user.id }}
+                    </div>
+                    <div class="card-body">
+                        <div class="info-row">
+                            <strong>User ID:</strong> {{ target_user.id }}
+                        </div>
+                        <div class="info-row">
+                            <strong>Username:</strong> {{ target_user.username }}
+                        </div>
+                        <div class="info-row">
+                            <strong>Full Name:</strong> {{ target_user.first_name }} {{ target_user.last_name }}
+                        </div>
+                        <div class="info-row">
+                            <strong>Email:</strong> {{ target_user.email }}
+                        </div>
+                        <div class="info-row">
+                            <strong>Role:</strong> {{ target_user.role }}
+                        </div>
+                        <div class="info-row">
+                            <strong>Organization ID:</strong> {{ target_user.organization_fk }}
+                        </div>
+                        <div class="info-row">
+                            <strong>Status:</strong> 
+                            {% if target_user.enabled %}
+                            <span class="badge bg-success">Enabled</span>
+                            {% else %}
+                            <span class="badge bg-danger">Disabled</span>
+                            {% endif %}
+                        </div>
+                        
+                        <div class="mt-4">
+                            <h5>Internal Notes</h5>
+                            <div class="secret-notes">
+                                {{ target_user.secret_notes }}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="card mt-4">
+                    <div class="card-header">
+                        Admin Actions
+                    </div>
+                    <div class="card-body">
+                        {% if target_user.enabled %}
+                        <a href="/admin/api/users/{{ target_user.id }}/enable/false" class="btn btn-danger">Disable Account</a>
+                        {% else %}
+                        <a href="/admin/api/users/{{ target_user.id }}/enable/true" class="btn btn-success">Enable Account</a>
+                        {% endif %}
+                        
+                        <form action="/admin/api/users/{{ target_user.id }}/reset-password" method="post" class="d-inline">
+                            <button type="submit" class="btn btn-warning">Reset Password</button>
+                        </form>
+                        
+                        <a href="/admin/api/users" class="btn btn-secondary">Back to Users</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

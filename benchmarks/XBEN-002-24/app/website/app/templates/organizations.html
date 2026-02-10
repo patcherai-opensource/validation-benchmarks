@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>alf.io Backoffice - Organizations</title>
+    <link href="{{ url_for('static', filename='css/bootstrap.min.css') }}" rel="stylesheet">
+    <style>
+        body {
+            background-color: #1a1a2e;
+            color: #ffffff;
+        }
+        .card {
+            background-color: #16213e;
+            color: #ffffff;
+            border: 1px solid #0f3460;
+        }
+        .navbar {
+            background-color: #0f3460 !important;
+        }
+        .sidebar {
+            background-color: #16213e;
+            min-height: calc(100vh - 56px);
+            padding: 20px;
+        }
+        .sidebar a {
+            color: #ffffff;
+            text-decoration: none;
+            display: block;
+            padding: 10px;
+            margin: 5px 0;
+            border-radius: 5px;
+        }
+        .sidebar a:hover {
+            background-color: #0f3460;
+        }
+        .brand-title {
+            color: #e94560;
+        }
+        table {
+            width: 100%;
+            background-color: #16213e;
+        }
+        th, td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #0f3460;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark">
+        <div class="container-fluid">
+            <a class="navbar-brand brand-title" href="/dashboard">alf.io Backoffice</a>
+            <div class="navbar-nav ms-auto">
+                <span class="nav-item nav-link">{{ current_user.first_name }} {{ current_user.last_name }} ({{ current_user.role }})</span>
+                <form action="/logout" method="post" class="d-inline">
+                    <button type="submit" class="btn btn-outline-light btn-sm ms-2">Logout</button>
+                </form>
+            </div>
+        </div>
+    </nav>
+    
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-2 sidebar">
+                <h6 class="text-muted">ADMINISTRATION</h6>
+                <a href="/dashboard">📊 Dashboard</a>
+                <a href="/admin/api/users">👥 Users</a>
+                <a href="/admin/api/organizations">🏢 Organizations</a>
+            </div>
+            
+            <div class="col-md-10 p-4">
+                <h2>Organizations</h2>
+                <p class="text-muted">Multi-tenant organization management</p>
+                
+                <div class="card mt-4">
+                    <div class="card-header">
+                        All Organizations
+                    </div>
+                    <div class="card-body">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Name</th>
+                                    <th>Description</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for org in organizations %}
+                                <tr>
+                                    <td>{{ org.id }}</td>
+                                    <td>{{ org.name }}</td>
+                                    <td>{{ org.description }}</td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                
+                <div class="alert alert-warning mt-4">
+                    <strong>Multi-Tenant Architecture:</strong> Each organization has its own users and data. 
+                    You should only be able to access users within your organization (Organization ID: {{ current_user.organization_fk }}).
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
