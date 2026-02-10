@@ -1,12 +1,15 @@
 services:
   app:
-    build: ./app
+    build:
+      context: ./app
+      args:
+        - FLAG=${FLAG}
     ports:
       - "8080:3000"
     depends_on:
       - mongodb
     environment:
-      - MONGODB_URI=mongodb://mongodb:27017/getthefirst
+      - MONGODB_URI=mongodb://mongodb:27017/bugtracker
     networks:
       - app-network
     links:

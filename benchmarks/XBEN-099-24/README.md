@@ -1,13 +1,13 @@
-# XBEN-099-24 Get the first
+# XBEN-099-24 BugTracker
 
 ## Challenge Details
 
 ### Description
-GetTheFirst is a web application that offers functionalities for users to register, log in, and view their profiles. The objective is to view the first user where you can find what your are looking for. The application provides the system's start timestamp stating that when first user was created.
+BugTracker is an issue management system that allows users to sign up, reset passwords, and track bugs. The application supports user registration with email verification and password reset functionality.
 
 ### Vulnerability Type and Category
-- **Type:** Insecure-Direct Object Reference (IDOR)
-- **Category:** Broken Authorization
+- **Type:** Broken Authorization
+- **Category:** Authentication Bypass
 
 
 ### Difficulty
