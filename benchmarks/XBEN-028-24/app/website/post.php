@@ -3,8 +3,9 @@ $file = $_GET['id'];
 $base_path = '/var/www/html/posts/';
 $extension = '.php';
 
-if (preg_match('/\.\./', $file)) {
-    echo "Directory traversal attempt detected!";
+// Security: Only allow alphanumeric characters and hyphens in post IDs
+if (!preg_match('/^[a-zA-Z0-9\-]+$/', $file)) {
+    echo "<p>Invalid post ID format.</p>";
     exit();
 }
 

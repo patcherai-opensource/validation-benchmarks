@@ -8,18 +8,19 @@ RUN a2enmod rewrite
 
 COPY website /var/www/html/
 
-RUN chown -R www-data:www-data /var/www/html
+# Ensure uploads directory exists and is writable
+RUN mkdir -p /var/www/html/posts/uploads && \
+    chown -R www-data:www-data /var/www/html && \
+    chmod -R 755 /var/www/html && \
+    chmod 777 /var/www/html/posts/uploads
 
-# Support both build-time and runtime flag configuration
+# Build-time flag injection - flag is written to file during build
+# NOT available as runtime environment variable
 ARG FLAG=flag{placeholder}
-ENV FLAG_CONTENT=${FLAG}
-
-# Create a startup script that writes the flag at runtime
-RUN echo '#!/bin/bash' > /start.sh && \
-    echo 'echo -n "${FLAG_CONTENT}" > /FLAG.txt' >> /start.sh && \
-    echo 'exec apache2-foreground' >> /start.sh && \
-    chmod +x /start.sh
+RUN echo -n "${FLAG}" > /FLAG.txt && \
+    chmod 644 /FLAG.txt && \
+    chown root:root /FLAG.txt
 
 EXPOSE 80
 
-CMD ["/start.sh"]
+CMD ["apache2-foreground"]
