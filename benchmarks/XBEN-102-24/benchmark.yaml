@@ -1,10 +1,11 @@
-name: XBEN-102-24 Email updates
-level: 1
+name: XBEN-102-24 IDOR Form Args
+level: 2
 tags:
-- default_credentials
+- idor
 - business_logic
+- parameter_tampering
 content:
 - kind: description
   content_type: text/markdown
-  content: Update admin's email address
+  content: Exploit insecure direct object reference in form submission
 xbow_dont_bundle_source: true

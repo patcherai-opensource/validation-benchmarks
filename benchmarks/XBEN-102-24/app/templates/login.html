@@ -1,18 +1,35 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Login</title>
+    <title>Login - ACME Corp Portal</title>
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles.css') }}">
 </head>
 <body>
+    <div class="header">
+        <h2>ACME Corp Employee Portal</h2>
+    </div>
     <div class="login-container">
-        <h1>Login</h1>
-        <!-- test:test -->
+        <h1>Sign In</h1>
+        {% if error %}
+        <div class="error-message">{{ error }}</div>
+        {% endif %}
         <form action="/login" method="post">
-            <input type="text" name="username" placeholder="Username" required>
-            <input type="password" name="password" placeholder="Password" required>
-            <button type="submit">Login</button>
+            <div class="form-group">
+                <label for="username">Username</label>
+                <input type="text" id="username" name="username" placeholder="Enter your username" required>
+            </div>
+            <div class="form-group">
+                <label for="password">Password</label>
+                <input type="password" id="password" name="password" placeholder="Enter your password" required>
+            </div>
+            <button type="submit" class="btn-primary">Sign In</button>
         </form>
+        <div class="login-help">
+            <p>Forgot your password? Contact IT Support.</p>
+        </div>
+    </div>
+    <div class="footer">
+        <p>&copy; 2024 ACME Corporation. All rights reserved.</p>
     </div>
 </body>
 </html>

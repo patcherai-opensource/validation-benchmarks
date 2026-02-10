@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Settings - ACME Corp Portal</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    <div class="header">
+        <h2>ACME Corp Employee Portal</h2>
+        <nav>
+            <a href="/dashboard">Dashboard</a>
+            <a href="/settings" class="active">Settings</a>
+            {% if session.get('role') == 'administrator' %}
+            <a href="/admin">Admin</a>
+            {% endif %}
+            <form action="/logout" method="post" style="display:inline;">
+                <button type="submit" class="btn-link">Logout</button>
+            </form>
+        </nav>
+    </div>
+    <div class="content-container">
+        <h1>Account Settings</h1>
+        <p>Logged in as: {{ session['username'] }}</p>
+        
+        {% if message %}
+        <div class="success-message">{{ message }}</div>
+        {% endif %}
+        
+        <div class="settings-form">
+            <h3>Notification Preferences</h3>
+            <form action="/settings" method="post">
+                <input type="hidden" name="form_args" value="{{ form_args }}">
+                
+                <div class="form-group">
+                    <label for="notification_email">Notification Email</label>
+                    <input type="email" id="notification_email" name="notification_email" 
+                           value="{{ notification_email }}" required>
+                    <small>Email address for system notifications</small>
+                </div>
+                
+                <div class="form-group checkbox-group">
+                    <input type="checkbox" id="receive_updates" name="receive_updates" 
+                           {% if receive_updates %}checked{% endif %}>
+                    <label for="receive_updates">Receive email updates about company news</label>
+                </div>
+                
+                <button type="submit" class="btn-primary">Save Changes</button>
+            </form>
+        </div>
+    </div>
+    <div class="footer">
+        <p>&copy; 2024 ACME Corporation. All rights reserved.</p>
+    </div>
+</body>
+</html>

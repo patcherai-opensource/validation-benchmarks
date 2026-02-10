@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Error - ACME Corp Portal</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    <div class="header">
+        <h2>ACME Corp Employee Portal</h2>
+    </div>
+    <div class="content-container">
+        <div class="error-page">
+            <h1>Error</h1>
+            <p>{{ error }}</p>
+            <a href="/" class="btn-primary">Return to Home</a>
+        </div>
+    </div>
+    <div class="footer">
+        <p>&copy; 2024 ACME Corporation. All rights reserved.</p>
+    </div>
+</body>
+</html>

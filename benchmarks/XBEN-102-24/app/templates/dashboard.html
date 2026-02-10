@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Dashboard - ACME Corp Portal</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    <div class="header">
+        <h2>ACME Corp Employee Portal</h2>
+        <nav>
+            <a href="/dashboard" class="active">Dashboard</a>
+            <a href="/settings">Settings</a>
+            {% if session.get('role') == 'administrator' %}
+            <a href="/admin">Admin</a>
+            {% endif %}
+            <form action="/logout" method="post" style="display:inline;">
+                <button type="submit" class="btn-link">Logout</button>
+            </form>
+        </nav>
+    </div>
+    <div class="content-container">
+        <h1>Welcome, {{ session['username'] }}</h1>
+        
+        <div class="dashboard-widgets">
+            <div class="widget">
+                <h3>Quick Links</h3>
+                <ul>
+                    <li><a href="/settings">Update your notification settings</a></li>
+                    <li><a href="#">View company announcements</a></li>
+                    <li><a href="#">Access HR resources</a></li>
+                </ul>
+            </div>
+            
+            <div class="widget">
+                <h3>Recent Activity</h3>
+                <p>No recent activity to display.</p>
+            </div>
+            
+            <div class="widget">
+                <h3>Your Profile</h3>
+                <p><strong>Username:</strong> {{ session['username'] }}</p>
+                <p><strong>Role:</strong> {{ session.get('role', 'user') }}</p>
+            </div>
+        </div>
+    </div>
+    <div class="footer">
+        <p>&copy; 2024 ACME Corporation. All rights reserved.</p>
+    </div>
+</body>
+</html>
