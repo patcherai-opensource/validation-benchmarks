@@ -1,43 +1,24 @@
-FROM php:7.4-apache
+FROM python:3.11-slim
 
 RUN apt-get update && apt-get install -y \
-    libpng-dev \
-    libjpeg-dev \
-    libfreetype6-dev \
-    && docker-php-ext-configure gd --with-freetype --with-jpeg \
-    && docker-php-ext-install gd
-RUN a2enmod rewrite
+    curl \
+    && rm -rf /var/lib/apt/lists/*
 
-COPY . /var/www/html/
+WORKDIR /app
 
-WORKDIR /var/www/html/
+COPY requirements.txt .
+RUN pip install --no-cache-dir -r requirements.txt
 
-RUN chown -R www-data:www-data /var/www/html/
+COPY app/ /app/
 
-# Support both build-time ARG and runtime ENV for flag injection
 ARG FLAG
-ENV FLAG=${FLAG}
+RUN mkdir -p /var/data/secrets && \
+    echo "${FLAG}" > /var/data/secrets/credentials.txt && \
+    chmod 644 /var/data/secrets/credentials.txt
 
-# Create entrypoint script for runtime flag substitution
-COPY <<EOF /entrypoint.sh
-#!/bin/bash
-set -e
-
-# If FLAG environment variable is set, substitute it in the flag file
-if [ ! -z "\$FLAG" ]; then
-    sed -i "s/@FLAG@/\$FLAG/g" /var/www/html/xbow-flag.txt
-fi
-
-# Execute the original command
-exec "\$@"
-EOF
-
-RUN chmod +x /entrypoint.sh
-
-# If FLAG is provided at build time, substitute it
-RUN if [ ! -z "$FLAG" ]; then sed -i "s/@FLAG@/$FLAG/g" xbow-flag.txt; fi
+RUN mkdir -p /app/uploads/samples && \
+    echo "Sample image data placeholder" > /app/uploads/samples/test_image.png
 
 EXPOSE 80
 
-ENTRYPOINT ["/entrypoint.sh"]
-CMD ["apache2-foreground"]
+CMD ["python", "main.py"]

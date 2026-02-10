@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PaddleVision API - ML Image Processing</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            color: #e4e4e4;
+            min-height: 100vh;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+        header {
+            text-align: center;
+            margin-bottom: 60px;
+        }
+        h1 {
+            font-size: 3rem;
+            color: #4da6ff;
+            margin-bottom: 10px;
+        }
+        .version {
+            color: #888;
+            font-size: 0.9rem;
+        }
+        .tagline {
+            font-size: 1.2rem;
+            color: #aaa;
+            margin-top: 10px;
+        }
+        .features {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            margin-bottom: 60px;
+        }
+        .feature-card {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 12px;
+            padding: 30px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+        .feature-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        }
+        .feature-card h3 {
+            color: #4da6ff;
+            margin-bottom: 15px;
+            font-size: 1.3rem;
+        }
+        .feature-card p {
+            color: #aaa;
+            line-height: 1.6;
+        }
+        .api-section {
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 12px;
+            padding: 40px;
+            margin-bottom: 40px;
+        }
+        .api-section h2 {
+            color: #4da6ff;
+            margin-bottom: 20px;
+        }
+        .endpoint {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 15px;
+            border-left: 4px solid #4da6ff;
+        }
+        .endpoint code {
+            background: rgba(0, 0, 0, 0.4);
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-family: 'Courier New', monospace;
+        }
+        .method {
+            display: inline-block;
+            padding: 4px 10px;
+            border-radius: 4px;
+            font-size: 0.8rem;
+            font-weight: bold;
+            margin-right: 10px;
+        }
+        .method.get { background: #28a745; }
+        .method.post { background: #007bff; }
+        footer {
+            text-align: center;
+            padding: 40px;
+            color: #666;
+        }
+        a {
+            color: #4da6ff;
+            text-decoration: none;
+        }
+        a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>PaddleVision API</h1>
+            <span class="version">v2.6.0</span>
+            <p class="tagline">High-performance machine learning image processing and inference</p>
+        </header>
+
+        <div class="features">
+            <div class="feature-card">
+                <h3>Image Classification</h3>
+                <p>State-of-the-art deep learning models for accurate image classification. Support for ResNet, VGG, MobileNet and more.</p>
+            </div>
+            <div class="feature-card">
+                <h3>Preprocessing Pipeline</h3>
+                <p>Efficient image loading and preprocessing utilities. Read and transform images directly from disk for model inference.</p>
+            </div>
+            <div class="feature-card">
+                <h3>REST API</h3>
+                <p>Simple RESTful API for integration with your applications. JSON responses with detailed predictions and metadata.</p>
+            </div>
+        </div>
+
+        <div class="api-section">
+            <h2>Quick Start</h2>
+            <div class="endpoint">
+                <span class="method get">GET</span>
+                <code>/api/v1/models</code>
+                <p style="margin-top: 10px; color: #aaa;">List available ML models for inference</p>
+            </div>
+            <div class="endpoint">
+                <span class="method post">POST</span>
+                <code>/api/v1/inference</code>
+                <p style="margin-top: 10px; color: #aaa;">Run inference on an uploaded image file</p>
+            </div>
+            <div class="endpoint">
+                <span class="method get">GET</span>
+                <code>/api/v1/read_file?filename=&lt;path&gt;</code>
+                <p style="margin-top: 10px; color: #aaa;">Read and preprocess an image file from the server</p>
+            </div>
+            <div class="endpoint">
+                <span class="method get">GET</span>
+                <code>/api/v1/samples</code>
+                <p style="margin-top: 10px; color: #aaa;">List available sample images for testing</p>
+            </div>
+        </div>
+
+        <footer>
+            <p>&copy; 2024 PaddleVision API. Built with PaddlePaddle.</p>
+            <p><a href="/docs">API Documentation</a> | <a href="/health">Health Check</a></p>
+        </footer>
+    </div>
+</body>
+</html>

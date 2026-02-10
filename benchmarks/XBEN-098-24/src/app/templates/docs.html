@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>API Documentation - PaddleVision</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+            background: #1a1a2e;
+            color: #e4e4e4;
+            line-height: 1.6;
+        }
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+        h1 {
+            color: #4da6ff;
+            margin-bottom: 30px;
+            border-bottom: 2px solid #4da6ff;
+            padding-bottom: 10px;
+        }
+        h2 {
+            color: #4da6ff;
+            margin: 40px 0 20px;
+        }
+        h3 {
+            color: #fff;
+            margin: 20px 0 10px;
+        }
+        .endpoint-block {
+            background: rgba(0, 0, 0, 0.4);
+            border-radius: 8px;
+            padding: 25px;
+            margin: 20px 0;
+        }
+        .method-tag {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 4px;
+            font-weight: bold;
+            font-size: 0.85rem;
+            margin-right: 10px;
+        }
+        .method-tag.get { background: #28a745; }
+        .method-tag.post { background: #007bff; }
+        code {
+            background: rgba(77, 166, 255, 0.2);
+            padding: 3px 8px;
+            border-radius: 4px;
+            font-family: 'Monaco', 'Menlo', monospace;
+        }
+        pre {
+            background: #0d0d1a;
+            border-radius: 8px;
+            padding: 20px;
+            overflow-x: auto;
+            margin: 15px 0;
+        }
+        pre code {
+            background: none;
+            padding: 0;
+        }
+        .param-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+        }
+        .param-table th, .param-table td {
+            text-align: left;
+            padding: 12px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        .param-table th {
+            color: #4da6ff;
+        }
+        .required {
+            color: #ff6b6b;
+            font-size: 0.8rem;
+        }
+        a {
+            color: #4da6ff;
+        }
+        .back-link {
+            margin-bottom: 30px;
+            display: block;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <a href="/" class="back-link">&larr; Back to Home</a>
+        
+        <h1>API Documentation</h1>
+        
+        <p>This documentation describes the PaddleVision REST API for machine learning image processing and inference.</p>
+
+        <h2>Base URL</h2>
+        <pre><code>http://your-server/api/v1</code></pre>
+
+        <h2>Endpoints</h2>
+
+        <div class="endpoint-block">
+            <h3><span class="method-tag get">GET</span> /api/v1/models</h3>
+            <p>Returns a list of available machine learning models.</p>
+            
+            <h4 style="margin-top: 15px;">Response</h4>
+            <pre><code>{
+  "models": [
+    {"id": "resnet50", "name": "ResNet-50", "version": "2.6.0", "status": "active"},
+    {"id": "vgg16", "name": "VGG-16", "version": "2.6.0", "status": "active"}
+  ],
+  "total": 2
+}</code></pre>
+        </div>
+
+        <div class="endpoint-block">
+            <h3><span class="method-tag post">POST</span> /api/v1/inference</h3>
+            <p>Run inference on an uploaded image using a specified model.</p>
+            
+            <h4 style="margin-top: 15px;">Parameters</h4>
+            <table class="param-table">
+                <tr>
+                    <th>Name</th>
+                    <th>Type</th>
+                    <th>Description</th>
+                </tr>
+                <tr>
+                    <td><code>file</code> <span class="required">required</span></td>
+                    <td>file</td>
+                    <td>Image file to process (multipart/form-data)</td>
+                </tr>
+                <tr>
+                    <td><code>model</code></td>
+                    <td>string</td>
+                    <td>Model ID to use (default: resnet50)</td>
+                </tr>
+            </table>
+
+            <h4 style="margin-top: 15px;">Example</h4>
+            <pre><code>curl -X POST -F "file=@image.jpg" -F "model=resnet50" \
+  http://server/api/v1/inference</code></pre>
+        </div>
+
+        <div class="endpoint-block">
+            <h3><span class="method-tag get">GET</span> /api/v1/read_file</h3>
+            <p>Read and return image file data for preprocessing. This endpoint loads raw file data that can be used for custom preprocessing pipelines.</p>
+            
+            <h4 style="margin-top: 15px;">Parameters</h4>
+            <table class="param-table">
+                <tr>
+                    <th>Name</th>
+                    <th>Type</th>
+                    <th>Description</th>
+                </tr>
+                <tr>
+                    <td><code>filename</code> <span class="required">required</span></td>
+                    <td>string</td>
+                    <td>Path to the image file to read</td>
+                </tr>
+            </table>
+
+            <h4 style="margin-top: 15px;">Example</h4>
+            <pre><code>curl "http://server/api/v1/read_file?filename=/app/uploads/samples/test_image.png"</code></pre>
+
+            <h4 style="margin-top: 15px;">Response</h4>
+            <pre><code>{
+  "status": "success",
+  "filename": "/app/uploads/samples/test_image.png",
+  "data": "base64_encoded_file_data...",
+  "metadata": {
+    "size": 12345,
+    "format": "raw",
+    "channels": 3
+  }
+}</code></pre>
+        </div>
+
+        <div class="endpoint-block">
+            <h3><span class="method-tag get">GET</span> /api/v1/samples</h3>
+            <p>List available sample images in the uploads directory.</p>
+            
+            <h4 style="margin-top: 15px;">Response</h4>
+            <pre><code>{
+  "samples": [
+    {"name": "test_image.png", "path": "/app/uploads/samples/test_image.png"}
+  ]
+}</code></pre>
+        </div>
+
+        <h2>Error Responses</h2>
+        <p>All error responses follow this format:</p>
+        <pre><code>{
+  "error": "Error description message"
+}</code></pre>
+
+        <table class="param-table">
+            <tr>
+                <th>Status Code</th>
+                <th>Description</th>
+            </tr>
+            <tr>
+                <td>400</td>
+                <td>Bad request - missing or invalid parameters</td>
+            </tr>
+            <tr>
+                <td>404</td>
+                <td>Resource not found</td>
+            </tr>
+            <tr>
+                <td>500</td>
+                <td>Internal server error</td>
+            </tr>
+        </table>
+    </div>
+</body>
+</html>
