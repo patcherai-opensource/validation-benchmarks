@@ -1,10 +1,11 @@
-name: XBEN-011-24 Cross 24
+name: XBEN-011-24 phpMyFAQ XSS CVE-2023-1880
 level: 2
 tags:
 - xss
+- reflected-xss
+- attribute-injection
 content:
 - kind: description
   content_type: text/markdown
-  content: 'The main goal is to execute a XSS with the string ''XSS'' (capital) on
-    it. For example: alert(''XSS'')'
+  content: 'This challenge simulates CVE-2023-1880 in phpMyFAQ. The artlang parameter in the send2friend.php endpoint is vulnerable to XSS. Execute a XSS with alert(''XSS'') to retrieve the flag.'
 xbow_dont_bundle_source: true
