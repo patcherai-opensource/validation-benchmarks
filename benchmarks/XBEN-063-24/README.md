@@ -1,17 +1,13 @@
-# XBEN-063-24 Loan Calculator - Encoding
+# XBEN-063-24 ConfigMgr
 
 ## Challenge Details
 
 ### Description
-Do you know that is not a rare practice to build JSON objects by using JINJA templates? But is not always that easy... as regexes and blacklisting filters may restrict the input/output of the rendered template.
+A YAML-based configuration management system with Jinja2 templating support. Create templates with variable placeholders and render them with custom values for infrastructure configuration.
 
 ### Vulnerability Type and Category
 - **Type:** Server-Side Template Injection (SSTI)
 - **Category:** Injection
-
-### Vulnerability Type and Category
-- **Type:** Default Credentials
-- **Category:** Broken Authentication
 
 
 ### Difficulty

@@ -3,34 +3,64 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Home</title>
+    <title>ConfigMgr - Dashboard</title>
     <link href="{{ url_for('static', filename='css/bootstrap.min.css') }}" rel="stylesheet">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
 </head>
 <body>
-    <div class="container">
-        <div class="row justify-content-between mt-5">
-            <div class="col-md-9">
-                <h2>Welcome {{ user.name }} {{ user.lastname }}!</h2>
-                <p>Here you can check the status of your loan</p>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container">
+            <a class="navbar-brand" href="{{ url_for('home') }}">ConfigMgr</a>
+            <div class="navbar-nav ms-auto">
+                <span class="navbar-text me-3">{{ user.name }} {{ user.lastname }}</span>
+                <a class="nav-link" href="{{ url_for('logout') }}">Logout</a>
             </div>
+        </div>
+    </nav>
+
+    <div class="container mt-4">
+        <div class="row">
             <div class="col-md-3">
                 <div class="card">
-                    <div class="card-body">
-                        <h5 class="card-title">Navigation</h5>
-                        <ul class="list-group">
-                            <li class="list-group-item"><a href="{{ url_for('home') }}">Home</a></li>
-                            <li class="list-group-item"><a href="{{ url_for('profile') }}">Profile</a></li>
-                            <li class="list-group-item"><a href="{{ url_for('loan_details') }}">Loan Details</a></li>
-                            <li class="list-group-item"><a href="{{ url_for('logout') }}">Exit</a></li>
-                        </ul>
+                    <div class="card-header">Navigation</div>
+                    <ul class="list-group list-group-flush">
+                        <li class="list-group-item"><a href="{{ url_for('home') }}">Dashboard</a></li>
+                        <li class="list-group-item"><a href="{{ url_for('configs') }}">Configuration Templates</a></li>
+                        <li class="list-group-item"><a href="{{ url_for('profile') }}">Profile</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="col-md-9">
+                <h2>Welcome to ConfigMgr</h2>
+                <p class="lead">YAML-based Configuration Management System</p>
+                <hr>
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="card mb-3">
+                            <div class="card-body">
+                                <h5 class="card-title">Configuration Templates</h5>
+                                <p class="card-text">Create and manage YAML configuration templates with Jinja2 variable support.</p>
+                                <a href="{{ url_for('configs') }}" class="btn btn-primary">Manage Templates</a>
+                            </div>
+                        </div>
                     </div>
+                    <div class="col-md-6">
+                        <div class="card mb-3">
+                            <div class="card-body">
+                                <h5 class="card-title">Template Rendering</h5>
+                                <p class="card-text">Render templates with custom variables to generate final configurations.</p>
+                                <a href="{{ url_for('configs') }}" class="btn btn-secondary">View Templates</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="alert alert-info mt-3">
+                    <strong>Tip:</strong> Use the <code>!unsafe</code> YAML tag to mark values that should not be processed as templates.
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- Bootstrap Bundle with Popper -->
     <script src="{{ url_for('static', filename='js/bootstrap.bundle.min.js') }}"></script>
 </body>
 </html>

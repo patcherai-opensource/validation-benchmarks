@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ConfigMgr - Profile</title>
+    <title>ConfigMgr - {% if template %}Edit{% else %}New{% endif %} Template</title>
     <link href="{{ url_for('static', filename='css/bootstrap.min.css') }}" rel="stylesheet">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
 </head>
@@ -31,24 +31,37 @@
                 </div>
             </div>
             <div class="col-md-9">
-                <h2>User Profile</h2>
+                <h2>{% if template %}Edit{% else %}New{% endif %} Configuration Template</h2>
                 <hr>
+                
+                {% if error %}
+                <div class="alert alert-danger">{{ error }}</div>
+                {% endif %}
+                
                 <form method="post">
-                    <div class="row">
-                        <div class="col-md-6 mb-3">
-                            <label for="name" class="form-label">First Name</label>
-                            <input type="text" class="form-control" id="name" name="name" value="{{ user.name }}" required>
-                        </div>
-                        <div class="col-md-6 mb-3">
-                            <label for="lastname" class="form-label">Last Name</label>
-                            <input type="text" class="form-control" id="lastname" name="lastname" value="{{ user.lastname }}" required>
-                        </div>
+                    <div class="mb-3">
+                        <label for="name" class="form-label">Template Name</label>
+                        <input type="text" class="form-control" id="name" name="name" value="{{ template.name if template else '' }}" required>
                     </div>
                     <div class="mb-3">
-                        <label for="email" class="form-label">Email</label>
-                        <input type="email" class="form-control" id="email" name="email" value="{{ user.email }}" required>
+                        <label for="yaml_content" class="form-label">YAML Configuration</label>
+                        <textarea class="form-control font-monospace" id="yaml_content" name="yaml_content" rows="15" placeholder="# Enter your YAML configuration here
+# Use {{ variable_name }} for template variables
+# Use !unsafe tag to mark values that should not be templated
+
+server:
+  host: {{ hostname }}
+  port: {{ port }}
+  description: !unsafe '{{ this_will_not_be_templated }}'">{{ template.yaml_content if template else '' }}</textarea>
+                        <div class="form-text">
+                            Use Jinja2 syntax for variables: <code>{{ '{{' }} variable {{ '}}' }}</code>. 
+                            Mark values as <code>!unsafe</code> to prevent template processing.
+                        </div>
                     </div>
-                    <button type="submit" class="btn btn-primary">Update Profile</button>
+                    <div class="d-flex gap-2">
+                        <button type="submit" class="btn btn-primary">Save Template</button>
+                        <a href="{{ url_for('configs') }}" class="btn btn-secondary">Cancel</a>
+                    </div>
                 </form>
             </div>
         </div>

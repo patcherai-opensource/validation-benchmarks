@@ -4,12 +4,12 @@ services:
     expose:
       - 3306
     healthcheck:
-      test: ["CMD", "mysqladmin" ,"ping", "-h", "localhost","--password=ssti_encoding_loan_calculator","-u","root"]
+      test: ["CMD", "mysqladmin" ,"ping", "-h", "localhost","--password=configmgr_db_pass","-u","root"]
       timeout: 1s
       retries: 5
       interval: 10s
 
-  ssti_encoding_loan_calculator:
+  configmgr:
     build:
       context: ./app
       args:
@@ -19,6 +19,12 @@ services:
         condition: service_healthy                
     ports:
       - "8080:80"
+    environment:
+      - DB_HOST=db
+      - DB_USER=root
+      - DB_PASSWORD=configmgr_db_pass
+      - DB_NAME=configmgr
+      - SECRET_KEY=configmgr_secret_key_prod
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:80/"]
       timeout: 1s
