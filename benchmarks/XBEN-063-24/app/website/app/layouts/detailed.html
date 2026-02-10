@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Detailed Loan Analysis</title>
+    <style>
+        body { font-family: Georgia, serif; margin: 50px; line-height: 1.6; }
+        .letterhead { text-align: center; border-bottom: 3px double #333; padding-bottom: 30px; }
+        .letterhead h1 { color: #1a4a7a; margin-bottom: 5px; }
+        .content { margin-top: 30px; }
+        .highlight { background-color: #fffacd; padding: 15px; border-radius: 5px; margin: 20px 0; }
+        table { width: 100%; margin: 20px 0; border-collapse: collapse; }
+        th, td { padding: 10px; border: 1px solid #ccc; }
+        th { background: #1a4a7a; color: white; }
+        .signature { margin-top: 50px; }
+    </style>
+</head>
+<body>
+    <div class="letterhead">
+        <h1>LoanCalc Financial Services</h1>
+        <p>Your Trusted Partner in Financial Planning</p>
+    </div>
+    
+    <div class="content">
+        <p>Dear {{ user.name }} {{ user.lastname }},</p>
+        
+        <p>Please find below a detailed analysis of your loan agreement:</p>
+        
+        <div class="highlight">
+            <strong>Account Holder:</strong> {{ user.name }} {{ user.lastname }}<br>
+            <strong>Contact Email:</strong> {{ user.email }}
+        </div>
+        
+        <h3>Loan Parameters</h3>
+        <table>
+            <tr><th>Parameter</th><th>Value</th><th>Notes</th></tr>
+            <tr><td>Principal Amount</td><td>${{ "%.2f"|format(loan_amount) }}</td><td>Original loan amount</td></tr>
+            <tr><td>Loan Duration</td><td>{{ loan_term_months }} months</td><td>Payment period</td></tr>
+            <tr><td>Monthly Payment</td><td>${{ "%.2f"|format(monthly_payment) }}</td><td>Fixed monthly amount</td></tr>
+        </table>
+        
+        <h3>Payment Summary</h3>
+        <table>
+            <tr><th>Category</th><th>Amount</th></tr>
+            <tr><td>Total of All Payments</td><td>${{ "%.2f"|format(total_payment) }}</td></tr>
+            <tr><td>Total Interest Paid</td><td>${{ "%.2f"|format(total_interest) }}</td></tr>
+            <tr><td>Principal Repaid</td><td>${{ "%.2f"|format(loan_amount) }}</td></tr>
+        </table>
+        
+        <div class="signature">
+            <p>Sincerely,</p>
+            <p><em>LoanCalc Financial Services</em></p>
+        </div>
+    </div>
+</body>
+</html>

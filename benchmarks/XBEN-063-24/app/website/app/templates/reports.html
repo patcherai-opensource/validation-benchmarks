@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reports</title>
+    <link href="{{ url_for('static', filename='css/bootstrap.min.css') }}" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <div class="row justify-content-between mt-5">
+            <div class="col-md-9">
+                <h2>Loan Reports</h2>
+                <p>Generate and download reports for your loan account.</p>
+                
+                <div class="card mb-4">
+                    <div class="card-header">
+                        <h5>Generate Report</h5>
+                    </div>
+                    <div class="card-body">
+                        <p>Select a report format to generate your loan summary:</p>
+                        
+                        <div class="list-group">
+                            <a href="{{ url_for('generate_report', layout='standard') }}" class="list-group-item list-group-item-action" target="_blank">
+                                <div class="d-flex w-100 justify-content-between">
+                                    <h5 class="mb-1">Standard Report</h5>
+                                </div>
+                                <p class="mb-1">Full loan summary with all details in a professional format.</p>
+                            </a>
+                            <a href="{{ url_for('generate_report', layout='compact') }}" class="list-group-item list-group-item-action" target="_blank">
+                                <div class="d-flex w-100 justify-content-between">
+                                    <h5 class="mb-1">Compact Report</h5>
+                                </div>
+                                <p class="mb-1">Condensed view with essential information only.</p>
+                            </a>
+                            <a href="{{ url_for('generate_report', layout='detailed') }}" class="list-group-item list-group-item-action" target="_blank">
+                                <div class="d-flex w-100 justify-content-between">
+                                    <h5 class="mb-1">Detailed Analysis</h5>
+                                </div>
+                                <p class="mb-1">Comprehensive letter-style report with full breakdown.</p>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="card">
+                    <div class="card-header">
+                        <h5>Account Summary</h5>
+                    </div>
+                    <div class="card-body">
+                        <table class="table">
+                            <tr>
+                                <td>Principal Amount</td>
+                                <td>${{ user.loan_amount }}</td>
+                            </tr>
+                            <tr>
+                                <td>Term</td>
+                                <td>{{ user.loan_term_months }} months</td>
+                            </tr>
+                            <tr>
+                                <td>Monthly Payment</td>
+                                <td>${{ user.monthly_payment }}</td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">Navigation</h5>
+                        <ul class="list-group">
+                            <li class="list-group-item"><a href="{{ url_for('home') }}">Home</a></li>
+                            <li class="list-group-item"><a href="{{ url_for('profile') }}">Profile</a></li>
+                            <li class="list-group-item"><a href="{{ url_for('loan_details') }}">Loan Details</a></li>
+                            <li class="list-group-item"><a href="{{ url_for('reports') }}">Reports</a></li>
+                            <li class="list-group-item"><a href="{{ url_for('logout') }}">Exit</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="{{ url_for('static', filename='js/bootstrap.bundle.min.js') }}"></script>
+</body>
+</html>

@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Loan Summary Report</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 40px; }
+        .report-header { border-bottom: 2px solid #333; padding-bottom: 20px; margin-bottom: 20px; }
+        .report-section { margin-bottom: 30px; }
+        .report-table { width: 100%; border-collapse: collapse; }
+        .report-table th, .report-table td { border: 1px solid #ddd; padding: 12px; text-align: left; }
+        .report-table th { background-color: #f4f4f4; }
+        .total-row { font-weight: bold; background-color: #e8f4e8; }
+        .report-footer { margin-top: 40px; font-size: 0.9em; color: #666; }
+    </style>
+</head>
+<body>
+    <div class="report-header">
+        <h1>Loan Summary Report</h1>
+        <p>Generated for: {{ user.name }} {{ user.lastname }}</p>
+        <p>Email: {{ user.email }}</p>
+    </div>
+    
+    <div class="report-section">
+        <h2>Loan Details</h2>
+        <table class="report-table">
+            <tr>
+                <th>Description</th>
+                <th>Value</th>
+            </tr>
+            <tr>
+                <td>Principal Amount</td>
+                <td>${{ "%.2f"|format(loan_amount) }}</td>
+            </tr>
+            <tr>
+                <td>Loan Term</td>
+                <td>{{ loan_term_months }} months</td>
+            </tr>
+            <tr>
+                <td>Monthly Payment</td>
+                <td>${{ "%.2f"|format(monthly_payment) }}</td>
+            </tr>
+            <tr class="total-row">
+                <td>Total Payment (Principal + Interest)</td>
+                <td>${{ "%.2f"|format(total_payment) }}</td>
+            </tr>
+            <tr>
+                <td>Total Interest</td>
+                <td>${{ "%.2f"|format(total_interest) }}</td>
+            </tr>
+        </table>
+    </div>
+    
+    <div class="report-footer">
+        <p>This report is for informational purposes only.</p>
+        <p>LoanCalc Financial Services</p>
+    </div>
+</body>
+</html>
