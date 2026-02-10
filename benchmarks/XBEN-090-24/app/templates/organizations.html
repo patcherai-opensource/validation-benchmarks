@@ -1,0 +1,105 @@
+{% extends "base.html" %}
+{% block title %}Organizations{% endblock %}
+{% block content %}
+    <h2>Organizations</h2>
+    <p>View and manage organizations in the system.</p>
+
+    <div class="card">
+        <div class="card-body">
+            <table class="table table-hover" id="orgsTable">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Name</th>
+                        <th>Description</th>
+                        <th>Users</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="orgTableBody">
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <div class="modal fade" id="orgDetailsModal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Organization Details</h5>
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>
+                <div class="modal-body" id="orgDetailsBody">
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            fetch('/admin/api/organizations')
+                .then(r => r.json())
+                .then(orgs => {
+                    const tbody = document.getElementById('orgTableBody');
+                    orgs.forEach(org => {
+                        const tr = document.createElement('tr');
+                        tr.innerHTML = `
+                            <td>${org.id}</td>
+                            <td>${org.name}</td>
+                            <td>${org.description || '-'}</td>
+                            <td><button class="btn btn-sm btn-outline-info" onclick="viewOrgUsers(${org.id})">View Users</button></td>
+                            <td>
+                                <button class="btn btn-sm btn-outline-primary" onclick="viewOrgDetails(${org.id})">Details</button>
+                                <button class="btn btn-sm btn-outline-secondary" onclick="generateApiKey(${org.id})">Generate API Key</button>
+                            </td>
+                        `;
+                        tbody.appendChild(tr);
+                    });
+                });
+        });
+
+        function viewOrgDetails(orgId) {
+            fetch(`/admin/api/organizations/${orgId}`)
+                .then(r => r.json())
+                .then(org => {
+                    document.getElementById('orgDetailsBody').innerHTML = `
+                        <p><strong>ID:</strong> ${org.id}</p>
+                        <p><strong>Name:</strong> ${org.name}</p>
+                        <p><strong>Description:</strong> ${org.description || '-'}</p>
+                        <p><strong>User Count:</strong> ${org.user_count}</p>
+                        <p><strong>API Key:</strong> <code>${org.api_key || 'Not set'}</code></p>
+                    `;
+                    $('#orgDetailsModal').modal('show');
+                });
+        }
+
+        function viewOrgUsers(orgId) {
+            fetch(`/admin/api/users?organizationId=${orgId}`)
+                .then(r => r.json())
+                .then(users => {
+                    let html = '<h6>Users:</h6><ul>';
+                    users.forEach(u => {
+                        html += `<li>${u.username} (${u.role}) - ${u.enabled ? 'Active' : 'Disabled'}</li>`;
+                    });
+                    html += '</ul>';
+                    document.getElementById('orgDetailsBody').innerHTML = html;
+                    $('#orgDetailsModal').modal('show');
+                });
+        }
+
+        function generateApiKey(orgId) {
+            fetch(`/admin/api/organizations/${orgId}/api-key`, { method: 'POST' })
+                .then(r => r.json())
+                .then(data => {
+                    if(data.success) {
+                        alert('New API Key: ' + data.api_key);
+                    } else {
+                        alert('Error generating API key');
+                    }
+                });
+        }
+    </script>
+{% endblock %}

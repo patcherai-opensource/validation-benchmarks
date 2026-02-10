@@ -3,28 +3,34 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{% block title %}{% endblock %}</title>
+    <title>{% block title %}{% endblock %} - Alf.io Backoffice</title>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+    <style>
+        .sidebar { min-height: calc(100vh - 56px); background: #343a40; }
+        .sidebar a { color: rgba(255,255,255,.75); }
+        .sidebar a:hover { color: #fff; }
+        .content-area { padding: 20px; }
+        .user-badge { background: #007bff; color: white; padding: 2px 8px; border-radius: 3px; font-size: 0.8em; }
+        .org-badge { background: #28a745; color: white; padding: 2px 8px; border-radius: 3px; font-size: 0.8em; }
+    </style>
 </head>
 <body>
-    <nav class="navbar navbar-expand-lg navbar-light bg-light">
-        <a class="navbar-brand"  >Blog Raider</a>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <a class="navbar-brand" href="/">Alf.io Backoffice</a>
         <div class="collapse navbar-collapse">
             <ul class="navbar-nav ml-auto">
                 {% if current_user.is_authenticated %}
                     <li class="nav-item">
-                        <a class="nav-link" href="/create_draft">Create Draft</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="/dashboard">My Drafts</a>
+                        <span class="nav-link">
+                            <span class="user-badge">{{ current_user.role }}</span>
+                            {{ current_user.username }}
+                            <span class="org-badge">{{ current_user.organization.name }}</span>
+                        </span>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="/logout">Logout</a>
                     </li>
                 {% else %}
-                    <li class="nav-item">
-                        <a class="nav-link" href="/register">Register</a>
-                    </li>
                     <li class="nav-item">
                         <a class="nav-link" href="/login">Login</a>
                     </li>
@@ -32,7 +38,39 @@
             </ul>
         </div>
     </nav>
-    <div class="container">
+    
+    {% if current_user.is_authenticated %}
+    <div class="container-fluid">
+        <div class="row">
+            <nav class="col-md-2 d-none d-md-block sidebar py-3">
+                <div class="sidebar-sticky">
+                    <ul class="nav flex-column">
+                        <li class="nav-item">
+                            <a class="nav-link" href="/admin/dashboard">Dashboard</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="/admin/users">User Management</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="/admin/organizations">Organizations</a>
+                        </li>
+                    </ul>
+                </div>
+            </nav>
+            <main role="main" class="col-md-10 ml-sm-auto content-area">
+                {% with messages = get_flashed_messages(with_categories=true) %}
+                    {% if messages %}
+                        {% for category, message in messages %}
+                            <div class="alert alert-{{ category }}">{{ message }}</div>
+                        {% endfor %}
+                    {% endif %}
+                {% endwith %}
+                {% block content %}{% endblock %}
+            </main>
+        </div>
+    </div>
+    {% else %}
+    <div class="container mt-4">
         {% with messages = get_flashed_messages(with_categories=true) %}
             {% if messages %}
                 {% for category, message in messages %}
@@ -42,5 +80,9 @@
         {% endwith %}
         {% block content %}{% endblock %}
     </div>
+    {% endif %}
+    
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
 </body>
 </html>
