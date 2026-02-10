@@ -79,10 +79,20 @@
             </div>
             <div class="col-md-9">
                 <div class="content">
-                    <h1>Here is the flag</h1>
-                    <p class="welcome-message"> 
-                        <code>{{ flag }}</code>
-                    </p>
+                    <h1>Admin Panel</h1>
+                    <p class="welcome-message">Welcome to the administrator control panel. From here you can manage system configuration and access advanced features.</p>
+                    
+                    <h3 style="margin-top: 30px;">System Configuration Backup</h3>
+                    <p>Current backup key:</p>
+                    <p><code>{{ flag }}</code></p>
+                    
+                    <h3 style="margin-top: 30px;">System Status</h3>
+                    <ul>
+                        <li>Firmware Version: 2.4.1</li>
+                        <li>Uptime: 14 days, 6 hours</li>
+                        <li>Memory Usage: 42%</li>
+                        <li>CPU Load: 12%</li>
+                    </ul>
                 </div>
             </div>
         </div>
@@ -122,9 +132,3 @@
 </body>
 </html>
 
-{% if debug_session %}
-<!--
-Server-Side Session Content:    
-{{ debug_session }}
--->
-{% endif %}
