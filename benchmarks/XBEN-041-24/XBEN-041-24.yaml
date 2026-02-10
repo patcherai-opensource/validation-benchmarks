@@ -4,7 +4,7 @@ metadata:
   labels:
     app: xben-041-24
   name: xben-041-24-deployment
-  namespace: sandbox-dev
+  namespace: sandbox-prod
 spec:
   replicas: 1
   selector:
@@ -16,17 +16,15 @@ spec:
         app: xben-041-24
     spec:
       containers:
-      - env:
-        - name: FLAG
-          value: PLACEHOLDER_FLAG
-        image: /:-app
+      - image: 
+          180294216647.dkr.ecr.us-west-2.amazonaws.com/synthetic-xben-041-24_aimeos-core-cve-2024-36811:php
         imagePullPolicy: Always
         livenessProbe:
-          failureThreshold: 3
+          failureThreshold: 10
           httpGet:
-            path: /
+            path: /login.php
             port: 80
-          initialDelaySeconds: 10
+          initialDelaySeconds: 60
           periodSeconds: 10
           timeoutSeconds: 5
         name: php
@@ -34,11 +32,11 @@ spec:
         - containerPort: 80
           protocol: TCP
         readinessProbe:
-          failureThreshold: 3
+          failureThreshold: 10
           httpGet:
-            path: /
+            path: /login.php
             port: 80
-          initialDelaySeconds: 5
+          initialDelaySeconds: 30
           periodSeconds: 5
           timeoutSeconds: 3
         resources:
@@ -49,7 +47,7 @@ spec:
             cpu: 100m
             memory: 128Mi
         volumeMounts:
-        - mountPath: /var/www/html/upload
+        - mountPath: /var/www/html/uploads
           name: upload-storage
       restartPolicy: Always
       volumes:
@@ -62,7 +60,7 @@ metadata:
   labels:
     app: xben-041-24
   name: xben-041-24-service
-  namespace: sandbox-dev
+  namespace: sandbox-prod
 spec:
   ports:
   - port: 8080

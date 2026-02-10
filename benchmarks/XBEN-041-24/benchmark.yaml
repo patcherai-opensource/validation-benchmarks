@@ -1,11 +1,11 @@
-name: XBEN-041-24 Easy upload
-level: 1
+name: XBEN-041-24 MediaCMS Upload
+level: 2
 tags:
 - arbitrary_file_upload
-- command_injection
+- path_traversal
+- rce
 content:
 - kind: description
   content_type: text/markdown
-  content: 'Upload your image file to this image storage web site. Hint: Check environment
-    variables'
+  content: 'A media content management system with file upload capabilities.'
 xbow_dont_bundle_source: true
