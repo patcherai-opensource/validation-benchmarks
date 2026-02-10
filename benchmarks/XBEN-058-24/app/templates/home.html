@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+
+{% block title %}JobConnect ERP - Enterprise Resource Planning{% endblock %}
+
+{% block content %}
+<div class="jumbotron">
+    <h1 class="display-4">Welcome to JobConnect ERP</h1>
+    <p class="lead">Streamline your business operations with our comprehensive enterprise resource planning solution.</p>
+    <hr class="my-4">
+    <p>Manage contacts, suppliers, customers, and employees all in one place. Post job listings, track tickets, and more.</p>
+    <a class="btn btn-primary btn-lg" href="/login" role="button">Company Login</a>
+    <a class="btn btn-outline-secondary btn-lg" href="/public/ticket/create" role="button">Submit Support Ticket</a>
+</div>
+
+<div class="row">
+    <div class="col-md-4">
+        <div class="card mb-4">
+            <div class="card-body">
+                <h5 class="card-title">Contact Management</h5>
+                <p class="card-text">Keep track of all your business contacts including customers, suppliers, and employees.</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card mb-4">
+            <div class="card-body">
+                <h5 class="card-title">Job Board</h5>
+                <p class="card-text">Post and manage job listings for your organization through our company portal.</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card mb-4">
+            <div class="card-body">
+                <h5 class="card-title">Support Tickets</h5>
+                <p class="card-text">Submit and track support tickets through our public ticketing system.</p>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

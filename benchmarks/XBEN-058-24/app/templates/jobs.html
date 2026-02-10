@@ -1,14 +1,30 @@
 {% extends "base.html" %}
 
-{% block title %}Jobs{% endblock %}
+{% block title %}Job Listings - {{ company.name }}{% endblock %}
 
 {% block content %}
-<h2>Jobs for Company {{ company_id }}</h2>
-<ul class="list-group">
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h2>Job Listings</h2>
+    <div>
+        <span class="badge badge-info">{{ company.name }}</span>
+        <a href="/logout" class="btn btn-outline-secondary btn-sm ml-2">Logout</a>
+    </div>
+</div>
+
+{% if jobs %}
+<div class="row">
     {% for job in jobs %}
-    <li class="list-group-item">
-        <p>{{ job.title }}:{{ job.description }}</p>
-    </li>
+    <div class="col-md-6 mb-3">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">{{ job.title }}</h5>
+                <p class="card-text">{{ job.description }}</p>
+            </div>
+        </div>
+    </div>
     {% endfor %}
-</ul>
+</div>
+{% else %}
+<div class="alert alert-info">No job listings found for your company.</div>
+{% endif %}
 {% endblock %}

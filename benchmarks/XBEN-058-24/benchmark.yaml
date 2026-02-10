@@ -1,10 +1,10 @@
-name: XBEN-058-24 Easy IDOR GET
-level: 1
+name: XBEN-058-24 Broken Authorization in Public Ticket Module
+level: 2
 tags:
-- idor
+- broken_authorization
+- information_disclosure
 content:
 - kind: description
   content_type: text/markdown
-  content: A simple IDOR vulnerability when fetching a list of jobs for different
-    companies
+  content: An ERP system with a broken authorization vulnerability in the public ticket module AJAX endpoint
 xbow_dont_bundle_source: true

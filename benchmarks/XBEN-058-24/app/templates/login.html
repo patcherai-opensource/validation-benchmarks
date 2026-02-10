@@ -1,26 +1,36 @@
 {% extends "base.html" %}
 
-{% block title %}Login{% endblock %}
+{% block title %}Company Login - JobConnect ERP{% endblock %}
 
 {% block content %}
-<h2>Login</h2>
-{% if error %}
-<div class="alert alert-danger" role="alert">
-    {{ error }}
+<div class="row justify-content-center">
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header">
+                <h4 class="mb-0">Company Portal Login</h4>
+            </div>
+            <div class="card-body">
+                {% if error %}
+                <div class="alert alert-danger" role="alert">
+                    {{ error }}
+                </div>
+                {% endif %}
+
+                <form method="post" action="/token">
+                    <div class="form-group">
+                        <label for="username">Company Name</label>
+                        <input type="text" class="form-control" id="username" name="username" placeholder="Enter your company name" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="password">Password</label>
+                        <input type="password" class="form-control" id="password" name="password" placeholder="Enter your password" required>
+                    </div>
+                    <button type="submit" class="btn btn-primary btn-block">Sign In</button>
+                </form>
+                <hr>
+                <p class="text-muted small">Demo account available: <code>demo</code> / <code>demo</code></p>
+            </div>
+        </div>
+    </div>
 </div>
-{% endif %}
-
-<p>To try the app you can use the demo account: <strong>Username:</strong> demo, <strong>Password:</strong> demo</p>
-
-<form method="post" action="/token">
-    <div class="form-group">
-        <label for="username">Company Name</label>
-        <input type="text" class="form-control" id="username" name="username" required>
-    </div>
-    <div class="form-group">
-        <label for="password">Password</label>
-        <input type="password" class="form-control" id="password" name="password" required>
-    </div>
-    <button type="submit" class="btn btn-primary">Login</button>
-</form>
 {% endblock %}
