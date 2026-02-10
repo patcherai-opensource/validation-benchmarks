@@ -1,17 +1,29 @@
-FROM httpd:2.4
+FROM node:18-alpine
 
 ARG DEBIAN_FRONTEND=noninteractive
+ARG FLAG
 
-RUN apt-get update && apt-get install -y curl
+# Install curl for healthchecks
+RUN apk add --no-cache curl
 
-COPY ./httpd.conf /usr/local/apache2/conf/httpd.conf
+WORKDIR /app
 
-COPY website /usr/local/apache2/htdocs/
+# Copy package files and server code
+COPY package.json /app/
+COPY server.js /app/
+
+# Install dependencies
+RUN npm install
+
+# Create the web root directory
+RUN mkdir -p /app/public
+
+# Copy website files to public directory
+COPY website /app/public/
+
+# Plant the flag at build time in a location outside the web root
+RUN echo -n "$FLAG" > /FLAG.txt && chmod 644 /FLAG.txt
 
 EXPOSE 80
 
-# Create entrypoint script for runtime flag injection
-COPY entrypoint.sh /entrypoint.sh
-RUN chmod +x /entrypoint.sh
-
-CMD ["/entrypoint.sh"]
+CMD ["node", "server.js"]
