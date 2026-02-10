@@ -15,23 +15,41 @@
             background-color: #34495e;
             color: #ffffff;
         }
+        a {
+            color: #3498db;
+        }
     </style>
 </head>
 <body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container">
+            <a class="navbar-brand" href="/">Trading Platform</a>
+        </div>
+    </nav>
     <div class="container mt-5">
         <div class="row justify-content-center">
-            <div class="col-md-6">
-                <h2 class="text-center mb-4">Trading Platform</h2>
-                {% if error %}
-                    <div class="alert alert-danger" role="alert">{{ error }}</div>
-                {% endif %}
-                <form method="POST">
-                    <div class="form-group">
-                        <label for="username">Username</label>
-                        <input type="text" class="form-control" id="username" name="username" required>
+            <div class="col-md-5">
+                <div class="card">
+                    <div class="card-body">
+                        <h4 class="card-title text-center mb-4">Sign In</h4>
+                        {% if error %}
+                            <div class="alert alert-info" role="alert">{{ error }}</div>
+                        {% endif %}
+                        <form method="POST">
+                            <div class="form-group mb-3">
+                                <label for="username">Username</label>
+                                <input type="text" class="form-control" id="username" name="username" required>
+                            </div>
+                            <div class="form-group mb-3">
+                                <label for="password">Password</label>
+                                <input type="password" class="form-control" id="password" name="password" required>
+                            </div>
+                            <button type="submit" class="btn btn-success btn-block w-100">Login</button>
+                        </form>
+                        <hr>
+                        <p class="text-center mb-0">Don't have an account? <a href="{{ url_for('register') }}">Register</a></p>
                     </div>
-                    <button type="submit" class="btn btn-success btn-block">Login</button>
-                </form>
+                </div>
             </div>
         </div>
     </div>
