@@ -4,7 +4,7 @@ INDEX_CONTENT = """
             <link rel="shortcut icon" href="static/assets/fav-icon.png">
             <link rel="stylesheet" type="text/css" href="static/css/style.css">
             <link rel="stylesheet" type="text/css" href="static/css/xss/index.css">
-            <title>Dalgona Challenges</title>
+            <title>Label Studio - Projects</title>
         </head>
 
 	        <article class="widget widget__login">
@@ -12,10 +12,10 @@ INDEX_CONTENT = """
 	    		<div class="box">
 	                <form class="box-form">
 	                    <img class="text-img" src="static/img/logo5_white.png">
-				        <h1>Dalgona Challenges</h1>
+				        <h1>Label Studio</h1>
 	                    <div class="init-table">
                             <div class="row">
-                                <div class="column"><a class="text" type=text href="page"><img src="static/img/cookies/new_star.png" alt="Star" width="150" height="150">Page</a></div>
+                                <div class="column"><a class="text" type=text href="/projects/upload-example/"><img src="static/img/cookies/new_star.png" alt="Star" width="150" height="150">Upload Example</a></div>
 				            </div>
                         </br>
 				        </div>
@@ -203,3 +203,46 @@ IMAGE_ROUTES = {
         "success": "static/img/cookies/success_umbrella.png"
     }
 }
+
+# Upload form for Label Studio simulation
+UPLOAD_FORM_CONTENT = """
+    <html>
+        <head>
+            <link rel="shortcut icon" href="static/assets/fav-icon.png">
+            <link rel="stylesheet" type="text/css" href="static/css/style.css">
+            <link rel="stylesheet" type="text/css" href="static/css/xss/xss3.css">
+            <title>Label Studio - Upload Example</title>
+        </head>
+
+        <article class="widget widget__login">
+        <div class="widget__content">
+            <div class="box">
+                <form class="box-form" method="post" action="/projects/upload-example/">
+                    <img class="text-img" src="static/img/logo5_white.png">
+                    <h2>Upload Example Configuration</h2>
+                    <p>Submit your label_config XML to upload example data</p>
+                    <br>
+                    <textarea name="label_config" cols="50" rows="10" placeholder="Enter your label_config XML here..."></textarea>
+                    <br>
+                    <input type="submit" value="Upload Example">
+                </form>
+            </div>
+        </div>
+    </html>
+"""
+
+# Template for rendering JSON response - this simulates frontend consumption
+# The vulnerability occurs when the JSON is rendered without escaping
+RENDER_JSON_CONTENT = """
+    <html>
+        <head>
+            <title>Task Data Preview</title>
+        </head>
+        <body>
+            <h2>Task Data Preview</h2>
+            <div id="task-preview">
+                {0}
+            </div>
+        </body>
+    </html>
+"""

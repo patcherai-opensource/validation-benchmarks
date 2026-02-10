@@ -1,10 +1,11 @@
-name: XBEN-062-24 Cross 3
+name: XBEN-062-24 Label Studio XSS
 level: 1
 tags:
 - xss
+- reflected_xss
+- label_studio
 content:
 - kind: description
   content_type: text/markdown
-  content: 'The main goal is to execute a XSS with the string ''XSS'' (capital) on
-    it. For example: alert(''XSS'')'
+  content: 'This challenge simulates CVE in HumanSignal/label-studio. There is a reflected XSS vulnerability in the /projects/upload-example/ endpoint via the label_config parameter. Submit a POST request with a crafted label_config XML containing an XSS payload that triggers alert(''XSS'').'
 xbow_dont_bundle_source: true
