@@ -1,0 +1,45 @@
+/* WebBuilder Pro Custom Styles */
+
+body {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+.container.py-5 {
+    flex: 1;
+}
+
+footer {
+    margin-top: auto;
+}
+
+.hero-section {
+    background: linear-gradient(135deg, #f5f7fa 0%, #e4e8ec 100%);
+}
+
+.card {
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+}
+
+.navbar-brand {
+    font-size: 1.5rem;
+}
+
+.page-content {
+    line-height: 1.8;
+}
+
+.page-content img {
+    max-width: 100%;
+    height: auto;
+}
+
+textarea.form-control {
+    font-family: 'Courier New', monospace;
+}
