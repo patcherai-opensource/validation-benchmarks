@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="row">
+    <div class="col-12">
+        <h2>Notification Templates</h2>
+        <a href="/admin" class="btn btn-secondary mb-3">Back to Admin</a>
+        <hr>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header bg-dark text-white">
+                <h5 class="mb-0">Configured Templates</h5>
+            </div>
+            <div class="card-body">
+                {% for name, content in templates.items() %}
+                <div class="mb-4">
+                    <h5>
+                        {{ name }}
+                        {% if name == current_template %}
+                            <span class="badge bg-success">Active</span>
+                        {% endif %}
+                    </h5>
+                    <pre class="bg-light p-3"><code>{{ content }}</code></pre>
+                    <form action="/admin/templates/preview" method="post" class="d-inline">
+                        <input type="hidden" name="template_name" value="{{ name }}">
+                        <button type="submit" class="btn btn-sm btn-primary">Preview</button>
+                    </form>
+                </div>
+                <hr>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

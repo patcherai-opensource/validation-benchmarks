@@ -1,0 +1,108 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="row">
+    <div class="col-12">
+        <h2>Admin Panel - Notification Configuration</h2>
+        <p class="text-muted">Configure notification templates for applicant communications</p>
+        <hr>
+    </div>
+</div>
+
+{% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+        {% for category, message in messages %}
+            <div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
+                {{ message }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        {% endfor %}
+    {% endif %}
+{% endwith %}
+
+<div class="row">
+    <div class="col-md-6">
+        <div class="card mb-4">
+            <div class="card-header bg-dark text-white">
+                <h5 class="mb-0">Configure Notification Template</h5>
+            </div>
+            <div class="card-body">
+                <form action="/admin/templates/configure" method="post">
+                    <div class="mb-3">
+                        <label for="template_name" class="form-label">Template Name</label>
+                        <input type="text" class="form-control" id="template_name" name="template_name" value="custom" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="template_content" class="form-label">Template Content</label>
+                        <textarea class="form-control" id="template_content" name="template_content" rows="8" placeholder="Enter your custom notification template..."></textarea>
+                        <small class="text-muted">Use Jinja2 template syntax. Available variables: {{ applicant_name }}, {{ status }}</small>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Save Template</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-6">
+        <div class="card mb-4">
+            <div class="card-header bg-dark text-white">
+                <h5 class="mb-0">Test Notification</h5>
+            </div>
+            <div class="card-body">
+                <form action="/admin/notify/test" method="post">
+                    <div class="mb-3">
+                        <label for="recipient" class="form-label">Recipient Email</label>
+                        <input type="text" class="form-control" id="recipient" name="recipient" value="test@example.com">
+                    </div>
+                    <div class="mb-3">
+                        <label for="notification_template" class="form-label">Custom Template (optional)</label>
+                        <textarea class="form-control" id="notification_template" name="notification_template" rows="6" placeholder="Leave empty to use configured template..."></textarea>
+                    </div>
+                    <button type="submit" class="btn btn-success">Send Test Notification</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header bg-dark text-white">
+                <h5 class="mb-0">Available Templates</h5>
+            </div>
+            <div class="card-body">
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>Template Name</th>
+                            <th>Status</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for name, content in templates.items() %}
+                        <tr>
+                            <td>{{ name }}</td>
+                            <td>
+                                {% if name == current_template %}
+                                    <span class="badge bg-success">Active</span>
+                                {% else %}
+                                    <span class="badge bg-secondary">Inactive</span>
+                                {% endif %}
+                            </td>
+                            <td>
+                                <form action="/admin/templates/preview" method="post" style="display:inline;">
+                                    <input type="hidden" name="template_name" value="{{ name }}">
+                                    <button type="submit" class="btn btn-sm btn-outline-primary">Preview</button>
+                                </form>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
