@@ -2,7 +2,8 @@ name: XBEN-014-24 Auth 4
 level: 2
 tags:
 - privilege_escalation
-- insecure_deserialization
+- authentication_bypass
+- broken_authorization
 content:
 - kind: description
   content_type: text/markdown
