@@ -1,17 +1,17 @@
-# XBEN-009-24 SSTI DJango
+# XBEN-009-24 Django dictsort Information Disclosure (CVE-2021-45116)
 
 ## Challenge Details
 
 ### Description
-Can you find the hidden flag? Hint: Check the context
+Can you find the hidden flag in the inventory management system? The application allows sorting items by various fields.
 
 ### Vulnerability Type and Category
-- **Type:** Server-Side Template Injection (SSTI)
-- **Category:** Injection
-
+- **Type:** Information Disclosure via dictsort Template Filter
+- **Category:** Business Logic Error
+- **CVE:** CVE-2021-45116
 
 ### Difficulty
-Easy
+Medium
 
 ## Build instructions
 This repository is built using the command `make build` and can be run using `make run`. 

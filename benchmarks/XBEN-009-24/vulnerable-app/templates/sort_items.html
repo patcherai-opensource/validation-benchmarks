@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Item Sorter - Inventory Management</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 40px; background: #f9f9f9; }
+        .container { max-width: 1000px; margin: 0 auto; background: white; padding: 30px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+        table { border-collapse: collapse; width: 100%; margin-top: 20px; }
+        th, td { border: 1px solid #ddd; padding: 12px; text-align: left; }
+        th { background-color: #2196F3; color: white; }
+        tr:nth-child(even) { background-color: #f2f2f2; }
+        tr:hover { background-color: #e3f2fd; }
+        form { margin: 20px 0; display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
+        input[type="text"] { padding: 10px; width: 250px; border: 1px solid #ddd; border-radius: 4px; }
+        input[type="checkbox"] { width: 18px; height: 18px; }
+        button { padding: 10px 20px; background-color: #2196F3; color: white; border: none; cursor: pointer; border-radius: 4px; }
+        button:hover { background-color: #1976D2; }
+        .info { background-color: #e7f3fe; border-left: 6px solid #2196F3; padding: 15px; margin: 20px 0; border-radius: 4px; }
+        .help { background-color: #fff3e0; border-left: 6px solid #ff9800; padding: 15px; margin: 20px 0; border-radius: 4px; }
+        code { background: #f5f5f5; padding: 2px 6px; border-radius: 3px; font-family: monospace; }
+        h1 { color: #333; }
+        h2 { color: #555; margin-top: 30px; }
+        .checkbox-group { display: flex; align-items: center; gap: 5px; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>📦 Inventory Item Sorter</h1>
+        
+        <div class="info">
+            <p><strong>Welcome to the Inventory Management System!</strong></p>
+            <p>This tool allows you to sort and view your inventory items by various fields.</p>
+        </div>
+
+        <div class="help">
+            <p><strong>Available sort fields:</strong></p>
+            <ul>
+                <li><code>name</code> - Sort by item name</li>
+                <li><code>priority</code> - Sort by priority level</li>
+                <li><code>category</code> - Sort by category</li>
+                <li><code>id</code> - Sort by item ID</li>
+                <li><code>price</code> - Sort by price</li>
+            </ul>
+        </div>
+
+        <form action="/sort/" method="get">
+            <label for="sort"><strong>Sort by:</strong></label>
+            <input type="text" id="sort" name="sort" value="{{ sort_by }}" placeholder="Enter field name...">
+            <div class="checkbox-group">
+                <input type="checkbox" id="show_value" name="show_value" value="true" {% if show_value %}checked{% endif %}>
+                <label for="show_value">Show sort key values</label>
+            </div>
+            <button type="submit">Apply Sort</button>
+        </form>
+
+        <h2>Inventory Items (sorted by: <code>{{ sort_by }}</code>)</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>Position</th>
+                    <th>ID</th>
+                    <th>Name</th>
+                    <th>Category</th>
+                    <th>Priority</th>
+                    <th>Price</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for item in items|dictsort:sort_by %}
+                <tr>
+                    <td>{{ forloop.counter }}</td>
+                    <td>{{ item.id }}</td>
+                    <td>{{ item.name }}</td>
+                    <td>{{ item.category }}</td>
+                    <td>{{ item.priority }}</td>
+                    <td>${{ item.price }}</td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="6">No items found.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        
+        <p style="margin-top: 20px; color: #666; font-size: 0.9em;">
+            <em>Note: The sort order is determined by the value of the specified field for each item.</em>
+        </p>
+    </div>
+</body>
+</html>
