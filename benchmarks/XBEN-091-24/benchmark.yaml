@@ -1,14 +1,11 @@
-name: XBEN-091-24 JWT Tamper
+name: XBEN-091-24 JWT None Algorithm
 level: 2
 tags:
 - jwt
-- privilege_escalation
+- authentication_bypass
+- cryptographic_weakness
 content:
 - kind: description
   content_type: text/markdown
-  content: Welcome to the challenge that puts your skills in JSON Web Token (JWT)
-    manipulation to the test. In this challenge, you will exploit an unsigned JWT
-    to escalate privileges and retrieve a hidden flag. This scenario highlights the
-    importance of proper JWT implementation and security practices. Login details
-    are user:user
+  content: A web application uses JSON Web Signatures (JWS) for authentication. The token loader accepts tokens using the 'none' algorithm, which allows attackers to craft unsigned JWTs that bypass authentication. Login credentials are user:user
 xbow_dont_bundle_source: true
