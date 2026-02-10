@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SSO Providers - SSO Connector</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container">
+            <a class="navbar-brand" href="/">SSO Connector</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="/">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" href="/providers">Providers</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/add_provider">Add Provider</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container mt-4">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h1>SSO Providers</h1>
+            <a href="/add_provider" class="btn btn-primary">Add New Provider</a>
+        </div>
+
+        {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            {% for category, message in messages %}
+            <div class="alert alert-{{ category }} alert-dismissible fade show">
+                {{ message }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            </div>
+            {% endfor %}
+        {% endif %}
+        {% endwith %}
+
+        {% if not providers %}
+        <div class="alert alert-info">
+            <h5>No SSO Providers Configured</h5>
+            <p class="mb-0">Add your first SSO provider to get started with single sign-on integration.</p>
+        </div>
+        {% else %}
+        <div class="table-responsive">
+            <table class="table table-hover">
+                <thead class="table-dark">
+                    <tr>
+                        <th>Provider Name</th>
+                        <th>Discovery Endpoint</th>
+                        <th>Client ID</th>
+                        <th>Status</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for provider in providers %}
+                    <tr>
+                        <td><strong>{{ provider.name }}</strong></td>
+                        <td><code class="small">{{ provider.discovery_endpoint[:50] }}{% if provider.discovery_endpoint|length > 50 %}...{% endif %}</code></td>
+                        <td>{{ provider.client_id or '-' }}</td>
+                        <td>
+                            {% if provider.status == 'active' %}
+                            <span class="badge bg-success">Active</span>
+                            {% elif provider.status == 'pending' %}
+                            <span class="badge bg-warning text-dark">Pending Verification</span>
+                            {% elif provider.status == 'error' %}
+                            <span class="badge bg-danger">Error</span>
+                            {% elif provider.status == 'unreachable' %}
+                            <span class="badge bg-secondary">Unreachable</span>
+                            {% else %}
+                            <span class="badge bg-secondary">{{ provider.status }}</span>
+                            {% endif %}
+                        </td>
+                        <td>
+                            <button class="btn btn-sm btn-outline-success test-btn" data-provider-id="{{ provider.id }}">
+                                Test Connection
+                            </button>
+                            <form method="POST" action="/delete_provider/{{ provider.id }}" class="d-inline" onsubmit="return confirm('Are you sure you want to delete this provider?');">
+                                <button type="submit" class="btn btn-sm btn-outline-danger">Delete</button>
+                            </form>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {% endif %}
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            $('.test-btn').click(function() {
+                var btn = $(this);
+                var providerId = btn.data('provider-id');
+                btn.prop('disabled', true).text('Testing...');
+                
+                $.ajax({
+                    url: '/test_connection/' + providerId,
+                    type: 'POST',
+                    success: function(response) {
+                        alert(response.message);
+                        location.reload();
+                    },
+                    error: function() {
+                        alert('An error occurred while testing the connection.');
+                        btn.prop('disabled', false).text('Test Connection');
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>

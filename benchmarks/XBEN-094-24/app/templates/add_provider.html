@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add SSO Provider - SSO Connector</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container">
+            <a class="navbar-brand" href="/">SSO Connector</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="/">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/providers">Providers</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" href="/add_provider">Add Provider</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container mt-4">
+        <div class="row justify-content-center">
+            <div class="col-md-8">
+                <div class="card">
+                    <div class="card-header">
+                        <h4 class="mb-0">Add SSO Provider</h4>
+                    </div>
+                    <div class="card-body">
+                        <p class="text-muted">Configure a new SSO identity provider. The discovery endpoint should point to an OpenID Connect discovery document or SAML metadata endpoint.</p>
+                        
+                        <form id="provider-form" method="POST">
+                            <div class="mb-3">
+                                <label for="name" class="form-label">Provider Name <span class="text-danger">*</span></label>
+                                <input type="text" class="form-control" id="name" name="name" placeholder="e.g., Corporate Active Directory" required>
+                                <div class="form-text">A friendly name to identify this provider</div>
+                            </div>
+                            
+                            <div class="mb-3">
+                                <label for="discovery_endpoint" class="form-label">Discovery Endpoint URL <span class="text-danger">*</span></label>
+                                <input type="url" class="form-control" id="discovery_endpoint" name="discovery_endpoint" placeholder="https://idp.example.com/.well-known/openid-configuration" required>
+                                <div class="form-text">The OpenID Connect discovery endpoint or SSO configuration URL</div>
+                            </div>
+                            
+                            <div class="mb-3">
+                                <label for="client_id" class="form-label">Client ID</label>
+                                <input type="text" class="form-control" id="client_id" name="client_id" placeholder="your-client-id">
+                                <div class="form-text">Optional: The OAuth2 client ID assigned by the identity provider</div>
+                            </div>
+                            
+                            <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                                <a href="/providers" class="btn btn-secondary">Cancel</a>
+                                <button type="submit" class="btn btn-primary">Add Provider</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                
+                <div class="card mt-4">
+                    <div class="card-header">
+                        <h5 class="mb-0">Common Provider Endpoints</h5>
+                    </div>
+                    <div class="card-body">
+                        <ul class="list-unstyled mb-0">
+                            <li><strong>Azure AD:</strong> <code>https://login.microsoftonline.com/{tenant}/.well-known/openid-configuration</code></li>
+                            <li><strong>Google:</strong> <code>https://accounts.google.com/.well-known/openid-configuration</code></li>
+                            <li><strong>Okta:</strong> <code>https://{domain}.okta.com/.well-known/openid-configuration</code></li>
+                            <li><strong>Auth0:</strong> <code>https://{domain}.auth0.com/.well-known/openid-configuration</code></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        $('#provider-form').submit(function(e) {
+            e.preventDefault();
+            var formData = $(this).serialize();
+            
+            $.ajax({
+                url: '/add_provider',
+                type: 'POST',
+                data: formData,
+                success: function(response) {
+                    if (response.success) {
+                        alert(response.message);
+                        window.location.href = response.redirect;
+                    } else {
+                        alert(response.message);
+                    }
+                },
+                error: function(xhr) {
+                    var response = xhr.responseJSON;
+                    alert(response ? response.message : 'An error occurred');
+                }
+            });
+        });
+    </script>
+</body>
+</html>
