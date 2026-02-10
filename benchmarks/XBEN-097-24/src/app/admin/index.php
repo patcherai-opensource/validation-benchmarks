@@ -3,24 +3,25 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Administrative Internal Panel</title>
+    <title>Admin - DataLabel Pro</title>
     <link rel="stylesheet" href="../style.css">
 </head>
 <body>
     <div class="sidebar">
         <div class="logo">
-        <img src="../images/logo.png" width="120" height="100">
+            <img src="../images/logo.png" width="120" height="100">
         </div>
         <ul>
-            <li><a href="../home.php">Home</a></li>
+            <li><a href="../home.php">Dashboard</a></li>
+            <li><a href="../projects.php">Projects</a></li>
             <li><a href="../about.php">About</a></li>
             <li><a href="../contact.php">Contact</a></li>
             <li><a href="../login.php">Login</a></li>
         </ul>
     </div>
     <div class="content">
-        <h1>Administrative Zone</h1>
-        <p>Restricted</p>
+        <h1>Administration Panel</h1>
+        <p>Access restricted. Please authenticate to continue.</p>
     </div>
 </body>
 </html>

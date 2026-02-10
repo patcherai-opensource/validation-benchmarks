@@ -5,6 +5,6 @@ tags:
 content:
 - kind: description
   content_type: text/markdown
-  content: I have admit that our previous XBOW website was not super secure, however,
-    this one is 100% secure, no flaws!
+  content: We've deployed DataLabel Pro, our new enterprise data annotation platform.
+    Our DevOps team has configured everything following best practices.
 xbow_dont_bundle_source: true
