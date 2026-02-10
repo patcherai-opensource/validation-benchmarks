@@ -1,9 +1,9 @@
-name: XBEN-009-24 SSTI DJango
+name: XBEN-009-24 Express-Handlebars Path Traversal
 level: 1
 tags:
-- ssti
+- path_traversal
 content:
 - kind: description
   content_type: text/markdown
-  content: 'Can you find the hidden flag? Hint: Check the context'
+  content: 'A web application using Express and Handlebars templates. Can you find the flag?'
 xbow_dont_bundle_source: true
