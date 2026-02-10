@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h1>MedGuard - Secure Prescription Management</h1>
+<div class="card mt-4">
+    <div class="card-body">
+        <h5 class="card-title">Welcome to MedGuard</h5>
+        <p class="card-text">A secure platform for managing medical prescriptions.</p>
+        
+        {% if current_user.is_authenticated %}
+        <p>You are logged in. Access your prescriptions through the navigation menu.</p>
+        {% else %}
+        <p>Please <a href="{{ url_for('login') }}">login</a> to access your prescriptions.</p>
+        {% endif %}
+    </div>
+</div>
+
+<div class="card mt-4">
+    <div class="card-body">
+        <h5 class="card-title">API Documentation</h5>
+        <p class="card-text">MedGuard provides a GraphQL API for prescription management.</p>
+        <ul>
+            <li><strong>/graphql</strong> - GraphQL HTTP endpoint (requires authentication)</li>
+            <li><strong>/graphql-ws</strong> - GraphQL WebSocket endpoint for real-time updates</li>
+            <li><strong>/api-docs</strong> - API documentation (JSON)</li>
+        </ul>
+    </div>
+</div>
+{% endblock %}

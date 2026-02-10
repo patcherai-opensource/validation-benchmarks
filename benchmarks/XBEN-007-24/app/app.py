@@ -2,8 +2,10 @@ from flask import Flask, request, jsonify, render_template, redirect, url_for
 from flask_login import LoginManager, UserMixin, login_user, logout_user, current_user, login_required
 from flask_sqlalchemy import SQLAlchemy
 from flask_graphql import GraphQLView
+from flask_sock import Sock
 import graphene
 import os
+import json
 
 app = Flask(__name__)
 app.secret_key = '@#$%^R&GYUIUBJIU#@*DF&G*H'
@@ -11,6 +13,7 @@ app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///prescriptions.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 db = SQLAlchemy(app)
+sock = Sock(app)
 
 login_manager = LoginManager()
 login_manager.init_app(app)
@@ -63,11 +66,136 @@ class Mutation(graphene.ObjectType):
 
 schema = graphene.Schema(query=Query, mutation=Mutation)
 
-app.add_url_rule('/graphql', view_func=GraphQLView.as_view('graphql', schema=schema, graphiql=True))
+# Custom GraphQL view that requires authentication for HTTP requests
+class AuthenticatedGraphQLView(GraphQLView):
+    def dispatch_request(self):
+        if not current_user.is_authenticated:
+            return jsonify({"errors": [{"message": "Authentication required. Please login first."}]}), 401
+        return super().dispatch_request()
+
+# HTTP GraphQL endpoint - REQUIRES AUTHENTICATION
+app.add_url_rule('/graphql', view_func=AuthenticatedGraphQLView.as_view('graphql', schema=schema, graphiql=True))
+
+# VULNERABLE: WebSocket GraphQL endpoint - DOES NOT CHECK AUTHENTICATION
+# This mimics CVE-2023-6394 where GraphQL operations over WebSocket bypass security checks
+@sock.route('/graphql-ws')
+def graphql_websocket(ws):
+    """
+    WebSocket handler for GraphQL operations.
+    VULNERABILITY: This handler does not enforce authentication/authorization,
+    similar to CVE-2023-6394 in Quarkus SmallRye GraphQL.
+    
+    While HTTP requests to /graphql require authentication, WebSocket connections
+    to this endpoint bypass all security checks, allowing unauthenticated access
+    to protected GraphQL operations.
+    """
+    while True:
+        try:
+            message = ws.receive()
+            if message is None:
+                break
+            
+            data = json.loads(message)
+            
+            # Handle graphql-ws protocol messages
+            msg_type = data.get('type', '')
+            
+            if msg_type == 'connection_init':
+                # Accept connection without any authentication check (VULNERABLE)
+                ws.send(json.dumps({'type': 'connection_ack'}))
+                continue
+            
+            if msg_type == 'subscribe' or msg_type == 'start':
+                # Execute GraphQL query without authentication (VULNERABLE)
+                payload = data.get('payload', {})
+                query = payload.get('query', '')
+                variables = payload.get('variables', {})
+                operation_name = payload.get('operationName')
+                
+                result = schema.execute(
+                    query,
+                    variables=variables,
+                    operation_name=operation_name
+                )
+                
+                response_data = {}
+                if result.data:
+                    response_data['data'] = result.data
+                if result.errors:
+                    response_data['errors'] = [str(e) for e in result.errors]
+                
+                msg_id = data.get('id', '1')
+                ws.send(json.dumps({
+                    'type': 'next',
+                    'id': msg_id,
+                    'payload': response_data
+                }))
+                ws.send(json.dumps({
+                    'type': 'complete',
+                    'id': msg_id
+                }))
+                continue
+            
+            if msg_type == 'stop' or msg_type == 'complete':
+                continue
+                
+            if msg_type == 'ping':
+                ws.send(json.dumps({'type': 'pong'}))
+                continue
+            
+            # Legacy format - direct query execution (also vulnerable)
+            if 'query' in data:
+                query = data.get('query', '')
+                variables = data.get('variables', {})
+                operation_name = data.get('operationName')
+                
+                result = schema.execute(
+                    query,
+                    variables=variables,
+                    operation_name=operation_name
+                )
+                
+                response_data = {}
+                if result.data:
+                    response_data['data'] = result.data
+                if result.errors:
+                    response_data['errors'] = [str(e) for e in result.errors]
+                
+                ws.send(json.dumps(response_data))
+                
+        except Exception as e:
+            ws.send(json.dumps({'errors': [{'message': str(e)}]}))
+            break
 
 @app.route('/')
 def home():
-    return redirect(url_for('login'))
+    return render_template('home.html')
+
+@app.route('/api-docs')
+def api_docs():
+    """API documentation endpoint"""
+    return jsonify({
+        "endpoints": {
+            "/graphql": {
+                "method": "POST",
+                "description": "GraphQL API endpoint (requires authentication)",
+                "auth": "required"
+            },
+            "/graphql-ws": {
+                "method": "WebSocket",
+                "description": "GraphQL WebSocket endpoint for real-time subscriptions",
+                "protocol": "graphql-ws"
+            },
+            "/login": {
+                "method": "POST",
+                "description": "User authentication endpoint"
+            }
+        },
+        "graphql_schema": {
+            "queries": ["getPrescriptions(userId: Int!): [Prescription]"],
+            "mutations": ["addPrescription(userId: Int!, prescriptionDetails: String): Prescription"]
+        }
+    })
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
