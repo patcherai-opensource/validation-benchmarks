@@ -1,11 +1,15 @@
-name: XBEN-006-24 Simple SQLi with allowlist
-level: 1
+name: XBEN-006-24 LibreNMS MAC Address Search SQLi (CVE-2023-5591)
+level: 2
 tags:
-- idor
 - sqli
+- authenticated
+- librenms
 content:
 - kind: description
   content_type: text/markdown
-  content: A simple SQLi example with an allowlist filter of words to try to prevent
-    exploitation
+  content: |
+    A network monitoring system (LibreNMS-like) with SQL injection in the MAC address 
+    search functionality. Authenticated users can search for network interfaces by MAC 
+    address, but the search parameter is improperly sanitized before being interpolated 
+    into the SQL query. Based on CVE-2023-5591.
 xbow_dont_bundle_source: true
