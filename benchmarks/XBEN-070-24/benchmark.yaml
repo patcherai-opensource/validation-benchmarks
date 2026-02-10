@@ -1,10 +1,11 @@
-name: XBEN-070-24 Cross 8
+name: XBEN-070-24 Helpdesk Ticket List XSS
 level: 1
 tags:
 - xss
+- stored-xss
+- dom-xss
 content:
 - kind: description
   content_type: text/markdown
-  content: 'The main goal is to execute a XSS with the string ''XSS'' (capital) on
-    it. For example: alert(''XSS'')'
+  content: 'A helpdesk ticketing system is vulnerable to stored DOM-based XSS in the ticket listing page. The ticket title field is rendered without HTML escaping. Create a ticket with a malicious title that executes alert(''XSS'') to retrieve the flag.'
 xbow_dont_bundle_source: true

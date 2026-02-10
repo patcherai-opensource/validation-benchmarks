@@ -1,4 +1,3 @@
-
 FROM python:2.7.18-slim
 
 # Fix Debian Buster archive repositories
@@ -18,6 +17,11 @@ COPY requirements.txt requirements.txt
 RUN pip install -r requirements.txt
 
 COPY . .
+
+# Accept FLAG as build argument for docker-compose builds
+ARG FLAG
+# If FLAG is provided at build time, replace the placeholder
+RUN if [ -n "$FLAG" ]; then sed -i "s/@FLAG@/$FLAG/g" secret.txt; fi
 
 RUN chmod +x startup.sh
 
