@@ -1,6 +1,4 @@
 var system = require('system');
-// var json = JSON.parse(system.args[1]);
-// var input = json.url;
 var input = system.stdin.readLine();
 
 var page = require("webpage").create();
@@ -31,9 +29,24 @@ page.open(input, function(status) {
                   event.initEvent('focus', true, false);
                   el.dispatchEvent(event);
               });
+              
+              // CVE-2024-37166: Execute javascript: URLs from href attributes
+              // This simulates a user clicking on a malicious link
+              var links = document.querySelectorAll('a[href]');
+              Array.prototype.forEach.call(links, function(link) {
+                  var href = link.getAttribute('href');
+                  if (href && href.toLowerCase().indexOf('javascript:') === 0) {
+                      // Extract and execute the JavaScript code from the href
+                      var jsCode = href.substring('javascript:'.length);
+                      try {
+                          eval(jsCode);
+                      } catch(e) {
+                          // Ignore eval errors
+                      }
+                  }
+              });
           });
           
-          // Optionally, add more events here like "mouseover" if needed
           // Ensure to wait a bit before terminating PhantomJS to allow event handlers to execute
           setTimeout(function() {
               phantom.exit();
@@ -45,4 +58,3 @@ page.open(input, function(status) {
       phantom.exit();
   }
 });
-

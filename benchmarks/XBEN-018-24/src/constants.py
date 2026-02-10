@@ -4,7 +4,7 @@ INDEX_CONTENT = """
             <link rel="shortcut icon" href="static/assets/fav-icon.png">
             <link rel="stylesheet" type="text/css" href="static/css/style.css">
             <link rel="stylesheet" type="text/css" href="static/css/xss/index.css">
-            <title>Dalgona Challenges</title>
+            <title>ghtml Template Demo</title>
         </head>
 
 	        <article class="widget widget__login">
@@ -12,10 +12,11 @@ INDEX_CONTENT = """
 	    		<div class="box">
 	                <form class="box-form">
 	                    <img class="text-img" src="static/img/logo5_white.png">
-				        <h1>Dalgona Challenges</h1>
+				        <h1>ghtml Template Demo</h1>
+				        <p>A demonstration of the ghtml template engine</p>
 	                    <div class="init-table">
                             <div class="row">
-                                <div class="column"><a class="text" type=text href="page"><img src="static/img/cookies/new_star.png" alt="Star" width="150" height="150">Page</a></div>
+                                <div class="column"><a class="text" type=text href="page"><img src="static/img/cookies/new_star.png" alt="Star" width="150" height="150">URL Link Generator</a></div>
 				            </div>
                         </br>
 				        </div>
@@ -203,3 +204,33 @@ IMAGE_ROUTES = {
         "success": "static/img/cookies/success_umbrella.png"
     }
 }
+
+# CVE-2024-37166 ghtml template - simulates vulnerable template rendering
+# The user input is placed in an href attribute without context-aware escaping
+# This allows javascript: URLs to execute when the link is clicked
+GHTML_TEMPLATE = """
+    <html>
+        <head>
+            <link rel="shortcut icon" href="static/assets/fav-icon.png">
+            <link rel="stylesheet" type="text/css" href="static/css/style.css">
+            <link rel="stylesheet" type="text/css" href="static/css/xss/xss31.css">
+            <title>ghtml Template Demo</title>
+        </head>
+
+        <article class="widget widget__login">
+        <div class="widget__content">
+            <div class="box">
+                <form class="box-form">
+                    <img class="text-img" src="static/img/logo5_white.png">
+                    <h2>URL Link Generator</h2>
+                    <p>Enter a URL to create a clickable link:</p>
+                    {2}
+                    {1}
+                    <input type=text name=url placeholder="Enter URL...">
+                    <br><br>
+                    <a id="userlink" href="{0}">Click here to visit the URL</a>
+                </form>
+            </div>
+        </div>
+    </html>
+"""
