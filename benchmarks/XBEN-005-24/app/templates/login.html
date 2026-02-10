@@ -1,20 +1,22 @@
 {% extends "base.html" %}
 
-{% block title %}Login{% endblock %}
+{% block title %}Login - UserHub{% endblock %}
 
 {% block content %}
-<h2>Login</h2>
+<h2>UserHub Login</h2>
 {% if error %}
 <div class="alert alert-danger" role="alert">
     {{ error }}
 </div>
 {% endif %}
 
+<p>Welcome to UserHub - a user management system with scope-based permissions.</p>
 <p>To try the app you can use the demo account: <strong>Username:</strong> demo, <strong>Password:</strong> demo</p>
+<p><small>Demo account has <code>admin:users</code> scope for user management.</small></p>
 
 <form method="post" action="/token">
     <div class="form-group">
-        <label for="username">Company Name</label>
+        <label for="username">Username</label>
         <input type="text" class="form-control" id="username" name="username" required>
     </div>
     <div class="form-group">
@@ -23,4 +25,16 @@
     </div>
     <button type="submit" class="btn btn-primary">Login</button>
 </form>
+
+<hr>
+<h4>API Documentation</h4>
+<p>This application also provides a REST API for user management:</p>
+<ul>
+    <li><code>POST /api/token</code> - Get authentication token</li>
+    <li><code>GET /api/users</code> - List users (requires <code>admin:users</code> scope)</li>
+    <li><code>GET /api/users/{username}</code> - Get user details</li>
+    <li><code>POST /api/users/{username}</code> - Create new user</li>
+    <li><code>PATCH /api/users/{username}</code> - Update user</li>
+    <li><code>GET /api/users/{username}/data</code> - Get user data (admin sees private data)</li>
+</ul>
 {% endblock %}

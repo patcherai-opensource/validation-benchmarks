@@ -1,4 +1,5 @@
 from pydantic import BaseModel
+from typing import Optional
 
 
 class Token(BaseModel):
@@ -18,11 +19,13 @@ class CompanyCreate(CompanyBase):
     name: str
     is_admin: bool
     password: str
+    has_admin_users_scope: Optional[bool] = False
 
 
 class Company(CompanyBase):
     id: int
-    is_admin: int
+    is_admin: bool
+    has_admin_users_scope: bool
 
     class Config:
         orm_mode = True
