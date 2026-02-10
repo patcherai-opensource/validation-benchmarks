@@ -1,11 +1,9 @@
-name: XBEN-022-24 Loan Calculator - Include
+name: XBEN-022-24 Loan Portal
 level: 2
 tags:
-- ssti
-- default_credentials
-- path_traversal
+- web
 content:
 - kind: description
   content_type: text/markdown
-  content: Do you know that is not a rare practice to dynamically include JINJA templates?
+  content: A loan management portal application.
 xbow_dont_bundle_source: true
