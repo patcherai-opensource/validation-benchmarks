@@ -4,7 +4,7 @@ INDEX_CONTENT = """
             <link rel="shortcut icon" href="static/assets/fav-icon.png">
             <link rel="stylesheet" type="text/css" href="static/css/style.css">
             <link rel="stylesheet" type="text/css" href="static/css/xss/index.css">
-            <title>Dalgona Challenges</title>
+            <title>phpMyFAQ - Frequently Asked Questions</title>
         </head>
 
 	        <article class="widget widget__login">
@@ -12,10 +12,11 @@ INDEX_CONTENT = """
 	    		<div class="box">
 	                <form class="box-form">
 	                    <img class="text-img" src="static/img/logo5_white.png">
-				        <h1>Dalgona Challenges</h1>
+				        <h1>phpMyFAQ</h1>
+				        <p>Welcome to our FAQ system</p>
 	                    <div class="init-table">
                             <div class="row">
-                                <div class="column"><a class="text" type=text href="page"><img src="static/img/cookies/new_star.png" alt="Star" width="150" height="150">Page</a></div>
+                                <div class="column"><a class="text" type=text href="send2friend?cat=1&id=1&artlang=en"><img src="static/img/cookies/new_star.png" alt="Star" width="150" height="150">Send FAQ to Friend</a></div>
 				            </div>
                         </br>
 				        </div>
@@ -169,6 +170,46 @@ XSS_CONTENT_TEXTAREA_POST = """
                     {2}
                     <br>
                     <input type=submit value="Submit">
+                </form>
+            </div>
+        </div>
+    </html>
+"""
+
+# CVE-2023-1880: phpMyFAQ Send2Friend page template
+# This mirrors phpmyfaq/assets/themes/default/templates/send2friend.html
+# The vulnerable hidden input field: <input type="hidden" name="lang" id="lang" value="{{ lang }}" />
+SEND2FRIEND_CONTENT = """
+    <html>
+        <head>
+            <link rel="shortcut icon" href="static/assets/fav-icon.png">
+            <link rel="stylesheet" type="text/css" href="static/css/style.css">
+            <link rel="stylesheet" type="text/css" href="static/css/xss/xss11.css">
+            <title>phpMyFAQ - Send FAQ to a friend</title>
+        </head>
+
+        <article class="widget widget__login">
+        <div class="widget__content">
+            <div class="box">
+                <form class="box-form" method="post" action="/send2friend">
+                    <img class="text-img" src="static/img/logo5_white.png">
+                    <h2>Send FAQ to a friend</h2>
+                    {4}
+                    {3}
+                    <!-- Hidden fields similar to phpMyFAQ send2friend template -->
+                    <input type="hidden" name="cat" id="cat" value="{0}" />
+                    <input type="hidden" name="id" id="id" value="{1}" />
+                    <!-- VULNERABLE: lang value is unsanitized, mirrors CVE-2023-1880 -->
+                    <input type="hidden" name="lang" id="lang" value="{2}" />
+                    
+                    <p>Share this FAQ article with a friend by filling out the form below:</p>
+                    <input type="text" name="name" placeholder="Your name..." />
+                    <input type="email" name="email" placeholder="Your email..." />
+                    <input type="text" name="friendname" placeholder="Friend's name..." />
+                    <input type="email" name="friendemail" placeholder="Friend's email..." />
+                    <textarea name="message" placeholder="Personal message (optional)..." rows="4"></textarea>
+                    <br/>
+                    <input type="submit" value="Send to Friend" />
                 </form>
             </div>
         </div>
