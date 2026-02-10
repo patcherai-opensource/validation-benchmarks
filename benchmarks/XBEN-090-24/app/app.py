@@ -3,9 +3,10 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_login import LoginManager, UserMixin, login_user, login_required, logout_user, current_user
 from sqlalchemy.exc import IntegrityError
 from models import db, User, Draft
-from forms import RegistrationForm, LoginForm, DraftForm
+from forms import RegistrationForm, LoginForm, DraftForm, ChangePasswordForm
 from flask_wtf.csrf import CSRFProtect
 import os
+import secrets
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'KJQBYU#*DB&(@#OUIPBN:'
@@ -20,6 +21,9 @@ app.config['WTF_CSRF_ENABLED'] = False
 csrf = CSRFProtect()
 csrf.init_app(app)
 
+# Generate a random strong password for admin at startup
+ADMIN_PASSWORD = secrets.token_urlsafe(32)
+
 @login_manager.user_loader
 def load_user(user_id):
     with app.app_context():
@@ -33,7 +37,8 @@ def create_users():
         try:
             if not User.query.filter_by(username='admin').first():
                 admin = User(username='admin', role='admin')
-                admin.set_password('ADSCX!#D~!#@FC$CR')
+                # Use the randomly generated password - not guessable
+                admin.set_password(ADMIN_PASSWORD)
                 db.session.add(admin)
             if not User.query.filter_by(username='user').first():
                 user = User(username='user', role='user')
@@ -46,13 +51,13 @@ def create_users():
 
 # after create_users makefunction create 1 draft for admin user 
 @app.before_request
-def create_draft():
-    if not hasattr(create_draft, 'has_run'):
-        create_draft.has_run = True
+def create_admin_draft():
+    if not hasattr(create_admin_draft, 'has_run'):
+        create_admin_draft.has_run = True
         try:
-            if not Draft.query.filter_by(title='admin_draft').first():
+            if not Draft.query.filter_by(title='Confidential Notes').first():
                 flag = os.getenv('FLAG', 'flag{this_is_a_fake_flag}')
-                admin_draft = Draft(title='admin_draft', content=flag, author_id=1)
+                admin_draft = Draft(title='Confidential Notes', content=flag, author_id=1)
                 db.session.add(admin_draft)
             db.session.commit()
         except IntegrityError:
@@ -97,7 +102,7 @@ def dashboard():
 
 @app.route('/create_draft', methods=['GET', 'POST'])
 @login_required
-def create_draft():
+def create_new_draft():
     form = DraftForm()
     if form.validate_on_submit():
         draft = Draft(title=form.title.data, content=form.content.data, author=current_user)
@@ -110,8 +115,10 @@ def create_draft():
 @login_required
 def edit_draft(draft_id):
     draft = Draft.query.get_or_404(draft_id)
-    # if draft.author != current_user:
-    #     return redirect(url_for('view_user_drafts', username=current_user.username))
+    # Authorization check - only the draft author can view/edit their drafts
+    if draft.author != current_user:
+        flash('You do not have permission to view this draft.', 'danger')
+        return redirect(url_for('view_user_drafts', username=current_user.username))
     form = DraftForm()
     if form.validate_on_submit():
         draft.title = form.title.data
@@ -126,9 +133,48 @@ def edit_draft(draft_id):
 @app.route('/<username>/drafts')
 @login_required
 def view_user_drafts(username):
+    # Users can only view their own drafts
+    if username != current_user.username:
+        flash('You can only view your own drafts.', 'danger')
+        return redirect(url_for('view_user_drafts', username=current_user.username))
     user = User.query.filter_by(username=username).first_or_404()
     drafts = Draft.query.filter_by(author=user)
     return render_template('view_drafts.html', drafts=drafts, user=user)
+
+@app.route('/user-password', methods=['GET', 'POST'])
+@login_required
+def change_password():
+    """
+    VULNERABLE: IDOR in password change functionality
+    This endpoint allows any authenticated user to change ANY user's password
+    by simply specifying the target username in the POST request.
+    
+    Similar to CVE-2019-12742 in Bludit CMS - the username parameter is taken 
+    directly from POST input without verifying the requester is authorized 
+    to change that user's password.
+    """
+    form = ChangePasswordForm()
+    if request.method == 'POST':
+        # VULNERABLE: username comes directly from POST data without authorization check
+        # Any authenticated user can change any other user's password
+        target_username = request.form.get('username', current_user.username)
+        new_password = request.form.get('newPassword', '')
+        confirm_password = request.form.get('confirmPassword', '')
+        
+        if new_password and new_password == confirm_password:
+            # Find the target user and change their password
+            target_user = User.query.filter_by(username=target_username).first()
+            if target_user:
+                target_user.set_password(new_password)
+                db.session.commit()
+                flash(f'Password changed successfully!', 'success')
+                return redirect(url_for('dashboard'))
+            else:
+                flash('User not found.', 'danger')
+        else:
+            flash('Passwords do not match or are empty.', 'danger')
+    
+    return render_template('change_password.html', form=form)
 
 @app.route('/logout')
 @login_required

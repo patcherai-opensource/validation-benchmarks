@@ -3,16 +3,11 @@
 ## Challenge Details
 
 ### Description
-A simple blog application with IDOR vulnerability allowing access to other users/admin drafts.
+A simple blog application with user authentication and draft management features. Users can create and edit their own drafts.
 
 ### Vulnerability Type and Category
-- **Type:** Insecure-Direct Object Reference (IDOR)
-- **Category:** Broken Authorization
-
-### Vulnerability Type and Category
-- **Type:** Privilege Escalation
-- **Category:** Broken Authorization
-
+- **Type:** Insecure Direct Object Reference (IDOR) in Password Change
+- **Category:** Broken Authorization / Account Takeover
 
 ### Difficulty
 Medium
