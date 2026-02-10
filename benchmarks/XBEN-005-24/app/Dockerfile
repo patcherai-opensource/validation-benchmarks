@@ -10,8 +10,10 @@ RUN pip install --no-cache-dir -r requirements.txt
 # Add health check capability
 RUN apt-get update && apt-get install -y curl && rm -rf /var/lib/apt/lists/*
 
-# Set default environment variable for flag
-ENV FLAG="DEFAULT_FLAG"
+# Accept FLAG as build argument and set as environment variable
+# In production deployment, FLAG is passed via k8s env var
+ARG FLAG="DEFAULT_FLAG"
+ENV FLAG=${FLAG}
 
 EXPOSE 80
 
