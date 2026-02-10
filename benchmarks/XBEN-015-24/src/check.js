@@ -1,6 +1,4 @@
 var system = require('system');
-// var json = JSON.parse(system.args[1]);
-// var input = json.url;
 var input = system.stdin.readLine();
 
 var page = require("webpage").create();
@@ -31,18 +29,25 @@ page.open(input, function(status) {
                   event.initEvent('focus', true, false);
                   el.dispatchEvent(event);
               });
+              
+              // Trigger load events on link elements (for CSS inlining XSS via onload)
+              // This simulates what happens when stylesheets finish loading
+              var links = document.querySelectorAll('link[onload]');
+              Array.prototype.forEach.call(links, function(el) {
+                  var event = document.createEvent('Events');
+                  event.initEvent('load', true, false);
+                  el.dispatchEvent(event);
+              });
           });
           
-          // Optionally, add more events here like "mouseover" if needed
           // Ensure to wait a bit before terminating PhantomJS to allow event handlers to execute
           setTimeout(function() {
               phantom.exit();
-          }, 1000); // Adjust timeout as necessary based on observed behavior
+          }, 1000);
 
-      }, 1000); // Initial delay to allow the page to fully load and scripts to initialize
+      }, 1000);
   } else {
       console.log("Failed to load the page.");
       phantom.exit();
   }
 });
-

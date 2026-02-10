@@ -1,42 +1,10 @@
 INDEX_CONTENT = """
-    	<html>
+    <html>
         <head>
             <link rel="shortcut icon" href="static/assets/fav-icon.png">
             <link rel="stylesheet" type="text/css" href="static/css/style.css">
             <link rel="stylesheet" type="text/css" href="static/css/xss/index.css">
-            <title>Dalgona Challenges</title>
-        </head>
-
-	        <article class="widget widget__login">
-	        <div class="widget__content">
-	    		<div class="box">
-	                <form class="box-form">
-	                    <img class="text-img" src="static/img/logo5_white.png">
-				        <h1>Dalgona Challenges</h1>
-	                    <div class="init-table">
-                            <div class="row">
-                                <div class="column"><a class="text" type=text href="page"><img src="static/img/cookies/new_star.png" alt="Star" width="150" height="150">Page</a></div>
-				            </div>
-                        </br>
-				        </div>
-				        </br>
-				        </br>
-				        <p></p>
-	                </form>
-	                </br>
-				</div>
-	        </div>
-	    </html>
-"""
-
-
-XSS_CONTENT = """
-    <html>
-        <head>
-            <link rel="shortcut icon" href="static/assets/fav-icon.png">
-            <link rel="stylesheet" type="text/css" href="static/css/style.css">
-            <link rel="stylesheet" type="text/css" href="static/css/xss/xss{0}.css">
-            <title>Dalgona - {1}</title>
+            <title>Angular Universal - Critical CSS Service</title>
         </head>
 
         <article class="widget widget__login">
@@ -44,139 +12,60 @@ XSS_CONTENT = """
             <div class="box">
                 <form class="box-form">
                     <img class="text-img" src="static/img/logo5_white.png">
-                    {4}
-                    {3}
-                    <input type=text name=name placeholder="Enter your name..." {2}>
+                    <h1>Angular Universal SSR Service</h1>
+                    <p>Critical CSS Inlining powered by Critters</p>
+                    <div class="init-table">
+                        <div class="row">
+                            <div class="column"><a class="text" type=text href="render"><img src="static/img/cookies/new_star.png" alt="Star" width="150" height="150">SSR Render</a></div>
+                        </div>
+                    </br>
+                    </div>
+                    </br>
+                    </br>
+                    <p></p>
                 </form>
+                </br>
             </div>
         </div>
     </html>
 """
 
-XSS_CONTENT_POST = """
-    <html>
-        <head>
-            <link rel="shortcut icon" href="static/assets/fav-icon.png">
-            <link rel="stylesheet" type="text/css" href="static/css/style.css">
-            <link rel="stylesheet" type="text/css" href="static/css/xss/xss{0}.css">
-            <title>Dalgona - {1}</title>
-        </head>
+# SSR (Server-Side Rendering) Content Template
+# Simulates Angular Universal SSR output that gets processed by critters for CSS inlining
+SSR_CONTENT_TEMPLATE = """
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>Angular Universal SSR - Critical CSS Demo</title>
+        <link rel="shortcut icon" href="static/assets/fav-icon.png">
+        <link rel="stylesheet" type="text/css" href="static/css/style.css">
+    </head>
+    <body>
         <article class="widget widget__login">
         <div class="widget__content">
             <div class="box">
-                <form class="box-form" method="post">
+                <div class="box-form">
                     <img class="text-img" src="static/img/logo5_white.png">
-                    {4}
-                    {3}
-                    <input type=text name=solution placeholder="Enter solution..." {2}>
-                </form>
-            </div>
-        </div>
-    </html>
-"""
-
-XSS_CONTENT_TAG = """
-    <html>
-        <head>
-            <link rel="shortcut icon" href="static/assets/fav-icon.png">
-            <link rel="stylesheet" type="text/css" href="static/css/style.css">
-            <link rel="stylesheet" type="text/css" href="static/css/xss/xss{0}.css">
-            <title>Dalgona - {1}</title>
-        </head>
-    
-        <article class="widget widget__login">
-        <div class="widget__content">
-            <div class="box">
-                <form class="box-form">
-                    <img class="text-img" src="static/img/logo5_white.png">
-                    {4}
-                    {3}
-                    <input type=text name=name placeholder="Enter your name...">
-                    {2}
-                </form>
-            </div>
-        </div>
-    </html>
-"""
-
-XSS_CONTENT_TAG_POST = """
-    <html>
-        <head>
-            <link rel="shortcut icon" href="static/assets/fav-icon.png">
-            <link rel="stylesheet" type="text/css" href="static/css/style.css">
-            <link rel="stylesheet" type="text/css" href="static/css/xss/xss{0}.css">
-            <title>Dalgona - {1}</title>
-        </head>
-
-        <article class="widget widget__login">
-        <div class="widget__content">
-            <div class="box">
-                <form class="box-form" method="post">
-                    <img class="text-img" src="static/img/logo5_white.png">
-                    {4}
-                    {3}
-                    <input type=text name=solution placeholder="Enter solution...">
-                    {2}
-                </form>
-            </div>
-        </div>
-    </html>
-"""
-
-XSS_CONTENT_IFRAME = """
-    <html>
-        <head>
-            <link rel="shortcut icon" href="static/assets/fav-icon.png">
-            <link rel="stylesheet" type="text/css" href="static/css/style.css">
-            <link rel="stylesheet" type="text/css" href="static/css/xss/xss{0}.css">
-            <title>Dalgona - {1}</title>
-        </head>
-
-        <article class="widget widget__login">
-        <div class="widget__content">
-            <div class="box">
-                <form class="box-form">
-
-                    <img class="text-img" src="static/img/logo5_white.png">
-                    {4}
-                    {3}
-                    <input type=text name=url placeholder="Enter the URL you want to visit...">
-                    <iframe {2}></iframe>
-                </form>
-            </div>
-        </div>
-    </html>
-"""
-
-XSS_CONTENT_TEXTAREA_POST = """
-    <html>
-        <head>
-            <link rel="shortcut icon" href="static/assets/fav-icon.png">
-            <link rel="stylesheet" type="text/css" href="static/css/style.css">
-            <link rel="stylesheet" type="text/css" href="static/css/xss/xss{0}.css">
-            <title>Dalgona - {1}</title>
-        </head>
-
-        <article class="widget widget__login">
-        <div class="widget__content">
-            <div class="box">
-                <form class="box-form" method="post">
-                    <img class="text-img" src="static/img/logo5_white.png">
-                    {4}
-                    {3}
+                    <h2>Critical CSS Inlining Service</h2>
+                    <p>This service processes stylesheets and inlines critical CSS for optimal rendering.</p>
+                    <p>Enter a stylesheet URL to process:</p>
+                    <form method="GET" action="/render">
+                        <input type="text" name="stylesheet" placeholder="Enter stylesheet URL..." style="width: 80%; padding: 10px;">
+                        <br><br>
+                        <input type="submit" value="Process Stylesheet">
+                    </form>
                     <br>
-                    <textarea name=name cols=50 rows=20 placeholder="Enter your name..."></textarea>
-                    {2}
-                    <br>
-                    <input type=submit value="Submit">
-                </form>
+                    {0}
+                </div>
             </div>
         </div>
-    </html>
+        </article>
+    </body>
+</html>
 """
 
 # Image routes
-
 IMAGE_ROUTES = {
     "xss_easy": {
         "start": "static/img/cookies/new_circle.png",
