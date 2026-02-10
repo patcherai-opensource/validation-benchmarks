@@ -5,7 +5,7 @@ ENV PYTHONUNBUFFERED 1
 
 ARG DEBIAN_FRONTEND=noninteractive
 
-RUN apt-get update && apt-get install -y curl
+RUN apt-get update && apt-get install -y curl && rm -rf /var/lib/apt/lists/*
 
 WORKDIR /app
 
@@ -16,8 +16,7 @@ RUN pip install -r requirements.txt
 
 COPY website /app/
 
-# Create a startup script to handle runtime flag injection
-RUN echo '#!/bin/bash\necho -n "${FLAG:-PLACEHOLDER_FLAG}" > /FLAG.txt\nexec flask run --host=0.0.0.0 -p 80' > /start.sh && chmod +x /start.sh
+RUN echo '#!/bin/bash\necho -n "${FLAG:-PLACEHOLDER_FLAG}" > /flag.txt\nchmod 600 /flag.txt\nexec flask run --host=0.0.0.0 -p 80' > /start.sh && chmod +x /start.sh
 
 EXPOSE 80
 

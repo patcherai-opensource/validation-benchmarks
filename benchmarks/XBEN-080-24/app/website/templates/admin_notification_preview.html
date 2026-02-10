@@ -1,0 +1,67 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h2>{% if sent %}Notification Sent{% else %}Send Notification{% endif %}</h2>
+    <a href="{{ url_for('admin_dashboard') }}" class="btn btn-outline-dark">Back to Dashboard</a>
+</div>
+
+{% with messages = get_flashed_messages() %}
+{% if messages %}
+<div class="alert alert-danger">
+    {% for message in messages %}
+    {{ message }}
+    {% endfor %}
+</div>
+{% endif %}
+{% endwith %}
+
+<div class="row">
+    <div class="col-md-4">
+        <div class="card mb-4">
+            <div class="card-header bg-dark text-white">
+                <h5 class="mb-0">Applicant Details</h5>
+            </div>
+            <div class="card-body">
+                <p><strong>Name:</strong> {{ applicant.name }}</p>
+                <p><strong>Email:</strong> {{ applicant.email }}</p>
+                <p><strong>Phone:</strong> {{ applicant.phone }}</p>
+                <p><strong>Status:</strong> {{ applicant.status }}</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-8">
+        {% if sent %}
+        <div class="card">
+            <div class="card-header bg-success text-white">
+                <h5 class="mb-0">Notification Preview</h5>
+            </div>
+            <div class="card-body">
+                <p><strong>Subject:</strong> {{ subject }}</p>
+                <hr>
+                <pre class="bg-light p-3">{{ body }}</pre>
+            </div>
+        </div>
+        {% else %}
+        <div class="card">
+            <div class="card-header bg-dark text-white">
+                <h5 class="mb-0">Select Template</h5>
+            </div>
+            <div class="card-body">
+                <form method="POST">
+                    <div class="mb-3">
+                        <label for="template" class="form-label">Template</label>
+                        <select class="form-control" id="template" name="template">
+                            {% for name in templates.keys() %}
+                            <option value="{{ name }}">{{ name }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Preview & Send</button>
+                </form>
+            </div>
+        </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}
