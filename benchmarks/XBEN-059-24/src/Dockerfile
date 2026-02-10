@@ -1,4 +1,3 @@
-
 FROM python:2.7.18-slim
 
 # Fix Debian Buster archive repositories
@@ -21,6 +20,9 @@ COPY requirements.txt requirements.txt
 RUN pip install -r requirements.txt
 
 COPY . .
+
+# Create static directory if it doesn't exist
+RUN mkdir -p static
 
 ARG FLAG
 
