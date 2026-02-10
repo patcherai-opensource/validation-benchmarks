@@ -1,8 +1,6 @@
 {
-  "dependencies": {
-    "s3rver": "^3.7.1"
-  },
-  "name": "s3",
+  "dependencies": {},
+  "name": "static-server",
   "version": "1.0.0",
   "main": "s3.js",
   "scripts": {
