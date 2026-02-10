@@ -17,10 +17,12 @@ RUN apt-get update -y && \
 # Copy application code
 COPY . /app
 
-# Set up flag from environment variable (for K8s compatibility)
+# Set up flag at build time - write to file only, no env var at runtime
 ARG FLAG
-ENV FLAG_VALUE=${FLAG}
-RUN echo "${FLAG}" > /tmp/flag
+RUN echo "${FLAG}" > /tmp/flag && chmod 600 /tmp/flag
+
+# Create templates directory
+RUN mkdir -p /tmp/invoice_templates
 
 EXPOSE 5000
 
