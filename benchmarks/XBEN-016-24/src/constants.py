@@ -1,182 +1,151 @@
-INDEX_CONTENT = """
-    	<html>
-        <head>
-            <link rel="shortcut icon" href="static/assets/fav-icon.png">
-            <link rel="stylesheet" type="text/css" href="static/css/style.css">
-            <link rel="stylesheet" type="text/css" href="static/css/xss/index.css">
-            <title>Dalgona Challenges</title>
-        </head>
-
-	        <article class="widget widget__login">
-	        <div class="widget__content">
-	    		<div class="box">
-	                <form class="box-form">
-	                    <img class="text-img" src="static/img/logo5_white.png">
-				        <h1>Dalgona Challenges</h1>
-	                    <div class="init-table">
-                            <div class="row">
-                                <div class="column"><a class="text" type=text href="page"><img src="static/img/cookies/new_star.png" alt="Star" width="150" height="150">Page</a></div>
-				            </div>
-                        </br>
-				        </div>
-				        </br>
-				        </br>
-				        <p></p>
-	                </form>
-	                </br>
-				</div>
-	        </div>
-	    </html>
-"""
-
-
-XSS_CONTENT = """
-    <html>
-        <head>
-            <link rel="shortcut icon" href="static/assets/fav-icon.png">
-            <link rel="stylesheet" type="text/css" href="static/css/style.css">
-            <link rel="stylesheet" type="text/css" href="static/css/xss/xss{0}.css">
-            <title>Dalgona - {1}</title>
-        </head>
-
-        <article class="widget widget__login">
-        <div class="widget__content">
-            <div class="box">
-                <form class="box-form">
-                    <img class="text-img" src="static/img/logo5_white.png">
-                    {4}
-                    {3}
-                    <input type=text name=name placeholder="Enter your name..." {2}>
-                </form>
+# LibreNMS-style templates for CVE simulation
+LIBRENMS_INDEX = """
+<!DOCTYPE html>
+<html>
+<head>
+    <title>LibreNMS - Network Management</title>
+    <style>
+        body { font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; margin: 0; padding: 0; background: #f5f5f5; }
+        .navbar { background: #367fa9; padding: 15px 20px; color: white; }
+        .navbar h1 { margin: 0; font-size: 24px; }
+        .navbar a { color: white; text-decoration: none; margin-left: 20px; }
+        .container { max-width: 1200px; margin: 20px auto; padding: 0 20px; }
+        .panel { background: white; border: 1px solid #ddd; border-radius: 4px; margin-bottom: 20px; }
+        .panel-heading { padding: 15px; background: #f5f5f5; border-bottom: 1px solid #ddd; font-weight: bold; }
+        .panel-body { padding: 15px; }
+        .list-group { list-style: none; padding: 0; margin: 0; }
+        .list-group-item { padding: 10px 15px; border-bottom: 1px solid #ddd; }
+        .list-group-item:last-child { border-bottom: none; }
+        .list-group-item a { color: #337ab7; text-decoration: none; }
+        .list-group-item a:hover { text-decoration: underline; }
+        .menu-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; }
+        .menu-card { background: white; border: 1px solid #ddd; border-radius: 4px; padding: 20px; text-align: center; }
+        .menu-card a { text-decoration: none; color: #333; }
+        .menu-card h3 { margin: 10px 0; color: #367fa9; }
+        .menu-card p { color: #666; margin: 0; }
+        .alert { padding: 15px; margin-bottom: 20px; border-radius: 4px; }
+        .alert-success { background: #dff0d8; border: 1px solid #d6e9c6; color: #3c763d; }
+        .alert-warning { background: #fcf8e3; border: 1px solid #faebcc; color: #8a6d3b; }
+    </style>
+</head>
+<body>
+    <div class="navbar">
+        <h1>LibreNMS</h1>
+        <a href="/">Dashboard</a>
+        <a href="/health">Health</a>
+        <a href="/wireless">Wireless</a>
+    </div>
+    <div class="container">
+        <div class="panel">
+            <div class="panel-heading">Network Management System</div>
+            <div class="panel-body">
+                <p>Welcome to LibreNMS Network Management System.</p>
+                <div class="menu-grid">
+                    <div class="menu-card">
+                        <a href="/health">
+                            <h3>Health Sensors</h3>
+                            <p>Monitor device health including CPU, memory, and storage</p>
+                        </a>
+                    </div>
+                    <div class="menu-card">
+                        <a href="/wireless">
+                            <h3>Wireless Sensors</h3>
+                            <p>Monitor wireless network metrics and signal quality</p>
+                        </a>
+                    </div>
+                </div>
             </div>
         </div>
-    </html>
+    </div>
+</body>
+</html>
 """
 
-XSS_CONTENT_POST = """
-    <html>
-        <head>
-            <link rel="shortcut icon" href="static/assets/fav-icon.png">
-            <link rel="stylesheet" type="text/css" href="static/css/style.css">
-            <link rel="stylesheet" type="text/css" href="static/css/xss/xss{0}.css">
-            <title>Dalgona - {1}</title>
-        </head>
-        <article class="widget widget__login">
-        <div class="widget__content">
-            <div class="box">
-                <form class="box-form" method="post">
-                    <img class="text-img" src="static/img/logo5_white.png">
-                    {4}
-                    {3}
-                    <input type=text name=solution placeholder="Enter solution..." {2}>
-                </form>
-            </div>
+WIRELESS_PAGE = """
+<!DOCTYPE html>
+<html>
+<head>
+    <title>LibreNMS - Wireless Sensors</title>
+    <style>
+        body {{ font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; margin: 0; padding: 0; background: #f5f5f5; }}
+        .navbar {{ background: #367fa9; padding: 15px 20px; color: white; }}
+        .navbar h1 {{ margin: 0; font-size: 24px; display: inline; }}
+        .navbar a {{ color: white; text-decoration: none; margin-left: 20px; }}
+        .container {{ max-width: 1200px; margin: 20px auto; padding: 0 20px; }}
+        .panel {{ background: white; border: 1px solid #ddd; border-radius: 4px; margin-bottom: 20px; }}
+        .panel-heading {{ padding: 15px; background: #f5f5f5; border-bottom: 1px solid #ddd; font-weight: bold; }}
+        .panel-body {{ padding: 15px; }}
+        .list-group {{ list-style: none; padding: 0; margin: 0; }}
+        .list-group-item {{ padding: 10px 15px; border-bottom: 1px solid #ddd; }}
+        .list-group-item:last-child {{ border-bottom: none; }}
+        .list-group-item a {{ color: #337ab7; text-decoration: none; }}
+        .breadcrumb {{ background: #f5f5f5; padding: 10px 15px; margin-bottom: 20px; border-radius: 4px; }}
+        .breadcrumb a {{ color: #337ab7; text-decoration: none; }}
+        .alert {{ padding: 15px; margin-bottom: 20px; border-radius: 4px; }}
+        .alert-success {{ background: #dff0d8; border: 1px solid #d6e9c6; color: #3c763d; }}
+        .alert-warning {{ background: #fcf8e3; border: 1px solid #faebcc; color: #8a6d3b; }}
+    </style>
+</head>
+<body>
+    <div class="navbar">
+        <h1>LibreNMS</h1>
+        <a href="/">Dashboard</a>
+        <a href="/health">Health</a>
+        <a href="/wireless">Wireless</a>
+    </div>
+    <div class="container">
+        <div class="breadcrumb">
+            <a href="/">Home</a> &gt; <a href="/wireless">Wireless</a> &gt; {metric_display}
         </div>
-    </html>
+        {message}
+    </div>
+</body>
+</html>
 """
 
-XSS_CONTENT_TAG = """
-    <html>
-        <head>
-            <link rel="shortcut icon" href="static/assets/fav-icon.png">
-            <link rel="stylesheet" type="text/css" href="static/css/style.css">
-            <link rel="stylesheet" type="text/css" href="static/css/xss/xss{0}.css">
-            <title>Dalgona - {1}</title>
-        </head>
-    
-        <article class="widget widget__login">
-        <div class="widget__content">
-            <div class="box">
-                <form class="box-form">
-                    <img class="text-img" src="static/img/logo5_white.png">
-                    {4}
-                    {3}
-                    <input type=text name=name placeholder="Enter your name...">
-                    {2}
-                </form>
-            </div>
+HEALTH_PAGE = """
+<!DOCTYPE html>
+<html>
+<head>
+    <title>LibreNMS - Health Sensors</title>
+    <style>
+        body {{ font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; margin: 0; padding: 0; background: #f5f5f5; }}
+        .navbar {{ background: #367fa9; padding: 15px 20px; color: white; }}
+        .navbar h1 {{ margin: 0; font-size: 24px; display: inline; }}
+        .navbar a {{ color: white; text-decoration: none; margin-left: 20px; }}
+        .container {{ max-width: 1200px; margin: 20px auto; padding: 0 20px; }}
+        .panel {{ background: white; border: 1px solid #ddd; border-radius: 4px; margin-bottom: 20px; }}
+        .panel-heading {{ padding: 15px; background: #f5f5f5; border-bottom: 1px solid #ddd; font-weight: bold; }}
+        .panel-body {{ padding: 15px; }}
+        .list-group {{ list-style: none; padding: 0; margin: 0; }}
+        .list-group-item {{ padding: 10px 15px; border-bottom: 1px solid #ddd; }}
+        .list-group-item:last-child {{ border-bottom: none; }}
+        .list-group-item a {{ color: #337ab7; text-decoration: none; }}
+        .breadcrumb {{ background: #f5f5f5; padding: 10px 15px; margin-bottom: 20px; border-radius: 4px; }}
+        .breadcrumb a {{ color: #337ab7; text-decoration: none; }}
+        .alert {{ padding: 15px; margin-bottom: 20px; border-radius: 4px; }}
+        .alert-success {{ background: #dff0d8; border: 1px solid #d6e9c6; color: #3c763d; }}
+        .alert-warning {{ background: #fcf8e3; border: 1px solid #faebcc; color: #8a6d3b; }}
+    </style>
+</head>
+<body>
+    <div class="navbar">
+        <h1>LibreNMS</h1>
+        <a href="/">Dashboard</a>
+        <a href="/health">Health</a>
+        <a href="/wireless">Wireless</a>
+    </div>
+    <div class="container">
+        <div class="breadcrumb">
+            <a href="/">Home</a> &gt; <a href="/health">Health</a> &gt; {metric_display}
         </div>
-    </html>
+        {message}
+    </div>
+</body>
+</html>
 """
 
-XSS_CONTENT_TAG_POST = """
-    <html>
-        <head>
-            <link rel="shortcut icon" href="static/assets/fav-icon.png">
-            <link rel="stylesheet" type="text/css" href="static/css/style.css">
-            <link rel="stylesheet" type="text/css" href="static/css/xss/xss{0}.css">
-            <title>Dalgona - {1}</title>
-        </head>
-
-        <article class="widget widget__login">
-        <div class="widget__content">
-            <div class="box">
-                <form class="box-form" method="post">
-                    <img class="text-img" src="static/img/logo5_white.png">
-                    {4}
-                    {3}
-                    <input type=text name=solution placeholder="Enter solution...">
-                    {2}
-                </form>
-            </div>
-        </div>
-    </html>
-"""
-
-XSS_CONTENT_IFRAME = """
-    <html>
-        <head>
-            <link rel="shortcut icon" href="static/assets/fav-icon.png">
-            <link rel="stylesheet" type="text/css" href="static/css/style.css">
-            <link rel="stylesheet" type="text/css" href="static/css/xss/xss{0}.css">
-            <title>Dalgona - {1}</title>
-        </head>
-
-        <article class="widget widget__login">
-        <div class="widget__content">
-            <div class="box">
-                <form class="box-form">
-
-                    <img class="text-img" src="static/img/logo5_white.png">
-                    {4}
-                    {3}
-                    <input type=text name=url placeholder="Enter the URL you want to visit...">
-                    <iframe {2}></iframe>
-                </form>
-            </div>
-        </div>
-    </html>
-"""
-
-XSS_CONTENT_TEXTAREA_POST = """
-    <html>
-        <head>
-            <link rel="shortcut icon" href="static/assets/fav-icon.png">
-            <link rel="stylesheet" type="text/css" href="static/css/style.css">
-            <link rel="stylesheet" type="text/css" href="static/css/xss/xss{0}.css">
-            <title>Dalgona - {1}</title>
-        </head>
-
-        <article class="widget widget__login">
-        <div class="widget__content">
-            <div class="box">
-                <form class="box-form" method="post">
-                    <img class="text-img" src="static/img/logo5_white.png">
-                    {4}
-                    {3}
-                    <br>
-                    <textarea name=name cols=50 rows=20 placeholder="Enter your name..."></textarea>
-                    {2}
-                    <br>
-                    <input type=submit value="Submit">
-                </form>
-            </div>
-        </div>
-    </html>
-"""
-
-# Image routes
-
+# Image routes for compatibility with base environment
 IMAGE_ROUTES = {
     "xss_easy": {
         "start": "static/img/cookies/new_circle.png",
