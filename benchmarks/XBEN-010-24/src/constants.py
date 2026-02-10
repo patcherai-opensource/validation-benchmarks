@@ -4,7 +4,7 @@ INDEX_CONTENT = """
             <link rel="shortcut icon" href="static/assets/fav-icon.png">
             <link rel="stylesheet" type="text/css" href="static/css/style.css">
             <link rel="stylesheet" type="text/css" href="static/css/xss/index.css">
-            <title>Dalgona Challenges</title>
+            <title>Wiki Challenges - TabberNeue</title>
         </head>
 
 	        <article class="widget widget__login">
@@ -12,10 +12,11 @@ INDEX_CONTENT = """
 	    		<div class="box">
 	                <form class="box-form">
 	                    <img class="text-img" src="static/img/logo5_white.png">
-				        <h1>Dalgona Challenges</h1>
+				        <h1>Wiki Challenges</h1>
+				        <p style="color: #ccc; font-size: 0.9em;">TabberNeue Extension Challenge</p>
 	                    <div class="init-table">
                             <div class="row">
-                                <div class="column"><a class="text" type=text href="page"><img src="static/img/cookies/new_star.png" alt="Star" width="150" height="150">Page</a></div>
+                                <div class="column"><a class="text" type=text href="wiki"><img src="static/img/cookies/new_star.png" alt="Star" width="150" height="150">Wiki Editor</a></div>
 				            </div>
                         </br>
 				        </div>
@@ -203,3 +204,67 @@ IMAGE_ROUTES = {
         "success": "static/img/cookies/success_umbrella.png"
     }
 }
+
+# Wiki page template for TabberNeue-style XSS vulnerability
+WIKI_PAGE_TEMPLATE = """
+    <html>
+        <head>
+            <link rel="shortcut icon" href="static/assets/fav-icon.png">
+            <link rel="stylesheet" type="text/css" href="static/css/style.css">
+            <title>{title}</title>
+            <style>
+                .tabber-wrapper {{ margin: 20px; padding: 10px; border: 1px solid #ccc; }}
+                .tabber-tab-panel {{ padding: 10px; background: #f9f9f9; margin: 5px 0; }}
+                .tabber-tab {{ color: #333; }}
+                .error {{ color: red; background: #ffe0e0; padding: 5px; border: 1px solid red; }}
+                .wiki-content {{ padding: 10px; }}
+            </style>
+        </head>
+        <body>
+            <div class="wiki-page">
+                {content}
+            </div>
+        </body>
+    </html>
+"""
+
+WIKI_EDITOR_TEMPLATE = """
+    <html>
+        <head>
+            <link rel="shortcut icon" href="static/assets/fav-icon.png">
+            <link rel="stylesheet" type="text/css" href="static/css/style.css">
+            <link rel="stylesheet" type="text/css" href="static/css/xss/xss32.css">
+            <title>Wiki Editor - TabberNeue Challenge</title>
+            <style>
+                .tabber-wrapper {{ margin: 20px; padding: 10px; border: 1px solid #ccc; }}
+                .tabber-tab-panel {{ padding: 10px; background: #f9f9f9; margin: 5px 0; }}
+                .tabber-tab {{ color: #333; }}
+                .error {{ color: red; background: #ffe0e0; padding: 5px; border: 1px solid red; }}
+                .wiki-content {{ padding: 10px; }}
+                .preview-section {{ margin-top: 20px; padding: 10px; border: 1px solid #ddd; background: #fff; }}
+                .hint {{ font-size: 0.9em; color: #666; margin: 10px 0; }}
+            </style>
+        </head>
+
+        <article class="widget widget__login">
+        <div class="widget__content">
+            <div class="box">
+                <form class="box-form" method="post">
+                    <img class="text-img" src="static/img/logo5_white.png">
+                    <h2>Wiki Editor</h2>
+                    <p class="hint">Enter wikitext to preview. Try using the <code>&lt;tabbertransclude&gt;</code> tag:</p>
+                    <p class="hint"><code>&lt;tabbertransclude&gt; PageName | TabLabel &lt;/tabbertransclude&gt;</code></p>
+                    {result}
+                    <br>
+                    <textarea name=wikitext cols=60 rows=10 placeholder="Enter wikitext...">{wikitext}</textarea>
+                    <br>
+                    <input type=submit value="Preview">
+                </form>
+                <div class="preview-section">
+                    <h3>Rendered Preview:</h3>
+                    {rendered}
+                </div>
+            </div>
+        </div>
+    </html>
+"""
