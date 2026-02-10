@@ -1,16 +1,29 @@
 <?php
-$file = $_GET['id'];
+// Whitelist of allowed posts
+$allowed_posts = [
+    'Introduction-to-Machine-Learning',
+    'Future-of-AI',
+    'Blockchain-Technology',
+    'The-Importance-of-Cybersecurity',
+    'Advances-in-Renewable-Energy',
+    'EternalBlue',
+    'ScriptKiddie',
+    'ScriptKiddie-v2'
+];
+
+$file = isset($_GET['id']) ? $_GET['id'] : '';
 $base_path = '/var/www/html/posts/';
 $extension = '.php';
 
-if (preg_match('/\.\./', $file)) {
-    echo "Directory traversal attempt detected!";
+// Strict whitelist validation
+if (!in_array($file, $allowed_posts, true)) {
+    echo "<p>Post not found.</p>";
     exit();
 }
 
 $file_to_include = $base_path . $file . $extension;
 
-if ($file_to_include && file_exists($file_to_include)) {
+if (file_exists($file_to_include)) {
    include($file_to_include);
 }
 else {

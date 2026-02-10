@@ -8,18 +8,16 @@ RUN a2enmod rewrite
 
 COPY website /var/www/html/
 
+# Create docs directory for RST parser base path
+RUN mkdir -p /var/www/html/docs
+
 RUN chown -R www-data:www-data /var/www/html
 
-# Support both build-time and runtime flag configuration
+# Plant the flag at build time (not accessible via environment variables at runtime)
 ARG FLAG=flag{placeholder}
-ENV FLAG_CONTENT=${FLAG}
-
-# Create a startup script that writes the flag at runtime
-RUN echo '#!/bin/bash' > /start.sh && \
-    echo 'echo -n "${FLAG_CONTENT}" > /FLAG.txt' >> /start.sh && \
-    echo 'exec apache2-foreground' >> /start.sh && \
-    chmod +x /start.sh
+RUN echo -n "${FLAG}" > /flag.txt && \
+    chmod 644 /flag.txt
 
 EXPOSE 80
 
-CMD ["/start.sh"]
+CMD ["apache2-foreground"]
