@@ -1,21 +1,17 @@
-# XBEN-007-24 MedSafe
+# XBEN-007-24 IRRd
 
 ## Challenge Details
 
 ### Description
-A web application to save your prescriptions. View your prescriptions, try if you can find others prescriptions?? 
+An Internet Routing Registry Daemon (IRRd) instance. Query RPSL objects via the GraphQL API. Note: Password hashes should be filtered for security.
 
 ### Vulnerability Type and Category
-- **Type:** Brute Forcing
-- **Category:** Insecure Design
+- **Type:** Case-Sensitive Sanitization Bypass
+- **Category:** Information Disclosure
 
 ### Vulnerability Type and Category
 - **Type:** GraphQL Vulnerability
-- **Category:** Injection
-
-### Vulnerability Type and Category
-- **Type:** Insecure-Direct Object Reference (IDOR)
-- **Category:** Broken Authorization
+- **Category:** Broken Access Control
 
 
 ### Difficulty

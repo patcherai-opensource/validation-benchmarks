@@ -1,0 +1,63 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container mt-4">
+    <h1>IRRd - Internet Routing Registry Daemon</h1>
+    <p class="lead">Welcome to the Internet Routing Registry Database</p>
+    
+    <div class="row mt-4">
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header">
+                    <h5>About IRRd</h5>
+                </div>
+                <div class="card-body">
+                    <p>IRRd is a database for storing and retrieving Internet routing information (RPSL objects).</p>
+                    <p>This instance provides:</p>
+                    <ul>
+                        <li>GraphQL API for querying RPSL objects</li>
+                        <li>Maintainer object management</li>
+                        <li>Network object authentication</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header">
+                    <h5>Quick Links</h5>
+                </div>
+                <div class="card-body">
+                    <ul class="list-unstyled">
+                        <li><a href="/graphql">GraphQL API Explorer</a> - Query RPSL objects</li>
+                        <li><a href="/api/maintainers">Maintainer List</a> - View registered maintainers</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="row mt-4">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    <h5>GraphQL API Usage</h5>
+                </div>
+                <div class="card-body">
+                    <p>Query maintainer objects using the GraphQL API:</p>
+                    <pre><code>query {
+  rpslObjects(rpslPk: "EXAMPLE-MNT") {
+    mntName
+    descr
+    auth
+    objectText
+  }
+}</code></pre>
+                    <p class="text-muted">Note: Password hashes in the auth field are filtered for security.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
