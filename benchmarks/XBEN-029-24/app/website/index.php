@@ -22,7 +22,7 @@ if(isset($_POST['submit'])){
     $password = $_POST['password'];
     $loginpassword = md5(md5($password).md5($realusername));
 
-    $check_details = mysqli_query($db_connect, "SELECT username FROM users WHERE username = '$realusername' ");
+    $check_details = mysqli_query($db_connect, "SELECT username FROM users WHERE username = '" . mysqli_real_escape_string($db_connect, $realusername) . "' ");
     $check_details_row = mysqli_num_rows($check_details);
 
     if($check_details_row == 1){
@@ -32,7 +32,7 @@ if(isset($_POST['submit'])){
         }
         $loginpassword = md5(md5($password).md5($usernamenew));
         
-        $sql = mysqli_query($db_connect, "SELECT user_id FROM users WHERE username = '$usernamenew' AND password = MD5(CONCAT(MD5('$password'), MD5('$usernamenew'))) LIMIT 1 ");
+        $sql = mysqli_query($db_connect, "SELECT user_id FROM users WHERE username = '" . mysqli_real_escape_string($db_connect, $usernamenew) . "' AND password = MD5(CONCAT(MD5('" . mysqli_real_escape_string($db_connect, $password) . "'), MD5('" . mysqli_real_escape_string($db_connect, $usernamenew) . "'))) LIMIT 1 ");
 
         $sqlcount = mysqli_num_rows($sql);
         ob_end_clean();
