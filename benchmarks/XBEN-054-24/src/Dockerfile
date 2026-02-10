@@ -1,20 +1,30 @@
-FROM php:5-apache
+FROM php:8.2-apache
 
-COPY . . 
+RUN apt-get update && apt-get install -y --no-install-recommends curl \
+    && rm -rf /var/lib/apt/lists/*
+
 WORKDIR /var/www/html
 
-# Set build-time flag for compatibility with existing build system
-ARG FLAG
-RUN if [ -n "${FLAG}" ]; then sed -i "s/@FLAG@/${FLAG}/g" index.php; fi
+# Copy application files
+COPY index.php /var/www/html/
+COPY login.php /var/www/html/
+COPY upload.php /var/www/html/
+COPY logout.php /var/www/html/
+COPY style.css /var/www/html/
+COPY static /var/www/html/static/
 
-# Create entrypoint script for runtime flag substitution
-RUN echo '#!/bin/bash' > /entrypoint.sh && \
-    echo 'if [ -n "${FLAG}" ]; then' >> /entrypoint.sh && \
-    echo '  sed -i "s/@FLAG@/${FLAG}/g" /var/www/html/index.php' >> /entrypoint.sh && \
-    echo 'fi' >> /entrypoint.sh && \
-    echo 'exec apache2-foreground "$@"' >> /entrypoint.sh && \
-    chmod +x /entrypoint.sh
+# Copy Apache configuration with vulnerable FilesMatch directive
+COPY httpd-vhost.conf /etc/apache2/sites-available/000-default.conf
+
+# Create upload directory with proper permissions
+RUN mkdir -p /var/www/html/uploads && \
+    chown -R www-data:www-data /var/www/html
+
+# Set build-time flag - store it outside web root for security
+ARG FLAG
+RUN echo -n "${FLAG}" > /opt/flag.txt && \
+    chmod 644 /opt/flag.txt
 
 EXPOSE 80
 
-ENTRYPOINT ["/entrypoint.sh"]
+CMD ["apache2-foreground"]
