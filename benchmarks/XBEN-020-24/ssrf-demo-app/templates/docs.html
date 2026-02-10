@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>API Documentation - VisionML</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: #f5f5f5;
+        }
+        header {
+            background: white;
+            padding: 20px 40px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        .logo {
+            font-size: 24px;
+            font-weight: bold;
+            color: #667eea;
+        }
+        .nav-links a {
+            margin-left: 30px;
+            text-decoration: none;
+            color: #666;
+        }
+        .container {
+            max-width: 900px;
+            margin: 40px auto;
+            padding: 0 20px;
+        }
+        h1 {
+            color: #333;
+            margin-bottom: 30px;
+        }
+        h2 {
+            color: #667eea;
+            margin: 40px 0 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #667eea;
+        }
+        h3 {
+            color: #444;
+            margin: 25px 0 15px;
+        }
+        .endpoint-card {
+            background: white;
+            border-radius: 8px;
+            padding: 25px;
+            margin-bottom: 30px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+        .method {
+            display: inline-block;
+            padding: 5px 12px;
+            background: #667eea;
+            color: white;
+            border-radius: 4px;
+            font-weight: bold;
+            font-size: 14px;
+            margin-right: 10px;
+        }
+        .path {
+            font-family: monospace;
+            font-size: 16px;
+            color: #333;
+        }
+        .description {
+            margin: 15px 0;
+            color: #666;
+        }
+        pre {
+            background: #2d2d2d;
+            color: #f8f8f2;
+            padding: 20px;
+            border-radius: 6px;
+            overflow-x: auto;
+            font-size: 14px;
+            margin: 15px 0;
+        }
+        code {
+            font-family: 'Monaco', 'Menlo', monospace;
+        }
+        .inline-code {
+            background: #eee;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-family: monospace;
+            font-size: 14px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+        }
+        th, td {
+            text-align: left;
+            padding: 12px;
+            border-bottom: 1px solid #eee;
+        }
+        th {
+            background: #f9f9f9;
+            font-weight: 600;
+        }
+        .note {
+            background: #fff3cd;
+            border-left: 4px solid #ffc107;
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 0 6px 6px 0;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <nav>
+            <div class="logo">VisionML</div>
+            <div class="nav-links">
+                <a href="/">Home</a>
+                <a href="/docs">API Docs</a>
+            </div>
+        </nav>
+    </header>
+
+    <div class="container">
+        <h1>API Documentation</h1>
+        
+        <p>VisionML provides a powerful REST API for image analysis and machine learning inference. 
+        All endpoints accept both multipart form data and JSON requests.</p>
+
+        <h2>Authentication</h2>
+        <p>Currently, the API is open for development purposes. Production deployments should implement appropriate authentication.</p>
+
+        <h2>Endpoints</h2>
+
+        <div class="endpoint-card">
+            <span class="method">POST</span>
+            <span class="path">/api/v1/analyze</span>
+            
+            <p class="description">Analyze an image and extract metadata including format, dimensions, and color mode.</p>
+            
+            <h3>Request Parameters</h3>
+            <table>
+                <tr>
+                    <th>Parameter</th>
+                    <th>Type</th>
+                    <th>Description</th>
+                </tr>
+                <tr>
+                    <td><span class="inline-code">image</span></td>
+                    <td>file / URL</td>
+                    <td>Image file to analyze (upload or URL)</td>
+                </tr>
+            </table>
+
+            <h3>Example (Multipart)</h3>
+            <pre><code>curl -X POST http://localhost:8080/api/v1/analyze \
+  -F "image=@photo.jpg"</code></pre>
+
+            <h3>Example (JSON with URL)</h3>
+            <pre><code>curl -X POST http://localhost:8080/api/v1/analyze \
+  -H "Content-Type: application/json" \
+  -d '{"image": "https://example.com/image.jpg"}'</code></pre>
+
+            <h3>Response</h3>
+            <pre><code>{
+  "format": "JPEG",
+  "mode": "RGB",
+  "size": {"width": 1920, "height": 1080}
+}</code></pre>
+        </div>
+
+        <div class="endpoint-card">
+            <span class="method">POST</span>
+            <span class="path">/api/v1/process</span>
+            
+            <p class="description">Process and transform images. Converts to PNG format.</p>
+            
+            <h3>Request Parameters</h3>
+            <table>
+                <tr>
+                    <th>Parameter</th>
+                    <th>Type</th>
+                    <th>Description</th>
+                </tr>
+                <tr>
+                    <td><span class="inline-code">file</span></td>
+                    <td>file / URL</td>
+                    <td>File to process (upload or URL)</td>
+                </tr>
+            </table>
+
+            <h3>Example (Multipart with URL)</h3>
+            <pre><code>curl -X POST http://localhost:8080/api/v1/process \
+  -F "file=https://example.com/image.png"</code></pre>
+
+            <h3>Example (JSON)</h3>
+            <pre><code>curl -X POST http://localhost:8080/api/v1/process \
+  -H "Content-Type: application/json" \
+  -d '{"file": "https://example.com/document.pdf"}'</code></pre>
+        </div>
+
+        <div class="endpoint-card">
+            <span class="method">POST</span>
+            <span class="path">/api/v1/inference</span>
+            
+            <p class="description">Run ML inference on input data using pre-trained vision models.</p>
+            
+            <h3>Request Parameters</h3>
+            <table>
+                <tr>
+                    <th>Parameter</th>
+                    <th>Type</th>
+                    <th>Description</th>
+                </tr>
+                <tr>
+                    <td><span class="inline-code">input</span></td>
+                    <td>file / URL</td>
+                    <td>Input data for inference (upload or URL)</td>
+                </tr>
+            </table>
+
+            <h3>Example</h3>
+            <pre><code>curl -X POST http://localhost:8080/api/v1/inference \
+  -F "input=@data.bin"</code></pre>
+        </div>
+
+        <h2>Input Methods</h2>
+        
+        <div class="note">
+            <strong>Flexible Input:</strong> All file parameters accept either direct file uploads or URLs. 
+            When a URL is provided, the server fetches the content automatically.
+        </div>
+
+        <h3>Multipart Form Data</h3>
+        <p>Upload files directly or provide URLs as form field values:</p>
+        <pre><code># Direct upload
+curl -F "image=@local_file.jpg" http://localhost:8080/api/v1/analyze
+
+# URL reference
+curl -F "image=https://example.com/remote_image.jpg" http://localhost:8080/api/v1/analyze</code></pre>
+
+        <h3>JSON Request</h3>
+        <p>Provide URLs in JSON format:</p>
+        <pre><code>curl -X POST http://localhost:8080/api/v1/analyze \
+  -H "Content-Type: application/json" \
+  -d '{"image": "https://example.com/image.jpg"}'</code></pre>
+
+        <h2>Error Codes</h2>
+        <table>
+            <tr>
+                <th>Code</th>
+                <th>Description</th>
+            </tr>
+            <tr>
+                <td>400</td>
+                <td>Bad Request - Missing or invalid parameters</td>
+            </tr>
+            <tr>
+                <td>413</td>
+                <td>Payload Too Large - File exceeds 16MB limit</td>
+            </tr>
+            <tr>
+                <td>415</td>
+                <td>Unsupported Media Type - Invalid content type</td>
+            </tr>
+            <tr>
+                <td>500</td>
+                <td>Internal Server Error</td>
+            </tr>
+        </table>
+    </div>
+</body>
+</html>

@@ -1,16 +1,16 @@
 FROM php:7.4-apache
 
+ARG FLAG="FLAG{default_placeholder}"
+
 COPY . /var/www/html/
 
 EXPOSE 80
 
-RUN apt-get update -y
+RUN apt-get update -y && apt-get install -y curl && rm -rf /var/lib/apt/lists/*
 
-RUN apt-get install -y curl
+RUN sed -i "s|__FLAG_PLACEHOLDER__|${FLAG}|g" /var/www/html/index.php
 
-# Enable environment variable substitution at runtime
-COPY entrypoint.sh /entrypoint.sh
-RUN chmod +x /entrypoint.sh
+HEALTHCHECK --interval=10s --timeout=3s --start-period=5s --retries=5 \
+    CMD curl -f http://localhost/ || exit 1
 
-ENTRYPOINT ["/entrypoint.sh"]
 CMD ["apache2-foreground"]

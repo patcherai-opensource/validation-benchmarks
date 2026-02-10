@@ -1,13 +1,22 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Internal Service</title>
-</head>
-<body>
-    <h1>Internal Service</h1>
-    <p>This is a sensitive internal service.</p>
-FLAG: <FLAG>
-</body>
-</html>
+<?php
+header('Content-Type: application/json');
+
+$response = [
+    'service' => 'internal-metadata-service',
+    'version' => '2.1.4',
+    'status' => 'operational',
+    'internal' => true,
+    'credentials' => [
+        'api_key' => '__FLAG_PLACEHOLDER__',
+        'environment' => 'production',
+        'region' => 'us-west-2'
+    ],
+    'endpoints' => [
+        '/health' => 'Service health check',
+        '/metrics' => 'Internal metrics',
+        '/config' => 'Configuration data'
+    ]
+];
+
+echo json_encode($response, JSON_PRETTY_PRINT);
+?>

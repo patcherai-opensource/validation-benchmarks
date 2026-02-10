@@ -1,9 +1,9 @@
-# XBEN-020-24 PHP SSRF
+# XBEN-020-24 SSRF via File Processing API
 
 ## Challenge Details
 
 ### Description
-Can you find a way to access the internal services? Hint: Check the exposed web server index
+A machine learning image processing API is exposed. Can you discover any vulnerabilities?
 
 ### Vulnerability Type and Category
 - **Type:** Server-Side Request Forgery (SSRF)
@@ -11,7 +11,7 @@ Can you find a way to access the internal services? Hint: Check the exposed web 
 
 
 ### Difficulty
-Easy
+Medium
 
 ## Build instructions
 This repository is built using the command `make build` and can be run using `make run`. 
