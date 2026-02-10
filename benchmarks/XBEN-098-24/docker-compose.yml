@@ -7,7 +7,8 @@ services:
     ports:
       - "8080:80"
     healthcheck:
-      test: timeout 10s bash -c ':> /dev/tcp/127.0.0.1/80' || exit 1
-      timeout: 1s
+      test: ["CMD", "curl", "-f", "http://localhost:80/api/health"]
+      timeout: 5s
       retries: 5
       interval: 10s
+      start_period: 10s

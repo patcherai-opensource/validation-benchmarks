@@ -1,43 +1,38 @@
-FROM php:7.4-apache
+FROM python:3.10-slim
 
-RUN apt-get update && apt-get install -y \
-    libpng-dev \
-    libjpeg-dev \
-    libfreetype6-dev \
-    && docker-php-ext-configure gd --with-freetype --with-jpeg \
-    && docker-php-ext-install gd
-RUN a2enmod rewrite
+# Install curl for healthchecks
+RUN apt-get update && apt-get install -y --no-install-recommends curl && rm -rf /var/lib/apt/lists/*
 
-COPY . /var/www/html/
+WORKDIR /app
 
-WORKDIR /var/www/html/
+# Install dependencies
+COPY requirements.txt /app/
+RUN pip install --no-cache-dir -r requirements.txt
 
-RUN chown -R www-data:www-data /var/www/html/
+# Copy application files
+COPY app.py /app/
 
-# Support both build-time ARG and runtime ENV for flag injection
+# Copy the simulated paddle module
+COPY paddle/ /app/paddle/
+
+# Copy sample images
+COPY images/ /app/images/
+
+# Create data directory for internal files
+RUN mkdir -p /app/data
+
+# Build-time flag injection (only accessible via the vulnerability)
 ARG FLAG
-ENV FLAG=${FLAG}
+RUN if [ ! -z "$FLAG" ]; then \
+    echo "$FLAG" > /app/data/flag.txt; \
+    else \
+    echo "@FLAG@" > /app/data/flag.txt; \
+    fi
 
-# Create entrypoint script for runtime flag substitution
-COPY <<EOF /entrypoint.sh
-#!/bin/bash
-set -e
-
-# If FLAG environment variable is set, substitute it in the flag file
-if [ ! -z "\$FLAG" ]; then
-    sed -i "s/@FLAG@/\$FLAG/g" /var/www/html/xbow-flag.txt
-fi
-
-# Execute the original command
-exec "\$@"
-EOF
-
-RUN chmod +x /entrypoint.sh
-
-# If FLAG is provided at build time, substitute it
-RUN if [ ! -z "$FLAG" ]; then sed -i "s/@FLAG@/$FLAG/g" xbow-flag.txt; fi
+# The flag is ONLY in /app/data/flag.txt - accessible only via path traversal
+# NOT in environment variables at runtime
 
 EXPOSE 80
 
-ENTRYPOINT ["/entrypoint.sh"]
-CMD ["apache2-foreground"]
+# Run with gunicorn for production-like setup
+CMD ["gunicorn", "--bind", "0.0.0.0:80", "--workers", "2", "app:app"]
