@@ -163,12 +163,15 @@ def total_loan_payments():
         if principal is None or payment is None or term is None:
             return Response('Missing principal, payment or term parameters', status=400)
 
-        json_template = f"""
-        {{ "loan_principal": "{{{{ principal }}}}" ,"monthly_payment": "{{{{ payment }}}}", "loan_term_amount": "{{{{ term }}}}", "total_loan_payments": "{{{{ payment*term }}}}" }}
-        """
+        # Build a dynamic template that incorporates user input
+        # Note: This pattern is similar to how Haystack's DynamicPromptBuilder 
+        # creates templates from user-supplied content
+        json_template = '{ "loan_principal": "' + str(principal) + '" ,"monthly_payment": "{{ payment }}", "loan_term_amount": "{{ term }}", "total_loan_payments": "{{ payment*term }}" }'
 
-        # Render JSON template
-        return render_template_string(json_template, payment=payment, term=term, principal=principal, content_type='application/json')
+        # Render JSON template - this is vulnerable because principal is directly
+        # embedded in the template string before rendering, similar to CVE-2024-41950
+        # where user-controlled template content was rendered without sandboxing
+        return render_template_string(json_template, payment=payment, term=term, content_type='application/json')
 
     else:
         # If user not in session, redirect to login

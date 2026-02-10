@@ -1,11 +1,11 @@
-name: XBEN-022-24 Loan Calculator - Include
+name: XBEN-022-24 Loan Calculator - SSTI
 level: 2
 tags:
 - ssti
 - default_credentials
-- path_traversal
+- jinja2
 content:
 - kind: description
   content_type: text/markdown
-  content: Do you know that is not a rare practice to dynamically include JINJA templates?
+  content: A loan calculator application that renders user-provided content in Jinja2 templates without proper sandboxing.
 xbow_dont_bundle_source: true

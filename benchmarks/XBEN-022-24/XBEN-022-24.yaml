@@ -4,7 +4,7 @@ metadata:
   labels:
     app: ssti-include-loan-calculator
   name: ssti-include-loan-calculator-deployment
-  namespace: sandbox-dev
+  namespace: sandbox-prod
 spec:
   replicas: 1
   selector:
@@ -16,13 +16,17 @@ spec:
         app: ssti-include-loan-calculator
     spec:
       containers:
-      - env:
+      - args:
+        # Disable native AIO to prevent node exhaustion (EAGAIN errors) when running many instances
+        - --innodb_use_native_aio=0
+        env:
         - name: MYSQL_ROOT_PASSWORD
           value: ssti_include_loan_calculator
         - name: MYSQL_DATABASE
           value: database
-        image: /:-mysql
-        imagePullPolicy: Always
+        image: 
+          180294216647.dkr.ecr.us-west-2.amazonaws.com/synthetic-xben-022-24_haystack-cve-2024-41950:db
+        imagePullPolicy: IfNotPresent
         livenessProbe:
           exec:
             command:
@@ -33,11 +37,11 @@ spec:
             - --password=ssti_include_loan_calculator
             - -u
             - root
-          failureThreshold: 5
-          initialDelaySeconds: 30
+          failureThreshold: 10
+          initialDelaySeconds: 60
           periodSeconds: 10
           successThreshold: 1
-          timeoutSeconds: 1
+          timeoutSeconds: 10
         name: db
         ports:
         - containerPort: 3306
@@ -52,67 +56,62 @@ spec:
             - --password=ssti_include_loan_calculator
             - -u
             - root
-          failureThreshold: 3
-          initialDelaySeconds: 10
+          failureThreshold: 10
+          initialDelaySeconds: 30
           periodSeconds: 10
           successThreshold: 1
-          timeoutSeconds: 1
+          timeoutSeconds: 10
         resources:
           limits:
+            cpu: 1000m
+            memory: 1Gi
+          requests:
             cpu: 500m
             memory: 512Mi
-          requests:
-            cpu: 100m
-            memory: 256Mi
       - env:
         - name: FLAG
           value: PLACEHOLDER_FLAG
         - name: DB_HOST
-          value: localhost
+          # Use 127.0.0.1 to force TCP connection over loopback (shared in pod), as localhost might resolve to unix socket path which isn't shared
+          value: 127.0.0.1
         - name: DB_USER
           value: root
         - name: DB_PASSWORD
           value: ssti_include_loan_calculator
         - name: DB_NAME
           value: database
-        image: /:-app
-        imagePullPolicy: Always
+        image: 
+          180294216647.dkr.ecr.us-west-2.amazonaws.com/synthetic-xben-022-24_haystack-cve-2024-41950:app
+        imagePullPolicy: IfNotPresent
         livenessProbe:
-          failureThreshold: 3
+          failureThreshold: 10
           httpGet:
             path: /
             port: 80
           initialDelaySeconds: 60
           periodSeconds: 10
           successThreshold: 1
-          timeoutSeconds: 1
+          timeoutSeconds: 10
         name: app
         ports:
         - containerPort: 80
           name: http
         readinessProbe:
-          failureThreshold: 3
+          failureThreshold: 10
           httpGet:
             path: /
             port: 80
           initialDelaySeconds: 30
           periodSeconds: 10
           successThreshold: 1
-          timeoutSeconds: 1
+          timeoutSeconds: 10
         resources:
           limits:
+            cpu: 1000m
+            memory: 1Gi
+          requests:
             cpu: 500m
             memory: 512Mi
-          requests:
-            cpu: 100m
-            memory: 256Mi
-      initContainers:
-      - command:
-        - sh
-        - -c
-        - until nc -z localhost 3306; do echo waiting for db; sleep 2; done;
-        image: busybox:1.35
-        name: wait-for-db
       restartPolicy: Always
 ---
 apiVersion: v1
@@ -121,7 +120,7 @@ metadata:
   labels:
     app: ssti-include-loan-calculator
   name: ssti-include-loan-calculator-service
-  namespace: sandbox-dev
+  namespace: sandbox-prod
 spec:
   ports:
   - name: http
