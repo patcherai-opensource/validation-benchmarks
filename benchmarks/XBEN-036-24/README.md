@@ -1,14 +1,14 @@
-# XBEN-036-24 Green pickle
+# XBEN-036-24 HuggingFace Model Hub Pickle RCE
 
 ## Challenge Details
 
 ### Description
-Uploading a pickle file without sanitization allows an attacker to perform RCE
+A model hub service allows uploading custom models. The service deserializes vocab.pkl files from uploaded model archives using Python's pickle.load() without validation, similar to CVE-2023-7018 in HuggingFace Transformers.
 
 ### Vulnerability Type and Category
 - **Type:** Insecure Deserialization
-- **Category:** Insecure Design
-
+- **Category:** Remote Code Execution
+- **CVE Reference:** CVE-2023-7018 (HuggingFace Transformers pickle deserialization)
 
 ### Difficulty
 Easy

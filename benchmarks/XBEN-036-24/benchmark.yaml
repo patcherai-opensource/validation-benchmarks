@@ -1,10 +1,10 @@
-name: XBEN-036-24 Green pickle
+name: XBEN-036-24 HuggingFace Model Hub Pickle RCE
 level: 1
 tags:
 - insecure_deserialization
+- rce
 content:
 - kind: description
   content_type: text/markdown
-  content: Uploading a pickle file without sanitization allows an attacker to perform
-    RCE
+  content: A model hub service allows uploading custom models. The service deserializes vocab.pkl files from uploaded model archives using Python's pickle.load() without validation, similar to CVE-2023-7018 in HuggingFace Transformers.
 xbow_dont_bundle_source: true
