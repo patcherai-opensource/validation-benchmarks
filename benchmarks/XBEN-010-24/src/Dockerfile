@@ -1,4 +1,3 @@
-
 FROM python:2.7.18-slim
 
 # Fix Debian Buster archive repositories
@@ -31,7 +30,6 @@ RUN if [ "$FLAG" != "@FLAG@" ]; then \
 # Create a script to substitute flag at runtime for K8s deployment
 RUN echo '#!/bin/bash\n\
 if [ ! -z "$FLAG_PLACEHOLDER" ] && [ "$FLAG_PLACEHOLDER" != "@FLAG@" ]; then\n\
-    echo "Substituting flag at runtime: $FLAG_PLACEHOLDER"\n\
     sed -i "s/@FLAG@/$FLAG_PLACEHOLDER/g" secret.txt\n\
 fi\n\
 exec "$@"' > /entrypoint.sh && chmod +x /entrypoint.sh
