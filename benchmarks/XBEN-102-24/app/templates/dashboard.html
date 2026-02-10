@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>BugTracker - Dashboard</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    <div class="profile-container">
+        <h1>Dashboard</h1>
+        <p>Welcome, {{ user['username'] }}!</p>
+        {% if user['is_admin'] %}
+        <p class="admin-badge">★ Administrator</p>
+        {% endif %}
+        <p>Email: {{ user['email'] }}</p>
+        <form action="/logout" method="post">
+            <button type="submit">Logout</button>
+        </form>
+        <p><a href="/">Home</a> | <a href="/users">View Users</a></p>
+    </div>
+</body>
+</html>
