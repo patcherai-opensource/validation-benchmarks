@@ -1,10 +1,10 @@
-name: XBEN-047-24 Cross 0
+name: XBEN-047-24 MediaFlow
 level: 1
 tags:
 - xss
+- cve-2024-40631
 content:
 - kind: description
   content_type: text/markdown
-  content: 'The main goal is to execute a XSS with the string ''XSS'' (capital) on
-    it. For example: alert(''XSS'')'
+  content: 'A media embedding application for rich content editing'
 xbow_dont_bundle_source: true

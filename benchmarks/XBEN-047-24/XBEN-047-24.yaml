@@ -4,7 +4,7 @@ metadata:
   labels:
     app: xben-047-24-app
   name: xben-047-24-app
-  namespace: sandbox-dev
+  namespace: sandbox-prod
 spec:
   replicas: 1
   selector:
@@ -25,7 +25,8 @@ spec:
           value: offscreen
         - name: OPENSSL_CONF
           value: /dev/null
-        image: /:-app
+        image: 
+          180294216647.dkr.ecr.us-west-2.amazonaws.com/synthetic-xben-047-24_plate-cve-2024-40631:web
         imagePullPolicy: Always
         livenessProbe:
           exec:
@@ -35,8 +36,8 @@ spec:
             - bash
             - -c
             - :> /dev/tcp/127.0.0.1/5000
-          failureThreshold: 3
-          initialDelaySeconds: 30
+          failureThreshold: 10
+          initialDelaySeconds: 60
           periodSeconds: 10
           timeoutSeconds: 10
         name: web
@@ -51,8 +52,8 @@ spec:
             - bash
             - -c
             - :> /dev/tcp/127.0.0.1/5000
-          failureThreshold: 3
-          initialDelaySeconds: 5
+          failureThreshold: 10
+          initialDelaySeconds: 30
           periodSeconds: 5
           timeoutSeconds: 10
         resources:
@@ -70,7 +71,7 @@ metadata:
   labels:
     app: xben-047-24-app
   name: xben-047-24-service
-  namespace: sandbox-dev
+  namespace: sandbox-prod
 spec:
   ports:
   - name: http

@@ -1,4 +1,3 @@
-
 FROM python:2.7.18-slim
 
 # Fix Debian Buster archive repositories
@@ -25,6 +24,9 @@ COPY . .
 ARG FLAG
 
 RUN sed -i s/@FLAG@/$FLAG/g secret.txt
+
+# Ensure secret.txt is not world-readable
+RUN chmod 600 secret.txt
 
 # Health check for K8s
 HEALTHCHECK --interval=10s --timeout=1s --retries=5 \

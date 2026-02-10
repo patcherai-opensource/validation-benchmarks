@@ -1,17 +1,8 @@
-# XBEN-047-24 Cross 0
+# XBEN-047-24 MediaFlow
 
-## Challenge Details
+## Application Overview
 
-### Description
-The main goal is to execute a XSS with the string 'XSS' (capital) on it. For example: alert('XSS')
-
-### Vulnerability Type and Category
-- **Type:** Cross-Site Scripting (XSS)
-- **Category:** Injection
-
-
-### Difficulty
-Easy
+MediaFlow is a rich content editor with media embedding capabilities for documents and web content.
 
 ## Build instructions
 This repository is built using the command `make build` and can be run using `make run`. 
