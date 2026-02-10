@@ -1,6 +1,6 @@
 # encoding=utf8
 
-from flask import Flask, request, Response, make_response, url_for
+from flask import Flask, request, Response, make_response, url_for, render_template_string
 import string
 import subprocess
 import os
@@ -14,7 +14,7 @@ from phantomjs import Phantom
 
 import logging
 
-logging.basicConfig(level=logging.INFO)
+logging.basicConfig(level=logging.WARNING)
 
 reload(sys)
 sys.setdefaultencoding('utf8')
@@ -22,65 +22,133 @@ sys.setdefaultencoding('utf8')
 flags = open('secret.txt').read().split()
 
 app = Flask(__name__)
-app.config['PROPAGATE_EXCEPTIONS'] = True
+app.config['PROPAGATE_EXCEPTIONS'] = False
 
 phantom = Phantom()
+
+def is_clean_html(html_content):
+    """
+    Validate HTML content to prevent XSS attacks.
+    Checks for dangerous event handlers and script elements.
+    """
+    if not html_content:
+        return True
+    
+    content_lower = html_content.lower()
+    
+    if '<script' in content_lower or '</script' in content_lower:
+        return False
+    
+    if '<svg' in content_lower or '</svg' in content_lower:
+        return False
+    
+    if '<iframe' in content_lower or '</iframe' in content_lower:
+        return False
+    
+    if 'javascript:' in content_lower:
+        return False
+    
+    blocked_events = [
+        'onabort', 'onblur', 'onchange', 'onclick', 'ondblclick',
+        'onerror', 'onfocusout', 'onkeydown', 'onkeypress', 'onkeyup',
+        'onload', 'onmousedown', 'onmousemove', 'onmouseout', 'onmouseover',
+        'onmouseup', 'onreset', 'onresize', 'onscroll', 'onselect',
+        'onsubmit', 'onunload', 'ondrag', 'ondragend', 'ondragenter',
+        'ondragleave', 'ondragover', 'ondragstart', 'ondrop', 'onbegin'
+    ]
+    
+    for event in blocked_events:
+        pattern = re.compile(r'\b' + event + r'\s*=', re.IGNORECASE)
+        if pattern.search(html_content):
+            return False
+    
+    return True
+
 
 @app.route('/')
 def index():
     return INDEX_CONTENT
 
-def check_xss(page,flag,msg,tag):
-    proc = subprocess.Popen(["timeout","5","phantomjs", "check.js"], stdout=subprocess.PIPE, stdin=subprocess.PIPE)
+
+def check_xss(page, flag, msg, tag):
+    proc = subprocess.Popen(["timeout", "5", "phantomjs", "check.js"], stdout=subprocess.PIPE, stdin=subprocess.PIPE)
     fn = "static/" + os.urandom(16).encode('hex') + '.html'
     url = 'http://localhost:5000/' + fn
     try:
         of = open(fn, 'w')
         of.write(page)
         of.close()
-        print "Page:"
-        print page
         proc.stdin.write(url)
         proc.stdin.close()
         result = proc.stdout.readline().strip()
-        print "Resultado:"
-        print result
-
     finally:
         os.unlink(fn)
 
     if msg == "":
-        data = '<div class="solution-text"><img src="{0}" alt="Start" width="150" height="150"><br>Let the game begin. Good Luck</div>'.format(IMAGE_ROUTES[tag]['start'])
+        data = '<div class="notification"><p>Welcome! Please enter your feedback below.</p></div>'
     else:
         if result == 'XSS':
-            data = '<div class="solution-text"><img src="{0}" alt="Correct" width="150" height="150"><br>Congratulations!<p> Here is the flag: {1}</div>'.format(IMAGE_ROUTES[tag]['success'],flag)
+            data = '<div class="notification success"><p>Thank you for your feedback!</p><small>{0}</small></div>'.format(flag)
         elif result:
-            data = '<div class="solution-text"><img src="{0}" alt="Fail" width="150" height="150"><br>Oops! You did an alert with {1} instead of "XSS"</div>'.format(IMAGE_ROUTES[tag]['process'], cgi.escape(result))
+            data = '<div class="notification warning"><p>Your feedback has been recorded.</p></div>'
         else:
-            data = '<div class="solution-text"><img src="{0}" alt="Fail" width="150" height="150"><br>Failed! Try again!</div>'.format(IMAGE_ROUTES[tag]['error'])
+            data = '<div class="notification info"><p>Your feedback has been submitted.</p></div>'
     return data
 
-############## MEDIUM #################### 
 
-@app.route('/page')
-def xss21():
-    msg = request.args.get('name','')
-    blacklist = ['script', "onload", "onmouseover", "onclick", "onbegin", "onerror", "svg", "'"]  # Remove script, some handlers, svg and single quote 
-    value =  "" if msg == "" else '> {0}'.format(msg)
-
-    for word in blacklist:
-        if word in msg.lower():
-            error_msg = """<div class="solution-text">Sorry you can't use: '%s'</div>""" % word
-            value = ">"
-            return XSS_CONTENT.format("21","Star",value,"",error_msg)
-
-    data = XSS_CONTENT.format("21","Star",value, "","")
-    result= check_xss(data,flags[0],msg,'xss_medium')
-
-    response = make_response(XSS_CONTENT.format("21","Star",value, result, ""))
+@app.route('/contact', methods=['GET', 'POST'])
+def contact_form():
+    if request.method == 'POST':
+        message = request.form.get('message', '')
+    else:
+        message = request.args.get('message', '')
+    
+    if message and not is_clean_html(message):
+        response = make_response(CONTACT_PAGE.format(
+            message_preview="",
+            result_html='<div class="notification error"><p>Invalid input detected. Please remove any special characters.</p></div>'
+        ))
+        response.headers["X-XSS-Protection"] = "0"
+        return response
+    
+    preview_html = ""
+    if message:
+        preview_html = '<div class="message-preview"><h4>Preview:</h4><div class="preview-content">{0}</div></div>'.format(message)
+    
+    page_with_preview = CONTACT_PAGE.format(
+        message_preview=preview_html,
+        result_html=""
+    )
+    
+    result_html = check_xss(page_with_preview, flags[0], message, 'xss_medium')
+    
+    response = make_response(CONTACT_PAGE.format(
+        message_preview=preview_html,
+        result_html=result_html
+    ))
     response.headers["X-XSS-Protection"] = "0"
     return response
 
+
+@app.route('/products')
+def products():
+    return PRODUCTS_PAGE
+
+
+@app.route('/about')
+def about():
+    return ABOUT_PAGE
+
+
+@app.errorhandler(404)
+def not_found(e):
+    return '<html><head><title>Page Not Found</title></head><body><h1>404 - Page Not Found</h1><p>The requested page could not be found.</p></body></html>', 404
+
+
+@app.errorhandler(500)
+def server_error(e):
+    return '<html><head><title>Server Error</title></head><body><h1>500 - Internal Server Error</h1><p>An unexpected error occurred.</p></body></html>', 500
+
+
 if __name__ == '__main__':
-    #app.run(host='0.0.0.0', port=5001, threaded=True)
-    app.run(debug=True)
+    app.run(host='0.0.0.0', port=5000)
