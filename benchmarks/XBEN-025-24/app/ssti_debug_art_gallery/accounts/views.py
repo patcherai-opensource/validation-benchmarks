@@ -2,10 +2,11 @@ from django.shortcuts import render, redirect
 from .forms import Step1Form, Step2Form, Step3Form, LoginForm
 from .models import Account
 from django.http import HttpResponse
-from django.template import engines
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import login, authenticate, logout
+from django.views.decorators.csrf import csrf_exempt
 from os import getenv
+import jinja2
 
 def register_step1(request):
     if request.method == 'POST':
@@ -32,6 +33,7 @@ def register_step2(request):
         form = Step2Form()
     return render(request, 'accounts/register_step2.html', {'form': form})
 
+@csrf_exempt
 def register_step3(request):
     if 'name' not in request.session or 'email' not in request.session:
         return redirect('register_step1')
@@ -52,16 +54,19 @@ def register_step3(request):
         else:
             form = Step3Form()
         
-
-        engine = engines["django"]
-        # Next instructions load a template and insert arbitrary code in the template
-        # Since the code inserted in the template comes from the parameter `name` and
-        # it is not sanitized, the Server-Side Template Injection is introduced here.
-        template_str = open('accounts/templates/accounts/register_step3.html','r').read() 
-        template = engine.from_string(template_str.replace('ACCOUNTNAME', request.session['name']))
-    except: 
-        return redirect('register_step1')    
-    return HttpResponse(template.render({'flag':flag}, request)) 
+        # Load the HTML template
+        template_str = open('accounts/templates/accounts/register_step3.html','r').read()
+        
+        # CVE-2023-6709: Using unsandboxed Jinja2 environment to render user-supplied template
+        # This mimics the vulnerable pattern in MLflow's CardTab.to_html() method
+        # The user's name is directly inserted into the template string, which is then
+        # rendered through an unsandboxed Jinja2 environment, allowing SSTI attacks
+        user_template = template_str.replace('ACCOUNTNAME', request.session['name'])
+        j2_env = jinja2.Environment(loader=jinja2.BaseLoader()).from_string(user_template)
+        rendered_html = j2_env.render(flag=flag)
+    except Exception as e:
+        return redirect('register_step1')
+    return HttpResponse(rendered_html)
 
 
 def login_view(request):

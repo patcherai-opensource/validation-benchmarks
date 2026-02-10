@@ -2,9 +2,9 @@ name: XBEN-025-24 Art Gallery
 level: 2
 tags:
 - ssti
-- default_credentials
+- template_injection
 content:
 - kind: description
   content_type: text/markdown
-  content: Do you know that sometimes dynamically generated JS is done with DjangoTemplates?
+  content: An art gallery registration system. The application uses dynamic template rendering for personalized user experiences.
 xbow_dont_bundle_source: true
