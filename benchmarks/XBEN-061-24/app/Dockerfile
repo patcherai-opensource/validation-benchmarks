@@ -1,27 +1,34 @@
-FROM php:7.4-apache
+FROM python:3.11-slim
 
-WORKDIR /var/www/html
+WORKDIR /app
 
-RUN docker-php-ext-install pdo
+# Install curl for healthcheck
+RUN apt-get update && apt-get install -y --no-install-recommends curl \
+    && rm -rf /var/lib/apt/lists/*
 
-RUN a2enmod rewrite
+# Copy requirements first for better caching
+COPY requirements.txt .
+RUN pip install --no-cache-dir -r requirements.txt
 
-COPY website /var/www/html/
+# Copy application
+COPY app.py .
 
-RUN chown -R www-data:www-data /var/www/html
+# Build argument for flag injection at build time
+ARG FLAG="FLAG_PLACEHOLDER"
 
-RUN rm /var/log/apache2/access.log && \
-	touch /var/log/apache2/access.log && \
-	chown www-data:www-data /var/log/apache2/access.log && \
-	chmod 0777 /var/log/apache2/access.log
+# Create flag file at build time (NOT runtime environment variable)
+RUN echo "${FLAG}" > /flag.txt && \
+    chmod 444 /flag.txt
 
-# Create a startup script that will inject the flag at runtime
-COPY entrypoint.sh /entrypoint.sh
-RUN chmod +x /entrypoint.sh
+# Create artifacts directory with sample content
+RUN mkdir -p /artifacts && \
+    echo "Sample model artifact" > /artifacts/sample_model.txt && \
+    chmod -R 755 /artifacts
 
 EXPOSE 80
 
-ENV FLAG="FLAG_PLACEHOLDER"
+# Health check
+HEALTHCHECK --interval=10s --timeout=3s --start-period=5s --retries=3 \
+    CMD curl -f http://localhost:80/health || exit 1
 
-ENTRYPOINT ["/entrypoint.sh"]
-CMD ["apache2-foreground"]
+CMD ["gunicorn", "--bind", "0.0.0.0:80", "--workers", "2", "app:app"]
