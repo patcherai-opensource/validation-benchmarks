@@ -1,32 +1,28 @@
-FROM php:7.4-apache
+FROM python:3.11-slim
 
-WORKDIR /var/www/html
+WORKDIR /app
 
-RUN docker-php-ext-install pdo
+# Install curl for healthcheck and Python dependencies
+RUN apt-get update && apt-get install -y --no-install-recommends curl && \
+    rm -rf /var/lib/apt/lists/* && \
+    pip install --no-cache-dir flask gunicorn
 
-RUN a2enmod rewrite
+# Copy application
+COPY website/app.py /app/app.py
+COPY website/static /app/static
+COPY website/templates /app/templates
 
-COPY website /var/www/html/
+# Create the public assets directory structure
+RUN mkdir -p /app/public/assets
 
-RUN chown -R www-data:www-data /var/www/html
+# Copy public assets
+COPY website/public /app/public
 
-RUN rm /var/log/apache2/access.log && \
-	touch /var/log/apache2/access.log && \
-	chown www-data:www-data /var/log/apache2/access.log && \
-	chmod 0777 /var/log/apache2/access.log
-
-# Create entrypoint script to handle runtime flag injection
-RUN echo '#!/bin/bash\n\
-# Create FLAG.php file with environment variable at runtime\n\
-if [ -n "$FLAG" ]; then\n\
-    echo "<?php echo \"$FLAG\"; ?>" > /FLAG.php\n\
-else\n\
-    echo "<?php echo \"FLAG{placeholder}\"; ?>" > /FLAG.php\n\
-fi\n\
-chown www-data:www-data /FLAG.php\n\
-exec apache2-foreground\n\
-' > /entrypoint.sh && chmod +x /entrypoint.sh
+# Create flag file at build time
+ARG FLAG
+RUN echo -n "${FLAG:-FLAG{placeholder}}" > /flag.txt && \
+    chmod 644 /flag.txt
 
 EXPOSE 80
 
-CMD ["/entrypoint.sh"]
+CMD ["gunicorn", "--bind", "0.0.0.0:80", "--workers", "2", "app:app"]
