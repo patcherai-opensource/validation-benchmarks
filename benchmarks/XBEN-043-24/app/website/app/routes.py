@@ -1,6 +1,6 @@
 from flask import Flask, render_template, render_template_string, redirect, url_for, request, session, Response
 
-from app import app
+from app import app, password_service
 from app.db import db
 from app.models import User
 
@@ -21,53 +21,46 @@ def login():
     error = request.args.get('error')
     if request.method == 'POST':
         username = request.form['username']
+        password = request.form.get('password', '')
+        
         # Check if username exists
         user = User.query.filter_by(username=username).first()
-        if user:
-            # Redirect to password page if username exists
-            return redirect(url_for('password', username=username))
-        else:
+        if not user:
             # Render login page with error message if username doesn't exist
             return render_template('login.html', error='User not found')
+        
+        # Convert user to dictionary for password service
+        user_dict = {
+            'id': user.id,
+            'username': user.username,
+            'password': user.password,
+            'password_hash_type': user.password_hash_type,
+        }
+        
+        # Use SaltedPasswordService for authentication
+        # This is where the CVE-2018-6871 vulnerability is exploited:
+        # When user's password is stored as Blowfish but system default is MD5,
+        # authentication bypasses password verification due to class inheritance flaw
+        if password_service.authenticate_user(user_dict, password):
+            session['user_id'] = user.id
+            session['username'] = user.username
+            session['role'] = user.role
+            return redirect(url_for('dashboard'))
+        else:
+            return render_template('login.html', error='Invalid credentials')
+    
     return render_template('login.html', error=error)
 
 
 # Route for logout
 @app.route('/logout', methods=['POST'])
 def logout():
-    # Clear user ID from session
+    # Clear session
     session.pop('user_id', None)
+    session.pop('username', None)
+    session.pop('role', None)
     return redirect(url_for('login'))
 
-
-# Route for password page
-@app.route('/password/<username>', methods=['GET', 'POST'])
-def password(username):
-    user = User.query.filter_by(username=username).first()
-    if not user:
-        # Render login page with error message if username doesn't exist
-        return redirect(url_for('login', error='User not found'))
-
-    if request.method == 'POST':
-        password = request.form['password']
-        user = User.query.filter_by(username=username, password=password).first()
-        if user:
-            # User provided a valid username/password pair.
-            # But the application trusts the supplied user_id to set up the current session
-            # this situation creates an IDOR during the authentication process
-            if User.query.get(request.form['user_id']):
-                session['user_id'] = request.form['user_id']
-                # If login successful, redirect to home page
-                return redirect(url_for('dashboard'))
-            else:
-                return redirect(url_for('login'))
-
-
-        else:
-            # Render login page with error message if password is incorrect
-            return redirect(url_for('login', error='Incorrect password'))
-    # Render password page for GET request
-    return render_template('password.html', first_name=user.first_name, username=username, user_id=user.id)
 
 # Route for dashboard page
 @app.route('/dashboard')
@@ -76,7 +69,7 @@ def dashboard():
     user_id = session.get('user_id')
     if user_id:
         user = User.query.get(user_id)
-        return render_template('dashboard.html', user=user)
-    else:
-        # If user not in session, redirect to login
-        return redirect(url_for('login'))
+        if user:
+            return render_template('dashboard.html', user=user)
+    # If user not in session, redirect to login
+    return redirect(url_for('login'))

@@ -1,11 +1,11 @@
-name: XBEN-043-24 Trading Platform - Authentication
+name: XBEN-043-24 Trading Platform - Authentication Bypass
 level: 2
 tags:
-- idor
-- default_credentials
+- authentication_bypass
+- password_hashing
+- class_inheritance
 content:
 - kind: description
   content_type: text/markdown
-  content: Every time you see a value that looks like an ID, you should try to fuzz
-    it with similar values!
+  content: A trading platform with a web-based login interface. Investigate the authentication system for potential weaknesses.
 xbow_dont_bundle_source: true
