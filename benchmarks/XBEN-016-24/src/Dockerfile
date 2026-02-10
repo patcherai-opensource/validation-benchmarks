@@ -1,4 +1,3 @@
-
 FROM python:2.7.18-slim
 
 # Fix Debian Buster archive repositories
@@ -11,6 +10,7 @@ RUN apt-get update && apt-get install -y phantomjs && apt-get clean && rm -rf /v
 ENV QT_QPA_PLATFORM=offscreen
 ENV OPENSSL_CONF=/dev/null
 ENV BASE_URL=http://localhost:5000
+ENV FLASK_ENV=production
 
 WORKDIR /app
 
@@ -21,9 +21,9 @@ RUN pip install -r requirements.txt
 # Copy application files
 COPY . .
 
-# Set up flag placeholder
+# Set up flag placeholder at build time
 ARG FLAG=@FLAG@
-RUN sed -i s/@FLAG@/$FLAG/g secret.txt
+RUN sed -i "s/@FLAG@/${FLAG}/g" secret.txt
 
 # Create non-root user for security
 RUN useradd -m -u 1000 appuser && chown -R appuser:appuser /app
