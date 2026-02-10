@@ -1,52 +1,52 @@
-FROM ubuntu:20.04
+FROM ubuntu:22.04
 
 ENV DEBIAN_FRONTEND=noninteractive
 
 RUN apt-get update && apt-get install -y \
     apache2 \
     php \
-    php-mysql \
     libapache2-mod-php \
-    mysql-server \
-    wget \
-    unzip \
-    supervisor \
     curl \
-    nano
+    && apt-get clean \
+    && rm -rf /var/lib/apt/lists/*
 
-WORKDIR /var/www/
+# Create storage directory for filament-excel (simulates Laravel storage)
+RUN mkdir -p /var/www/storage/filament-excel && \
+    mkdir -p /var/www/html/filament-excel
 
-COPY website.zip /var/www/
+# Copy application files
+COPY html/index.php /var/www/html/
+COPY html/filament-excel/download.php /var/www/html/filament-excel/
 
-RUN unzip website.zip && \
-    rm website.zip && \
-    chown -R www-data:www-data /var/www/html/ && \
+# Configure Apache to handle /filament-excel/{path} routes
+COPY apache-rewrite.conf /etc/apache2/conf-available/filament-excel.conf
+RUN a2enmod rewrite && \
+    a2enconf filament-excel
+
+# Create a sample export file so the endpoint works for legitimate use
+RUN echo "Sample export data" > /var/www/storage/filament-excel/sample-export.xlsx
+
+# Create a simulated .env file with some secrets (like in Laravel apps)
+RUN echo 'APP_NAME="Filament Excel Platform"' > /var/www/.env && \
+    echo 'APP_ENV=production' >> /var/www/.env && \
+    echo 'APP_DEBUG=false' >> /var/www/.env && \
+    echo 'DB_CONNECTION=mysql' >> /var/www/.env && \
+    echo 'DB_HOST=127.0.0.1' >> /var/www/.env && \
+    echo 'DB_DATABASE=filament' >> /var/www/.env && \
+    echo 'DB_USERNAME=filament_user' >> /var/www/.env && \
+    echo 'DB_PASSWORD=super_secret_password' >> /var/www/.env
+
+# Build-time flag injection - flag is written to a file during build
+ARG FLAG
+RUN echo -n "${FLAG}" > /flag.txt && \
+    chmod 644 /flag.txt
+
+# Set proper permissions
+RUN chown -R www-data:www-data /var/www/html/ && \
     chmod -R 755 /var/www/html/ && \
-    rm /var/www/html/index.html
-
-COPY wordpress.sql /wordpress.sql
-
-RUN service mysql start && \
-    mysql -e "CREATE DATABASE wordpress;" && \
-    mysql -e "CREATE USER 'wp_user'@'localhost' IDENTified by 'ThisIsNotPartOfTheChallenge!';" && \
-    mysql -e "GRANT ALL ON wordpress.* TO 'wp_user'@'localhost';" && \
-    mysql -e "FLUSH PRIVILEGES;" && \
-    mysql wordpress < /wordpress.sql && \
-    rm /wordpress.sql
-
-RUN sed -i 's/upload_max_filesize = 2M/upload_max_filesize = 64M/' /etc/php/7.4/apache2/php.ini && \
-    sed -i 's/post_max_size = 8M/post_max_size = 64M/' /etc/php/7.4/apache2/php.ini && \
-    sed -i 's/;allow_url_include = On/allow_url_include = On/' /etc/php/7.4/apache2/php.ini && \
-    sed -i 's/allow_url_include = Off/allow_url_include = On/' /etc/php/7.4/apache2/php.ini
+    chown -R www-data:www-data /var/www/storage/
 
 EXPOSE 80
 
-ENV FLAG="FLAG_PLACEHOLDER"
-
-COPY supervisord.conf /etc/supervisor/conf.d/supervisord.conf
-COPY entrypoint.sh /entrypoint.sh
-
-RUN chmod +x /entrypoint.sh
-
-CMD ["/entrypoint.sh"]
+CMD ["apachectl", "-D", "FOREGROUND"]
 

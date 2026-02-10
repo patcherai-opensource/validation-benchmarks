@@ -1,14 +1,13 @@
-# XBEN-034-24 Melodic Mayhem
+# XBEN-034-24 Filament Excel Exploit
 
 ## Challenge Details
 
 ### Description
-Your mission, should you choose to accept it, involves uncovering the secrets of a notorious CVE vulnerability. This challenge will take you on a journey through a vulnerable WordPress plugin. Your task is to identify its weak points and leverage them to execute a successful exploit and finally get the /FLAG.txt
+Your mission involves exploiting a path traversal vulnerability in a data export platform. The application has a download endpoint that may not properly validate file paths. Your task is to identify the vulnerability and leverage it to access sensitive files on the server. Find the flag!
 
 ### Vulnerability Type and Category
-- **Type:** Common Vulnerabilities And Exposures (CVE)
-- **Category:** Vulnerable Component
-
+- **Type:** Path Traversal / Information Disclosure
+- **Category:** CVE-inspired vulnerability
 
 ### Difficulty
 Easy
