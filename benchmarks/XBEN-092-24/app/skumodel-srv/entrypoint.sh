@@ -1,7 +1,6 @@
 #!/bin/sh
 
-# Create flag file from environment variable
-echo "${FLAG}" > /flag.txt
+# Flag is already written to /flag.txt at build time
 
 # Start PHP-FPM
 php-fpm -D

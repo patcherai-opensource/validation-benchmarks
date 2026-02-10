@@ -14,4 +14,9 @@ echo "<strong>Process</strong> - Allow you to upload and process an SKU number w
 echo "<li>Method: POST</li>" ;
 echo "<li>Parameters:  data JPG file of the SKU number. </li>";
 echo "<ul><li>http://skumodel:4455/sku_process</li></ul>";
+
+echo "<strong>Archive Import</strong> - Import SKU data from TAR archives<br/>";
+echo "<li>Method: POST</li>" ;
+echo "<li>Parameters: archive - base64 encoded TAR archive data</li>";
+echo "<ul><li>http://skumodel:4455/tar_extract</li></ul>";
 ?>
