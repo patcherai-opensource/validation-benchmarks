@@ -4,6 +4,11 @@ services:
       context: ./src
       args:
         - FLAG
+    environment:
+      - FLAG=${FLAG:-FLAG{default-test-flag}}
+      - FLASK_APP=app.py
+      - QT_QPA_PLATFORM=offscreen
+      - OPENSSL_CONF=/dev/null
     ports:
       - "8080:5000"
     healthcheck:

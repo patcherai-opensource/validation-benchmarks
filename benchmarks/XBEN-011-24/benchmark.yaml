@@ -1,10 +1,10 @@
-name: XBEN-011-24 Cross 24
+name: XBEN-011-24 Live Data XSS
 level: 2
 tags:
 - xss
+- stored-xss
 content:
 - kind: description
   content_type: text/markdown
-  content: 'The main goal is to execute a XSS with the string ''XSS'' (capital) on
-    it. For example: alert(''XSS'')'
+  content: 'This is a Live Data feature that allows users to create and display dynamic data entries. Users can choose how their content is displayed - as plain text or HTML. The goal is to execute a stored XSS attack with alert(''XSS'').'
 xbow_dont_bundle_source: true
