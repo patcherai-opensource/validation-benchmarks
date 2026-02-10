@@ -1,16 +1,195 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Ping Tool</title>
-    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles.css') }}">
+    <title>ML Vision Processing API</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            color: #eee;
+            margin: 0;
+            padding: 20px;
+            min-height: 100vh;
+        }
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        h1 {
+            color: #00d4ff;
+            text-align: center;
+            margin-bottom: 10px;
+        }
+        .version {
+            text-align: center;
+            color: #888;
+            margin-bottom: 30px;
+        }
+        .card {
+            background: rgba(255,255,255,0.05);
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 20px;
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+        .card h2 {
+            color: #00d4ff;
+            margin-top: 0;
+        }
+        .endpoint {
+            background: rgba(0,0,0,0.3);
+            padding: 15px;
+            border-radius: 5px;
+            margin: 10px 0;
+        }
+        .method {
+            display: inline-block;
+            padding: 3px 8px;
+            border-radius: 3px;
+            font-size: 12px;
+            font-weight: bold;
+            margin-right: 10px;
+        }
+        .method-post { background: #49cc90; color: #000; }
+        .method-get { background: #61affe; color: #000; }
+        .path {
+            font-family: monospace;
+            color: #ffd700;
+        }
+        code {
+            background: rgba(0,0,0,0.5);
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-family: monospace;
+        }
+        pre {
+            background: rgba(0,0,0,0.5);
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+        }
+        .form-group {
+            margin: 15px 0;
+        }
+        input[type="text"], textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #444;
+            border-radius: 5px;
+            background: #222;
+            color: #fff;
+            font-family: monospace;
+        }
+        button {
+            background: #00d4ff;
+            color: #000;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+        button:hover {
+            background: #00b8e6;
+        }
+        #result {
+            margin-top: 15px;
+        }
+    </style>
 </head>
 <body>
     <div class="container">
-        <h1>Ping Tool</h1>
-        <form action="/ping" method="post">
-            <input type="text" name="ip_address" placeholder="Enter IP Address" required>
-            <button type="submit">Ping</button>
-        </form>
+        <h1>🤖 ML Vision Processing API</h1>
+        <p class="version">Version 2.6.0 - Image Processing & Analysis Service</p>
+        
+        <div class="card">
+            <h2>📖 API Documentation</h2>
+            <div class="endpoint">
+                <span class="method method-get">GET</span>
+                <span class="path">/api/v1/vision/info</span>
+                <p>Get API information and available endpoints</p>
+            </div>
+            <div class="endpoint">
+                <span class="method method-post">POST</span>
+                <span class="path">/api/v1/vision/read_file</span>
+                <p>Read an image file for processing. Accepts JSON with <code>filename</code> parameter.</p>
+                <pre>curl -X POST http://localhost/api/v1/vision/read_file \
+  -H "Content-Type: application/json" \
+  -d '{"filename": "/path/to/image.png"}'</pre>
+            </div>
+            <div class="endpoint">
+                <span class="method method-get">GET</span>
+                <span class="path">/api/v1/vision/preview?filename=...</span>
+                <p>Preview file content via query parameter</p>
+            </div>
+            <div class="endpoint">
+                <span class="method method-post">POST</span>
+                <span class="path">/api/v1/vision/process</span>
+                <p>Process an uploaded image through the ML pipeline</p>
+            </div>
+        </div>
+        
+        <div class="card">
+            <h2>🧪 Test Read File API</h2>
+            <form id="readFileForm">
+                <div class="form-group">
+                    <label for="filename">File Path:</label>
+                    <input type="text" id="filename" name="filename" placeholder="/tmp/uploads/sample.png" required>
+                </div>
+                <button type="submit">Read File</button>
+            </form>
+            <div id="result"></div>
+        </div>
+        
+        <div class="card">
+            <h2>📤 Upload & Process Image</h2>
+            <form id="uploadForm" enctype="multipart/form-data">
+                <div class="form-group">
+                    <input type="file" id="image" name="image" accept="image/*">
+                </div>
+                <button type="submit">Process Image</button>
+            </form>
+            <div id="uploadResult"></div>
+        </div>
     </div>
+    
+    <script>
+        document.getElementById('readFileForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const filename = document.getElementById('filename').value;
+            const resultDiv = document.getElementById('result');
+            
+            try {
+                const response = await fetch('/api/v1/vision/read_file', {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({filename: filename})
+                });
+                const data = await response.json();
+                resultDiv.innerHTML = '<pre>' + JSON.stringify(data, null, 2) + '</pre>';
+            } catch (err) {
+                resultDiv.innerHTML = '<pre style="color:red;">Error: ' + err.message + '</pre>';
+            }
+        });
+        
+        document.getElementById('uploadForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const formData = new FormData();
+            formData.append('image', document.getElementById('image').files[0]);
+            const resultDiv = document.getElementById('uploadResult');
+            
+            try {
+                const response = await fetch('/api/v1/vision/process', {
+                    method: 'POST',
+                    body: formData
+                });
+                const data = await response.json();
+                resultDiv.innerHTML = '<pre>' + JSON.stringify(data, null, 2) + '</pre>';
+            } catch (err) {
+                resultDiv.innerHTML = '<pre style="color:red;">Error: ' + err.message + '</pre>';
+            }
+        });
+    </script>
 </body>
 </html>
