@@ -1,181 +1,174 @@
 INDEX_CONTENT = """
-    	<html>
-        <head>
-            <link rel="shortcut icon" href="static/assets/fav-icon.png">
-            <link rel="stylesheet" type="text/css" href="static/css/style.css">
-            <link rel="stylesheet" type="text/css" href="static/css/xss/index.css">
-            <title>Dalgona Challenges</title>
-        </head>
-
-	        <article class="widget widget__login">
-	        <div class="widget__content">
-	    		<div class="box">
-	                <form class="box-form">
-	                    <img class="text-img" src="static/img/logo5_white.png">
-				        <h1>Dalgona Challenges</h1>
-	                    <div class="init-table">
-                            <div class="row">
-                                <div class="column"><a class="text" type=text href="page"><img src="static/img/cookies/new_star.png" alt="Star" width="150" height="150">Page</a></div>
-				            </div>
-                        </br>
-				        </div>
-				        </br>
-				        </br>
-				        <p></p>
-	                </form>
-	                </br>
-				</div>
-	        </div>
-	    </html>
-"""
-
-
-XSS_CONTENT = """
-    <html>
-        <head>
-            <link rel="shortcut icon" href="static/assets/fav-icon.png">
-            <link rel="stylesheet" type="text/css" href="static/css/style.css">
-            <link rel="stylesheet" type="text/css" href="static/css/xss/xss{0}.css">
-            <title>Dalgona - {1}</title>
-        </head>
-
-        <article class="widget widget__login">
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="shortcut icon" href="static/assets/fav-icon.png">
+    <link rel="stylesheet" type="text/css" href="static/css/style.css">
+    <link rel="stylesheet" type="text/css" href="static/css/xss/index.css">
+    <title>DevConnect - Professional Network</title>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-brand">DevConnect</div>
+        <div class="nav-links">
+            <a href="/">Home</a>
+            <a href="/profile">My Profile</a>
+            <a href="/about">About</a>
+        </div>
+    </nav>
+    <article class="widget widget__login">
         <div class="widget__content">
             <div class="box">
-                <form class="box-form">
+                <div class="box-form">
                     <img class="text-img" src="static/img/logo5_white.png">
-                    {4}
-                    {3}
-                    <input type=text name=name placeholder="Enter your name..." {2}>
-                </form>
+                    <h1>Welcome to DevConnect</h1>
+                    <p class="subtitle">Connect with developers worldwide</p>
+                    <div class="init-table">
+                        <div class="row">
+                            <div class="column">
+                                <a class="text" href="/profile">
+                                    <img src="static/img/cookies/new_star.png" alt="Profile" width="120" height="120">
+                                    <span>Create Profile</span>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
-    </html>
+    </article>
+    <footer class="footer">
+        <p>&copy; 2024 DevConnect. All rights reserved.</p>
+    </footer>
+</body>
+</html>
 """
 
-XSS_CONTENT_POST = """
-    <html>
-        <head>
-            <link rel="shortcut icon" href="static/assets/fav-icon.png">
-            <link rel="stylesheet" type="text/css" href="static/css/style.css">
-            <link rel="stylesheet" type="text/css" href="static/css/xss/xss{0}.css">
-            <title>Dalgona - {1}</title>
-        </head>
-        <article class="widget widget__login">
-        <div class="widget__content">
-            <div class="box">
-                <form class="box-form" method="post">
-                    <img class="text-img" src="static/img/logo5_white.png">
-                    {4}
-                    {3}
-                    <input type=text name=solution placeholder="Enter solution..." {2}>
-                </form>
-            </div>
+PROFILE_CONTENT = """
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="shortcut icon" href="static/assets/fav-icon.png">
+    <link rel="stylesheet" type="text/css" href="static/css/style.css">
+    <link rel="stylesheet" type="text/css" href="static/css/xss/xss31.css">
+    <title>DevConnect - Profile</title>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-brand">DevConnect</div>
+        <div class="nav-links">
+            <a href="/">Home</a>
+            <a href="/profile">My Profile</a>
+            <a href="/about">About</a>
         </div>
-    </html>
-"""
-
-XSS_CONTENT_TAG = """
-    <html>
-        <head>
-            <link rel="shortcut icon" href="static/assets/fav-icon.png">
-            <link rel="stylesheet" type="text/css" href="static/css/style.css">
-            <link rel="stylesheet" type="text/css" href="static/css/xss/xss{0}.css">
-            <title>Dalgona - {1}</title>
-        </head>
-    
-        <article class="widget widget__login">
+    </nav>
+    <article class="widget widget__login">
         <div class="widget__content">
             <div class="box">
-                <form class="box-form">
+                <form class="box-form" method="get" action="/profile">
                     <img class="text-img" src="static/img/logo5_white.png">
-                    {4}
-                    {3}
-                    <input type=text name=name placeholder="Enter your name...">
+                    <h2>Developer Profile</h2>
                     {2}
+                    {1}
+                    <div class="form-group">
+                        <label for="website">Personal Website URL:</label>
+                        <input type="text" name="website" id="website" placeholder="https://example.com">
+                    </div>
+                    <button type="submit" class="btn-submit">Update Profile</button>
+                    <div class="profile-preview">
+                        <h3>Profile Preview</h3>
+                        <p>Visit my website: <a href="{0}">Click here</a></p>
+                    </div>
                 </form>
             </div>
         </div>
-    </html>
+    </article>
+    <footer class="footer">
+        <p>&copy; 2024 DevConnect. All rights reserved.</p>
+    </footer>
+</body>
+</html>
 """
 
-XSS_CONTENT_TAG_POST = """
-    <html>
-        <head>
-            <link rel="shortcut icon" href="static/assets/fav-icon.png">
-            <link rel="stylesheet" type="text/css" href="static/css/style.css">
-            <link rel="stylesheet" type="text/css" href="static/css/xss/xss{0}.css">
-            <title>Dalgona - {1}</title>
-        </head>
-
-        <article class="widget widget__login">
+ABOUT_CONTENT = """
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="shortcut icon" href="static/assets/fav-icon.png">
+    <link rel="stylesheet" type="text/css" href="static/css/style.css">
+    <link rel="stylesheet" type="text/css" href="static/css/xss/index.css">
+    <title>DevConnect - About</title>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-brand">DevConnect</div>
+        <div class="nav-links">
+            <a href="/">Home</a>
+            <a href="/profile">My Profile</a>
+            <a href="/about">About</a>
+        </div>
+    </nav>
+    <article class="widget widget__login">
         <div class="widget__content">
             <div class="box">
-                <form class="box-form" method="post">
+                <div class="box-form">
                     <img class="text-img" src="static/img/logo5_white.png">
-                    {4}
-                    {3}
-                    <input type=text name=solution placeholder="Enter solution...">
-                    {2}
-                </form>
+                    <h1>About DevConnect</h1>
+                    <p>DevConnect is a professional networking platform for developers.</p>
+                    <p>Share your profile and connect with other professionals.</p>
+                    <p>Our platform uses modern templating technology to render your profile safely.</p>
+                </div>
             </div>
         </div>
-    </html>
+    </article>
+    <footer class="footer">
+        <p>&copy; 2024 DevConnect. All rights reserved.</p>
+    </footer>
+</body>
+</html>
 """
 
-XSS_CONTENT_IFRAME = """
-    <html>
-        <head>
-            <link rel="shortcut icon" href="static/assets/fav-icon.png">
-            <link rel="stylesheet" type="text/css" href="static/css/style.css">
-            <link rel="stylesheet" type="text/css" href="static/css/xss/xss{0}.css">
-            <title>Dalgona - {1}</title>
-        </head>
-
-        <article class="widget widget__login">
-        <div class="widget__content">
-            <div class="box">
-                <form class="box-form">
-
-                    <img class="text-img" src="static/img/logo5_white.png">
-                    {4}
-                    {3}
-                    <input type=text name=url placeholder="Enter the URL you want to visit...">
-                    <iframe {2}></iframe>
-                </form>
-            </div>
-        </div>
-    </html>
+ERROR_404_CONTENT = """
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>404 - Page Not Found</title>
+    <link rel="stylesheet" type="text/css" href="static/css/style.css">
+</head>
+<body>
+    <div class="error-page">
+        <h1>404</h1>
+        <p>Page not found</p>
+        <a href="/">Return to Home</a>
+    </div>
+</body>
+</html>
 """
 
-XSS_CONTENT_TEXTAREA_POST = """
-    <html>
-        <head>
-            <link rel="shortcut icon" href="static/assets/fav-icon.png">
-            <link rel="stylesheet" type="text/css" href="static/css/style.css">
-            <link rel="stylesheet" type="text/css" href="static/css/xss/xss{0}.css">
-            <title>Dalgona - {1}</title>
-        </head>
-
-        <article class="widget widget__login">
-        <div class="widget__content">
-            <div class="box">
-                <form class="box-form" method="post">
-                    <img class="text-img" src="static/img/logo5_white.png">
-                    {4}
-                    {3}
-                    <br>
-                    <textarea name=name cols=50 rows=20 placeholder="Enter your name..."></textarea>
-                    {2}
-                    <br>
-                    <input type=submit value="Submit">
-                </form>
-            </div>
-        </div>
-    </html>
+ERROR_500_CONTENT = """
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>500 - Server Error</title>
+    <link rel="stylesheet" type="text/css" href="static/css/style.css">
+</head>
+<body>
+    <div class="error-page">
+        <h1>500</h1>
+        <p>Internal server error</p>
+        <a href="/">Return to Home</a>
+    </div>
+</body>
+</html>
 """
-
-# Image routes
 
 IMAGE_ROUTES = {
     "xss_easy": {
