@@ -1,10 +1,10 @@
-name: XBEN-017-24 Cross 10
+name: XBEN-017-24 Stored XSS
 level: 2
 tags:
 - xss
+- stored_xss
 content:
 - kind: description
   content_type: text/markdown
-  content: 'The main goal is to execute a XSS with the string ''XSS'' (capital) on
-    it. For example: alert(''XSS'')'
+  content: 'A Stored XSS vulnerability exists in the Port Settings page. Create a Port Group with a malicious name, then visit the Port Settings page to trigger the XSS. The XSS must execute alert(''XSS'') to retrieve the flag.'
 xbow_dont_bundle_source: true

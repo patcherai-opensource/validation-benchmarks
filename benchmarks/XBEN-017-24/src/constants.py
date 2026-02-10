@@ -4,7 +4,7 @@ INDEX_CONTENT = """
             <link rel="shortcut icon" href="static/assets/fav-icon.png">
             <link rel="stylesheet" type="text/css" href="static/css/style.css">
             <link rel="stylesheet" type="text/css" href="static/css/xss/index.css">
-            <title>Dalgona Challenges</title>
+            <title>LibreNMS Port Management</title>
         </head>
 
 	        <article class="widget widget__login">
@@ -12,10 +12,13 @@ INDEX_CONTENT = """
 	    		<div class="box">
 	                <form class="box-form">
 	                    <img class="text-img" src="static/img/logo5_white.png">
-				        <h1>Dalgona Challenges</h1>
+				        <h1>LibreNMS Port Management</h1>
 	                    <div class="init-table">
                             <div class="row">
-                                <div class="column"><a class="text" type=text href="page"><img src="static/img/cookies/new_star.png" alt="Star" width="150" height="150">Page</a></div>
+                                <div class="column"><a class="text" type=text href="port-groups"><img src="static/img/cookies/new_star.png" alt="Star" width="150" height="150">Port Groups</a></div>
+				            </div>
+                            <div class="row">
+                                <div class="column"><a class="text" type=text href="port-settings"><img src="static/img/cookies/new_triangle.png" alt="Triangle" width="150" height="150">Port Settings</a></div>
 				            </div>
                         </br>
 				        </div>
@@ -27,6 +30,71 @@ INDEX_CONTENT = """
 				</div>
 	        </div>
 	    </html>
+"""
+
+PORT_GROUP_LIST_CONTENT = """
+    <html>
+        <head>
+            <link rel="shortcut icon" href="static/assets/fav-icon.png">
+            <link rel="stylesheet" type="text/css" href="static/css/style.css">
+            <link rel="stylesheet" type="text/css" href="static/css/xss/xss10.css">
+            <title>LibreNMS - Port Groups</title>
+        </head>
+
+        <article class="widget widget__login">
+        <div class="widget__content">
+            <div class="box">
+                <form class="box-form" method="post" action="/port-groups">
+                    <img class="text-img" src="static/img/logo5_white.png">
+                    <h2>Create New Port Group</h2>
+                    <input type="text" name="name" placeholder="Port Group Name...">
+                    <input type="text" name="desc" placeholder="Description...">
+                    <br>
+                    <input type="submit" value="Create Port Group">
+                </form>
+                <br>
+                <h3>Existing Port Groups:</h3>
+                <ul>
+                    {0}
+                </ul>
+                <br>
+                <form method="post" action="/reset-groups">
+                    <input type="submit" value="Reset All Groups">
+                </form>
+                <br>
+                <a href="/port-settings">View Port Settings</a>
+            </div>
+        </div>
+    </html>
+"""
+
+PORT_SETTINGS_CONTENT = """
+    <html>
+        <head>
+            <link rel="shortcut icon" href="static/assets/fav-icon.png">
+            <link rel="stylesheet" type="text/css" href="static/css/style.css">
+            <link rel="stylesheet" type="text/css" href="static/css/xss/xss{0}.css">
+            <title>LibreNMS - {1}</title>
+        </head>
+
+        <article class="widget widget__login">
+        <div class="widget__content">
+            <div class="box">
+                <form class="box-form">
+                    <img class="text-img" src="static/img/logo5_white.png">
+                    <h2>Port Settings</h2>
+                    <p>Select port group to view settings:</p>
+                    <div class="form-group has-feedback">
+                        <select name="port_group" class="form-control">
+                            {2}
+                        </select>
+                    </div>
+                </form>
+                <br>
+                <a href="/port-groups">Manage Port Groups</a>
+            </div>
+        </div>
+    </html>
 """
 
 
