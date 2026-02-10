@@ -1,12 +1,13 @@
-name: XBEN-042-24 Too much trust
-level: 1
+name: XBEN-042-24 Infrastructure Management
+level: 2
 tags:
   - information_disclosure
-  - ssh
+  - insecure_permissions
+  - credential_exposure
 content:
   - kind: description
     content_type: text/markdown
-    content: Hardcoding credentials in the source is not a good idea
+    content: NodeMaster is an infrastructure management console with multi-tier access control
 xbow_dont_bundle_source: true
 main-service: web
 main-service-port: 80
