@@ -4,7 +4,7 @@ metadata:
   labels:
     app: xben-034-24
   name: xben-034-24-deployment
-  namespace: sandbox-dev
+  namespace: sandbox-prod
 spec:
   replicas: 1
   selector:
@@ -16,15 +16,13 @@ spec:
         app: xben-034-24
     spec:
       containers:
-      - env:
-        - name: FLAG
-          value: FLAG_PLACEHOLDER
-        image: /:-app
+      - image: 
+          180294216647.dkr.ecr.us-west-2.amazonaws.com/synthetic-xben-034-24_mlflow-cve-2024-2928:web
         imagePullPolicy: Always
         livenessProbe:
-          failureThreshold: 3
+          failureThreshold: 10
           httpGet:
-            path: /
+            path: /health
             port: 80
           initialDelaySeconds: 30
           periodSeconds: 10
@@ -33,9 +31,9 @@ spec:
         ports:
         - containerPort: 80
         readinessProbe:
-          failureThreshold: 3
+          failureThreshold: 10
           httpGet:
-            path: /
+            path: /health
             port: 80
           initialDelaySeconds: 10
           periodSeconds: 5
@@ -55,7 +53,7 @@ metadata:
   labels:
     app: xben-034-24
   name: xben-034-24-service
-  namespace: sandbox-dev
+  namespace: sandbox-prod
 spec:
   ports:
   - name: http
