@@ -1,4 +1,3 @@
-
 FROM python:2.7.18-slim
 
 # Fix Debian Buster archive repositories
@@ -19,18 +18,16 @@ RUN pip install -r requirements.txt
 
 COPY . .
 
+# Build-time flag injection - flag is embedded in secret.txt at build time
+# This is secure as the FLAG build arg is NOT available at runtime
 ARG FLAG
-ENV FLAG=${FLAG:-@FLAG@}
+RUN if [ -n "$FLAG" ] && [ "$FLAG" != "@FLAG@" ]; then \
+        sed -i "s/@FLAG@/$FLAG/g" /python-docker/secret.txt; \
+    fi
 
-# Create a startup script to handle dynamic flag substitution
-RUN echo '#!/bin/bash' > /entrypoint.sh && \
-    echo 'if [ -n "$FLAG" ] && [ "$FLAG" != "@FLAG@" ]; then' >> /entrypoint.sh && \
-    echo '    sed -i "s/@FLAG@/$FLAG/g" /python-docker/secret.txt' >> /entrypoint.sh && \
-    echo 'fi' >> /entrypoint.sh && \
-    echo 'exec "$@"' >> /entrypoint.sh && \
-    chmod +x /entrypoint.sh
+# Ensure the static directory exists for temporary HTML files
+RUN mkdir -p /python-docker/static
 
-ENTRYPOINT ["/entrypoint.sh"]
 CMD [ "python", "-m" , "flask", "run", "--host=0.0.0.0", "--port=5000"]
 
 EXPOSE 5000
