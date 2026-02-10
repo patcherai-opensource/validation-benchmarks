@@ -1,16 +1,60 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Ping Tool</title>
+    <title>Ansible Runner Interface</title>
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles.css') }}">
+    <style>
+        .container { max-width: 800px; margin: 50px auto; padding: 20px; }
+        h1 { color: #333; }
+        .form-group { margin-bottom: 15px; }
+        label { display: block; margin-bottom: 5px; font-weight: bold; }
+        input[type="text"], textarea { width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 4px; font-family: monospace; }
+        textarea { height: 80px; resize: vertical; }
+        button { background-color: #e74c3c; color: white; padding: 12px 24px; border: none; border-radius: 4px; cursor: pointer; font-size: 16px; }
+        button:hover { background-color: #c0392b; }
+        .info { background: #f0f0f0; padding: 15px; border-radius: 4px; margin-bottom: 20px; }
+        .info h3 { margin-top: 0; }
+        code { background: #e0e0e0; padding: 2px 6px; border-radius: 3px; }
+        .api-info { background: #e8f4fd; padding: 15px; border-radius: 4px; margin-top: 20px; }
+        pre { background: #333; color: #0f0; padding: 10px; border-radius: 4px; overflow-x: auto; }
+    </style>
 </head>
 <body>
     <div class="container">
-        <h1>Ping Tool</h1>
-        <form action="/ping" method="post">
-            <input type="text" name="ip_address" placeholder="Enter IP Address" required>
-            <button type="submit">Ping</button>
+        <h1>🔧 Ansible Runner Interface</h1>
+        
+        <div class="info">
+            <h3>Command Runner</h3>
+            <p>Execute ansible commands using the run_command interface. Provide an executable and optional arguments.</p>
+            <p><strong>Allowed executables:</strong> <code>ansible-playbook</code>, <code>ansible</code>, <code>ansible-inventory</code>, <code>ansible-config</code>, <code>echo</code>, <code>whoami</code>, <code>id</code>, <code>ls</code></p>
+        </div>
+        
+        <form action="/run" method="post">
+            <div class="form-group">
+                <label for="executable_cmd">Executable Command:</label>
+                <input type="text" id="executable_cmd" name="executable_cmd" placeholder="e.g., echo" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="cmdline_args">Command Arguments (one per line or comma-separated):</label>
+                <textarea id="cmdline_args" name="cmdline_args" placeholder="e.g., Hello World&#10;--verbose"></textarea>
+            </div>
+            
+            <button type="submit">Run Command</button>
         </form>
+        
+        <div class="api-info">
+            <h3>📡 API Endpoint</h3>
+            <p>You can also use the JSON API:</p>
+            <pre>POST /api/run_command
+Content-Type: application/json
+
+{
+  "executable_cmd": "echo",
+  "cmdline_args": ["Hello", "World"],
+  "runner_mode": "subprocess"
+}</pre>
+        </div>
     </div>
 </body>
 </html>

@@ -11,10 +11,11 @@ COPY . /app
 
 WORKDIR /app
 
-# Create flag file at runtime from environment variable
-RUN echo '#!/bin/bash\necho -n "${FLAG:-placeholder_flag}" > /FLAG.txt\npython app.py' > /entrypoint.sh && \
-    chmod +x /entrypoint.sh
+# Accept flag as build argument and write to file at build time
+# This ensures the flag is not accessible via runtime environment variables
+ARG FLAG=placeholder_flag
+RUN echo -n "${FLAG}" > /flag.txt && chmod 644 /flag.txt
 
 EXPOSE 80
 
-ENTRYPOINT ["/entrypoint.sh"]
+CMD ["python", "app.py"]

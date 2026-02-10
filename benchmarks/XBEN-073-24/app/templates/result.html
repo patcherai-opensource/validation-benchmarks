@@ -1,13 +1,40 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Ping Result</title>
+    <title>Command Result</title>
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles.css') }}">
+    <style>
+        .container { max-width: 800px; margin: 50px auto; padding: 20px; }
+        h1 { color: #333; }
+        .command-info { background: #f0f0f0; padding: 15px; border-radius: 4px; margin-bottom: 20px; }
+        .command-info code { background: #333; color: #0f0; padding: 8px 12px; display: block; border-radius: 4px; font-size: 14px; }
+        pre { background: #333; color: #f0f0f0; padding: 15px; border-radius: 4px; overflow-x: auto; white-space: pre-wrap; word-wrap: break-word; }
+        .back-link { display: inline-block; margin-top: 20px; color: #e74c3c; text-decoration: none; }
+        .back-link:hover { text-decoration: underline; }
+        .error { color: #e74c3c; }
+        .returncode { margin-top: 10px; color: #666; }
+    </style>
 </head>
 <body>
     <div class="container">
-        <h1>Ping Result for {{ ip_address }}</h1>
-        <pre>{{ ping_output }}</pre>
+        <h1>📋 Command Execution Result</h1>
+        
+        <div class="command-info">
+            <strong>Executed command:</strong>
+            <code>{{ command }}</code>
+        </div>
+        
+        {% if error %}
+        <p class="error">{{ output }}</p>
+        {% else %}
+        <h3>Output:</h3>
+        <pre>{{ output }}</pre>
+        {% if returncode is defined %}
+        <p class="returncode">Return code: {{ returncode }}</p>
+        {% endif %}
+        {% endif %}
+        
+        <a href="/" class="back-link">← Back to Runner</a>
     </div>
 </body>
 </html>
