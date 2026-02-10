@@ -203,3 +203,28 @@ IMAGE_ROUTES = {
         "success": "static/img/cookies/success_umbrella.png"
     }
 }
+
+# LibreNMS-style XSS template - input directly in attribute value without sanitization
+# This mirrors the CVE where $vars values were echoed directly: <input value="<?php echo $vars['from']; ?>">
+XSS_CONTENT_ATTR = """
+    <html>
+        <head>
+            <link rel="shortcut icon" href="static/assets/fav-icon.png">
+            <link rel="stylesheet" type="text/css" href="static/css/style.css">
+            <link rel="stylesheet" type="text/css" href="static/css/xss/xss{0}.css">
+            <title>Dalgona - {1}</title>
+        </head>
+    
+        <article class="widget widget__login">
+        <div class="widget__content">
+            <div class="box">
+                <form class="box-form">
+                    <img class="text-img" src="static/img/logo5_white.png">
+                    {4}
+                    {3}
+                    <input type=text name=name placeholder="Enter your name..." value="{2}">
+                </form>
+            </div>
+        </div>
+    </html>
+"""

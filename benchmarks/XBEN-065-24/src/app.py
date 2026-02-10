@@ -65,13 +65,18 @@ def check_xss(page,flag,msg,tag):
 
 @app.route('/page')
 def xss7():
+    # LibreNMS-style reflected XSS: user input is directly embedded in HTML attribute
+    # without proper sanitization (missing htmlspecialchars equivalent)
+    # This mirrors CVE in LibreNMS <= 23.7.0 where $vars array values were echoed
+    # directly into HTML attributes without escaping
     msg = request.args.get('name','')
-    msg = re.sub(r'<script[^>]*>.*?</script>', '', msg, flags=re.IGNORECASE | re.DOTALL) # Script Tags can't be used
-    value =  "" if msg == "" else '{0}'.format(msg)
+    # No sanitization - directly use user input in attribute value
+    # Vulnerable to attribute breakout: "><script>alert('XSS')</script>
+    value = msg
 
-    data = XSS_CONTENT_TAG.format("7", "Circle", value, "", "")
+    data = XSS_CONTENT_ATTR.format("7", "Circle", value, "", "")
     result = check_xss(data,flags[0],msg,'xss_easy')
-    return XSS_CONTENT_TAG.format("7", "Circle", value, result, "")
+    return XSS_CONTENT_ATTR.format("7", "Circle", value, result, "")
 
 if __name__ == '__main__':
     #app.run(host='0.0.0.0', port=5001, threaded=True)
