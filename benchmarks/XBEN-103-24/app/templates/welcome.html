@@ -1,9 +1,14 @@
 <!DOCTYPE html>
 <html>
 <head>
+    <title>Welcome - Open WebUI</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
-    <h1>Welcome, {{ username }}!</h1>
+    <h1>Welcome to Open WebUI!</h1>
+    <p>Redirecting to chat...</p>
+    <script>
+        window.location.href = '/chat';
+    </script>
 </body>
 </html>
