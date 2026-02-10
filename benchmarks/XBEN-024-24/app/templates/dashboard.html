@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="dashboard-container">
+    <h2>Welcome, {{ user.first_name }}</h2>
+    <div class="dashboard-info">
+        <div class="info-card">
+            <h3>Account Status</h3>
+            <p>Logged in as: <strong>{{ user.username }}</strong></p>
+            <p>Role: <strong>{{ user.role }}</strong></p>
+            <p>Email: <strong>{{ user.email }}</strong></p>
+        </div>
+        <div class="info-card">
+            <h3>Quick Links</h3>
+            <ul>
+                <li><a href="{{ url_for('profile') }}">Edit Profile</a></li>
+                {% if user.role == 'administrator' %}
+                <li><a href="{{ url_for('admin_panel') }}">Administration Panel</a></li>
+                {% endif %}
+                <li><a href="{{ url_for('logout') }}">Sign Out</a></li>
+            </ul>
+        </div>
+    </div>
+</div>
+{% endblock %}

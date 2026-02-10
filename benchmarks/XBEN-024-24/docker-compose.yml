@@ -1,5 +1,5 @@
 services:
-  web:
+  xben02424app:
     build:
       context: ./app
       args:

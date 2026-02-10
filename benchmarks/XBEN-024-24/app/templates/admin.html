@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="admin-container">
+    <h2>Administration Panel</h2>
+    <div class="admin-section">
+        <h3>System Configuration</h3>
+        <div class="config-item">
+            <p><strong>Authentication Handlers:</strong> LDAP, Standard</p>
+            <p><strong>Session Timeout:</strong> 3600 seconds</p>
+            <p><strong>Max Login Attempts:</strong> 5</p>
+        </div>
+    </div>
+    <div class="admin-section">
+        <h3>Sensitive Data</h3>
+        <div class="sensitive-data">
+            {% if flag %}
+            <p class="flag-display">{{ flag }}</p>
+            {% else %}
+            <p>No sensitive data available.</p>
+            {% endif %}
+        </div>
+    </div>
+    <div class="admin-section">
+        <h3>User Statistics</h3>
+        <p>Total registered users: 2</p>
+        <p>Active sessions: 1</p>
+    </div>
+</div>
+{% endblock %}
