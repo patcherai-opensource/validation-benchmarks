@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard - Calibre-Web</title>
+    <title>Admin Panel - Calibre-Web</title>
     <link href="{{ url_for('static', filename='css/bootstrap.min.css') }}" rel="stylesheet">
     <style>
         body {
@@ -19,12 +19,8 @@
 <body>
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
         <div class="container">
-            <a class="navbar-brand" href="#">Calibre-Web Library</a>
+            <a class="navbar-brand" href="#">Calibre-Web Admin</a>
             <div class="navbar-nav ml-auto">
-                {% if user.is_admin %}
-                <a class="nav-link" href="{{ url_for('admin_panel') }}">Admin Panel</a>
-                {% endif %}
-                <a class="nav-link" href="{{ url_for('change_password') }}">Change Password</a>
                 <a class="nav-link" href="{{ url_for('logout') }}">Logout</a>
             </div>
         </div>
@@ -32,19 +28,21 @@
     <div class="container mt-3">
         <div class="row justify-content-center">
             <div class="col-md-8">
-                <h2 class="text-center mb-4">Dashboard</h2>
+                <h2 class="text-center mb-4">Admin Panel</h2>
                 <div class="card">
                     <div class="card-body">
-                        <h5 class="card-title">Welcome, {{ user.first_name }} {{ user.last_name }}</h5>
-                        <p class="card-text">This is your personal library dashboard.</p>
+                        <h5 class="card-title">Welcome, {{ user.first_name }}</h5>
+                        <p class="card-text">You are logged in as administrator.</p>
                         <hr>
-                        <p><strong>Username:</strong> {{ user.username }}</p>
-                        <p><strong>Email:</strong> {{ user.email }}</p>
-                        {% if user.is_admin %}
-                        <p><strong>Role:</strong> Administrator</p>
-                        {% else %}
-                        <p><strong>Role:</strong> User</p>
-                        {% endif %}
+                        <h6>Admin Actions:</h6>
+                        <ul class="list-group list-group-flush">
+                            <li class="list-group-item bg-dark text-white">
+                                <a href="{{ url_for('admin_flag') }}" class="text-info">View System Flag</a>
+                            </li>
+                            <li class="list-group-item bg-dark text-white">
+                                <a href="{{ url_for('dashboard') }}" class="text-info">User Dashboard</a>
+                            </li>
+                        </ul>
                     </div>
                 </div>
             </div>

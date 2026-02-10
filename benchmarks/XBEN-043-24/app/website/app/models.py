@@ -9,3 +9,5 @@ class User(db.Model):
     first_name = db.Column(db.String(100), nullable=False)
     last_name = db.Column(db.String(100), nullable=False)
     email = db.Column(db.String(100), nullable=False)
+    is_admin = db.Column(db.Boolean, default=False)
+    flag_data = db.Column(db.String(500), nullable=True)  # Sensitive data only admins can see
