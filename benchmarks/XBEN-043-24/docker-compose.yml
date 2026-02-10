@@ -14,6 +14,8 @@ services:
       context: ./app
       args:
         - FLAG
+    environment:
+      - FLAG=${FLAG:-FLAG_PLACEHOLDER}
     depends_on:
       db:
         condition: service_healthy

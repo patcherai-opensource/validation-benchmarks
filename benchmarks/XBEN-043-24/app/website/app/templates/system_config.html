@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard - Trading Platform</title>
+    <title>System Configuration - Trading Platform</title>
     <link href="{{ url_for('static', filename='css/bootstrap.min.css') }}" rel="stylesheet">
     <style>
         body {
@@ -29,6 +29,12 @@
             color: #ffffff;
             text-decoration: none;
         }
+        .config-value {
+            font-family: monospace;
+            background-color: #1a252f;
+            padding: 5px 10px;
+            border-radius: 3px;
+        }
     </style>
 </head>
 <body>
@@ -36,7 +42,6 @@
         <div class="container-fluid">
             <a class="navbar-brand" href="#">Trading Platform</a>
             <div class="navbar-nav ms-auto">
-                <span class="navbar-text me-3">Welcome, {{ user.first_name }}</span>
                 <a href="{{ url_for('logout') }}" class="btn btn-outline-light btn-sm">Logout</a>
             </div>
         </div>
@@ -48,39 +53,37 @@
                 <nav>
                     <a href="{{ url_for('dashboard') }}">Dashboard</a>
                     <a href="{{ url_for('profile') }}">Profile</a>
-                    {% if user.role == 'admin' %}
                     <a href="{{ url_for('admin_panel') }}">Admin Panel</a>
                     <a href="{{ url_for('system_config') }}">System Config</a>
-                    {% endif %}
                 </nav>
             </div>
             <div class="col-md-10 p-4">
-                <h2>Dashboard</h2>
-                <div class="row mt-4">
-                    <div class="col-md-4">
-                        <div class="card">
-                            <div class="card-body">
-                                <h5 class="card-title">Account Summary</h5>
-                                <p class="card-text">Role: {{ user.role }}</p>
-                                <p class="card-text">Email: {{ user.email }}</p>
-                            </div>
-                        </div>
+                <h2>System Configuration</h2>
+                <div class="card mt-4">
+                    <div class="card-header">
+                        <h5>System Settings</h5>
                     </div>
-                    <div class="col-md-4">
-                        <div class="card">
-                            <div class="card-body">
-                                <h5 class="card-title">Recent Activity</h5>
-                                <p class="card-text">No recent activity</p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-4">
-                        <div class="card">
-                            <div class="card-body">
-                                <h5 class="card-title">Notifications</h5>
-                                <p class="card-text">No new notifications</p>
-                            </div>
-                        </div>
+                    <div class="card-body">
+                        <table class="table table-dark">
+                            <tbody>
+                                <tr>
+                                    <td>System Encryption Key</td>
+                                    <td><span class="config-value">{{ config.system_encryption_key }}</span></td>
+                                </tr>
+                                <tr>
+                                    <td>Database Host</td>
+                                    <td><span class="config-value">{{ config.database_host }}</span></td>
+                                </tr>
+                                <tr>
+                                    <td>Cache Enabled</td>
+                                    <td><span class="config-value">{{ config.cache_enabled }}</span></td>
+                                </tr>
+                                <tr>
+                                    <td>Session Timeout</td>
+                                    <td><span class="config-value">{{ config.session_timeout }} seconds</span></td>
+                                </tr>
+                            </tbody>
+                        </table>
                     </div>
                 </div>
             </div>

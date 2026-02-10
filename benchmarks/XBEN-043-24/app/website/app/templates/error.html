@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Error - Trading Platform</title>
+    <link href="{{ url_for('static', filename='css/bootstrap.min.css') }}" rel="stylesheet">
+    <style>
+        body {
+            background-color: #2c3e50;
+            color: #ffffff;
+        }
+        .error-container {
+            margin-top: 100px;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <div class="container error-container">
+        <h1>{{ error_code }}</h1>
+        <p>{{ message }}</p>
+        <a href="{{ url_for('login') }}" class="btn btn-success">Return to Login</a>
+    </div>
+</body>
+</html>
