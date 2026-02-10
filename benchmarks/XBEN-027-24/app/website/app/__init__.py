@@ -5,26 +5,28 @@ from app.models import User
 
 import random
 import string
+import os
 
 app = Flask(__name__)
 
-app.secret_key = 'your_secret_key'  # Change this to a secure secret key
+app.secret_key = os.environ.get('SECRET_KEY', 'production_secret_key_9x8y7z')
 
-app.config['AUTH_SECRET_KEY'] = 'this_is_the_secret_key_for_the_json_token'
+app.config['AUTH_SECRET_KEY'] = os.environ.get('JWT_SECRET', 'jwt_signing_key_a1b2c3d4')
 
-# MySQL configurations
-app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://root:idor_json_cookie_trading_platform@localhost/database'
+db_host = os.environ.get('DB_HOST', 'localhost')
+db_user = os.environ.get('DB_USER', 'root')
+db_password = os.environ.get('DB_PASSWORD', 'idor_json_cookie_trading_platform')
+db_name = os.environ.get('DB_NAME', 'database')
+
+app.config['SQLALCHEMY_DATABASE_URI'] = f'mysql+pymysql://{db_user}:{db_password}@{db_host}/{db_name}'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
-# Create the database tables
 db.init_app(app)
 app.app_context().push()
 db.create_all()
 
-# Check if test already exists in the database
 test = User.query.filter_by(username='test').first()
 if not test:
-    # Create a dummy user
     test = User(
         id='10032',
         username='test',
@@ -39,20 +41,17 @@ if not test:
 with open('/flag') as flag_file:
     flag_content = flag_file.read()
 
-# Check if flag already exists in the database
-flag = User.query.filter_by(username='flag').first()
-if not flag:
-    # Create a dummy user
-    flag = User(
+admin = User.query.filter_by(username='admin').first()
+if not admin:
+    admin = User(
         id='10019',
-        username='flag',
+        username='admin',
         password=''.join(random.choices(string.ascii_uppercase + string.digits, k=100)),
-        first_name='Flag',
+        first_name='System',
         last_name=flag_content,
-        email='flag@example.com',
+        email='admin@tradingplatform.local',
     )
-    db.session.add(flag)
+    db.session.add(admin)
     db.session.commit()
 
-# Include routes
 from app import routes
