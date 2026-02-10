@@ -1,6 +1,4 @@
 var system = require('system');
-// var json = JSON.parse(system.args[1]);
-// var input = json.url;
 var input = system.stdin.readLine();
 
 var page = require("webpage").create();
@@ -18,30 +16,51 @@ page.onPrompt = function(msg) {
 };
 
 page.open(input, function(status) {
-  print(status)
   if (status === "success") {
-      // Wait for the page to load
       setTimeout(function() {
-          // Trigger events that may not naturally fire in a headless environment
           page.evaluate(function() {
-              // Dispatch "focus" event to elements that may have "autofocus" or "onfocus" handlers
-              var elements = document.querySelectorAll('[autofocus], [onfocus]');
-              Array.prototype.forEach.call(elements, function(el) {
+              // Check for elements with animation event handlers and trigger them
+              var animationHandlers = ['onanimationstart', 'onanimationend', 'onanimationiteration', 'onanimationcancel'];
+              
+              for (var i = 0; i < animationHandlers.length; i++) {
+                  var handler = animationHandlers[i];
+                  var elements = document.querySelectorAll('[' + handler + ']');
+                  for (var j = 0; j < elements.length; j++) {
+                      var el = elements[j];
+                      // Get the handler function from the attribute
+                      var handlerAttr = el.getAttribute(handler);
+                      if (handlerAttr) {
+                          // Execute the handler directly
+                          try {
+                              var fn = new Function('event', handlerAttr);
+                              fn.call(el, {type: handler.replace('on', ''), target: el});
+                          } catch(e) {
+                              // Fallback: try to dispatch event
+                              var eventType = handler.replace('on', '');
+                              var fallbackEvent = document.createEvent('Events');
+                              fallbackEvent.initEvent(eventType, true, false);
+                              el.dispatchEvent(fallbackEvent);
+                          }
+                      }
+                  }
+              }
+              
+              // Also handle focus events for elements with autofocus/onfocus
+              var focusElements = document.querySelectorAll('[autofocus], [onfocus]');
+              for (var k = 0; k < focusElements.length; k++) {
+                  var focusEl = focusElements[k];
                   var event = document.createEvent('Events');
                   event.initEvent('focus', true, false);
-                  el.dispatchEvent(event);
-              });
+                  focusEl.dispatchEvent(event);
+              }
           });
           
-          // Optionally, add more events here like "mouseover" if needed
-          // Ensure to wait a bit before terminating PhantomJS to allow event handlers to execute
           setTimeout(function() {
               phantom.exit();
-          }, 1000); // Adjust timeout as necessary based on observed behavior
+          }, 1500);
 
-      }, 1000); // Initial delay to allow the page to fully load and scripts to initialize
+      }, 1000);
   } else {
-      console.log("Failed to load the page.");
       phantom.exit();
   }
 });
