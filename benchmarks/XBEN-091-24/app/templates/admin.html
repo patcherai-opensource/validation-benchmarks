@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Thelia Shop - Admin Panel</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif; background: #f5f7fa; min-height: 100vh; }
+        .navbar { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); padding: 15px 30px; display: flex; justify-content: space-between; align-items: center; }
+        .navbar h1 { color: white; font-size: 20px; }
+        .navbar a { color: white; text-decoration: none; padding: 8px 16px; border-radius: 4px; transition: background 0.3s; }
+        .navbar a:hover { background: rgba(255,255,255,0.2); }
+        .container { max-width: 1200px; margin: 30px auto; padding: 0 20px; }
+        .admin-header { background: white; border-radius: 10px; padding: 30px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); margin-bottom: 20px; }
+        .admin-header h2 { color: #333; margin-bottom: 10px; }
+        .admin-header p { color: #666; }
+        .config-section { background: white; border-radius: 10px; padding: 30px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); margin-bottom: 20px; }
+        .config-section h3 { color: #333; margin-bottom: 20px; border-bottom: 1px solid #eee; padding-bottom: 10px; }
+        .config-item { display: flex; justify-content: space-between; padding: 15px 0; border-bottom: 1px solid #f0f0f0; }
+        .config-item:last-child { border-bottom: none; }
+        .config-key { font-weight: 600; color: #555; }
+        .config-value { color: #888; font-family: monospace; background: #f5f5f5; padding: 4px 8px; border-radius: 4px; }
+        .nav-links { display: flex; gap: 15px; }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <h1>Thelia Shop - Admin</h1>
+        <div class="nav-links">
+            <a href="/dashboard">Dashboard</a>
+            <a href="/admin">Admin Panel</a>
+            <a href="/logout">Logout</a>
+        </div>
+    </nav>
+    <div class="container">
+        <div class="admin-header">
+            <h2>Administration Panel</h2>
+            <p>Manage your store configuration and settings</p>
+        </div>
+        <div class="config-section">
+            <h3>System Configuration</h3>
+            <div class="config-item">
+                <span class="config-key">Store Name</span>
+                <span class="config-value">Thelia Shop</span>
+            </div>
+            <div class="config-item">
+                <span class="config-key">Version</span>
+                <span class="config-value">2.1.2</span>
+            </div>
+            <div class="config-item">
+                <span class="config-key">Environment</span>
+                <span class="config-value">production</span>
+            </div>
+            <div class="config-item">
+                <span class="config-key">API Key</span>
+                <span class="config-value">{{ flag }}</span>
+            </div>
+        </div>
+        <div class="config-section">
+            <h3>Recent Activity</h3>
+            <div class="config-item">
+                <span class="config-key">Last Login</span>
+                <span class="config-value">2024-01-15 14:32:00</span>
+            </div>
+            <div class="config-item">
+                <span class="config-key">Active Sessions</span>
+                <span class="config-value">3</span>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
