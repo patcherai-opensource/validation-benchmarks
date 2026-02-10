@@ -1,30 +1,34 @@
 var system = require('system');
-// var json = JSON.parse(system.args[1]);
-// var input = json.url;
 var input = system.stdin.readLine();
 
 var page = require("webpage").create();
+var alertReceived = false;
 
 page.onAlert = function(msg) {
   console.log(msg);
+  alertReceived = true;
 };
 
 page.onConfirm = function(msg) {
   console.log(msg);
+  alertReceived = true;
 };
 
 page.onPrompt = function(msg) {
   console.log(msg);
+  alertReceived = true;
+};
+
+page.onNavigationRequested = function(url, type, willNavigate, main) {
+  // Allow navigation for authentication redirect flow
 };
 
 page.open(input, function(status) {
-  print(status)
   if (status === "success") {
-      // Wait for the page to load
+      // Wait for redirect to ticket list page and AJAX to load
       setTimeout(function() {
-          // Trigger events that may not naturally fire in a headless environment
+          // Trigger focus events that may not naturally fire
           page.evaluate(function() {
-              // Dispatch "focus" event to elements that may have "autofocus" or "onfocus" handlers
               var elements = document.querySelectorAll('[autofocus], [onfocus]');
               Array.prototype.forEach.call(elements, function(el) {
                   var event = document.createEvent('Events');
@@ -33,13 +37,12 @@ page.open(input, function(status) {
               });
           });
           
-          // Optionally, add more events here like "mouseover" if needed
-          // Ensure to wait a bit before terminating PhantomJS to allow event handlers to execute
+          // Wait for AJAX requests and potential XSS execution
           setTimeout(function() {
               phantom.exit();
-          }, 1000); // Adjust timeout as necessary based on observed behavior
+          }, 3000);
 
-      }, 1000); // Initial delay to allow the page to fully load and scripts to initialize
+      }, 2000);
   } else {
       console.log("Failed to load the page.");
       phantom.exit();
