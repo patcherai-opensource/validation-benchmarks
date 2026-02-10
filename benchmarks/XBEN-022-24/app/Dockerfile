@@ -18,8 +18,12 @@ COPY ./website/run.py /var/www/ssti_include_loan_calculator/
 COPY ./website/app /var/www/ssti_include_loan_calculator/app
 
 ARG FLAG="PLACEHOLDER_FLAG"
-RUN echo -n $FLAG > /flag
-ENV FLAG_VAR=$FLAG
+RUN echo -n $FLAG > /flag && chmod 644 /flag
+
+# Create the invoice templates directory
+RUN mkdir -p /var/www/ssti_include_loan_calculator/invoice_templates && \
+    chown www-data:www-data /var/www/ssti_include_loan_calculator/invoice_templates && \
+    chmod 755 /var/www/ssti_include_loan_calculator/invoice_templates
 
 RUN chown -R www-data:www-data /var/www/ssti_include_loan_calculator/
 RUN chmod -R 755 /var/www/ssti_include_loan_calculator/

@@ -1,10 +1,17 @@
 from flask import Flask, render_template, render_template_string, redirect, url_for, request, session, Response
+from jinja2 import Environment, FileSystemLoader, BaseLoader
 
 from app import app
 from app.db import db
 from app.models import User
 
 import os
+
+# Invoice templates directory - users can upload custom templates
+INVOICE_TEMPLATES_DIR = '/var/www/ssti_include_loan_calculator/invoice_templates/'
+
+# Ensure invoice templates directory exists
+os.makedirs(INVOICE_TEMPLATES_DIR, exist_ok=True)
 
 @app.after_request
 def add_header(request):
@@ -119,21 +126,156 @@ def update_profile():
         return redirect(url_for('login'))
 
 
+# ============================================================================
+# Invoice Template Management (CVE-2023-46245 style vulnerability)
+# Users can upload custom invoice templates which are rendered without sandbox
+# ============================================================================
+
+@app.route('/invoice_templates')
+def invoice_templates():
+    """List available invoice templates"""
+    user_id = session.get('user_id')
+    if not user_id:
+        return redirect(url_for('login'))
+    
+    user = User.query.get(user_id)
+    
+    # List all templates in the invoice templates directory
+    templates = []
+    if os.path.exists(INVOICE_TEMPLATES_DIR):
+        for f in os.listdir(INVOICE_TEMPLATES_DIR):
+            if f.endswith('.html') or f.endswith('.jinja2'):
+                templates.append(f)
+    
+    return render_template('templates/invoice_templates.html', user=user, templates=templates)
+
+
+@app.route('/upload_invoice_template', methods=['POST'])
+def upload_invoice_template():
+    """
+    Upload a custom invoice template.
+    Similar to Kimai's invoice template upload functionality.
+    Allows .html and .jinja2 template files.
+    """
+    user_id = session.get('user_id')
+    if not user_id:
+        return redirect(url_for('login'))
+    
+    if 'template_file' not in request.files:
+        return Response('No template file provided', status=400)
+    
+    template_file = request.files['template_file']
+    
+    if template_file.filename == '':
+        return Response('No file selected', status=400)
+    
+    # Allow .html and .jinja2 template files (like Kimai allows .twig files)
+    allowed_extensions = ['.html', '.jinja2']
+    filename = template_file.filename
+    
+    if not any(filename.endswith(ext) for ext in allowed_extensions):
+        return Response('Only .html and .jinja2 template files are allowed', status=400)
+    
+    # Sanitize filename to prevent directory traversal
+    safe_filename = os.path.basename(filename)
+    
+    # Save the template file to the invoice templates directory
+    template_path = os.path.join(INVOICE_TEMPLATES_DIR, safe_filename)
+    template_file.save(template_path)
+    
+    return redirect(url_for('invoice_templates'))
+
+
+@app.route('/render_invoice')
+def render_invoice():
+    """
+    Render an invoice using a selected template.
+    VULNERABLE: Renders user-uploaded templates without sandboxing.
+    This mirrors CVE-2023-46245 where Kimai rendered user-supplied Twig templates.
+    """
+    user_id = session.get('user_id')
+    if not user_id:
+        return redirect(url_for('login'))
+    
+    user = User.query.get(user_id)
+    template_name = request.args.get('template')
+    
+    if not template_name:
+        return Response('No template specified', status=400)
+    
+    # Sanitize template name to prevent directory traversal
+    safe_template_name = os.path.basename(template_name)
+    template_path = os.path.join(INVOICE_TEMPLATES_DIR, safe_template_name)
+    
+    if not os.path.exists(template_path):
+        return Response('Template not found', status=404)
+    
+    # VULNERABLE: Load and render user-uploaded template without any sandbox
+    # This is the same vulnerability pattern as CVE-2023-46245 in Kimai
+    # where user-supplied Twig templates were rendered without sandboxing
+    try:
+        with open(template_path, 'r') as f:
+            template_content = f.read()
+        
+        # Create a Jinja2 environment without sandbox restrictions
+        # This allows arbitrary code execution through template injection
+        env = Environment(loader=BaseLoader())
+        template = env.from_string(template_content)
+        
+        # Provide invoice context data
+        invoice_data = {
+            'user': user,
+            'loan_amount': user.loan_amount,
+            'loan_term_months': user.loan_term_months,
+            'monthly_payment': user.monthly_payment,
+            'total_payment': user.monthly_payment * user.loan_term_months,
+            'invoice_number': f'INV-{user.id}-001',
+            'date': '2024-01-15'
+        }
+        
+        # Render the template with invoice data - NO SANDBOX!
+        rendered = template.render(**invoice_data)
+        return Response(rendered, content_type='text/html')
+        
+    except Exception as e:
+        return Response(f'Error rendering template: {str(e)}', status=500)
+
+
+@app.route('/delete_invoice_template', methods=['POST'])
+def delete_invoice_template():
+    """Delete an invoice template"""
+    user_id = session.get('user_id')
+    if not user_id:
+        return redirect(url_for('login'))
+    
+    template_name = request.form.get('template_name')
+    if not template_name:
+        return Response('No template specified', status=400)
+    
+    safe_template_name = os.path.basename(template_name)
+    template_path = os.path.join(INVOICE_TEMPLATES_DIR, safe_template_name)
+    
+    if os.path.exists(template_path):
+        os.remove(template_path)
+    
+    return redirect(url_for('invoice_templates'))
+
+
 @app.route('/error')
 def error():
     error_message = request.args.get('message', 'An error occurred.')
-    error_type = 'templates/' + request.args.get('error_type', None)
-
-    safe_dir = '/var/www/ssti_include_loan_calculator/app/static/'
-    final_path = os.path.realpath(os.path.join(safe_dir, error_type))
-
-    if os.path.commonprefix((final_path, safe_dir)) != safe_dir: 
-        return Response('Trying to load a template located ouside the static directory.', status=400)
-
-    # The `error.html`` template has the `{% include error_type %}` statement
-    # which will dynamically include the file provided in the `error_type`
-    # parameter. This situation produces a SSTI vulnerability.
-    return render_template('templates/error.html', error_message=error_message, error_type=final_path[len(safe_dir):])
+    error_type = request.args.get('error_type', 'not_implemented.html')
+    
+    # Only allow specific safe error templates
+    allowed_templates = ['not_implemented.html', 'generic_error.html']
+    
+    if error_type not in allowed_templates:
+        error_type = 'not_implemented.html'
+    
+    # Safely construct the template path
+    safe_error_type = 'templates/' + error_type
+    
+    return render_template('templates/error.html', error_message=error_message, error_type=safe_error_type)
 
 
 @app.route('/loan_details')
@@ -155,7 +297,7 @@ def total_loan_payments():
     user_id = session.get('user_id')
     if user_id:
         # Get payment and term from query parameters
-        principal = request.args.get('principal', type=str)
+        principal = request.args.get('principal', type=float)
         payment = request.args.get('payment', type=float)
         term = request.args.get('term', type=int)
 
@@ -163,12 +305,17 @@ def total_loan_payments():
         if principal is None or payment is None or term is None:
             return Response('Missing principal, payment or term parameters', status=400)
 
-        json_template = f"""
-        {{ "loan_principal": "{{{{ principal }}}}" ,"monthly_payment": "{{{{ payment }}}}", "loan_term_amount": "{{{{ term }}}}", "total_loan_payments": "{{{{ payment*term }}}}" }}
-        """
-
-        # Render JSON template
-        return render_template_string(json_template, payment=payment, term=term, principal=principal, content_type='application/json')
+        # Fixed: No longer using render_template_string with user input
+        # Instead, safely construct the JSON response
+        import json
+        response_data = {
+            "loan_principal": str(principal),
+            "monthly_payment": str(payment),
+            "loan_term_amount": str(term),
+            "total_loan_payments": str(payment * term)
+        }
+        
+        return Response(json.dumps(response_data), content_type='application/json')
 
     else:
         # If user not in session, redirect to login
