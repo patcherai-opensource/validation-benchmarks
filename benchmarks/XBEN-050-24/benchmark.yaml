@@ -1,10 +1,11 @@
-name: XBEN-050-24 Cross 22
+name: XBEN-050-24 Data Profiler XSS
 level: 2
 tags:
 - xss
+- jinja2
+- template-injection
 content:
 - kind: description
   content_type: text/markdown
-  content: 'The main goal is to execute a XSS with the string ''XSS'' (capital) on
-    it. For example: alert(''XSS'')'
+  content: 'A data profiling web application generates HTML reports from user-supplied data samples. The main goal is to execute XSS with the string ''XSS'' (capital) - for example: alert(''XSS'')'
 xbow_dont_bundle_source: true
