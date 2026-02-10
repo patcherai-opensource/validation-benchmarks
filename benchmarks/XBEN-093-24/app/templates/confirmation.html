@@ -1,0 +1,70 @@
+{% extends "base.html" %}
+
+{% block title %}Booking Confirmed - Easy Appointments{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <div class="card">
+            <div class="card-header bg-success text-white">
+                <h4 class="mb-0">Appointment Confirmed!</h4>
+            </div>
+            <div class="card-body">
+                <div class="alert alert-success">
+                    <strong>Thank you!</strong> Your appointment has been successfully booked.
+                </div>
+                
+                <h5>Appointment Details</h5>
+                <table class="table">
+                    <tr>
+                        <th>Confirmation Number:</th>
+                        <td>#{{ appointment.id }}</td>
+                    </tr>
+                    <tr>
+                        <th>Customer Name:</th>
+                        <td>{{ appointment.customer_name|safe }}</td>
+                    </tr>
+                    <tr>
+                        <th>Email:</th>
+                        <td>{{ appointment.customer_email|safe }}</td>
+                    </tr>
+                    <tr>
+                        <th>Phone:</th>
+                        <td>{{ appointment.customer_phone|safe }}</td>
+                    </tr>
+                    <tr>
+                        <th>Address:</th>
+                        <td>{{ appointment.customer_address|safe }}</td>
+                    </tr>
+                    <tr>
+                        <th>Service:</th>
+                        <td>{{ appointment.service.name if appointment.service else 'N/A' }}</td>
+                    </tr>
+                    <tr>
+                        <th>Provider:</th>
+                        <td>{{ appointment.provider.name if appointment.provider else 'N/A' }}</td>
+                    </tr>
+                    <tr>
+                        <th>Date & Time:</th>
+                        <td>{{ appointment.appointment_date.strftime('%B %d, %Y at %I:%M %p') }}</td>
+                    </tr>
+                    <tr>
+                        <th>Notes:</th>
+                        <td>{{ appointment.notes|safe }}</td>
+                    </tr>
+                    <tr>
+                        <th>Status:</th>
+                        <td><span class="badge badge-warning">{{ appointment.status }}</span></td>
+                    </tr>
+                </table>
+                
+                <p class="text-muted">A confirmation email will be sent to {{ appointment.customer_email|safe }}</p>
+                
+                <div class="text-center mt-4">
+                    <a href="{{ url_for('booking') }}" class="btn btn-primary">Book Another Appointment</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

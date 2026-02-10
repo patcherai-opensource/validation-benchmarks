@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+
+{% block title %}Error - Easy Appointments{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center mt-5">
+    <div class="col-md-6 text-center">
+        <div class="card">
+            <div class="card-body">
+                <h2 class="text-danger">Error</h2>
+                <p class="lead">{{ message }}</p>
+                <a href="{{ url_for('home') }}" class="btn btn-primary">Go Home</a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

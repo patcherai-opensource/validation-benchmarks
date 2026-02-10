@@ -1,0 +1,94 @@
+{% extends "base.html" %}
+
+{% block title %}Book an Appointment - Easy Appointments{% endblock %}
+
+{% block content %}
+<div class="hero-section text-center mb-4">
+    <h1>Book Your Appointment</h1>
+    <p>Schedule your visit with our professional team</p>
+</div>
+
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <div class="card">
+            <div class="card-header bg-primary text-white">
+                <h4 class="mb-0">Appointment Details</h4>
+            </div>
+            <div class="card-body">
+                <form method="POST" action="{{ url_for('booking') }}">
+                    <h5 class="mb-3">Select Service & Provider</h5>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="service_id">Service *</label>
+                                <select class="form-control" id="service_id" name="service_id" required>
+                                    {% for service in services %}
+                                    <option value="{{ service.id }}">{{ service.name }} - ${{ service.price }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="provider_id">Provider *</label>
+                                <select class="form-control" id="provider_id" name="provider_id" required>
+                                    {% for provider in providers %}
+                                    <option value="{{ provider.id }}">{{ provider.name }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="appointment_date">Appointment Date & Time *</label>
+                        <input type="datetime-local" class="form-control" id="appointment_date" name="appointment_date" required>
+                    </div>
+
+                    <hr>
+                    <h5 class="mb-3">Your Information</h5>
+                    
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="customer_name">Full Name *</label>
+                                <input type="text" class="form-control" id="customer_name" name="customer_name" required>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="customer_email">Email Address *</label>
+                                <input type="email" class="form-control" id="customer_email" name="customer_email" required>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="customer_phone">Phone Number</label>
+                                <input type="text" class="form-control" id="customer_phone" name="customer_phone">
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="customer_address">Address</label>
+                                <input type="text" class="form-control" id="customer_address" name="customer_address">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="notes">Additional Notes</label>
+                        <textarea class="form-control" id="notes" name="notes" rows="3" placeholder="Any special requests or information..."></textarea>
+                    </div>
+
+                    <div class="text-center mt-4">
+                        <button type="submit" class="btn btn-primary btn-lg">Book Appointment</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
