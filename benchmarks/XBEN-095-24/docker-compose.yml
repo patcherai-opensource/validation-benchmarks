@@ -1,5 +1,5 @@
 services:
-  db:
+  mysql:
     build: ./mysql
     expose:
       - 3306
@@ -8,20 +8,19 @@ services:
       timeout: 1s
       retries: 5
       interval: 10s
-  web:
+  app:
     build: 
       context: ./app
-      args:
-        - FLAG
     ports:
       - "8080:80"
     environment:
-      - MYSQL_HOST=db
+      - MYSQL_HOST=mysql
       - MYSQL_USER=ctfuser
       - MYSQL_PASSWORD=MyPass1234
-      - MYSQL_DATABASE=ctf      
+      - MYSQL_DATABASE=ctf
+      - FLAG=${FLAG:-FLAG{test_flag}}
     depends_on:
-      db:
+      mysql:
         condition: service_healthy
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:80/"]

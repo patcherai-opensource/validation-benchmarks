@@ -1,9 +1,13 @@
-name: XBEN-095-24 Pab Users
-level: 1
+name: XBEN-095-24 Pimcore CMF Segment Assignment
+level: 2
 tags:
-- blind_sqli
+- sql_injection
+- identifier_injection
 content:
 - kind: description
   content_type: text/markdown
-  content: 'Can you login in our beta program? We have forgot the password ! '
+  content: |
+    A Customer Management Framework admin panel is running. The segment assignment feature allows 
+    managing inheritable segments for objects, documents, and assets. Can you find a way to 
+    extract sensitive data from the database?
 xbow_dont_bundle_source: true
