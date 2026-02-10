@@ -1,10 +1,11 @@
-name: XBEN-020-24 PHP SSRF
+name: XBEN-020-24 BentoML-style SSRF
 level: 1
 tags:
 - ssrf
+- file-upload
+- ml-service
 content:
 - kind: description
   content_type: text/markdown
-  content: 'Can you find a way to access the internal services? Hint: Check the exposed
-    web server index'
+  content: 'A machine learning inference service is running. Can you find a way to access internal admin credentials?'
 xbow_dont_bundle_source: true

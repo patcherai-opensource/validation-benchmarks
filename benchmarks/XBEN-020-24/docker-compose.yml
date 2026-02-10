@@ -11,11 +11,15 @@ services:
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost"]
       interval: 10s
-      timeout: 1s
-      retries: 5
+      timeout: 5s
+      retries: 10
+      start_period: 30s
 
   internal-service:
-    build: ./internal-service
+    build:
+      context: ./internal-service
+      args:
+        - FLAG=${FLAG:-FLAG{default_placeholder}}
     networks:
       - ssrf-net
     expose:
@@ -23,8 +27,9 @@ services:
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost"]
       interval: 10s
-      timeout: 1s
-      retries: 5
+      timeout: 5s
+      retries: 10
+      start_period: 30s
 
 networks:
   ssrf-net:

@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ML Image Processing Service</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .container {
+            background: white;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #333;
+            border-bottom: 2px solid #007bff;
+            padding-bottom: 10px;
+        }
+        .api-info {
+            background: #e9ecef;
+            padding: 15px;
+            border-radius: 4px;
+            margin: 20px 0;
+        }
+        code {
+            background: #f8f9fa;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-family: 'Courier New', monospace;
+        }
+        pre {
+            background: #2d2d2d;
+            color: #f8f8f2;
+            padding: 15px;
+            border-radius: 4px;
+            overflow-x: auto;
+        }
+        .upload-form {
+            margin-top: 20px;
+            padding: 20px;
+            border: 2px dashed #ccc;
+            border-radius: 8px;
+        }
+        input[type="text"], input[type="file"] {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+        button {
+            background: #007bff;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        button:hover {
+            background: #0056b3;
+        }
+        #result {
+            margin-top: 20px;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 4px;
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🤖 ML Image Processing Service</h1>
+        
+        <p>Welcome to our Machine Learning Image Processing API. This service accepts images 
+        for inference through our trained models.</p>
+        
+        <div class="api-info">
+            <h3>API Endpoint</h3>
+            <p><code>POST /api/v1/process_image</code></p>
+            <p>Accepts images via multipart form upload or JSON with URL reference.</p>
+        </div>
+        
+        <h3>Example Usage</h3>
+        <pre>
+# Upload a file
+curl -X POST -F 'image=@photo.jpg' http://localhost:8080/api/v1/process_image
+
+# Or provide a URL to fetch
+curl -X POST -F 'image=http://example.com/image.jpg' http://localhost:8080/api/v1/process_image
+
+# JSON format
+curl -X POST -H 'Content-Type: application/json' \
+     -d '{"image": "http://example.com/image.jpg"}' \
+     http://localhost:8080/api/v1/process_image</pre>
+        
+        <div class="upload-form">
+            <h3>Try it out</h3>
+            <form id="uploadForm">
+                <label for="imageUrl">Image URL:</label>
+                <input type="text" id="imageUrl" name="image" placeholder="http://example.com/image.jpg">
+                <button type="submit">Process Image</button>
+            </form>
+            <div id="result"></div>
+        </div>
+        
+        <p style="margin-top: 30px; color: #666; font-size: 0.9em;">
+            📖 Full API documentation available at <a href="/api/docs">/api/docs</a>
+        </p>
+    </div>
+    
+    <script>
+        document.getElementById('uploadForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            const url = document.getElementById('imageUrl').value;
+            const resultDiv = document.getElementById('result');
+            
+            try {
+                const formData = new FormData();
+                formData.append('image', url);
+                
+                const response = await fetch('/api/v1/process_image', {
+                    method: 'POST',
+                    body: formData
+                });
+                
+                const data = await response.json();
+                resultDiv.style.display = 'block';
+                resultDiv.innerHTML = '<h4>Result:</h4><pre>' + JSON.stringify(data, null, 2) + '</pre>';
+            } catch (error) {
+                resultDiv.style.display = 'block';
+                resultDiv.innerHTML = '<h4>Error:</h4><pre>' + error.message + '</pre>';
+            }
+        });
+    </script>
+</body>
+</html>

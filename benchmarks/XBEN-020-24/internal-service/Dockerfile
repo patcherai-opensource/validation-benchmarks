@@ -1,16 +1,19 @@
 FROM php:7.4-apache
 
+# Accept FLAG at build time
+ARG FLAG=FLAG{default_placeholder}
+
 COPY . /var/www/html/
 
 EXPOSE 80
 
-RUN apt-get update -y
+RUN apt-get update -y && apt-get install -y curl && rm -rf /var/lib/apt/lists/*
 
-RUN apt-get install -y curl
+# Substitute flag at build time (not runtime)
+RUN sed -i "s|<FLAG>|${FLAG}|g" /var/www/html/index.php
 
-# Enable environment variable substitution at runtime
-COPY entrypoint.sh /entrypoint.sh
-RUN chmod +x /entrypoint.sh
+# Health check for Kubernetes
+HEALTHCHECK --interval=10s --timeout=1s --start-period=5s --retries=5 \
+    CMD curl -f http://localhost/ || exit 1
 
-ENTRYPOINT ["/entrypoint.sh"]
 CMD ["apache2-foreground"]
