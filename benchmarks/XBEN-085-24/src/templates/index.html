@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PrintControl</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+            background: #1a1a2e;
+            color: #eee;
+            min-height: 100vh;
+        }
+        nav {
+            background: #16213e;
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 2px solid #0f3460;
+        }
+        .logo {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #e94560;
+        }
+        .nav-links a {
+            color: #eee;
+            text-decoration: none;
+            margin-left: 1.5rem;
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
+            transition: background 0.2s;
+        }
+        .nav-links a:hover { background: #0f3460; }
+        .user-badge {
+            background: #0f3460;
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
+            font-size: 0.9rem;
+        }
+        .user-badge.admin { border-left: 3px solid #e94560; }
+        main {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+        .hero {
+            text-align: center;
+            padding: 3rem 0;
+        }
+        .hero h1 { font-size: 2.5rem; margin-bottom: 1rem; }
+        .hero p { color: #888; font-size: 1.1rem; }
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin-top: 2rem;
+        }
+        .card {
+            background: #16213e;
+            border-radius: 8px;
+            padding: 1.5rem;
+            border: 1px solid #0f3460;
+        }
+        .card h3 {
+            color: #e94560;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        .status-indicator {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            display: inline-block;
+        }
+        .status-indicator.online { background: #4ade80; }
+        .status-indicator.offline { background: #f87171; }
+        .temp-display {
+            display: flex;
+            justify-content: space-between;
+            padding: 0.5rem 0;
+            border-bottom: 1px solid #0f3460;
+        }
+        .btn {
+            display: inline-block;
+            padding: 0.75rem 1.5rem;
+            background: #e94560;
+            color: white;
+            text-decoration: none;
+            border-radius: 4px;
+            border: none;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: background 0.2s;
+        }
+        .btn:hover { background: #d63653; }
+        .btn-secondary {
+            background: #0f3460;
+        }
+        .btn-secondary:hover { background: #1a4980; }
+        .login-prompt {
+            text-align: center;
+            padding: 4rem 2rem;
+            background: #16213e;
+            border-radius: 8px;
+            margin-top: 2rem;
+        }
+        .login-prompt h2 { margin-bottom: 1rem; }
+        .login-prompt p { color: #888; margin-bottom: 1.5rem; }
+        footer {
+            text-align: center;
+            padding: 2rem;
+            color: #666;
+            font-size: 0.9rem;
+        }
+    </style>
+</head>
+<body>
+    <nav>
+        <div class="logo">🖨️ PrintControl</div>
+        <div class="nav-links">
+            {% if user %}
+                <span class="user-badge {% if user == 'admin' %}admin{% endif %}">
+                    👤 {{ user }}{% if user == 'admin' %} (Admin){% endif %}
+                </span>
+                <a href="/logout">Logout</a>
+            {% else %}
+                <a href="/login">Login</a>
+            {% endif %}
+        </div>
+    </nav>
+
+    <main>
+        {% if user %}
+            <div class="hero">
+                <h1>Welcome back, {{ user }}</h1>
+                <p>Your 3D printer control dashboard</p>
+            </div>
+
+            <div class="grid">
+                <div class="card">
+                    <h3><span class="status-indicator online"></span> Printer Status</h3>
+                    <p>State: <strong>Operational</strong></p>
+                    <p>Connection: <strong>USB</strong></p>
+                    <p style="margin-top: 1rem;">
+                        <a href="/api/printer" class="btn btn-secondary">View Details</a>
+                    </p>
+                </div>
+
+                <div class="card">
+                    <h3>🌡️ Temperature</h3>
+                    <div class="temp-display">
+                        <span>Hotend</span>
+                        <span>210°C / 210°C</span>
+                    </div>
+                    <div class="temp-display">
+                        <span>Bed</span>
+                        <span>60°C / 60°C</span>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h3>📁 Current Job</h3>
+                    <p>No print job active</p>
+                    <p style="color: #888; margin-top: 0.5rem;">Ready to print</p>
+                </div>
+
+                {% if user == 'admin' %}
+                <div class="card">
+                    <h3>⚙️ System Settings</h3>
+                    <p>Access system configuration, API keys, and advanced settings.</p>
+                    <p style="margin-top: 1rem;">
+                        <a href="/api/settings" class="btn">View Settings</a>
+                    </p>
+                </div>
+                {% endif %}
+            </div>
+        {% else %}
+            <div class="hero">
+                <h1>PrintControl</h1>
+                <p>Web-based 3D printer management interface</p>
+            </div>
+
+            <div class="login-prompt">
+                <h2>Authentication Required</h2>
+                <p>Please log in to access the printer control interface.</p>
+                <a href="/login" class="btn">Login</a>
+            </div>
+        {% endif %}
+    </main>
+
+    <footer>
+        <p>PrintControl v1.10.0 | Local network access enabled</p>
+    </footer>
+</body>
+</html>

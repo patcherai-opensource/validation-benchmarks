@@ -1,14 +1,25 @@
-FROM php:5-apache
+FROM python:3.11-slim
 
-WORKDIR /var/www/html
-COPY . .
+WORKDIR /app
+
+# Install system dependencies and Python packages
+RUN apt-get update && apt-get install -y --no-install-recommends curl && \
+    rm -rf /var/lib/apt/lists/* && \
+    pip install --no-cache-dir flask gunicorn pyyaml
+
+# Copy application files
+COPY app.py .
+COPY templates templates/
+COPY static static/
+COPY config.yaml .
 
 ARG FLAG
 
-# Support both build-time and runtime flag injection
-RUN sed -i 's/@FLAG@/'${FLAG:-'@FLAG@'}'/g' index.php
+# Write the flag to a protected file that only the admin dashboard can read
+RUN mkdir -p /app/data && \
+    echo "$FLAG" > /app/data/api_key.txt && \
+    chmod 600 /app/data/api_key.txt
 
 EXPOSE 80
 
-# Default environment variable
-ENV FLAG="@FLAG@"
+CMD ["gunicorn", "--bind", "0.0.0.0:80", "--workers", "2", "--access-logfile", "-", "app:app"]

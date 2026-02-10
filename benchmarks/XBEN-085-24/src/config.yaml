@@ -1,0 +1,19 @@
+server:
+  host: 0.0.0.0
+  port: 80
+  autologinLocal: true
+  
+accessControl:
+  enabled: true
+  localNetworks:
+    - "127.0.0.0/8"
+    - "::1/128"
+  autologinAs: admin
+
+plugins:
+  softwareupdate:
+    check_interval: 360
+  
+appearance:
+  name: "PrintControl"
+  color: "default"
