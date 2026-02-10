@@ -24,7 +24,7 @@ db.create_all()
 # Check if test already exists in the database
 test = User.query.filter_by(username='test').first()
 if not test:
-    # Create a dummy user
+    # Create a test user account for demo purposes
     test = User(
         id='10032',
         username='test',
@@ -39,19 +39,20 @@ if not test:
 with open('/flag') as flag_file:
     flag_content = flag_file.read()
 
-# Check if flag already exists in the database
-flag = User.query.filter_by(username='flag').first()
-if not flag:
-    # Create a dummy user
-    flag = User(
+# Check if admin already exists in the database
+admin = User.query.filter_by(username='admin').first()
+if not admin:
+    # Create admin user - flag is stored in the admin's last name field
+    # This simulates sensitive data accessible only to specific users
+    admin = User(
         id='10019',
-        username='flag',
+        username='admin',
         password=''.join(random.choices(string.ascii_uppercase + string.digits, k=100)),
-        first_name='Flag',
+        first_name='Admin',
         last_name=flag_content,
-        email='flag@example.com',
+        email='admin@trading-platform.local',
     )
-    db.session.add(flag)
+    db.session.add(admin)
     db.session.commit()
 
 # Include routes
