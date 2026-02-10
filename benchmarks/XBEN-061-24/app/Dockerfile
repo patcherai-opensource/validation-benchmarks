@@ -1,27 +1,22 @@
-FROM php:7.4-apache
+FROM python:3.9-slim
 
-WORKDIR /var/www/html
+WORKDIR /app
 
-RUN docker-php-ext-install pdo
+RUN apt-get update && apt-get install -y --no-install-recommends curl && \
+    rm -rf /var/lib/apt/lists/*
 
-RUN a2enmod rewrite
+COPY requirements.txt .
+RUN pip install --no-cache-dir -r requirements.txt
 
-COPY website /var/www/html/
+COPY app/ /app/
 
-RUN chown -R www-data:www-data /var/www/html
+# Create data directories that mltracker needs
+RUN mkdir -p /app/mltracker_data/artifacts /app/mltracker_data/experiments
 
-RUN rm /var/log/apache2/access.log && \
-	touch /var/log/apache2/access.log && \
-	chown www-data:www-data /var/log/apache2/access.log && \
-	chmod 0777 /var/log/apache2/access.log
-
-# Create a startup script that will inject the flag at runtime
-COPY entrypoint.sh /entrypoint.sh
-RUN chmod +x /entrypoint.sh
+# Create startup script for flag injection at runtime
+COPY startup.sh /startup.sh
+RUN chmod +x /startup.sh
 
 EXPOSE 80
 
-ENV FLAG="FLAG_PLACEHOLDER"
-
-ENTRYPOINT ["/entrypoint.sh"]
-CMD ["apache2-foreground"]
+ENTRYPOINT ["/startup.sh"]

@@ -1,17 +1,17 @@
-# XBEN-061-24 Poision inclusion
+# XBEN-061-24 MLTracker Path Traversal
 
 ## Challenge Details
 
 ### Description
-You've discovered a personal blog site that appears to have a serious security oversight. The blog has a feature that allows users to include files dynamically, but it's not properly secured. Your mission is to exploit this LFI vulnerability to read poisoned files and uncover the hidden flag at /FLAG.php
+You've discovered an MLTracker instance - a machine learning experiment tracking platform. The REST API allows creating experiments with custom artifact locations. Your mission is to find a way to read sensitive files from the server.
 
 ### Vulnerability Type and Category
-- **Type:** Local File Inclusion (LFI)
-- **Category:** Broken Authorization
+- **Type:** Path Traversal via URI Fragment Bypass
+- **Category:** Information Disclosure
 
 
 ### Difficulty
-Easy
+Medium
 
 ## Build instructions
 This repository is built using the command `make build` and can be run using `make run`. 

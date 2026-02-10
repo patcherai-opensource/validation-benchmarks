@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MLTracker - Machine Learning Experiment Tracking</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        .hero-section {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 80px 0;
+        }
+        .feature-card {
+            transition: transform 0.3s;
+        }
+        .feature-card:hover {
+            transform: translateY(-5px);
+        }
+        .api-endpoint {
+            background-color: #f8f9fa;
+            border-left: 4px solid #667eea;
+            padding: 15px;
+            margin-bottom: 15px;
+            font-family: monospace;
+        }
+        .method-badge {
+            font-size: 0.75rem;
+            padding: 4px 8px;
+            border-radius: 4px;
+            margin-right: 10px;
+        }
+        .method-get { background-color: #28a745; color: white; }
+        .method-post { background-color: #007bff; color: white; }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container">
+            <a class="navbar-brand" href="/">
+                <strong>MLTracker</strong>
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="#features">Features</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#api">API Reference</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#quickstart">Quick Start</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <section class="hero-section">
+        <div class="container text-center">
+            <h1 class="display-4 fw-bold">MLTracker</h1>
+            <p class="lead mt-3">Open Source Machine Learning Experiment Tracking Platform</p>
+            <p class="mt-2">Track experiments, manage models, and store artifacts with ease.</p>
+            <a href="#api" class="btn btn-light btn-lg mt-4">Explore API</a>
+        </div>
+    </section>
+
+    <section id="features" class="py-5">
+        <div class="container">
+            <h2 class="text-center mb-5">Key Features</h2>
+            <div class="row">
+                <div class="col-md-4 mb-4">
+                    <div class="card feature-card h-100">
+                        <div class="card-body text-center">
+                            <div class="display-4 mb-3">📊</div>
+                            <h5 class="card-title">Experiment Tracking</h5>
+                            <p class="card-text">Track and compare experiments across different parameters and metrics.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4 mb-4">
+                    <div class="card feature-card h-100">
+                        <div class="card-body text-center">
+                            <div class="display-4 mb-3">📦</div>
+                            <h5 class="card-title">Artifact Storage</h5>
+                            <p class="card-text">Store and manage model artifacts with flexible storage backends.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4 mb-4">
+                    <div class="card feature-card h-100">
+                        <div class="card-body text-center">
+                            <div class="display-4 mb-3">🔄</div>
+                            <h5 class="card-title">Model Versioning</h5>
+                            <p class="card-text">Version control for machine learning models with full lineage tracking.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="api" class="py-5 bg-light">
+        <div class="container">
+            <h2 class="text-center mb-5">REST API Reference</h2>
+            
+            <h4 class="mb-4">Experiments</h4>
+            
+            <div class="api-endpoint">
+                <span class="method-badge method-get">GET</span>
+                <code>/api/2.0/mltracker/experiments/list</code>
+                <p class="mt-2 mb-0 text-muted">List all experiments</p>
+            </div>
+            
+            <div class="api-endpoint">
+                <span class="method-badge method-get">GET</span>
+                <code>/api/2.0/mltracker/experiments/get?experiment_id={id}</code>
+                <p class="mt-2 mb-0 text-muted">Get experiment details by ID</p>
+            </div>
+            
+            <div class="api-endpoint">
+                <span class="method-badge method-post">POST</span>
+                <code>/api/2.0/mltracker/experiments/create</code>
+                <p class="mt-2 mb-1 text-muted">Create a new experiment</p>
+                <small class="text-muted">Body: {"name": "string", "artifact_location": "file:///path" (optional)}</small>
+            </div>
+            
+            <div class="api-endpoint">
+                <span class="method-badge method-get">GET</span>
+                <code>/api/2.0/mltracker/experiments/get-artifact?experiment_id={id}&path={path}</code>
+                <p class="mt-2 mb-0 text-muted">Get experiment artifact</p>
+            </div>
+            
+            <h4 class="mb-4 mt-5">Model Versions</h4>
+            
+            <div class="api-endpoint">
+                <span class="method-badge method-get">GET</span>
+                <code>/api/2.0/mltracker/model-versions/list</code>
+                <p class="mt-2 mb-0 text-muted">List all model versions</p>
+            </div>
+            
+            <div class="api-endpoint">
+                <span class="method-badge method-post">POST</span>
+                <code>/api/2.0/mltracker/model-versions/create</code>
+                <p class="mt-2 mb-1 text-muted">Create a new model version</p>
+                <small class="text-muted">Body: {"name": "string", "source": "file:///path"}</small>
+            </div>
+            
+            <div class="api-endpoint">
+                <span class="method-badge method-get">GET</span>
+                <code>/api/2.0/mltracker/model-versions/get-artifact?version_id={id}&path={path}</code>
+                <p class="mt-2 mb-0 text-muted">Get model version artifact</p>
+            </div>
+        </div>
+    </section>
+
+    <section id="quickstart" class="py-5">
+        <div class="container">
+            <h2 class="text-center mb-5">Quick Start</h2>
+            <div class="row justify-content-center">
+                <div class="col-lg-8">
+                    <div class="card">
+                        <div class="card-header">
+                            <strong>Create an Experiment</strong>
+                        </div>
+                        <div class="card-body">
+                            <pre class="bg-dark text-light p-3 rounded"><code>curl -X POST http://localhost:8080/api/2.0/mltracker/experiments/create \
+  -H "Content-Type: application/json" \
+  -d '{"name": "my-experiment"}'</code></pre>
+                        </div>
+                    </div>
+                    
+                    <div class="card mt-4">
+                        <div class="card-header">
+                            <strong>Create a Model Version</strong>
+                        </div>
+                        <div class="card-body">
+                            <pre class="bg-dark text-light p-3 rounded"><code>curl -X POST http://localhost:8080/api/2.0/mltracker/model-versions/create \
+  -H "Content-Type: application/json" \
+  -d '{"name": "my-model", "source": "file:///app/mltracker_data/artifacts/0"}'</code></pre>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer class="bg-dark text-light py-4">
+        <div class="container text-center">
+            <p class="mb-0">&copy; 2024 MLTracker. Open Source ML Tracking Platform.</p>
+            <small class="text-muted">Version 2.9.2</small>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
