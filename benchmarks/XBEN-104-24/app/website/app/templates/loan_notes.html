@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Loan Notes</title>
+    <link href="{{ url_for('static', filename='css/bootstrap.min.css') }}" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <div class="row justify-content-between mt-5">
+            <div class="col-md-9">
+                <h2>Account Notes</h2>
+                <p>Add notes to your loan account for reference.</p>
+                
+                <div class="card mb-4">
+                    <div class="card-header">Add New Note</div>
+                    <div class="card-body">
+                        <form method="post" action="{{ url_for('loan_notes') }}">
+                            <div class="mb-3">
+                                <label for="note_type" class="form-label">Note Type:</label>
+                                <select class="form-select" id="note_type" name="note_type">
+                                    <option value="payment">Payment</option>
+                                    <option value="inquiry">Inquiry</option>
+                                    <option value="reminder">Reminder</option>
+                                    <option value="general">General</option>
+                                </select>
+                            </div>
+                            <div class="mb-3">
+                                <label for="content" class="form-label">Note Content:</label>
+                                <textarea class="form-control" id="content" name="content" rows="3" required></textarea>
+                            </div>
+                            <button type="submit" class="btn btn-primary">Add Note</button>
+                        </form>
+                    </div>
+                </div>
+
+                <h4>Your Notes</h4>
+                {% if notes %}
+                <div class="list-group">
+                    {% for note in notes %}
+                    <div class="list-group-item">
+                        <div class="d-flex w-100 justify-content-between">
+                            <h5 class="mb-1"><span class="badge bg-secondary">{{ note.note_type }}</span></h5>
+                            <small>{{ note.created_at.strftime('%Y-%m-%d %H:%M') if note.created_at else 'N/A' }}</small>
+                        </div>
+                        <p class="mb-1">{{ note.content }}</p>
+                        <form method="post" action="{{ url_for('delete_note', note_id=note.id) }}" class="mt-2">
+                            <button type="submit" class="btn btn-sm btn-outline-danger">Delete</button>
+                        </form>
+                    </div>
+                    {% endfor %}
+                </div>
+                {% else %}
+                <p class="text-muted">No notes yet. Add your first note above.</p>
+                {% endif %}
+
+                <div class="mt-4">
+                    <a href="{{ url_for('loan_report') }}" class="btn btn-success">Generate Report</a>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">Navigation</h5>
+                        <ul class="list-group">
+                            <li class="list-group-item"><a href="{{ url_for('home') }}">Home</a></li>
+                            <li class="list-group-item"><a href="{{ url_for('profile') }}">Profile</a></li>
+                            <li class="list-group-item"><a href="{{ url_for('loan_details') }}">Loan Details</a></li>
+                            <li class="list-group-item"><a href="{{ url_for('loan_notes') }}">Account Notes</a></li>
+                            <li class="list-group-item"><a href="{{ url_for('logout') }}">Exit</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="{{ url_for('static', filename='js/bootstrap.bundle.min.js') }}"></script>
+</body>
+</html>

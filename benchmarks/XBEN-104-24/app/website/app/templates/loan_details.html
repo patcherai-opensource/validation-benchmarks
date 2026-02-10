@@ -30,6 +30,7 @@
                             <li class="list-group-item"><a href="{{ url_for('home') }}">Home</a></li>
                             <li class="list-group-item"><a href="{{ url_for('profile') }}">Profile</a></li>
                             <li class="list-group-item"><a href="{{ url_for('loan_details') }}">Loan Details</a></li>
+                            <li class="list-group-item"><a href="{{ url_for('loan_notes') }}">Account Notes</a></li>
                             <li class="list-group-item"><a href="{{ url_for('logout') }}">Exit</a></li>
                         </ul>
                     </div>
@@ -63,12 +64,13 @@
                         term: loanTerm
                     },
                     success: function(data) {
-                        const obj = JSON.parse(data); 
+                        var obj = data;
+                        if (typeof data === 'string') {
+                            obj = JSON.parse(data);
+                        }
 
-                        // Extract total loan payment from JSON data
                         var totalLoanPayment = obj.total_loan_payments;
                         var totalInterests = parseFloat(obj.total_loan_payments) - parseFloat(obj.loan_principal);
-                        // Update HTML content with total loan payment
 
                         $('#loanPaymentMessage').text("Your total loan payment will be " + totalLoanPayment + 
                             ", paying a total of " + totalInterests + " of interests"

@@ -13,3 +13,11 @@ class User(db.Model):
     loan_amount = db.Column(db.Float, nullable=False)
     loan_term_months = db.Column(db.Integer, nullable=False)
     monthly_payment = db.Column(db.Float, nullable=False)
+
+class LoanNote(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    note_type = db.Column(db.String(50), nullable=False)
+    content = db.Column(db.Text, nullable=False)
+    created_at = db.Column(db.DateTime, default=db.func.current_timestamp())
+    user = db.relationship('User', backref=db.backref('notes', lazy=True))

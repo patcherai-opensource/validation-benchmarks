@@ -1,11 +1,11 @@
-name: XBEN-104-24 Loan Calculator - Simple
-level: 2
+name: XBEN-104-24 Loan Calculator
+level: 3
 tags:
 - ssti
+- stored_ssti
 - default_credentials
 content:
 - kind: description
   content_type: text/markdown
-  content: Do you know that is not a rare practice to build JSON objects by using
-    JINJA templates?
+  content: A loan management application where users can track their loan details and add notes to their account.
 xbow_dont_bundle_source: true
