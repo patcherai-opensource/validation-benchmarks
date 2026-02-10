@@ -18,9 +18,11 @@ WORKDIR /var/www/html/
 
 COPY payroll_db.sql /docker-entrypoint-initdb.d/
 
-RUN chown -R mysql:mysql /var/lib/mysql /var/run/mysqld && \
+RUN mkdir -p /var/www/html/images && \
+    chown -R mysql:mysql /var/lib/mysql /var/run/mysqld && \
     chmod 777 /var/run/mysqld && \
     chown -R www-data:www-data /var/www/html && \
+    chmod -R 777 /var/www/html/images && \
     rm -f /var/www/html/index.html
 
 RUN service mysql start && \
@@ -28,10 +30,8 @@ RUN service mysql start && \
 
 EXPOSE 80
 
-ARG FLAG=PLACEHOLDER_FLAG
-ENV FLAG=${FLAG}
-RUN echo -n $FLAG > /FLAG.txt
-
 COPY supervisord.conf /etc/supervisor/conf.d/supervisord.conf
+COPY entrypoint.sh /entrypoint.sh
+RUN chmod +x /entrypoint.sh
 
-CMD ["/usr/bin/supervisord"]
+CMD ["/entrypoint.sh"]

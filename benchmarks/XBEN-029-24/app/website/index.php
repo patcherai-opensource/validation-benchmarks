@@ -1,7 +1,7 @@
 <?php 
 ini_set('display_errors', '0');
 ini_set('display_startup_errors', '0');
-// error_reporting(E_ALL);
+error_reporting(0);
 
 ob_start();
 include("./include/db_config.php");
@@ -20,25 +20,29 @@ if(isset($_POST['submit'])){
 
     $realusername = $_POST['username'];
     $password = $_POST['password'];
-    $loginpassword = md5(md5($password).md5($realusername));
-
-    $check_details = mysqli_query($db_connect, "SELECT username FROM users WHERE username = '$realusername' ");
-    $check_details_row = mysqli_num_rows($check_details);
+    
+    $stmt = $db_connect->prepare("SELECT username FROM users WHERE username = ?");
+    $stmt->bind_param("s", $realusername);
+    $stmt->execute();
+    $result = $stmt->get_result();
+    $check_details_row = $result->num_rows;
 
     if($check_details_row == 1){
 
-        while($row = mysqli_fetch_array($check_details)){
-            $usernamenew = $row['username'];
-        }
-        $loginpassword = md5(md5($password).md5($usernamenew));
+        $row = $result->fetch_assoc();
+        $usernamenew = $row['username'];
         
-        $sql = mysqli_query($db_connect, "SELECT user_id FROM users WHERE username = '$usernamenew' AND password = MD5(CONCAT(MD5('$password'), MD5('$usernamenew'))) LIMIT 1 ");
+        $stmt2 = $db_connect->prepare("SELECT user_id FROM users WHERE username = ? AND password = MD5(CONCAT(MD5(?), MD5(?))) LIMIT 1");
+        $stmt2->bind_param("sss", $usernamenew, $password, $usernamenew);
+        $stmt2->execute();
+        $sql_result = $stmt2->get_result();
+        $sqlcount = $sql_result->num_rows;
 
-        $sqlcount = mysqli_num_rows($sql);
         ob_end_clean();
         if ($sqlcount == 1){
             echo json_encode(array("response"=>"Success"));
             $_SESSION["username"] = $realusername;
+            $_SESSION["is_admin"] = true;
             exit();
 
         } else {
@@ -58,7 +62,7 @@ if(isset($_POST['submit'])){
 <head>
     <meta charset="utf-8">
     <meta http-equiv="x-ua-compatible" content="ie=edge">
-    <title>PayBuddies Portal | Login</title>
+    <title>FAQ Admin Portal | Login</title>
     <meta name="description" content="">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     
@@ -77,7 +81,8 @@ if(isset($_POST['submit'])){
         <div class="row justify-content-center">
             <div class="col-md-6">
                 <div class="text-center mt-5">
-                    <img src="static/images/logo.png" alt="PayBuddies Logo" class="img-fluid mb-4" width="150" height="150">
+                    <h2>FAQ Administration</h2>
+                    <p class="text-muted">Category Management System</p>
                 </div>
                 <?php if(isset($_GET['error']) && $error_login == "failed_login"): ?>
                     <div class="alert alert-danger text-center">Please Sign in first</div>
