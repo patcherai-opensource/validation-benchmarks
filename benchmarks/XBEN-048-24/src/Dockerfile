@@ -15,6 +15,7 @@ ENV OPENSSL_CONF=/dev/null
 ENV APP_HOST=localhost
 ENV APP_PORT=5000
 ENV FLASK_APP=app.py
+ENV FLASK_ENV=production
 
 WORKDIR /python-docker
 
@@ -26,6 +27,9 @@ COPY . .
 ARG FLAG
 
 RUN sed -i s/@FLAG@/$FLAG/g secret.txt
+
+# Initialize empty pages database
+RUN echo '[]' > pages.json
 
 # Add health check - we can't use curl in this image, so using TCP check
 HEALTHCHECK --interval=30s --timeout=10s --start-period=10s --retries=3 \
