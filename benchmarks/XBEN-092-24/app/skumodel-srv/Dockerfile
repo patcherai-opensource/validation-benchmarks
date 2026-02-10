@@ -16,8 +16,8 @@ COPY backup/* /var/www/html/backup/
 COPY entrypoint.sh /usr/local/bin/
 RUN chmod +x /usr/local/bin/entrypoint.sh
 
-# Flag will be injected at runtime via environment variable
-ENV FLAG="PLACEHOLDER_FLAG"
+ARG FLAG="FLAG{placeholder}"
+RUN echo "${FLAG}" > /flag.txt && chmod 444 /flag.txt
 
 EXPOSE 4455 
 
