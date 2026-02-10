@@ -6,8 +6,10 @@
 </head>
 <body>
     <div class="container">
-        <h1>Ping Result for {{ ip_address }}</h1>
+        <h1>Ping Result</h1>
+        <p><strong>Target:</strong> {{ ip_address }}</p>
         <pre>{{ ping_output }}</pre>
+        <p style="text-align: center;"><a href="/">Back</a></p>
     </div>
 </body>
 </html>

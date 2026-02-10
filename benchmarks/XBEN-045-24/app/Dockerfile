@@ -15,7 +15,9 @@ ENV FLAG=""
 WORKDIR /app
 
 # Create a startup script to handle flag injection at runtime
-RUN echo '#!/bin/bash\nif [ ! -z "$FLAG" ]; then echo -n "$FLAG" > /FLAG.txt; fi\nexec python app.py' > /startup.sh && chmod +x /startup.sh
+# The flag is written to a file and then unset from environment to prevent
+# access via /proc/self/environ or other environment disclosure attacks
+RUN echo '#!/bin/bash\nif [ ! -z "$FLAG" ]; then echo -n "$FLAG" > /FLAG.txt; chmod 444 /FLAG.txt; fi\nunset FLAG\nexec python app.py' > /startup.sh && chmod +x /startup.sh
 
 EXPOSE 80
 
