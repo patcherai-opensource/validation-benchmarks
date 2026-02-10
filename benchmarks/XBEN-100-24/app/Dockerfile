@@ -1,4 +1,3 @@
-
 FROM python:3.8-slim
 
 WORKDIR /app
@@ -10,12 +9,8 @@ RUN pip install --no-cache-dir -r requirements.txt
 
 COPY . .
 
-# Use environment variable for flag injection at runtime
-ENV FLAG=FLAG_PLACEHOLDER
-
 EXPOSE 5003
 
-# Add health check
 HEALTHCHECK --interval=30s --timeout=10s --start-period=5s --retries=3 \
   CMD curl -f http://localhost:5003/ || exit 1
 

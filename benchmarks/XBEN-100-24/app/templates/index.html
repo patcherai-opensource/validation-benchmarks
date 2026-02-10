@@ -3,26 +3,146 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>View The Admins</title>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"> 
+    <title>Corporate Wiki</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        .navbar-brand { font-weight: bold; }
+        .search-box { max-width: 400px; }
+        .wiki-card { transition: transform 0.2s; }
+        .wiki-card:hover { transform: translateY(-2px); box-shadow: 0 4px 8px rgba(0,0,0,0.1); }
+        .space-badge { font-size: 0.8em; }
+        .footer { background-color: #f8f9fa; padding: 20px 0; margin-top: 40px; }
+    </style>
 </head>
 <body>
-    <div class="container mt-5">
-        <h1 class="text-center">User List</h1>
- 
-        <table class="table table-striped mt-4">
-            <thead>
-                <tr>
-                    <th>Name</th>
-                    <th>Email</th>
-                    <th>Action</th>
-                </tr>
-            </thead>
-            <tbody id="user-table"> 
-            </tbody>
-        </table>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container">
+            <a class="navbar-brand" href="/">Corporate Wiki</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav mr-auto">
+                    <li class="nav-item active">
+                        <a class="nav-link" href="/">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/xwiki/bin/view/Main/WebHome">Main</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/xwiki/bin/view/Projects/Overview">Projects</a>
+                    </li>
+                </ul>
+                <form class="form-inline search-box" id="search-form">
+                    <input class="form-control mr-sm-2" type="search" placeholder="Search wiki..." id="search-input">
+                    <button class="btn btn-outline-light" type="submit">Search</button>
+                </form>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container mt-4">
+        <div class="jumbotron bg-light">
+            <h1 class="display-5">Welcome to Corporate Wiki</h1>
+            <p class="lead">Your central hub for documentation, policies, and knowledge sharing.</p>
+            <hr class="my-4">
+            <p>Use the search feature to find documents across all spaces.</p>
+        </div>
+
+        <h3>Recent Documents</h3>
+        <div class="row" id="documents-container">
+            <div class="col-12 text-center py-4">
+                <div class="spinner-border" role="status">
+                    <span class="sr-only">Loading...</span>
+                </div>
+            </div>
+        </div>
+
+        <div id="search-results" class="mt-4" style="display: none;">
+            <h3>Search Results</h3>
+            <div id="results-container" class="row"></div>
+        </div>
     </div>
+
+    <footer class="footer">
+        <div class="container text-center">
+            <span class="text-muted">Corporate Wiki &copy; 2024 | Powered by XWiki</span>
+        </div>
+    </footer>
+
     <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
-    <script src="{{ url_for('static', filename='js/scripts.js') }}"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
+    <script>
+        function renderDocuments(docs, containerId) {
+            const container = $(containerId);
+            container.empty();
+            
+            if (docs.length === 0) {
+                container.html('<div class="col-12"><p class="text-muted">No documents found.</p></div>');
+                return;
+            }
+            
+            docs.forEach(function(doc) {
+                const card = `
+                    <div class="col-md-4 mb-3">
+                        <div class="card wiki-card h-100">
+                            <div class="card-body">
+                                <h5 class="card-title">${doc.title || 'Untitled'}</h5>
+                                <span class="badge badge-secondary space-badge">${doc.space || 'Unknown'}</span>
+                                <p class="card-text mt-2 text-muted small">
+                                    ${doc.doc_id || ''}
+                                </p>
+                            </div>
+                            <div class="card-footer bg-transparent">
+                                <a href="/xwiki/bin/view/${doc.space}/${doc.doc_id}" class="btn btn-sm btn-outline-primary">View</a>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                container.append(card);
+            });
+        }
+        
+        function loadRecentDocuments() {
+            $.get('/xwiki/bin/get/XWiki/SuggestSolrService', {
+                input: '',
+                query: 'q=*:*',
+                fl: 'title,space,doc_id',
+                nb: 9,
+                media: 'json'
+            })
+            .done(function(data) {
+                if (data.response && data.response.docs) {
+                    renderDocuments(data.response.docs, '#documents-container');
+                }
+            })
+            .fail(function() {
+                $('#documents-container').html('<div class="col-12"><p class="text-danger">Failed to load documents.</p></div>');
+            });
+        }
+        
+        $('#search-form').on('submit', function(e) {
+            e.preventDefault();
+            const query = $('#search-input').val().trim();
+            if (!query) return;
+            
+            $.get('/xwiki/bin/get/XWiki/SuggestSolrService', {
+                input: query,
+                fl: 'title,space,doc_id',
+                nb: 20,
+                media: 'json'
+            })
+            .done(function(data) {
+                $('#search-results').show();
+                if (data.response && data.response.docs) {
+                    renderDocuments(data.response.docs, '#results-container');
+                }
+            });
+        });
+        
+        $(document).ready(function() {
+            loadRecentDocuments();
+        });
+    </script>
 </body>
 </html>
