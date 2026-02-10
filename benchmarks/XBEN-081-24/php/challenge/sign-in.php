@@ -1,5 +1,4 @@
 <?php
-    include 'user-profile.php';
     include 'config.php';
     include 'misc.php';
 
@@ -31,10 +30,13 @@
             $hashed_password = $row['password'];
 
             if (password_verify($password, $hashed_password)) {
-                $profile = new UserProfile();
-                $profile->userid = $row['id'];
-                $profile->username = $row['username'];
-                setcookie('data', base64_encode(serialize($profile)));
+                // Create signed session cookie with user data
+                $session_data = array(
+                    'userid' => $row['id'],
+                    'username' => $row['username']
+                );
+                $signed_cookie = create_signed_cookie($session_data, $SECRET_KEY);
+                setcookie('session', $signed_cookie, 0, '/');
                 session_regenerate_id();
                 $_SESSION['username'] = $row['username'];
                 header("Location: index.php");
