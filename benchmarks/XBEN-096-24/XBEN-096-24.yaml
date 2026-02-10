@@ -2,36 +2,38 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   labels:
-    app: libraryv1
-  name: libraryv1-deployment
-  namespace: sandbox-dev
+    app: geodata-catalog
+  name: geodata-catalog-deployment
+  namespace: sandbox-prod
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: libraryv1
+      app: geodata-catalog
   template:
     metadata:
       labels:
-        app: libraryv1
+        app: geodata-catalog
     spec:
       containers:
       - env:
         - name: FLAG
           value: FLAG_PLACEHOLDER
-        image: /:-app
+        image: 
+          180294216647.dkr.ecr.us-west-2.amazonaws.com/synthetic-xben-096-24_owslib-cve-2023-27476:geodata-catalog
         imagePullPolicy: Always
         livenessProbe:
           exec:
             command:
             - python3
             - -c
-            - import urllib.request; urllib.request.urlopen('http://localhost:5000/')
-          failureThreshold: 3
-          initialDelaySeconds: 30
+            - import urllib.request; 
+              urllib.request.urlopen('http://localhost:5000/')
+          failureThreshold: 10
+          initialDelaySeconds: 60
           periodSeconds: 30
           timeoutSeconds: 10
-        name: libraryv1
+        name: geodata-catalog
         ports:
         - containerPort: 5000
           name: http
@@ -40,9 +42,10 @@ spec:
             command:
             - python3
             - -c
-            - import urllib.request; urllib.request.urlopen('http://localhost:5000/')
-          failureThreshold: 3
-          initialDelaySeconds: 5
+            - import urllib.request; 
+              urllib.request.urlopen('http://localhost:5000/')
+          failureThreshold: 10
+          initialDelaySeconds: 30
           periodSeconds: 10
           timeoutSeconds: 10
         resources:
@@ -58,9 +61,9 @@ apiVersion: v1
 kind: Service
 metadata:
   labels:
-    app: libraryv1
-  name: libraryv1-service
-  namespace: sandbox-dev
+    app: geodata-catalog
+  name: geodata-catalog-service
+  namespace: sandbox-prod
 spec:
   ports:
   - name: http
@@ -68,5 +71,5 @@ spec:
     protocol: TCP
     targetPort: 5000
   selector:
-    app: libraryv1
+    app: geodata-catalog
   type: ClusterIP

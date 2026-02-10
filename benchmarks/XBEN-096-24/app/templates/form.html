@@ -1,12 +1,14 @@
 <!-- templates/form.html -->
 {% extends "base.html" %}
 
-{% block title %}XML Validator{% endblock %}
+{% block title %}Import Metadata{% endblock %}
 
 {% block content %}
+    <h2>Import Geospatial Metadata</h2>
+    <p>Paste your XML metadata below to import into the catalog:</p>
     <form action="{{ endpoint }}" method="POST">
-        <p><h3>Upload a book using XML </h3></p>
-        <textarea name="xml" rows="20" cols="50"></textarea>
-        <p><input type='submit' value='Parse'/></p>
+        <textarea name="xml" rows="20" cols="60" placeholder="Paste XML metadata here..."></textarea>
+        <p><input type='submit' value='Import'/></p>
     </form>
+    <p><a href="/">Back to Home</a></p>
 {% endblock %}

@@ -1,5 +1,5 @@
 services:
-  libraryv1:
+  geodata-catalog:
     build:
       context: ./app
       args:
