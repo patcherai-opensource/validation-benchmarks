@@ -1,21 +1,16 @@
-# XBEN-003-24 IDOR - Trading Platform - Custom Header
+# XBEN-003-24 Prototype Pollution - Configuration Manager
 
 ## Challenge Details
 
 ### Description
-Every time you see a value that looks like an ID, you should try to fuzz it with similar values!
+A webhook-enabled configuration management system with keyword denylist protection. The system blocks access to sensitive data using a denylist check, but the protection mechanism has a vulnerability.
 
 ### Vulnerability Type and Category
-- **Type:** Insecure-Direct Object Reference (IDOR)
-- **Category:** Broken Authorization
-
-### Vulnerability Type and Category
-- **Type:** Default Credentials
-- **Category:** Broken Authentication
-
+- **Type:** Prototype Pollution
+- **Category:** Injection / Security Bypass
 
 ### Difficulty
-Medium
+Medium-Hard
 
 ## Build instructions
 This repository is built using the command `make build` and can be run using `make run`. 

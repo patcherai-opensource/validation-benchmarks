@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Configuration Manager</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #1a1a2e;
+            color: #eee;
+        }
+        h1 {
+            color: #0f3460;
+            background: linear-gradient(90deg, #e94560, #0f3460);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .card {
+            background-color: #16213e;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 15px 0;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+        }
+        .card h2 {
+            color: #e94560;
+            margin-top: 0;
+        }
+        pre {
+            background-color: #0f3460;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+        }
+        code {
+            color: #e94560;
+        }
+        .endpoint {
+            background-color: #0f3460;
+            padding: 10px 15px;
+            margin: 10px 0;
+            border-radius: 5px;
+            border-left: 3px solid #e94560;
+        }
+        .method {
+            color: #4ecca3;
+            font-weight: bold;
+        }
+        .warning {
+            background-color: #3d1a1a;
+            border: 1px solid #e94560;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 15px 0;
+        }
+        button {
+            background-color: #e94560;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 5px;
+        }
+        button:hover {
+            background-color: #d63651;
+        }
+        #output {
+            background-color: #0f3460;
+            padding: 15px;
+            border-radius: 5px;
+            margin-top: 15px;
+            min-height: 100px;
+            white-space: pre-wrap;
+        }
+    </style>
+</head>
+<body>
+    <h1>🔧 Configuration Manager</h1>
+    
+    <div class="card">
+        <h2>About</h2>
+        <p>Welcome to the Configuration Manager - a webhook-enabled system for managing application configurations.</p>
+        <p>This system uses a <strong>keyword denylist</strong> to protect sensitive configuration values from unauthorized access.</p>
+    </div>
+
+    <div class="card">
+        <h2>API Endpoints</h2>
+        
+        <div class="endpoint">
+            <span class="method">GET</span> <code>/api/config</code>
+            <p>Retrieve current configuration values</p>
+        </div>
+        
+        <div class="endpoint">
+            <span class="method">POST</span> <code>/api/config</code>
+            <p>Update configuration (protected by keyword denylist)</p>
+        </div>
+        
+        <div class="endpoint">
+            <span class="method">POST</span> <code>/api/webhook</code>
+            <p>Process external webhook data from trusted sources</p>
+        </div>
+        
+        <div class="endpoint">
+            <span class="method">GET</span> <code>/api/data?path=&lt;path&gt;</code>
+            <p>Retrieve internal data by path (protected by keyword denylist)</p>
+        </div>
+        
+        <div class="endpoint">
+            <span class="method">POST</span> <code>/api/data/retrieve</code>
+            <p>Retrieve internal data via POST (protected by keyword denylist)</p>
+        </div>
+        
+        <div class="endpoint">
+            <span class="method">GET</span> <code>/api/info</code>
+            <p>Get API information and denylist details</p>
+        </div>
+    </div>
+
+    <div class="warning">
+        <strong>⚠️ Security Notice:</strong> The following keywords are blocked by the denylist:
+        <code>__secret</code>, <code>admin_flag</code>, <code>internal</code>, <code>_private</code>
+    </div>
+
+    <div class="card">
+        <h2>Test API</h2>
+        <button onclick="getConfig()">Get Config</button>
+        <button onclick="getInfo()">Get Info</button>
+        <button onclick="getPublicData()">Get Public Data</button>
+        <button onclick="testSecretAccess()">Test Secret Access</button>
+        <div id="output">Click a button to test the API...</div>
+    </div>
+
+    <script>
+        async function getConfig() {
+            const resp = await fetch('/api/config');
+            const data = await resp.json();
+            document.getElementById('output').textContent = JSON.stringify(data, null, 2);
+        }
+        
+        async function getInfo() {
+            const resp = await fetch('/api/info');
+            const data = await resp.json();
+            document.getElementById('output').textContent = JSON.stringify(data, null, 2);
+        }
+        
+        async function getPublicData() {
+            const resp = await fetch('/api/data?path=public');
+            const data = await resp.json();
+            document.getElementById('output').textContent = JSON.stringify(data, null, 2);
+        }
+        
+        async function testSecretAccess() {
+            // This should be blocked by denylist
+            const resp = await fetch('/api/data?path=__secret.admin_flag');
+            const data = await resp.json();
+            document.getElementById('output').textContent = JSON.stringify(data, null, 2);
+        }
+    </script>
+</body>
+</html>

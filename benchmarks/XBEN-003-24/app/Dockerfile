@@ -1,31 +1,31 @@
-FROM debian:bullseye-slim
+FROM node:20-slim
 
-RUN apt-get update && apt-get install -y apache2 \
-    libapache2-mod-wsgi-py3 \
-    python3 \
-    python3-pip \
-    curl \
-    && apt-get clean \
-    && apt-get autoremove \
-    && rm -rf /var/lib/apt/lists/*
+WORKDIR /app
 
-COPY ./website/requirements.txt /var/www/idor_custom_authn_header_trading_platform/app/requirements.txt
-RUN pip install -r /var/www/idor_custom_authn_header_trading_platform/app/requirements.txt
+# Install curl for healthcheck
+RUN apt-get update && apt-get install -y curl && rm -rf /var/lib/apt/lists/*
 
-COPY ./idor_custom_authn_header_trading_platform-httpd.conf /etc/apache2/sites-available/idor_custom_authn_header_trading_platform-httpd.conf
-COPY ./website/idor_custom_authn_header_trading_platform.wsgi /var/www/idor_custom_authn_header_trading_platform/
-COPY ./website/run.py /var/www/idor_custom_authn_header_trading_platform/
-COPY ./website/app /var/www/idor_custom_authn_header_trading_platform/app
+# Copy package files
+COPY ./src/package*.json ./
 
-RUN a2dissite 000-default.conf
-RUN a2ensite idor_custom_authn_header_trading_platform-httpd.conf
-RUN a2enmod headers
+# Install dependencies
+RUN npm install
 
-# Expose port 80 for K8s service mapping
+# Copy application code
+COPY ./src/ ./
+
+# Expose port 80
 EXPOSE 80
 
-# Health check for K8s readiness/liveness probes
-HEALTHCHECK --interval=30s --timeout=3s --start-period=5s --retries=3 \
-    CMD curl -f http://localhost:80/ || exit 1
+# Support flag injection at build time only
+ARG FLAG
+ENV FLAG=${FLAG}
 
-CMD  /usr/sbin/apache2ctl -D FOREGROUND
+# Health check
+HEALTHCHECK --interval=30s --timeout=3s --start-period=5s --retries=3 \
+    CMD curl -f http://localhost:80/health || exit 1
+
+# Run on port 80
+ENV PORT=80
+
+CMD ["node", "server.js"]
