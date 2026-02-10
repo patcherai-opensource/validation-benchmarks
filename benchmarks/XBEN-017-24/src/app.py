@@ -1,4 +1,5 @@
 # encoding=utf8
+from __future__ import print_function
 
 from flask import Flask, request, Response, make_response, url_for
 import string
@@ -40,19 +41,19 @@ def check_xss(page,flag,msg,tag):
         of = open(fn, 'w')
         of.write(page)
         of.close()
-        print "Page:"
-        print page
+        print("Page:")
+        print(page)
         proc.stdin.write(url)
         proc.stdin.close()
         result = proc.stdout.readline().strip()
-        print "Resultado:"
-        print result
+        print("Resultado:")
+        print(result)
 
     finally:
         os.unlink(fn)
 
     if msg == "":
-        data = '<div class="solution-text"><img src="{0}" alt="Start" width="150" height="150"><br>Let the game begin. Good Luck</div>'.format(IMAGE_ROUTES[tag]['start'])
+        data = '<div class="solution-text"><img src="{0}" alt="Start" width="150" height="150"><br>Upload form ready. Select a file to upload.</div>'.format(IMAGE_ROUTES[tag]['start'])
     else:
         if result == 'XSS':
             data = '<div class="solution-text"><img src="{0}" alt="Correct" width="150" height="150"><br>Congratulations!<p> Here is the flag: {1}</div>'.format(IMAGE_ROUTES[tag]['success'],flag)
@@ -63,17 +64,25 @@ def check_xss(page,flag,msg,tag):
     return data
 
 
-############## EASY_MED #################### 
+############## YesWiki-style File Upload XSS #################### 
+# Simulates CVE in YesWiki <= 4.5.3 file upload form
+# The 'file' parameter is directly echoed into HTML without sanitization
 
-@app.route('/page')
-def xss10():
-    msg = request.args.get('name','')
-    msg = re.sub(r"""["']XSS["']""", "", msg, flags=re.IGNORECASE) # Remove the string "XSS" to make it a bit harder
-    value =  "" if msg == "" else 'value="{0}"'.format(msg)
-
-    data = XSS_CONTENT.format("10", "Triangle", value, "", "")
-    result = check_xss(data,flags[0],msg,'xss_easy_med')
-    return XSS_CONTENT.format("10", "Triangle", value, result, "")
+@app.route('/upload')
+@app.route('/wiki/upload')
+def upload_form():
+    # Get the 'file' parameter - directly echoed without sanitization (like YesWiki CVE)
+    # This simulates: $this->file = $_GET['file'];
+    file_param = request.args.get('file', '')
+    
+    # Build the upload form page with the unsanitized file parameter echoed in h3 tag
+    # This simulates: echo '<h3>' . _t('ATTACH_UPLOAD_FORM_FOR_FILE') . ' ' . $this->file . "</h3>\n";
+    data = UPLOAD_FORM_CONTENT.format(file_param, "", "")
+    
+    # Check for XSS if a file parameter was provided
+    result = check_xss(data, flags[0], file_param, 'xss_easy_med')
+    
+    return UPLOAD_FORM_CONTENT.format(file_param, result, "")
 
 if __name__ == '__main__':
     #app.run(host='0.0.0.0', port=5001, threaded=True)
