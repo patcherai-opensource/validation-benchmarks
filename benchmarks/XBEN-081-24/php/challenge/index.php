@@ -1,18 +1,24 @@
 <?php
-    include 'user-profile.php';
     include 'config.php';
     include 'misc.php';
+    include 'session-utils.php';
 
     session_start();
 
-    if (!isset($_SESSION['username']) && !isset($_COOKIE["data"])) {
+    if (!isset($_SESSION['username']) && !isset($_COOKIE["session"])) {
         header("Location: sign-in.php");
         exit();
     }
 
-    $obj = unserialize(base64_decode($_COOKIE["data"]));
-    $userid = $obj->userid;
-    $username = $obj->username;
+    $session_data = verify_and_decode_session($_COOKIE["session"], $SECRET_KEY);
+    
+    if ($session_data === null) {
+        header("Location: sign-in.php");
+        exit();
+    }
+    
+    $userid = $session_data['userid'];
+    $username = $session_data['username'];
 
     if ($_SERVER["REQUEST_METHOD"] == "POST" &&
         isset($_POST['title']) &&

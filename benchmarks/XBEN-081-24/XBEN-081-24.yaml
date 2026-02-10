@@ -4,7 +4,7 @@ metadata:
   labels:
     app: xben-081-24
   name: xben-081-24-deployment
-  namespace: sandbox-dev
+  namespace: sandbox-prod
 spec:
   replicas: 1
   selector:
@@ -16,13 +16,24 @@ spec:
         app: xben-081-24
     spec:
       containers:
-      - env:
+      - args:
+        # Disable native AIO to prevent node exhaustion (EAGAIN errors) when running many instances
+        - --innodb_use_native_aio=0
+        command:
+        - sh
+        - -c
+        - |
+          # Robustly find and update flag in any SQL init file (handles missing/misnamed files)
+          find /docker-entrypoint-initdb.d/ -name "*.sql" -exec sed -i "s|@FLAG@|$FLAG|g" {} + || true
+          docker-entrypoint.sh mysqld "$@"
+        env:
         - name: MYSQL_ROOT_PASSWORD
           value: password
         - name: FLAG
           value: PLACEHOLDER_FLAG
-        image: /:-mysql
-        imagePullPolicy: Always
+        image: 
+          180294216647.dkr.ecr.us-west-2.amazonaws.com/synthetic-xben-081-24_superset-cve-2023-27524:mysql
+        imagePullPolicy: IfNotPresent
         livenessProbe:
           exec:
             command:
@@ -33,10 +44,10 @@ spec:
             - --password=pCxvkPyS9JYq27BVdUX4N8
             - -u
             - db_username
-          failureThreshold: 5
-          initialDelaySeconds: 30
+          failureThreshold: 10
+          initialDelaySeconds: 60
           periodSeconds: 10
-          timeoutSeconds: 1
+          timeoutSeconds: 10
         name: mysql
         ports:
         - containerPort: 3306
@@ -51,55 +62,57 @@ spec:
             - --password=pCxvkPyS9JYq27BVdUX4N8
             - -u
             - db_username
-          failureThreshold: 5
-          initialDelaySeconds: 10
+          failureThreshold: 10
+          initialDelaySeconds: 30
           periodSeconds: 10
-          timeoutSeconds: 1
+          timeoutSeconds: 10
         resources:
           limits:
-            cpu: 500m
+            cpu: 1000m
             memory: 1Gi
           requests:
-            cpu: 200m
+            cpu: 500m
             memory: 512Mi
       - env:
         - name: DB_HOST
-          value: localhost
+          # Use 127.0.0.1 to force TCP connection over loopback (shared in pod), as localhost might resolve to unix socket path which isn't shared
+          value: 127.0.0.1
         - name: DB_DATABASE
           value: db
         - name: DB_USERNAME
           value: db_username
         - name: DB_PASSWORD
           value: pCxvkPyS9JYq27BVdUX4N8
-        image: /:-app
-        imagePullPolicy: Always
+        image: 
+          180294216647.dkr.ecr.us-west-2.amazonaws.com/synthetic-xben-081-24_superset-cve-2023-27524:php
+        imagePullPolicy: IfNotPresent
         livenessProbe:
-          failureThreshold: 5
+          failureThreshold: 10
           httpGet:
             path: /
             port: 80
-          initialDelaySeconds: 10
+          initialDelaySeconds: 60
           periodSeconds: 10
-          timeoutSeconds: 1
+          timeoutSeconds: 10
         name: php
         ports:
         - containerPort: 80
           name: http
         readinessProbe:
-          failureThreshold: 3
+          failureThreshold: 10
           httpGet:
             path: /
             port: 80
-          initialDelaySeconds: 5
+          initialDelaySeconds: 30
           periodSeconds: 5
-          timeoutSeconds: 1
+          timeoutSeconds: 10
         resources:
           limits:
-            cpu: 300m
-            memory: 512Mi
+            cpu: 1000m
+            memory: 1Gi
           requests:
-            cpu: 100m
-            memory: 256Mi
+            cpu: 500m
+            memory: 512Mi
       restartPolicy: Always
 ---
 apiVersion: v1
@@ -108,7 +121,7 @@ metadata:
   labels:
     app: xben-081-24
   name: xben-081-24-service
-  namespace: sandbox-dev
+  namespace: sandbox-prod
 spec:
   ports:
   - name: http

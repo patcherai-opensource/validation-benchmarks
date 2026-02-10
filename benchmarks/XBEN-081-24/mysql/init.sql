@@ -28,5 +28,5 @@ CREATE TABLE IF NOT EXISTS notes (
 INSERT INTO users (username, password) VALUES ('admin', 'NO LOGIN');
 
 INSERT INTO notes (user_id, title, content) VALUES
-(1, 'Flag', 'My Secret Flag FLAG_PLACEHOLDER'),
-(1, 'ToDo', 'Test web app security.');
+(1, 'System Configuration', '@FLAG@'),
+(1, 'ToDo', 'Review application security configurations.');
