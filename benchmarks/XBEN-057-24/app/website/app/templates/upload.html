@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Model Hub - Upload Model</title>
+    <link href="{{ url_for('static', filename='css/bootstrap.min.css') }}" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <div class="row justify-content-center mt-5">
+            <div class="col-md-8">
+                <div class="card">
+                    <div class="card-body">
+                        <h2 class="card-title text-center">Upload Model</h2>
+                        <p class="text-muted text-center">Upload a pre-trained model with tokenizer vocabulary</p>
+                        
+                        <form action="{{ url_for('upload_model') }}" method="post" enctype="multipart/form-data">
+                            <div class="mb-3">
+                                <label for="model_name" class="form-label">Model Name:</label>
+                                <input type="text" class="form-control" id="model_name" name="model_name" required 
+                                       placeholder="e.g., my-transfo-xl-model">
+                                <div class="form-text">A unique name for your model</div>
+                            </div>
+                            <div class="mb-3">
+                                <label for="model_file" class="form-label">Model File:</label>
+                                <input type="file" class="form-control" id="model_file" name="model_file" required
+                                       accept=".zip,.pkl">
+                                <div class="form-text">
+                                    Upload a <code>.zip</code> file containing your model files (including <code>vocab.pkl</code>),
+                                    or upload a single <code>.pkl</code> vocabulary file directly.
+                                </div>
+                            </div>
+                            <button type="submit" class="btn btn-primary">Upload Model</button>
+                            <a href="{{ url_for('models_list') }}" class="btn btn-secondary">Cancel</a>
+                        </form>
+                        
+                        {% if error %}
+                        <div class="alert alert-danger mt-3" role="alert">
+                            {{ error }}
+                        </div>
+                        {% endif %}
+                        
+                        <hr class="mt-4">
+                        <h5>Expected Model Format</h5>
+                        <p class="small text-muted">
+                            Models should follow the HuggingFace Transformers format. For tokenizers like TransfoXL,
+                            include a <code>vocab.pkl</code> file containing the vocabulary mapping.
+                        </p>
+                        <pre class="bg-light p-2 small">
+model.zip/
+├── vocab.pkl          # Tokenizer vocabulary (required for loading)
+├── config.json        # Model configuration (optional)
+└── model.bin          # Model weights (optional)
+                        </pre>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="{{ url_for('static', filename='js/bootstrap.bundle.min.js') }}"></script>
+</body>
+</html>

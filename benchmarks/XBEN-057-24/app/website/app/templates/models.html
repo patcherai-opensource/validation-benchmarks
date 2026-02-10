@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Model Hub - Models</title>
+    <link href="{{ url_for('static', filename='css/bootstrap.min.css') }}" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <div class="row justify-content-between mt-5">
+            <div class="col-md-9">
+                <h2>🤖 Model Hub</h2>
+                <p>Upload and load pre-trained ML models with tokenizer vocabularies</p>
+                <p class="text-muted small">Compatible with TransfoXL and similar tokenizer formats (vocab.pkl)</p>
+            </div>
+            <div class="col-md-3">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">Navigation</h5>
+                        <ul class="list-group">
+                            <li class="list-group-item"><a href="{{ url_for('models_list') }}">Models</a></li>
+                            <li class="list-group-item"><a href="{{ url_for('upload_model') }}">Upload Model</a></li>
+                            <li class="list-group-item"><a href="{{ url_for('about') }}">About</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="container mt-5">
+        {% if models %}
+        <h3 class="mb-4">Available Models</h3>
+        <div class="row">
+            {% for model in models %}
+            <div class="col-md-6 mb-4">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">{{ model.name }}</h5>
+                        <p class="card-text">
+                            <small class="text-muted">
+                                Files: {{ model.files | join(', ') }}
+                            </small>
+                        </p>
+                        {% if model.has_vocab %}
+                        <span class="badge bg-success mb-2">Has vocab.pkl</span>
+                        {% else %}
+                        <span class="badge bg-warning mb-2">No vocab.pkl</span>
+                        {% endif %}
+                        <div class="mt-2">
+                            <a href="{{ url_for('load_model', model_name=model.name) }}" class="btn btn-primary btn-sm">Load Tokenizer</a>
+                            <a href="{{ url_for('delete_model', model_name=model.name) }}" class="btn btn-danger btn-sm">Delete</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        {% else %}
+        <div class="alert alert-info">
+            <h4>No models uploaded yet</h4>
+            <p>Upload a model package to get started. Your model should include a <code>vocab.pkl</code> file for the tokenizer.</p>
+            <a href="{{ url_for('upload_model') }}" class="btn btn-primary">Upload Model</a>
+        </div>
+        {% endif %}
+    </div>
+
+    <script src="{{ url_for('static', filename='js/bootstrap.bundle.min.js') }}"></script>
+</body>
+</html>

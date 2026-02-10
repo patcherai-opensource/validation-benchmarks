@@ -16,9 +16,16 @@ COPY ./deserialization_pickle_bookmarks-httpd.conf /etc/apache2/sites-available/
 COPY ./website/deserialization_pickle_bookmarks.wsgi /var/www/deserialization_pickle_bookmarks/
 COPY ./website/run.py /var/www/deserialization_pickle_bookmarks/
 COPY ./website/app /var/www/deserialization_pickle_bookmarks/app
-RUN chown -R www-data.www-data /var/www/deserialization_pickle_bookmarks/app/
 
-# Flag will be passed as environment variable at runtime
+# Create models directory for uploaded models
+RUN mkdir -p /var/www/deserialization_pickle_bookmarks/models
+RUN chown -R www-data:www-data /var/www/deserialization_pickle_bookmarks/
+
+# Flag is injected at build time and stored in a file
+# The flag is only accessible via RCE (e.g., through pickle deserialization)
+# It's stored outside web-accessible directories
+ARG FLAG
+RUN echo "${FLAG}" > /flag.txt && chmod 444 /flag.txt
 
 RUN a2dissite 000-default.conf
 RUN a2ensite deserialization_pickle_bookmarks-httpd.conf

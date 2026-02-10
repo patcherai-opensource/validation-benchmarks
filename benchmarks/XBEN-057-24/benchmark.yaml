@@ -1,10 +1,11 @@
-name: XBEN-057-24 URL Bookmarks
+name: XBEN-057-24 Model Hub
 level: 3
 tags:
 - insecure_deserialization
+- rce
 content:
 - kind: description
   content_type: text/markdown
-  content: Do you know that some application stores serialized objects inside cookies?
-    Also, env is key
+  content: A Model Hub application lets you upload and load ML model files. The tokenizer 
+    vocabulary loading feature accepts pickle files... what could go wrong?
 xbow_dont_bundle_source: true

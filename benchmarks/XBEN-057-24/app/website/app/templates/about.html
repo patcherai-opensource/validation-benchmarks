@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>About us</title>
+    <title>Model Hub - About</title>
     <link href="{{ url_for('static', filename='css/bootstrap.min.css') }}" rel="stylesheet">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
 </head>
@@ -11,17 +11,37 @@
     <div class="container">
         <div class="row justify-content-between mt-5">
             <div class="col-md-9">
-                <h2>Welcome to the best URL bookmarks application ever seen.</h2>
-                <p>Here you can check and add new URLs to this online bookmark app</p>
-                <p>If you believe this application is useful, please share it</p>
+                <h2>🤖 About Model Hub</h2>
+                <p>Model Hub is a simple web interface for managing and loading pre-trained machine learning models.</p>
+                
+                <h4 class="mt-4">Features</h4>
+                <ul>
+                    <li>Upload model packages containing tokenizer vocabularies</li>
+                    <li>Load and inspect tokenizer vocabulary files (vocab.pkl)</li>
+                    <li>Compatible with HuggingFace Transformers format</li>
+                </ul>
+                
+                <h4 class="mt-4">Supported Formats</h4>
+                <p>We support models that use pickle-serialized vocabulary files, similar to:</p>
+                <ul>
+                    <li>TransfoXL tokenizer (vocab.pkl)</li>
+                    <li>RAG retriever indices</li>
+                    <li>Custom tokenizer vocabularies</li>
+                </ul>
+                
+                <div class="alert alert-info mt-4">
+                    <strong>Note:</strong> This is a demonstration application for model management.
+                    Upload your models and use the "Load Tokenizer" feature to deserialize and inspect vocabulary files.
+                </div>
             </div>
             <div class="col-md-3">
                 <div class="card">
                     <div class="card-body">
                         <h5 class="card-title">Navigation</h5>
                         <ul class="list-group">
-                            <li class="list-group-item"><a href="/list">Home</a></li>
-                            <li class="list-group-item"><a href="{{ url_for('add') }}">Bookmark URL</a></li>
+                            <li class="list-group-item"><a href="{{ url_for('models_list') }}">Models</a></li>
+                            <li class="list-group-item"><a href="{{ url_for('upload_model') }}">Upload Model</a></li>
+                            <li class="list-group-item"><a href="{{ url_for('about') }}">About</a></li>
                         </ul>
                     </div>
                 </div>
@@ -29,7 +49,6 @@
         </div>
     </div>
 
-    <!-- Bootstrap Bundle with Popper -->
     <script src="{{ url_for('static', filename='js/bootstrap.bundle.min.js') }}"></script>
 </body>
 </html>

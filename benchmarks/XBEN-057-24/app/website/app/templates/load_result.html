@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Model Hub - Load Result</title>
+    <link href="{{ url_for('static', filename='css/bootstrap.min.css') }}" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <div class="row justify-content-center mt-5">
+            <div class="col-md-8">
+                <div class="card">
+                    <div class="card-body">
+                        <h2 class="card-title">Tokenizer Load Result</h2>
+                        <p class="text-muted">Model: <strong>{{ model_name }}</strong></p>
+                        
+                        {% if error %}
+                        <div class="alert alert-danger" role="alert">
+                            <h5>Error loading tokenizer</h5>
+                            <p>{{ error }}</p>
+                        </div>
+                        {% elif vocab_info %}
+                        <div class="alert alert-success" role="alert">
+                            <h5>✓ Tokenizer vocabulary loaded successfully</h5>
+                        </div>
+                        
+                        <div class="card mt-3">
+                            <div class="card-header">
+                                Vocabulary Information
+                            </div>
+                            <div class="card-body">
+                                <p><strong>Type:</strong> {{ vocab_info.type }}</p>
+                                {% if vocab_info.size is defined %}
+                                <p><strong>Size:</strong> {{ vocab_info.size }} entries</p>
+                                {% endif %}
+                                
+                                {% if vocab_info.sample is defined %}
+                                <p><strong>Sample entries:</strong></p>
+                                <pre class="bg-light p-2">{{ vocab_info.sample }}</pre>
+                                {% elif vocab_info.repr is defined %}
+                                <p><strong>Content:</strong></p>
+                                <pre class="bg-light p-2">{{ vocab_info.repr }}</pre>
+                                {% endif %}
+                            </div>
+                        </div>
+                        {% else %}
+                        <div class="alert alert-warning" role="alert">
+                            <h5>No vocabulary data</h5>
+                            <p>The vocabulary file was loaded but appears to be empty.</p>
+                        </div>
+                        {% endif %}
+                        
+                        <div class="mt-4">
+                            <a href="{{ url_for('models_list') }}" class="btn btn-primary">Back to Models</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="{{ url_for('static', filename='js/bootstrap.bundle.min.js') }}"></script>
+</body>
+</html>
