@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+{% block content %}
+<h2>System Information</h2>
+<div class="system-info">
+    <h3>Authentication Configuration</h3>
+    <p>This Enterprise CMS uses a multi-handler authentication system for flexible user management.</p>
+    
+    <h4>Enabled Login Handlers:</h4>
+    <ul>
+        {% for handler in handlers %}
+        <li><strong>{{ handler }}</strong> - 
+            {% if handler == 'standard' %}
+            Standard database authentication
+            {% elif handler == 'ldap' %}
+            LDAP directory integration
+            {% elif handler == 'textfile' %}
+            Text file based authentication
+            {% endif %}
+        </li>
+        {% endfor %}
+    </ul>
+    
+    <h4>User Types:</h4>
+    <table>
+        <tr>
+            <th>Password Hash Type</th>
+            <th>Description</th>
+        </tr>
+        <tr>
+            <td>0</td>
+            <td>No password set (system/service accounts)</td>
+        </tr>
+        <tr>
+            <td>1</td>
+            <td>Plaintext password</td>
+        </tr>
+        <tr>
+            <td>2</td>
+            <td>Hashed password (MD5/SHA)</td>
+        </tr>
+    </table>
+    
+    <h4>Known Users:</h4>
+    <ul>
+        <li><strong>admin</strong> - Administrator account</li>
+        <li><strong>guest</strong> - Guest user account</li>
+    </ul>
+    
+    <p><em>Note: This system is configured similarly to eZ Publish Legacy CMS with both standard and LDAP handlers enabled.</em></p>
+</div>
+{% endblock %}

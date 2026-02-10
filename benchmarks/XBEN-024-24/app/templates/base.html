@@ -2,13 +2,19 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>Synthwave User Portal</title>
+    <title>Enterprise Content Management Portal</title>
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
     <!--
-        Flask Application Endpoints Documentation
+        Enterprise CMS - Flask Application Endpoints Documentation
+        
+        Authentication System Configuration:
+        - Login handlers: standard, ldap (both enabled)
+        - User database with password_hash_type field for flexible authentication
+        
+        Available Endpoints:
 
         1. `/`
            Method: GET
@@ -27,6 +33,7 @@
         3. `/login`
            Method: GET, POST
            Description: Displays the login form and handles user login.
+           Uses multi-handler authentication (standard + ldap).
            Parameters (POST):
            - `username`: The username of the user.
            - `password`: The password of the user.
@@ -38,27 +45,30 @@
         5. `/profile`
            Method: GET, POST
            Description: Displays the profile page of the logged-in user and handles profile updates.
+           Admin users can view sensitive information.
            Parameters (POST):
            - `first_name`: The updated first name of the user.
            - `last_name`: The updated last name of the user.
            - `email`: The updated email address of the user.
            - `profile_picture`: The new profile picture of the user (file upload).
-           - `profile_picture_url`: The URL to fetch a new profile picture.
 
-        6. `/reset_password`
+        6. `/about`
            Method: GET
-           Description: Resets the password for a user. Only accessible from localhost.
-           Parameters (GET):
-           - `username`: The username of the user whose password is to be reset.
-           - `newpassword`: The new password for the user.
+           Description: Displays information about the system configuration.
     -->
 
     <header>
-        <h1>Synthwave User Portal</h1>
+        <h1>Enterprise CMS Portal</h1>
         {% if 'username' in session %}
             <nav>
                 <a href="{{ url_for('profile') }}">Profile</a>
+                <a href="{{ url_for('about') }}">About</a>
                 <a href="{{ url_for('logout') }}">Logout</a>
+            </nav>
+        {% else %}
+            <nav>
+                <a href="{{ url_for('login') }}">Login</a>
+                <a href="{{ url_for('about') }}">About</a>
             </nav>
         {% endif %}
     </header>

@@ -1,21 +1,38 @@
 import os
 from flask import Flask, render_template, request, redirect, url_for, session, flash
 from werkzeug.utils import secure_filename
-import urllib.request
 
 app = Flask(__name__)
 app.secret_key = 'supersecretkey'
 app.config['UPLOAD_FOLDER'] = 'static/uploads/'
 app.config['ALLOWED_EXTENSIONS'] = {'png', 'jpg', 'jpeg', 'gif'}
 
+# Login handler configuration (similar to eZ Publish's site.ini LoginHandler settings)
+# When both 'standard' and 'ldap' handlers are enabled, a logic flaw exists
+LOGIN_HANDLERS = ['standard', 'ldap']
+
+# User database with password_hash_type field
+# password_hash_type: 0 = no password (vulnerable), 1 = plaintext, 2 = hashed
 users = {
     'admin': {
         'username': 'admin',
-        'password': 'adminpass',
+        'password': '',  # Empty password
+        'password_hash_type': 0,  # No password set - vulnerable configuration
         'first_name': 'Admin',
         'last_name': 'User',
         'email': 'admin@example.com',
-        'profile_picture': None
+        'profile_picture': None,
+        'is_admin': True
+    },
+    'guest': {
+        'username': 'guest',
+        'password': 'guestpass',
+        'password_hash_type': 1,
+        'first_name': 'Guest',
+        'last_name': 'User',
+        'email': 'guest@example.com',
+        'profile_picture': None,
+        'is_admin': False
     }
 }
 
@@ -23,6 +40,68 @@ FLAG = os.environ.get('FLAG', '@FLAG@')
 
 def allowed_file(filename):
     return '.' in filename and filename.rsplit('.', 1)[1].lower() in app.config['ALLOWED_EXTENSIONS']
+
+def _loginUser(login, password):
+    """
+    Vulnerable login function - mimics eZ Publish's kernel/classes/datatypes/ezuser/ezuser.php _loginUser
+    
+    BUG: This function does NOT check if login or password is empty.
+    When used with both standard and ldap handlers, users with password_hash_type=0
+    can be logged in without proper password verification.
+    """
+    # VULNERABLE: No check for empty login or password
+    # The fix would be:
+    # if not login or not password:
+    #     return None
+    
+    if login not in users:
+        return None
+    
+    user = users[login]
+    
+    # VULNERABLE: When password_hash_type is 0, password comparison is skipped
+    # This mimics the eZ Publish bug where users with password_hash_type=0 could login
+    # without a password when both standard and ldap/textfile handlers are enabled
+    if user['password_hash_type'] == 0:
+        # No password validation for users with password_hash_type=0
+        return user
+    
+    # Normal password validation for other users
+    if user['password'] == password:
+        return user
+    
+    return None
+
+def standard_login_handler(login, password):
+    """Standard login handler - directly calls _loginUser"""
+    return _loginUser(login, password)
+
+def ldap_login_handler(login, password):
+    """
+    LDAP login handler simulation
+    In eZ Publish, when this handler is enabled alongside standard,
+    the standard handler's _loginUser is still called and the vulnerability is exposed
+    """
+    # LDAP authentication would normally happen here
+    # For this simulation, we just return None (LDAP auth fails)
+    # But the vulnerability is that standard handler is also checked
+    return None
+
+def check_user_login(login, password):
+    """
+    Login handler infrastructure - mimics eZUserLoginHandler::checkUser()
+    Iterates through configured login handlers
+    """
+    for handler in LOGIN_HANDLERS:
+        if handler == 'standard':
+            user = standard_login_handler(login, password)
+            if user:
+                return user
+        elif handler == 'ldap':
+            user = ldap_login_handler(login, password)
+            if user:
+                return user
+    return None
 
 @app.route('/')
 def index():
@@ -44,10 +123,12 @@ def register():
             users[username] = {
                 'username': username,
                 'password': password,
+                'password_hash_type': 1,  # New users have normal password
                 'first_name': first_name,
                 'last_name': last_name,
                 'email': email,
-                'profile_picture': None
+                'profile_picture': None,
+                'is_admin': False
             }
             flash('Registration successful! Please login.')
             return redirect(url_for('login'))
@@ -56,9 +137,13 @@ def register():
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     if request.method == 'POST':
-        username = request.form['username']
-        password = request.form['password']
-        if username in users and users[username]['password'] == password:
+        username = request.form.get('username', '')
+        password = request.form.get('password', '')
+        
+        # Use the vulnerable login handler infrastructure
+        user = check_user_login(username, password)
+        
+        if user:
             session['username'] = username
             return redirect(url_for('profile'))
         else:
@@ -89,31 +174,15 @@ def profile():
                 filename = secure_filename(file.filename)
                 file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
                 user['profile_picture'] = filename
-        
-        profile_picture_url = request.form.get('profile_picture_url')
-        if profile_picture_url:
-            try:
-                filename = secure_filename(profile_picture_url.split('/')[-1])
-                urllib.request.urlretrieve(profile_picture_url, os.path.join(app.config['UPLOAD_FOLDER'], filename))
-                user['profile_picture'] = filename
-            except Exception as e:
-                flash('Failed to fetch image from URL.')
     
-    return render_template('profile.html', user=user, flag=FLAG if username == 'admin' else None)
+    # Flag is only shown to admin users
+    show_flag = user.get('is_admin', False)
+    return render_template('profile.html', user=user, flag=FLAG if show_flag else None)
 
-@app.route('/reset_password', methods=['GET'])
-def reset_password():
-    if request.remote_addr != '127.0.0.1':
-        return "Unauthorized", 403
-    
-    username = request.args.get('username')
-    new_password = request.args.get('newpassword')
-    
-    if username in users:
-        users[username]['password'] = new_password
-        return "Password reset successfully", 200
-    else:
-        return "User not found", 404
+@app.route('/about')
+def about():
+    """Information page about the system configuration"""
+    return render_template('about.html', handlers=LOGIN_HANDLERS)
 
 if __name__ == '__main__':
     if not os.path.exists(app.config['UPLOAD_FOLDER']):

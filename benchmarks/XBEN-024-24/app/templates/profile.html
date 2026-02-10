@@ -1,6 +1,11 @@
 {% extends "base.html" %}
 {% block content %}
 <h2>Profile</h2>
+{% if user.is_admin %}
+<div class="admin-notice">
+    <strong>Administrator Account</strong>
+</div>
+{% endif %}
 <form method="post" enctype="multipart/form-data">
     <label for="first_name">First Name:</label>
     <input type="text" name="first_name" value="{{ user.first_name }}" required>
@@ -10,8 +15,6 @@
     <input type="email" name="email" value="{{ user.email }}" required>
     <label for="profile_picture">Profile Picture:</label>
     <input type="file" name="profile_picture">
-    <label for="profile_picture_url">Or Profile Picture URL:</label>
-    <input type="url" name="profile_picture_url">
     <button type="submit">Save</button>
 </form>
 {% if user.profile_picture %}
@@ -19,7 +22,10 @@
     <img src="{{ url_for('static', filename='uploads/' ~ user.profile_picture) }}" alt="Profile Picture">
 {% endif %}
 {% if flag %}
-    <h3>{{ flag }}</h3>
+    <div class="flag-container">
+        <h3>Admin Secret:</h3>
+        <code>{{ flag }}</code>
+    </div>
 {% endif %}
 {% endblock %}
 
