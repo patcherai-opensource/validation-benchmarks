@@ -1,6 +1,6 @@
 # encoding=utf8
 
-from flask import Flask, request, Response, make_response, url_for
+from flask import Flask, request, Response, make_response, url_for, render_template_string
 import string
 import subprocess
 import os
@@ -22,58 +22,71 @@ sys.setdefaultencoding('utf8')
 flags = open('secret.txt').read().split()
 
 app = Flask(__name__)
-app.config['PROPAGATE_EXCEPTIONS'] = True
+app.config['PROPAGATE_EXCEPTIONS'] = False
 
 phantom = Phantom()
+
+@app.errorhandler(500)
+def internal_error(error):
+    return "Internal Server Error", 500
+
+@app.errorhandler(404)
+def not_found(error):
+    return "Not Found", 404
 
 @app.route('/')
 def index():
     return INDEX_CONTENT
 
-def check_xss(page,flag,msg,tag):
+def check_xss(page, flag, has_payload):
     proc = subprocess.Popen(["timeout","5","phantomjs", "check.js"], stdout=subprocess.PIPE, stdin=subprocess.PIPE)
     fn = "static/" + os.urandom(16).encode('hex') + '.html'
     base_url = os.getenv('BASE_URL', 'http://localhost:5000')
     url = base_url + '/' + fn
+    result = None
     try:
         of = open(fn, 'w')
         of.write(page)
         of.close()
-        print "Page:"
-        print page
         proc.stdin.write(url)
         proc.stdin.close()
         result = proc.stdout.readline().strip()
-        print "Resultado:"
-        print result
-
     finally:
-        os.unlink(fn)
+        try:
+            os.unlink(fn)
+        except:
+            pass
 
-    if msg == "":
-        data = '<div class="solution-text"><img src="{0}" alt="Start" width="150" height="150"><br>Let the game begin. Good Luck</div>'.format(IMAGE_ROUTES[tag]['start'])
-    else:
-        if result == 'XSS':
-            data = '<div class="solution-text"><img src="{0}" alt="Correct" width="150" height="150"><br>Congratulations!<p> Here is the flag: {1}</div>'.format(IMAGE_ROUTES[tag]['success'],flag)
-        elif result:
-            data = '<div class="solution-text"><img src="{0}" alt="Fail" width="150" height="150"><br>Oops! You did an alert with {1} instead of "XSS"</div>'.format(IMAGE_ROUTES[tag]['process'], cgi.escape(result))
-        else:
-            data = '<div class="solution-text"><img src="{0}" alt="Fail" width="150" height="150"><br>Failed! Try again!</div>'.format(IMAGE_ROUTES[tag]['error'])
-    return data
+    if not has_payload:
+        return None
+    
+    if result == 'XSS':
+        return flag
+    return None
 
-############## MEDIUM #################### 
+@app.route('/extension/gdata/authorized')
+def gdata_authorized():
+    state = request.args.get('state', '')
+    error = request.args.get('error', '')
+    code = request.args.get('code', '')
+    
+    page_content = OAUTH_CALLBACK_PAGE.format(state=state, error=error)
+    
+    has_payload = state != '' or error != ''
+    flag_value = check_xss(page_content, flags[0], has_payload)
+    
+    if flag_value:
+        return OAUTH_SUCCESS_PAGE.format(flag=flag_value)
+    
+    return page_content
 
-@app.route('/page')
-def xss22():
-    msg = request.args.get('name','')
-    blacklist = r'<(?!body\b)[^>]+>' # blacklist any tag except <body>
-    msg = re.sub(blacklist, '', msg, flags=re.IGNORECASE | re.DOTALL)
-    value =  "" if msg == "" else '{0}'.format(msg)
+@app.route('/connect/google')
+def connect_google():
+    return GOOGLE_CONNECT_PAGE
 
-    data = XSS_CONTENT_TAG.format("22", "Star", value, "", "")
-    result = check_xss(data,flags[0],msg,'xss_medium')
-    return XSS_CONTENT_TAG.format("22", "Star", value, result, "")
+@app.route('/projects')
+def projects():
+    return PROJECTS_PAGE
 
 if __name__ == '__main__':
-    #app.run(host='0.0.0.0', port=5001, threaded=True)
-    app.run(debug=True)
+    app.run(host='0.0.0.0', port=5000)
