@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AutoRunner - API Documentation</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-brand">AutoRunner</div>
+        <div class="nav-links">
+            <a href="/">Dashboard</a>
+            <a href="/docs" class="active">API Docs</a>
+        </div>
+    </nav>
+    
+    <div class="container">
+        <div class="header">
+            <h1>API Documentation</h1>
+            <p>REST API for command execution</p>
+        </div>
+        
+        <div class="card">
+            <h2>POST /api/run</h2>
+            <p>Execute a system command with optional arguments.</p>
+            
+            <h3>Request Body</h3>
+            <pre>{
+  "executable_cmd": "string (required)",
+  "cmdline_args": "string or array (optional)"
+}</pre>
+            
+            <h3>Response</h3>
+            <pre>{
+  "command": "string",
+  "args": ["array"],
+  "result": {
+    "status": "completed|timeout|error",
+    "rc": "integer",
+    "stdout": "string",
+    "stderr": "string"
+  }
+}</pre>
+            
+            <h3>Example</h3>
+            <pre>curl -X POST http://localhost/api/run \
+  -H "Content-Type: application/json" \
+  -d '{"executable_cmd": "ls", "cmdline_args": "-la"}'</pre>
+        </div>
+        
+        <div class="card">
+            <h2>GET /api/commands</h2>
+            <p>List all available commands.</p>
+            
+            <h3>Response</h3>
+            <pre>{
+  "commands": {
+    "command_name": "description"
+  }
+}</pre>
+        </div>
+        
+        <div class="card">
+            <h2>Available Commands</h2>
+            <table class="command-table">
+                <thead>
+                    <tr>
+                        <th>Command</th>
+                        <th>Description</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for cmd, desc in commands.items() %}
+                    <tr>
+                        <td><code>{{ cmd }}</code></td>
+                        <td>{{ desc }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</body>
+</html>

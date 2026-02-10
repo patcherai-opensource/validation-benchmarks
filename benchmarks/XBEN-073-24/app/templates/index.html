@@ -1,16 +1,99 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>Ping Tool</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AutoRunner - Command Automation Platform</title>
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles.css') }}">
 </head>
 <body>
+    <nav class="navbar">
+        <div class="nav-brand">AutoRunner</div>
+        <div class="nav-links">
+            <a href="/" class="active">Dashboard</a>
+            <a href="/docs">API Docs</a>
+        </div>
+    </nav>
+    
     <div class="container">
-        <h1>Ping Tool</h1>
-        <form action="/ping" method="post">
-            <input type="text" name="ip_address" placeholder="Enter IP Address" required>
-            <button type="submit">Ping</button>
-        </form>
+        <div class="header">
+            <h1>Command Runner</h1>
+            <p>Execute system commands with optional arguments</p>
+        </div>
+        
+        <div class="card">
+            <h2>Run Command</h2>
+            <form id="commandForm">
+                <div class="form-group">
+                    <label for="executable_cmd">Command</label>
+                    <select name="executable_cmd" id="executable_cmd" required>
+                        <option value="">Select a command...</option>
+                        {% for cmd, desc in commands.items() %}
+                        <option value="{{ cmd }}">{{ cmd }} - {{ desc }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="cmdline_args">Arguments (optional)</label>
+                    <input type="text" name="cmdline_args" id="cmdline_args" placeholder="e.g., -l -a for ls">
+                    <small>Space-separated arguments to pass to the command</small>
+                </div>
+                <button type="submit" class="btn-primary">Execute</button>
+            </form>
+        </div>
+        
+        <div class="card" id="resultCard" style="display: none;">
+            <h2>Output</h2>
+            <div class="result-header">
+                <span id="resultCommand"></span>
+                <span id="resultStatus" class="status-badge"></span>
+            </div>
+            <pre id="resultOutput"></pre>
+        </div>
     </div>
+    
+    <script>
+        document.getElementById('commandForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const formData = {
+                executable_cmd: document.getElementById('executable_cmd').value,
+                cmdline_args: document.getElementById('cmdline_args').value
+            };
+            
+            try {
+                const response = await fetch('/api/run', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(formData)
+                });
+                
+                const data = await response.json();
+                
+                const resultCard = document.getElementById('resultCard');
+                const resultCommand = document.getElementById('resultCommand');
+                const resultStatus = document.getElementById('resultStatus');
+                const resultOutput = document.getElementById('resultOutput');
+                
+                resultCard.style.display = 'block';
+                
+                if (data.error) {
+                    resultCommand.textContent = 'Error';
+                    resultStatus.textContent = 'failed';
+                    resultStatus.className = 'status-badge status-error';
+                    resultOutput.textContent = data.error;
+                } else {
+                    resultCommand.textContent = `$ ${data.command} ${data.args.join(' ')}`;
+                    resultStatus.textContent = data.result.status;
+                    resultStatus.className = 'status-badge ' + (data.result.rc === 0 ? 'status-success' : 'status-error');
+                    resultOutput.textContent = data.result.stdout || data.result.stderr || 'No output';
+                }
+            } catch (error) {
+                console.error('Error:', error);
+            }
+        });
+    </script>
 </body>
 </html>

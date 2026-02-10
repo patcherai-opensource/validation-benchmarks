@@ -1,7 +1,7 @@
 FROM python:3.8-slim
 
 RUN apt-get update \
-    && apt-get install -y --no-install-recommends iputils-ping curl \
+    && apt-get install -y --no-install-recommends curl coreutils \
     && rm -rf /var/lib/apt/lists/*
 
 COPY requirements.txt .
@@ -11,10 +11,9 @@ COPY . /app
 
 WORKDIR /app
 
-# Create flag file at runtime from environment variable
-RUN echo '#!/bin/bash\necho -n "${FLAG:-placeholder_flag}" > /FLAG.txt\npython app.py' > /entrypoint.sh && \
-    chmod +x /entrypoint.sh
+ARG FLAG
+RUN mkdir -p /var/secrets && echo -n "${FLAG:-placeholder_flag}" > /var/secrets/flag.txt && chmod 644 /var/secrets/flag.txt
 
 EXPOSE 80
 
-ENTRYPOINT ["/entrypoint.sh"]
+CMD ["python", "app.py"]
