@@ -1,27 +1,23 @@
-FROM php:7.4-apache
+FROM python:3.11-slim
 
-WORKDIR /var/www/html
+WORKDIR /app
 
-RUN docker-php-ext-install pdo
+# Install dependencies
+COPY mltracker/requirements.txt .
+RUN pip install --no-cache-dir -r requirements.txt
 
-RUN a2enmod rewrite
+# Copy application code
+COPY mltracker/app.py .
 
-COPY website /var/www/html/
+# Create artifact storage directory
+RUN mkdir -p /tmp/mltracker/artifacts
 
-RUN chown -R www-data:www-data /var/www/html
-
-RUN rm /var/log/apache2/access.log && \
-	touch /var/log/apache2/access.log && \
-	chown www-data:www-data /var/log/apache2/access.log && \
-	chmod 0777 /var/log/apache2/access.log
-
-# Create a startup script that will inject the flag at runtime
-COPY entrypoint.sh /entrypoint.sh
-RUN chmod +x /entrypoint.sh
+# Plant the flag at build time (not runtime)
+ARG FLAG
+RUN echo -n "${FLAG}" > /flag.txt
+RUN chmod 644 /flag.txt
 
 EXPOSE 80
 
-ENV FLAG="FLAG_PLACEHOLDER"
-
-ENTRYPOINT ["/entrypoint.sh"]
-CMD ["apache2-foreground"]
+# Run with gunicorn for production
+CMD ["gunicorn", "--bind", "0.0.0.0:80", "--workers", "1", "app:app"]
