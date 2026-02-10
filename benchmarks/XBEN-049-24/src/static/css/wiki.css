@@ -1,0 +1,249 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    line-height: 1.6;
+    color: #333;
+    background-color: #f5f5f5;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+.wiki-header {
+    background: #2c5282;
+    color: white;
+    padding: 1rem 0;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.wiki-header .container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.wiki-header h1 {
+    font-size: 1.5rem;
+}
+
+.wiki-header h1 a {
+    color: white;
+    text-decoration: none;
+}
+
+.wiki-header nav a {
+    color: white;
+    text-decoration: none;
+    margin-left: 20px;
+    opacity: 0.9;
+}
+
+.wiki-header nav a:hover {
+    opacity: 1;
+    text-decoration: underline;
+}
+
+.wiki-main {
+    padding: 2rem 0;
+}
+
+.wiki-main .container {
+    display: grid;
+    grid-template-columns: 1fr 300px;
+    gap: 2rem;
+}
+
+.wiki-content {
+    background: white;
+    padding: 2rem;
+    border-radius: 4px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+}
+
+.wiki-content h2 {
+    color: #2c5282;
+    margin-bottom: 1rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 2px solid #e2e8f0;
+}
+
+.wiki-content h3 {
+    color: #2d3748;
+    margin: 1.5rem 0 1rem;
+}
+
+.wiki-content p {
+    margin-bottom: 1rem;
+}
+
+.wiki-content ul {
+    margin: 1rem 0;
+    padding-left: 2rem;
+}
+
+.wiki-content li {
+    margin-bottom: 0.5rem;
+}
+
+.wiki-content a {
+    color: #2c5282;
+}
+
+.wiki-content a:hover {
+    text-decoration: underline;
+}
+
+.wiki-sidebar {
+    background: white;
+    padding: 1.5rem;
+    border-radius: 4px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    height: fit-content;
+}
+
+.wiki-sidebar h4 {
+    color: #2c5282;
+    margin-bottom: 1rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 1px solid #e2e8f0;
+}
+
+.wiki-sidebar ul {
+    list-style: none;
+}
+
+.wiki-sidebar li {
+    margin-bottom: 0.5rem;
+}
+
+.wiki-sidebar a {
+    color: #2c5282;
+    text-decoration: none;
+}
+
+.wiki-sidebar a:hover {
+    text-decoration: underline;
+}
+
+.wiki-footer {
+    background: #2d3748;
+    color: #a0aec0;
+    padding: 1.5rem 0;
+    text-align: center;
+    margin-top: 2rem;
+}
+
+.upload-form {
+    margin-top: 1.5rem;
+}
+
+.form-group {
+    margin-bottom: 1.5rem;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-weight: 500;
+    color: #4a5568;
+}
+
+.form-group input[type="file"] {
+    display: block;
+    width: 100%;
+    padding: 0.5rem;
+    border: 2px dashed #cbd5e0;
+    border-radius: 4px;
+    background: #f7fafc;
+}
+
+.form-group textarea {
+    width: 100%;
+    padding: 0.75rem;
+    border: 1px solid #cbd5e0;
+    border-radius: 4px;
+    font-family: inherit;
+    resize: vertical;
+}
+
+.form-actions {
+    display: flex;
+    gap: 1rem;
+    margin-top: 1.5rem;
+}
+
+.btn {
+    display: inline-block;
+    padding: 0.75rem 1.5rem;
+    border: none;
+    border-radius: 4px;
+    font-size: 1rem;
+    cursor: pointer;
+    text-decoration: none;
+    text-align: center;
+}
+
+.btn-primary {
+    background: #2c5282;
+    color: white;
+}
+
+.btn-primary:hover {
+    background: #2a4365;
+}
+
+.btn-secondary {
+    background: #e2e8f0;
+    color: #4a5568;
+}
+
+.btn-secondary:hover {
+    background: #cbd5e0;
+}
+
+.edit-form textarea {
+    width: 100%;
+    padding: 1rem;
+    border: 1px solid #cbd5e0;
+    border-radius: 4px;
+    font-family: monospace;
+    font-size: 0.9rem;
+    resize: vertical;
+}
+
+.flag-message {
+    background: #f0fff4;
+    border: 1px solid #9ae6b4;
+    color: #276749;
+    padding: 1rem;
+    border-radius: 4px;
+    margin-top: 1rem;
+    font-family: monospace;
+}
+
+@media (max-width: 768px) {
+    .wiki-main .container {
+        grid-template-columns: 1fr;
+    }
+    
+    .wiki-header .container {
+        flex-direction: column;
+        text-align: center;
+    }
+    
+    .wiki-header nav {
+        margin-top: 1rem;
+    }
+    
+    .wiki-header nav a {
+        margin: 0 10px;
+    }
+}
