@@ -1,11 +1,12 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Login</title>
+    <title>eZ Platform - Login</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
     <div class="container">
+        <h1>eZ Platform CMS</h1>
         <h2>Login</h2>
         <form method="post" action="{{ url_for('login') }}">
             <label for="username">Username:</label>
@@ -14,6 +15,7 @@
             <input type="password" id="password" name="password" required>
             <button type="submit">Login</button>
         </form>
+        <p class="hint">Content editors can create and modify content with RichText fields.</p>
     </div>
 </body>
 </html>

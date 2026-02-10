@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>eZ Platform - New Content</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="dashboard-container">
+        <header>
+            <h1>eZ Platform CMS</h1>
+            <div class="user-info">
+                Welcome, <strong>{{ session['username'] }}</strong> ({{ session['role'] }})
+                | <a href="{{ url_for('logout') }}">Logout</a>
+            </div>
+        </header>
+        
+        <nav>
+            <a href="{{ url_for('dashboard') }}">Dashboard</a>
+            | <a href="{{ url_for('new_content') }}">New Content</a>
+        </nav>
+        
+        <main>
+            <h2>Create New Content</h2>
+            
+            {% if error %}
+            <div class="error-message">{{ error }}</div>
+            {% endif %}
+            
+            <form method="POST" action="{{ url_for('new_content') }}">
+                <div class="form-group">
+                    <label for="title">Title:</label>
+                    <input type="text" id="title" name="title" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="richtext">RichText Field (XML):</label>
+                    <textarea id="richtext" name="richtext" rows="15" cols="80"><section xmlns="http://ez.no/namespaces/ezpublish5/xhtml5"><paragraph>Enter your content here.</paragraph></section></textarea>
+                    <p class="help-text">Enter valid XML content. The RichText field supports eZ Platform XML format.</p>
+                </div>
+                
+                <button type="submit" class="btn">Create Content</button>
+            </form>
+            
+            <p><a href="{{ url_for('dashboard') }}">Back to Dashboard</a></p>
+        </main>
+        
+        <footer>
+            <p>eZ Platform RichText CMS - Version 2.3.25</p>
+        </footer>
+    </div>
+</body>
+</html>

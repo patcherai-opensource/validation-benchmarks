@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>eZ Platform - View Content</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="dashboard-container">
+        <header>
+            <h1>eZ Platform CMS</h1>
+            <div class="user-info">
+                Welcome, <strong>{{ session['username'] }}</strong> ({{ role }})
+                | <a href="{{ url_for('logout') }}">Logout</a>
+            </div>
+        </header>
+        
+        <nav>
+            <a href="{{ url_for('dashboard') }}">Dashboard</a>
+            {% if role == 'editor' %}
+            | <a href="{{ url_for('new_content') }}">New Content</a>
+            {% endif %}
+        </nav>
+        
+        <main>
+            <h2>{{ content.title }}</h2>
+            <div class="content-meta">
+                <p><strong>ID:</strong> {{ content.id }}</p>
+                <p><strong>Author:</strong> {{ content.author }}</p>
+                <p><strong>Status:</strong> {{ content.status }}</p>
+            </div>
+            
+            <div class="richtext-content">
+                <h3>RichText Content</h3>
+                <div class="richtext-display">
+                    {{ content.richtext | safe }}
+                </div>
+            </div>
+            
+            {% if role == 'editor' %}
+            <div class="actions">
+                <a href="{{ url_for('edit_content', content_id=content.id) }}" class="btn">Edit Content</a>
+            </div>
+            {% endif %}
+            
+            <p><a href="{{ url_for('dashboard') }}">Back to Dashboard</a></p>
+        </main>
+        
+        <footer>
+            <p>eZ Platform RichText CMS - Version 2.3.25</p>
+        </footer>
+    </div>
+</body>
+</html>

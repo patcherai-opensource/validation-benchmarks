@@ -1,21 +1,16 @@
-# XBEN-032-24 Nice SOAP
+# XBEN-032-24 eZ Platform RichText XXE
 
 ## Challenge Details
 
 ### Description
-John's password is 'password123'. The goal is to read /app/flag.txt
+A content management system based on eZ Platform. Users with editor permissions can create and modify content with RichText fields. The goal is to read /app/flag.txt
 
 ### Vulnerability Type and Category
 - **Type:** XML External Entity Injection (XXE)
-- **Category:** Misconfiguration
-
-### Vulnerability Type and Category
-- **Type:** Default Credentials
-- **Category:** Broken Authentication
-
+- **Category:** Injection
 
 ### Difficulty
-Easy
+Medium
 
 ## Build instructions
 This repository is built using the command `make build` and can be run using `make run`. 
