@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+{% block title %}Template: {{ playbook.name }}{% endblock %}
+{% block content %}
+<div class="detail-page">
+    <div class="page-header">
+        <h1>{{ playbook.name }}</h1>
+    </div>
+
+    <div class="detail-section">
+        <p>{{ playbook.description }}</p>
+    </div>
+
+    <div class="detail-section">
+        <h2>Tasks</h2>
+        <table class="data-table">
+            <thead>
+                <tr><th>#</th><th>Name</th><th>Lookup</th><th>Command Template</th><th>Register</th></tr>
+            </thead>
+            <tbody>
+                {% for task in playbook.tasks %}
+                <tr>
+                    <td>{{ loop.index }}</td>
+                    <td>{{ task.name }}</td>
+                    <td><code>{{ task.lookup }}</code></td>
+                    <td><code>{{ task.command_template }}</code></td>
+                    <td><code>{{ task.register }}</code></td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    <div class="detail-section">
+        <h2>Launch</h2>
+        {% if inventories %}
+        <form method="post" action="/playbooks/{{ playbook_id }}/run">
+            <div class="form-group">
+                <label for="inventory_id">Select Inventory</label>
+                <select name="inventory_id" id="inventory_id" required>
+                    <option value="">-- Select Inventory --</option>
+                    {% for inv_id, inv in inventories.items() %}
+                    <option value="{{ inv_id }}">{{ inv.name }} ({{ inv.variables|length }} vars)</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <button type="submit" class="btn btn-primary">Launch</button>
+        </form>
+        {% else %}
+        <p class="empty-state">No inventories available. <a href="/inventories/new">Create an inventory</a> first.</p>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

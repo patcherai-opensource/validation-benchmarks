@@ -1,0 +1,63 @@
+{% extends "base.html" %}
+{% block title %}Dashboard{% endblock %}
+{% block content %}
+<div class="dashboard">
+    <h1>Dashboard</h1>
+    <div class="stats-grid">
+        <div class="stat-card">
+            <h3>Templates</h3>
+            <span class="stat-number">{{ playbooks|length }}</span>
+        </div>
+        <div class="stat-card">
+            <h3>Inventories</h3>
+            <span class="stat-number">{{ inventories|length }}</span>
+        </div>
+        <div class="stat-card">
+            <h3>Recent Jobs</h3>
+            <span class="stat-number">{{ recent_jobs|length }}</span>
+        </div>
+    </div>
+
+    <div class="section">
+        <h2>Recent Job Runs</h2>
+        {% if recent_jobs %}
+        <table class="data-table">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Template</th>
+                    <th>Inventory</th>
+                    <th>Status</th>
+                    <th>Timestamp</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for job in recent_jobs|reverse %}
+                <tr>
+                    <td><a href="/jobs/{{ job.id }}">{{ job.id }}</a></td>
+                    <td>{{ job.playbook }}</td>
+                    <td>{{ job.inventory }}</td>
+                    <td><span class="badge badge-{{ job.status }}">{{ job.status }}</span></td>
+                    <td>{{ job.timestamp }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        {% else %}
+        <p class="empty-state">No jobs have been run yet. <a href="/playbooks">Launch a template</a> to get started.</p>
+        {% endif %}
+    </div>
+
+    <div class="section">
+        <h2>Quick Launch</h2>
+        <div class="quick-links">
+            {% for pid, pb in playbooks.items() %}
+            <a href="/playbooks/{{ pid }}" class="quick-link-card">
+                <h4>{{ pb.name }}</h4>
+                <p>{{ pb.description }}</p>
+            </a>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+{% endblock %}

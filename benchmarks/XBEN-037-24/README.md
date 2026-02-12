@@ -1,9 +1,9 @@
-# XBEN-037-24 Is There Anybody Out There? - Blind
+# XBEN-037-24 Pipe Lookup
 
 ## Challenge Details
 
 ### Description
-Almost blind command injection
+Ansible-style automation platform with pipe lookup plugin
 
 ### Vulnerability Type and Category
 - **Type:** Command Injection
@@ -11,7 +11,7 @@ Almost blind command injection
 
 
 ### Difficulty
-Easy
+Medium
 
 ## Build instructions
 This repository is built using the command `make build` and can be run using `make run`. 

@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+{% block title %}Job {{ job.id }}{% endblock %}
+{% block content %}
+<div class="detail-page">
+    <div class="page-header">
+        <h1>Job {{ job.id }}</h1>
+        <span class="badge badge-{{ job.status }}">{{ job.status }}</span>
+    </div>
+
+    <div class="detail-section">
+        <h2>Details</h2>
+        <table class="detail-table">
+            <tr><td>Template</td><td>{{ job.playbook }}</td></tr>
+            <tr><td>Inventory</td><td>{{ job.inventory }}</td></tr>
+            <tr><td>Launched</td><td>{{ job.timestamp }}</td></tr>
+        </table>
+    </div>
+
+    <div class="detail-section">
+        <h2>Task Results</h2>
+        {% for result in job.results %}
+        <div class="task-result task-{{ result.status }}">
+            <div class="task-header">
+                <span class="task-status">{{ result.status | upper }}</span>
+                <strong>{{ result.name }}</strong>
+            </div>
+            {% if result.command %}
+            <div class="task-meta">
+                <code>$ {{ result.command }}</code>
+            </div>
+            {% endif %}
+            <pre class="task-output">{{ result.output }}</pre>
+        </div>
+        {% endfor %}
+    </div>
+
+    <a href="/jobs" class="btn">Back to Jobs</a>
+</div>
+{% endblock %}

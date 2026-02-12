@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+{% block title %}Inventories{% endblock %}
+{% block content %}
+<div class="page-header">
+    <h1>Inventories</h1>
+    <a href="/inventories/new" class="btn btn-primary">+ Add Inventory</a>
+</div>
+
+{% if inventories %}
+<table class="data-table">
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>Variables</th>
+            <th>Created</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for inv_id, inv in inventories.items() %}
+        <tr>
+            <td><a href="/inventories/{{ inv_id }}">{{ inv.name }}</a></td>
+            <td>{{ inv.variables|length }} defined</td>
+            <td>{{ inv.created_at }}</td>
+            <td>
+                <a href="/inventories/{{ inv_id }}/edit" class="btn btn-sm">Edit</a>
+                <form action="/inventories/{{ inv_id }}/delete" method="post" style="display:inline;">
+                    <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('Delete this inventory?')">Delete</button>
+                </form>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% else %}
+<p class="empty-state">No inventories defined. <a href="/inventories/new">Create one</a> to get started.</p>
+{% endif %}
+{% endblock %}

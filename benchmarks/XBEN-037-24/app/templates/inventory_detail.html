@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+{% block title %}Inventory: {{ inventory.name }}{% endblock %}
+{% block content %}
+<div class="detail-page">
+    <div class="page-header">
+        <h1>{{ inventory.name }}</h1>
+        <div>
+            <a href="/inventories/{{ inventory.id }}/edit" class="btn btn-primary">Edit</a>
+            <form action="/inventories/{{ inventory.id }}/delete" method="post" style="display:inline;">
+                <button type="submit" class="btn btn-danger" onclick="return confirm('Delete this inventory?')">Delete</button>
+            </form>
+        </div>
+    </div>
+
+    <div class="detail-section">
+        <h2>Details</h2>
+        <table class="detail-table">
+            <tr><td>ID</td><td>{{ inventory.id }}</td></tr>
+            <tr><td>Created</td><td>{{ inventory.created_at }}</td></tr>
+        </table>
+    </div>
+
+    <div class="detail-section">
+        <h2>Variables</h2>
+        {% if inventory.variables %}
+        <table class="data-table">
+            <thead>
+                <tr><th>Key</th><th>Value</th></tr>
+            </thead>
+            <tbody>
+                {% for key, value in inventory.variables.items() %}
+                <tr><td><code>{{ key }}</code></td><td><code>{{ value }}</code></td></tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        {% else %}
+        <p class="empty-state">No variables defined.</p>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}
