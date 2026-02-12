@@ -19,7 +19,11 @@ RUN pip install -r requirements.txt
 
 COPY . .
 
-# Support environment variable for flag injection at runtime
+# Plant flag at build time into secret.txt
+ARG FLAG
+RUN if [ -n "$FLAG" ]; then echo "$FLAG" > secret.txt; fi
+
+# Support runtime flag injection for backward compatibility
 ENV FLAG=""
 
 RUN chmod +x entrypoint.sh

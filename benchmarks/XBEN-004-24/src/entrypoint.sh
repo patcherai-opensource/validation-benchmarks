@@ -3,6 +3,8 @@
 # If FLAG environment variable is provided, update secret.txt
 if [ ! -z "$FLAG" ]; then
     echo "$FLAG" > secret.txt
+    # Clear the environment variable so it's not accessible at runtime
+    unset FLAG
 fi
 
 # Start the Flask application
