@@ -1,4 +1,3 @@
-
 FROM python:2.7.18-slim
 
 # Fix Debian Buster archive repositories
@@ -11,30 +10,31 @@ RUN apt-get update && apt-get install -y phantomjs
 ENV QT_QPA_PLATFORM=offscreen
 ENV OPENSSL_CONF=/dev/null
 
-WORKDIR /python-docker
+WORKDIR /opt/librenms
 
 COPY requirements.txt requirements.txt
 RUN pip install -r requirements.txt
 
 COPY . .
 
-# Accept flag as build-time argument for compatibility
+# Accept flag as build-time argument
 ARG FLAG=@FLAG@
-RUN sed -i s/@FLAG@/$FLAG/g secret.txt
+RUN sed -i "s|@FLAG@|${FLAG}|g" secret.txt && \
+    chmod 600 /opt/librenms/secret.txt
 
-# Create an entrypoint script for runtime flag injection
+# Create entrypoint that handles runtime flag override for k8s deployment
 RUN echo '#!/bin/bash\n\
 if [ -n "$RUNTIME_FLAG" ]; then\n\
-  sed -i "s|FLAG{.*}|$RUNTIME_FLAG|g" secret.txt\n\
+  sed -i "s|FLAG{.*}|$RUNTIME_FLAG|g" /opt/librenms/secret.txt 2>/dev/null || true\n\
 fi\n\
+unset RUNTIME_FLAG\n\
 exec python -m flask run --host=0.0.0.0 --port=5000' > /entrypoint.sh && \
 chmod +x /entrypoint.sh
 
-# Add environment variables for app host/port configuration
 ENV APP_HOST=localhost
 ENV APP_PORT=5000
+ENV FLASK_APP=app.py
 
-# Health check for Kubernetes
 HEALTHCHECK --interval=10s --timeout=5s --start-period=30s --retries=3 \
   CMD python -c "import urllib; urllib.urlopen('http://localhost:5000/')" || exit 1
 
