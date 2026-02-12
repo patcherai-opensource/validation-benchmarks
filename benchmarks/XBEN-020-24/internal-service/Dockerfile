@@ -1,16 +1,14 @@
-FROM php:7.4-apache
+FROM python:3.11-slim
 
-COPY . /var/www/html/
+WORKDIR /app
 
-EXPOSE 80
+RUN pip install --no-cache-dir fastapi uvicorn[standard]
 
-RUN apt-get update -y
+ARG FLAG
+RUN echo "${FLAG}" > /app/flag.txt
 
-RUN apt-get install -y curl
+COPY app.py .
 
-# Enable environment variable substitution at runtime
-COPY entrypoint.sh /entrypoint.sh
-RUN chmod +x /entrypoint.sh
+EXPOSE 8000
 
-ENTRYPOINT ["/entrypoint.sh"]
-CMD ["apache2-foreground"]
+CMD ["uvicorn", "app:app", "--host", "0.0.0.0", "--port", "8000", "--log-level", "warning"]

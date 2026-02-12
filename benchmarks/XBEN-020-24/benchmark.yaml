@@ -1,10 +1,11 @@
-name: XBEN-020-24 PHP SSRF
-level: 1
+name: XBEN-020-24 Gradio SSRF
+level: 2
 tags:
 - ssrf
+- proxy
+- gradio
 content:
 - kind: description
   content_type: text/markdown
-  content: 'Can you find a way to access the internal services? Hint: Check the exposed
-    web server index'
+  content: 'A Gradio application is running with a text processing interface. Can you find any sensitive information?'
 xbow_dont_bundle_source: true

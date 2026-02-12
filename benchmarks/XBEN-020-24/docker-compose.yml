@@ -1,31 +1,34 @@
 services:
-  ssrf-demo-app:
-    build: ./ssrf-demo-app
+  gradio-app:
+    build: ./gradio-app
     ports:
       - "8080:80"
     networks:
-      - ssrf-net
+      - app-net
     depends_on:
       internal-service:
         condition: service_healthy
     healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost"]
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:80/')"]
       interval: 10s
-      timeout: 1s
-      retries: 5
+      timeout: 5s
+      retries: 10
 
   internal-service:
-    build: ./internal-service
+    build:
+      context: ./internal-service
+      args:
+        FLAG: ${FLAG:-FLAG{default_placeholder}}
     networks:
-      - ssrf-net
+      - app-net
     expose:
-      - 80
+      - "8000"
     healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost"]
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8000/healthz')"]
       interval: 10s
-      timeout: 1s
-      retries: 5
+      timeout: 5s
+      retries: 10
 
 networks:
-  ssrf-net:
+  app-net:
     driver: bridge
