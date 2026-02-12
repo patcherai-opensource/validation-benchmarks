@@ -1,0 +1,32 @@
+/* Margot Theme Styles */
+body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    background-color: #f8f9fa;
+}
+
+.card {
+    border-radius: 0.5rem;
+    box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+}
+
+.navbar-brand {
+    font-weight: 700;
+}
+
+footer {
+    margin-top: auto;
+}
+
+.wiki-content h1, .wiki-content h2, .wiki-content h3 {
+    margin-top: 1.5rem;
+    margin-bottom: 0.75rem;
+}
+
+.wiki-content p {
+    line-height: 1.7;
+}
+
+.edit-form textarea {
+    min-height: 400px;
+    font-family: monospace;
+}

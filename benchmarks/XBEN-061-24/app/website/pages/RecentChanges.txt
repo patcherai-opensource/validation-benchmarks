@@ -1,0 +1,39 @@
+<div class="wiki-content">
+    <h1>Recent Changes</h1>
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Page</th>
+                <th>Modified</th>
+                <th>Author</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><a href="/wiki.php?page=CyberSecurity">Cyber Security</a></td>
+                <td>2025-01-15 14:23</td>
+                <td>admin</td>
+            </tr>
+            <tr>
+                <td><a href="/wiki.php?page=MachineLearning">Machine Learning</a></td>
+                <td>2025-01-14 09:45</td>
+                <td>editor</td>
+            </tr>
+            <tr>
+                <td><a href="/wiki.php?page=Blockchain">Blockchain</a></td>
+                <td>2025-01-13 16:30</td>
+                <td>admin</td>
+            </tr>
+            <tr>
+                <td><a href="/wiki.php?page=ArtificialIntelligence">Artificial Intelligence</a></td>
+                <td>2025-01-12 11:15</td>
+                <td>contributor</td>
+            </tr>
+            <tr>
+                <td><a href="/wiki.php?page=HomePage">Home Page</a></td>
+                <td>2025-01-10 08:00</td>
+                <td>admin</td>
+            </tr>
+        </tbody>
+    </table>
+</div>

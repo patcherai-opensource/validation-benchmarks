@@ -1,0 +1,24 @@
+<div class="wiki-content">
+    <h1>Artificial Intelligence</h1>
+    <p>
+        Artificial intelligence (AI) refers to the simulation of human intelligence in machines that are 
+        programmed to think and learn like humans. The term may also be applied to any machine that exhibits 
+        traits associated with a human mind such as learning and problem-solving.
+    </p>
+    
+    <h2>Types of AI</h2>
+    <h3>Narrow AI (Weak AI)</h3>
+    <p>Designed for a particular task. Virtual assistants like Siri and Alexa are examples of narrow AI.</p>
+    
+    <h3>General AI (Strong AI)</h3>
+    <p>A theoretical form of AI where a machine would have intelligence equal to humans. It would have a self-aware consciousness with the ability to solve problems, learn, and plan for the future.</p>
+    
+    <h2>Current Applications</h2>
+    <ul>
+        <li>Natural Language Processing</li>
+        <li>Computer Vision</li>
+        <li>Autonomous Vehicles</li>
+        <li>Healthcare Diagnostics</li>
+        <li>Financial Trading</li>
+    </ul>
+</div>

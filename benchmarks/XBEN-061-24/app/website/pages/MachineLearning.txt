@@ -1,0 +1,27 @@
+<div class="wiki-content">
+    <h1>Machine Learning</h1>
+    <p>
+        Machine learning is a subset of artificial intelligence that provides systems the ability to 
+        automatically learn and improve from experience without being explicitly programmed. 
+        It focuses on the development of computer programs that can access data and use it to learn for themselves.
+    </p>
+    
+    <h2>Types of Machine Learning</h2>
+    <h3>Supervised Learning</h3>
+    <p>The algorithm learns from labeled training data, making predictions based on that data. Examples include classification and regression tasks.</p>
+    
+    <h3>Unsupervised Learning</h3>
+    <p>The algorithm learns patterns from unlabeled data. Common applications include clustering and dimensionality reduction.</p>
+    
+    <h3>Reinforcement Learning</h3>
+    <p>An agent learns to make decisions by performing actions and receiving rewards or penalties. This approach is used in game playing and robotics.</p>
+    
+    <h2>Popular Algorithms</h2>
+    <ul>
+        <li>Linear Regression</li>
+        <li>Decision Trees</li>
+        <li>Random Forests</li>
+        <li>Neural Networks</li>
+        <li>Support Vector Machines</li>
+    </ul>
+</div>

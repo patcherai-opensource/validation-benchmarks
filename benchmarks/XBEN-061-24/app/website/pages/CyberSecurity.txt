@@ -1,0 +1,30 @@
+<div class="wiki-content">
+    <h1>Cyber Security Fundamentals</h1>
+    <p>
+        Cybersecurity is the practice of protecting systems, networks, and programs from digital attacks. 
+        These cyberattacks are usually aimed at accessing, changing, or destroying sensitive information, 
+        extorting money from users, or interrupting normal business processes.
+    </p>
+    
+    <h2>Key Concepts</h2>
+    <h3>Confidentiality</h3>
+    <p>Ensuring that information is accessible only to those authorized to have access. This is typically achieved through encryption, access controls, and authentication mechanisms.</p>
+    
+    <h3>Integrity</h3>
+    <p>Maintaining and assuring the accuracy and completeness of data over its entire lifecycle. This means data cannot be modified in an unauthorized or undetected manner.</p>
+    
+    <h3>Availability</h3>
+    <p>Information must be available when needed. This involves maintaining hardware, performing software upgrades, and ensuring adequate bandwidth.</p>
+    
+    <h2>Common Threats</h2>
+    <ul>
+        <li><strong>Phishing</strong> - Social engineering attacks that trick users into revealing sensitive information</li>
+        <li><strong>Ransomware</strong> - Malware that encrypts files and demands payment for decryption</li>
+        <li><strong>Man-in-the-Middle</strong> - Attacks where communication between two parties is intercepted</li>
+        <li><strong>SQL Injection</strong> - Exploiting vulnerabilities in database-driven applications</li>
+        <li><strong>Cross-Site Scripting</strong> - Injecting malicious scripts into web pages viewed by others</li>
+    </ul>
+    
+    <h2>Best Practices</h2>
+    <p>Organizations should implement a defense-in-depth strategy that includes regular security audits, employee training, and incident response planning.</p>
+</div>

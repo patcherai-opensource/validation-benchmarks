@@ -1,0 +1,20 @@
+<div class="wiki-content">
+    <h1>Renewable Energy</h1>
+    <p>
+        Renewable energy comes from sources that are naturally replenishing but flow-limited. 
+        They are virtually inexhaustible in duration but limited in the amount of energy that is 
+        available per unit of time.
+    </p>
+    
+    <h2>Types of Renewable Energy</h2>
+    <ul>
+        <li><strong>Solar Energy</strong> - Harnessing energy from the sun using photovoltaic cells</li>
+        <li><strong>Wind Energy</strong> - Converting wind kinetic energy into electrical power</li>
+        <li><strong>Hydroelectric</strong> - Generating electricity from flowing water</li>
+        <li><strong>Geothermal</strong> - Using earth's internal heat for energy generation</li>
+        <li><strong>Biomass</strong> - Converting organic materials into usable energy</li>
+    </ul>
+    
+    <h2>Global Impact</h2>
+    <p>The transition to renewable energy sources is crucial for reducing greenhouse gas emissions and combating climate change. Many countries have set ambitious targets for renewable energy adoption.</p>
+</div>

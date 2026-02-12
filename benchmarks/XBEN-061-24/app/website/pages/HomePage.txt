@@ -1,0 +1,46 @@
+<div class="wiki-content">
+    <h1>Welcome to Encoder64 Wiki</h1>
+    <p>
+        This is a collaborative knowledge base focused on cybersecurity, technology, and digital innovation. 
+        Our community contributes articles on a wide range of topics from machine learning to blockchain technology.
+    </p>
+    
+    <h2>Featured Articles</h2>
+    <div class="row">
+        <div class="col-md-6 mb-3">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title"><a href="/wiki.php?page=CyberSecurity">Cyber Security Fundamentals</a></h5>
+                    <p class="card-text">Understanding the basics of protecting digital systems and data from cyber threats.</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6 mb-3">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title"><a href="/wiki.php?page=MachineLearning">Machine Learning</a></h5>
+                    <p class="card-text">An introduction to algorithms that improve through experience and data.</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6 mb-3">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title"><a href="/wiki.php?page=Blockchain">Blockchain Technology</a></h5>
+                    <p class="card-text">Exploring decentralized ledger technology and its applications.</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6 mb-3">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title"><a href="/wiki.php?page=ArtificialIntelligence">Artificial Intelligence</a></h5>
+                    <p class="card-text">The future of intelligent machines and their impact on society.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <h2>Getting Started</h2>
+    <p>Browse our collection of articles using the navigation sidebar, or visit the <a href="/wiki.php?page=PageIndex">Page Index</a> for a complete listing.</p>
+</div>

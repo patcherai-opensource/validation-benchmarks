@@ -1,0 +1,22 @@
+<div class="wiki-content">
+    <h1>Blockchain Technology</h1>
+    <p>
+        Blockchain is a distributed database or ledger that is shared among the nodes of a computer network. 
+        It stores information electronically in digital format and is best known for its crucial role in 
+        cryptocurrency systems for maintaining a secure and decentralized record of transactions.
+    </p>
+    
+    <h2>How It Works</h2>
+    <p>Each block in the chain contains a number of transactions, and every time a new transaction occurs on the blockchain, a record of that transaction is added to every participant's ledger.</p>
+    
+    <h2>Key Features</h2>
+    <ul>
+        <li><strong>Decentralization</strong> - No single entity controls the entire chain</li>
+        <li><strong>Transparency</strong> - All transactions are visible to participants</li>
+        <li><strong>Immutability</strong> - Once recorded, data cannot be altered retroactively</li>
+        <li><strong>Security</strong> - Cryptographic hashing ensures data integrity</li>
+    </ul>
+    
+    <h2>Applications Beyond Cryptocurrency</h2>
+    <p>Blockchain technology finds applications in supply chain management, healthcare record keeping, voting systems, and digital identity verification.</p>
+</div>

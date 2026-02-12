@@ -1,0 +1,9 @@
+body {
+    font-family: "Courier New", monospace;
+    background-color: #1a1a2e;
+    color: #e0e0e0;
+}
+.navbar { background-color: #16213e !important; }
+.card { background-color: #0f3460; border-color: #533483; }
+.card-header { background-color: #533483; color: #e0e0e0; }
+a { color: #e94560; }
