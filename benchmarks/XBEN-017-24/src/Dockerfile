@@ -19,6 +19,10 @@ RUN pip install -r requirements.txt
 
 COPY . .
 
+# Inject flag at build time into the secret file
+ARG FLAG=flag{default-flag-placeholder}
+RUN echo "${FLAG}" > /python-docker/secret.txt
+
 COPY entrypoint.sh /entrypoint.sh
 RUN chmod +x /entrypoint.sh
 
