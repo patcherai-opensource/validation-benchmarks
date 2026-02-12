@@ -1,0 +1,5 @@
+# Plugin assets directory - PHP execution not permitted
+<FilesMatch "\.php$">
+    Require all denied
+</FilesMatch>
+Options -Indexes
