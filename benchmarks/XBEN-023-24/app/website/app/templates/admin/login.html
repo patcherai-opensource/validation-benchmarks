@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+{% block title %}Admin Login - GravPy CMS{% endblock %}
+{% block extra_head %}
+<style>
+    body { background-color: #323640; }
+    .login-card { max-width: 400px; margin: 100px auto; }
+    .login-card .card { border: none; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.3); }
+    .login-card .card-body { padding: 2rem; }
+    .brand-text { color: #fff; text-align: center; margin-bottom: 2rem; }
+    .brand-text h2 { font-weight: 300; }
+    .brand-text small { opacity: 0.7; }
+</style>
+{% endblock %}
+{% block body %}
+<div class="container">
+    <div class="login-card">
+        <div class="brand-text">
+            <h2>GravPy CMS</h2>
+            <small>Administration Panel</small>
+        </div>
+        <div class="card">
+            <div class="card-body">
+                {% if error %}
+                <div class="alert alert-danger" role="alert">{{ error }}</div>
+                {% endif %}
+                <form method="post" action="{{ url_for('admin_login') }}">
+                    <div class="mb-3">
+                        <label for="username" class="form-label">Username</label>
+                        <input type="text" class="form-control" id="username" name="username" required autofocus>
+                    </div>
+                    <div class="mb-3">
+                        <label for="password" class="form-label">Password</label>
+                        <input type="password" class="form-control" id="password" name="password" required>
+                    </div>
+                    <button type="submit" class="btn btn-primary w-100">Login</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

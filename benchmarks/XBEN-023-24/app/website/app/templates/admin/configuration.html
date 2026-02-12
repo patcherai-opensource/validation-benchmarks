@@ -1,0 +1,23 @@
+{% extends "admin/base_admin.html" %}
+{% block title %}Configuration - GravPy Admin{% endblock %}
+{% block content %}
+<h2>Configuration</h2>
+<div class="card mt-3">
+    <div class="card-header">System Settings</div>
+    <div class="card-body">
+        <table class="table">
+            <thead>
+                <tr><th>Key</th><th>Value</th></tr>
+            </thead>
+            <tbody>
+                {% for setting in settings %}
+                <tr>
+                    <td><code>{{ setting.key }}</code></td>
+                    <td>{{ setting.value }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

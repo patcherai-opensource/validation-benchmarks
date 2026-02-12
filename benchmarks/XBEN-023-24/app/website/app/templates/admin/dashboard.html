@@ -1,0 +1,66 @@
+{% extends "admin/base_admin.html" %}
+{% block title %}Dashboard - GravPy Admin{% endblock %}
+{% block content %}
+<h2>Dashboard</h2>
+<div class="row mt-4">
+    <div class="col-md-4">
+        <div class="card">
+            <div class="card-body text-center">
+                <h3>{{ pages | length }}</h3>
+                <p class="text-muted">Pages</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card">
+            <div class="card-body text-center">
+                <h3>{{ pages | selectattr('published') | list | length }}</h3>
+                <p class="text-muted">Published</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card">
+            <div class="card-body text-center">
+                <h3>{{ pages | selectattr('twig_enabled') | list | length }}</h3>
+                <p class="text-muted">Twig Enabled</p>
+            </div>
+        </div>
+    </div>
+</div>
+<h4 class="mt-4">Recent Pages</h4>
+<table class="table table-striped bg-white">
+    <thead>
+        <tr>
+            <th>Title</th>
+            <th>Slug</th>
+            <th>Status</th>
+            <th>Twig</th>
+            <th>Updated</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for page in pages[:10] %}
+        <tr>
+            <td><a href="{{ url_for('admin_page_edit', page_id=page.id) }}">{{ page.title }}</a></td>
+            <td><code>/page/{{ page.slug }}</code></td>
+            <td>
+                {% if page.published %}
+                <span class="badge bg-success">Published</span>
+                {% else %}
+                <span class="badge bg-secondary">Draft</span>
+                {% endif %}
+            </td>
+            <td>
+                {% if page.twig_enabled %}
+                <span class="badge bg-info">Enabled</span>
+                {% else %}
+                <span class="badge bg-light text-dark">Disabled</span>
+                {% endif %}
+            </td>
+            <td>{{ page.updated_at.strftime('%Y-%m-%d %H:%M') if page.updated_at else '-' }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}
