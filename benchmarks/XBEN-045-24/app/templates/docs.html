@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SciCalc - Documentation</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="/" class="nav-brand">SciCalc</a>
+            <div class="nav-links">
+                <a href="/">Calculator</a>
+                <a href="/docs">Documentation</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <div class="docs-content">
+            <h2>Documentation</h2>
+
+            <section>
+                <h3>Overview</h3>
+                <p>SciCalc is a web-based scientific expression evaluator. It supports arithmetic, trigonometric functions,
+                   logarithms, and custom function definitions using a safe Python-like syntax.</p>
+                <p>Expressions are evaluated in a sandboxed environment using the
+                   <a href="https://newville.github.io/asteval/" target="_blank">asteval</a> library,
+                   which provides safe evaluation of mathematical expressions without the risks of Python's built-in <code>eval()</code>.</p>
+            </section>
+
+            <section>
+                <h3>API Reference</h3>
+
+                <div class="api-endpoint">
+                    <h4><span class="method post">POST</span> /api/v1/evaluate</h4>
+                    <p>Evaluate a mathematical expression.</p>
+
+                    <h5>Request Body (JSON)</h5>
+                    <pre><code>{
+    "expression": "sqrt(2) * pi"
+}</code></pre>
+
+                    <h5>Response</h5>
+                    <pre><code>{
+    "success": true,
+    "result": "4.442882938158366",
+    "output": [],
+    "elapsed_ms": 1.23
+}</code></pre>
+
+                    <h5>Error Response</h5>
+                    <pre><code>{
+    "success": false,
+    "error": "name 'undefined_var' is not defined"
+}</code></pre>
+                </div>
+
+                <div class="api-endpoint">
+                    <h4><span class="method get">GET</span> /api/v1/examples</h4>
+                    <p>Retrieve a list of example expressions.</p>
+                </div>
+            </section>
+
+            <section>
+                <h3>Supported Features</h3>
+                <ul>
+                    <li>Arithmetic: <code>+</code>, <code>-</code>, <code>*</code>, <code>/</code>, <code>**</code>, <code>%</code></li>
+                    <li>Comparison: <code>==</code>, <code>!=</code>, <code>&lt;</code>, <code>&gt;</code>, <code>&lt;=</code>, <code>&gt;=</code></li>
+                    <li>Math functions: <code>abs</code>, <code>sqrt</code>, <code>log</code>, <code>log10</code>, <code>exp</code>, <code>ceil</code>, <code>floor</code></li>
+                    <li>Trigonometry: <code>sin</code>, <code>cos</code>, <code>tan</code>, <code>asin</code>, <code>acos</code>, <code>atan</code></li>
+                    <li>Constants: <code>pi</code>, <code>e</code></li>
+                    <li>Variables and assignments</li>
+                    <li>Function definitions with <code>def</code></li>
+                    <li>Loops: <code>for</code>, <code>while</code></li>
+                    <li>Conditionals: <code>if</code>/<code>elif</code>/<code>else</code></li>
+                    <li>List comprehensions</li>
+                    <li>Print output via <code>print()</code></li>
+                </ul>
+            </section>
+
+            <section>
+                <h3>Limits</h3>
+                <ul>
+                    <li>Maximum expression length: 4096 characters</li>
+                    <li>Evaluation timeout: 30 seconds</li>
+                    <li>No module imports allowed</li>
+                    <li>No file system access</li>
+                    <li>No network access</li>
+                </ul>
+            </section>
+        </div>
+    </div>
+</body>
+</html>

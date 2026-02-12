@@ -1,16 +1,121 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>Ping Tool</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SciCalc - Scientific Expression Evaluator</title>
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles.css') }}">
 </head>
 <body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="/" class="nav-brand">SciCalc</a>
+            <div class="nav-links">
+                <a href="/">Calculator</a>
+                <a href="/docs">Documentation</a>
+            </div>
+        </div>
+    </nav>
+
     <div class="container">
-        <h1>Ping Tool</h1>
-        <form action="/ping" method="post">
-            <input type="text" name="ip_address" placeholder="Enter IP Address" required>
-            <button type="submit">Ping</button>
-        </form>
+        <div class="main-panel">
+            <h2>Expression Evaluator</h2>
+            <p class="subtitle">Enter mathematical expressions or define functions using Python-like syntax.</p>
+
+            <div class="editor-area">
+                <textarea id="expression" placeholder="Enter expression (e.g., sqrt(2) * pi)" rows="6"></textarea>
+                <div class="button-row">
+                    <button id="evaluate-btn" onclick="evaluate()">Evaluate</button>
+                    <button id="clear-btn" class="secondary" onclick="clearAll()">Clear</button>
+                </div>
+            </div>
+
+            <div id="result-panel" class="result-panel" style="display:none;">
+                <h3>Result</h3>
+                <div id="output-area" class="output-area"></div>
+                <div id="result-value" class="result-value"></div>
+                <div id="timing" class="timing"></div>
+            </div>
+
+            <div id="error-panel" class="error-panel" style="display:none;">
+                <h3>Error</h3>
+                <pre id="error-message"></pre>
+            </div>
+        </div>
+
+        <div class="side-panel">
+            <h3>Examples</h3>
+            {% for ex in examples %}
+            <div class="example-card" onclick="loadExample('{{ ex.expr | e }}')">
+                <code>{{ ex.expr }}</code>
+                <span class="example-desc">{{ ex.desc }}</span>
+            </div>
+            {% endfor %}
+        </div>
     </div>
+
+    <script>
+        function evaluate() {
+            var expr = document.getElementById('expression').value;
+            if (!expr.trim()) return;
+
+            document.getElementById('result-panel').style.display = 'none';
+            document.getElementById('error-panel').style.display = 'none';
+            document.getElementById('evaluate-btn').disabled = true;
+            document.getElementById('evaluate-btn').textContent = 'Evaluating...';
+
+            fetch('/api/v1/evaluate', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({expression: expr})
+            })
+            .then(function(resp) { return resp.json(); })
+            .then(function(data) {
+                document.getElementById('evaluate-btn').disabled = false;
+                document.getElementById('evaluate-btn').textContent = 'Evaluate';
+
+                if (data.success) {
+                    var outputArea = document.getElementById('output-area');
+                    var resultValue = document.getElementById('result-value');
+                    outputArea.innerHTML = '';
+                    resultValue.innerHTML = '';
+
+                    if (data.output && data.output.length > 0) {
+                        outputArea.innerHTML = '<pre>' + data.output.join('\n') + '</pre>';
+                    }
+                    if (data.result !== null && data.result !== 'None') {
+                        resultValue.innerHTML = '<code>' + data.result + '</code>';
+                    }
+                    document.getElementById('timing').textContent = 'Evaluated in ' + data.elapsed_ms + 'ms';
+                    document.getElementById('result-panel').style.display = 'block';
+                } else {
+                    document.getElementById('error-message').textContent = data.error;
+                    document.getElementById('error-panel').style.display = 'block';
+                }
+            })
+            .catch(function() {
+                document.getElementById('evaluate-btn').disabled = false;
+                document.getElementById('evaluate-btn').textContent = 'Evaluate';
+                document.getElementById('error-message').textContent = 'Network error';
+                document.getElementById('error-panel').style.display = 'block';
+            });
+        }
+
+        function clearAll() {
+            document.getElementById('expression').value = '';
+            document.getElementById('result-panel').style.display = 'none';
+            document.getElementById('error-panel').style.display = 'none';
+        }
+
+        function loadExample(expr) {
+            document.getElementById('expression').value = expr.replace(/\\n/g, '\n');
+        }
+
+        document.getElementById('expression').addEventListener('keydown', function(e) {
+            if (e.ctrlKey && e.key === 'Enter') {
+                evaluate();
+            }
+        });
+    </script>
 </body>
 </html>
