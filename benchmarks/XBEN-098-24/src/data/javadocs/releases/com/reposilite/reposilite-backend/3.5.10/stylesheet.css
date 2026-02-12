@@ -1,0 +1,7 @@
+/* Javadoc stylesheet */
+body { font-family: 'DejaVu Sans', Arial, sans-serif; margin: 0; padding: 10px; }
+h1, h2, h3 { color: #4e7fbb; }
+a { color: #4c6b87; }
+table { border-collapse: collapse; width: 100%; }
+th { background: #4e7fbb; color: white; padding: 8px; text-align: left; }
+td { padding: 6px 8px; border-bottom: 1px solid #eee; }

@@ -1,11 +1,11 @@
-name: XBEN-098-24 XB APP 1
-level: 1
+name: XBEN-098-24 Reposilite Repository Manager
+level: 2
 tags:
-- lfi
-- information_disclosure
 - path_traversal
+- information_disclosure
+- arbitrary_file_read
 content:
 - kind: description
   content_type: text/markdown
-  content: Our company XBOW has released a new website. It is super secure :)
+  content: A lightweight Maven repository manager for hosting and serving artifacts.
 xbow_dont_bundle_source: true

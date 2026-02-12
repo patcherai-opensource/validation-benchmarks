@@ -1,109 +1,317 @@
-body {
+:root {
+    --primary: #7c3aed;
+    --primary-light: #8b5cf6;
+    --bg: #0f172a;
+    --bg-card: #1e293b;
+    --bg-hover: #334155;
+    --text: #e2e8f0;
+    --text-muted: #94a3b8;
+    --border: #334155;
+    --success: #22c55e;
+    --danger: #ef4444;
+}
+
+* {
     margin: 0;
-    font-family: 'Arial', sans-serif;
-    background: #1e1e1e;
-    color: #fff;
-}
-
-.sidebar {
-    position: fixed;
-    width: 250px;
-    height: 100%;
-    background: #000000;
-    transition: width 0.3s;
-}
-
-.sidebar .logo {
-    padding: 15px;
-    text-align: center;
-    background: #000000;
-    color: #C7FF6D;
-    font-size: 24px;
-    font-weight: bold;
-    border-bottom: 1px solid #444;
-}
-
-.sidebar ul {
-    list-style: none;
     padding: 0;
-    margin: 0;
+    box-sizing: border-box;
 }
 
-.sidebar ul li {
-    border-bottom: 1px solid #444;
+body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.6;
 }
 
-.sidebar ul li a {
+a {
+    color: var(--primary-light);
     text-decoration: none;
-    color: #C7FF6D;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 2rem;
+    height: 60px;
+    background: var(--bg-card);
+    border-bottom: 1px solid var(--border);
+}
+
+.nav-brand {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.nav-brand a {
+    color: var(--text);
+    font-size: 1.25rem;
+    font-weight: 700;
+}
+
+.nav-brand a:hover {
+    text-decoration: none;
+}
+
+.version {
+    font-size: 0.75rem;
+    padding: 2px 8px;
+    border-radius: 12px;
+    background: var(--primary);
+    color: white;
+}
+
+.nav-links {
+    display: flex;
+    gap: 1.5rem;
+}
+
+.nav-links a {
+    color: var(--text-muted);
+    font-size: 0.9rem;
+}
+
+.nav-links a:hover {
+    color: var(--text);
+    text-decoration: none;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 2rem;
+}
+
+h1 {
+    font-size: 1.75rem;
+    margin-bottom: 1.5rem;
+    color: var(--text);
+}
+
+h2 {
+    font-size: 1.25rem;
+    margin: 2rem 0 1rem;
+    color: var(--text);
+}
+
+.subtitle {
+    color: var(--text-muted);
+    margin: -1rem 0 1.5rem;
+}
+
+code {
+    background: var(--bg-card);
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-size: 0.875rem;
+    border: 1px solid var(--border);
+}
+
+.breadcrumb {
+    font-size: 0.875rem;
+    color: var(--text-muted);
+    margin-bottom: 1rem;
+    padding: 0.5rem 0;
+}
+
+.card-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 1rem;
+}
+
+.card {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 1.5rem;
+    transition: border-color 0.2s;
+}
+
+.card:hover {
+    border-color: var(--primary);
+}
+
+.card h3 {
+    margin-bottom: 0.5rem;
+}
+
+.card p {
+    color: var(--text-muted);
+    font-size: 0.875rem;
+}
+
+.badge {
+    display: inline-block;
+    font-size: 0.75rem;
+    padding: 2px 8px;
+    border-radius: 4px;
+    background: var(--primary);
+    color: white;
+    margin-top: 0.5rem;
+}
+
+.stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 1rem;
+}
+
+.stat-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 1.25rem;
+    text-align: center;
+}
+
+.stat-value {
     display: block;
-    padding: 15px;
-    transition: background 0.3s;
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--primary-light);
 }
 
-.sidebar ul li a:hover {
-    background: #444;
+.stat-label {
+    display: block;
+    font-size: 0.8rem;
+    color: var(--text-muted);
+    margin-top: 0.25rem;
 }
 
-.content {
-    margin-left: 250px;
-    padding: 20px;
-    background: url('background.jpg') no-repeat center center fixed;
-    background-size: cover;
+.file-browser {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    overflow: hidden;
 }
 
-.content h1 {
-    font-size: 36px;
-    font-family: 'Courier New', Courier, monospace;
-    color: #C7FF6D;
-}
-
-.content p {
-    font-size: 18px;
-}
-
-form {
-    background: rgba(0, 0, 0, 0.5);
-    padding: 20px;
-    border-radius: 10px;
-}
-
-input[type="text"], input[type="email"], input[type="password"], textarea {
+.file-table {
     width: 100%;
-    padding: 10px;
-    margin: 10px 0;
-    border: 1px solid #444;
-    border-radius: 5px;
-    background: #333;
-    color: #fff;
+    border-collapse: collapse;
 }
 
-input[type="submit"] {
-    background: #C7FF6D;
+.file-table thead {
+    background: rgba(0, 0, 0, 0.2);
+}
+
+.file-table th {
+    text-align: left;
+    padding: 0.75rem 1rem;
+    font-size: 0.8rem;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    border-bottom: 1px solid var(--border);
+}
+
+.file-table td {
+    padding: 0.6rem 1rem;
+    border-bottom: 1px solid var(--border);
+    font-size: 0.9rem;
+}
+
+.file-table tbody tr:hover {
+    background: var(--bg-hover);
+}
+
+.file-table tbody tr:last-child td {
+    border-bottom: none;
+}
+
+.icon {
+    margin-right: 0.5rem;
+}
+
+.javadoc-link {
+    margin-left: 1rem;
+    font-size: 0.8rem;
+    color: var(--success);
+}
+
+.auth-form {
+    max-width: 400px;
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 2rem;
+}
+
+.auth-form p {
+    color: var(--text-muted);
+    margin-bottom: 1.5rem;
+    font-size: 0.9rem;
+}
+
+.form-group {
+    margin-bottom: 1rem;
+}
+
+.form-group label {
+    display: block;
+    font-size: 0.875rem;
+    color: var(--text-muted);
+    margin-bottom: 0.5rem;
+}
+
+.form-group input {
+    width: 100%;
+    padding: 0.6rem 0.75rem;
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    color: var(--text);
+    font-size: 0.9rem;
+}
+
+.form-group input:focus {
+    outline: none;
+    border-color: var(--primary);
+}
+
+.btn {
+    display: inline-block;
+    padding: 0.6rem 1.25rem;
+    border-radius: 6px;
     border: none;
-    padding: 10px 20px;
-    border-radius: 5px;
     cursor: pointer;
-    color: #111;
+    font-size: 0.9rem;
+    font-weight: 500;
 }
 
-input[type="submit"]:hover {
-    background: #9dd543;
+.btn-primary {
+    background: var(--primary);
+    color: white;
 }
 
-p {
-    animation-duration: 3s;
-    animation-name: slidein;
-  }
-  
-  @keyframes slidein {
-    from {
-      margin-left: 100%;
-      width: 300%;
-    }
-  
-    to {
-      margin-left: 0%;
-      width: 100%;
-    }
-  }
+.btn-primary:hover {
+    background: var(--primary-light);
+}
+
+.alert {
+    padding: 0.75rem;
+    border-radius: 6px;
+    margin-bottom: 1rem;
+    font-size: 0.875rem;
+}
+
+.alert-error {
+    background: rgba(239, 68, 68, 0.15);
+    border: 1px solid var(--danger);
+    color: var(--danger);
+}
+
+.footer {
+    text-align: center;
+    padding: 2rem;
+    color: var(--text-muted);
+    font-size: 0.8rem;
+    border-top: 1px solid var(--border);
+    margin-top: 3rem;
+}

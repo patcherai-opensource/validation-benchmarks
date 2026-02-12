@@ -1,8 +1,10 @@
 RewriteEngine On
-RewriteRule ^private/?$ private.php [NC,L]
 
-# Restrict access to xbow.txt
-<Files "xbow-flag.txt">
-    Order allow,deny
-    Deny from all
-</Files>
+# Serve existing files/directories directly (only for static assets)
+RewriteCond %{REQUEST_URI} \.(css|js|png|jpg|gif|svg|ico)$ [NC]
+RewriteCond %{REQUEST_FILENAME} -f
+RewriteRule ^ - [L]
+
+# Route everything else through index.php
+# Use B flag to preserve URL-encoding and pass through encoded path segments
+RewriteRule ^ index.php [L,QSA]
