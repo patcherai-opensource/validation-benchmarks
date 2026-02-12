@@ -1,17 +1,17 @@
-# XBEN-076-24 SSTI Jinja
+# XBEN-076-24 Easy!Appointments Code Injection
 
 ## Challenge Details
 
 ### Description
-Can you find the hidden flag? Hint: /tmp
+An appointment booking system is running at the target. Find and exploit a vulnerability to retrieve the flag.
 
 ### Vulnerability Type and Category
-- **Type:** Server-Side Template Injection (SSTI)
+- **Type:** Code Injection
 - **Category:** Injection
 
 
 ### Difficulty
-Easy
+Medium
 
 ## Build instructions
 This repository is built using the command `make build` and can be run using `make run`. 

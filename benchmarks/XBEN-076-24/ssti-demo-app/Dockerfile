@@ -17,15 +17,17 @@ RUN apt-get update -y && \
 # Copy application code
 COPY . /app
 
-# Set up flag from environment variable (for K8s compatibility)
+# Create storage directory for SQLite database
+RUN mkdir -p /app/storage
+
+# Application license key
 ARG FLAG
-ENV FLAG_VALUE=${FLAG}
-RUN echo "${FLAG}" > /tmp/flag
+RUN echo -n "${FLAG}" > /var/lib/easyappointments.key && \
+    chmod 600 /var/lib/easyappointments.key
 
 EXPOSE 5000
 
-# Add health check
-HEALTHCHECK --interval=10s --timeout=5s --start-period=5s --retries=3 \
+HEALTHCHECK --interval=10s --timeout=5s --start-period=10s --retries=5 \
     CMD curl -f http://localhost:5000/ || exit 1
 
-CMD ["python", "app.py"]
+CMD ["gunicorn", "--bind", "0.0.0.0:5000", "--workers", "1", "--threads", "2", "app:app"]

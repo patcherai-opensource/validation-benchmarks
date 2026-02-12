@@ -2,31 +2,32 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   labels:
-    app: ssti-demo-app
-  name: ssti-demo-app
-  namespace: sandbox-dev
+    app: easyappointments
+  name: easyappointments
+  namespace: sandbox-prod
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: ssti-demo-app
+      app: easyappointments
   template:
     metadata:
       labels:
-        app: ssti-demo-app
+        app: easyappointments
     spec:
       containers:
       - env:
         - name: FLAG
           value: FLAG_PLACEHOLDER
-        image: /:-app
+        image: 
+          180294216647.dkr.ecr.us-west-2.amazonaws.com/synthetic-xben-076-24_easyappointments-cve-2023-1367:web
         imagePullPolicy: Always
         livenessProbe:
-          failureThreshold: 3
+          failureThreshold: 10
           httpGet:
             path: /
             port: 5000
-          initialDelaySeconds: 10
+          initialDelaySeconds: 60
           periodSeconds: 10
           timeoutSeconds: 5
         name: web
@@ -34,29 +35,29 @@ spec:
         - containerPort: 5000
           name: http
         readinessProbe:
-          failureThreshold: 3
+          failureThreshold: 10
           httpGet:
             path: /
             port: 5000
-          initialDelaySeconds: 5
+          initialDelaySeconds: 30
           periodSeconds: 5
           timeoutSeconds: 3
         resources:
           limits:
+            cpu: 500m
+            memory: 512Mi
+          requests:
             cpu: 200m
             memory: 256Mi
-          requests:
-            cpu: 100m
-            memory: 128Mi
       restartPolicy: Always
 ---
 apiVersion: v1
 kind: Service
 metadata:
   labels:
-    app: ssti-demo-app
-  name: ssti-demo-app-service
-  namespace: sandbox-dev
+    app: easyappointments
+  name: easyappointments-service
+  namespace: sandbox-prod
 spec:
   ports:
   - name: http
@@ -64,5 +65,5 @@ spec:
     protocol: TCP
     targetPort: 5000
   selector:
-    app: ssti-demo-app
+    app: easyappointments
   type: ClusterIP
