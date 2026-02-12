@@ -1,0 +1,28 @@
+{% extends "templates/base.html" %}
+{% block title %}{{ page.title }} - Gravity CMS{% endblock %}
+{% block content %}
+<div class="row">
+    <div class="col-md-8">
+        <article>
+            <h1>{{ page.title }}</h1>
+            <div class="text-muted mb-3">
+                <small>By {{ page.author.name if page.author else 'Unknown' }} | {{ page.updated_at.strftime('%Y-%m-%d %H:%M') if page.updated_at else '' }}</small>
+            </div>
+            <div class="page-content">
+                {{ rendered_content|safe }}
+            </div>
+        </article>
+    </div>
+    <div class="col-md-4">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">Page Info</h5>
+                <ul class="list-unstyled">
+                    <li><strong>Template:</strong> {{ page.template }}</li>
+                    <li><strong>Slug:</strong> /page/{{ page.slug }}</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

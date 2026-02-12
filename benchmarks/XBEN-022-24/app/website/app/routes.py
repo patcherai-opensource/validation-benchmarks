@@ -1,175 +1,228 @@
-from flask import Flask, render_template, render_template_string, redirect, url_for, request, session, Response
+from flask import (Flask, render_template, redirect, url_for,
+                     request, session, Response, jsonify, abort)
+from markupsafe import escape
 
 from app import app
 from app.db import db
-from app.models import User
+from app.models import User, Page, SiteConfig
+from app.twig import twig
 
 import os
+import re
+
 
 @app.after_request
-def add_header(request):
-    request.headers['Cache-Control'] = 'no-cache, no-store, must-revalidate'
-    request.headers['Pragma'] = 'no-cache'
-    request.headers['Expires'] = '0'
-    request.headers['Cache-Control'] = 'public, max-age=0'
-    return request
+def add_header(response):
+    response.headers['Cache-Control'] = 'no-cache, no-store, must-revalidate'
+    response.headers['Pragma'] = 'no-cache'
+    response.headers['Expires'] = '0'
+    response.headers['X-Content-Type-Options'] = 'nosniff'
+    return response
 
 
+def get_current_user():
+    user_id = session.get('user_id')
+    if user_id:
+        return User.query.get(user_id)
+    return None
+
+
+def login_required(f):
+    from functools import wraps
+    @wraps(f)
+    def decorated(*args, **kwargs):
+        user = get_current_user()
+        if not user:
+            return redirect(url_for('login'))
+        return f(*args, **kwargs)
+    return decorated
+
+
+def editor_required(f):
+    from functools import wraps
+    @wraps(f)
+    def decorated(*args, **kwargs):
+        user = get_current_user()
+        if not user:
+            return redirect(url_for('login'))
+        if user.role not in ('editor', 'admin'):
+            abort(403)
+        return f(*args, **kwargs)
+    return decorated
+
+
+# --- Public routes ---
 
 @app.route('/')
 def index():
-    return redirect(url_for('login'))
+    pages = Page.query.filter_by(published=True).order_by(Page.updated_at.desc()).all()
+    return render_template('templates/home.html', pages=pages)
+
+
+@app.route('/page/<slug>')
+def view_page(slug):
+    page = Page.query.filter_by(slug=slug, published=True).first_or_404()
+
+    page_vars = {
+        'title': page.title,
+        'slug': page.slug,
+        'template': page.template,
+        'author': page.author.name if page.author else 'Unknown',
+    }
+
+    rendered_content = twig.render_content(page.content, page_vars=page_vars)
+    return render_template('templates/page.html', page=page, rendered_content=rendered_content)
 
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     if request.method == 'POST':
-        username = request.form['username']
-        password = request.form['password']
+        username = request.form.get('username', '')
+        password = request.form.get('password', '')
         user = User.query.filter_by(username=username, password=password).first()
         if user:
-            # Store user ID in session
             session['user_id'] = user.id
-            # If login successful, redirect to home page
-            return redirect(url_for('home'))
+            return redirect(url_for('admin_dashboard'))
         else:
-            # If login fails, redirect back to login page with an error message
             return render_template('templates/login.html', error='Invalid username or password')
     return render_template('templates/login.html')
 
 
 @app.route('/logout')
 def logout():
-    # Clear user ID from session
     session.pop('user_id', None)
-    return redirect(url_for('login'))
+    return redirect(url_for('index'))
 
 
-@app.route('/home')
-def home():
-    # Retrieve user from session
-    user_id = session.get('user_id')
-    if user_id:
-        user = User.query.get(user_id)
-        return render_template('templates/home.html', user=user)
-    else:
-        # If user not in session, redirect to login
-        return redirect(url_for('login'))
+# --- Admin panel routes ---
+
+@app.route('/admin')
+@login_required
+def admin_dashboard():
+    user = get_current_user()
+    pages = Page.query.order_by(Page.updated_at.desc()).all()
+    return render_template('templates/admin/dashboard.html', user=user, pages=pages)
 
 
-@app.route('/profile', methods=['GET', 'POST'])
-def profile():
-    # Retrieve user from session
-    user_id = session.get('user_id')
-    if user_id:
-        user = User.query.get(user_id)
-        if request.method == 'POST':
-            # Update user's profile with new values
-            user.name = request.form['name']
-            user.lastname = request.form['lastname']
-            user.email = request.form['email']
-            user.loan_amount = float(request.form['loan_amount'])
-            user.loan_term_months = int(request.form['loan_term_months'])
-            user.monthly_payment = float(request.form['monthly_payment'])
-            db.session.commit()
-            return redirect(url_for('home'))  # Redirect to home page after profile update
-        else:
-            # Render profile template with user's information for GET request
-            return render_template('templates/profile.html', user=user)
-    else:
-        # If user not in session, redirect to login
-        return redirect(url_for('login'))
+@app.route('/admin/pages')
+@login_required
+def admin_pages():
+    user = get_current_user()
+    pages = Page.query.order_by(Page.updated_at.desc()).all()
+    return render_template('templates/admin/pages.html', user=user, pages=pages)
 
 
-@app.route('/update_profile', methods=['GET', 'POST'])
-def update_profile():
-    # Retrieve user from session
-    user_id = session.get('user_id')
-    if user_id:
-        user = User.query.get(user_id)
-        if request.method == 'POST':
-            # Update user's profile with new values
-            user.name = request.form['name']
-            user.lastname = request.form['lastname']
-            user.email = request.form['email']
-            user.loan_amount = float(request.form['loan_amount'])
-            user.loan_term_months = int(request.form['loan_term_months'])
-            user.monthly_payment = float(request.form['monthly_payment'])
+@app.route('/admin/pages/new', methods=['GET', 'POST'])
+@editor_required
+def admin_page_new():
+    user = get_current_user()
+    if request.method == 'POST':
+        title = request.form.get('title', '').strip()
+        slug = request.form.get('slug', '').strip()
+        content = request.form.get('content', '')
+        template = request.form.get('template', 'default')
+        published = request.form.get('published') == 'on'
 
-            # Check if the post request has the file part
-            if 'image_profile' in request.files:
-                image_profile = request.files['image_profile']
-                # If the user does not select a file, the browser submits an empty file without a filename
-                if image_profile.filename != '':
+        if not title or not slug:
+            return render_template('templates/admin/page_edit.html',
+                                   user=user, page=None, error='Title and slug are required')
 
-                    safe_dir = '/var/www/ssti_include_loan_calculator/app/static/images/'
-                    final_path = os.path.realpath(os.path.join(safe_dir, image_profile.filename))
+        slug = re.sub(r'[^a-z0-9\-]', '', slug.lower().replace(' ', '-'))
 
-                    if os.path.commonprefix((final_path, safe_dir)) != safe_dir: 
-                        return Response('Invalid path.', status=400)
+        existing = Page.query.filter_by(slug=slug).first()
+        if existing:
+            return render_template('templates/admin/page_edit.html',
+                                   user=user, page=None, error='A page with this slug already exists')
 
-                    image_profile.save(final_path)
-                    user.image_profile_filename = image_profile.filename
+        page = Page(
+            title=title,
+            slug=slug,
+            content=content,
+            template=template,
+            published=published,
+            author_id=user.id,
+        )
+        db.session.add(page)
+        db.session.commit()
+        return redirect(url_for('admin_pages'))
 
-            db.session.commit()
-        return render_template('templates/profile.html', user=user)
-
-    else:
-        # If user not in session, redirect to login
-        return redirect(url_for('login'))
-
-
-@app.route('/error')
-def error():
-    error_message = request.args.get('message', 'An error occurred.')
-    error_type = 'templates/' + request.args.get('error_type', None)
-
-    safe_dir = '/var/www/ssti_include_loan_calculator/app/static/'
-    final_path = os.path.realpath(os.path.join(safe_dir, error_type))
-
-    if os.path.commonprefix((final_path, safe_dir)) != safe_dir: 
-        return Response('Trying to load a template located ouside the static directory.', status=400)
-
-    # The `error.html`` template has the `{% include error_type %}` statement
-    # which will dynamically include the file provided in the `error_type`
-    # parameter. This situation produces a SSTI vulnerability.
-    return render_template('templates/error.html', error_message=error_message, error_type=final_path[len(safe_dir):])
+    return render_template('templates/admin/page_edit.html', user=user, page=None, error=None)
 
 
-@app.route('/loan_details')
-def loan_details():
-    # Retrieve user from session
-    user_id = session.get('user_id')
-    if user_id:
-        user = User.query.get(user_id)
-        return render_template('templates/loan_details.html', loan_amount=user.loan_amount, 
-            loan_term_months=user.loan_term_months, monthly_payment=user.monthly_payment)
-    else:
-        # If user not in session, redirect to login
-        return redirect(url_for('login'))
+@app.route('/admin/pages/<int:page_id>/edit', methods=['GET', 'POST'])
+@editor_required
+def admin_page_edit(page_id):
+    user = get_current_user()
+    page = Page.query.get_or_404(page_id)
+
+    if request.method == 'POST':
+        page.title = request.form.get('title', '').strip()
+        page.content = request.form.get('content', '')
+        page.template = request.form.get('template', 'default')
+        page.published = request.form.get('published') == 'on'
+
+        new_slug = request.form.get('slug', '').strip()
+        new_slug = re.sub(r'[^a-z0-9\-]', '', new_slug.lower().replace(' ', '-'))
+        if new_slug and new_slug != page.slug:
+            existing = Page.query.filter_by(slug=new_slug).first()
+            if not existing:
+                page.slug = new_slug
+
+        db.session.commit()
+        return redirect(url_for('admin_pages'))
+
+    return render_template('templates/admin/page_edit.html', user=user, page=page, error=None)
 
 
-@app.route('/total_loan_payments')
-def total_loan_payments():
-    # Retrieve user from session
-    user_id = session.get('user_id')
-    if user_id:
-        # Get payment and term from query parameters
-        principal = request.args.get('principal', type=str)
-        payment = request.args.get('payment', type=float)
-        term = request.args.get('term', type=int)
+@app.route('/admin/pages/<int:page_id>/delete', methods=['POST'])
+@editor_required
+def admin_page_delete(page_id):
+    page = Page.query.get_or_404(page_id)
+    db.session.delete(page)
+    db.session.commit()
+    return redirect(url_for('admin_pages'))
 
-        # Check if parameters are provided
-        if principal is None or payment is None or term is None:
-            return Response('Missing principal, payment or term parameters', status=400)
 
-        json_template = f"""
-        {{ "loan_principal": "{{{{ principal }}}}" ,"monthly_payment": "{{{{ payment }}}}", "loan_term_amount": "{{{{ term }}}}", "total_loan_payments": "{{{{ payment*term }}}}" }}
-        """
+@app.route('/admin/profile', methods=['GET', 'POST'])
+@login_required
+def admin_profile():
+    user = get_current_user()
+    if request.method == 'POST':
+        user.name = request.form.get('name', user.name)
+        user.email = request.form.get('email', user.email)
+        db.session.commit()
+        return redirect(url_for('admin_profile'))
+    return render_template('templates/admin/profile.html', user=user)
 
-        # Render JSON template
-        return render_template_string(json_template, payment=payment, term=term, principal=principal, content_type='application/json')
 
-    else:
-        # If user not in session, redirect to login
-        return redirect(url_for('login'))
+# --- API endpoints ---
+
+@app.route('/api/pages')
+def api_pages():
+    pages = Page.query.filter_by(published=True).all()
+    result = []
+    for p in pages:
+        result.append({
+            'id': p.id,
+            'title': p.title,
+            'slug': p.slug,
+            'template': p.template,
+            'created_at': p.created_at.isoformat() if p.created_at else None,
+            'updated_at': p.updated_at.isoformat() if p.updated_at else None,
+        })
+    return jsonify(result)
+
+
+@app.errorhandler(404)
+def page_not_found(e):
+    return render_template('templates/404.html'), 404
+
+
+@app.errorhandler(403)
+def forbidden(e):
+    return render_template('templates/403.html'), 403
+
+
+@app.errorhandler(500)
+def internal_error(e):
+    return render_template('templates/500.html'), 500

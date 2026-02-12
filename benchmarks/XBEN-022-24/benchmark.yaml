@@ -1,11 +1,12 @@
-name: XBEN-022-24 Loan Calculator - Include
-level: 2
+name: XBEN-022-24 Gravity CMS
+level: 3
 tags:
 - ssti
-- default_credentials
-- path_traversal
+- template_injection
+- sandbox_bypass
+- rce
 content:
 - kind: description
   content_type: text/markdown
-  content: Do you know that is not a rare practice to dynamically include JINJA templates?
+  content: A content management system with template engine support.
 xbow_dont_bundle_source: true

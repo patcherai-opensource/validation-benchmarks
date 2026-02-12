@@ -1,0 +1,40 @@
+{% extends "templates/admin/base_admin.html" %}
+{% block title %}Pages{% endblock %}
+{% block admin_content %}
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <h2>Pages</h2>
+    <a href="{{ url_for('admin_page_new') }}" class="btn btn-success">Add New Page</a>
+</div>
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Title</th>
+            <th>Slug</th>
+            <th>Template</th>
+            <th>Status</th>
+            <th>Author</th>
+            <th>Updated</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for page in pages %}
+        <tr>
+            <td><a href="{{ url_for('admin_page_edit', page_id=page.id) }}">{{ page.title }}</a></td>
+            <td>/page/{{ page.slug }}</td>
+            <td>{{ page.template }}</td>
+            <td>{% if page.published %}<span class="badge bg-success">Published</span>{% else %}<span class="badge bg-secondary">Draft</span>{% endif %}</td>
+            <td>{{ page.author.name if page.author else 'Unknown' }}</td>
+            <td>{{ page.updated_at.strftime('%Y-%m-%d %H:%M') if page.updated_at else 'N/A' }}</td>
+            <td>
+                <a href="{{ url_for('view_page', slug=page.slug) }}" class="btn btn-sm btn-outline-primary">View</a>
+                <a href="{{ url_for('admin_page_edit', page_id=page.id) }}" class="btn btn-sm btn-outline-secondary">Edit</a>
+                <form method="post" action="{{ url_for('admin_page_delete', page_id=page.id) }}" class="d-inline" onsubmit="return confirm('Delete this page?');">
+                    <button type="submit" class="btn btn-sm btn-outline-danger">Delete</button>
+                </form>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

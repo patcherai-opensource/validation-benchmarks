@@ -1,0 +1,53 @@
+{% extends "templates/admin/base_admin.html" %}
+{% block title %}Dashboard{% endblock %}
+{% block admin_content %}
+<h2>Dashboard</h2>
+<div class="row mt-4">
+    <div class="col-md-4">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">Pages</h5>
+                <p class="card-text display-6">{{ pages|length }}</p>
+                <a href="{{ url_for('admin_pages') }}" class="btn btn-primary btn-sm">Manage</a>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">Your Role</h5>
+                <p class="card-text display-6">{{ user.role|capitalize }}</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">Quick Actions</h5>
+                <a href="{{ url_for('admin_page_new') }}" class="btn btn-success btn-sm">New Page</a>
+            </div>
+        </div>
+    </div>
+</div>
+<h4 class="mt-4">Recent Pages</h4>
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Title</th>
+            <th>Slug</th>
+            <th>Status</th>
+            <th>Updated</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for page in pages[:5] %}
+        <tr>
+            <td><a href="{{ url_for('admin_page_edit', page_id=page.id) }}">{{ page.title }}</a></td>
+            <td>/page/{{ page.slug }}</td>
+            <td>{% if page.published %}<span class="badge bg-success">Published</span>{% else %}<span class="badge bg-secondary">Draft</span>{% endif %}</td>
+            <td>{{ page.updated_at.strftime('%Y-%m-%d %H:%M') if page.updated_at else 'N/A' }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

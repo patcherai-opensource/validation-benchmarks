@@ -1,0 +1,49 @@
+{% extends "templates/admin/base_admin.html" %}
+{% block title %}{% if page %}Edit Page{% else %}New Page{% endif %}{% endblock %}
+{% block admin_content %}
+<h2>{% if page %}Edit Page{% else %}New Page{% endif %}</h2>
+{% if error %}
+<div class="alert alert-danger">{{ error }}</div>
+{% endif %}
+<form method="post">
+    <div class="row">
+        <div class="col-md-9">
+            <div class="mb-3">
+                <label for="title" class="form-label">Title</label>
+                <input type="text" class="form-control" id="title" name="title" value="{{ page.title if page else '' }}" required>
+            </div>
+            <div class="mb-3">
+                <label for="content" class="form-label">Content</label>
+                <p class="form-text">Supports Twig template directives. Available variables: <code>page</code>, <code>site</code>, <code>grav</code></p>
+                <textarea class="form-control" id="content" name="content" rows="15">{{ page.content if page else '' }}</textarea>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card">
+                <div class="card-body">
+                    <div class="mb-3">
+                        <label for="slug" class="form-label">Slug</label>
+                        <input type="text" class="form-control" id="slug" name="slug" value="{{ page.slug if page else '' }}" {% if not page %}required{% endif %}>
+                    </div>
+                    <div class="mb-3">
+                        <label for="template" class="form-label">Template</label>
+                        <select class="form-select" id="template" name="template">
+                            <option value="default" {% if page and page.template == 'default' %}selected{% endif %}>Default</option>
+                            <option value="fullwidth" {% if page and page.template == 'fullwidth' %}selected{% endif %}>Full Width</option>
+                            <option value="blog" {% if page and page.template == 'blog' %}selected{% endif %}>Blog Post</option>
+                        </select>
+                    </div>
+                    <div class="mb-3 form-check">
+                        <input type="checkbox" class="form-check-input" id="published" name="published" {% if not page or page.published %}checked{% endif %}>
+                        <label class="form-check-label" for="published">Published</label>
+                    </div>
+                    <button type="submit" class="btn btn-primary w-100">Save</button>
+                    {% if page %}
+                    <a href="{{ url_for('view_page', slug=page.slug) }}" class="btn btn-outline-secondary w-100 mt-2">Preview</a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+{% endblock %}
