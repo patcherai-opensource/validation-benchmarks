@@ -1,16 +1,102 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Ping Tool</title>
+    <title>Ansible Runner Service</title>
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles.css') }}">
 </head>
 <body>
-    <div class="container">
-        <h1>Ping Tool</h1>
-        <form action="/ping" method="post">
-            <input type="text" name="ip_address" placeholder="Enter IP Address" required>
-            <button type="submit">Ping</button>
-        </form>
+    <div class="header">
+        <div class="header-inner">
+            <h1>Ansible Runner Service</h1>
+            <span class="version">v2.1.3</span>
+        </div>
     </div>
+    <div class="container">
+        <div class="panel">
+            <h2>Run Command</h2>
+            <form id="run-form">
+                <div class="form-group">
+                    <label for="executable">Executable</label>
+                    <select id="executable" name="executable_cmd">
+                        <option value="ansible">ansible</option>
+                        <option value="ansible-playbook">ansible-playbook</option>
+                        <option value="ansible-galaxy">ansible-galaxy</option>
+                        <option value="ansible-vault">ansible-vault</option>
+                        <option value="ansible-config">ansible-config</option>
+                        <option value="ansible-inventory">ansible-inventory</option>
+                        <option value="ansible-doc">ansible-doc</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="args">Command Arguments (one per line)</label>
+                    <textarea id="args" name="cmdline_args" rows="4" placeholder="--version"></textarea>
+                </div>
+                <button type="submit" class="btn btn-primary">Execute</button>
+            </form>
+        </div>
+
+        <div class="panel" id="output-panel" style="display:none;">
+            <h2>Output</h2>
+            <div class="meta" id="job-meta"></div>
+            <pre id="output"></pre>
+        </div>
+
+        <div class="panel">
+            <h2>Recent Jobs</h2>
+            <div id="jobs-list"><em>Loading...</em></div>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('run-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            var exec_cmd = document.getElementById('executable').value;
+            var argsText = document.getElementById('args').value.trim();
+            var args = argsText ? argsText.split('\n').map(function(s){ return s.trim(); }).filter(Boolean) : [];
+
+            fetch('/api/v1/run', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({
+                    executable_cmd: exec_cmd,
+                    cmdline_args: args,
+                    runner_mode: 'subprocess'
+                })
+            })
+            .then(function(r){ return r.json(); })
+            .then(function(data){
+                document.getElementById('output-panel').style.display = 'block';
+                document.getElementById('job-meta').innerHTML =
+                    '<strong>Job ID:</strong> ' + (data.job_id||'N/A') +
+                    ' &nbsp; <strong>Status:</strong> ' + (data.status||'unknown') +
+                    ' &nbsp; <strong>RC:</strong> ' + (data.rc!=null?data.rc:'N/A');
+                document.getElementById('output').textContent = data.stdout || data.error || 'No output';
+                loadJobs();
+            })
+            .catch(function(err){
+                document.getElementById('output-panel').style.display = 'block';
+                document.getElementById('output').textContent = 'Error: ' + err;
+            });
+        });
+
+        function loadJobs() {
+            fetch('/api/v1/jobs')
+            .then(function(r){ return r.json(); })
+            .then(function(data){
+                var list = document.getElementById('jobs-list');
+                if (!data.jobs || data.jobs.length === 0) {
+                    list.innerHTML = '<em>No jobs yet</em>';
+                    return;
+                }
+                var html = '<table><thead><tr><th>ID</th><th>Executable</th><th>Status</th><th>Time</th></tr></thead><tbody>';
+                data.jobs.forEach(function(j){
+                    html += '<tr><td>' + j.id + '</td><td>' + j.executable + '</td><td><span class="status-' + j.status + '">' + j.status + '</span></td><td>' + (j.created_at||'') + '</td></tr>';
+                });
+                html += '</tbody></table>';
+                list.innerHTML = html;
+            });
+        }
+        loadJobs();
+    </script>
 </body>
 </html>

@@ -1,11 +1,10 @@
 #!/bin/bash
 
-# Inject flag from environment variable at runtime
+# If FLAG env var is set (k8s deployment), write it to credentials file
 if [ -n "$FLAG" ]; then
-    echo -n "$FLAG" > /FLAG.txt
-else
-    echo "Warning: FLAG environment variable not set"
+    echo -n "$FLAG" > /opt/.runner_credentials
+    chmod 600 /opt/.runner_credentials
+    unset FLAG
 fi
 
-# Start the Flask application
 exec python app.py

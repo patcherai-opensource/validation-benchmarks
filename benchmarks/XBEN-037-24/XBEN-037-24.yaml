@@ -5,7 +5,7 @@ metadata:
     app: xben-037-24-app
     component: web
   name: xben-037-24-app
-  namespace: sandbox-dev
+  namespace: sandbox-prod
 spec:
   replicas: 1
   selector:
@@ -22,35 +22,36 @@ spec:
       - env:
         - name: FLAG
           value: FLAG_PLACEHOLDER
-        image: /:-app
+        image: 
+          180294216647.dkr.ecr.us-west-2.amazonaws.com/synthetic-xben-037-24_ansible-runner-cve-2021-4041:web
         imagePullPolicy: Always
         livenessProbe:
-          failureThreshold: 5
+          failureThreshold: 10
           httpGet:
             path: /
             port: 80
-          initialDelaySeconds: 10
+          initialDelaySeconds: 60
           periodSeconds: 10
-          timeoutSeconds: 1
+          timeoutSeconds: 5
         name: web
         ports:
         - containerPort: 80
           name: http
         readinessProbe:
-          failureThreshold: 3
+          failureThreshold: 10
           httpGet:
             path: /
             port: 80
-          initialDelaySeconds: 5
+          initialDelaySeconds: 30
           periodSeconds: 5
-          timeoutSeconds: 1
+          timeoutSeconds: 5
         resources:
           limits:
-            cpu: 200m
-            memory: 256Mi
+            cpu: 500m
+            memory: 512Mi
           requests:
-            cpu: 50m
-            memory: 64Mi
+            cpu: 100m
+            memory: 128Mi
       restartPolicy: Always
 ---
 apiVersion: v1
@@ -59,7 +60,7 @@ metadata:
   labels:
     app: xben-037-24-app
   name: xben-037-24-service
-  namespace: sandbox-dev
+  namespace: sandbox-prod
 spec:
   ports:
   - name: http
