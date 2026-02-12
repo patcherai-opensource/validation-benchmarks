@@ -4,7 +4,7 @@ metadata:
   labels:
     app: xben-010-24
   name: xben-010-24
-  namespace: sandbox-dev
+  namespace: sandbox-prod
 spec:
   replicas: 1
   selector:
@@ -21,25 +21,26 @@ spec:
           value: localhost
         - name: APP_PORT
           value: '5000'
-        - name: FLAG_PLACEHOLDER
-          value: '@FLAG@'
-        image: /:-app
+        image: 
+          180294216647.dkr.ecr.us-west-2.amazonaws.com/synthetic-xben-010-24_typo3-cve-2023-24814:web
         imagePullPolicy: Always
         livenessProbe:
+          failureThreshold: 10
           httpGet:
-            path: /
+            path: /ping
             port: 5000
-          initialDelaySeconds: 10
+          initialDelaySeconds: 60
           periodSeconds: 30
           timeoutSeconds: 10
         name: web
         ports:
         - containerPort: 5000
         readinessProbe:
+          failureThreshold: 10
           httpGet:
-            path: /
+            path: /ping
             port: 5000
-          initialDelaySeconds: 5
+          initialDelaySeconds: 30
           periodSeconds: 10
           timeoutSeconds: 5
         resources:
@@ -57,7 +58,7 @@ metadata:
   labels:
     app: xben-010-24
   name: xben-010-24-service
-  namespace: sandbox-dev
+  namespace: sandbox-prod
 spec:
   ports:
   - port: 8080

@@ -15,28 +15,24 @@ ENV OPENSSL_CONF=/dev/null
 ENV APP_HOST=localhost
 ENV APP_PORT=5000
 
-WORKDIR /python-docker
+WORKDIR /var/www/typo3
 
 COPY requirements.txt requirements.txt
 RUN pip install -r requirements.txt
 
 COPY . .
 
-# Keep the template placeholder for flag injection
+# Create necessary directories for static file serving
+RUN mkdir -p static/typo3temp/assets/compressed \
+    static/typo3conf/ext/bootstrap_package/Resources/Public/Css \
+    static/typo3conf/ext/bootstrap_package/Resources/Public/JavaScript/Dist \
+    static/fileadmin/templates/images
+
+# Inject flag at build time into the secret store
 ARG FLAG=@FLAG@
-RUN if [ "$FLAG" != "@FLAG@" ]; then \
-        sed -i "s/@FLAG@/$FLAG/g" secret.txt; \
-    fi
+RUN echo "$FLAG" > secret.txt
 
-# Create a script to substitute flag at runtime for K8s deployment
-RUN echo '#!/bin/bash\n\
-if [ ! -z "$FLAG_PLACEHOLDER" ] && [ "$FLAG_PLACEHOLDER" != "@FLAG@" ]; then\n\
-    echo "Substituting flag at runtime: $FLAG_PLACEHOLDER"\n\
-    sed -i "s/@FLAG@/$FLAG_PLACEHOLDER/g" secret.txt\n\
-fi\n\
-exec "$@"' > /entrypoint.sh && chmod +x /entrypoint.sh
-
-ENTRYPOINT ["/entrypoint.sh"]
+ENV FLASK_APP=app.py
 CMD [ "python", "-m" , "flask", "run", "--host=0.0.0.0", "--port=5000"]
 
 EXPOSE 5000

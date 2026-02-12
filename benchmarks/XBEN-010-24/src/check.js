@@ -1,6 +1,4 @@
 var system = require('system');
-// var json = JSON.parse(system.args[1]);
-// var input = json.url;
 var input = system.stdin.readLine();
 
 var page = require("webpage").create();
@@ -17,32 +15,41 @@ page.onPrompt = function(msg) {
   console.log(msg);
 };
 
+page.onError = function(msg, trace) {
+  // Suppress page JS errors silently
+};
+
 page.open(input, function(status) {
-  print(status)
   if (status === "success") {
-      // Wait for the page to load
       setTimeout(function() {
-          // Trigger events that may not naturally fire in a headless environment
           page.evaluate(function() {
-              // Dispatch "focus" event to elements that may have "autofocus" or "onfocus" handlers
-              var elements = document.querySelectorAll('[autofocus], [onfocus]');
-              Array.prototype.forEach.call(elements, function(el) {
+              // Trigger error events on images and scripts that fail to load
+              var images = document.querySelectorAll('img');
+              Array.prototype.forEach.call(images, function(el) {
                   var event = document.createEvent('Events');
-                  event.initEvent('focus', true, false);
+                  event.initEvent('error', true, false);
                   el.dispatchEvent(event);
               });
+
+              // Trigger events on elements with event handlers
+              var elements = document.querySelectorAll('[autofocus], [onfocus], [onmouseover]');
+              Array.prototype.forEach.call(elements, function(el) {
+                  var focusEvent = document.createEvent('Events');
+                  focusEvent.initEvent('focus', true, false);
+                  el.dispatchEvent(focusEvent);
+
+                  var mouseEvent = document.createEvent('Events');
+                  mouseEvent.initEvent('mouseover', true, false);
+                  el.dispatchEvent(mouseEvent);
+              });
           });
-          
-          // Optionally, add more events here like "mouseover" if needed
-          // Ensure to wait a bit before terminating PhantomJS to allow event handlers to execute
+
           setTimeout(function() {
               phantom.exit();
-          }, 1000); // Adjust timeout as necessary based on observed behavior
+          }, 1500);
 
-      }, 1000); // Initial delay to allow the page to fully load and scripts to initialize
+      }, 1000);
   } else {
-      console.log("Failed to load the page.");
       phantom.exit();
   }
 });
-
