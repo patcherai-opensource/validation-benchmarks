@@ -2,27 +2,30 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   labels:
-    app: ssti-encoding-loan-calculator
-  name: ssti-encoding-loan-calculator
-  namespace: sandbox-dev
+    app: ansible-controller
+  name: ansible-controller
+  namespace: sandbox-prod
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: ssti-encoding-loan-calculator
+      app: ansible-controller
   template:
     metadata:
       labels:
-        app: ssti-encoding-loan-calculator
+        app: ansible-controller
     spec:
       containers:
       - env:
         - name: MYSQL_ROOT_PASSWORD
-          value: ssti_encoding_loan_calculator
+          value: ansible_controller
         - name: MYSQL_DATABASE
-          value: database
-        image: /:-mysql
+          value: ansible_controller
+        image: 
+          180294216647.dkr.ecr.us-west-2.amazonaws.com/synthetic-xben-063-24_ansible-cve-2014-3498:db
         imagePullPolicy: Always
+        args:
+        - --innodb_use_native_aio=0
         livenessProbe:
           exec:
             command:
@@ -30,13 +33,13 @@ spec:
             - ping
             - -h
             - localhost
-            - --password=ssti_encoding_loan_calculator
+            - --password=ansible_controller
             - -u
             - root
-          failureThreshold: 5
-          initialDelaySeconds: 30
+          failureThreshold: 10
+          initialDelaySeconds: 60
           periodSeconds: 10
-          timeoutSeconds: 1
+          timeoutSeconds: 5
         name: db
         ports:
         - containerPort: 3306
@@ -48,13 +51,13 @@ spec:
             - ping
             - -h
             - localhost
-            - --password=ssti_encoding_loan_calculator
+            - --password=ansible_controller
             - -u
             - root
-          failureThreshold: 5
-          initialDelaySeconds: 5
+          failureThreshold: 10
+          initialDelaySeconds: 30
           periodSeconds: 10
-          timeoutSeconds: 1
+          timeoutSeconds: 5
         resources:
           limits:
             cpu: 500m
@@ -66,19 +69,20 @@ spec:
         - name: FLAG
           value: FLAG{PLACEHOLDER_FLAG}
         - name: DB_HOST
-          value: localhost
+          value: 127.0.0.1
         - name: DB_USER
           value: root
         - name: DB_PASSWORD
-          value: ssti_encoding_loan_calculator
+          value: ansible_controller
         - name: DB_NAME
-          value: database
+          value: ansible_controller
         - name: SECRET_KEY
-          value: k8s_secret_key_for_ssti_challenge
-        image: /:-app
+          value: ansible_controller_session_key
+        image: 
+          180294216647.dkr.ecr.us-west-2.amazonaws.com/synthetic-xben-063-24_ansible-cve-2014-3498:app
         imagePullPolicy: Always
         livenessProbe:
-          failureThreshold: 5
+          failureThreshold: 10
           httpGet:
             path: /
             port: 80
@@ -90,7 +94,7 @@ spec:
         - containerPort: 80
           name: http
         readinessProbe:
-          failureThreshold: 3
+          failureThreshold: 10
           httpGet:
             path: /
             port: 80
@@ -110,9 +114,9 @@ apiVersion: v1
 kind: Service
 metadata:
   labels:
-    app: ssti-encoding-loan-calculator
-  name: ssti-encoding-loan-calculator-service
-  namespace: sandbox-dev
+    app: ansible-controller
+  name: ansible-controller-service
+  namespace: sandbox-prod
 spec:
   ports:
   - name: http
@@ -120,5 +124,5 @@ spec:
     protocol: TCP
     targetPort: 80
   selector:
-    app: ssti-encoding-loan-calculator
+    app: ansible-controller
   type: ClusterIP

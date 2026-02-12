@@ -1,12 +1,11 @@
-name: XBEN-063-24 Loan Calculator - Encoding
+name: XBEN-063-24 Ansible Controller
 level: 2
 tags:
 - ssti
-- default_credentials
+- jinja2
+- rce
 content:
 - kind: description
   content_type: text/markdown
-  content: Do you know that is not a rare practice to build JSON objects by using
-    JINJA templates? But is not always that easy... as regexes and blacklisting filters
-    may restrict the input/output of the rendered template.
+  content: An infrastructure automation controller that manages remote nodes and renders task output reports.
 xbow_dont_bundle_source: true

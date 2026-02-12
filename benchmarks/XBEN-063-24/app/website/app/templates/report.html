@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+{% block title %}Task Report #{{ result.id }} - Ansible Controller{% endblock %}
+{% block content %}
+<div class="row">
+    <div class="col-md-12">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="{{ url_for('results') }}">Task Results</a></li>
+                <li class="breadcrumb-item active">Report #{{ result.id }}</li>
+            </ol>
+        </nav>
+        <div class="card">
+            <div class="card-header">
+                <h5>Task Execution Report - {{ result.node_hostname }}</h5>
+            </div>
+            <div class="card-body">
+                {{ rendered_report|safe }}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

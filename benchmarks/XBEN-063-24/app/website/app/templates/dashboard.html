@@ -1,0 +1,109 @@
+{% extends "base.html" %}
+{% block title %}Dashboard - Ansible Controller{% endblock %}
+{% block content %}
+<div class="row">
+    <div class="col-md-3">
+        <div class="card text-white bg-primary mb-3">
+            <div class="card-body">
+                <h5 class="card-title">Managed Nodes</h5>
+                <p class="card-text display-6">{{ nodes|length }}</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card text-white bg-success mb-3">
+            <div class="card-body">
+                <h5 class="card-title">Reachable</h5>
+                <p class="card-text display-6">{{ nodes|selectattr('status', 'equalto', 'reachable')|list|length }}</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card text-white bg-danger mb-3">
+            <div class="card-body">
+                <h5 class="card-title">Unreachable</h5>
+                <p class="card-text display-6">{{ nodes|selectattr('status', 'equalto', 'unreachable')|list|length }}</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card text-white bg-info mb-3">
+            <div class="card-body">
+                <h5 class="card-title">Recent Tasks</h5>
+                <p class="card-text display-6">{{ results|length }}</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row mt-3">
+    <div class="col-md-8">
+        <div class="card">
+            <div class="card-header">
+                <h5>Recent Task Results</h5>
+            </div>
+            <div class="card-body">
+                <table class="table table-sm table-hover">
+                    <thead>
+                        <tr>
+                            <th>Host</th>
+                            <th>Task</th>
+                            <th>Module</th>
+                            <th>Status</th>
+                            <th>Time</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for r in results %}
+                        <tr>
+                            <td>{{ r.node_hostname }}</td>
+                            <td>{{ r.task_name }}</td>
+                            <td><code>{{ r.module_name }}</code></td>
+                            <td>
+                                {% if r.status == 'ok' %}
+                                <span class="badge bg-success">ok</span>
+                                {% elif r.status == 'changed' %}
+                                <span class="badge bg-warning text-dark">changed</span>
+                                {% elif r.status == 'failed' %}
+                                <span class="badge bg-danger">failed</span>
+                                {% else %}
+                                <span class="badge bg-secondary">{{ r.status }}</span>
+                                {% endif %}
+                            </td>
+                            <td>{{ r.executed_at.strftime('%Y-%m-%d %H:%M') if r.executed_at else '-' }}</td>
+                            <td><a href="{{ url_for('result_report', result_id=r.id) }}" class="btn btn-sm btn-outline-primary">Report</a></td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card">
+            <div class="card-header">
+                <h5>Inventory Groups</h5>
+            </div>
+            <div class="card-body">
+                {% set groups = nodes|groupby('group_name') %}
+                {% for group_name, group_nodes in groups %}
+                <h6>{{ group_name }}</h6>
+                <ul class="list-group mb-2">
+                    {% for node in group_nodes %}
+                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                        {{ node.hostname }}
+                        {% if node.status == 'reachable' %}
+                        <span class="badge bg-success rounded-pill">●</span>
+                        {% else %}
+                        <span class="badge bg-danger rounded-pill">●</span>
+                        {% endif %}
+                    </li>
+                    {% endfor %}
+                </ul>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

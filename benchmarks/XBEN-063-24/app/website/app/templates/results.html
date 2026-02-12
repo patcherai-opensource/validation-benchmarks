@@ -1,0 +1,56 @@
+{% extends "base.html" %}
+{% block title %}Task Results - Ansible Controller{% endblock %}
+{% block content %}
+<div class="row">
+    <div class="col-md-12">
+        <div class="card">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <h5 class="mb-0">Task Results</h5>
+                <span class="text-muted">{{ results|length }} results</span>
+            </div>
+            <div class="card-body">
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Host</th>
+                            <th>Task</th>
+                            <th>Module</th>
+                            <th>Status</th>
+                            <th>Message</th>
+                            <th>Executed</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for r in results %}
+                        <tr>
+                            <td>{{ r.id }}</td>
+                            <td>{{ r.node_hostname }}</td>
+                            <td>{{ r.task_name }}</td>
+                            <td><code>{{ r.module_name }}</code></td>
+                            <td>
+                                {% if r.status == 'ok' %}
+                                <span class="badge bg-success">ok</span>
+                                {% elif r.status == 'changed' %}
+                                <span class="badge bg-warning text-dark">changed</span>
+                                {% elif r.status == 'failed' %}
+                                <span class="badge bg-danger">failed</span>
+                                {% else %}
+                                <span class="badge bg-secondary">{{ r.status }}</span>
+                                {% endif %}
+                            </td>
+                            <td>{{ r.msg[:80] }}{% if r.msg|length > 80 %}...{% endif %}</td>
+                            <td>{{ r.executed_at.strftime('%Y-%m-%d %H:%M') if r.executed_at else '-' }}</td>
+                            <td>
+                                <a href="{{ url_for('result_report', result_id=r.id) }}" class="btn btn-sm btn-outline-primary">View Report</a>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
