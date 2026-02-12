@@ -1,0 +1,59 @@
+{% extends "base.html" %}
+{% block title %}{{ collection.name }}{% endblock %}
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <div>
+        <h2>{{ collection.name }}</h2>
+        <p class="text-muted mb-0">
+            Model: <code>{{ collection.model }}</code> &middot;
+            Domain: <code>{{ collection.domain }}</code>
+        </p>
+    </div>
+    <div>
+        <a href="/collection/{{ collection.id }}/edit" class="btn btn-outline-secondary">Edit</a>
+        <a href="/" class="btn btn-outline-secondary">Back</a>
+    </div>
+</div>
+
+{% if error %}
+<div class="alert alert-warning">
+    <strong>Domain filter error:</strong> {{ error }}
+</div>
+{% endif %}
+
+<div class="card">
+    <div class="card-header">
+        <strong>Matching Resources</strong>
+        <span class="badge bg-secondary">{{ resources|length }}</span>
+    </div>
+    <div class="card-body">
+        <table class="table table-sm mb-0">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Name</th>
+                    <th>Model</th>
+                    <th>Description</th>
+                    <th>Sequence</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for r in resources %}
+                <tr>
+                    <td>{{ r.id }}</td>
+                    <td>{{ r.name }}</td>
+                    <td><code>{{ r.res_model }}</code></td>
+                    <td>{{ r.description }}</td>
+                    <td>{{ r.sequence }}</td>
+                </tr>
+                {% endfor %}
+                {% if not resources %}
+                <tr>
+                    <td colspan="5" class="text-center text-muted">No matching resources</td>
+                </tr>
+                {% endif %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

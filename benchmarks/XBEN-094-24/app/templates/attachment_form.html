@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+{% block title %}New Attachment{% endblock %}
+{% block content %}
+<h2>New Attachment</h2>
+
+<div class="card mt-3">
+    <div class="card-body">
+        <form method="POST">
+            <div class="mb-3">
+                <label for="name" class="form-label">Name</label>
+                <input type="text" class="form-control" id="name" name="name" required>
+            </div>
+            <div class="mb-3">
+                <label for="res_model" class="form-label">Resource Model</label>
+                <input type="text" class="form-control" id="res_model" name="res_model"
+                       placeholder="ir.attachment">
+            </div>
+            <div class="mb-3">
+                <label for="data" class="form-label">Data</label>
+                <textarea class="form-control" id="data" name="data" rows="4"></textarea>
+            </div>
+            <div class="mb-3">
+                <label for="description" class="form-label">Description</label>
+                <textarea class="form-control" id="description" name="description" rows="2"></textarea>
+            </div>
+            <button type="submit" class="btn btn-primary">Create Attachment</button>
+            <a href="/attachments" class="btn btn-outline-secondary">Cancel</a>
+        </form>
+    </div>
+</div>
+{% endblock %}

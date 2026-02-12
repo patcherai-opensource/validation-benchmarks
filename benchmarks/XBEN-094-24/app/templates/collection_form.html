@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+{% block title %}{{ 'Edit' if collection else 'New' }} Collection{% endblock %}
+{% block content %}
+<h2>{{ 'Edit' if collection else 'New' }} Collection</h2>
+
+<div class="card mt-3">
+    <div class="card-body">
+        <form method="POST">
+            <div class="mb-3">
+                <label for="name" class="form-label">Name</label>
+                <input type="text" class="form-control" id="name" name="name"
+                       value="{{ collection.name if collection else '' }}" required>
+            </div>
+            <div class="mb-3">
+                <label for="model" class="form-label">Model</label>
+                <input type="text" class="form-control" id="model" name="model"
+                       value="{{ collection.model if collection else 'ir.resource' }}"
+                       placeholder="ir.resource">
+                <div class="form-text">Target model for this collection (e.g., ir.resource, party.party)</div>
+            </div>
+            <div class="mb-3">
+                <label for="domain" class="form-label">Domain</label>
+                <textarea class="form-control font-monospace" id="domain" name="domain" rows="3"
+                          placeholder="[]">{{ collection.domain if collection else '[]' }}</textarea>
+                <div class="form-text">
+                    Filter expression in domain notation.
+                    Example: <code>[('name', 'like', 'Sales')]</code>
+                </div>
+            </div>
+            <button type="submit" class="btn btn-primary">
+                {{ 'Update' if collection else 'Create' }} Collection
+            </button>
+            <a href="/" class="btn btn-outline-secondary">Cancel</a>
+        </form>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+{% block title %}Attachments{% endblock %}
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h2>Attachments</h2>
+    <a href="/attachment/new" class="btn btn-primary">New Attachment</a>
+</div>
+
+<div class="card">
+    <div class="card-body">
+        <table class="table table-hover mb-0">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Name</th>
+                    <th>Model</th>
+                    <th>Description</th>
+                    <th>Created</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for a in attachments %}
+                <tr>
+                    <td>{{ a.id }}</td>
+                    <td>{{ a.name }}</td>
+                    <td><code>{{ a.res_model }}</code></td>
+                    <td>{{ a.description }}</td>
+                    <td>{{ a.create_date.strftime('%Y-%m-%d %H:%M') if a.create_date else '-' }}</td>
+                </tr>
+                {% endfor %}
+                {% if not attachments %}
+                <tr>
+                    <td colspan="5" class="text-center text-muted">No attachments found</td>
+                </tr>
+                {% endif %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

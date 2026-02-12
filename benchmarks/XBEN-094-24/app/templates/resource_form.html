@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+{% block title %}{{ 'Edit' if resource else 'New' }} Resource{% endblock %}
+{% block content %}
+<h2>{{ 'Edit' if resource else 'New' }} Resource</h2>
+
+<div class="card mt-3">
+    <div class="card-body">
+        <form method="POST">
+            <div class="mb-3">
+                <label for="name" class="form-label">Name</label>
+                <input type="text" class="form-control" id="name" name="name"
+                       value="{{ resource.name if resource else '' }}" required>
+            </div>
+            <div class="mb-3">
+                <label for="res_model" class="form-label">Model</label>
+                <input type="text" class="form-control" id="res_model" name="res_model"
+                       value="{{ resource.res_model if resource else '' }}"
+                       placeholder="ir.resource">
+            </div>
+            <div class="mb-3">
+                <label for="description" class="form-label">Description</label>
+                <textarea class="form-control" id="description" name="description"
+                          rows="3">{{ resource.description if resource else '' }}</textarea>
+            </div>
+            <div class="mb-3">
+                <label for="sequence" class="form-label">Sequence</label>
+                <input type="number" class="form-control" id="sequence" name="sequence"
+                       value="{{ resource.sequence if resource else '10' }}">
+            </div>
+            <button type="submit" class="btn btn-primary">
+                {{ 'Update' if resource else 'Create' }} Resource
+            </button>
+            <a href="/resources" class="btn btn-outline-secondary">Cancel</a>
+        </form>
+    </div>
+</div>
+{% endblock %}

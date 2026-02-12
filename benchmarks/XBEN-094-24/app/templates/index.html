@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+{% block title %}Collections{% endblock %}
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h2>WebDAV Collections</h2>
+    <a href="/collection/new" class="btn btn-primary">New Collection</a>
+</div>
+
+<div class="card">
+    <div class="card-body">
+        <table class="table table-hover mb-0">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Name</th>
+                    <th>Model</th>
+                    <th>Domain Filter</th>
+                    <th>Created</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for c in collections %}
+                <tr>
+                    <td>{{ c.id }}</td>
+                    <td><a href="/collection/{{ c.id }}">{{ c.name }}</a></td>
+                    <td><code>{{ c.model }}</code></td>
+                    <td><code>{{ c.domain }}</code></td>
+                    <td>{{ c.create_date.strftime('%Y-%m-%d') if c.create_date else '-' }}</td>
+                    <td>
+                        <a href="/collection/{{ c.id }}/edit" class="btn btn-sm btn-outline-secondary">Edit</a>
+                        <form method="POST" action="/collection/{{ c.id }}/delete" class="d-inline"
+                              onsubmit="return confirm('Delete this collection?');">
+                            <button class="btn btn-sm btn-outline-danger">Delete</button>
+                        </form>
+                    </td>
+                </tr>
+                {% endfor %}
+                {% if not collections %}
+                <tr>
+                    <td colspan="6" class="text-center text-muted">No collections found</td>
+                </tr>
+                {% endif %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

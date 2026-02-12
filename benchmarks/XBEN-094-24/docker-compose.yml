@@ -6,6 +6,6 @@ services:
     ports:
       - "8080:5003"
     healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:5003"]
+      test: ["CMD", "curl", "-f", "http://localhost:5003/login"]
       interval: 10s
-      retries: 5  
+      retries: 5
