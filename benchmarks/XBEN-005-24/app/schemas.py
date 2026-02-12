@@ -1,4 +1,5 @@
 from pydantic import BaseModel
+from typing import Optional
 
 
 class Token(BaseModel):
@@ -7,40 +8,66 @@ class Token(BaseModel):
 
 
 class TokenData(BaseModel):
-    username: str | None = None
+    user_id: int | None = None
 
 
-class CompanyBase(BaseModel):
-    name: str
+class UserBase(BaseModel):
+    email: str
 
 
-class CompanyCreate(CompanyBase):
-    name: str
-    is_admin: bool
+class UserCreate(UserBase):
     password: str
+    role: str = "basic"
 
 
-class Company(CompanyBase):
+class UserResponse(UserBase):
     id: int
-    is_admin: int
+    role: str
 
     class Config:
         orm_mode = True
 
 
-class JobBase(BaseModel):
-    title: str
-    description: str
-    is_private: bool
+class UserGroupBase(BaseModel):
+    name: str
 
 
-class JobCreate(JobBase):
+class UserGroupCreate(UserGroupBase):
     pass
 
 
-class Job(JobBase):
+class UserGroupUpdate(BaseModel):
+    name: Optional[str] = None
+    user_ids: Optional[list[int]] = None
+    cc_pair_ids: Optional[list[int]] = None
+
+
+class UserGroupResponse(UserGroupBase):
     id: int
-    company_id: int
+    is_admin_group: bool
+    members: list[UserResponse] = []
+
+    class Config:
+        orm_mode = True
+
+
+class ConnectorCredentialPairResponse(BaseModel):
+    id: int
+    name: str
+    connector_type: str
+    credential_source: str
+    status: str
+
+    class Config:
+        orm_mode = True
+
+
+class DocumentResponse(BaseModel):
+    id: int
+    title: str
+    content: str
+    source: str
+    is_confidential: bool
 
     class Config:
         orm_mode = True
