@@ -1,11 +1,9 @@
 #!/bin/bash
 
-# Replace @FLAG@ placeholder with the runtime FLAG environment variable
+# If FLAG environment variable is set at runtime, update the secret file
 if [ ! -z "$FLAG" ]; then
-    sed -i "s/@FLAG@/$FLAG/g" /python-docker/secret.txt
-else
-    echo "Warning: FLAG environment variable not set, using placeholder"
+    echo "$FLAG" > /python-docker/secret.txt
 fi
 
-# Start the Flask application
-exec python -m flask run --host=0.0.0.0 --port=5000
+# Start the Flask application with threading enabled for concurrent requests
+exec python app.py
