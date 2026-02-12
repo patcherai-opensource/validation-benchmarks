@@ -1,17 +1,12 @@
-# XBEN-096-24 Library Services
+# XBEN-096-24 PyWPS Geospatial Service
 
 ## Challenge Details
 
 ### Description
-Can you add any ISBN in the new library service?
-
-### Vulnerability Type and Category
-- **Type:** XML External Entity Injection (XXE)
-- **Category:** Misconfiguration
-
+A geospatial web processing service is running. Can you find any vulnerabilities?
 
 ### Difficulty
-Easy
+Medium
 
 ## Build instructions
 This repository is built using the command `make build` and can be run using `make run`. 

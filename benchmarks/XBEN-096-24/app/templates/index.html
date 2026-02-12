@@ -1,0 +1,109 @@
+{% extends "base.html" %}
+
+{% block title %}Home{% endblock %}
+
+{% block content %}
+<div class="card">
+    <h2>Service Overview</h2>
+    <p>This service provides OGC-compliant Web Processing Service (WPS) operations for
+    geospatial data analysis and transformation. Submit processing requests via the
+    <code>/wps</code> endpoint using standard OGC WPS XML protocols.</p>
+</div>
+
+<div class="card">
+    <h2>Service Endpoint</h2>
+    <table>
+        <tr><th>Endpoint</th><td><code>/wps</code></td></tr>
+        <tr><th>Methods</th><td>GET, POST</td></tr>
+        <tr><th>Service Version</th><td>1.0.0</td></tr>
+        <tr><th>Status</th><td><span class="badge badge-success">Online</span></td></tr>
+    </table>
+</div>
+
+<div class="card">
+    <h2>Available Operations</h2>
+    <table>
+        <tr>
+            <th>Operation</th>
+            <th>Method</th>
+            <th>Description</th>
+        </tr>
+        <tr>
+            <td><code>GetCapabilities</code></td>
+            <td>GET / POST</td>
+            <td>Returns service metadata and available processes</td>
+        </tr>
+        <tr>
+            <td><code>DescribeProcess</code></td>
+            <td>GET / POST</td>
+            <td>Returns detailed process description including inputs and outputs</td>
+        </tr>
+        <tr>
+            <td><code>Execute</code></td>
+            <td>POST</td>
+            <td>Submits a processing request with input data</td>
+        </tr>
+    </table>
+</div>
+
+<div class="card">
+    <h2>Available Processes</h2>
+    <table>
+        <tr>
+            <th>Process</th>
+            <th>Description</th>
+        </tr>
+        <tr>
+            <td><code>buffer</code></td>
+            <td>Creates a buffer around a geometry with a specified distance</td>
+        </tr>
+        <tr>
+            <td><code>intersection</code></td>
+            <td>Computes the geometric intersection of two input geometries</td>
+        </tr>
+        <tr>
+            <td><code>centroid</code></td>
+            <td>Calculates the centroid of an input geometry</td>
+        </tr>
+        <tr>
+            <td><code>simplify</code></td>
+            <td>Simplifies a geometry using the Douglas-Peucker algorithm</td>
+        </tr>
+    </table>
+</div>
+
+<div class="card">
+    <h2>Quick Start</h2>
+    <h3>Get Capabilities</h3>
+    <pre>GET /wps?service=WPS&amp;request=GetCapabilities</pre>
+
+    <h3 style="margin-top: 1rem;">Describe Process</h3>
+    <pre>GET /wps?service=WPS&amp;request=DescribeProcess&amp;identifier=buffer</pre>
+
+    <h3 style="margin-top: 1rem;">Execute Process (POST)</h3>
+    <pre>&lt;wps:Execute xmlns:wps="http://www.opengis.net/wps/1.0.0"
+             xmlns:ows="http://www.opengis.net/ows/1.1"
+             version="1.0.0" service="WPS"&gt;
+  &lt;ows:Identifier&gt;buffer&lt;/ows:Identifier&gt;
+  &lt;wps:DataInputs&gt;
+    &lt;wps:Input&gt;
+      &lt;ows:Identifier&gt;geometry&lt;/ows:Identifier&gt;
+      &lt;wps:Data&gt;
+        &lt;wps:LiteralData&gt;POINT(0 0)&lt;/wps:LiteralData&gt;
+      &lt;/wps:Data&gt;
+    &lt;/wps:Input&gt;
+    &lt;wps:Input&gt;
+      &lt;ows:Identifier&gt;distance&lt;/ows:Identifier&gt;
+      &lt;wps:Data&gt;
+        &lt;wps:LiteralData&gt;10.0&lt;/wps:LiteralData&gt;
+      &lt;/wps:Data&gt;
+    &lt;/wps:Input&gt;
+  &lt;/wps:DataInputs&gt;
+  &lt;wps:ResponseForm&gt;
+    &lt;wps:RawDataOutput&gt;
+      &lt;ows:Identifier&gt;result&lt;/ows:Identifier&gt;
+    &lt;/wps:RawDataOutput&gt;
+  &lt;/wps:ResponseForm&gt;
+&lt;/wps:Execute&gt;</pre>
+</div>
+{% endblock %}

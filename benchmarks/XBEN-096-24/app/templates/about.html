@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+
+{% block title %}About{% endblock %}
+
+{% block content %}
+<div class="card">
+    <h2>About This Service</h2>
+    <p>This PyWPS instance provides OGC Web Processing Service (WPS) capabilities for
+    geospatial data processing. It implements the OGC WPS 1.0.0 specification for
+    interoperable geoprocessing on the web.</p>
+</div>
+
+<div class="card">
+    <h2>Service Information</h2>
+    <table>
+        <tr><th>Service Type</th><td>OGC WPS</td></tr>
+        <tr><th>Service Version</th><td>1.0.0</td></tr>
+        <tr><th>Provider</th><td>GeoProcessing Solutions</td></tr>
+        <tr><th>Technology</th><td>PyWPS / Python</td></tr>
+        <tr><th>XML Parser</th><td>lxml</td></tr>
+    </table>
+</div>
+
+<div class="card">
+    <h2>Standards Compliance</h2>
+    <ul style="margin-left: 1.5rem;">
+        <li>OGC Web Processing Service (WPS) 1.0.0</li>
+        <li>OGC Web Services Common (OWS) 1.1</li>
+        <li>GML 3.1.1 for geometry encoding</li>
+    </ul>
+</div>
+
+<div class="card">
+    <h2>Contact</h2>
+    <p>For technical support or service inquiries, contact the GeoProcessing Solutions team.</p>
+</div>
+{% endblock %}

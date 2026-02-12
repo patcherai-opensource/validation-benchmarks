@@ -1,5 +1,5 @@
 services:
-  libraryv1:
+  pywps:
     build:
       context: ./app
       args:

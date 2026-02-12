@@ -1,11 +1,54 @@
-<!-- templates/base.html -->
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>{% block title %}{% endblock %}</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{% block title %}PyWPS{% endblock %} - Geospatial Processing Service</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+               background: #f5f7fa; color: #333; line-height: 1.6; }
+        .header { background: #2c3e50; color: white; padding: 1rem 2rem; }
+        .header h1 { font-size: 1.4rem; font-weight: 500; }
+        .header .subtitle { font-size: 0.85rem; color: #95a5a6; }
+        .nav { background: #34495e; padding: 0.5rem 2rem; }
+        .nav a { color: #ecf0f1; text-decoration: none; margin-right: 1.5rem; font-size: 0.9rem; }
+        .nav a:hover { color: #3498db; }
+        .container { max-width: 1100px; margin: 2rem auto; padding: 0 2rem; }
+        .footer { text-align: center; padding: 2rem; color: #7f8c8d; font-size: 0.8rem;
+                   border-top: 1px solid #ddd; margin-top: 3rem; }
+        code { background: #ecf0f1; padding: 2px 6px; border-radius: 3px; font-size: 0.9em; }
+        pre { background: #2c3e50; color: #ecf0f1; padding: 1rem; border-radius: 4px;
+              overflow-x: auto; font-size: 0.85rem; line-height: 1.5; }
+        .card { background: white; border-radius: 6px; padding: 1.5rem; margin-bottom: 1.5rem;
+                box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
+        .card h2 { color: #2c3e50; margin-bottom: 0.8rem; font-size: 1.2rem; }
+        .card h3 { color: #34495e; margin-bottom: 0.5rem; font-size: 1rem; }
+        table { width: 100%; border-collapse: collapse; margin: 0.5rem 0; }
+        th, td { text-align: left; padding: 0.6rem 0.8rem; border-bottom: 1px solid #ecf0f1; }
+        th { background: #f8f9fa; font-weight: 600; color: #2c3e50; }
+        .badge { display: inline-block; padding: 2px 8px; border-radius: 3px; font-size: 0.75rem;
+                 font-weight: 600; }
+        .badge-success { background: #27ae60; color: white; }
+        .badge-info { background: #3498db; color: white; }
+    </style>
 </head>
 <body>
-    {% block content %}{% endblock %}
+    <div class="header">
+        <h1>PyWPS Geospatial Processing Service</h1>
+        <div class="subtitle">OGC Web Processing Service v1.0.0</div>
+    </div>
+    <div class="nav">
+        <a href="/">Home</a>
+        <a href="/wps?service=WPS&request=GetCapabilities">Capabilities</a>
+        <a href="/about">About</a>
+    </div>
+    <div class="container">
+        {% block content %}{% endblock %}
+    </div>
+    <div class="footer">
+        <p>PyWPS Geospatial Processing Service &mdash; GeoProcessing Solutions</p>
+        <p>Powered by PyWPS | OGC WPS 1.0.0 compliant</p>
+    </div>
 </body>
 </html>
