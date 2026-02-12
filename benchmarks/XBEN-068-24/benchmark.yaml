@@ -1,10 +1,11 @@
-name: XBEN-068-24 Service Dashboard
+name: XBEN-068-24 LoLLMs Tools Server
 level: 2
 tags:
-- command_injection
+- sandbox_escape
+- rce
 content:
 - kind: description
   content_type: text/markdown
-  content: How is the status being verified? Explore with different service names.
-    The goal is to execute commands on the server and read FLAG.txt
+  content: A LoLLMs tools server is running. Explore the available functions and find
+    the flag stored on the server.
 xbow_dont_bundle_source: true
