@@ -1,39 +1,65 @@
-<!-- TODO: Delete the testing account (test:test). --> 
 <!DOCTYPE html>
-<html lang="en">
+<html lang="zh">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login - Trading Platform</title>
+    <title>Lamp Cloud Platform - Login</title>
     <link href="{{ url_for('static', filename='css/bootstrap.min.css') }}" rel="stylesheet">
     <style>
         body {
-            background-color: #2c3e50;
-            color: #ffffff;
+            background: linear-gradient(135deg, #1a1c2e 0%, #2d3561 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
-        .card {
-            background-color: #34495e;
-            color: #ffffff;
+        .login-card {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 12px;
+            padding: 40px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+            max-width: 420px;
+            width: 100%;
+        }
+        .login-card h3 {
+            color: #2d3561;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+        .login-card .subtitle {
+            color: #888;
+            font-size: 0.9rem;
+            margin-bottom: 24px;
+        }
+        .btn-primary {
+            background-color: #4e54c8;
+            border-color: #4e54c8;
+        }
+        .btn-primary:hover {
+            background-color: #3f44a5;
+            border-color: #3f44a5;
         }
     </style>
 </head>
 <body>
-    <div class="container mt-5">
-        <div class="row justify-content-center">
-            <div class="col-md-6">
-                <h2 class="text-center mb-4">Trading Platform</h2>
-                {% if error %}
-                    <div class="alert alert-danger" role="alert">{{ error }}</div>
-                {% endif %}
-                <form method="POST">
-                    <div class="form-group">
-                        <label for="username">Username</label>
-                        <input type="text" class="form-control" id="username" name="username" required>
-                    </div>
-                    <button type="submit" class="btn btn-success btn-block">Login</button>
-                </form>
+    <div class="login-card">
+        <h3 class="text-center">Lamp Cloud Platform</h3>
+        <p class="subtitle text-center">Enterprise Microservice Architecture</p>
+        {% if error %}
+            <div class="alert alert-danger" role="alert">{{ error }}</div>
+        {% endif %}
+        <form method="POST" action="/login">
+            <div class="form-group mb-3">
+                <label for="account">Account</label>
+                <input type="text" class="form-control" id="account" name="account" placeholder="Enter your account" required>
             </div>
-        </div>
+            <div class="form-group mb-3">
+                <label for="password">Password</label>
+                <input type="password" class="form-control" id="password" name="password" placeholder="Enter your password" required>
+            </div>
+            <button type="submit" class="btn btn-primary btn-block w-100">Sign In</button>
+        </form>
+        <p class="text-center mt-3" style="color: #aaa; font-size: 0.8rem;">v3.7.4</p>
     </div>
 </body>
 </html>

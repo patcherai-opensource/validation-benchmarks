@@ -1,0 +1,18 @@
+server:
+  port: 8764
+
+spring:
+  datasource:
+    druid:
+      url: jdbc:mysql://${DB_HOST:127.0.0.1}:3306/lamp_cloud?useUnicode=true&characterEncoding=utf-8&useSSL=false
+      username: root
+      password: ${DB_PASSWORD:lamp_cloud_platform}
+
+lamp:
+  authority:
+    cacheEnabled: true
+    cacheTtlMinutes: 30
+
+logging:
+  level:
+    com.tangyh.lamp: info

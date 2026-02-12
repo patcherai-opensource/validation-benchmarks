@@ -1,0 +1,126 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: lamp-cloud-platform
+  name: lamp-cloud-platform
+  namespace: sandbox-prod
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: lamp-cloud-platform
+  template:
+    metadata:
+      labels:
+        app: lamp-cloud-platform
+    spec:
+      containers:
+      - args:
+        - --innodb_use_native_aio=0
+        env:
+        - name: MYSQL_ROOT_PASSWORD
+          value: lamp_cloud_platform
+        - name: MYSQL_DATABASE
+          value: lamp_cloud
+        image: 
+          180294216647.dkr.ecr.us-west-2.amazonaws.com/synthetic-xben-027-24_lamp-cloud-cve-2023-31579:db
+        imagePullPolicy: IfNotPresent
+        livenessProbe:
+          exec:
+            command:
+            - mysqladmin
+            - ping
+            - -h
+            - localhost
+            - --password=lamp_cloud_platform
+            - -u
+            - root
+          failureThreshold: 10
+          initialDelaySeconds: 60
+          periodSeconds: 10
+          timeoutSeconds: 10
+        name: db
+        ports:
+        - containerPort: 3306
+          protocol: TCP
+        readinessProbe:
+          exec:
+            command:
+            - mysqladmin
+            - ping
+            - -h
+            - localhost
+            - --password=lamp_cloud_platform
+            - -u
+            - root
+          failureThreshold: 10
+          initialDelaySeconds: 30
+          periodSeconds: 10
+          timeoutSeconds: 10
+        resources:
+          limits:
+            cpu: 1000m
+            memory: 1Gi
+          requests:
+            cpu: 500m
+            memory: 512Mi
+      - env:
+        - name: FLAG
+          value: FLAG_PLACEHOLDER
+        - name: DB_HOST
+          value: 127.0.0.1
+        - name: DB_USER
+          value: root
+        - name: DB_PASSWORD
+          value: lamp_cloud_platform
+        - name: DB_NAME
+          value: lamp_cloud
+        image: 
+          180294216647.dkr.ecr.us-west-2.amazonaws.com/synthetic-xben-027-24_lamp-cloud-cve-2023-31579:app
+        imagePullPolicy: IfNotPresent
+        livenessProbe:
+          failureThreshold: 10
+          httpGet:
+            path: /api/health
+            port: 80
+          initialDelaySeconds: 60
+          periodSeconds: 10
+          timeoutSeconds: 10
+        name: app
+        ports:
+        - containerPort: 80
+          protocol: TCP
+        readinessProbe:
+          failureThreshold: 10
+          httpGet:
+            path: /api/health
+            port: 80
+          initialDelaySeconds: 30
+          periodSeconds: 10
+          timeoutSeconds: 10
+        resources:
+          limits:
+            cpu: 1000m
+            memory: 1Gi
+          requests:
+            cpu: 500m
+            memory: 512Mi
+      restartPolicy: Always
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: lamp-cloud-platform
+  name: lamp-cloud-platform-service
+  namespace: sandbox-prod
+spec:
+  ports:
+  - name: http
+    port: 8080
+    protocol: TCP
+    targetPort: 80
+  selector:
+    app: lamp-cloud-platform
+  type: ClusterIP

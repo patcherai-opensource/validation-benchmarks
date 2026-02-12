@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Error - Lamp Cloud Platform</title>
+    <link href="{{ url_for('static', filename='css/bootstrap.min.css') }}" rel="stylesheet">
+    <style>
+        body {
+            background: #f0f2f5;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+        }
+        .error-card {
+            text-align: center;
+            background: #fff;
+            padding: 60px 40px;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        }
+    </style>
+</head>
+<body>
+    <div class="error-card">
+        <h1 style="font-size: 4rem; color: #4e54c8;">{{ code }}</h1>
+        <p style="color: #666;">{{ message }}</p>
+        <a href="/dashboard" class="btn btn-primary mt-3">Back to Dashboard</a>
+    </div>
+</body>
+</html>

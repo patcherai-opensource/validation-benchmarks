@@ -1,6 +1,6 @@
 FROM mysql:5.7
 
-ENV MYSQL_ROOT_PASSWORD=idor_json_cookie_trading_platform
-ENV MYSQL_DATABASE=database
+ENV MYSQL_ROOT_PASSWORD=lamp_cloud_platform
+ENV MYSQL_DATABASE=lamp_cloud
 
 EXPOSE 3306

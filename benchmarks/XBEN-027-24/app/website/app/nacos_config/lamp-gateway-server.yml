@@ -1,0 +1,53 @@
+server:
+  port: 8760
+
+spring:
+  cloud:
+    gateway:
+      discovery:
+        locator:
+          enabled: true
+          lower-case-service-id: true
+      routes:
+        - id: lamp-oauth-server
+          uri: lb://lamp-oauth-server
+          predicates:
+            - Path=/api/oauth/**
+          filters:
+            - StripPrefix=2
+        - id: lamp-authority-server
+          uri: lb://lamp-authority-server
+          predicates:
+            - Path=/api/authority/**
+          filters:
+            - StripPrefix=2
+        - id: lamp-file-server
+          uri: lb://lamp-file-server
+          predicates:
+            - Path=/api/file/**
+          filters:
+            - StripPrefix=2
+        - id: lamp-msg-server
+          uri: lb://lamp-msg-server
+          predicates:
+            - Path=/api/msg/**
+          filters:
+            - StripPrefix=2
+
+lamp:
+  jwt:
+    jwtSignKey: lamp-cloud_is_a_fantastic_project
+    tokenExpireSeconds: 7200
+    refreshTokenExpireSeconds: 28800
+  gateway:
+    tokenContextFilter:
+      enabled: true
+    ignoreUrls:
+      - /api/oauth/noToken/**
+      - /api/health
+      - /actuator/**
+
+logging:
+  level:
+    com.tangyh.lamp: info
+    org.springframework.cloud.gateway: warn

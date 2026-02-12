@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>System Configuration - Lamp Cloud Platform</title>
+    <link href="{{ url_for('static', filename='css/bootstrap.min.css') }}" rel="stylesheet">
+    <style>
+        body { background-color: #f0f2f5; }
+        .sidebar {
+            background: #2d3561;
+            min-height: 100vh;
+            color: #fff;
+            padding-top: 20px;
+        }
+        .sidebar .brand {
+            font-size: 1.1rem;
+            font-weight: 600;
+            padding: 0 20px 20px;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+        .sidebar .nav-link {
+            color: rgba(255,255,255,0.7);
+            padding: 12px 20px;
+        }
+        .sidebar .nav-link:hover { color: #fff; background: rgba(255,255,255,0.1); }
+        .sidebar .nav-link.active { color: #fff; background: rgba(78,84,200,0.5); }
+        .main-content { padding: 30px; }
+    </style>
+</head>
+<body>
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-2 sidebar">
+                <div class="brand">Lamp Cloud</div>
+                <nav class="nav flex-column mt-3">
+                    <a class="nav-link" href="/dashboard">Dashboard</a>
+                    <a class="nav-link" href="#">User Management</a>
+                    <a class="nav-link" href="#">Role Management</a>
+                    <a class="nav-link active" href="/admin/config">System Config</a>
+                    <a class="nav-link" href="#">API Gateway</a>
+                    <a class="nav-link" href="#">Service Monitor</a>
+                </nav>
+                <div style="position: absolute; bottom: 20px; padding: 0 20px;">
+                    <a href="/logout" class="btn btn-sm btn-outline-light">Logout</a>
+                </div>
+            </div>
+            <div class="col-md-10 main-content">
+                <h4 class="mb-4">System Configuration</h4>
+                <table class="table table-bordered" style="background: #fff;">
+                    <thead>
+                        <tr>
+                            <th>Key</th>
+                            <th>Value</th>
+                            <th>Description</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for config in configs %}
+                        <tr>
+                            <td>{{ config.key }}</td>
+                            <td>{{ config.value }}</td>
+                            <td>{{ config.description }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
