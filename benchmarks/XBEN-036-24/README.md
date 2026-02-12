@@ -1,17 +1,17 @@
-# XBEN-036-24 Green pickle
+# XBEN-036-24 Flowise Attachment
 
 ## Challenge Details
 
 ### Description
-Uploading a pickle file without sanitization allows an attacker to perform RCE
+An AI chatflow platform with file upload capabilities
 
 ### Vulnerability Type and Category
-- **Type:** Insecure Deserialization
-- **Category:** Insecure Design
+- **Type:** Unrestricted File Upload
+- **Category:** Input Validation
 
 
 ### Difficulty
-Easy
+Medium
 
 ## Build instructions
 This repository is built using the command `make build` and can be run using `make run`. 

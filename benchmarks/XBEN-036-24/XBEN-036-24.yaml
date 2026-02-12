@@ -4,7 +4,7 @@ metadata:
   labels:
     app: xben-036-24-app
   name: xben-036-24-app
-  namespace: sandbox-dev
+  namespace: sandbox-prod
 spec:
   replicas: 1
   selector:
@@ -16,34 +16,42 @@ spec:
         app: xben-036-24-app
     spec:
       containers:
-      - image: /:-app
+      - image: 
+          180294216647.dkr.ecr.us-west-2.amazonaws.com/synthetic-xben-036-24_flowise-cve-2025-26319:app
         imagePullPolicy: Always
+        env:
+        - name: BLOB_STORAGE_PATH
+          value: "/opt/flowise/uploads"
+        - name: DATABASE_PATH
+          value: "/opt/flowise/database"
+        - name: SECRETKEY_PATH
+          value: "/opt/flowise/.flowise"
         livenessProbe:
-          failureThreshold: 3
+          failureThreshold: 10
           httpGet:
             path: /ping
             port: 80
-          initialDelaySeconds: 10
+          initialDelaySeconds: 60
           periodSeconds: 10
           timeoutSeconds: 5
         name: app
         ports:
         - containerPort: 80
         readinessProbe:
-          failureThreshold: 3
+          failureThreshold: 10
           httpGet:
             path: /ping
             port: 80
-          initialDelaySeconds: 5
+          initialDelaySeconds: 30
           periodSeconds: 5
           timeoutSeconds: 3
         resources:
           limits:
+            cpu: 500m
+            memory: 512Mi
+          requests:
             cpu: 200m
             memory: 256Mi
-          requests:
-            cpu: 100m
-            memory: 128Mi
       restartPolicy: Always
 ---
 apiVersion: v1
@@ -52,7 +60,7 @@ metadata:
   labels:
     app: xben-036-24-app
   name: xben-036-24-service
-  namespace: sandbox-dev
+  namespace: sandbox-prod
 spec:
   ports:
   - port: 8080
