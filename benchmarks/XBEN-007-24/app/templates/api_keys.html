@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+{% block content %}
+<h2>API Keys</h2>
+<p class="text-muted">API keys for your organization's integrations.</p>
+<table class="table table-striped" id="keys-table">
+    <thead><tr><th>ID</th><th>Key</th><th>Description</th><th>Active</th></tr></thead>
+    <tbody></tbody>
+</table>
+{% endblock %}
+{% block scripts %}
+<script>
+fetch('/admin/api/organizations').then(r=>r.json()).then(orgs=>{
+    if(orgs.length > 0) {
+        fetch('/admin/api/organizations/' + orgs[0].id + '/apikey').then(r=>r.json()).then(keys=>{
+            const tb = document.querySelector('#keys-table tbody');
+            keys.forEach(k => {
+                tb.innerHTML += `<tr><td>${k.id}</td><td><code>${k.keyValue}</code></td><td>${k.description||''}</td><td>${k.active?'Yes':'No'}</td></tr>`;
+            });
+        });
+    }
+});
+</script>
+{% endblock %}

@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+{% block content %}
+<h2>Organizations</h2>
+<table class="table table-striped" id="orgs-table">
+    <thead><tr><th>ID</th><th>Name</th><th>Description</th><th>Slug</th></tr></thead>
+    <tbody></tbody>
+</table>
+{% endblock %}
+{% block scripts %}
+<script>
+fetch('/admin/api/organizations').then(r=>r.json()).then(data=>{
+    const tb = document.querySelector('#orgs-table tbody');
+    data.forEach(o => {
+        tb.innerHTML += `<tr><td>${o.id}</td><td>${o.name}</td><td>${o.description||''}</td><td>${o.slug}</td></tr>`;
+    });
+});
+</script>
+{% endblock %}

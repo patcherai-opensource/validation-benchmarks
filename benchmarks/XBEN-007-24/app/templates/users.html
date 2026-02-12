@@ -1,0 +1,80 @@
+{% extends "base.html" %}
+{% block content %}
+<h2>User Management</h2>
+<div class="mb-3">
+    <button class="btn btn-success btn-sm" data-bs-toggle="modal" data-bs-target="#addUserModal">Add User</button>
+</div>
+<table class="table table-striped" id="users-table">
+    <thead><tr><th>ID</th><th>Username</th><th>Name</th><th>Email</th><th>Role</th><th>Org ID</th><th>Enabled</th><th>Actions</th></tr></thead>
+    <tbody></tbody>
+</table>
+
+<div class="modal fade" id="addUserModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header"><h5 class="modal-title">Add User</h5></div>
+            <div class="modal-body">
+                <input class="form-control mb-2" id="nu-username" placeholder="Username">
+                <input class="form-control mb-2" id="nu-firstName" placeholder="First Name">
+                <input class="form-control mb-2" id="nu-lastName" placeholder="Last Name">
+                <input class="form-control mb-2" id="nu-email" placeholder="Email">
+                <select class="form-control mb-2" id="nu-role"><option>OPERATOR</option><option>OWNER</option></select>
+                <input class="form-control mb-2" id="nu-orgId" placeholder="Organization ID" type="number">
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                <button class="btn btn-primary" onclick="addUser()">Create</button>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+{% block scripts %}
+<script>
+function loadUsers() {
+    fetch('/admin/api/users').then(r=>r.json()).then(data=>{
+        const tb = document.querySelector('#users-table tbody');
+        tb.innerHTML = '';
+        data.forEach(u => {
+            tb.innerHTML += `<tr>
+                <td>${u.id}</td><td>${u.username}</td><td>${u.firstName} ${u.lastName}</td>
+                <td>${u.email}</td><td>${u.role}</td><td>${u.organizationId}</td>
+                <td>${u.enabled ? 'Yes' : 'No'}</td>
+                <td>
+                    <button class="btn btn-warning btn-sm" onclick="toggleUser(${u.id}, ${!u.enabled})">${u.enabled?'Disable':'Enable'}</button>
+                    <button class="btn btn-info btn-sm" onclick="resetPw(${u.id})">Reset PW</button>
+                    <button class="btn btn-danger btn-sm" onclick="deleteUser(${u.id})">Delete</button>
+                </td></tr>`;
+        });
+    });
+}
+function toggleUser(id, enable) {
+    fetch(`/admin/api/users/${id}/enable/${enable}`, {method:'PUT'}).then(()=>loadUsers());
+}
+function resetPw(id) {
+    fetch(`/admin/api/users/${id}/reset-password`, {method:'PUT'}).then(r=>r.json()).then(d=>{
+        alert('New password: ' + d.password);
+    });
+}
+function deleteUser(id) {
+    if(confirm('Delete user?')) fetch(`/admin/api/users/${id}`, {method:'DELETE'}).then(()=>loadUsers());
+}
+function addUser() {
+    fetch('/admin/api/users', {
+        method:'POST', headers:{'Content-Type':'application/json'},
+        body: JSON.stringify({
+            username: document.getElementById('nu-username').value,
+            firstName: document.getElementById('nu-firstName').value,
+            lastName: document.getElementById('nu-lastName').value,
+            email: document.getElementById('nu-email').value,
+            role: document.getElementById('nu-role').value,
+            organizationId: parseInt(document.getElementById('nu-orgId').value)
+        })
+    }).then(r=>r.json()).then(d=>{
+        if(d.temporaryPassword) alert('Created. Temp password: ' + d.temporaryPassword);
+        loadUsers();
+    });
+}
+loadUsers();
+</script>
+{% endblock %}

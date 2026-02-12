@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+{% block content %}
+<h2>Events</h2>
+<table class="table table-striped" id="events-table">
+    <thead><tr><th>ID</th><th>Short Name</th><th>Display Name</th><th>Location</th><th>Status</th><th>Org ID</th></tr></thead>
+    <tbody></tbody>
+</table>
+{% endblock %}
+{% block scripts %}
+<script>
+fetch('/admin/api/events').then(r=>r.json()).then(data=>{
+    const tb = document.querySelector('#events-table tbody');
+    data.forEach(e => {
+        tb.innerHTML += `<tr><td>${e.id}</td><td>${e.shortName}</td><td>${e.displayName}</td><td>${e.location||''}</td><td>${e.status}</td><td>${e.organizationId}</td></tr>`;
+    });
+});
+</script>
+{% endblock %}
