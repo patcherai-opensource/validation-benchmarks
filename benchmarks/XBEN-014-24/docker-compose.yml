@@ -1,13 +1,35 @@
 services:
-  web:
+  db:
     build: 
-      context: ./src
+      context: ./mysql
       args:
         - FLAG
+    expose:
+      - 3306
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "--password=contentflow_db", "-u", "root"]
+      timeout: 5s
+      retries: 10
+      interval: 10s
+      start_period: 30s
+
+  web:
+    build:
+      context: ./src
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      - DB_HOST=db
+      - DB_PORT=3306
+      - DB_USER=root
+      - DB_PASSWORD=contentflow_db
+      - DB_NAME=contentflow
     ports:
       - "8080:80"
     healthcheck:
-      test: timeout 10s bash -c ':> /dev/tcp/127.0.0.1/80' || exit 1
-      timeout: 1s
-      retries: 5
+      test: ["CMD", "curl", "-f", "http://localhost:80/"]
+      timeout: 5s
+      retries: 10
       interval: 10s
+      start_period: 30s

@@ -1,0 +1,125 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: xben-014-24-contentflow
+  name: xben-014-24-contentflow
+  namespace: sandbox-prod
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: xben-014-24-contentflow
+  template:
+    metadata:
+      labels:
+        app: xben-014-24-contentflow
+    spec:
+      containers:
+      - env:
+        - name: MYSQL_ROOT_PASSWORD
+          value: contentflow_db
+        - name: MYSQL_DATABASE
+          value: contentflow
+        image: 
+          180294216647.dkr.ecr.us-west-2.amazonaws.com/synthetic-xben-014-24_typo3-cve-2018-6871:db
+        imagePullPolicy: Always
+        args: ["--innodb_use_native_aio=0"]
+        livenessProbe:
+          exec:
+            command:
+            - mysqladmin
+            - ping
+            - -h
+            - localhost
+            - --password=contentflow_db
+            - -u
+            - root
+          failureThreshold: 10
+          initialDelaySeconds: 60
+          periodSeconds: 15
+          timeoutSeconds: 5
+        name: db
+        ports:
+        - containerPort: 3306
+          name: mysql
+        readinessProbe:
+          exec:
+            command:
+            - mysqladmin
+            - ping
+            - -h
+            - localhost
+            - --password=contentflow_db
+            - -u
+            - root
+          failureThreshold: 10
+          initialDelaySeconds: 30
+          periodSeconds: 10
+          timeoutSeconds: 5
+        resources:
+          limits:
+            cpu: 500m
+            memory: 512Mi
+          requests:
+            cpu: 250m
+            memory: 256Mi
+      - env:
+        - name: DB_HOST
+          value: "127.0.0.1"
+        - name: DB_PORT
+          value: "3306"
+        - name: DB_USER
+          value: root
+        - name: DB_PASSWORD
+          value: contentflow_db
+        - name: DB_NAME
+          value: contentflow
+        image: 
+          180294216647.dkr.ecr.us-west-2.amazonaws.com/synthetic-xben-014-24_typo3-cve-2018-6871:web
+        imagePullPolicy: Always
+        livenessProbe:
+          failureThreshold: 10
+          httpGet:
+            path: /
+            port: 80
+          initialDelaySeconds: 90
+          periodSeconds: 15
+          timeoutSeconds: 10
+        name: web
+        ports:
+        - containerPort: 80
+          name: http
+        readinessProbe:
+          failureThreshold: 10
+          httpGet:
+            path: /
+            port: 80
+          initialDelaySeconds: 60
+          periodSeconds: 10
+          timeoutSeconds: 10
+        resources:
+          limits:
+            cpu: 500m
+            memory: 512Mi
+          requests:
+            cpu: 250m
+            memory: 256Mi
+      restartPolicy: Always
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: xben-014-24-contentflow
+  name: xben-014-24-contentflow-service
+  namespace: sandbox-prod
+spec:
+  ports:
+  - name: http
+    port: 8080
+    protocol: TCP
+    targetPort: 80
+  selector:
+    app: xben-014-24-contentflow
+  type: ClusterIP
