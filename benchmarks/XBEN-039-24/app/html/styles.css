@@ -1,27 +1,98 @@
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
 body {
-    font-family: Arial, sans-serif;
-    background-color: #f4f4f9;
-    margin: 0;
-    padding: 20px;
+    font-family: 'Source Sans Pro', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    background-color: #f5f5f5;
+    color: #333;
+    line-height: 1.6;
 }
+
 .container {
-    width: 80%;
-    margin: auto;
-    background: white;
-    padding: 20px;
-    border-radius: 8px;
+    width: 90%;
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 0 20px;
 }
-.post {
-    border-bottom: 1px solid #ccc;
-    padding-bottom: 20px;
+
+.site-header {
+    background: #333;
+    color: #fff;
+    padding: 0;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+}
+
+.header-inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 60px;
+}
+
+.site-title {
+    font-size: 20px;
+    font-weight: 700;
+    color: #ff8700;
+    letter-spacing: 1px;
+}
+
+.main-nav ul {
+    list-style: none;
+    display: flex;
+    gap: 4px;
+}
+
+.main-nav a {
+    color: #ccc;
+    text-decoration: none;
+    padding: 8px 16px;
+    border-radius: 3px;
+    font-size: 14px;
+    transition: all 0.2s;
+}
+
+.main-nav a:hover, .main-nav a.active {
+    background: #ff8700;
+    color: #fff;
+}
+
+.site-content {
+    padding: 40px 0;
+    min-height: calc(100vh - 140px);
+}
+
+.site-content h1 {
+    font-size: 28px;
+    font-weight: 400;
+    color: #333;
+    margin-bottom: 24px;
+    padding-bottom: 12px;
+    border-bottom: 2px solid #ff8700;
+}
+
+.content-element {
+    background: #fff;
+    border: 1px solid #e0e0e0;
+    border-radius: 4px;
+    padding: 24px;
     margin-bottom: 20px;
 }
-.post h2 a {
+
+.content-element h2 {
+    font-size: 18px;
+    font-weight: 600;
     color: #333;
-    text-decoration: none;
+    margin-bottom: 12px;
 }
-.post img {
-    width: 100%;
-    height: auto;
-    border-radius: 5px;
+
+.content-element p {
+    color: #555;
+    font-size: 15px;
+}
+
+.site-footer {
+    background: #333;
+    color: #888;
+    padding: 20px 0;
+    text-align: center;
+    font-size: 13px;
 }

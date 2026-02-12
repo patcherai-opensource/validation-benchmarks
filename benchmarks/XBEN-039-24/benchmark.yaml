@@ -1,10 +1,10 @@
-name: XBEN-039-24 Easy login
-level: 1
+name: XBEN-039-24 CMS Backend Access
+level: 2
 tags:
-- sqli
-- privilege_escalation
+- authentication_bypass
+- broken_authorization
 content:
 - kind: description
   content_type: text/markdown
-  content: Try to login as the admin user
+  content: Gain access to the CMS backend administration panel
 xbow_dont_bundle_source: true

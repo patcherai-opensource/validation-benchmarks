@@ -1,0 +1,340 @@
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+    font-family: 'Source Sans Pro', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    background-color: #2b2b2b;
+    color: #333;
+}
+
+/* Login styles */
+.typo3-login {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    background: linear-gradient(135deg, #2b2b2b 0%, #3c3c3c 100%);
+}
+
+#typo3-login-wrap {
+    width: 100%;
+    max-width: 420px;
+    padding: 20px;
+}
+
+#typo3-login-container {
+    background: #fff;
+    border-radius: 4px;
+    box-shadow: 0 2px 20px rgba(0,0,0,0.3);
+    overflow: hidden;
+}
+
+#typo3-login-header {
+    background: #ff8700;
+    padding: 30px 40px 20px;
+    text-align: center;
+}
+
+.typo3-login-logo .logo-text {
+    font-size: 32px;
+    font-weight: 700;
+    color: #fff;
+    letter-spacing: 2px;
+}
+
+.typo3-login-logo .logo-version {
+    font-size: 14px;
+    color: rgba(255,255,255,0.8);
+    display: block;
+    margin-top: 4px;
+}
+
+#typo3-login-form {
+    padding: 30px 40px;
+}
+
+#typo3-login-form h2 {
+    font-size: 18px;
+    color: #333;
+    margin-bottom: 20px;
+    font-weight: 400;
+}
+
+.form-group {
+    margin-bottom: 16px;
+}
+
+.form-group label {
+    display: block;
+    font-size: 13px;
+    color: #666;
+    margin-bottom: 6px;
+    font-weight: 600;
+}
+
+.form-control {
+    width: 100%;
+    padding: 10px 12px;
+    font-size: 14px;
+    border: 1px solid #ccc;
+    border-radius: 3px;
+    background: #f8f8f8;
+    transition: border-color 0.2s;
+}
+
+.form-control:focus {
+    outline: none;
+    border-color: #ff8700;
+    background: #fff;
+}
+
+.btn-login {
+    width: 100%;
+    padding: 12px;
+    background: #ff8700;
+    color: #fff;
+    border: none;
+    border-radius: 3px;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.btn-login:hover {
+    background: #e67a00;
+}
+
+.alert {
+    padding: 12px 16px;
+    border-radius: 3px;
+    margin-bottom: 16px;
+    font-size: 13px;
+}
+
+.alert-danger {
+    background: #fce4e4;
+    border: 1px solid #f5c6c6;
+    color: #a94442;
+}
+
+#typo3-login-footer {
+    padding: 20px 40px;
+    background: #f5f5f5;
+    text-align: center;
+    font-size: 12px;
+    color: #888;
+    border-top: 1px solid #e5e5e5;
+}
+
+.typo3-login-copyright {
+    margin-top: 4px;
+}
+
+/* Backend styles */
+.typo3-backend {
+    background: #f5f5f5;
+}
+
+#typo3-topbar {
+    background: #333;
+    color: #fff;
+    padding: 0 20px;
+    height: 45px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 100;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.3);
+}
+
+.topbar-left .logo-text {
+    font-size: 18px;
+    font-weight: 700;
+    color: #ff8700;
+    letter-spacing: 1px;
+}
+
+.topbar-left .logo-version {
+    font-size: 11px;
+    color: #999;
+    margin-left: 8px;
+}
+
+.topbar-right {
+    font-size: 13px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
+
+.badge-admin {
+    background: #ff8700;
+    color: #fff;
+    padding: 2px 8px;
+    border-radius: 3px;
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+}
+
+.btn-logout {
+    color: #ccc;
+    text-decoration: none;
+    padding: 6px 12px;
+    border: 1px solid #555;
+    border-radius: 3px;
+    font-size: 12px;
+    transition: all 0.2s;
+}
+
+.btn-logout:hover {
+    background: #555;
+    color: #fff;
+}
+
+#typo3-main {
+    display: flex;
+    margin-top: 45px;
+    min-height: calc(100vh - 45px);
+}
+
+#typo3-sidebar {
+    width: 230px;
+    background: #424242;
+    color: #ccc;
+    padding-top: 10px;
+    position: fixed;
+    top: 45px;
+    bottom: 0;
+    overflow-y: auto;
+}
+
+.module-menu {
+    list-style: none;
+}
+
+.module-group {
+    margin-bottom: 5px;
+}
+
+.module-group-label {
+    display: block;
+    padding: 10px 20px 6px;
+    font-size: 11px;
+    text-transform: uppercase;
+    color: #888;
+    font-weight: 600;
+    letter-spacing: 1px;
+}
+
+.module-group ul {
+    list-style: none;
+}
+
+.module-group ul li a {
+    display: block;
+    padding: 8px 20px 8px 30px;
+    color: #ccc;
+    text-decoration: none;
+    font-size: 13px;
+    transition: all 0.15s;
+}
+
+.module-group ul li a:hover {
+    background: #555;
+    color: #fff;
+}
+
+.module-group ul li a.active {
+    background: #ff8700;
+    color: #fff;
+}
+
+#typo3-content {
+    flex: 1;
+    margin-left: 230px;
+    padding: 30px;
+}
+
+#typo3-content h1 {
+    font-size: 22px;
+    font-weight: 400;
+    color: #333;
+    margin-bottom: 20px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid #ddd;
+}
+
+.dashboard-widgets {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 20px;
+}
+
+.widget {
+    background: #fff;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    padding: 20px;
+}
+
+.widget h3 {
+    font-size: 15px;
+    font-weight: 600;
+    color: #333;
+    margin-bottom: 12px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid #eee;
+}
+
+.table {
+    width: 100%;
+    border-collapse: collapse;
+    background: #fff;
+    font-size: 13px;
+}
+
+.table th, .table td {
+    padding: 10px 14px;
+    text-align: left;
+    border-bottom: 1px solid #eee;
+}
+
+.table th {
+    background: #f8f8f8;
+    font-weight: 600;
+    color: #555;
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.table tr:hover td {
+    background: #fafafa;
+}
+
+.panel {
+    background: #fff;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    padding: 20px;
+    margin-bottom: 20px;
+}
+
+.panel h3 {
+    font-size: 15px;
+    font-weight: 600;
+    margin-bottom: 12px;
+}
+
+code {
+    background: #f5f5f5;
+    padding: 2px 6px;
+    border-radius: 3px;
+    font-size: 12px;
+    color: #c7254e;
+}

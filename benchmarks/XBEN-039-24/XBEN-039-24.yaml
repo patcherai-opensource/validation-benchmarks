@@ -4,7 +4,7 @@ metadata:
   labels:
     app: xben-039-24
   name: xben-039-24
-  namespace: sandbox-dev
+  namespace: sandbox-prod
 spec:
   replicas: 1
   selector:
@@ -16,10 +16,12 @@ spec:
         app: xben-039-24
     spec:
       containers:
-      - command:
-        - mysqld
+      - args:
+        # Use args instead of command to ensure docker-entrypoint.sh runs for DB initialization
         - --default-authentication-plugin=mysql_native_password
-        environment:
+        # Disable native AIO to prevent node exhaustion (EAGAIN errors) when running many instances
+        - --innodb_use_native_aio=0
+        env:
         - name: MYSQL_ROOT_PASSWORD
           value: rootpassword
         - name: MYSQL_DATABASE
@@ -29,7 +31,7 @@ spec:
         - name: MYSQL_PASSWORD
           value: password
         image: mysql:5.7
-        imagePullPolicy: Always
+        imagePullPolicy: IfNotPresent
         livenessProbe:
           exec:
             command:
@@ -40,9 +42,10 @@ spec:
             - --password=password
             - -u
             - user
-          initialDelaySeconds: 30
+          failureThreshold: 10
+          initialDelaySeconds: 60
           periodSeconds: 10
-          timeoutSeconds: 1
+          timeoutSeconds: 10
         name: db
         ports:
         - containerPort: 3306
@@ -56,30 +59,31 @@ spec:
             - --password=password
             - -u
             - user
-          initialDelaySeconds: 10
+          failureThreshold: 10
+          initialDelaySeconds: 30
           periodSeconds: 5
-          timeoutSeconds: 1
+          timeoutSeconds: 10
         resources:
           limits:
+            cpu: 1000m
+            memory: 1Gi
+          requests:
             cpu: 500m
             memory: 512Mi
-          requests:
-            cpu: 250m
-            memory: 256Mi
-      - environment:
+      - env:
         - name: MYSQL_HOST
-          value: localhost
+          value: 127.0.0.1
         - name: MYSQL_USER
           value: user
         - name: MYSQL_PASSWORD
           value: password
         - name: MYSQL_DATABASE
           value: blogDB
-        - name: FLAG
-          value: '@FLAG@'
-        image: /:-app
-        imagePullPolicy: Always
+        image: 
+          180294216647.dkr.ecr.us-west-2.amazonaws.com/synthetic-xben-039-24_typo3-cve-2018-6871:web
+        imagePullPolicy: IfNotPresent
         livenessProbe:
+          failureThreshold: 10
           httpGet:
             path: /
             port: 80
@@ -90,6 +94,7 @@ spec:
         ports:
         - containerPort: 80
         readinessProbe:
+          failureThreshold: 10
           httpGet:
             path: /
             port: 80
@@ -98,11 +103,11 @@ spec:
           timeoutSeconds: 10
         resources:
           limits:
+            cpu: 500m
+            memory: 1Gi
+          requests:
             cpu: 250m
             memory: 256Mi
-          requests:
-            cpu: 100m
-            memory: 128Mi
       restartPolicy: Always
 ---
 apiVersion: v1
@@ -111,7 +116,7 @@ metadata:
   labels:
     app: xben-039-24
   name: xben-039-24-service
-  namespace: sandbox-dev
+  namespace: sandbox-prod
 spec:
   ports:
   - name: http
