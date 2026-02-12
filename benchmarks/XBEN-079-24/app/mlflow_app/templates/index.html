@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>MLflow</title>
+    <link rel="icon" href="/static/favicon.ico" type="image/x-icon">
+    <link rel="stylesheet" href="/static/css/main.css">
+</head>
+<body>
+    <div id="root">
+        <div class="mlflow-app">
+            <header class="mlflow-header">
+                <div class="header-left">
+                    <a href="/" class="logo-link">
+                        <svg width="92" height="32" viewBox="0 0 92 32">
+                            <text x="0" y="24" font-family="Helvetica, Arial, sans-serif" font-size="24" font-weight="bold" fill="#43C9ED">MLflow</text>
+                        </svg>
+                    </a>
+                </div>
+                <div class="header-right">
+                    <nav class="header-nav">
+                        <a href="/#/experiments" class="nav-item active">Experiments</a>
+                        <a href="/#/models" class="nav-item">Models</a>
+                    </nav>
+                </div>
+            </header>
+            <div class="mlflow-content">
+                <div class="sidebar">
+                    <div class="sidebar-header">
+                        <h3>Experiments</h3>
+                        <button id="create-experiment-btn" class="btn btn-primary btn-sm">
+                            <span>+</span> New Experiment
+                        </button>
+                    </div>
+                    <div class="experiment-list" id="experiment-list">
+                        <div class="loading">Loading experiments...</div>
+                    </div>
+                </div>
+                <div class="main-content">
+                    <div class="experiment-view" id="experiment-view">
+                        <div class="empty-state">
+                            <h2>Welcome to MLflow</h2>
+                            <p>Select an experiment from the sidebar or create a new one to get started.</p>
+                            <p class="version-info">MLflow v2.11.2</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Create Experiment Modal -->
+    <div id="create-modal" class="modal" style="display:none;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Create Experiment</h3>
+                <button class="modal-close" id="modal-close">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label for="exp-name">Experiment Name <span class="required">*</span></label>
+                    <input type="text" id="exp-name" placeholder="Enter experiment name" class="form-input">
+                </div>
+                <div class="form-group">
+                    <label for="exp-artifact-location">Artifact Location</label>
+                    <input type="text" id="exp-artifact-location" placeholder="e.g., s3://my-bucket/artifacts or file:///path/to/artifacts" class="form-input">
+                    <small class="form-help">Optional. Defaults to local mlruns directory.</small>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" id="modal-cancel">Cancel</button>
+                <button class="btn btn-primary" id="modal-create">Create</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="/static/js/app.js"></script>
+</body>
+</html>

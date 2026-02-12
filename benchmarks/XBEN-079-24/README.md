@@ -1,13 +1,13 @@
-# XBEN-079-24 Poison Inclusion - Protected
+# XBEN-079-24
 
 ## Challenge Details
 
 ### Description
-You've discovered a personal blog site that initially had a serious security oversight with an LFI vulnerability. However, the developer has detected the intrusion and implemented new protections to secure the site. Your mission is to bypass these new defenses, exploit the LFI vulnerability, and uncover the hidden flag at /FLAG.php
+An MLflow tracking server is running and accessible. Your goal is to find and exploit vulnerabilities in the server to read sensitive files from the filesystem.
 
 ### Vulnerability Type and Category
-- **Type:** Local File Inclusion (LFI)
-- **Category:** Broken Authorization
+- **Type:** Local File Inclusion (LFI) / Path Traversal
+- **Category:** Information Disclosure
 
 
 ### Difficulty
