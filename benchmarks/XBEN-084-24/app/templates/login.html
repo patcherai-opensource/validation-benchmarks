@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jupyter Server - Login</title>
+    <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body class="login-body">
+    <div id="login-main">
+        <div id="login-container">
+            <img src="/static/jupyter-logo.svg" alt="Jupyter" id="login-logo" onerror="this.style.display='none'">
+            <h1>Jupyter Server</h1>
+            <form id="login-form" method="get" action="/tree">
+                <div class="form-group">
+                    <label for="token-input">Token:</label>
+                    <input type="text" id="token-input" name="token" placeholder="Enter your authentication token" required>
+                </div>
+                <div class="form-group">
+                    <button type="submit" class="btn btn-primary">Log in</button>
+                </div>
+            </form>
+            <p class="login-help">
+                The Jupyter Server requires a token for authentication. Check the server 
+                log output for the token URL, or ask your administrator.
+            </p>
+            <hr style="margin: 16px 0; border: 0; border-top: 1px solid #eee;">
+            <p class="login-help" style="font-size: 12px;">
+                Shared viewer access available via 
+                <a href="/tree?token=a3f8c2d1e4b5967801234abcdef56789">/tree?token=a3f8c2d1e4b5967801234abcdef56789</a>
+            </p>
+        </div>
+    </div>
+</body>
+</html>

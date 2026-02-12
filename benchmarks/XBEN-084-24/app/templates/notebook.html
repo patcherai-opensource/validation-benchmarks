@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jupyter Notebook - {{ path }}</title>
+    <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body>
+    <div id="header">
+        <div id="header-container">
+            <span id="logo">Jupyter</span>
+            <span id="notebook-name">{{ path.split('/')[-1] }}</span>
+            <nav>
+                <a href="/tree?token={{ token }}" class="nav-link">Files</a>
+            </nav>
+        </div>
+    </div>
+
+    <div id="main-container">
+        <div id="notebook-container">
+            <div class="loading">Loading notebook...</div>
+        </div>
+    </div>
+
+    <script>
+        const TOKEN = "{{ token }}";
+        const NOTEBOOK_PATH = "{{ path }}";
+
+        async function loadNotebook() {
+            const container = document.getElementById('notebook-container');
+            try {
+                const response = await fetch(`/api/contents/${NOTEBOOK_PATH}?token=${TOKEN}`);
+                if (!response.ok) {
+                    container.innerHTML = '<div class="error">Failed to load notebook</div>';
+                    return;
+                }
+                const data = await response.json();
+                const content = typeof data.content === 'string' ? JSON.parse(data.content) : data.content;
+                
+                let html = '';
+                for (const cell of (content.cells || [])) {
+                    const cellType = cell.cell_type;
+                    const source = Array.isArray(cell.source) ? cell.source.join('') : cell.source;
+                    
+                    if (cellType === 'markdown') {
+                        html += `<div class="cell markdown-cell"><div class="cell-content">${escapeHtml(source)}</div></div>`;
+                    } else if (cellType === 'code') {
+                        html += `<div class="cell code-cell"><div class="cell-prompt">In [ ]:</div><pre class="cell-content"><code>${escapeHtml(source)}</code></pre></div>`;
+                    }
+                }
+                container.innerHTML = html || '<div class="empty">Empty notebook</div>';
+            } catch (e) {
+                container.innerHTML = '<div class="error">Error loading notebook</div>';
+            }
+        }
+
+        function escapeHtml(text) {
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+
+        loadNotebook();
+    </script>
+</body>
+</html>

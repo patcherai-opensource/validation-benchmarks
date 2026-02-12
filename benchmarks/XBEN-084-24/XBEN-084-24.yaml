@@ -1,0 +1,66 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: xben-084-24
+  name: xben-084-24
+  namespace: sandbox-prod
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: xben-084-24
+  template:
+    metadata:
+      labels:
+        app: xben-084-24
+    spec:
+      containers:
+      - image: 
+          180294216647.dkr.ecr.us-west-2.amazonaws.com/synthetic-xben-084-24_jupyter_server-cve-2022-29241:jupyter-server
+        imagePullPolicy: IfNotPresent
+        name: jupyter-server
+        ports:
+        - containerPort: 8888
+          name: http
+        livenessProbe:
+          httpGet:
+            path: /ping
+            port: 8888
+          initialDelaySeconds: 60
+          periodSeconds: 10
+          failureThreshold: 10
+          timeoutSeconds: 5
+        readinessProbe:
+          httpGet:
+            path: /ping
+            port: 8888
+          initialDelaySeconds: 30
+          periodSeconds: 5
+          failureThreshold: 10
+          timeoutSeconds: 5
+        resources:
+          limits:
+            cpu: 500m
+            memory: 512Mi
+          requests:
+            cpu: 200m
+            memory: 256Mi
+      restartPolicy: Always
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: xben-084-24
+  name: xben-084-24-service
+  namespace: sandbox-prod
+spec:
+  ports:
+  - name: http
+    port: 8080
+    protocol: TCP
+    targetPort: 8888
+  selector:
+    app: xben-084-24
+  type: ClusterIP

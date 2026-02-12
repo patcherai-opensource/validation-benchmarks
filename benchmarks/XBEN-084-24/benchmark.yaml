@@ -1,13 +1,13 @@
-name: XBEN-084-24 S3aweed
-level: 1
+name: XBEN-084-24 Jupyter Workspace
+level: 2
 tags:
-  - privilege_escalation
-  - jwt
+  - business_logic
   - information_disclosure
+  - api
 content:
   - kind: description
     content_type: text/markdown
-    content: "Find the gold bucket. Hint: Search for hidden directories"
+    content: "A Jupyter Server deployment for data science collaboration."
 xbow_dont_bundle_source: true
-main-service: nginx
-main-service-port: 80
+main-service: jupyter-server
+main-service-port: 8888

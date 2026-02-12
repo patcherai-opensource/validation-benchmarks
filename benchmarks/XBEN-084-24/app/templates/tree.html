@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jupyter Server - Files</title>
+    <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body>
+    <div id="header">
+        <div id="header-container">
+            <span id="logo">Jupyter</span>
+            <nav>
+                <a href="/tree?token={{ token }}" class="nav-link active">Files</a>
+                <a href="#" class="nav-link">Running</a>
+                <a href="#" class="nav-link">Clusters</a>
+            </nav>
+            <span id="header-right">
+                <span class="btn btn-sm" id="logout-btn" onclick="window.location='/login'">Logout</span>
+            </span>
+        </div>
+    </div>
+
+    <div id="main-container">
+        <div id="notebook-list">
+            <div id="breadcrumb">
+                <a href="/tree?token={{ token }}">Home</a>
+                {% if path %}
+                    {% for part in path.split('/') %}
+                        <span class="sep">/</span>
+                        <a href="/tree/{{ '/'.join(path.split('/')[:loop.index]) }}?token={{ token }}">{{ part }}</a>
+                    {% endfor %}
+                {% endif %}
+            </div>
+            <div id="file-list">
+                <div class="loading">Loading...</div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const TOKEN = "{{ token }}";
+        const CURRENT_PATH = "{{ path }}";
+
+        async function loadContents() {
+            const fileList = document.getElementById('file-list');
+            try {
+                const response = await fetch(`/api/contents/${CURRENT_PATH}?token=${TOKEN}`);
+                if (!response.ok) {
+                    fileList.innerHTML = '<div class="error">Failed to load contents</div>';
+                    return;
+                }
+                const data = await response.json();
+                
+                if (data.type === 'directory') {
+                    let html = '<table class="file-table"><thead><tr><th></th><th>Name</th><th>Last Modified</th><th>Size</th></tr></thead><tbody>';
+                    
+                    if (CURRENT_PATH) {
+                        const parentPath = CURRENT_PATH.split('/').slice(0, -1).join('/');
+                        html += `<tr class="file-row"><td class="icon">📁</td><td><a href="/tree/${parentPath}?token=${TOKEN}">..</a></td><td></td><td></td></tr>`;
+                    }
+                    
+                    for (const item of data.content || []) {
+                        const icon = item.type === 'directory' ? '📁' : (item.type === 'notebook' ? '📓' : '📄');
+                        const link = item.type === 'directory' 
+                            ? `/tree/${item.path}?token=${TOKEN}`
+                            : (item.type === 'notebook' 
+                                ? `/notebooks/${item.path}?token=${TOKEN}` 
+                                : `/api/contents/${item.path}?token=${TOKEN}`);
+                        const size = item.size ? formatBytes(item.size) : '-';
+                        const modified = item.last_modified ? new Date(item.last_modified).toLocaleString() : '-';
+                        html += `<tr class="file-row"><td class="icon">${icon}</td><td><a href="${link}">${item.name}</a></td><td>${modified}</td><td>${size}</td></tr>`;
+                    }
+                    
+                    html += '</tbody></table>';
+                    fileList.innerHTML = html;
+                } else {
+                    fileList.innerHTML = `<pre>${data.content || 'No content'}</pre>`;
+                }
+            } catch (e) {
+                fileList.innerHTML = '<div class="error">Error loading contents</div>';
+            }
+        }
+
+        function formatBytes(bytes) {
+            if (bytes === 0) return '0 B';
+            const k = 1024;
+            const sizes = ['B', 'KB', 'MB', 'GB'];
+            const i = Math.floor(Math.log(bytes) / Math.log(k));
+            return parseFloat((bytes / Math.pow(k, i)).toFixed(1)) + ' ' + sizes[i];
+        }
+
+        loadContents();
+    </script>
+</body>
+</html>
