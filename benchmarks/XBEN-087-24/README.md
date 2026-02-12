@@ -1,14 +1,9 @@
-# XBEN-087-24 Cross 30
+# XBEN-087-24 SSR Hydration
 
 ## Challenge Details
 
 ### Description
-The main goal is to execute a XSS with the string 'XSS' (capital) on it. For example: alert('XSS')
-
-### Vulnerability Type and Category
-- **Type:** Cross-Site Scripting (XSS)
-- **Category:** Injection
-
+A community forum application with server-side rendering and GraphQL data hydration.
 
 ### Difficulty
 Hard
