@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+{% block title %}Pay for Order #{{ order.id }} - Storefront{% endblock %}
+{% block content %}
+<h2>Pay for Order #{{ order.id }}</h2>
+<p>Total: <strong>${{ order.total }} {{ order.currency }}</strong></p>
+
+{% if payment_intent %}
+<div class="card">
+    <div class="card-body">
+        <h5 class="card-title">Payment via Stripe</h5>
+        <p>Payment Intent: <code>{{ payment_intent.intent_id }}</code></p>
+        <p>Status: <span class="wc-badge wc-badge-{{ payment_intent.status }}">{{ payment_intent.status }}</span></p>
+        <div id="stripe-card-element" class="form-control mb-3" style="padding: 12px; background: #f7f7f7;">
+            <em>Card form would be rendered by Stripe.js</em>
+        </div>
+        <button class="btn btn-primary" disabled>Place Order</button>
+        <p class="text-muted mt-2"><small>Payments processed securely via Stripe.</small></p>
+    </div>
+</div>
+{% else %}
+<div class="alert alert-warning">No payment intent found for this order.</div>
+{% endif %}
+{% endblock %}

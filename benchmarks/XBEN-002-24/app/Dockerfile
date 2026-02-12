@@ -23,7 +23,10 @@ RUN a2dissite 000-default.conf
 RUN a2ensite idor_indirect_trading_platform-httpd.conf
 RUN a2enmod headers
 
-# Configure Apache to log to stdout/stderr for K8s compatibility
+# Suppress server version in headers
+RUN echo "ServerTokens Prod" >> /etc/apache2/apache2.conf
+
+# Configure Apache to log to stdout/stderr
 RUN ln -sf /dev/stdout /var/log/apache2/access.log \
     && ln -sf /dev/stderr /var/log/apache2/error.log
 

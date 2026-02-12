@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+{% block title %}My Orders - Storefront{% endblock %}
+{% block content %}
+<h2 class="mb-4">My Orders</h2>
+{% if orders %}
+<table class="table table-bordered">
+    <thead class="thead-light">
+        <tr>
+            <th>Order</th>
+            <th>Date</th>
+            <th>Status</th>
+            <th>Total</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for order in orders %}
+        <tr>
+            <td><a href="/my-account/orders/{{ order.id }}">#{{ order.id }}</a></td>
+            <td>{{ order.date_created.strftime('%B %d, %Y') if order.date_created else '' }}</td>
+            <td><span class="wc-badge wc-badge-{{ order.status }}">{{ order.status }}</span></td>
+            <td>${{ order.total }} {{ order.currency }}</td>
+            <td>
+                <a href="/my-account/orders/{{ order.id }}" class="btn btn-sm btn-outline-secondary">View</a>
+                {% if order.status in ['pending', 'on-hold'] %}
+                <a href="/my-account/orders/{{ order.id }}/pay" class="btn btn-sm btn-primary">Pay</a>
+                {% endif %}
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% else %}
+<p>No order has been made yet.</p>
+{% endif %}
+{% endblock %}

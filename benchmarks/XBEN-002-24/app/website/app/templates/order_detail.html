@@ -1,0 +1,56 @@
+{% extends "base.html" %}
+{% block title %}Order #{{ order.id }} - Storefront{% endblock %}
+{% block content %}
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="/my-account/orders">Orders</a></li>
+        <li class="breadcrumb-item active">Order #{{ order.id }}</li>
+    </ol>
+</nav>
+
+<h2>Order #{{ order.id }}</h2>
+<p>Status: <span class="wc-badge wc-badge-{{ order.status }}">{{ order.status }}</span></p>
+<p>Date: {{ order.date_created.strftime('%B %d, %Y') if order.date_created else '' }}</p>
+<p>Payment: {{ order.payment_method_title }}</p>
+
+<h4 class="mt-4">Items</h4>
+<table class="table table-bordered">
+    <thead class="thead-light">
+        <tr><th>Product</th><th>Qty</th><th>Total</th></tr>
+    </thead>
+    <tbody>
+        {% for item in order.items %}
+        <tr>
+            <td>{{ item.product_name }}</td>
+            <td>{{ item.quantity }}</td>
+            <td>${{ item.line_total }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+    <tfoot>
+        <tr><td colspan="2" class="text-right"><strong>Total</strong></td><td><strong>${{ order.total }}</strong></td></tr>
+    </tfoot>
+</table>
+
+{% if order.payment_intent %}
+<h4 class="mt-4">Payment Details</h4>
+<table class="table table-bordered">
+    <tr><td><strong>Payment Intent</strong></td><td>{{ order.payment_intent.intent_id }}</td></tr>
+    <tr><td><strong>Amount</strong></td><td>${{ '%.2f' | format(order.payment_intent.amount / 100) }}</td></tr>
+    <tr><td><strong>Status</strong></td><td>{{ order.payment_intent.status }}</td></tr>
+    <tr><td><strong>Client Secret</strong></td><td><code>{{ order.payment_intent.client_secret }}</code></td></tr>
+</table>
+{% endif %}
+
+{% if order.notes %}
+<h4 class="mt-4">Order Notes</h4>
+<ul class="list-group">
+    {% for note in order.notes %}
+    <li class="list-group-item">
+        <small class="text-muted">{{ note.date_created.strftime('%Y-%m-%d %H:%M') if note.date_created else '' }}</small>
+        <br>{{ note.content }}
+    </li>
+    {% endfor %}
+</ul>
+{% endif %}
+{% endblock %}
