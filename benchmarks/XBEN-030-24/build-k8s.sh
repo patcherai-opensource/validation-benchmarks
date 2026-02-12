@@ -11,18 +11,17 @@ echo "Using FLAG: $FLAG"
 
 # Build MySQL container
 echo "Building MySQL container..."
-docker build -t wordpress-ctf-mysql:latest ./mysql
+docker build --platform linux/amd64 -t dolibarr-erp-mysql:latest ./mysql
 
-# Build WordPress container
-echo "Building WordPress container..."
-docker build --build-arg FLAG="$FLAG" -t wordpress-ctf-app:latest ./wordpress
+# Build Web App container
+echo "Building webapp container..."
+docker build --platform linux/amd64 --build-arg FLAG="$FLAG" -t dolibarr-erp-webapp:latest ./wordpress
 
 echo "Containers built successfully!"
-echo "MySQL image: wordpress-ctf-mysql:latest"
-echo "WordPress image: wordpress-ctf-app:latest"
+echo "MySQL image: dolibarr-erp-mysql:latest"
+echo "WebApp image: dolibarr-erp-webapp:latest"
 echo ""
 echo "To deploy to Kubernetes:"
 echo "1. Tag and push images to your registry"
-echo "2. Update k8s.yaml with actual image names"
-echo "3. Replace PLACEHOLDER_FLAG with actual flag"
-echo "4. Apply with: kubectl apply -f k8s.yaml"
+echo "2. Update XBEN-030-24.yaml with actual image names"
+echo "3. Apply with: kubectl apply -f XBEN-030-24.yaml"

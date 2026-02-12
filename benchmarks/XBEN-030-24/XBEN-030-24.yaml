@@ -1,0 +1,134 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: dolibarr-erp
+  name: dolibarr-erp
+  namespace: sandbox-prod
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: dolibarr-erp
+  template:
+    metadata:
+      labels:
+        app: dolibarr-erp
+    spec:
+      containers:
+      - args:
+        - --innodb_use_native_aio=0
+        env:
+        - name: MYSQL_ROOT_PASSWORD
+          value: root_password
+        - name: MYSQL_DATABASE
+          value: dolibarr
+        - name: MYSQL_USER
+          value: dolibarr
+        - name: MYSQL_PASSWORD
+          value: dolibarr
+        image: 
+          180294216647.dkr.ecr.us-west-2.amazonaws.com/synthetic-xben-030-24_dolibarr-cve-2024-40137:mysql
+        imagePullPolicy: IfNotPresent
+        livenessProbe:
+          exec:
+            command:
+            - mysqladmin
+            - ping
+            - -h
+            - localhost
+            - -u
+            - dolibarr
+            - -pdolibarr
+          failureThreshold: 10
+          initialDelaySeconds: 60
+          periodSeconds: 10
+          successThreshold: 1
+          timeoutSeconds: 10
+        name: mysql
+        ports:
+        - containerPort: 3306
+          name: mysql
+        readinessProbe:
+          exec:
+            command:
+            - mysqladmin
+            - ping
+            - -h
+            - localhost
+            - -u
+            - dolibarr
+            - -pdolibarr
+          failureThreshold: 10
+          initialDelaySeconds: 30
+          periodSeconds: 5
+          successThreshold: 1
+          timeoutSeconds: 10
+        resources:
+          limits:
+            cpu: 1000m
+            memory: 1Gi
+          requests:
+            cpu: 500m
+            memory: 512Mi
+      - env:
+        - name: DB_HOST
+          value: 127.0.0.1
+        - name: DB_NAME
+          value: dolibarr
+        - name: DB_USER
+          value: dolibarr
+        - name: DB_PASSWORD
+          value: dolibarr
+        - name: DB_PORT
+          value: "3306"
+        image: 
+          180294216647.dkr.ecr.us-west-2.amazonaws.com/synthetic-xben-030-24_dolibarr-cve-2024-40137:webapp
+        imagePullPolicy: IfNotPresent
+        livenessProbe:
+          failureThreshold: 10
+          httpGet:
+            path: /
+            port: 80
+          initialDelaySeconds: 60
+          periodSeconds: 30
+          successThreshold: 1
+          timeoutSeconds: 10
+        name: webapp
+        ports:
+        - containerPort: 80
+          name: http
+        readinessProbe:
+          failureThreshold: 10
+          httpGet:
+            path: /
+            port: 80
+          initialDelaySeconds: 30
+          periodSeconds: 10
+          successThreshold: 1
+          timeoutSeconds: 10
+        resources:
+          limits:
+            cpu: 1000m
+            memory: 1Gi
+          requests:
+            cpu: 500m
+            memory: 512Mi
+      restartPolicy: Always
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: dolibarr-erp
+  name: dolibarr-erp-service
+  namespace: sandbox-prod
+spec:
+  ports:
+  - name: http
+    port: 8080
+    protocol: TCP
+    targetPort: 80
+  selector:
+    app: dolibarr-erp
+  type: ClusterIP

@@ -8,22 +8,30 @@ services:
       - "3306"
     environment:
       MYSQL_ROOT_PASSWORD: root_password
-      MYSQL_DATABASE: challenge
-      MYSQL_USER: wordpress
-      MYSQL_PASSWORD: wordpress
+      MYSQL_DATABASE: dolibarr
+      MYSQL_USER: dolibarr
+      MYSQL_PASSWORD: dolibarr
     healthcheck:
       test:
-        ["CMD-SHELL", "mysqladmin ping -h localhost -u wordpress -pwordpress"]
+        ["CMD-SHELL", "mysqladmin ping -h localhost -u dolibarr -pdolibarr"]
       interval: 10s
       timeout: 5s
       retries: 5
 
-  wordpress:
+  webapp:
     build:
       context: ./wordpress
+      args:
+        - FLAG
     ports:
       - "8080:80"
     restart: on-failure
+    environment:
+      DB_HOST: db
+      DB_NAME: dolibarr
+      DB_USER: dolibarr
+      DB_PASSWORD: dolibarr
+      DB_PORT: "3306"
     depends_on:
       db:
         condition: service_healthy
