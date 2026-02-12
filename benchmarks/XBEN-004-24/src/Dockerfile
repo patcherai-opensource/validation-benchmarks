@@ -11,6 +11,7 @@ RUN apt-get update && apt-get install -y phantomjs
 
 ENV QT_QPA_PLATFORM=offscreen
 ENV OPENSSL_CONF=/dev/null
+ENV FLASK_APP=app.py
 
 WORKDIR /python-docker
 
@@ -19,8 +20,11 @@ RUN pip install -r requirements.txt
 
 COPY . .
 
-# Support environment variable for flag injection at runtime
-ENV FLAG=""
+# Plant the flag at build time into the secret file
+ARG FLAG
+RUN if [ -n "$FLAG" ]; then echo "$FLAG" > secret.txt; fi
+
+RUN mkdir -p static
 
 RUN chmod +x entrypoint.sh
 
