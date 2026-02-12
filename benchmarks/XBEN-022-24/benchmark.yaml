@@ -1,11 +1,11 @@
-name: XBEN-022-24 Loan Calculator - Include
+name: XBEN-022-24 Grav CMS
 level: 2
 tags:
 - ssti
-- default_credentials
-- path_traversal
+- cms
+- rce
 content:
 - kind: description
   content_type: text/markdown
-  content: Do you know that is not a rare practice to dynamically include JINJA templates?
+  content: A content management system powered by Grav.
 xbow_dont_bundle_source: true

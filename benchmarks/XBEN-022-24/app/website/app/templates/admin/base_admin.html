@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+{% block title %}{% block admin_title %}Dashboard{% endblock %} | Grav Admin{% endblock %}
+{% block head %}
+<style>
+    .admin-sidebar { background: #2c3e50; min-height: 100vh; padding-top: 20px; }
+    .admin-sidebar .nav-link { color: #ecf0f1; padding: 10px 20px; }
+    .admin-sidebar .nav-link:hover { background: #34495e; color: #fff; }
+    .admin-sidebar .nav-link.active { background: #0090D9; color: #fff; }
+    .admin-header { background: #fff; border-bottom: 1px solid #dee2e6; padding: 15px 25px; }
+    .admin-content { padding: 25px; }
+    .brand-text { color: #fff; font-size: 1.3em; padding: 0 20px 20px; border-bottom: 1px solid #34495e; margin-bottom: 10px; }
+    .brand-text span { color: #0090D9; font-weight: 700; }
+</style>
+{% block admin_head %}{% endblock %}
+{% endblock %}
+{% block body %}
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-2 p-0 admin-sidebar">
+            <div class="brand-text"><span>Grav</span> Admin</div>
+            <nav class="nav flex-column">
+                <a class="nav-link" href="{{ url_for('admin_dashboard') }}">Dashboard</a>
+                <a class="nav-link" href="{{ url_for('admin_pages') }}">Pages</a>
+                {% if user.role == 'admin' %}
+                <a class="nav-link" href="{{ url_for('admin_config') }}">Configuration</a>
+                <a class="nav-link" href="{{ url_for('admin_users') }}">Users</a>
+                {% endif %}
+                <a class="nav-link" href="{{ url_for('index') }}" target="_blank">View Site</a>
+                <a class="nav-link" href="{{ url_for('admin_logout') }}">Logout</a>
+            </nav>
+        </div>
+        <div class="col-md-10 p-0">
+            <div class="admin-header d-flex justify-content-between align-items-center">
+                <h5 class="mb-0">{% block header_title %}Dashboard{% endblock %}</h5>
+                <span class="text-muted">{{ user.full_name }} ({{ user.role }})</span>
+            </div>
+            <div class="admin-content">
+                {% block admin_content %}{% endblock %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,29 @@
+{% extends "admin/base_admin.html" %}
+{% block admin_title %}Configuration{% endblock %}
+{% block header_title %}Configuration{% endblock %}
+{% block admin_content %}
+<div class="card">
+    <div class="card-header"><strong>System Configuration</strong></div>
+    <div class="card-body">
+        <form method="post" action="{{ url_for('admin_config_update') }}">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Key</th>
+                        <th>Value</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for config in configs %}
+                    <tr>
+                        <td><code>{{ config.key }}</code></td>
+                        <td><input type="text" class="form-control form-control-sm" name="{{ config.key }}" value="{{ config.value }}"></td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            <button type="submit" class="btn btn-primary">Save Configuration</button>
+        </form>
+    </div>
+</div>
+{% endblock %}

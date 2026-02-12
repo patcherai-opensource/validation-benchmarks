@@ -1,0 +1,65 @@
+{% extends "admin/base_admin.html" %}
+{% block admin_title %}{{ 'New Page' if is_new else 'Edit: ' + page.title }}{% endblock %}
+{% block header_title %}{{ 'New Page' if is_new else 'Edit: ' + page.title }}{% endblock %}
+{% block admin_content %}
+{% if error %}
+<div class="alert alert-danger">{{ error }}</div>
+{% endif %}
+
+<form method="post" action="{{ url_for('admin_page_new') if is_new else url_for('admin_page_edit', page_id=page.id) }}">
+    <div class="row">
+        <div class="col-md-9">
+            <div class="card mb-3">
+                <div class="card-header"><strong>Content</strong></div>
+                <div class="card-body">
+                    <div class="mb-3">
+                        <label for="title" class="form-label">Page Title</label>
+                        <input type="text" class="form-control" id="title" name="title" value="{{ page.title if page else '' }}" required>
+                    </div>
+                    {% if is_new %}
+                    <div class="mb-3">
+                        <label for="slug" class="form-label">Slug</label>
+                        <input type="text" class="form-control" id="slug" name="slug" value="" required placeholder="my-page-url">
+                    </div>
+                    {% endif %}
+                    <div class="mb-3">
+                        <label for="content" class="form-label">Page Content</label>
+                        <textarea class="form-control" id="content" name="content" rows="15">{{ page.content if page else '' }}</textarea>
+                        <small class="text-muted">HTML content. When Twig Processing is enabled, Twig/Jinja2 template expressions will be evaluated.</small>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card mb-3">
+                <div class="card-header"><strong>Options</strong></div>
+                <div class="card-body">
+                    <div class="mb-3">
+                        <label for="template" class="form-label">Page Template</label>
+                        <select class="form-select" id="template" name="template">
+                            <option value="default" {{ 'selected' if (not page or page.template == 'default') else '' }}>Default</option>
+                            <option value="blog" {{ 'selected' if page and page.template == 'blog' else '' }}>Blog</option>
+                            <option value="sidebar" {{ 'selected' if page and page.template == 'sidebar' else '' }}>Sidebar</option>
+                        </select>
+                    </div>
+                    <div class="mb-3 form-check">
+                        <input type="checkbox" class="form-check-input" id="process_twig" name="process_twig" {{ 'checked' if page and page.process_twig else '' }}>
+                        <label class="form-check-label" for="process_twig">Twig Processing</label>
+                        <br><small class="text-muted">Enable Twig template processing for this page</small>
+                    </div>
+                    <div class="mb-3 form-check">
+                        <input type="checkbox" class="form-check-input" id="visible" name="visible" {{ 'checked' if (not page or page.visible) else '' }}>
+                        <label class="form-check-label" for="visible">Visible</label>
+                    </div>
+                    <div class="mb-3 form-check">
+                        <input type="checkbox" class="form-check-input" id="routable" name="routable" {{ 'checked' if (not page or page.routable) else '' }}>
+                        <label class="form-check-label" for="routable">Routable</label>
+                    </div>
+                </div>
+            </div>
+            <button type="submit" class="btn btn-primary w-100">{{ 'Create Page' if is_new else 'Save' }}</button>
+            <a href="{{ url_for('admin_pages') }}" class="btn btn-outline-secondary w-100 mt-2">Cancel</a>
+        </div>
+    </div>
+</form>
+{% endblock %}
