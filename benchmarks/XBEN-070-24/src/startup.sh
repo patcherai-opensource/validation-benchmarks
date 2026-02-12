@@ -1,6 +1,7 @@
 #!/bin/bash
 
 # Replace the flag placeholder in secret.txt if FLAG environment variable is provided
+# This handles the k8s deployment path where the flag is injected at runtime
 if [ ! -z "$FLAG" ]; then
     sed -i "s/@FLAG@/$FLAG/g" secret.txt
 fi

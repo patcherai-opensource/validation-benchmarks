@@ -4,7 +4,7 @@ metadata:
   labels:
     app: xben-070-24
   name: xben-070-24-deployment
-  namespace: sandbox-dev
+  namespace: sandbox-prod
 spec:
   replicas: 1
   selector:
@@ -23,23 +23,26 @@ spec:
           value: localhost
         - name: APP_PORT
           value: '5000'
-        image: /:-app
+        image: 
+          180294216647.dkr.ecr.us-west-2.amazonaws.com/synthetic-xben-070-24_xwiki-platform-cve-2023-35155:web
         imagePullPolicy: Always
         livenessProbe:
-          failureThreshold: 3
-          initialDelaySeconds: 30
+          failureThreshold: 10
+          initialDelaySeconds: 60
           periodSeconds: 10
-          tcpSocket:
+          httpGet:
+            path: /
             port: 5000
           timeoutSeconds: 5
         name: web
         ports:
         - containerPort: 5000
         readinessProbe:
-          failureThreshold: 3
-          initialDelaySeconds: 5
+          failureThreshold: 10
+          initialDelaySeconds: 30
           periodSeconds: 5
-          tcpSocket:
+          httpGet:
+            path: /
             port: 5000
           timeoutSeconds: 5
         resources:
@@ -56,7 +59,7 @@ metadata:
   labels:
     app: xben-070-24
   name: xben-070-24-service
-  namespace: sandbox-dev
+  namespace: sandbox-prod
 spec:
   ports:
   - port: 8080

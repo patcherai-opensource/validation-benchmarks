@@ -1,0 +1,302 @@
+/* XWiki Platform Stylesheet */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    font-size: 14px;
+    line-height: 1.5;
+    color: #333;
+    background-color: #f5f5f5;
+}
+
+a {
+    color: #2563eb;
+    text-decoration: none;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
+#xwiki-platform {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+/* Header */
+#xwiki-header {
+    background-color: #1a1a2e;
+    color: #fff;
+    border-bottom: 3px solid #e94560;
+}
+
+.header-inner {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+    display: flex;
+    align-items: center;
+    height: 56px;
+}
+
+.header-inner .logo {
+    color: #fff;
+    font-size: 22px;
+    font-weight: bold;
+    text-decoration: none;
+    margin-right: 30px;
+    letter-spacing: 1px;
+}
+
+.header-nav ul {
+    list-style: none;
+    display: flex;
+    gap: 0;
+}
+
+.header-nav ul li a {
+    color: #ccc;
+    padding: 16px 14px;
+    display: block;
+    font-size: 13px;
+    transition: background-color 0.2s;
+}
+
+.header-nav ul li a:hover {
+    color: #fff;
+    background-color: rgba(255,255,255,0.1);
+    text-decoration: none;
+}
+
+.header-nav ul li.active a {
+    color: #fff;
+    border-bottom: 2px solid #e94560;
+}
+
+.header-actions {
+    margin-left: auto;
+}
+
+.user-info {
+    color: #aaa;
+    font-size: 13px;
+}
+
+/* Content */
+#xwiki-content {
+    flex: 1;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+    width: 100%;
+}
+
+.content-inner {
+    background: #fff;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    padding: 0;
+}
+
+.page-header {
+    padding: 20px 24px;
+    border-bottom: 1px solid #eee;
+}
+
+.page-header h1 {
+    font-size: 24px;
+    font-weight: 600;
+    color: #1a1a2e;
+    margin-bottom: 6px;
+}
+
+.page-meta {
+    font-size: 12px;
+    color: #888;
+}
+
+.page-meta .author {
+    margin-right: 16px;
+}
+
+/* Action tabs */
+.page-actions {
+    border-bottom: 1px solid #ddd;
+    background: #fafafa;
+}
+
+.action-tabs {
+    list-style: none;
+    display: flex;
+    padding: 0 24px;
+    gap: 0;
+}
+
+.action-tabs li a {
+    display: block;
+    padding: 10px 16px;
+    font-size: 13px;
+    color: #555;
+    border-bottom: 2px solid transparent;
+    transition: all 0.2s;
+}
+
+.action-tabs li a:hover {
+    color: #333;
+    text-decoration: none;
+    background-color: #f0f0f0;
+}
+
+.action-tabs li.active a {
+    color: #1a1a2e;
+    border-bottom-color: #e94560;
+    font-weight: 500;
+}
+
+/* Page body */
+.page-body {
+    padding: 24px;
+}
+
+.page-body h2 {
+    font-size: 18px;
+    font-weight: 600;
+    color: #1a1a2e;
+    margin: 16px 0 8px;
+    padding-bottom: 4px;
+    border-bottom: 1px solid #eee;
+}
+
+.page-body p {
+    margin-bottom: 12px;
+}
+
+.page-body ul {
+    margin: 8px 0 12px 24px;
+}
+
+.page-body li {
+    margin-bottom: 4px;
+}
+
+/* Message boxes */
+.box {
+    padding: 12px 16px;
+    border-radius: 4px;
+    margin: 12px 0;
+    font-size: 13px;
+}
+
+.box.errormessage {
+    background-color: #fef2f2;
+    border: 1px solid #fecaca;
+    color: #991b1b;
+}
+
+.box.successmessage {
+    background-color: #f0fdf4;
+    border: 1px solid #bbf7d0;
+    color: #166534;
+}
+
+.box.infomessage {
+    background-color: #eff6ff;
+    border: 1px solid #bfdbfe;
+    color: #1e40af;
+}
+
+.box.warning {
+    background-color: #fffbeb;
+    border: 1px solid #fde68a;
+    color: #92400e;
+}
+
+/* Share panel */
+.share-panel {
+    margin-top: 8px;
+}
+
+.share-panel h2 {
+    font-size: 16px;
+    margin-bottom: 16px;
+    color: #1a1a2e;
+    border-bottom: 1px solid #eee;
+    padding-bottom: 8px;
+}
+
+.form-group {
+    margin-bottom: 14px;
+}
+
+.form-group label {
+    display: block;
+    font-size: 13px;
+    font-weight: 500;
+    color: #555;
+    margin-bottom: 4px;
+}
+
+.form-input {
+    width: 100%;
+    max-width: 480px;
+    padding: 8px 10px;
+    border: 1px solid #ccc;
+    border-radius: 3px;
+    font-size: 13px;
+    font-family: inherit;
+    transition: border-color 0.2s;
+}
+
+.form-input:focus {
+    outline: none;
+    border-color: #2563eb;
+    box-shadow: 0 0 0 2px rgba(37,99,235,0.15);
+}
+
+.form-actions {
+    margin-top: 16px;
+}
+
+.btn {
+    display: inline-block;
+    padding: 8px 20px;
+    font-size: 13px;
+    font-weight: 500;
+    border: none;
+    border-radius: 3px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.btn-primary {
+    background-color: #1a1a2e;
+    color: #fff;
+}
+
+.btn-primary:hover {
+    background-color: #2d2d4e;
+}
+
+/* Footer */
+#xwiki-footer {
+    background-color: #1a1a2e;
+    color: #888;
+    border-top: 1px solid #333;
+}
+
+.footer-inner {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 16px 20px;
+    text-align: center;
+    font-size: 12px;
+}
+
+.footer-inner a {
+    color: #aaa;
+}
