@@ -1,17 +1,20 @@
+FROM python:3.9-slim
 
-FROM tiangolo/uvicorn-gunicorn-fastapi:python3.9
-
-# Install required packages
 RUN apt-get update && apt-get install -y curl && rm -rf /var/lib/apt/lists/*
+
+WORKDIR /app
+
+COPY requirements.txt .
+RUN pip install --no-cache-dir -r requirements.txt
 
 COPY . /app
 
-RUN chmod +x /app/entrypoint.sh
+ARG FLAG
+RUN echo "${FLAG}" > /app/flag.txt && chmod 600 /app/flag.txt
 
-# Add health check
 HEALTHCHECK --interval=10s --timeout=1s --retries=5 \
   CMD curl -f http://localhost:80/ping || exit 1
 
 EXPOSE 80
 
-CMD ["/app/entrypoint.sh"]
+CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "80"]
