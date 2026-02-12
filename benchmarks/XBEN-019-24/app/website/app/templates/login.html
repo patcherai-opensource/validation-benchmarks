@@ -3,67 +3,84 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login</title>
-    <link href="/resource?filename=css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <title>TeamPass | Collaborative Passwords Manager</title>
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+    <style>
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .login-card {
+            max-width: 420px;
+            width: 100%;
+            border: none;
+            border-radius: 12px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+        }
+        .login-card .card-header {
+            background: #343a40;
+            color: #fff;
+            text-align: center;
+            border-radius: 12px 12px 0 0 !important;
+            padding: 24px;
+        }
+        .login-card .card-header img {
+            max-height: 40px;
+            margin-bottom: 8px;
+        }
+        .login-card .card-body {
+            padding: 32px;
+        }
+        .teampass-brand {
+            font-size: 1.5rem;
+            font-weight: 700;
+            letter-spacing: 1px;
+        }
+        .teampass-version {
+            font-size: 0.75rem;
+            color: #adb5bd;
+        }
+    </style>
 </head>
 <body>
-    <div class="container">
-        <div class="row justify-content-center mt-5">
-            <div class="col-md-6">
-                <div class="card">
-                    <div class="card-body">
-                        <h2 class="card-title text-center">Login</h2>
-                        <form id="loginForm" action="{{ url_for('login') }}" method="post">
-                            <div class="mb-3">
-                                <label for="username" class="form-label">Username:</label>
-                                <input type="text" class="form-control" id="username" name="username" required>
-                                <div class="invalid-feedback">
-                                    Please provide a username.
-                                </div>
-                            </div>
-                            <div class="mb-3">
-                                <label for="password" class="form-label">Password:</label>
-                                <input type="password" class="form-control" id="password" name="password" required>
-                                <div class="invalid-feedback">
-                                    Please provide a password.
-                                </div>
-                            </div>
-                            <button type="submit" class="btn btn-primary">Login</button>
-                        </form>
-                        <!-- Alert for displaying login errors -->
-                        <div id="loginAlert" class="alert alert-danger mt-3 d-none" role="alert">
-                            Incorrect username or password. Please try again.
-                        </div>
-                    </div>
+    <div class="login-card card">
+        <div class="card-header">
+            <div class="teampass-brand">🔐 TeamPass</div>
+            <div class="teampass-version">v3.0.9 - Collaborative Passwords Manager</div>
+        </div>
+        <div class="card-body">
+            {% if error %}
+            <div class="alert alert-danger" role="alert">
+                {{ error }}
+            </div>
+            {% endif %}
+            <form method="post" action="/login">
+                <div class="mb-3">
+                    <label for="login" class="form-label">Login</label>
+                    <input type="text" class="form-control" id="login" name="login" placeholder="Enter your login" required autofocus>
                 </div>
+                <div class="mb-3">
+                    <label for="pw" class="form-label">Password</label>
+                    <input type="password" class="form-control" id="pw" name="pw" placeholder="Enter your password" required>
+                </div>
+                <div class="mb-3">
+                    <label for="duo_code" class="form-label">2FA Code <small class="text-muted">(if enabled)</small></label>
+                    <input type="text" class="form-control" id="duo_code" name="duo_code" placeholder="DUO / Google Auth code">
+                </div>
+                <button type="submit" class="btn btn-primary w-100">Connect</button>
+            </form>
+            <hr>
+            <div class="text-center">
+                <small class="text-muted">
+                    Forgotten password? Contact your administrator.
+                </small>
             </div>
         </div>
     </div>
 
-    <!-- Bootstrap Bundle with Popper -->
-    <script src="/resource?filename=js/bootstrap.bundle.min.js"></script>
-    
-    <!-- Custom JavaScript for login form -->
-    <script>
-        // Get the form element
-        const form = document.getElementById('loginForm');
-
-        // Add event listener to form submission
-        form.addEventListener('submit', function(event) {
-            // Prevent the form from submitting
-            event.preventDefault();
-
-            // Perform your own validation here if needed
-            // For simplicity, let's just show an alert
-            const username = document.getElementById('username').value;
-            const password = document.getElementById('password').value;
-
-
-            // Always display error message
-            document.getElementById('loginAlert').classList.remove('d-none');
-
-        });
-    </script>
+    <script src="/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
