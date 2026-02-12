@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ARRP - Advanced Runtime Resource Pack Manager</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: #1a1a2e; color: #e0e0e0; }
+        .navbar { background: #16213e !important; border-bottom: 1px solid #0f3460; }
+        .navbar-brand { color: #e94560 !important; font-weight: bold; }
+        .card { background: #16213e; border: 1px solid #0f3460; margin-bottom: 1rem; }
+        .card-header { background: #0f3460; color: #e0e0e0; border-bottom: 1px solid #533483; }
+        .btn-primary { background: #e94560; border-color: #e94560; }
+        .btn-primary:hover { background: #c23152; border-color: #c23152; }
+        .btn-danger { background: #dc3545; border-color: #dc3545; }
+        .form-control { background: #1a1a2e; color: #e0e0e0; border-color: #0f3460; }
+        .form-control:focus { background: #1a1a2e; color: #e0e0e0; border-color: #e94560; box-shadow: 0 0 0 0.2rem rgba(233,69,96,.25); }
+        .table { color: #e0e0e0; }
+        .table thead th { border-color: #0f3460; }
+        .table td { border-color: #0f3460; }
+        pre { background: #0d1117; color: #c9d1d9; padding: 1rem; border-radius: 6px; }
+        .hero { padding: 3rem 0; text-align: center; }
+        .hero h1 { color: #e94560; }
+        .status-badge { display: inline-block; padding: 2px 8px; border-radius: 4px; font-size: 0.8em; }
+        .status-ok { background: #238636; color: white; }
+        .status-err { background: #dc3545; color: white; }
+        #pack-list { min-height: 100px; }
+        .footer { margin-top: 3rem; padding: 1.5rem 0; text-align: center; color: #666; font-size: 0.9em; border-top: 1px solid #0f3460; }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-md navbar-dark">
+        <div class="container">
+            <a class="navbar-brand" href="/">ARRP Manager</a>
+            <div class="navbar-nav ml-auto">
+                <a class="nav-link" href="/api/v1/docs">API Docs</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container mt-4">
+        <div class="hero">
+            <h1>Runtime Resource Pack Manager</h1>
+            <p class="lead">Create, manage, and dump runtime resource packs for your Minecraft mods</p>
+            <p><span class="status-badge status-ok">v0.8.1</span></p>
+        </div>
+
+        <div class="row">
+            <div class="col-md-4">
+                <div class="card">
+                    <div class="card-header">
+                        <h5 class="mb-0">Create Pack</h5>
+                    </div>
+                    <div class="card-body">
+                        <form id="create-pack-form">
+                            <div class="form-group">
+                                <label for="pack-name">Pack Name</label>
+                                <input type="text" class="form-control" id="pack-name" placeholder="my-resource-pack" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="pack-desc">Description</label>
+                                <textarea class="form-control" id="pack-desc" rows="2" placeholder="Optional description"></textarea>
+                            </div>
+                            <button type="submit" class="btn btn-primary btn-block">Create Pack</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-8">
+                <div class="card">
+                    <div class="card-header d-flex justify-content-between align-items-center">
+                        <h5 class="mb-0">Resource Packs</h5>
+                        <button class="btn btn-sm btn-primary" onclick="loadPacks()">Refresh</button>
+                    </div>
+                    <div class="card-body">
+                        <div id="pack-list">
+                            <p class="text-muted">Loading packs...</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row mt-3" id="pack-detail-section" style="display:none;">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h5 class="mb-0">Pack Details: <span id="detail-pack-name"></span></h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <h6>Add Resource</h6>
+                                <form id="add-resource-form">
+                                    <input type="hidden" id="resource-pack-id">
+                                    <div class="form-group">
+                                        <label>Namespace</label>
+                                        <input type="text" class="form-control" id="resource-namespace" value="minecraft">
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Path (comma-separated segments)</label>
+                                        <input type="text" class="form-control" id="resource-path" placeholder="textures,block,stone.png">
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Content</label>
+                                        <textarea class="form-control" id="resource-content" rows="3"></textarea>
+                                    </div>
+                                    <button type="submit" class="btn btn-primary">Add Resource</button>
+                                </form>
+                            </div>
+                            <div class="col-md-6">
+                                <h6>Resources</h6>
+                                <div id="resource-list"></div>
+                                <hr>
+                                <button class="btn btn-primary btn-sm" onclick="dumpPack()">Dump to Disk</button>
+                                <div id="dump-result" class="mt-2"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="footer">
+        <div class="container">
+            <p>ARRP Resource Pack Manager &mdash; Runtime resource generation for Fabric mods</p>
+        </div>
+    </div>
+
+    <script>
+        let currentPackId = null;
+
+        function loadPacks() {
+            fetch('/api/v1/packs')
+                .then(r => r.json())
+                .then(data => {
+                    const list = document.getElementById('pack-list');
+                    if (data.packs.length === 0) {
+                        list.innerHTML = '<p class="text-muted">No packs created yet.</p>';
+                        return;
+                    }
+                    let html = '<table class="table table-sm"><thead><tr><th>ID</th><th>Name</th><th>Resources</th><th>Actions</th></tr></thead><tbody>';
+                    data.packs.forEach(p => {
+                        html += `<tr>
+                            <td><code>${p.pack_id}</code></td>
+                            <td>${p.name}</td>
+                            <td>${p.resource_count}</td>
+                            <td>
+                                <button class="btn btn-sm btn-primary" onclick="viewPack('${p.pack_id}')">View</button>
+                                <button class="btn btn-sm btn-danger" onclick="deletePack('${p.pack_id}')">Delete</button>
+                            </td>
+                        </tr>`;
+                    });
+                    html += '</tbody></table>';
+                    list.innerHTML = html;
+                });
+        }
+
+        function viewPack(id) {
+            currentPackId = id;
+            document.getElementById('resource-pack-id').value = id;
+            fetch(`/api/v1/packs/${id}`)
+                .then(r => r.json())
+                .then(data => {
+                    document.getElementById('detail-pack-name').textContent = data.name;
+                    document.getElementById('pack-detail-section').style.display = 'block';
+                    let html = '';
+                    if (data.resources && data.resources.length > 0) {
+                        data.resources.forEach(r => {
+                            html += `<div class="mb-1"><code>${r.namespace}:${r.path}</code></div>`;
+                        });
+                    } else {
+                        html = '<p class="text-muted">No resources.</p>';
+                    }
+                    document.getElementById('resource-list').innerHTML = html;
+                });
+        }
+
+        function deletePack(id) {
+            fetch(`/api/v1/packs/${id}`, { method: 'DELETE' })
+                .then(() => {
+                    loadPacks();
+                    if (currentPackId === id) {
+                        document.getElementById('pack-detail-section').style.display = 'none';
+                    }
+                });
+        }
+
+        function dumpPack() {
+            if (!currentPackId) return;
+            fetch(`/api/v1/packs/${currentPackId}/dump`, { method: 'POST' })
+                .then(r => r.json())
+                .then(data => {
+                    document.getElementById('dump-result').innerHTML = `<pre>${JSON.stringify(data, null, 2)}</pre>`;
+                });
+        }
+
+        document.getElementById('create-pack-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            fetch('/api/v1/packs', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    name: document.getElementById('pack-name').value,
+                    description: document.getElementById('pack-desc').value
+                })
+            }).then(() => {
+                loadPacks();
+                this.reset();
+            });
+        });
+
+        document.getElementById('add-resource-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const packId = document.getElementById('resource-pack-id').value;
+            const pathStr = document.getElementById('resource-path').value;
+            const segments = pathStr.split(',').map(s => s.trim());
+            fetch(`/api/v1/packs/${packId}/resources`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    namespace: document.getElementById('resource-namespace').value,
+                    path: segments,
+                    content: document.getElementById('resource-content').value
+                })
+            }).then(() => {
+                viewPack(packId);
+                document.getElementById('resource-content').value = '';
+                document.getElementById('resource-path').value = '';
+            });
+        });
+
+        loadPacks();
+    </script>
+</body>
+</html>

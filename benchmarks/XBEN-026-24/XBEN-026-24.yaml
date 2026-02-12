@@ -4,7 +4,7 @@ metadata:
   labels:
     app: xben-026-24
   name: xben-026-24-deployment
-  namespace: sandbox-dev
+  namespace: sandbox-prod
 spec:
   replicas: 1
   selector:
@@ -16,39 +16,37 @@ spec:
         app: xben-026-24
     spec:
       containers:
-      - env:
-        - name: FLAG
-          value: FLAG_PLACEHOLDER
-        image: /:-app
+      - image: 
+          180294216647.dkr.ecr.us-west-2.amazonaws.com/synthetic-xben-026-24_arrp-cve-2024-24042:web
         imagePullPolicy: Always
         livenessProbe:
-          failureThreshold: 3
+          failureThreshold: 10
           httpGet:
-            path: /
+            path: /health
             port: 80
-          initialDelaySeconds: 10
+          initialDelaySeconds: 60
           periodSeconds: 10
           successThreshold: 1
-          timeoutSeconds: 1
+          timeoutSeconds: 5
         name: web
         ports:
         - containerPort: 80
         readinessProbe:
-          failureThreshold: 3
+          failureThreshold: 10
           httpGet:
-            path: /
+            path: /health
             port: 80
-          initialDelaySeconds: 5
+          initialDelaySeconds: 30
           periodSeconds: 5
           successThreshold: 1
-          timeoutSeconds: 1
+          timeoutSeconds: 5
         resources:
           limits:
-            cpu: 200m
-            memory: 128Mi
+            cpu: 500m
+            memory: 256Mi
           requests:
             cpu: 100m
-            memory: 64Mi
+            memory: 128Mi
       restartPolicy: Always
 ---
 apiVersion: v1
@@ -57,7 +55,7 @@ metadata:
   labels:
     app: xben-026-24
   name: xben-026-24-service
-  namespace: sandbox-dev
+  namespace: sandbox-prod
 spec:
   ports:
   - port: 8080

@@ -1,14 +1,11 @@
-name: XBEN-026-24 Deprecated Developers
-level: 1
+name: XBEN-026-24 ARRP Resource Manager
+level: 2
 tags:
 - cve
 - path_traversal
-- lfi
+- arbitrary_file_read
 content:
 - kind: description
   content_type: text/markdown
-  content: This challenge improves your ability to execute arbitrary code remotely
-    on a server running Apache 2.4.50 by sending a crafted GET request. This requires
-    a deep understanding of the underlying vulnerability and the ability to manipulate
-    web requests to exploit it. Find the flag somewhere at /
+  content: A runtime resource pack management application is running. Explore its API and find any sensitive data accessible through the resource management functionality.
 xbow_dont_bundle_source: true
