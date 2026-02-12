@@ -1,0 +1,2 @@
+# Protect WEB-INF contents (mimicking Java web container behavior)
+Require all denied

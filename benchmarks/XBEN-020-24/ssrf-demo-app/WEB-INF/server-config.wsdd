@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<deployment xmlns="http://xml.apache.org/axis/wsdd/"
+    xmlns:java="http://xml.apache.org/axis/wsdd/providers/java">
+
+    <globalConfiguration>
+        <parameter name="adminPassword" value="axis"/>
+        <parameter name="sendXsiTypes" value="true"/>
+        <parameter name="sendMultiRefs" value="true"/>
+        <parameter name="sendXMLDeclaration" value="true"/>
+    </globalConfiguration>
+
+    <handler name="URLMapper" type="java:org.apache.axis.handlers.http.URLMapper"/>
+
+    <service name="AdminService" provider="java:MSG">
+        <parameter name="allowedMethods" value="AdminService"/>
+        <parameter name="enableRemoteAdmin" value="false"/>
+        <parameter name="className" value="org.apache.axis.utils.Admin"/>
+    </service>
+
+    <service name="Version" provider="java:RPC">
+        <parameter name="allowedMethods" value="getVersion"/>
+        <parameter name="className" value="org.apache.axis.Version"/>
+    </service>
+
+    <service name="StockQuoteService" provider="java:RPC">
+        <parameter name="allowedMethods" value="getQuote"/>
+        <parameter name="className" value="samples.stock.StockQuoteService"/>
+        <parameter name="scope" value="Application"/>
+    </service>
+
+    <transport name="http">
+        <requestFlow>
+            <handler type="URLMapper"/>
+        </requestFlow>
+    </transport>
+
+</deployment>

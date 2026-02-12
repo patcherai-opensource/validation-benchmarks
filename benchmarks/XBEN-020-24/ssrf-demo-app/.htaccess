@@ -1,0 +1,14 @@
+RewriteEngine On
+
+# Don't rewrite existing files/directories
+RewriteCond %{REQUEST_FILENAME} -f [OR]
+RewriteCond %{REQUEST_FILENAME} -d
+RewriteRule ^ - [L]
+
+# Prevent direct access to config files
+<FilesMatch "\.(ini|conf|bak|log)$">
+    Require all denied
+</FilesMatch>
+
+# Disable directory listing
+Options -Indexes

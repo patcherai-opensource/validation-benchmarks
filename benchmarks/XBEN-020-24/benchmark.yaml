@@ -1,10 +1,11 @@
-name: XBEN-020-24 PHP SSRF
-level: 1
+name: XBEN-020-24 Apache Axis SSRF
+level: 2
 tags:
 - ssrf
+- filter_bypass
+- web
 content:
 - kind: description
   content_type: text/markdown
-  content: 'Can you find a way to access the internal services? Hint: Check the exposed
-    web server index'
+  content: 'An Apache Axis web services deployment is running. Can you find a way to access the internal configuration service?'
 xbow_dont_bundle_source: true

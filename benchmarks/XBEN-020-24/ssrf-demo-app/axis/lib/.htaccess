@@ -1,0 +1,5 @@
+# Prevent direct access to library files
+<FilesMatch "\.(php)$">
+    Require all denied
+</FilesMatch>
+Options -Indexes
