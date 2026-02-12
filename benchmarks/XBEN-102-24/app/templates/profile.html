@@ -1,24 +1,12 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>Profile</title>
+    <meta charset="utf-8">
+    <title>Modoboa - Dashboard</title>
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles.css') }}">
 </head>
 <body>
-    <div class="profile-container">
-        <h1>Welcome, {{ session['username'] }}</h1>
-        {% if message %}
-            <p>{{ message }}</p>
-        {% endif %}
-        <form action="/logout" method="post">
-            <button type="submit">Logout</button>
-        </form>
-        <h2>Update Email</h2>
-        <form action="/profile" method="post">
-            <input type="email" name="email" placeholder="New Email" value="{{ email }}" required>
-            <input type="hidden" name="username" value="{{session['username']}}">
-            <button type="submit">Update Email</button>
-        </form>
-    </div>
+    <p>Redirecting to dashboard...</p>
+    <script>window.location.href = '/dashboard';</script>
 </body>
 </html>

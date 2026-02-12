@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Modoboa - Profile Private</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    <div class="container">
+        <div class="detail-card">
+            <h2>Profile Not Public</h2>
+            <p>This user's profile is not publicly available.</p>
+        </div>
+        <a href="{{ url_for('login') }}" class="btn">Login</a>
+    </div>
+</body>
+</html>

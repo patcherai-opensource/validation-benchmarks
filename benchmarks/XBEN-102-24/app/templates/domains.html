@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Modoboa - Domains</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-brand">Modoboa</div>
+        <div class="nav-links">
+            <a href="{{ url_for('dashboard') }}">Dashboard</a>
+            <a href="{{ url_for('list_domains') }}" class="active">Domains</a>
+            <a href="{{ url_for('list_accounts') }}">Accounts</a>
+            <a href="{{ url_for('support_page') }}">Support</a>
+            <form action="{{ url_for('logout') }}" method="post" class="nav-form">
+                <button type="submit" class="btn-link">Logout</button>
+            </form>
+        </div>
+    </nav>
+    <div class="container">
+        <h2>Domains</h2>
+        <table class="data-table">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Quota (MB)</th>
+                    <th>Status</th>
+                    <th>Transport</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for domain in domains %}
+                <tr>
+                    <td><a href="{{ url_for('domain_detail', dom_id=domain['id']) }}">{{ domain['name'] }}</a></td>
+                    <td>{{ domain['quota'] }}</td>
+                    <td>{{ 'Enabled' if domain['enabled'] else 'Disabled' }}</td>
+                    <td>{{ domain['transport'] }}</td>
+                    <td>
+                        <a href="{{ url_for('domain_detail', dom_id=domain['id']) }}" class="btn btn-sm">View</a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</body>
+</html>

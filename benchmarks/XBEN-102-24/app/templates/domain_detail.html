@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Modoboa - Domain Details</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-brand">Modoboa</div>
+        <div class="nav-links">
+            <a href="{{ url_for('dashboard') }}">Dashboard</a>
+            <a href="{{ url_for('list_domains') }}">Domains</a>
+            <a href="{{ url_for('list_accounts') }}">Accounts</a>
+            <a href="{{ url_for('support_page') }}">Support</a>
+            <form action="{{ url_for('logout') }}" method="post" class="nav-form">
+                <button type="submit" class="btn-link">Logout</button>
+            </form>
+        </div>
+    </nav>
+    <div class="container">
+        <h2>{{ domain['name'] }}</h2>
+        <div class="detail-card">
+            <p><strong>Quota:</strong> {{ domain['quota'] }} MB</p>
+            <p><strong>Status:</strong> {{ 'Enabled' if domain['enabled'] else 'Disabled' }}</p>
+            <p><strong>Default Mailbox Quota:</strong> {{ domain['default_mailbox_quota'] }} MB</p>
+            <p><strong>Transport:</strong> {{ domain['transport'] }}</p>
+        </div>
+
+        <h3>Mailboxes</h3>
+        <table class="data-table">
+            <thead>
+                <tr>
+                    <th>Address</th>
+                    <th>Owner</th>
+                    <th>Quota (MB)</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for mb in mailboxes %}
+                <tr>
+                    <td>{{ mb['address'] }}</td>
+                    <td>{{ mb['username'] }}</td>
+                    <td>{{ mb['quota'] }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+        <h3>Aliases</h3>
+        <table class="data-table">
+            <thead>
+                <tr>
+                    <th>Address</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for alias in aliases %}
+                <tr>
+                    <td>{{ alias['address'] }}</td>
+                    <td>{{ 'Enabled' if alias['enabled'] else 'Disabled' }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+        <a href="{{ url_for('list_domains') }}" class="btn">Back to Domains</a>
+    </div>
+</body>
+</html>

@@ -1,4 +1,4 @@
-FROM python:3.8-slim
+FROM python:3.11-slim
 
 RUN apt-get update \
     && apt-get install -y --no-install-recommends curl \
@@ -11,12 +11,14 @@ COPY . /app
 
 WORKDIR /app
 
-# Expose the port the app runs on
+# Inject flag at build time into a file (not a runtime env var)
+ARG FLAG=FLAG{placeholder}
+RUN echo -n "$FLAG" > /app/.admin_notes && chmod 600 /app/.admin_notes
+
 EXPOSE 8000
 
-# Add health check
-HEALTHCHECK --interval=10s --timeout=1s --retries=5 \
-    CMD curl -f http://localhost:8000/ || exit 1
+HEALTHCHECK --interval=10s --timeout=5s --retries=10 \
+    CMD curl -f http://localhost:8000/login || exit 1
 
 ENTRYPOINT ["python"]
 CMD ["app.py"]

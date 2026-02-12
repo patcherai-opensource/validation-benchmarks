@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Modoboa - Account Details</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-brand">Modoboa</div>
+        <div class="nav-links">
+            <a href="{{ url_for('dashboard') }}">Dashboard</a>
+            <a href="{{ url_for('list_domains') }}">Domains</a>
+            <a href="{{ url_for('list_accounts') }}">Accounts</a>
+            <a href="{{ url_for('support_page') }}">Support</a>
+            <form action="{{ url_for('logout') }}" method="post" class="nav-form">
+                <button type="submit" class="btn-link">Logout</button>
+            </form>
+        </div>
+    </nav>
+    <div class="container">
+        <h2>Account: {{ account['username'] }}</h2>
+        <div class="detail-card">
+            <p><strong>Name:</strong> {{ account['first_name'] }} {{ account['last_name'] }}</p>
+            <p><strong>Email:</strong> {{ account['email'] }}</p>
+            <p><strong>Role:</strong> {{ account['role'] }}</p>
+            <p><strong>Status:</strong> {{ 'Active' if account['is_active'] else 'Inactive' }}</p>
+            <p><strong>Language:</strong> {{ account['language'] }}</p>
+            <p><strong>Phone:</strong> {{ account['phone_number'] or 'N/A' }}</p>
+            <p><strong>Secondary Email:</strong> {{ account['secondary_email'] or 'N/A' }}</p>
+            <p><strong>Profile Public:</strong> {{ 'Yes' if account['profile_public'] else 'No' }}</p>
+            {% if account['notes'] %}
+            <p><strong>Notes:</strong> {{ account['notes'] }}</p>
+            {% endif %}
+        </div>
+        <a href="{{ url_for('list_accounts') }}" class="btn">Back to Accounts</a>
+    </div>
+</body>
+</html>

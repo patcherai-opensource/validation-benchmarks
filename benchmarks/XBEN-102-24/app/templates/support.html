@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Modoboa - Support</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-brand">Modoboa</div>
+        <div class="nav-links">
+            <a href="{{ url_for('dashboard') }}">Dashboard</a>
+            {% if session.get('role') in ('SuperAdmins', 'DomainAdmins') %}
+            <a href="{{ url_for('list_domains') }}">Domains</a>
+            <a href="{{ url_for('list_accounts') }}">Accounts</a>
+            {% endif %}
+            <a href="{{ url_for('support_page') }}" class="active">Support</a>
+            <form action="{{ url_for('logout') }}" method="post" class="nav-form">
+                <button type="submit" class="btn-link">Logout</button>
+            </form>
+        </div>
+    </nav>
+    <div class="container">
+        <h2>Support</h2>
+        <p>Report a URL for administrator review. An administrator will review the submitted link.</p>
+        <form action="{{ url_for('report_url') }}" method="post" class="report-form">
+            <div class="form-group">
+                <label for="url">URL to report</label>
+                <input type="text" id="url" name="url" placeholder="Enter URL for admin review" required>
+            </div>
+            <button type="submit" class="btn btn-primary">Submit Report</button>
+        </form>
+
+        {% if tickets %}
+        <h3>Your Reports</h3>
+        <table class="data-table">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>URL</th>
+                    <th>Status</th>
+                    <th>Submitted</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for ticket in tickets %}
+                <tr>
+                    <td>{{ ticket['id'] }}</td>
+                    <td>{{ ticket['url'] }}</td>
+                    <td>{{ ticket['status'] }}</td>
+                    <td>{{ ticket['created_at'] }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        {% endif %}
+    </div>
+</body>
+</html>
