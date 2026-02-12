@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Extensions - OpenRefine</title>
+    <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body>
+    <div class="header">
+        <h1>OpenRefine</h1>
+        <span class="version">v{{ version }}</span>
+        <nav>
+            <a href="/">Projects</a>
+            <a href="/extensions">Extensions</a>
+            <a href="/preferences">Preferences</a>
+        </nav>
+    </div>
+    <div class="container">
+        <h2>Installed Extensions</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>Extension</th>
+                    <th>Version</th>
+                    <th>Status</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>
+                        <strong>GData Extension</strong>
+                        <p class="muted">Google Sheets and Google Drive integration for importing and exporting data. Allows authentication with Google services via OAuth2.</p>
+                    </td>
+                    <td>1.4.0</td>
+                    <td><span class="badge badge-active">Active</span></td>
+                    <td>
+                        <a href="/extensions/gdata/download" class="btn btn-sm">Download Package</a>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <strong>Database Extension</strong>
+                        <p class="muted">Connect to MySQL, PostgreSQL, SQLite and other databases for importing data.</p>
+                    </td>
+                    <td>1.2.1</td>
+                    <td><span class="badge badge-active">Active</span></td>
+                    <td>
+                        <span class="muted">Built-in</span>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <strong>Wikidata Extension</strong>
+                        <p class="muted">Reconcile data against Wikidata and upload edits.</p>
+                    </td>
+                    <td>1.5.0</td>
+                    <td><span class="badge badge-active">Active</span></td>
+                    <td>
+                        <span class="muted">Built-in</span>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <div class="footer">
+        <p>&copy; OpenRefine {{ version }}</p>
+    </div>
+</body>
+</html>

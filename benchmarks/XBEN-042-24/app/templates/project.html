@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{{ project.name }} - OpenRefine</title>
+    <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body>
+    <div class="header">
+        <h1>OpenRefine</h1>
+        <span class="version">v{{ version }}</span>
+        <nav>
+            <a href="/">Projects</a>
+            <a href="/extensions">Extensions</a>
+            <a href="/preferences">Preferences</a>
+        </nav>
+    </div>
+    <div class="container">
+        <h2>{{ project.name }}</h2>
+        <p class="muted">Created: {{ project.created }} &middot; {{ project.rows }} rows</p>
+
+        {% if rows %}
+        <table>
+            <tbody>
+                {% for row in rows %}
+                <tr>
+                    {% for cell in row %}
+                    <td>{{ cell }}</td>
+                    {% endfor %}
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        {% else %}
+        <p class="muted">No data in this project.</p>
+        {% endif %}
+
+        <div class="actions">
+            <a href="/" class="btn">Back to Projects</a>
+            <form method="POST" action="/project/{{ project.id }}/delete" style="display:inline">
+                <button type="submit" class="btn btn-danger">Delete Project</button>
+            </form>
+        </div>
+    </div>
+    <div class="footer">
+        <p>&copy; OpenRefine {{ version }}</p>
+    </div>
+</body>
+</html>

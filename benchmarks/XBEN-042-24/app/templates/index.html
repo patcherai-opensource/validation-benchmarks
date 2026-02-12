@@ -2,40 +2,67 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta http-equiv="refresh" content="5">
-    <title>Server Processes</title>
-    <style>
-        body { font-family: Arial, sans-serif; }
-        table { width: 100%; border-collapse: collapse; }
-        th, td { border: 1px solid #ddd; padding: 8px; text-align: left; }
-        th { background-color: #f2f2f2; }
-    </style>
+    <title>OpenRefine</title>
+    <link rel="stylesheet" href="/static/css/style.css">
 </head>
 <body>
-    <h1>Server Processes</h1>
-    <table>
-        <tr>
-            <th>USER</th>
-            <th>PID</th>
-            <th>%CPU</th>
-            <th>%MEM</th>
-            <th>VSZ</th>
-            <th>RSS</th>
-            <th>TTY</th>
-            <th>STAT</th>
-            <th>START</th>
-            <th>TIME</th>
-            <th>COMMAND</th>
-        </tr>
-        {% for process in processes %}
-        <tr>
-            {% for item in process.split() %}
-            <td>{{ item }}</td>
-            {% endfor %}
-        </tr>
-        {% endfor %}
-    </table>
-    <a href="/source" style="font-size: small;">View Source Code</a>
+    <div class="header">
+        <h1>OpenRefine</h1>
+        <span class="version">v{{ version }}</span>
+        <nav>
+            <a href="/">Projects</a>
+            <a href="/extensions">Extensions</a>
+            <a href="/preferences">Preferences</a>
+        </nav>
+    </div>
+    <div class="container">
+        <h2>Open Project</h2>
+        {% if projects %}
+        <table>
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Name</th>
+                    <th>Created</th>
+                    <th>Rows</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for pid, p in projects.items() %}
+                <tr>
+                    <td>{{ p.id }}</td>
+                    <td><a href="/project/{{ p.id }}">{{ p.name }}</a></td>
+                    <td>{{ p.created }}</td>
+                    <td>{{ p.rows }}</td>
+                    <td>
+                        <form method="POST" action="/project/{{ p.id }}/delete" style="display:inline">
+                            <button type="submit" class="btn btn-sm btn-danger">Delete</button>
+                        </form>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        {% else %}
+        <p class="muted">No projects yet. Create one below.</p>
+        {% endif %}
+
+        <h2>Create Project</h2>
+        <form method="POST" action="/project">
+            <div class="form-group">
+                <label for="name">Project Name:</label>
+                <input type="text" id="name" name="name" placeholder="My Dataset" required>
+            </div>
+            <div class="form-group">
+                <label for="data">Paste Data (CSV):</label>
+                <textarea id="data" name="data" rows="8" placeholder="col1,col2,col3&#10;val1,val2,val3"></textarea>
+            </div>
+            <button type="submit" class="btn btn-primary">Create Project</button>
+        </form>
+    </div>
+    <div class="footer">
+        <p>&copy; OpenRefine {{ version }}</p>
+    </div>
 </body>
 </html>
-

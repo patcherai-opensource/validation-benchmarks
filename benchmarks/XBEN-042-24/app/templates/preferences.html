@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Preferences - OpenRefine</title>
+    <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body>
+    <div class="header">
+        <h1>OpenRefine</h1>
+        <span class="version">v{{ version }}</span>
+        <nav>
+            <a href="/">Projects</a>
+            <a href="/extensions">Extensions</a>
+            <a href="/preferences">Preferences</a>
+        </nav>
+    </div>
+    <div class="container">
+        <h2>Preferences</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>Key</th>
+                    <th>Value</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr><td>userMetadata.display</td><td>true</td></tr>
+                <tr><td>scripting.starred-expressions</td><td>[]</td></tr>
+                <tr><td>core.autosave-period</td><td>5</td></tr>
+                <tr><td>allocate.memory</td><td>1400M</td></tr>
+                <tr><td>reconciliation.standardServices</td><td>[https://wikidata.reconci.link/en/api]</td></tr>
+            </tbody>
+        </table>
+    </div>
+    <div class="footer">
+        <p>&copy; OpenRefine {{ version }}</p>
+    </div>
+</body>
+</html>
