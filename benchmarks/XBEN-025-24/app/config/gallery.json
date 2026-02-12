@@ -1,0 +1,141 @@
+{
+  "collections": [
+    {
+      "id": "contemporary",
+      "name": "Contemporary Collection",
+      "description": "Modern and contemporary art pieces from emerging artists worldwide",
+      "featured": true
+    },
+    {
+      "id": "abstract",
+      "name": "Abstract Expressions",
+      "description": "Abstract art exploring form, color, and emotion",
+      "featured": true
+    },
+    {
+      "id": "photography",
+      "name": "Photography Series",
+      "description": "Fine art photography capturing moments in time",
+      "featured": false
+    }
+  ],
+  "artworks": [
+    {
+      "id": 1,
+      "title": "DSC02674_11",
+      "artist": "M. Chen",
+      "description": "Computer Abstract Art Image",
+      "image": "r1.jpg",
+      "price": 850,
+      "collection": "abstract",
+      "medium": "Digital Print on Canvas",
+      "year": 2023
+    },
+    {
+      "id": 2,
+      "title": "Urban Street-Art",
+      "artist": "J. van der Berg",
+      "description": "Graffiti on a wooden construction-wall on Plantage Muidergracht",
+      "image": "r2.jpg",
+      "price": 560,
+      "collection": "contemporary",
+      "medium": "Mixed Media",
+      "year": 2022
+    },
+    {
+      "id": 3,
+      "title": "Abstract-9974",
+      "artist": "S. Nakamura",
+      "description": "Abstract Art Image",
+      "image": "r3.jpg",
+      "price": 650,
+      "collection": "abstract",
+      "medium": "Acrylic on Canvas",
+      "year": 2023
+    },
+    {
+      "id": 4,
+      "title": "Art 235",
+      "artist": "L. Fernandez",
+      "description": "Composite Image",
+      "image": "r4.jpg",
+      "price": 480,
+      "collection": "contemporary",
+      "medium": "Digital Composite",
+      "year": 2021
+    },
+    {
+      "id": 5,
+      "title": "Radiographic Image",
+      "artist": "K. Okafor",
+      "description": "African Songye Power Figure in the collection of the Indianapolis Museum of Art",
+      "image": "r5.jpg",
+      "price": 1130,
+      "collection": "photography",
+      "medium": "Radiographic Print",
+      "year": 2020
+    },
+    {
+      "id": 6,
+      "title": "Abstract00BO",
+      "artist": "B. Compton",
+      "description": "BTerryCompton Abstract Art Image",
+      "image": "r6.jpg",
+      "price": 840,
+      "collection": "abstract",
+      "medium": "Oil on Canvas",
+      "year": 2023
+    },
+    {
+      "id": 7,
+      "title": "Aliens Laughing",
+      "artist": "R. Torres",
+      "description": "Young gray aliens reading books, laughing",
+      "image": "r7.jpg",
+      "price": 650,
+      "collection": "contemporary",
+      "medium": "Digital Illustration",
+      "year": 2022
+    },
+    {
+      "id": 8,
+      "title": "Flower #56",
+      "artist": "A. Petrov",
+      "description": "134 flowers Sea Lavender Art",
+      "image": "r8.jpg",
+      "price": 900,
+      "collection": "photography",
+      "medium": "Photography Print",
+      "year": 2021
+    },
+    {
+      "id": 9,
+      "title": "White Wolves",
+      "artist": "D. Williams",
+      "description": "CPM Art Challenge Photo White Wolves, 2013",
+      "image": "r9.jpg",
+      "price": 730,
+      "collection": "photography",
+      "medium": "Photography Print",
+      "year": 2019
+    }
+  ],
+  "exhibitions": [
+    {
+      "id": "spring-2024",
+      "title": "Spring Exhibition 2024",
+      "description": "Our annual spring showcase featuring the best new works",
+      "startDate": "2024-03-15",
+      "endDate": "2024-05-30",
+      "active": true
+    },
+    {
+      "id": "digital-frontiers",
+      "title": "Digital Frontiers",
+      "description": "Exploring the intersection of technology and art",
+      "startDate": "2024-01-10",
+      "endDate": "2024-04-20",
+      "active": false
+    }
+  ]
+}

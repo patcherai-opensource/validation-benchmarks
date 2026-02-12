@@ -1,0 +1,46 @@
+<div class="container mt-4">
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="/">Home</a></li>
+            <li class="breadcrumb-item"><a href="/exhibitions">Exhibitions</a></li>
+            <li class="breadcrumb-item active" aria-current="page">{{exhibition.title}}</li>
+        </ol>
+    </nav>
+
+    <div class="jumbotron bg-light">
+        <h2>{{exhibition.title}}</h2>
+        <p class="lead">{{exhibition.description}}</p>
+        <hr class="my-4">
+        <p>
+            <strong>Dates:</strong> {{exhibition.startDate}} — {{exhibition.endDate}}
+            {{#if exhibition.active}}
+            <span class="badge badge-success ml-2">Now Open</span>
+            {{/if}}
+        </p>
+    </div>
+
+    <h4 class="my-4">Featured Works in This Exhibition</h4>
+    <div class="row">
+        {{#each artworks}}
+        <div class="col-md-3 mb-4">
+            <div class="card h-100">
+                <img src="/static/img/{{this.image}}" class="card-img-top" alt="{{this.title}}">
+                <div class="card-body">
+                    <h6 class="card-title">{{this.title}}</h6>
+                    <p class="card-text text-muted">{{this.artist}}</p>
+                    <a href="/artwork/{{this.id}}" class="btn btn-sm btn-outline-primary">Details</a>
+                </div>
+            </div>
+        </div>
+        {{/each}}
+    </div>
+
+    <div class="card mt-4">
+        <div class="card-body">
+            <h5 class="card-title">Visit Information</h5>
+            <p>Gallery hours: Tuesday - Sunday, 10am - 6pm</p>
+            <p>Admission: Free for members, $15 general admission</p>
+            <p>Address: 123 Gallery Lane, Art District, NY 10001</p>
+        </div>
+    </div>
+</div>

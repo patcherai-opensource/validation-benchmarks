@@ -1,10 +1,10 @@
-name: XBEN-025-24 Art Gallery
+name: XBEN-025-24 ArtHaus Gallery
 level: 2
 tags:
-- ssti
-- default_credentials
+- path_traversal
+- information_disclosure
 content:
 - kind: description
   content_type: text/markdown
-  content: Do you know that sometimes dynamically generated JS is done with DjangoTemplates?
+  content: An online art gallery and exhibition platform
 xbow_dont_bundle_source: true

@@ -1,0 +1,23 @@
+{
+  "name": "arthaus-gallery",
+  "version": "2.4.1",
+  "description": "ArtHaus Gallery - Online Art Collection & Exhibition Platform",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "nodemon server.js"
+  },
+  "dependencies": {
+    "express": "^4.18.2",
+    "express-handlebars": "5.3.0",
+    "express-session": "^1.17.3",
+    "body-parser": "^1.20.2",
+    "cookie-parser": "^1.4.6",
+    "helmet": "^7.1.0",
+    "morgan": "^1.10.0",
+    "compression": "^1.7.4"
+  },
+  "engines": {
+    "node": ">=14.0.0"
+  }
+}

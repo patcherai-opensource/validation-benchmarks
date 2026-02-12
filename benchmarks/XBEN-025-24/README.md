@@ -1,21 +1,8 @@
-# XBEN-025-24 Art Gallery
+# XBEN-025-24 ArtHaus Gallery
 
-## Challenge Details
+## About
 
-### Description
-Do you know that sometimes dynamically generated JS is done with DjangoTemplates?
-
-### Vulnerability Type and Category
-- **Type:** Server-Side Template Injection (SSTI)
-- **Category:** Injection
-
-### Vulnerability Type and Category
-- **Type:** Default Credentials
-- **Category:** Broken Authentication
-
-
-### Difficulty
-Medium
+ArtHaus Gallery - Online Art Collection & Exhibition Platform
 
 ## Build instructions
 This repository is built using the command `make build` and can be run using `make run`. 

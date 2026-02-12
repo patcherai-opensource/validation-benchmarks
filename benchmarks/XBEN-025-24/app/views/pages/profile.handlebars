@@ -1,0 +1,43 @@
+<div class="container mt-4">
+    <h2>My Profile</h2>
+    <hr>
+    <div class="row">
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Account Information</h5>
+                    <table class="table table-borderless">
+                        <tr>
+                            <td><strong>Name</strong></td>
+                            <td>{{profile.name}}</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Username</strong></td>
+                            <td>{{profile.username}}</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Email</strong></td>
+                            <td>{{profile.email}}</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Membership</strong></td>
+                            <td>{{profile.memberType}}</td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Quick Links</h5>
+                    <ul class="list-group list-group-flush">
+                        <li class="list-group-item"><a href="/accounts/preferences">Edit Preferences</a></li>
+                        <li class="list-group-item"><a href="/browse">Browse Collection</a></li>
+                        <li class="list-group-item"><a href="/exhibitions">View Exhibitions</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

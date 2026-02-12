@@ -1,0 +1,57 @@
+<div class="container mt-4">
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="/">Home</a></li>
+            <li class="breadcrumb-item"><a href="/browse">Browse</a></li>
+            <li class="breadcrumb-item active" aria-current="page">{{artwork.title}}</li>
+        </ol>
+    </nav>
+
+    <div class="row">
+        <div class="col-md-7">
+            <img src="/static/img/{{artwork.image}}" class="img-fluid rounded" alt="{{artwork.title}}">
+        </div>
+        <div class="col-md-5">
+            <h2>{{artwork.title}}</h2>
+            <h5 class="text-muted">by {{artwork.artist}}</h5>
+            <hr>
+            <p>{{artwork.description}}</p>
+            <table class="table table-borderless">
+                <tr>
+                    <td><strong>Medium</strong></td>
+                    <td>{{artwork.medium}}</td>
+                </tr>
+                <tr>
+                    <td><strong>Year</strong></td>
+                    <td>{{artwork.year}}</td>
+                </tr>
+                <tr>
+                    <td><strong>Collection</strong></td>
+                    <td>{{artwork.collection}}</td>
+                </tr>
+            </table>
+            <h3 class="mt-3">${{formatPrice artwork.price}}</h3>
+            <button class="btn btn-primary btn-lg mt-2" disabled>Purchase (Coming Soon)</button>
+            <p class="text-muted mt-2"><small>Contact us for purchasing inquiries.</small></p>
+        </div>
+    </div>
+
+    {{#if related}}
+    <hr class="my-5">
+    <h4>Related Works</h4>
+    <div class="row">
+        {{#each related}}
+        <div class="col-md-4 mb-4">
+            <div class="card">
+                <img src="/static/img/{{this.image}}" class="card-img-top" alt="{{this.title}}">
+                <div class="card-body">
+                    <h5 class="card-title">{{this.title}}</h5>
+                    <p class="card-text text-muted">{{this.artist}}</p>
+                    <a href="/artwork/{{this.id}}" class="btn btn-sm btn-outline-primary">View</a>
+                </div>
+            </div>
+        </div>
+        {{/each}}
+    </div>
+    {{/if}}
+</div>
