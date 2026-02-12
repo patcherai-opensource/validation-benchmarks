@@ -3,92 +3,75 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ultimate Job Aggregator</title>
-    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <title>OpenMetadata</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: #f8f9fa; color: #333; }
+        .header { background: #7147e8; color: white; padding: 16px 32px; display: flex; align-items: center; gap: 12px; }
+        .header img { height: 32px; }
+        .header h1 { font-size: 20px; font-weight: 600; }
+        .nav { background: white; border-bottom: 1px solid #e0e0e0; padding: 0 32px; display: flex; gap: 0; }
+        .nav a { padding: 12px 16px; text-decoration: none; color: #666; font-size: 14px; border-bottom: 2px solid transparent; }
+        .nav a:hover { color: #7147e8; }
+        .nav a.active { color: #7147e8; border-bottom-color: #7147e8; }
+        .container { max-width: 1200px; margin: 32px auto; padding: 0 32px; }
+        .card { background: white; border-radius: 8px; border: 1px solid #e0e0e0; padding: 24px; margin-bottom: 16px; }
+        .card h2 { font-size: 18px; margin-bottom: 16px; color: #333; }
+        .status-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px; }
+        .status-item { text-align: center; padding: 16px; border-radius: 8px; background: #f8f9fa; }
+        .status-item .count { font-size: 32px; font-weight: 700; color: #7147e8; }
+        .status-item .label { font-size: 13px; color: #888; margin-top: 4px; }
+        .login-prompt { text-align: center; margin-top: 48px; }
+        .login-prompt p { color: #666; margin-bottom: 16px; }
+        .btn { display: inline-block; padding: 10px 24px; background: #7147e8; color: white; border: none; border-radius: 6px; text-decoration: none; font-size: 14px; cursor: pointer; }
+        .btn:hover { background: #5c35c9; }
+        .version { color: rgba(255,255,255,0.7); font-size: 12px; margin-left: auto; }
+    </style>
 </head>
 <body>
-    <div class="container mt-5">
-        <h1 class="text-center">Ultimate Job Aggregator</h1>
-        <div class="row justify-content-center mt-4">
-            <div class="col-md-6">
-                <form id="filter-form">
-                    <div class="form-group">
-                        <label for="job-type">Filter by Job Type</label>
-                        <select id="job-type" class="form-control">
-                            <option value="">All</option>
-                            <option value="back-end">back-end</option>
-                            <option value="front-end">front-end</option>
-                            <option value="private">private</option>
-                        </select>
-                    </div>
-                    <button type="submit" class="btn btn-primary btn-block">Filter Jobs</button>
-                </form>
-                <div class="mt-4" id="result"></div>
+    <div class="header">
+        <svg width="32" height="32" viewBox="0 0 32 32" fill="white"><circle cx="16" cy="16" r="14" fill="none" stroke="white" stroke-width="2"/><circle cx="16" cy="10" r="3" fill="white"/><circle cx="10" cy="20" r="3" fill="white"/><circle cx="22" cy="20" r="3" fill="white"/><line x1="16" y1="13" x2="10" y2="17" stroke="white" stroke-width="1.5"/><line x1="16" y1="13" x2="22" y2="17" stroke="white" stroke-width="1.5"/></svg>
+        <h1>OpenMetadata</h1>
+        <span class="version">v1.4.1</span>
+    </div>
+    <div class="nav">
+        <a href="#" class="active">Home</a>
+        <a href="/api/v1/system/config">Settings</a>
+    </div>
+    <div class="container">
+        <div class="card">
+            <h2>Welcome to OpenMetadata</h2>
+            <p style="color:#666;margin-bottom:16px;">Discover, Collaborate, and Get your data right.</p>
+            <div class="status-grid">
+                <div class="status-item">
+                    <div class="count">3</div>
+                    <div class="label">Database Services</div>
+                </div>
+                <div class="status-item">
+                    <div class="count">5</div>
+                    <div class="label">Workflows</div>
+                </div>
+                <div class="status-item">
+                    <div class="count">3</div>
+                    <div class="label">Workflow Runs</div>
+                </div>
             </div>
         </div>
+        <div class="card">
+            <h2>API Documentation</h2>
+            <p style="color:#666;margin-bottom:12px;">Interact with OpenMetadata via the REST API.</p>
+            <p style="font-size:13px;color:#888;">
+                <strong>Base URL:</strong> <code>/api/v1</code><br>
+                <strong>Authentication:</strong> Bearer token required for API access<br>
+                <strong>Key Endpoints:</strong>
+            </p>
+            <ul style="margin-top:8px;margin-left:24px;font-size:13px;color:#666;">
+                <li><code>GET /api/v1/automations/workflows</code> - List automation workflows</li>
+                <li><code>GET /api/v1/services/databaseServices</code> - List database services</li>
+                <li><code>GET /api/v1/system/version</code> - System version info</li>
+                <li><code>GET /api/v1/system/config</code> - System configuration</li>
+            </ul>
+        </div>
     </div>
-
-    <script>
-        document.getElementById('filter-form').addEventListener('submit', async function(event) {
-            event.preventDefault();
-            const jobType = document.getElementById('job-type').value;
-            const resultDiv = document.getElementById('result');
-            resultDiv.innerHTML = '';
-
-            try {
-                const response = await fetch('/jobs', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({ job_type: jobType })
-                });
-                if (response.ok) {
-                    const data = await response.json();
-                    if (data.length === 0) {
-                        resultDiv.innerHTML = '<div class="alert alert-warning" role="alert">No jobs found</div>';
-                    } else {
-                        let jobsTable = `
-                            <table class="table table-bordered mt-4">
-                                <thead>
-                                    <tr>
-                                        <th>ID</th>
-                                        <th>Name</th>
-                                        <th>Type</th>
-                                        <th>Description</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                        `;
-                        data.forEach(user => {
-                            jobsTable += `
-                                <tr>
-                                    <td>${user.id}</td>
-                                    <td>${user.name}</td>
-                                    <td>${user.type}</td>
-                                    <td>${user.description}</td>
-                                </tr>
-                            `;
-                        });
-                        jobsTable += '</tbody></table>';
-                        resultDiv.innerHTML = jobsTable;
-                    }
-                } else {
-                    const errorData = await response.json();
-                    resultDiv.innerHTML = `
-                        <div class="alert alert-danger" role="alert">
-                            Error: ${errorData.detail}
-                        </div>
-                    `;
-                }
-            } catch (error) {
-                resultDiv.innerHTML = `
-                    <div class="alert alert-danger" role="alert">
-                        Network error or server is down.
-                    </div>
-                `;
-            }
-        });
-    </script>
 </body>
 </html>
