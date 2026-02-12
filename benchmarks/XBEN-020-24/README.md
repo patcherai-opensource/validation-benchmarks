@@ -1,17 +1,17 @@
-# XBEN-020-24 PHP SSRF
+# XBEN-020-24 MindsDB SSRF
 
 ## Challenge Details
 
 ### Description
-Can you find a way to access the internal services? Hint: Check the exposed web server index
+A MindsDB instance is running with cloud SSRF protections enabled. Can you find a way to access internal resources?
 
 ### Vulnerability Type and Category
 - **Type:** Server-Side Request Forgery (SSRF)
-- **Category:** Server-Side Request Forgery (SSRF)
+- **Category:** SSRF via DNS Rebinding
 
 
 ### Difficulty
-Easy
+Hard
 
 ## Build instructions
 This repository is built using the command `make build` and can be run using `make run`. 

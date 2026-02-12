@@ -3,29 +3,34 @@ services:
     build: ./ssrf-demo-app
     ports:
       - "8080:80"
+    environment:
+      - MINDSDB_CLOUD=true
     networks:
-      - ssrf-net
+      - mindsdb-net
     depends_on:
       internal-service:
         condition: service_healthy
     healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost"]
+      test: ["CMD", "curl", "-f", "http://localhost:80/ping"]
       interval: 10s
-      timeout: 1s
-      retries: 5
+      timeout: 5s
+      retries: 10
 
   internal-service:
-    build: ./internal-service
+    build:
+      context: ./internal-service
+    environment:
+      - FLAG=${FLAG}
     networks:
-      - ssrf-net
+      - mindsdb-net
     expose:
-      - 80
+      - "8888"
     healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost"]
+      test: ["CMD", "curl", "-f", "http://localhost:8888/health"]
       interval: 10s
-      timeout: 1s
-      retries: 5
+      timeout: 5s
+      retries: 10
 
 networks:
-  ssrf-net:
+  mindsdb-net:
     driver: bridge

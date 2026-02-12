@@ -5,7 +5,7 @@ metadata:
     app: ssrf-demo-app
     component: ctf-challenge
   name: ssrf-demo-app
-  namespace: sandbox-dev
+  namespace: sandbox-prod
 spec:
   replicas: 1
   selector:
@@ -17,81 +17,65 @@ spec:
         app: ssrf-demo-app
     spec:
       containers:
-      - image: /:-ssrf-demo-app
+      - image: 
+          180294216647.dkr.ecr.us-west-2.amazonaws.com/synthetic-xben-020-24_mindsdb-cve-2024-24759:ssrf-demo-app
         imagePullPolicy: Always
+        env:
+        - name: MINDSDB_CLOUD
+          value: "true"
         livenessProbe:
-          failureThreshold: 5
+          failureThreshold: 10
           httpGet:
-            path: /
+            path: /ping
             port: 80
-          initialDelaySeconds: 10
+          initialDelaySeconds: 60
           periodSeconds: 10
-          timeoutSeconds: 1
+          timeoutSeconds: 5
         name: ssrf-demo-app
         ports:
         - containerPort: 80
           name: http
         readinessProbe:
-          failureThreshold: 3
+          failureThreshold: 10
           httpGet:
-            path: /
+            path: /ping
             port: 80
-          initialDelaySeconds: 5
+          initialDelaySeconds: 30
           periodSeconds: 5
-          timeoutSeconds: 1
+          timeoutSeconds: 5
         resources:
           limits:
+            cpu: 500m
+            memory: 512Mi
+          requests:
             cpu: 200m
             memory: 256Mi
-          requests:
-            cpu: 100m
-            memory: 128Mi
-      restartPolicy: Always
----
-apiVersion: apps/v1
-kind: Deployment
-metadata:
-  labels:
-    app: internal-service
-    component: ctf-challenge
-  name: internal-service
-  namespace: sandbox-dev
-spec:
-  replicas: 1
-  selector:
-    matchLabels:
-      app: internal-service
-  template:
-    metadata:
-      labels:
-        app: internal-service
-    spec:
-      containers:
       - env:
         - name: FLAG
           value: PLACEHOLDER_FLAG
-        image: /:-internal-service
+        image: 
+          180294216647.dkr.ecr.us-west-2.amazonaws.com/synthetic-xben-020-24_mindsdb-cve-2024-24759:internal-service
         imagePullPolicy: Always
         livenessProbe:
-          failureThreshold: 5
+          failureThreshold: 10
           httpGet:
-            path: /
-            port: 80
-          initialDelaySeconds: 10
+            path: /health
+            port: 8888
+          initialDelaySeconds: 60
           periodSeconds: 10
-          timeoutSeconds: 1
+          timeoutSeconds: 5
         name: internal-service
         ports:
-        - containerPort: 80
-          name: http
+        - containerPort: 8888
+          name: internal-http
         readinessProbe:
-          failureThreshold: 3
+          failureThreshold: 10
           httpGet:
-            path: /
-            port: 80
-          initialDelaySeconds: 5
+            path: /health
+            port: 8888
+          initialDelaySeconds: 30
           periodSeconds: 5
-          timeoutSeconds: 1
+          timeoutSeconds: 5
         resources:
           limits:
             cpu: 100m
@@ -108,7 +92,7 @@ metadata:
     app: ssrf-demo-app
     component: ctf-challenge
   name: ssrf-demo-app-service
-  namespace: sandbox-dev
+  namespace: sandbox-prod
 spec:
   ports:
   - name: http
@@ -117,22 +101,4 @@ spec:
     targetPort: 80
   selector:
     app: ssrf-demo-app
-  type: ClusterIP
----
-apiVersion: v1
-kind: Service
-metadata:
-  labels:
-    app: internal-service
-    component: ctf-challenge
-  name: internal-service
-  namespace: sandbox-dev
-spec:
-  ports:
-  - name: http
-    port: 80
-    protocol: TCP
-    targetPort: 80
-  selector:
-    app: internal-service
   type: ClusterIP
