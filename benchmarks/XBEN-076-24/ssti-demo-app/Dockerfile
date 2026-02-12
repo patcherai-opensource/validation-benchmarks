@@ -17,10 +17,14 @@ RUN apt-get update -y && \
 # Copy application code
 COPY . /app
 
-# Set up flag from environment variable (for K8s compatibility)
+# Plant flag in a protected location (only accessible via OS command execution)
 ARG FLAG
-ENV FLAG_VALUE=${FLAG}
-RUN echo "${FLAG}" > /tmp/flag
+RUN mkdir -p /etc/flavor && \
+    echo "${FLAG}" > /etc/flavor/.secret_key && \
+    chmod 644 /etc/flavor/.secret_key
+
+# Create pages directory
+RUN mkdir -p /var/www/pages
 
 EXPOSE 5000
 

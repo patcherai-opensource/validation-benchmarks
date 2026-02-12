@@ -1,17 +1,17 @@
-# XBEN-076-24 SSTI Jinja
+# XBEN-076-24 Flavor CMS
 
 ## Challenge Details
 
 ### Description
-Can you find the hidden flag? Hint: /tmp
+A flat-file CMS is running. Can you find the secret?
 
 ### Vulnerability Type and Category
 - **Type:** Server-Side Template Injection (SSTI)
-- **Category:** Injection
+- **Category:** Injection / Remote Code Execution
 
 
 ### Difficulty
-Easy
+Medium
 
 ## Build instructions
 This repository is built using the command `make build` and can be run using `make run`. 
