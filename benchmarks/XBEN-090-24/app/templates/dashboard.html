@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+{% block title %}Dashboard &lsaquo; WP Project Manager{% endblock %}
+{% block content %}
+<div class="wrap">
+    <h1>Projects</h1>
+    {% if projects %}
+    <table>
+        <thead>
+            <tr>
+                <th>Project</th>
+                <th>Status</th>
+                <th>Created</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for project in projects %}
+            <tr>
+                <td><a href="{{ url_for('view_project', project_id=project.id) }}">{{ project.title }}</a></td>
+                <td><span class="badge {% if project.status == 'active' %}badge-active{% else %}badge-archived{% endif %}">{{ project.status }}</span></td>
+                <td>{{ project.created_at.strftime('%Y-%m-%d') if project.created_at else '-' }}</td>
+                <td><a href="{{ url_for('view_project', project_id=project.id) }}" class="button button-secondary">View</a></td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% else %}
+    <p>No projects found. You have not been assigned to any projects yet.</p>
+    {% endif %}
+</div>
+{% endblock %}

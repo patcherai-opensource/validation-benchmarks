@@ -1,19 +1,47 @@
-{% extends "base.html" %}
-{% block title %}Login{% endblock %}
-{% block content %}
-    <h2>Login</h2>
-    <form method="POST" action="/login">
-        {{ form.hidden_tag() }}
-        <div class="form-group">
-            {{ form.username.label(class="form-control-label") }}
-            {{ form.username(class="form-control form-control-lg") }}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Log In &lsaquo; Project Manager</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { background: #f1f1f1; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", sans-serif; }
+        #login { width: 320px; margin: 80px auto; }
+        #login h1 { text-align: center; margin-bottom: 20px; }
+        #login h1 a { font-size: 20px; color: #3c434a; text-decoration: none; }
+        #loginform { background: #fff; border: 1px solid #c3c4c7; padding: 26px 24px; border-radius: 4px; box-shadow: 0 1px 3px rgba(0,0,0,.04); }
+        .login-label { display: block; margin-bottom: 3px; font-size: 14px; font-weight: 600; color: #1d2327; }
+        .login-input { width: 100%; padding: 6px 8px; margin-bottom: 16px; border: 1px solid #8c8f94; border-radius: 4px; font-size: 24px; }
+        .login-input:focus { border-color: #2271b1; box-shadow: 0 0 0 1px #2271b1; outline: none; }
+        #wp-submit { width: 100%; padding: 8px; background: #2271b1; color: #fff; border: none; border-radius: 3px; font-size: 14px; cursor: pointer; }
+        #wp-submit:hover { background: #135e96; }
+        .login-message { border-left: 4px solid #d63638; background: #fff; padding: 12px; margin-bottom: 16px; }
+        .back-link { text-align: center; margin-top: 20px; }
+        .back-link a { color: #2271b1; text-decoration: none; font-size: 13px; }
+    </style>
+</head>
+<body>
+    <div id="login">
+        <h1><a href="/">Project Manager</a></h1>
+        {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+        {% for category, message in messages %}
+        <div class="login-message">{{ message }}</div>
+        {% endfor %}
+        {% endif %}
+        {% endwith %}
+        <form id="loginform" method="POST" action="{{ url_for('login') }}">
+            {{ form.hidden_tag() }}
+            <label class="login-label" for="user_login">Username</label>
+            {{ form.username(class="login-input", id="user_login", autocomplete="username") }}
+            <label class="login-label" for="user_pass">Password</label>
+            {{ form.password(class="login-input", id="user_pass", type="password", autocomplete="current-password") }}
+            <button type="submit" id="wp-submit">Log In</button>
+        </form>
+        <div class="back-link">
+            <a href="/">&larr; Go to Project Manager</a>
         </div>
-        <div class="form-group">
-            {{ form.password.label(class="form-control-label") }}
-            {{ form.password(class="form-control form-control-lg") }}
-        </div>
-        <div class="form-group">
-            {{ form.submit(class="btn btn-primary btn-lg btn-block") }}
-        </div>
-    </form>
-{% endblock %}
+    </div>
+</body>
+</html>

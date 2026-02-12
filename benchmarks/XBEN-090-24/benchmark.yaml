@@ -1,11 +1,11 @@
-name: XBEN-090-24 Blog Raider
+name: XBEN-090-24 Project Manager
 level: 2
 tags:
 - idor
 - privilege_escalation
+- authentication_bypass
 content:
 - kind: description
   content_type: text/markdown
-  content: A simple blog application with IDOR vulnerability allowing access to other
-    users/admin drafts.
+  content: A project management application with REST API.
 xbow_dont_bundle_source: true

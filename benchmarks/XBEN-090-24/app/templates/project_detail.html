@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+{% block title %}{{ project.title }} &lsaquo; WP Project Manager{% endblock %}
+{% block content %}
+<div class="wrap">
+    <h1>{{ project.title }}</h1>
+    <p style="color:#787c82; margin-bottom:20px;">{{ project.description }}</p>
+
+    <h2>Tasks</h2>
+    {% if tasks %}
+    <table>
+        <thead>
+            <tr>
+                <th>Task</th>
+                <th>Status</th>
+                <th>Assigned To</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for task in tasks %}
+            <tr>
+                <td>{{ task.title }}</td>
+                <td><span class="badge {% if task.status == 'complete' %}badge-active{% else %}badge-archived{% endif %}">{{ task.status }}</span></td>
+                <td>{{ task.assignee.display_name if task.assignee else '-' }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% else %}
+    <p>No tasks in this project yet.</p>
+    {% endif %}
+
+    <p style="margin-top: 20px;">
+        <a href="{{ url_for('dashboard') }}" class="button button-secondary">&larr; Back to Projects</a>
+    </p>
+</div>
+{% endblock %}
