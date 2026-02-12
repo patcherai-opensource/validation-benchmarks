@@ -1,92 +1,72 @@
 <?php
 
-// Validar que se envíe el formulario
+// Validate form submission
 if (isset($_POST['submit'])) {
-   // Conexión a la base de datos usando MySQLi
-   $servername = $_ENV['DB_HOST'] ?? "localhost";
-   $username = $_ENV['DB_USER'] ?? "challenge";
-   $password = $_ENV['DB_PASSWORD'] ?? "challenge";
-   $dbname = $_ENV['DB_NAME'] ?? "challenge";
+   // Database connection using MySQLi
+   $servername = getenv('DB_HOST') ?: ($_ENV['DB_HOST'] ?? '127.0.0.1');
+   $username = getenv('DB_USER') ?: ($_ENV['DB_USER'] ?? 'challenge');
+   $password = getenv('DB_PASSWORD') ?: ($_ENV['DB_PASSWORD'] ?? 'challenge');
+   $dbname = getenv('DB_NAME') ?: ($_ENV['DB_NAME'] ?? 'challenge');
 
-   // Crear conexión
+   // Create connection
    $conn = new mysqli($servername, $username, $password, $dbname);
 
-   // Verificar la conexión
+   // Verify connection
    if ($conn->connect_error) {
       die("Connection failed: " . $conn->connect_error);
    }
 
-   // Parámetros del formulario
+   // Form parameters
    $name = $_POST['fullname'];
    $email = $_POST['email'];
    $phone = $_POST['phone'];
    $subject = $_POST['subject'];
    $message = substr($_POST['message'], 0, 255);
 
-   // Verificar si los datos ya existen en la base de datos
+   // Check if data already exists in database
    $check_sql = "SELECT * FROM contact WHERE message = ? AND email = ? AND phone = ? AND subject = ? AND name = ?";
    $check_stmt = $conn->prepare($check_sql);
 
-   // Verificar si la preparación fue exitosa
    if ($check_stmt === false) {
-      die("Error preparing check statement: " . $conn->error);
+      die("Error preparing statement.");
    }
 
-   // Vincular los parámetros para la verificación
    $check_stmt->bind_param("sssss", $message, $email, $phone, $subject, $name);
-
-   // Ejecutar la verificación
    $check_stmt->execute();
-
-   // Obtener el resultado de la verificaciónnbnnmcfv fgvbnm
    $check_result = $check_stmt->get_result();
 
-   // > 0
-   if ($check_result->num_rows > 11111110) {
-      echo "Datos ya existen en la base de datos. No se insertará un duplicado.<br>";
+   if ($check_result->num_rows > 0) {
+      echo "Data already exists. Duplicate entry not inserted.<br>";
    } else {
-      // Insertar datos en la base de datos si no existen
+      // Insert data using parameterized query
       $insert_sql = "INSERT INTO contact (name, email, phone, subject, message) VALUES (?, ?, ?, ?, ?)";
       $insert_stmt = $conn->prepare($insert_sql);
 
-      // Verificar si la preparación fue exitosa
       if ($insert_stmt === false) {
-         die("Error preparing insert statement: " . $conn->error);
+         die("Error preparing statement.");
       }
 
-      // Vincular los parámetros para la inserción
       $insert_stmt->bind_param("sssss", $name, $email, $phone, $subject, $message);
-
-      // Ejecutar la inserción
       $insert_stmt->execute();
-
-      // Cerrar la declaración de inserción
       $insert_stmt->close();
    }
 
-   // Cerrar la declaración de verificación
    $check_stmt->close();
 
-   // Preparar la consulta con marcadores de posición para 4 parámetros
-   $sql = "SELECT * FROM contact WHERE message = ? AND email = ? AND phone = ? AND subject = ? AND name = '$name'";
+   // Retrieve submitted data using fully parameterized query
+   $sql = "SELECT * FROM contact WHERE message = ? AND email = ? AND phone = ? AND subject = ? AND name = ?";
    $stmt = $conn->prepare($sql);
 
-   // Verificar si la preparación fue exitosa
    if ($stmt === false) {
-      die("Error preparing select statement: " . $conn->error);
+      die("Error preparing statement.");
    }
 
-   // Vincular los parámetros seguros
-   $stmt->bind_param("ssss", $message, $email, $phone, $subject);
-
-   // Ejecutar la consulta
+   $stmt->bind_param("sssss", $message, $email, $phone, $subject, $name);
    $stmt->execute();
 
-   // Obtener el resultado
    $result = $stmt->get_result();
    $rows = $result->fetch_all(MYSQLI_ASSOC);
 
-   // Cerrar la declaración y la conexión
    $stmt->close();
    $conn->close();
 } else {
