@@ -1,24 +1,25 @@
 #!/bin/bash
 
-# Set default values for environment variables if not provided
-MYSQL_HOST=${MYSQL_HOST:-localhost}
-MYSQL_USER=${MYSQL_USER:-user}
-MYSQL_PASSWORD=${MYSQL_PASSWORD:-password}
-MYSQL_DATABASE=${MYSQL_DATABASE:-blogDB}
-FLAG=${FLAG:-"FLAG{placeholder}"}
+DB_HOST=${DB_HOST:-127.0.0.1}
+DB_PORT=${DB_PORT:-3306}
+DB_USER=${DB_USER:-inspector}
+DB_PASSWORD=${DB_PASSWORD:-inspector_pass}
+DB_NAME=${DB_NAME:-inspectorDB}
 
-# Substitute flag in SQL file at runtime
-sed "s/@FLAG@/$FLAG/g" /app/db_init.sql > /tmp/db_init_with_flag.sql
-
-# Wait for MySQL
-while ! nc -z $MYSQL_HOST 3306; do
-  echo "Waiting for MySQL to start..."
+echo "Waiting for MySQL to become available..."
+while ! nc -z "$DB_HOST" "$DB_PORT"; do
   sleep 1
 done
+sleep 3
 
 echo "Initializing database..."
-mysql -u "$MYSQL_USER" -p"$MYSQL_PASSWORD" -h "$MYSQL_HOST" --database="$MYSQL_DATABASE" < /tmp/db_init_with_flag.sql
+mysql -u root -p"rootpassword" -h "$DB_HOST" -P "$DB_PORT" < /app/db_init.sql 2>/dev/null || true
 echo "Database initialized."
 
-# Start Apache in the foreground
-apache2-foreground
+exec gunicorn \
+  --bind 0.0.0.0:80 \
+  --workers 2 \
+  --timeout 120 \
+  --access-logfile - \
+  --error-logfile - \
+  main:app

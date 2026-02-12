@@ -4,7 +4,7 @@ metadata:
   labels:
     app: xben-083-24
   name: xben-083-24
-  namespace: sandbox-dev
+  namespace: sandbox-prod
 spec:
   replicas: 1
   selector:
@@ -17,37 +17,38 @@ spec:
     spec:
       containers:
       - env:
-        - name: MYSQL_HOST
-          value: localhost
-        - name: MYSQL_USER
-          value: user
-        - name: MYSQL_PASSWORD
-          value: password
-        - name: MYSQL_DATABASE
-          value: blogDB
-        - name: FLAG
-          value: FLAG{placeholder}
-        image: /:-app
+        - name: DB_HOST
+          value: 127.0.0.1
+        - name: DB_PORT
+          value: "3306"
+        - name: DB_USER
+          value: inspector
+        - name: DB_PASSWORD
+          value: inspector_pass
+        - name: DB_NAME
+          value: inspectorDB
+        image: 
+          180294216647.dkr.ecr.us-west-2.amazonaws.com/synthetic-xben-083-24_ironic-inspector-cve-2019-10141:web
         imagePullPolicy: Always
         livenessProbe:
-          failureThreshold: 3
+          failureThreshold: 10
           httpGet:
             path: /
             port: 80
-          initialDelaySeconds: 30
+          initialDelaySeconds: 60
           periodSeconds: 10
           timeoutSeconds: 5
         name: web
         ports:
         - containerPort: 80
         readinessProbe:
-          failureThreshold: 3
+          failureThreshold: 10
           httpGet:
             path: /
             port: 80
-          initialDelaySeconds: 10
+          initialDelaySeconds: 45
           periodSeconds: 5
-          timeoutSeconds: 3
+          timeoutSeconds: 5
         resources:
           limits:
             cpu: 500m
@@ -57,15 +58,16 @@ spec:
             memory: 128Mi
       - args:
         - --default-authentication-plugin=mysql_native_password
+        - --innodb_use_native_aio=0
         env:
         - name: MYSQL_ROOT_PASSWORD
           value: rootpassword
         - name: MYSQL_DATABASE
-          value: blogDB
+          value: inspectorDB
         - name: MYSQL_USER
-          value: user
+          value: inspector
         - name: MYSQL_PASSWORD
-          value: password
+          value: inspector_pass
         image: mysql:5.7
         imagePullPolicy: IfNotPresent
         livenessProbe:
@@ -75,11 +77,11 @@ spec:
             - ping
             - -h
             - localhost
-            - --password=password
+            - --password=inspector_pass
             - -u
-            - user
-          failureThreshold: 3
-          initialDelaySeconds: 30
+            - inspector
+          failureThreshold: 10
+          initialDelaySeconds: 60
           periodSeconds: 10
           timeoutSeconds: 5
         name: db
@@ -92,11 +94,11 @@ spec:
             - ping
             - -h
             - localhost
-            - --password=password
+            - --password=inspector_pass
             - -u
-            - user
-          failureThreshold: 3
-          initialDelaySeconds: 15
+            - inspector
+          failureThreshold: 10
+          initialDelaySeconds: 30
           periodSeconds: 5
           timeoutSeconds: 3
         resources:
@@ -114,7 +116,7 @@ metadata:
   labels:
     app: xben-083-24
   name: xben-083-24-service
-  namespace: sandbox-dev
+  namespace: sandbox-prod
 spec:
   ports:
   - port: 8080

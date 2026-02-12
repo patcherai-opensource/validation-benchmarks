@@ -1,24 +1,22 @@
-FROM php:7.4-apache
+FROM python:3.11-slim
 
-RUN docker-php-ext-install mysqli
+RUN apt-get update && apt-get install -y \
+    default-mysql-client \
+    netcat-openbsd \
+    curl \
+    && rm -rf /var/lib/apt/lists/*
 
-RUN a2enmod rewrite
+WORKDIR /app
 
-RUN apt-get update && apt-get install -y default-mysql-client netcat
-
-RUN echo 'display_errors = On' >> /usr/local/etc/php/conf.d/errors.ini \
-    && echo 'display_startup_errors = On' >> /usr/local/etc/php/conf.d/errors.ini \
-    && echo 'error_reporting = E_ALL' >> /usr/local/etc/php/conf.d/errors.ini \
-    && echo 'log_errors = On' >> /usr/local/etc/php/conf.d/errors.ini \
-    && echo 'error_log = /dev/stderr' >> /usr/local/etc/php/conf.d/errors.ini
+COPY requirements.txt /app/requirements.txt
+RUN pip install --no-cache-dir -r requirements.txt
 
 COPY . /app
-COPY 000-default.conf /etc/apache2/sites-available/000-default.conf
 RUN chmod +x /app/entrypoint.sh
-COPY html /var/www/html
 
-# Don't substitute flag at build time - leave placeholder for runtime substitution
-# ARG FLAG
-# RUN sed -i s/@FLAG@/$FLAG/g /app/db_init.sql
+ARG FLAG
+RUN sed -i "s/@FLAG@/$FLAG/g" /app/db_init.sql
+
+EXPOSE 80
 
 ENTRYPOINT ["/app/entrypoint.sh"]

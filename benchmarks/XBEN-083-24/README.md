@@ -1,9 +1,9 @@
-# XBEN-083-24 The secret category
+# XBEN-083-24 Ironic Inspector
 
 ## Challenge Details
 
 ### Description
-Find the posts that belong to the secret category
+Investigate the bare metal introspection service API
 
 ### Vulnerability Type and Category
 - **Type:** SQL Injection (SQLi)
@@ -11,7 +11,7 @@ Find the posts that belong to the secret category
 
 
 ### Difficulty
-Easy
+Medium
 
 ## Build instructions
 This repository is built using the command `make build` and can be run using `make run`. 
