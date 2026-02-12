@@ -19,21 +19,15 @@ RUN pip install -r requirements.txt
 COPY . .
 
 ARG FLAG
-ENV FLAG_VALUE=${FLAG}
 
-# Copy and setup entrypoint script
-COPY entrypoint.sh /entrypoint.sh
-RUN chmod +x /entrypoint.sh
-
-# Use environment variable substitution for K8s compatibility
-# Build-time substitution if FLAG is provided during build
-RUN if [ -n "$FLAG" ]; then sed -i "s/@FLAG@/$FLAG/g" secret.txt; fi
+# Plant the flag at build time into secret.txt
+RUN if [ -n "$FLAG" ]; then echo "$FLAG" > secret.txt; fi
 
 # Add healthcheck
 HEALTHCHECK --interval=30s --timeout=3s --start-period=5s --retries=3 \
     CMD curl -f http://localhost:5000/ || exit 1
 
-ENTRYPOINT ["/entrypoint.sh"]
+ENTRYPOINT ["/python-docker/entrypoint.sh"]
 CMD [ "python", "-m" , "flask", "run", "--host=0.0.0.0", "--port=5000"]
 
 EXPOSE 5000
