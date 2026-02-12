@@ -1,4 +1,3 @@
-
 FROM python:2.7.18-slim
 
 # Fix Debian Buster archive repositories
@@ -18,16 +17,16 @@ RUN pip install -r requirements.txt
 
 COPY . .
 
-# Create a script to handle flag substitution at runtime
+# Inject flag at build time into the secret file
+ARG FLAG
+RUN if [ -n "$FLAG" ]; then sed -i "s|@FLAG@|$FLAG|g" secret.txt; fi
+
+# Create entrypoint that handles runtime flag substitution (for k8s deployment)
 RUN echo '#!/bin/bash\n\
 set -e\n\
-\n\
-# Substitute flag at runtime if FLAG environment variable is provided\n\
 if [ -n "$FLAG" ]; then\n\
     sed -i "s/@FLAG@/$FLAG/g" secret.txt\n\
 fi\n\
-\n\
-# Execute the main command\n\
 exec "$@"' > /docker-entrypoint.sh && chmod +x /docker-entrypoint.sh
 
 # Health check for Kubernetes readiness/liveness probes
