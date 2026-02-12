@@ -3,12 +3,44 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-    <title>{% block title %}FastAPI App{% endblock %}</title>
+    <title>{% block title %}motionEye{% endblock %}</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; background: #1a1a2e; color: #e0e0e0; min-height: 100vh; }
+        .navbar { background: #16213e; padding: 12px 24px; display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid #0f3460; }
+        .navbar .brand { font-size: 1.4em; font-weight: bold; color: #e94560; text-decoration: none; }
+        .navbar .brand span { color: #999; font-weight: normal; font-size: 0.7em; }
+        .navbar nav a { color: #a0a0c0; text-decoration: none; margin-left: 20px; font-size: 0.95em; }
+        .navbar nav a:hover { color: #e94560; }
+        .container { max-width: 960px; margin: 0 auto; padding: 24px; }
+        .card { background: #16213e; border: 1px solid #0f3460; border-radius: 6px; padding: 20px; margin-bottom: 16px; }
+        .btn { display: inline-block; padding: 8px 20px; border: none; border-radius: 4px; cursor: pointer; font-size: 0.9em; text-decoration: none; }
+        .btn-primary { background: #e94560; color: #fff; }
+        .btn-primary:hover { background: #c73650; }
+        input[type="text"], input[type="password"] { width: 100%; padding: 10px; margin: 6px 0 16px 0; background: #0f3460; border: 1px solid #1a1a4e; border-radius: 4px; color: #e0e0e0; font-size: 0.95em; }
+        label { display: block; font-size: 0.9em; color: #a0a0c0; margin-bottom: 2px; }
+        .alert { padding: 12px; border-radius: 4px; margin-bottom: 16px; }
+        .alert-danger { background: #4a1020; border: 1px solid #e94560; color: #ff8090; }
+        table { width: 100%; border-collapse: collapse; }
+        th, td { padding: 10px 14px; text-align: left; border-bottom: 1px solid #0f3460; }
+        th { color: #a0a0c0; font-weight: 600; font-size: 0.85em; text-transform: uppercase; }
+        .status-on { color: #4ecca3; }
+        .status-off { color: #e94560; }
+        footer { text-align: center; padding: 20px; color: #555; font-size: 0.8em; }
+    </style>
 </head>
 <body>
+    {% block body %}
+    <div class="navbar">
+        <a href="/" class="brand">motionEye <span>v0.42.1</span></a>
+        <nav>
+            {% block nav %}{% endblock %}
+        </nav>
+    </div>
     <div class="container">
         {% block content %}{% endblock %}
     </div>
+    <footer>motionEye &copy; 2024</footer>
+    {% endblock %}
 </body>
 </html>

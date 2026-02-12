@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+
+{% block title %}motionEye - Configuration{% endblock %}
+
+{% block nav %}
+<a href="/cameras">Cameras</a>
+<a href="/config/main">Configuration</a>
+<a href="/logout">Logout</a>
+{% endblock %}
+
+{% block content %}
+<h2 style="margin-bottom: 16px;">System Configuration</h2>
+<div class="card">
+    <table>
+        <thead>
+            <tr>
+                <th>Section</th>
+                <th>Key</th>
+                <th>Value</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for cfg in configs %}
+            <tr>
+                <td>{{ cfg.section }}</td>
+                <td>{{ cfg.key }}</td>
+                <td>{{ cfg.value }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

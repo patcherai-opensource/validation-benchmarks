@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+
+{% block title %}motionEye - Cameras{% endblock %}
+
+{% block nav %}
+<a href="/cameras">Cameras</a>
+{% if user == 'admin' %}
+<a href="/config/main">Configuration</a>
+{% endif %}
+<a href="/logout">Logout</a>
+{% endblock %}
+
+{% block content %}
+<h2 style="margin-bottom: 16px;">Cameras</h2>
+<div class="card">
+    <table>
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Name</th>
+                <th>Protocol</th>
+                <th>Host</th>
+                <th>Status</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for camera in cameras %}
+            <tr>
+                <td>{{ camera.id }}</td>
+                <td>{{ camera.name }}</td>
+                <td>{{ camera.proto }}</td>
+                <td>{{ camera.host if camera.host else "local" }}</td>
+                <td>
+                    {% if camera.enabled %}
+                    <span class="status-on">● Enabled</span>
+                    {% else %}
+                    <span class="status-off">● Disabled</span>
+                    {% endif %}
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

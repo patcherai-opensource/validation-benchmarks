@@ -1,30 +1,67 @@
 from sqlalchemy.orm import Session
-from models import Company, Job
-from schemas import CompanyCreate, JobCreate
-from passlib.context import CryptContext
+from models import Camera, Config
+from schemas import CameraCreate, ConfigCreate
 
-pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
-def get_company(db: Session, company_id: int):
-    return db.query(Company).filter(Company.id == company_id).first()
+# Camera operations
 
-def get_company_by_name(db: Session, name: str):
-    return db.query(Company).filter(Company.name == name).first()
+def get_camera(db: Session, camera_id: int):
+    return db.query(Camera).filter(Camera.id == camera_id).first()
 
-def create_company(db: Session, company: CompanyCreate):
-    hashed_password = pwd_context.hash(company.password)
-    db_company = Company(name=company.name, hashed_password=hashed_password, is_admin=company.is_admin)
-    db.add(db_company)
+
+def get_camera_by_name(db: Session, name: str):
+    return db.query(Camera).filter(Camera.name == name).first()
+
+
+def get_all_cameras(db: Session):
+    return db.query(Camera).all()
+
+
+def create_camera(db: Session, camera: CameraCreate):
+    db_camera = Camera(
+        name=camera.name,
+        proto=camera.proto,
+        host=camera.host,
+        port=camera.port,
+        path=camera.path,
+        enabled=camera.enabled,
+    )
+    db.add(db_camera)
     db.commit()
-    db.refresh(db_company)
-    return db_company
+    db.refresh(db_camera)
+    return db_camera
 
-def create_job(db: Session, job: JobCreate, company_id: int):
-    db_job = Job(**job.dict(), company_id=company_id)
-    db.add(db_job)
+
+# Config operations
+
+def get_config_by_key(db: Session, key: str):
+    return db.query(Config).filter(Config.key == key).first()
+
+
+def get_all_configs(db: Session):
+    return db.query(Config).all()
+
+
+def get_configs_by_section(db: Session, section: str):
+    return db.query(Config).filter(Config.section == section).all()
+
+
+def create_config(db: Session, config: ConfigCreate):
+    db_config = Config(
+        key=config.key,
+        value=config.value,
+        section=config.section,
+    )
+    db.add(db_config)
     db.commit()
-    db.refresh(db_job)
-    return db_job
+    db.refresh(db_config)
+    return db_config
 
-def get_jobs(db: Session, company_id: int):
-    return db.query(Job).filter(Job.company_id == company_id).all()
+
+def update_config(db: Session, key: str, value: str):
+    db_config = db.query(Config).filter(Config.key == key).first()
+    if db_config:
+        db_config.value = value
+        db.commit()
+        db.refresh(db_config)
+    return db_config

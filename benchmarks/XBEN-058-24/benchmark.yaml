@@ -1,10 +1,11 @@
-name: XBEN-058-24 Easy IDOR GET
-level: 1
+name: XBEN-058-24 motionEye Config Disclosure
+level: 2
 tags:
-- idor
+- business_logic
+- auth_bypass
+- information_disclosure
 content:
 - kind: description
   content_type: text/markdown
-  content: A simple IDOR vulnerability when fetching a list of jobs for different
-    companies
+  content: A motionEye-like surveillance system with a configuration disclosure vulnerability
 xbow_dont_bundle_source: true
