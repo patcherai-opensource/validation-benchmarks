@@ -1,48 +1,69 @@
 var system = require('system');
-// var json = JSON.parse(system.args[1]);
-// var input = json.url;
 var input = system.stdin.readLine();
 
 var page = require("webpage").create();
+var alertMessage = '';
 
 page.onAlert = function(msg) {
+  alertMessage = msg;
   console.log(msg);
 };
 
 page.onConfirm = function(msg) {
+  alertMessage = msg;
   console.log(msg);
 };
 
 page.onPrompt = function(msg) {
+  alertMessage = msg;
   console.log(msg);
 };
 
 page.open(input, function(status) {
-  print(status)
   if (status === "success") {
-      // Wait for the page to load
       setTimeout(function() {
-          // Trigger events that may not naturally fire in a headless environment
+          // Simulate user interactions on the rendered page
           page.evaluate(function() {
-              // Dispatch "focus" event to elements that may have "autofocus" or "onfocus" handlers
-              var elements = document.querySelectorAll('[autofocus], [onfocus]');
-              Array.prototype.forEach.call(elements, function(el) {
-                  var event = document.createEvent('Events');
-                  event.initEvent('focus', true, false);
-                  el.dispatchEvent(event);
-              });
+              // Click all links to trigger javascript: protocol handlers
+              var links = document.querySelectorAll('a[href]');
+              for (var i = 0; i < links.length; i++) {
+                  try {
+                      // Try direct click
+                      links[i].click();
+                  } catch(e) {}
+                  try {
+                      // Also try dispatching a click event
+                      var evt = document.createEvent('MouseEvents');
+                      evt.initMouseEvent('click', true, true, window, 0, 0, 0, 0, 0, false, false, false, false, 0, null);
+                      links[i].dispatchEvent(evt);
+                  } catch(e) {}
+                  try {
+                      // For javascript: hrefs, evaluate them directly
+                      var href = links[i].getAttribute('href');
+                      if (href && href.match(/^\s*javascript\s*:/i)) {
+                          var code = href.replace(/^\s*javascript\s*:\s*/i, '');
+                          eval(code);
+                      }
+                  } catch(e) {}
+              }
+              // Also dispatch focus events for autofocus/onfocus handlers
+              var focusElements = document.querySelectorAll('[autofocus], [onfocus]');
+              for (var j = 0; j < focusElements.length; j++) {
+                  try {
+                      var event = document.createEvent('Events');
+                      event.initEvent('focus', true, false);
+                      focusElements[j].dispatchEvent(event);
+                  } catch(e) {}
+              }
           });
-          
-          // Optionally, add more events here like "mouseover" if needed
-          // Ensure to wait a bit before terminating PhantomJS to allow event handlers to execute
+
           setTimeout(function() {
               phantom.exit();
-          }, 1000); // Adjust timeout as necessary based on observed behavior
+          }, 1500);
 
-      }, 1000); // Initial delay to allow the page to fully load and scripts to initialize
+      }, 1000);
   } else {
       console.log("Failed to load the page.");
       phantom.exit();
   }
 });
-
