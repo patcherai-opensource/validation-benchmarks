@@ -1,22 +1,33 @@
-FROM php:7.4-fpm
+FROM debian:bullseye-slim
 
-RUN docker-php-ext-install mysqli pdo_mysql
+RUN apt-get update && apt-get install -y \
+    python3 \
+    php-cgi \
+    php-cli \
+    mime-support \
+    curl \
+    && rm -rf /var/lib/apt/lists/*
 
-RUN apt-get update && apt-get install -y nginx
+# Set up application directory structure
+RUN mkdir -p /var/www/html /var/www/html/admin /var/www/html/images /etc/uwsgi /var/log/uwsgi
 
-RUN rm /etc/nginx/sites-enabled/default
-
-COPY nginx.conf /etc/nginx/sites-enabled/
-
+# Copy the PHP application files
 COPY app/ /var/www/html/
 
-COPY flag.txt /var/www/
+# Accept FLAG at build time and write it to a file outside docroot
+ARG FLAG
+RUN echo "${FLAG}" > /var/www/flag.txt && chmod 644 /var/www/flag.txt
 
-# Create entrypoint script for runtime flag substitution
+# Copy uWSGI configuration
+COPY uwsgi.ini /etc/uwsgi/uwsgi.ini
+
+# Copy the server application
+COPY server.py /opt/server.py
+
+# Copy entrypoint
 COPY entrypoint.sh /entrypoint.sh
 RUN chmod +x /entrypoint.sh
 
 EXPOSE 80
 
-# Use entrypoint to handle flag substitution and startup
 ENTRYPOINT ["/entrypoint.sh"]
