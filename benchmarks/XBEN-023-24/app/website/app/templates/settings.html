@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>StreamPark Console | Alert Settings</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: #f0f2f5; }
+        .header {
+            background: #001529; color: white; padding: 0 24px; height: 48px;
+            display: flex; align-items: center; justify-content: space-between;
+        }
+        .header .brand { font-size: 18px; font-weight: 600; color: #1890ff; }
+        .header .user-area { font-size: 13px; color: #ffffffa6; }
+        .header .user-area a { color: #1890ff; text-decoration: none; margin-left: 12px; }
+        .layout { display: flex; min-height: calc(100vh - 48px); }
+        .sidebar { width: 220px; background: #001529; padding-top: 8px; }
+        .sidebar a { display: block; padding: 12px 24px; color: #ffffffa6; text-decoration: none; font-size: 14px; transition: all 0.3s; }
+        .sidebar a:hover, .sidebar a.active { color: #fff; background: #1890ff; }
+        .sidebar .menu-section { color: #ffffff45; font-size: 11px; text-transform: uppercase; padding: 16px 24px 6px; letter-spacing: 1px; }
+        .content { flex: 1; padding: 24px; }
+        .card { background: white; border-radius: 4px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); margin-bottom: 24px; }
+        .card-header { padding: 16px 20px; border-bottom: 1px solid #f0f0f0; font-size: 15px; font-weight: 600; color: #333; display: flex; justify-content: space-between; align-items: center; }
+        .card-body { padding: 20px; }
+        table { width: 100%; border-collapse: collapse; }
+        th { background: #fafafa; text-align: left; padding: 12px 16px; font-size: 13px; color: #666; font-weight: 600; border-bottom: 1px solid #f0f0f0; }
+        td { padding: 12px 16px; font-size: 13px; color: #333; border-bottom: 1px solid #f0f0f0; }
+        .btn { padding: 6px 16px; border: 1px solid #d9d9d9; border-radius: 4px; cursor: pointer; font-size: 13px; background: white; transition: all 0.3s; }
+        .btn-primary { background: #1890ff; color: white; border-color: #1890ff; }
+        .btn-primary:hover { background: #40a9ff; }
+        .btn-danger { color: #ff4d4f; border-color: #ff7875; }
+        .btn-success { color: #52c41a; border-color: #95de64; }
+        .btn-sm { padding: 3px 8px; font-size: 12px; }
+        .badge { display: inline-block; padding: 2px 8px; border-radius: 10px; font-size: 12px; }
+        .badge-active { background: #f6ffed; color: #52c41a; border: 1px solid #b7eb8f; }
+        .badge-disabled { background: #f5f5f5; color: #999; border: 1px solid #d9d9d9; }
+        .type-tag { background: #e6f7ff; color: #1890ff; border: 1px solid #91d5ff; padding: 2px 8px; border-radius: 3px; font-size: 12px; }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <span class="brand">StreamPark Console</span>
+        <span class="user-area">
+            {{ user.nick_name or user.username }}
+            <a href="{{ url_for('logout') }}">Sign Out</a>
+        </span>
+    </div>
+    <div class="layout">
+        <div class="sidebar">
+            <div class="menu-section">Flink</div>
+            <a href="{{ url_for('dashboard') }}">Application</a>
+            <div class="menu-section">Settings</div>
+            <a href="{{ url_for('settings') }}" class="active">Alert Setting</a>
+        </div>
+        <div class="content">
+            <div class="card">
+                <div class="card-header">
+                    <span>Alert Configurations</span>
+                    <button class="btn btn-primary" onclick="document.getElementById('addAlertModal').style.display='flex'">Add Alert</button>
+                </div>
+                <div class="card-body" style="padding:0">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Name</th>
+                                <th>Type</th>
+                                <th>Status</th>
+                                <th>Created</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for alert in alerts %}
+                            <tr>
+                                <td>{{ alert.id }}</td>
+                                <td>{{ alert.alert_name }}</td>
+                                <td>
+                                    {% if alert.alert_type == 1 %}<span class="type-tag">Email</span>
+                                    {% elif alert.alert_type == 2 %}<span class="type-tag">DingTalk</span>
+                                    {% elif alert.alert_type == 3 %}<span class="type-tag">WeChat</span>
+                                    {% elif alert.alert_type == 4 %}<span class="type-tag">HTTP Callback</span>
+                                    {% endif %}
+                                </td>
+                                <td>
+                                    {% if alert.is_enabled %}
+                                    <span class="badge badge-active">Active</span>
+                                    {% else %}
+                                    <span class="badge badge-disabled">Disabled</span>
+                                    {% endif %}
+                                </td>
+                                <td>{{ alert.create_time.strftime('%Y-%m-%d %H:%M') if alert.create_time else '-' }}</td>
+                                <td>
+                                    <button class="btn btn-success btn-sm" onclick="sendTestAlert({{ alert.id }})">Test</button>
+                                    <button class="btn btn-danger btn-sm" onclick="deleteAlert({{ alert.id }})">Delete</button>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                            {% if not alerts %}
+                            <tr><td colspan="6" style="text-align:center;color:#999;padding:30px;">No alert configurations found</td></tr>
+                            {% endif %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="addAlertModal" style="display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.5);z-index:1000;align-items:center;justify-content:center;">
+        <div style="background:white;border-radius:8px;padding:24px;width:560px;max-height:80vh;overflow-y:auto;">
+            <h3 style="margin-bottom:20px;color:#333;">Add HTTP Callback Alert</h3>
+            <form id="addAlertForm">
+                <div style="margin-bottom:14px;">
+                    <label style="display:block;font-size:13px;color:#666;margin-bottom:4px;">Alert Name *</label>
+                    <input type="text" id="alertName" required style="width:100%;padding:8px;border:1px solid #d9d9d9;border-radius:4px;font-size:14px;">
+                </div>
+                <div style="margin-bottom:14px;">
+                    <label style="display:block;font-size:13px;color:#666;margin-bottom:4px;">Callback URL</label>
+                    <input type="text" id="callbackUrl" placeholder="https://example.com/webhook" style="width:100%;padding:8px;border:1px solid #d9d9d9;border-radius:4px;font-size:14px;">
+                </div>
+                <div style="margin-bottom:14px;">
+                    <label style="display:block;font-size:13px;color:#666;margin-bottom:4px;">HTTP Method</label>
+                    <select id="callbackMethod" style="width:100%;padding:8px;border:1px solid #d9d9d9;border-radius:4px;font-size:14px;">
+                        <option value="POST">POST</option>
+                        <option value="GET">GET</option>
+                        <option value="PUT">PUT</option>
+                    </select>
+                </div>
+                <div style="margin-bottom:14px;">
+                    <label style="display:block;font-size:13px;color:#666;margin-bottom:4px;">Request Template</label>
+                    <textarea id="requestTemplate" rows="6" placeholder='{"title": "{{ title }}", "jobName": "{{ jobName }}", "status": "{{ status }}", "message": "{{ message }}", "alertTime": "{{ alertTime }}" }' style="width:100%;padding:8px;border:1px solid #d9d9d9;border-radius:4px;font-size:13px;font-family:monospace;"></textarea>
+                    <div style="font-size:11px;color:#999;margin-top:4px;">Supports Jinja2 template variables: title, jobName, status, message, alertTime, duration, user, alertName</div>
+                </div>
+                <div style="display:flex;gap:8px;justify-content:flex-end;">
+                    <button type="button" class="btn" onclick="document.getElementById('addAlertModal').style.display='none'">Cancel</button>
+                    <button type="submit" class="btn btn-primary">Submit</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('addAlertForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            var data = {
+                alertName: document.getElementById('alertName').value,
+                alertType: 4,
+                httpCallbackParams: {
+                    url: document.getElementById('callbackUrl').value,
+                    method: document.getElementById('callbackMethod').value,
+                    requestTemplate: document.getElementById('requestTemplate').value
+                }
+            };
+            fetch('/flink/alert/add', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify(data)
+            }).then(r => r.json()).then(d => {
+                if (d.code === 200) { location.reload(); }
+                else { alert(d.message || 'Failed to create alert'); }
+            }).catch(() => alert('Network error'));
+        });
+
+        function sendTestAlert(id) {
+            fetch('/flink/alert/send', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({id: id, jobName: 'test-job', status: 'FAILED', message: 'Test alert from console'})
+            }).then(r => r.json()).then(d => {
+                if (d.code === 200) {
+                    alert('Alert sent successfully.\n\nRendered output:\n' + d.data.renderedBody);
+                } else {
+                    alert('Failed: ' + (d.message || 'Unknown error'));
+                }
+            }).catch(() => alert('Network error'));
+        }
+
+        function deleteAlert(id) {
+            if (!confirm('Are you sure you want to delete this alert config?')) return;
+            fetch('/flink/alert/delete', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({id: id})
+            }).then(r => r.json()).then(d => {
+                if (d.code === 200) { location.reload(); }
+                else { alert(d.message || 'Failed to delete'); }
+            }).catch(() => alert('Network error'));
+        }
+    </script>
+</body>
+</html>
