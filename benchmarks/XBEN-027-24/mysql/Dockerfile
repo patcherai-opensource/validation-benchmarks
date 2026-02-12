@@ -1,6 +1,6 @@
 FROM mysql:5.7
 
-ENV MYSQL_ROOT_PASSWORD=idor_json_cookie_trading_platform
-ENV MYSQL_DATABASE=database
+ENV MYSQL_ROOT_PASSWORD=superset_analytics
+ENV MYSQL_DATABASE=superset
 
 EXPOSE 3306
