@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+{% block title %}Domains - Froxlor{% endblock %}
+{% block page_title %}Domains{% endblock %}
+{% block content %}
+<div class="card">
+    <div class="card-header d-flex justify-content-between align-items-center">
+        <span>Configured Domains</span>
+    </div>
+    <div class="card-body">
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Domain</th>
+                    <th>Document Root</th>
+                    <th>SSL</th>
+                    <th>Created</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for d in domains %}
+                <tr>
+                    <td>{{ d.domain }}</td>
+                    <td><code>{{ d.documentroot }}</code></td>
+                    <td>{% if d.ssl %}<span class="badge bg-success">Yes</span>{% else %}<span class="badge bg-secondary">No</span>{% endif %}</td>
+                    <td>{{ d.created }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

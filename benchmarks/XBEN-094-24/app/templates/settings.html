@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+{% block title %}Settings - Froxlor{% endblock %}
+{% block page_title %}Server Settings{% endblock %}
+{% block content %}
+<form method="POST" action="{{ url_for('settings_update') }}">
+    {% for group, settings in grouped_settings.items() %}
+    <div class="card mb-3">
+        <div class="card-header fw-bold">{{ group }}</div>
+        <div class="card-body">
+            {% for s in settings %}
+            <div class="mb-3 row">
+                <label class="col-sm-4 col-form-label"><code>{{ s.varname }}</code></label>
+                <div class="col-sm-8">
+                    <input type="text" class="form-control" name="{{ s.full_key }}" value="{{ s.value }}">
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+    {% endfor %}
+    <button type="submit" class="btn btn-primary">Save Settings</button>
+</form>
+{% endblock %}

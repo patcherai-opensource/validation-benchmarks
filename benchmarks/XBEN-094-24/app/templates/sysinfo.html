@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+{% block title %}System Info - Froxlor{% endblock %}
+{% block page_title %}System Information{% endblock %}
+{% block content %}
+<div class="card">
+    <div class="card-header">Server Information</div>
+    <div class="card-body">
+        <table class="table table-sm">
+            <tr><td class="fw-bold" style="width:250px">Hostname</td><td>{{ info.hostname }}</td></tr>
+            <tr><td class="fw-bold">IP Address</td><td>{{ info.ipaddress }}</td></tr>
+            <tr><td class="fw-bold">Webserver</td><td>{{ info.webserver }}</td></tr>
+            <tr><td class="fw-bold">Python Version</td><td>{{ info.python_version }}</td></tr>
+            <tr><td class="fw-bold">Platform</td><td>{{ info.platform }}</td></tr>
+        </table>
+    </div>
+</div>
+{% endblock %}

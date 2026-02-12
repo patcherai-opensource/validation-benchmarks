@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+{% block title %}Configuration Rebuild - Froxlor{% endblock %}
+{% block page_title %}Configuration Rebuild Results{% endblock %}
+{% block content %}
+<div class="card">
+    <div class="card-header">Rebuild Output</div>
+    <div class="card-body">
+        {% if results %}
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Service</th>
+                    <th>Command</th>
+                    <th>Status</th>
+                    <th>Output</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for r in results %}
+                <tr>
+                    <td>{{ r.label }}</td>
+                    <td><code>{{ r.command }}</code></td>
+                    <td>
+                        {% if r.status == 'OK' %}
+                        <span class="badge bg-success">{{ r.status }}</span>
+                        {% elif r.status == 'TIMEOUT' %}
+                        <span class="badge bg-warning">{{ r.status }}</span>
+                        {% else %}
+                        <span class="badge bg-danger">{{ r.status }}</span>
+                        {% endif %}
+                    </td>
+                    <td><pre class="mb-0" style="font-size:0.85em">{{ r.output }}</pre></td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        {% else %}
+        <div class="alert alert-info">No commands configured to execute.</div>
+        {% endif %}
+        <a href="{{ url_for('admin_settings') }}" class="btn btn-secondary">Back to Settings</a>
+    </div>
+</div>
+{% endblock %}

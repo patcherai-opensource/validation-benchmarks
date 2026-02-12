@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+{% block title %}Import / Export - Froxlor{% endblock %}
+{% block page_title %}Import / Export Settings{% endblock %}
+{% block content %}
+<div class="row">
+    <div class="col-md-6">
+        <div class="card mb-4">
+            <div class="card-header"><i class="bi bi-upload"></i> Import Settings</div>
+            <div class="card-body">
+                <p class="text-muted">Upload a JSON settings file to restore or apply a configuration. The file should contain key-value pairs in <code>group.varname</code> format.</p>
+                <form method="POST" action="{{ url_for('settings_import') }}" enctype="multipart/form-data">
+                    <div class="mb-3">
+                        <label for="import_file" class="form-label">Settings File (JSON)</label>
+                        <input type="file" class="form-control" id="import_file" name="import_file" accept=".json" required>
+                    </div>
+                    <button type="submit" class="btn btn-warning">Import Settings</button>
+                </form>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="card mb-4">
+            <div class="card-header"><i class="bi bi-download"></i> Export Settings</div>
+            <div class="card-body">
+                <p class="text-muted">Download the current server configuration as a JSON file for backup or migration purposes.</p>
+                <a href="{{ url_for('settings_export') }}" class="btn btn-primary">Export Settings</a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+{% block title %}Dashboard - Froxlor{% endblock %}
+{% block page_title %}Dashboard{% endblock %}
+{% block content %}
+<div class="row mb-4">
+    <div class="col-md-3">
+        <div class="stat-card">
+            <h3>{{ domain_count }}</h3>
+            <p>Domains</p>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="stat-card">
+            <h3>{{ customer_count }}</h3>
+            <p>Customers</p>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="stat-card">
+            <h3>{{ ftp_count }}</h3>
+            <p>FTP Accounts</p>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="stat-card">
+            <h3><i class="bi bi-check-circle text-success"></i></h3>
+            <p>Server Status</p>
+        </div>
+    </div>
+</div>
+
+<div class="card">
+    <div class="card-header">Server Overview</div>
+    <div class="card-body">
+        <table class="table table-sm mb-0">
+            <tr><td class="fw-bold" style="width:200px">Hostname</td><td>{{ hostname }}</td></tr>
+            <tr><td class="fw-bold">Administrator</td><td>{{ admin.name }} ({{ admin.loginname }})</td></tr>
+            <tr><td class="fw-bold">Email</td><td>{{ admin.email }}</td></tr>
+            <tr><td class="fw-bold">Last Login</td><td>{{ admin.lastlogin_succ or 'N/A' }}</td></tr>
+        </table>
+    </div>
+</div>
+{% endblock %}

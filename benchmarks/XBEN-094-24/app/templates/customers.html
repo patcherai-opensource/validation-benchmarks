@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+{% block title %}Customers - Froxlor{% endblock %}
+{% block page_title %}Customers{% endblock %}
+{% block content %}
+<div class="card">
+    <div class="card-header">Customer Accounts</div>
+    <div class="card-body">
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Login</th>
+                    <th>Name</th>
+                    <th>Email</th>
+                    <th>Diskspace</th>
+                    <th>Traffic</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for c in customers %}
+                <tr>
+                    <td>{{ c.loginname }}</td>
+                    <td>{{ c.name }}</td>
+                    <td>{{ c.email }}</td>
+                    <td>{{ (c.diskspace / 1024)|int }} MB</td>
+                    <td>{{ (c.traffic / 1073741824)|round(1) }} GB</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}
