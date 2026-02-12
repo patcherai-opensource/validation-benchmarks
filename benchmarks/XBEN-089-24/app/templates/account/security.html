@@ -1,0 +1,81 @@
+{% extends "base.html" %}
+{% block title %}Security - Pterodactyl{% endblock %}
+{% block body %}
+<nav class="navbar navbar-expand-lg navbar-dark">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="/"><i class="fas fa-feather-alt"></i> Pterodactyl</a>
+        <div class="navbar-nav ms-auto">
+            {% if user['role'] == 'admin' %}
+            <a class="nav-link" href="/admin"><i class="fas fa-cogs"></i> Admin</a>
+            {% endif %}
+            <a class="nav-link" href="/dashboard"><i class="fas fa-columns"></i> Dashboard</a>
+            <a class="nav-link" href="/auth/logout"><i class="fas fa-sign-out-alt"></i> Logout</a>
+        </div>
+    </div>
+</nav>
+
+<div class="container-fluid">
+    <div class="row">
+        <nav class="col-md-2 sidebar py-3">
+            <ul class="nav flex-column">
+                <li class="nav-item">
+                    <a class="nav-link" href="/dashboard"><i class="fas fa-server me-2"></i>Servers</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link active" href="/account/security"><i class="fas fa-lock me-2"></i>Security</a>
+                </li>
+            </ul>
+        </nav>
+
+        <main class="col-md-10 ms-sm-auto px-md-4 py-3">
+            <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pb-2 mb-3 border-bottom border-secondary">
+                <h4>Account Security</h4>
+            </div>
+
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h5 class="mb-0"><i class="fas fa-shield-alt me-2"></i>Two-Factor Authentication</h5>
+                </div>
+                <div class="card-body">
+                    {% if user['use_totp'] %}
+                    <div class="d-flex align-items-center mb-3">
+                        <span class="badge bg-success me-2">Enabled</span>
+                        <span>Two-factor authentication is currently enabled on your account.</span>
+                    </div>
+                    <div class="mt-2">
+                        <small class="text-muted">TOTP Secret: <code>{{ user['totp_secret'] }}</code></small>
+                    </div>
+                    {% else %}
+                    <div class="d-flex align-items-center">
+                        <span class="badge bg-warning me-2">Disabled</span>
+                        <span>Two-factor authentication is not enabled. Enable it for enhanced account security.</span>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="mb-0"><i class="fas fa-user me-2"></i>Account Details</h5>
+                </div>
+                <div class="card-body">
+                    <table class="table table-dark mb-0">
+                        <tr>
+                            <td class="fw-bold" style="width: 200px;">Username</td>
+                            <td>{{ user['username'] }}</td>
+                        </tr>
+                        <tr>
+                            <td class="fw-bold">Email</td>
+                            <td>{{ user['email'] }}</td>
+                        </tr>
+                        <tr>
+                            <td class="fw-bold">Role</td>
+                            <td>{{ user['role'] }}</td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+        </main>
+    </div>
+</div>
+{% endblock %}
