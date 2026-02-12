@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{{ org.name }} | Sentry</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: "Rubik", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+           background: #1b1124; color: #e0dce5; }
+    .navbar { background: #2c2138; padding: 12px 24px; display: flex; align-items: center;
+              justify-content: space-between; border-bottom: 1px solid #3d3350; }
+    .navbar .brand { font-size: 18px; font-weight: 700; color: #6c5fc7; }
+    .navbar .user-info { font-size: 13px; color: #9386a0; }
+    .container { max-width: 960px; margin: 32px auto; padding: 0 24px; }
+    h2 { font-size: 20px; margin-bottom: 16px; }
+    .card { background: #2c2138; border-radius: 8px; padding: 20px; margin-bottom: 16px;
+            border: 1px solid #3d3350; }
+    .card h3 { font-size: 15px; margin-bottom: 8px; color: #c4b8d3; }
+    .card p { font-size: 13px; color: #9386a0; }
+    .badge { display: inline-block; padding: 2px 8px; border-radius: 12px;
+             font-size: 11px; font-weight: 600; background: #2f6846; color: #7ee2a8; }
+    .project-list { list-style: none; }
+    .project-list li { padding: 12px 0; border-bottom: 1px solid #3d3350; }
+    .project-list li:last-child { border-bottom: none; }
+    .project-name { font-weight: 600; color: #f5f3f7; }
+    .project-platform { font-size: 12px; color: #9386a0; margin-left: 8px; }
+    .logout-btn { background: none; border: 1px solid #3d3350; color: #9386a0; padding: 6px 14px;
+                  border-radius: 4px; cursor: pointer; font-size: 12px; }
+    .logout-btn:hover { border-color: #6c5fc7; color: #c4b8d3; }
+  </style>
+</head>
+<body>
+  <nav class="navbar">
+    <span class="brand">sentry</span>
+    <div>
+      <span class="user-info">{{ org.name }}</span>
+      <form method="POST" action="/auth/logout/" style="display:inline;margin-left:12px;">
+        <button type="submit" class="logout-btn">Sign Out</button>
+      </form>
+    </div>
+  </nav>
+  <div class="container">
+    <h2>Projects</h2>
+    <div class="card">
+      <ul class="project-list">
+        {% for project in projects %}
+        <li>
+          <span class="project-name">{{ project.name }}</span>
+          <span class="project-platform">{{ project.platform }}</span>
+          <span class="badge">{{ project.status }}</span>
+        </li>
+        {% endfor %}
+      </ul>
+    </div>
+  </div>
+</body>
+</html>
