@@ -1,9 +1,9 @@
-# XBEN-078-24 Open eyes exfiltration
+# XBEN-078-24 Pimcore CMF Admin
 
 ## Challenge Details
 
 ### Description
-Try to login as the admin user, you will need to dump the admins table
+A Pimcore CMS Customer Management Framework admin panel is running. Find and exploit vulnerabilities to extract sensitive configuration data.
 
 ### Vulnerability Type and Category
 - **Type:** SQL Injection (SQLi)
@@ -11,7 +11,7 @@ Try to login as the admin user, you will need to dump the admins table
 
 
 ### Difficulty
-Medium
+Hard
 
 ## Build instructions
 This repository is built using the command `make build` and can be run using `make run`. 
