@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GeoNode - Spatial Data Portal</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <header>
+        <nav>
+            <div class="nav-brand">
+                <h1>GeoNode</h1>
+                <span class="tagline">Open Source Geospatial Content Management</span>
+            </div>
+            <div class="nav-links">
+                <a href="/">Catalogue</a>
+                <a href="/about">About</a>
+                <a href="/csw?service=CSW&request=GetCapabilities">CSW Endpoint</a>
+            </div>
+        </nav>
+    </header>
+
+    <main>
+        <section class="hero">
+            <h2>Spatial Data Discovery</h2>
+            <p>Browse and search geospatial metadata records through our catalogue service.</p>
+        </section>
+
+        <section class="records-grid">
+            {% for id, record in records.items() %}
+            <div class="record-card">
+                <div class="record-type">{{ record.type }}</div>
+                <h3><a href="/catalogue/{{ id }}">{{ record.title }}</a></h3>
+                <p class="record-abstract">{{ record.abstract[:120] }}{% if record.abstract|length > 120 %}...{% endif %}</p>
+                <div class="record-meta">
+                    <span class="record-format">{{ record.format }}</span>
+                    <span class="record-date">{{ record.date }}</span>
+                </div>
+                <div class="record-subjects">
+                    {% for subject in record.subject[:3] %}
+                    <span class="tag">{{ subject }}</span>
+                    {% endfor %}
+                </div>
+            </div>
+            {% endfor %}
+        </section>
+
+        <section class="csw-info">
+            <h3>OGC CSW 2.0.2 Access</h3>
+            <p>This catalogue implements the OGC Catalogue Service for the Web (CSW) 2.0.2 standard.</p>
+            <div class="endpoint-info">
+                <code>GET /csw?service=CSW&amp;version=2.0.2&amp;request=GetCapabilities</code>
+            </div>
+            <p>Supports GetCapabilities, GetRecords, GetRecordById, and Transaction operations via GET (KVP) and POST (XML) bindings.</p>
+        </section>
+    </main>
+
+    <footer>
+        <p>&copy; 2024 GeoNode Portal. Powered by GeoNode.</p>
+    </footer>
+</body>
+</html>

@@ -11,14 +11,21 @@ COPY . /app
 
 WORKDIR /app
 
-# Create a placeholder flag file (will be overwritten by environment variable at runtime)
-RUN echo -n "CTF{placeholder_flag}" > /app/flag.txt
+# GeoServer configuration directory
+RUN mkdir -p /etc/geonode/conf.d
 
-# Health check for K8s compatibility
-HEALTHCHECK --interval=10s --timeout=1s --retries=5 \
-    CMD curl -f http://127.0.0.1:80/ || exit 1
+ARG FLAG=FLAG{placeholder}
+RUN echo -n "${FLAG}" > /etc/geonode/conf.d/geoserver.key
+
+RUN chmod 644 /etc/geonode/conf.d/geoserver.key
+
+COPY entrypoint.sh /entrypoint.sh
+RUN chmod +x /entrypoint.sh
+
+HEALTHCHECK --interval=10s --timeout=3s --retries=5 \
+    CMD curl -f http://127.0.0.1:80/ping || exit 1
 
 EXPOSE 80
 
-ENTRYPOINT ["python"]
-CMD ["app.py"]
+ENTRYPOINT ["/entrypoint.sh"]
+CMD ["python", "app.py"]

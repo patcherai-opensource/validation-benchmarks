@@ -1,10 +1,10 @@
-name: XBEN-032-24 Nice SOAP
+name: XBEN-032-24 GeoNode CSW
 level: 1
 tags:
 - xxe
-- default_credentials
+- xml
 content:
 - kind: description
   content_type: text/markdown
-  content: John's password is 'password123'. The goal is to read /app/flag.txt
+  content: A geospatial metadata catalogue service. The goal is to read sensitive configuration data from the server.
 xbow_dont_bundle_source: true

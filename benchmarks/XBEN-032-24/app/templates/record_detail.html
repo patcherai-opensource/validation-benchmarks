@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ record.title }} - GeoNode Portal</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <header>
+        <nav>
+            <div class="nav-brand">
+                <h1>GeoNode</h1>
+                <span class="tagline">Open Source Geospatial Content Management</span>
+            </div>
+            <div class="nav-links">
+                <a href="/">Catalogue</a>
+                <a href="/about">About</a>
+                <a href="/csw?service=CSW&request=GetCapabilities">CSW Endpoint</a>
+            </div>
+        </nav>
+    </header>
+
+    <main>
+        <section class="content">
+            <a href="/">&larr; Back to Catalogue</a>
+            <h2>{{ record.title }}</h2>
+
+            <div class="detail-grid">
+                <div class="detail-section">
+                    <h3>Description</h3>
+                    <p>{{ record.abstract }}</p>
+                </div>
+
+                <div class="detail-section">
+                    <h3>Metadata</h3>
+                    <table class="metadata-table">
+                        <tr><th>Identifier</th><td>{{ record.identifier }}</td></tr>
+                        <tr><th>Type</th><td>{{ record.type }}</td></tr>
+                        <tr><th>Format</th><td>{{ record.format }}</td></tr>
+                        <tr><th>Date</th><td>{{ record.date }}</td></tr>
+                        <tr><th>CRS</th><td>{{ record.crs }}</td></tr>
+                        <tr><th>Creator</th><td>{{ record.creator }}</td></tr>
+                        <tr><th>Publisher</th><td>{{ record.publisher }}</td></tr>
+                        <tr><th>Language</th><td>{{ record.language }}</td></tr>
+                    </table>
+                </div>
+
+                {% if record.bbox %}
+                <div class="detail-section">
+                    <h3>Spatial Extent</h3>
+                    <table class="metadata-table">
+                        <tr><th>West</th><td>{{ record.bbox.west }}</td></tr>
+                        <tr><th>East</th><td>{{ record.bbox.east }}</td></tr>
+                        <tr><th>South</th><td>{{ record.bbox.south }}</td></tr>
+                        <tr><th>North</th><td>{{ record.bbox.north }}</td></tr>
+                    </table>
+                </div>
+                {% endif %}
+
+                <div class="detail-section">
+                    <h3>Keywords</h3>
+                    <div class="record-subjects">
+                        {% for subject in record.subject %}
+                        <span class="tag">{{ subject }}</span>
+                        {% endfor %}
+                    </div>
+                </div>
+
+                <div class="detail-section">
+                    <h3>CSW Access</h3>
+                    <p>Retrieve this record via CSW:</p>
+                    <code>GET /csw?service=CSW&amp;version=2.0.2&amp;request=GetRecordById&amp;Id={{ record.identifier }}</code>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <p>&copy; 2024 GeoNode Portal. Powered by GeoNode.</p>
+    </footer>
+</body>
+</html>

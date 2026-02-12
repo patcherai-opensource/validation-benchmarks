@@ -1,113 +1,262 @@
-/* General reset */
+/* GeoNode Portal Stylesheet */
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-    font-family: 'Arial', sans-serif;
 }
 
-/* Body styling */
 body {
-    background-color: #f4f4f4;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: #f5f6fa;
+    color: #333;
+    line-height: 1.6;
+}
+
+header {
+    background: #2c3e50;
+    color: white;
+    padding: 0;
+}
+
+nav {
+    max-width: 1200px;
+    margin: 0 auto;
     display: flex;
+    justify-content: space-between;
     align-items: center;
-    justify-content: center;
-    height: 100vh;
+    padding: 15px 20px;
+}
+
+.nav-brand h1 {
+    font-size: 1.5rem;
     margin: 0;
 }
 
-/* Container styling */
-.container, .dashboard-container {
-    max-width: 800px;
-    width: 100%;
-    margin: 20px auto;
-    padding: 20px;
-    background: #fff;
-    box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
-    border-radius: 8px;
-    text-align: center;
-}
-
-/* Headings */
-h2, h3 {
-    color: #444;
-    margin-bottom: 20px;
-}
-
-/* Form styling */
-form {
-    display: flex;
-    flex-direction: column;
-    gap: 15px;
-}
-
-label {
+.nav-brand .tagline {
+    font-size: 0.75rem;
+    opacity: 0.7;
     display: block;
-    margin-bottom: 5px;
-    font-weight: bold;
 }
 
-input[type="text"],
-input[type="password"] {
-    width: 100%;
-    padding: 10px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
+.nav-links a {
+    color: #ecf0f1;
+    text-decoration: none;
+    margin-left: 25px;
+    font-size: 0.9rem;
+    transition: color 0.2s;
 }
 
-button {
-    width: 100%;
-    padding: 10px;
-    background: #007bff;
-    border: none;
+.nav-links a:hover {
+    color: #3498db;
+}
+
+main {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 30px 20px;
+}
+
+.hero {
+    text-align: center;
+    padding: 40px 20px;
+    background: linear-gradient(135deg, #3498db, #2c3e50);
     color: white;
-    font-size: 16px;
-    border-radius: 4px;
-    cursor: pointer;
-    transition: background 0.3s ease;
+    border-radius: 8px;
+    margin-bottom: 30px;
 }
 
-button:hover {
-    background: #0056b3;
-}
-
-/* Info boxes */
-.info-box {
-    background: #f9f9f9;
-    padding: 20px;
-    margin-bottom: 20px;
-    border: 1px solid #ddd;
-    border-radius: 4px;
-    text-align: left;
-}
-
-.info-box h3 {
+.hero h2 {
+    font-size: 1.8rem;
     margin-bottom: 10px;
 }
 
-/* Buttons */
-button.action {
-    width: 45%;
-    margin: 10px 2.5%;
+.hero p {
+    font-size: 1.1rem;
+    opacity: 0.9;
+}
+
+.records-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+    gap: 20px;
+    margin-bottom: 40px;
+}
+
+.record-card {
+    background: white;
+    border-radius: 6px;
+    padding: 20px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+    transition: box-shadow 0.2s;
+}
+
+.record-card:hover {
+    box-shadow: 0 4px 16px rgba(0,0,0,0.12);
+}
+
+.record-type {
     display: inline-block;
+    background: #e8f4f8;
+    color: #2980b9;
+    font-size: 0.75rem;
+    padding: 2px 8px;
+    border-radius: 3px;
+    text-transform: uppercase;
+    font-weight: 600;
+    margin-bottom: 8px;
 }
 
-/* SOAP result display */
-#accountInfo, #accountHolderInfo {
-    white-space: pre-wrap;
-    font-family: monospace;
+.record-card h3 {
+    margin-bottom: 8px;
+    font-size: 1.1rem;
 }
 
-/* Logout link */
-a {
-    display: block;
-    text-align: center;
-    margin-top: 20px;
-    color: #007bff;
+.record-card h3 a {
+    color: #2c3e50;
     text-decoration: none;
-    transition: color 0.3s ease;
 }
 
-a:hover {
-    color: #0056b3;
+.record-card h3 a:hover {
+    color: #3498db;
+}
+
+.record-abstract {
+    font-size: 0.9rem;
+    color: #666;
+    margin-bottom: 12px;
+}
+
+.record-meta {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.8rem;
+    color: #888;
+    margin-bottom: 10px;
+}
+
+.record-subjects {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 5px;
+}
+
+.tag {
+    background: #ecf0f1;
+    color: #555;
+    padding: 2px 8px;
+    border-radius: 3px;
+    font-size: 0.75rem;
+}
+
+.csw-info {
+    background: white;
+    padding: 25px;
+    border-radius: 6px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+}
+
+.csw-info h3 {
+    margin-bottom: 10px;
+    color: #2c3e50;
+}
+
+.endpoint-info {
+    background: #f8f9fa;
+    padding: 12px 15px;
+    border-radius: 4px;
+    margin: 10px 0;
+    border-left: 3px solid #3498db;
+}
+
+.endpoint-info code {
+    font-size: 0.85rem;
+}
+
+.content {
+    background: white;
+    padding: 30px;
+    border-radius: 6px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+}
+
+.content h2 {
+    margin-bottom: 20px;
+    color: #2c3e50;
+}
+
+.content h3 {
+    margin-top: 25px;
+    margin-bottom: 10px;
+    color: #34495e;
+}
+
+.content h4 {
+    margin-top: 15px;
+    margin-bottom: 8px;
+}
+
+.content ul {
+    padding-left: 25px;
+    margin-bottom: 15px;
+}
+
+.content li {
+    margin-bottom: 5px;
+}
+
+.content pre {
+    background: #f8f9fa;
+    padding: 15px;
+    border-radius: 4px;
+    overflow-x: auto;
+    font-size: 0.85rem;
+    border: 1px solid #e9ecef;
+}
+
+.content code {
+    background: #f8f9fa;
+    padding: 2px 6px;
+    border-radius: 3px;
+    font-size: 0.85rem;
+}
+
+.detail-grid {
+    margin-top: 20px;
+}
+
+.detail-section {
+    margin-bottom: 25px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid #eee;
+}
+
+.detail-section:last-child {
+    border-bottom: none;
+}
+
+.metadata-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 10px;
+}
+
+.metadata-table th,
+.metadata-table td {
+    text-align: left;
+    padding: 8px 12px;
+    border-bottom: 1px solid #eee;
+}
+
+.metadata-table th {
+    width: 150px;
+    color: #666;
+    font-weight: 600;
+}
+
+footer {
+    text-align: center;
+    padding: 20px;
+    color: #888;
+    font-size: 0.85rem;
+    margin-top: 40px;
 }

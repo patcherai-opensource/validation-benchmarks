@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About - GeoNode Portal</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <header>
+        <nav>
+            <div class="nav-brand">
+                <h1>GeoNode</h1>
+                <span class="tagline">Open Source Geospatial Content Management</span>
+            </div>
+            <div class="nav-links">
+                <a href="/">Catalogue</a>
+                <a href="/about">About</a>
+                <a href="/csw?service=CSW&request=GetCapabilities">CSW Endpoint</a>
+            </div>
+        </nav>
+    </header>
+
+    <main>
+        <section class="content">
+            <h2>About This Portal</h2>
+            <p>This GeoNode instance provides a metadata catalogue for geospatial data discovery and sharing.
+               It implements the OGC CSW 2.0.2 standard for interoperable access to spatial metadata.</p>
+
+            <h3>Supported Standards</h3>
+            <ul>
+                <li>OGC CSW 2.0.2 - Catalogue Service for the Web</li>
+                <li>Dublin Core Metadata Element Set</li>
+                <li>OGC Filter Encoding 1.1</li>
+                <li>ISO 19115/19139 Geographic Metadata</li>
+            </ul>
+
+            <h3>API Usage</h3>
+            <p>The CSW endpoint at <code>/csw</code> supports both HTTP GET (Key-Value Pair encoding) and
+               HTTP POST (XML encoding) request methods.</p>
+
+            <h4>Example: GetRecords via POST</h4>
+            <pre>&lt;csw:GetRecords xmlns:csw="http://www.opengis.net/cat/csw/2.0.2"
+    service="CSW" version="2.0.2"
+    maxRecords="10" startPosition="1"
+    outputSchema="http://www.opengis.net/cat/csw/2.0.2"&gt;
+  &lt;csw:Query typeNames="csw:Record"&gt;
+    &lt;csw:ElementSetName&gt;summary&lt;/csw:ElementSetName&gt;
+  &lt;/csw:Query&gt;
+&lt;/csw:GetRecords&gt;</pre>
+
+            <h3>Software</h3>
+            <p>Built on GeoNode with OWSLib compatibility layer for XML processing.</p>
+        </section>
+    </main>
+
+    <footer>
+        <p>&copy; 2024 GeoNode Portal. Powered by GeoNode.</p>
+    </footer>
+</body>
+</html>
