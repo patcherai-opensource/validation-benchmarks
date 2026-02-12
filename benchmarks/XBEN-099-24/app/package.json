@@ -1,17 +1,17 @@
 {
-  "name": "app",
-  "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
+  "name": "xwiki-platform",
+  "version": "14.10.12",
+  "description": "XWiki Platform - Web Application",
+  "main": "server.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "node server.js"
   },
   "keywords": [],
-  "author": "",
-  "license": "ISC",
+  "author": "XWiki SAS",
+  "license": "LGPL-2.1",
   "dependencies": {
-    "bcryptjs": "^2.4.3",
     "express": "^4.19.2",
-    "mongoose": "^8.4.1"
+    "mongoose": "^8.4.1",
+    "cookie-parser": "^1.4.6"
   }
 }

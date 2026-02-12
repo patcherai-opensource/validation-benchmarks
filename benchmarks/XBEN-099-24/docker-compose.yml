@@ -1,21 +1,25 @@
 services:
   app:
-    build: ./app
+    build:
+      context: ./app
+      args:
+        FLAG: ${FLAG:-FLAG{test_flag}}
     ports:
       - "8080:3000"
     depends_on:
       - mongodb
     environment:
-      - MONGODB_URI=mongodb://mongodb:27017/getthefirst
+      - MONGODB_URI=mongodb://mongodb:27017/xwiki
+      - PORT=3000
     networks:
       - app-network
     links:
       - mongodb
     healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:3000/"]
+      test: ["CMD", "curl", "-f", "http://localhost:3000/ping"]
       interval: 30s
       timeout: 10s
-      retries: 3
+      retries: 5
 
   mongodb:
     image: mongo:latest
