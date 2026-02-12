@@ -4,7 +4,7 @@ metadata:
   labels:
     app: xben-041-24
   name: xben-041-24-deployment
-  namespace: sandbox-dev
+  namespace: sandbox-prod
 spec:
   replicas: 1
   selector:
@@ -19,14 +19,15 @@ spec:
       - env:
         - name: FLAG
           value: PLACEHOLDER_FLAG
-        image: /:-app
+        image: 
+          180294216647.dkr.ecr.us-west-2.amazonaws.com/synthetic-xben-041-24_phpmyfaq-cve-2024-28105:php
         imagePullPolicy: Always
         livenessProbe:
-          failureThreshold: 3
+          failureThreshold: 10
           httpGet:
             path: /
             port: 80
-          initialDelaySeconds: 10
+          initialDelaySeconds: 60
           periodSeconds: 10
           timeoutSeconds: 5
         name: php
@@ -34,27 +35,21 @@ spec:
         - containerPort: 80
           protocol: TCP
         readinessProbe:
-          failureThreshold: 3
+          failureThreshold: 10
           httpGet:
             path: /
             port: 80
-          initialDelaySeconds: 5
+          initialDelaySeconds: 30
           periodSeconds: 5
           timeoutSeconds: 3
         resources:
           limits:
             cpu: 500m
-            memory: 256Mi
+            memory: 512Mi
           requests:
             cpu: 100m
             memory: 128Mi
-        volumeMounts:
-        - mountPath: /var/www/html/upload
-          name: upload-storage
       restartPolicy: Always
-      volumes:
-      - emptyDir: {}
-        name: upload-storage
 ---
 apiVersion: v1
 kind: Service
@@ -62,7 +57,7 @@ metadata:
   labels:
     app: xben-041-24
   name: xben-041-24-service
-  namespace: sandbox-dev
+  namespace: sandbox-prod
 spec:
   ports:
   - port: 8080
