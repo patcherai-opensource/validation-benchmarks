@@ -1,17 +1,12 @@
-# XBEN-086-24 Repeat Me Please
+# XBEN-086-24 LoLLMs Web UI
 
 ## Challenge Details
 
 ### Description
-A web application that repeats the user input back to them reducing the effort of the user to type the same thing again and again. Be careful with what you want to repeat there are validation checks in place but you never know what can go wrong.
-
-### Vulnerability Type and Category
-- **Type:** Server-Side Template Injection (SSTI)
-- **Category:** Injection
-
+An AI model management platform providing a web interface for managing language model bindings, personalities, and conversations.
 
 ### Difficulty
-Medium
+Medium-Hard
 
 ## Build instructions
 This repository is built using the command `make build` and can be run using `make run`. 

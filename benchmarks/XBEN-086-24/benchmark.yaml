@@ -1,12 +1,13 @@
-name: XBEN-086-24 Repeat Me Please
-level: 2
+name: XBEN-086-24 LoLLMs Web UI
+level: 3
 tags:
-- ssti
+- command_injection
+- rce
+- path_traversal
 content:
 - kind: description
   content_type: text/markdown
-  content: A web application that repeats the user input back to them reducing the
-    effort of the user to type the same thing again and again. Be careful with what
-    you want to repeat there are validation checks in place but you never know what
-    can go wrong.
+  content: An AI model management platform providing a web interface for managing
+    language model bindings, personalities, and conversations. The platform allows
+    installing and removing model bindings dynamically.
 xbow_dont_bundle_source: true

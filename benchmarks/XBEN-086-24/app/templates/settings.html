@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LoLLMs Settings</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" rel="stylesheet">
+    <style>
+        body { background-color: #1a1a2e; color: #e0e0e0; }
+        .navbar { background-color: #16213e !important; }
+        .navbar-brand { color: #e94560 !important; font-weight: bold; }
+        .card { background-color: #0f3460; border: 1px solid #533483; }
+        .card-header { background-color: #16213e; color: #e94560; font-weight: bold; }
+        .btn-primary { background-color: #e94560; border-color: #e94560; }
+        .btn-danger { background-color: #c73652; }
+        .form-control, .form-select { background-color: #1a1a2e; border-color: #533483; color: #e0e0e0; }
+        .form-control:focus, .form-select:focus { background-color: #1a1a2e; color: #e0e0e0; border-color: #e94560; }
+        .list-group-item { background-color: #16213e; border-color: #533483; color: #e0e0e0; }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="/">
+                <i class="fas fa-robot"></i> LoLLMs WebUI
+            </a>
+            <div class="navbar-nav ms-auto">
+                <a class="nav-link" href="/"><i class="fas fa-comments"></i> Chat</a>
+                <a class="nav-link active" href="/settings"><i class="fas fa-cog"></i> Settings</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container mt-4">
+        <div class="row">
+            <div class="col-md-6">
+                <div class="card mb-4">
+                    <div class="card-header">
+                        <i class="fas fa-plug"></i> Binding Management
+                    </div>
+                    <div class="card-body">
+                        <h6>Installed Bindings</h6>
+                        <div id="binding-list" class="list-group mb-3"></div>
+
+                        <h6>Install New Binding</h6>
+                        <div class="input-group mb-2">
+                            <input type="text" class="form-control" id="new-binding-name" placeholder="Binding name">
+                            <button class="btn btn-primary" onclick="installBinding()">Install</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card mb-4">
+                    <div class="card-header">
+                        <i class="fas fa-users"></i> Personalities
+                    </div>
+                    <div class="card-body">
+                        <div id="personality-list" class="list-group"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-6">
+                <div class="card mb-4">
+                    <div class="card-header">
+                        <i class="fas fa-server"></i> Server Configuration
+                    </div>
+                    <div class="card-body">
+                        <div id="config-display"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        async function loadBindings() {
+            const resp = await fetch('/list_bindings');
+            const data = await resp.json();
+            const list = document.getElementById('binding-list');
+            list.innerHTML = '';
+            data.bindings.forEach(b => {
+                const item = document.createElement('div');
+                item.className = 'list-group-item d-flex justify-content-between align-items-center';
+                item.innerHTML = `
+                    <span><i class="fas fa-cube"></i> ${b.name}</span>
+                    <button class="btn btn-danger btn-sm" onclick="uninstallBinding('${b.name}')">
+                        <i class="fas fa-trash"></i> Uninstall
+                    </button>
+                `;
+                list.appendChild(item);
+            });
+        }
+
+        async function installBinding() {
+            const name = document.getElementById('new-binding-name').value.trim();
+            if (!name) return;
+            const resp = await fetch('/install_binding', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({name: name})
+            });
+            const data = await resp.json();
+            alert(data.message || 'Done');
+            loadBindings();
+        }
+
+        async function uninstallBinding(name) {
+            if (!confirm(`Uninstall binding "${name}"?`)) return;
+            const resp = await fetch('/unInstall_binding', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({name: name})
+            });
+            const data = await resp.json();
+            alert(data.message || 'Done');
+            loadBindings();
+        }
+
+        async function loadPersonalities() {
+            const resp = await fetch('/list_personalities');
+            const data = await resp.json();
+            const list = document.getElementById('personality-list');
+            list.innerHTML = '';
+            data.personalities.forEach(p => {
+                const item = document.createElement('div');
+                item.className = 'list-group-item';
+                item.innerHTML = `<strong>${p.name}</strong><br><small class="text-muted">${p.description}</small>`;
+                list.appendChild(item);
+            });
+        }
+
+        async function loadConfig() {
+            const resp = await fetch('/get_config');
+            const data = await resp.json();
+            const display = document.getElementById('config-display');
+            display.innerHTML = `
+                <table class="table table-dark table-sm">
+                    <tr><td>Version</td><td>${data.version}</td></tr>
+                    <tr><td>Active Binding</td><td>${data.binding_name}</td></tr>
+                    <tr><td>Model</td><td>${data.model_name || 'None'}</td></tr>
+                    <tr><td>Personalities</td><td>${data.personalities.join(', ')}</td></tr>
+                    <tr><td>Auto Update</td><td>${data.auto_update}</td></tr>
+                </table>
+            `;
+        }
+
+        loadBindings();
+        loadPersonalities();
+        loadConfig();
+    </script>
+</body>
+</html>

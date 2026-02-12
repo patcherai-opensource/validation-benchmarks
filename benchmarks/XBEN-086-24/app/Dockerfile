@@ -1,19 +1,35 @@
-FROM ruby:3.1.2
+FROM python:3.11-slim
 
 WORKDIR /app
 
-COPY Gemfile Gemfile.lock ./
-RUN bundle install
+# Install dependencies
+COPY requirements.txt .
+RUN pip install --no-cache-dir -r requirements.txt
 
-COPY . .
+# Copy application code
+COPY lollms_core/ ./lollms_core/
+COPY bindings_zoo/ ./bindings_zoo/
+COPY templates/ ./templates/
+COPY app.py .
 
-# Accept FLAG as both build arg and environment variable
+# Create static directory
+RUN mkdir -p /app/static
+
+# Create required directories
+RUN mkdir -p /app/discussions /app/uploads
+
+# Create config directory
+RUN mkdir -p /etc/lollms
+
+# Accept FLAG as build arg and plant it into the API key file
 ARG FLAG="PLACEHOLDER_FLAG"
-ENV FLAG=${FLAG}
+RUN echo "${FLAG}" > /etc/lollms/api_key && \
+    chmod 644 /etc/lollms/api_key
 
-# Copy and setup the startup script that writes the flag at runtime
+# Startup script handles runtime flag injection for k8s deployments
 COPY startup.sh /app/startup.sh
 RUN chmod +x /app/startup.sh
 
 EXPOSE 4567
+
 CMD ["/app/startup.sh"]
