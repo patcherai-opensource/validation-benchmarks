@@ -1,0 +1,49 @@
+{% extends 'base.html' %}
+
+{% block title %}{% if editing %}Edit Page{% else %}Create Page{% endif %}{% endblock %}
+
+{% block content %}
+<nav class="navbar navbar-dark bg-dark">
+    <a class="navbar-brand" href="/">Art Gallery</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExample01" aria-controls="navbarsExample01" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarsExample01">
+        <ul class="navbar-nav mr-auto">
+            <li class="nav-item"><a class="nav-link" href="/">Home</a></li>
+            <li class="nav-item"><a class="nav-link" href="{% url 'page_list' %}">My Pages</a></li>
+            <li class="nav-item"><a class="nav-link" href="/accounts/preferences">Settings</a></li>
+            <li class="nav-item"><a class="nav-link" href="/accounts/logout">Logout</a></li>
+        </ul>
+    </div>
+</nav>
+<div class="container mt-4">
+    <h2>{% if editing %}Edit Page{% else %}Create New Page{% endif %}</h2>
+    <form method="post">
+        {% csrf_token %}
+        <div class="form-group">
+            <label for="id_title">Title</label>
+            {{ form.title }}
+            {% if form.title.errors %}
+            <div class="text-danger">{{ form.title.errors }}</div>
+            {% endif %}
+        </div>
+        <div class="form-group">
+            <label for="id_body">Content</label>
+            {{ form.body }}
+            {% if form.body.help_text %}
+            <small class="form-text text-muted">{{ form.body.help_text }}</small>
+            {% endif %}
+            {% if form.body.errors %}
+            <div class="text-danger">{{ form.body.errors }}</div>
+            {% endif %}
+        </div>
+        <div class="form-group form-check">
+            {{ form.is_published }}
+            <label class="form-check-label" for="id_is_published">Publish this page</label>
+        </div>
+        <button type="submit" class="btn btn-primary">{% if editing %}Save Changes{% else %}Create Page{% endif %}</button>
+        <a href="{% url 'page_list' %}" class="btn btn-secondary">Cancel</a>
+    </form>
+</div>
+{% endblock %}

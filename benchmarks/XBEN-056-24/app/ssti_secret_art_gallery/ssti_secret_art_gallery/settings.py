@@ -8,10 +8,14 @@ import os
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-SECRET_KEY = os.environ.get('FLAG', open('/flag.txt').read() if os.path.exists('/flag.txt') else 'default-secret-key')
+# Read the secret key from the deployment secret file.
+_secret_path = '/etc/app/secret_key'
+if os.path.exists(_secret_path):
+    SECRET_KEY = open(_secret_path).read().strip()
+else:
+    SECRET_KEY = 'insecure-dev-key-change-in-production'
 
-# SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = ['*']
 
@@ -24,7 +28,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'accounts',
-    'bootstrap4'
+    'bootstrap4',
 ]
 
 AUTH_USER_MODEL = 'accounts.Account'
@@ -44,14 +48,13 @@ ROOT_URLCONF = 'ssti_secret_art_gallery.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [ 
+        'DIRS': [
             os.path.join(BASE_DIR, 'templates'),
-            os.path.join(BASE_DIR, 'accounts','templates') 
-            ],
+            os.path.join(BASE_DIR, 'accounts', 'templates'),
+        ],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
-                'django.template.context_processors.debug',
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
@@ -69,7 +72,7 @@ DATABASES = {
         'HOST': os.environ.get('DB_HOST', 'localhost'),
         'USER': os.environ.get('DB_USER', 'root'),
         'PASSWORD': os.environ.get('DB_PASSWORD', 'ssti_secret_art_gallery'),
-        'PORT': os.environ.get('DB_PORT', '3306')
+        'PORT': os.environ.get('DB_PORT', '3306'),
     }
 }
 
@@ -95,7 +98,6 @@ TIME_ZONE = 'UTC'
 USE_I18N = True
 
 USE_TZ = True
-
 
 # Static files (CSS, JavaScript, Images)
 STATIC_URL = 'static/'

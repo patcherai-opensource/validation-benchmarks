@@ -5,29 +5,18 @@
 {% block content %}
 
 <nav class="navbar navbar-dark bg-dark">
-    <a class="navbar-brand" href="#">Art Gallery</a>
+    <a class="navbar-brand" href="/">Art Gallery</a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExample01" aria-controls="navbarsExample01" aria-expanded="false" aria-label="Toggle navigation">
     <span class="navbar-toggler-icon"></span>
     </button>
-    
+
     <div class="collapse navbar-collapse" id="navbarsExample01">
         <ul class="navbar-nav mr-auto">
-            <li class="nav-item active">
-            <a class="nav-link" href="/">Home</a>
-            </li>
-            <li class="nav-item dropdown">
-            <a class="nav-link dropdown-toggle" href="#" id="dropdown01" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Actions</a>
-            <div class="dropdown-menu" aria-labelledby="dropdown01">
-                <a class="dropdown-item" href="/accounts/preferences">My settings<span class="sr-only">(current)</span></a>
-                <a class="dropdown-item disabled" href="#">Buy Art</a>
-                <a class="dropdown-item disabled" href="#">Sell Art(Only Premiun Accounts)</a>
-                <a class="dropdown-item" href="/accounts/logout">Logout</a>
-            </div>
-            </li>
+            <li class="nav-item"><a class="nav-link" href="/">Home</a></li>
+            <li class="nav-item"><a class="nav-link" href="/accounts/pages/">My Pages</a></li>
+            <li class="nav-item active"><a class="nav-link" href="/accounts/preferences">My Settings</a></li>
+            <li class="nav-item"><a class="nav-link" href="/accounts/logout">Logout</a></li>
         </ul>
-        <form class="form-inline my-2 my-md-0">
-            <input class="form-control" type="text" placeholder="Search" aria-label="Search">
-        </form>
     </div>
 </nav>
 <div class="container mt-5">
@@ -37,9 +26,13 @@
             <p>Name: {{ user.username }}</p>
             <p>Premium Subscriber: {{ user.is_premium }}</p>
             {% if user.is_premium %}
-            <p>This account is in process to access premium subscription</p>
-            <p>The validation process could take a few hours ... </p>
+            <p>This account is in process to access premium subscription.</p>
+            <p>The validation process could take a few hours.</p>
             {% endif %}
+            <hr>
+            <h4>Content Management</h4>
+            <a href="/accounts/pages/" class="btn btn-outline-primary">Manage My Pages</a>
+            <a href="/accounts/pages/new/" class="btn btn-outline-success">Create New Page</a>
         </div>
     </div>
 </div>

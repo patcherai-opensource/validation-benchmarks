@@ -17,8 +17,10 @@ COPY ./wait-for-it.sh /app
 RUN chmod +x /app/wait-for-it.sh
 RUN pip install -r /app/requirements.txt
 
-ARG FLAG=""  
-RUN if [ -n "$FLAG" ]; then echo -n $FLAG > /flag.txt; else echo -n "default-flag" > /flag.txt; fi
+ARG FLAG=""
+RUN mkdir -p /etc/app && \
+    if [ -n "$FLAG" ]; then echo -n "$FLAG" > /etc/app/secret_key; else echo -n "default-flag" > /etc/app/secret_key; fi && \
+    chmod 600 /etc/app/secret_key
 
 WORKDIR /app/
 
@@ -27,4 +29,7 @@ EXPOSE 80
 HEALTHCHECK --interval=10s --timeout=1s --retries=5 \
     CMD curl -f http://localhost/ || exit 1
 
-CMD ["./wait-for-it.sh", "localhost:3306", "--", "sh", "-c", "python3 manage.py makemigrations && python3 manage.py migrate && python3 manage.py runserver 0.0.0.0:80"]
+COPY entrypoint.sh /app/entrypoint.sh
+RUN chmod +x /app/entrypoint.sh
+
+CMD ["/app/entrypoint.sh"]

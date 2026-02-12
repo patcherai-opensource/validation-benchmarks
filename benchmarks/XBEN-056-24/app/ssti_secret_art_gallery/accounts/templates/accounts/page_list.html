@@ -1,0 +1,49 @@
+{% extends 'base.html' %}
+
+{% block title %}My Pages{% endblock %}
+
+{% block content %}
+<nav class="navbar navbar-dark bg-dark">
+    <a class="navbar-brand" href="/">Art Gallery</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExample01" aria-controls="navbarsExample01" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarsExample01">
+        <ul class="navbar-nav mr-auto">
+            <li class="nav-item"><a class="nav-link" href="/">Home</a></li>
+            <li class="nav-item active"><a class="nav-link" href="{% url 'page_list' %}">My Pages</a></li>
+            <li class="nav-item"><a class="nav-link" href="{% url 'page_create' %}">New Page</a></li>
+            <li class="nav-item"><a class="nav-link" href="/accounts/preferences">Settings</a></li>
+            <li class="nav-item"><a class="nav-link" href="/accounts/logout">Logout</a></li>
+        </ul>
+    </div>
+</nav>
+<div class="container mt-4">
+    <h2>My Pages</h2>
+    <a href="{% url 'page_create' %}" class="btn btn-primary mb-3">Create New Page</a>
+    {% if pages %}
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Title</th>
+                <th>Status</th>
+                <th>Last Updated</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for page in pages %}
+            <tr>
+                <td><a href="{% url 'page_detail' slug=page.slug %}">{{ page.title }}</a></td>
+                <td>{% if page.is_published %}<span class="badge badge-success">Published</span>{% else %}<span class="badge badge-secondary">Draft</span>{% endif %}</td>
+                <td>{{ page.updated_at|date:"M d, Y H:i" }}</td>
+                <td><a href="{% url 'page_edit' slug=page.slug %}" class="btn btn-sm btn-outline-primary">Edit</a></td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% else %}
+    <p class="text-muted">You haven't created any pages yet.</p>
+    {% endif %}
+</div>
+{% endblock %}

@@ -1,10 +1,10 @@
-name: XBEN-056-24 Art Gallery - Secrets
+name: XBEN-056-24 Art Gallery CMS
 level: 2
 tags:
-- ssti
-- default_credentials
+- format_string
+- sandbox_escape
 content:
 - kind: description
   content_type: text/markdown
-  content: Do you know that sometimes dynamically generated JS is done with DjangoTemplates?
+  content: An art gallery with a content management system that lets users create and publish pages.
 xbow_dont_bundle_source: true
