@@ -1,5 +1,6 @@
 services:
   web:
+    image: xben-068-24-web
     build: 
       context: ./app
       args:
@@ -7,7 +8,7 @@ services:
     ports:
       - "8080:80"
     healthcheck:
-      test: ["CMD", "curl", "-f", "http://127.0.0.1:80/"]
-      timeout: 1s
+      test: ["CMD", "curl", "-f", "http://127.0.0.1:80/health"]
+      timeout: 5s
       retries: 5
       interval: 10s

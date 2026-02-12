@@ -3,91 +3,242 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Service Status Dashboard</title>
+    <title>CalcEngine – Scientific Expression Evaluator</title>
     <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
         body {
-            font-family: Arial, sans-serif;
-            background: #f4f4f9;
-            margin: 0;
-            padding: 0;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-        }
-
-        #service-container {
-            width: 80%;
-            max-width: 600px;
-            background: white;
-            border-radius: 8px;
-            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-            padding: 20px;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background: #0f1419;
+            color: #e1e8ed;
+            min-height: 100vh;
             display: flex;
             flex-direction: column;
-            gap: 10px;
         }
-
-        .service {
-            padding: 10px 20px;
-            border-radius: 5px;
+        header {
+            background: #1a2332;
+            border-bottom: 1px solid #2d3e50;
+            padding: 16px 24px;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            font-size: 16px;
-            transition: background-color 0.3s;
         }
-
-        .red {
-            background-color: #ffdddd;
-            color: #d04437;
+        header h1 {
+            font-size: 20px;
+            font-weight: 600;
+            color: #4fc3f7;
         }
-
-        .green {
-            background-color: #ddffdd;
-            color: #4a934a;
+        header h1 span { color: #78909c; font-weight: 400; font-size: 14px; }
+        header nav a {
+            color: #90a4ae;
+            text-decoration: none;
+            margin-left: 20px;
+            font-size: 14px;
+        }
+        header nav a:hover { color: #4fc3f7; }
+        main {
+            flex: 1;
+            max-width: 900px;
+            width: 100%;
+            margin: 0 auto;
+            padding: 32px 24px;
+        }
+        .editor-section {
+            background: #1a2332;
+            border: 1px solid #2d3e50;
+            border-radius: 8px;
+            overflow: hidden;
+            margin-bottom: 24px;
+        }
+        .editor-header {
+            background: #15202b;
+            padding: 10px 16px;
+            border-bottom: 1px solid #2d3e50;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 13px;
+            color: #78909c;
+        }
+        .editor-header .actions button {
+            background: #4fc3f7;
+            color: #0f1419;
+            border: none;
+            padding: 6px 16px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 13px;
+            font-weight: 600;
+            margin-left: 8px;
+        }
+        .editor-header .actions button:hover { background: #29b6f6; }
+        .editor-header .actions button.secondary {
+            background: transparent;
+            color: #78909c;
+            border: 1px solid #2d3e50;
+        }
+        .editor-header .actions button.secondary:hover {
+            color: #e1e8ed;
+            border-color: #4fc3f7;
+        }
+        textarea {
+            width: 100%;
+            min-height: 200px;
+            background: #0f1419;
+            color: #e1e8ed;
+            border: none;
+            padding: 16px;
+            font-family: 'Fira Code', 'Consolas', 'Monaco', monospace;
+            font-size: 14px;
+            line-height: 1.6;
+            resize: vertical;
+            outline: none;
+        }
+        textarea::placeholder { color: #455a64; }
+        .output-section {
+            background: #1a2332;
+            border: 1px solid #2d3e50;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+        .output-header {
+            background: #15202b;
+            padding: 10px 16px;
+            border-bottom: 1px solid #2d3e50;
+            font-size: 13px;
+            color: #78909c;
+        }
+        .output-content {
+            padding: 16px;
+            font-family: 'Fira Code', 'Consolas', 'Monaco', monospace;
+            font-size: 14px;
+            min-height: 100px;
+            white-space: pre-wrap;
+            word-break: break-all;
+        }
+        .output-content .result { color: #66bb6a; }
+        .output-content .error { color: #ef5350; }
+        .output-content .info { color: #78909c; }
+        .examples {
+            margin-top: 32px;
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 12px;
+        }
+        .example-card {
+            background: #1a2332;
+            border: 1px solid #2d3e50;
+            border-radius: 6px;
+            padding: 14px;
+            cursor: pointer;
+            transition: border-color 0.2s;
+        }
+        .example-card:hover { border-color: #4fc3f7; }
+        .example-card h4 { font-size: 13px; color: #4fc3f7; margin-bottom: 6px; }
+        .example-card code {
+            font-family: 'Fira Code', monospace;
+            font-size: 12px;
+            color: #90a4ae;
+        }
+        footer {
+            text-align: center;
+            padding: 16px;
+            color: #455a64;
+            font-size: 12px;
+            border-top: 1px solid #1a2332;
         }
     </style>
 </head>
 <body>
-    <div id="service-container">
-        <div id="apache" class="service">Apache: Loading...</div>
-        <div id="mysql" class="service">MySQL: Loading...</div>
-        <div id="nginx" class="service">Nginx: Loading...</div>
-        <div id="ssh" class="service">SSH: Loading...</div>
-    </div>
-
+    <header>
+        <h1>CalcEngine <span>v{{ version }}</span></h1>
+        <nav>
+            <a href="/docs">Documentation</a>
+            <a href="/api/v1/info">API</a>
+        </nav>
+    </header>
+    <main>
+        <div class="editor-section">
+            <div class="editor-header">
+                <span>Expression Editor</span>
+                <div class="actions">
+                    <button class="secondary" onclick="resetSession()">Reset Session</button>
+                    <button onclick="evaluate()">Evaluate ▶</button>
+                </div>
+            </div>
+            <textarea id="expression" placeholder="Enter a mathematical expression...&#10;&#10;Examples:&#10;  sin(pi/4) * sqrt(2)&#10;  x = 10; y = 20; x + y&#10;  def f(n): return n**2 + 1&#10;  f(5)"></textarea>
+        </div>
+        <div class="output-section">
+            <div class="output-header">Output</div>
+            <div class="output-content" id="output"><span class="info">Results will appear here.</span></div>
+        </div>
+        <div class="examples">
+            <div class="example-card" onclick="loadExample('sin(pi/4) * sqrt(2)')">
+                <h4>Trigonometry</h4>
+                <code>sin(pi/4) * sqrt(2)</code>
+            </div>
+            <div class="example-card" onclick="loadExample('x = linspace(0, 10, 5)\nsum(x)')">
+                <h4>Arrays</h4>
+                <code>x = linspace(0, 10, 5)<br>sum(x)</code>
+            </div>
+            <div class="example-card" onclick="loadExample('def factorial(n):\n    if n <= 1:\n        return 1\n    return n * factorial(n-1)\nfactorial(10)')">
+                <h4>User Functions</h4>
+                <code>def factorial(n): ...</code>
+            </div>
+            <div class="example-card" onclick="loadExample('a = 3 + 4j\nb = 1 - 2j\na * b')">
+                <h4>Complex Numbers</h4>
+                <code>a = 3+4j; b = 1-2j; a*b</code>
+            </div>
+        </div>
+    </main>
+    <footer>CalcEngine v{{ version }} &mdash; Sandboxed Expression Evaluator</footer>
     <script>
-        document.addEventListener("DOMContentLoaded", function() {
-            const services = ['apache', 'mysql', 'nginx', 'ssh'];
-
-            services.forEach(service => {
-                fetch('/check_service', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({ service_name: service })
-                })
-                .then(response => response.json())
-                .then(data => {
-                    const element = document.getElementById(service);
-                    if (data.status === "true") {
-                        element.classList.add('green');
-                        element.textContent = service.toUpperCase() + ": Running";
-                    } else {
-                        element.classList.add('red');
-                        element.textContent = service.toUpperCase() + ": Stopped";
-                    }
-                })
-                .catch(error => {
-                    console.error('Error:', error);
-                    const element = document.getElementById(service);
-                    element.textContent = service.toUpperCase() + ": Error";
-                });
+        function evaluate() {
+            const expr = document.getElementById('expression').value;
+            const output = document.getElementById('output');
+            if (!expr.trim()) {
+                output.innerHTML = '<span class="info">Enter an expression to evaluate.</span>';
+                return;
+            }
+            output.innerHTML = '<span class="info">Evaluating...</span>';
+            fetch('/api/v1/evaluate', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({expression: expr})
+            })
+            .then(r => r.json())
+            .then(data => {
+                if (data.success) {
+                    output.innerHTML = '<span class="result">→ ' + escapeHtml(data.result) + '</span>';
+                } else if (data.errors) {
+                    output.innerHTML = data.errors.map(e => '<span class="error">✗ ' + escapeHtml(e) + '</span>').join('\n');
+                } else if (data.error) {
+                    output.innerHTML = '<span class="error">✗ ' + escapeHtml(data.error) + '</span>';
+                }
+            })
+            .catch(err => {
+                output.innerHTML = '<span class="error">✗ Network error</span>';
             });
+        }
+        function resetSession() {
+            fetch('/api/v1/session/reset', {method: 'POST'})
+            .then(() => {
+                document.getElementById('output').innerHTML = '<span class="info">Session reset. Variables and functions cleared.</span>';
+            });
+        }
+        function loadExample(code) {
+            document.getElementById('expression').value = code;
+        }
+        function escapeHtml(s) {
+            const d = document.createElement('div');
+            d.textContent = s;
+            return d.innerHTML;
+        }
+        document.getElementById('expression').addEventListener('keydown', function(e) {
+            if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') {
+                e.preventDefault();
+                evaluate();
+            }
         });
     </script>
 </body>
 </html>
-
