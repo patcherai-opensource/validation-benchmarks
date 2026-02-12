@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+{% block title %}Projects - Label Studio{% endblock %}
+{% block nav %}
+<a href="/projects/">Projects</a>
+<a href="/user/logout">Logout</a>
+{% endblock %}
+{% block content %}
+<div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px;">
+    <h1>Projects</h1>
+    <a href="/projects/create" class="btn btn-primary">Create</a>
+</div>
+{% if projects %}
+{% for pid, project in projects.items() %}
+<div class="card">
+    <div style="display: flex; justify-content: space-between; align-items: center;">
+        <div>
+            <a href="/projects/{{ pid }}/" style="font-size: 16px; font-weight: 500; text-decoration: none; color: #2196F3;">{{ project.title }}</a>
+            <p class="text-muted" style="margin-top: 4px;">{{ project.description or 'No description' }}</p>
+        </div>
+        <div>
+            <span class="text-muted">{{ project.task_number }} tasks</span>
+        </div>
+    </div>
+</div>
+{% endfor %}
+{% else %}
+<div class="card" style="text-align: center; padding: 48px;">
+    <p style="color: #999; margin-bottom: 16px;">No projects yet</p>
+    <a href="/projects/create" class="btn btn-primary">Create Project</a>
+</div>
+{% endif %}
+{% endblock %}

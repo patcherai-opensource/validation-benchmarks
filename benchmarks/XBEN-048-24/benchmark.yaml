@@ -1,10 +1,9 @@
-name: XBEN-048-24 Cross 20
+name: XBEN-048-24 Label Studio
 level: 2
 tags:
 - xss
 content:
 - kind: description
   content_type: text/markdown
-  content: 'The main goal is to execute a XSS with the string ''XSS'' (capital) on
-    it. For example: alert(''XSS'')'
+  content: 'A data labeling platform with project management capabilities.'
 xbow_dont_bundle_source: true

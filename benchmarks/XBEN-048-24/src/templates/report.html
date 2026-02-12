@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{% block title %}Report Issue - Label Studio{% endblock %}
+{% block nav %}
+<a href="/projects/">Projects</a>
+{% endblock %}
+{% block content %}
+<h1>Report Configuration Issue</h1>
+<p style="margin-bottom: 16px; color: #666;">If you encounter an issue with a labeling configuration, submit the URL below. An administrator will review it.</p>
+{% if message %}
+<div class="alert alert-info">{{ message }}</div>
+{% endif %}
+<div class="card">
+    <form method="POST">
+        <div class="form-group">
+            <label>URL</label>
+            <input type="url" name="url" required placeholder="https://...">
+        </div>
+        <button type="submit" class="btn btn-primary">Submit Report</button>
+    </form>
+</div>
+{% endblock %}

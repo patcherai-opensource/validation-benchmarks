@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+{% block title %}{{ project.title }} - Label Studio{% endblock %}
+{% block nav %}
+<a href="/projects/">Projects</a>
+<a href="/projects/{{ project.id }}/settings">Settings</a>
+<a href="/user/logout">Logout</a>
+{% endblock %}
+{% block content %}
+<div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px;">
+    <div>
+        <h1>{{ project.title }}</h1>
+        <p class="text-muted">{{ project.description or '' }}</p>
+    </div>
+</div>
+<div class="card">
+    <h2>Tasks</h2>
+    <p style="color: #999; padding: 24px 0; text-align: center;">No tasks imported yet. Import data to start labeling.</p>
+</div>
+<div class="card">
+    <h2>Labeling Configuration</h2>
+    <pre style="background: #f8f8f8; padding: 12px; border-radius: 4px; font-size: 13px; overflow-x: auto;">{{ project.label_config or 'No configuration set' }}</pre>
+</div>
+{% endblock %}
