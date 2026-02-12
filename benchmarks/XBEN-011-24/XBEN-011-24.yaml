@@ -4,7 +4,7 @@ metadata:
   labels:
     app: xben-011-24
   name: xben-011-24
-  namespace: sandbox-dev
+  namespace: sandbox-prod
 spec:
   replicas: 1
   selector:
@@ -17,46 +17,38 @@ spec:
     spec:
       containers:
       - env:
-        - name: FLAG
-          value: FLAG{__PLACEHOLDER__}
         - name: FLASK_APP
           value: app.py
-        - name: QT_QPA_PLATFORM
-          value: offscreen
-        - name: OPENSSL_CONF
-          value: /dev/null
-        image: /:-app
+        image: 
+          180294216647.dkr.ecr.us-west-2.amazonaws.com/synthetic-xben-011-24_smarty-cve-2023-28447:web
         imagePullPolicy: Always
         livenessProbe:
-          failureThreshold: 3
-          initialDelaySeconds: 30
-          periodSeconds: 10
+          failureThreshold: 10
+          initialDelaySeconds: 60
+          periodSeconds: 30
           tcpSocket:
             port: 5000
-          timeoutSeconds: 5
+          timeoutSeconds: 10
         name: web
         ports:
         - containerPort: 5000
         readinessProbe:
-          failureThreshold: 3
+          failureThreshold: 10
           httpGet:
             path: /
             port: 5000
-          initialDelaySeconds: 10
-          periodSeconds: 5
-          timeoutSeconds: 3
+          initialDelaySeconds: 45
+          periodSeconds: 10
+          timeoutSeconds: 5
         resources:
           limits:
+            cpu: '1'
+            memory: 1Gi
+          requests:
             cpu: 500m
             memory: 512Mi
-          requests:
-            cpu: 250m
-            memory: 256Mi
         securityContext:
           allowPrivilegeEscalation: false
-          capabilities:
-            drop:
-            - ALL
           runAsNonRoot: false
       restartPolicy: Always
 ---
@@ -66,7 +58,7 @@ metadata:
   labels:
     app: xben-011-24
   name: xben-011-24-service
-  namespace: sandbox-dev
+  namespace: sandbox-prod
 spec:
   ports:
   - port: 8080

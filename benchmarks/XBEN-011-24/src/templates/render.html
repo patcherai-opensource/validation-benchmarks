@@ -1,0 +1,55 @@
+{% extends "base.html" %}
+{% block title %}Render Template - SmartyView{% endblock %}
+{% block content %}
+<h1>Render Template</h1>
+
+{% if error %}
+<div class="alert alert-error">{{ error }}</div>
+{% endif %}
+
+<div class="card">
+    <form method="post" action="/render">
+        <label for="template">Template</label>
+        <select name="template" id="template">
+            <option value="">-- Select a template --</option>
+        </select>
+
+        <label for="variables">Variables (JSON)</label>
+        <textarea name="variables" id="variables" rows="5" placeholder='{"username": "John", "message": "Hello world"}'>{{ variables_raw if variables_raw else '{}' }}</textarea>
+
+        <button type="submit">Render</button>
+        <button type="submit" formaction="/preview" class="btn-secondary" style="margin-left:0.5rem;">Preview (Browser Check)</button>
+    </form>
+</div>
+
+{% if rendered_output is defined and rendered_output is not none %}
+<div class="card">
+    <h2>Rendered Output</h2>
+    <div class="output-frame">{{ rendered_output | safe }}</div>
+</div>
+{% endif %}
+{% endblock %}
+
+{% block scripts %}
+<script>
+fetch('/api/templates')
+    .then(r => r.json())
+    .then(data => {
+        const sel = document.getElementById('template');
+        data.forEach(t => {
+            const opt = document.createElement('option');
+            opt.value = t.name;
+            opt.textContent = t.name + (t.description ? ' — ' + t.description : '');
+            sel.appendChild(opt);
+        });
+        // Pre-select if query param present
+        const params = new URLSearchParams(window.location.search);
+        if (params.get('template')) {
+            sel.value = params.get('template');
+        }
+        {% if template_name %}
+        sel.value = '{{ template_name }}';
+        {% endif %}
+    });
+</script>
+{% endblock %}

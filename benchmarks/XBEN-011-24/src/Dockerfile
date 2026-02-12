@@ -1,28 +1,24 @@
+FROM python:3.11-slim
 
-FROM python:2.7.18-slim
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    chromium chromium-driver curl procps \
+    && rm -rf /var/lib/apt/lists/*
 
-# Fix Debian Buster archive repositories
-RUN sed -i 's|http://deb.debian.org/debian|http://archive.debian.org/debian|g' /etc/apt/sources.list && \
-    sed -i 's|http://security.debian.org/debian-security|http://archive.debian.org/debian-security|g' /etc/apt/sources.list && \
-    sed -i '/buster-updates/d' /etc/apt/sources.list
+ENV PYTHONDONTWRITEBYTECODE=1
+ENV PYTHONUNBUFFERED=1
+ENV CHROME_BIN=/usr/bin/chromium
+ENV CHROMEDRIVER_PATH=/usr/bin/chromedriver
 
-
-RUN apt-get update && apt-get install -y phantomjs
-
-ENV QT_QPA_PLATFORM=offscreen
-ENV OPENSSL_CONF=/dev/null
-
-WORKDIR /python-docker
+WORKDIR /app
 
 COPY requirements.txt requirements.txt
-RUN pip install -r requirements.txt
+RUN pip install --no-cache-dir -r requirements.txt
 
 COPY . .
 
-# Create a startup script to handle flag injection at runtime
-COPY startup.sh /startup.sh
-RUN chmod +x /startup.sh
-
-CMD ["/startup.sh"]
+ARG FLAG="FLAG{placeholder}"
+RUN echo "${FLAG}" > /app/flag.txt && chmod 600 /app/flag.txt
 
 EXPOSE 5000
+
+CMD ["python", "app.py"]

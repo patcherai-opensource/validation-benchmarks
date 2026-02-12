@@ -1,0 +1,88 @@
+{% extends "base.html" %}
+{% block title %}SmartyView - Template Playground{% endblock %}
+{% block content %}
+<h1>Template Library</h1>
+<div class="card">
+    <p style="margin-bottom: 1rem; color: #666;">
+        Browse and manage your Smarty-compatible templates. Select a template to view its source or
+        <a href="/render">render it with variables</a>.
+    </p>
+    <ul class="template-list" id="template-list">
+        <li style="color: #999;">Loading templates...</li>
+    </ul>
+</div>
+
+<div class="card">
+    <h2>Create New Template</h2>
+    <form id="create-form">
+        <label for="tpl-name">Template Name</label>
+        <input type="text" id="tpl-name" name="name" placeholder="my-template" pattern="[a-zA-Z0-9_-]+" required>
+        <label for="tpl-desc">Description</label>
+        <input type="text" id="tpl-desc" name="description" placeholder="Short description...">
+        <label for="tpl-source">Template Source</label>
+        <textarea id="tpl-source" name="source" rows="6" placeholder='{$greeting|escape:"html"}, {$name}!'></textarea>
+        <button type="submit">Create Template</button>
+        <span id="create-msg" style="margin-left: 1rem; font-size: 0.9rem;"></span>
+    </form>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+function loadTemplates() {
+    fetch('/api/templates')
+        .then(r => r.json())
+        .then(data => {
+            const list = document.getElementById('template-list');
+            if (!data.length) {
+                list.innerHTML = '<li style="color:#999;">No templates found.</li>';
+                return;
+            }
+            list.innerHTML = data.map(t => `
+                <li>
+                    <div>
+                        <span class="name">${t.name}</span>
+                        ${t.readonly ? '<span class="badge badge-readonly">read-only</span>' : ''}
+                        <br><span class="desc">${t.description || ''}</span>
+                    </div>
+                    <div>
+                        <a href="/render?template=${encodeURIComponent(t.name)}" class="btn" style="font-size:0.8rem;padding:0.3rem 0.8rem;">Render</a>
+                    </div>
+                </li>
+            `).join('');
+        })
+        .catch(() => {
+            document.getElementById('template-list').innerHTML = '<li style="color:#c0392b;">Failed to load templates.</li>';
+        });
+}
+
+document.getElementById('create-form').addEventListener('submit', function(e) {
+    e.preventDefault();
+    const msg = document.getElementById('create-msg');
+    fetch('/api/templates', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({
+            name: document.getElementById('tpl-name').value,
+            description: document.getElementById('tpl-desc').value,
+            source: document.getElementById('tpl-source').value,
+        })
+    })
+    .then(r => r.json().then(d => ({status: r.status, body: d})))
+    .then(({status, body}) => {
+        if (status === 201) {
+            msg.style.color = '#27ae60';
+            msg.textContent = 'Created!';
+            document.getElementById('create-form').reset();
+            loadTemplates();
+        } else {
+            msg.style.color = '#c0392b';
+            msg.textContent = body.error || 'Error creating template.';
+        }
+    })
+    .catch(() => { msg.style.color = '#c0392b'; msg.textContent = 'Network error.'; });
+});
+
+loadTemplates();
+</script>
+{% endblock %}

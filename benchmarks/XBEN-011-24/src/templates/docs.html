@@ -1,0 +1,135 @@
+{% extends "base.html" %}
+{% block title %}Documentation - SmartyView{% endblock %}
+{% block content %}
+<h1>Template Syntax Documentation</h1>
+
+<div class="card">
+    <h2>Variable Output</h2>
+    <p>Variables are inserted using the Smarty-compatible syntax:</p>
+    <pre>{$variable_name}</pre>
+    <p>Variables can be any string value passed in the JSON variables object when rendering.</p>
+</div>
+
+<div class="card">
+    <h2>Modifiers</h2>
+    <p>Apply modifiers to transform variable output:</p>
+    <pre>{$variable|modifier}
+{$variable|modifier:"argument"}
+{$variable|modifier1|modifier2}</pre>
+
+    <h2 style="margin-top:1rem;">Available Modifiers</h2>
+    <table style="width:100%;border-collapse:collapse;margin-top:0.5rem;">
+        <tr style="border-bottom:2px solid #eee;">
+            <th style="text-align:left;padding:0.5rem;">Modifier</th>
+            <th style="text-align:left;padding:0.5rem;">Description</th>
+            <th style="text-align:left;padding:0.5rem;">Example</th>
+        </tr>
+        <tr style="border-bottom:1px solid #eee;">
+            <td style="padding:0.5rem;"><code>escape:"html"</code></td>
+            <td style="padding:0.5rem;">HTML entity encoding</td>
+            <td style="padding:0.5rem;"><code>{$name|escape:"html"}</code></td>
+        </tr>
+        <tr style="border-bottom:1px solid #eee;">
+            <td style="padding:0.5rem;"><code>escape:"javascript"</code></td>
+            <td style="padding:0.5rem;">JavaScript string escaping</td>
+            <td style="padding:0.5rem;"><code>{$val|escape:"javascript"}</code></td>
+        </tr>
+        <tr style="border-bottom:1px solid #eee;">
+            <td style="padding:0.5rem;"><code>escape:"url"</code></td>
+            <td style="padding:0.5rem;">URL percent encoding</td>
+            <td style="padding:0.5rem;"><code>{$link|escape:"url"}</code></td>
+        </tr>
+        <tr style="border-bottom:1px solid #eee;">
+            <td style="padding:0.5rem;"><code>escape:"htmlall"</code></td>
+            <td style="padding:0.5rem;">Encode all characters as HTML entities</td>
+            <td style="padding:0.5rem;"><code>{$text|escape:"htmlall"}</code></td>
+        </tr>
+        <tr style="border-bottom:1px solid #eee;">
+            <td style="padding:0.5rem;"><code>upper</code></td>
+            <td style="padding:0.5rem;">Convert to uppercase</td>
+            <td style="padding:0.5rem;"><code>{$name|upper}</code></td>
+        </tr>
+        <tr style="border-bottom:1px solid #eee;">
+            <td style="padding:0.5rem;"><code>lower</code></td>
+            <td style="padding:0.5rem;">Convert to lowercase</td>
+            <td style="padding:0.5rem;"><code>{$name|lower}</code></td>
+        </tr>
+        <tr style="border-bottom:1px solid #eee;">
+            <td style="padding:0.5rem;"><code>truncate:N</code></td>
+            <td style="padding:0.5rem;">Truncate to N characters</td>
+            <td style="padding:0.5rem;"><code>{$text|truncate:50}</code></td>
+        </tr>
+        <tr style="border-bottom:1px solid #eee;">
+            <td style="padding:0.5rem;"><code>nl2br</code></td>
+            <td style="padding:0.5rem;">Convert newlines to &lt;br&gt;</td>
+            <td style="padding:0.5rem;"><code>{$text|nl2br}</code></td>
+        </tr>
+        <tr>
+            <td style="padding:0.5rem;"><code>strip_tags</code></td>
+            <td style="padding:0.5rem;">Remove HTML tags</td>
+            <td style="padding:0.5rem;"><code>{$html|strip_tags}</code></td>
+        </tr>
+    </table>
+</div>
+
+<div class="card">
+    <h2>Escaping Contexts</h2>
+    <p>Choose the appropriate escape modifier based on where the variable appears in your template:</p>
+    <ul style="margin:0.5rem 0 0 1.5rem;">
+        <li><strong>HTML body:</strong> Use <code>escape:"html"</code></li>
+        <li><strong>JavaScript strings:</strong> Use <code>escape:"javascript"</code></li>
+        <li><strong>URLs:</strong> Use <code>escape:"url"</code></li>
+    </ul>
+    <p style="margin-top:0.8rem;"><strong>Example — JavaScript context:</strong></p>
+    <pre>&lt;script&gt;
+let greeting = `{$user_input|escape:"javascript"}`;
+console.log(greeting);
+&lt;/script&gt;</pre>
+</div>
+
+<div class="card">
+    <h2>API Reference</h2>
+    <table style="width:100%;border-collapse:collapse;">
+        <tr style="border-bottom:2px solid #eee;">
+            <th style="text-align:left;padding:0.5rem;">Method</th>
+            <th style="text-align:left;padding:0.5rem;">Endpoint</th>
+            <th style="text-align:left;padding:0.5rem;">Description</th>
+        </tr>
+        <tr style="border-bottom:1px solid #eee;">
+            <td style="padding:0.5rem;"><code>GET</code></td>
+            <td style="padding:0.5rem;"><code>/api/templates</code></td>
+            <td style="padding:0.5rem;">List all templates</td>
+        </tr>
+        <tr style="border-bottom:1px solid #eee;">
+            <td style="padding:0.5rem;"><code>GET</code></td>
+            <td style="padding:0.5rem;"><code>/api/templates/:name</code></td>
+            <td style="padding:0.5rem;">Get template details</td>
+        </tr>
+        <tr style="border-bottom:1px solid #eee;">
+            <td style="padding:0.5rem;"><code>POST</code></td>
+            <td style="padding:0.5rem;"><code>/api/templates</code></td>
+            <td style="padding:0.5rem;">Create a template</td>
+        </tr>
+        <tr style="border-bottom:1px solid #eee;">
+            <td style="padding:0.5rem;"><code>PUT</code></td>
+            <td style="padding:0.5rem;"><code>/api/templates/:name</code></td>
+            <td style="padding:0.5rem;">Update a template</td>
+        </tr>
+        <tr style="border-bottom:1px solid #eee;">
+            <td style="padding:0.5rem;"><code>DELETE</code></td>
+            <td style="padding:0.5rem;"><code>/api/templates/:name</code></td>
+            <td style="padding:0.5rem;">Delete a template</td>
+        </tr>
+        <tr style="border-bottom:1px solid #eee;">
+            <td style="padding:0.5rem;"><code>POST</code></td>
+            <td style="padding:0.5rem;"><code>/render</code></td>
+            <td style="padding:0.5rem;">Render a template with variables</td>
+        </tr>
+        <tr>
+            <td style="padding:0.5rem;"><code>POST</code></td>
+            <td style="padding:0.5rem;"><code>/preview</code></td>
+            <td style="padding:0.5rem;">Render and validate in headless browser</td>
+        </tr>
+    </table>
+</div>
+{% endblock %}
