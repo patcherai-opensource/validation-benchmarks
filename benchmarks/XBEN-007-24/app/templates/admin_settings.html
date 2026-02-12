@@ -1,0 +1,92 @@
+{% extends "base.html" %}
+{% block title %}Server Settings - Calibre-Web{% endblock %}
+{% block content %}
+<h3>Server Settings</h3>
+<div class="row">
+    <div class="col-md-8 offset-md-2">
+        <form method="POST" action="{{ url_for('admin_settings') }}">
+            <div class="card mb-3">
+                <div class="card-header">Registration</div>
+                <div class="card-body">
+                    <div class="form-check mb-2">
+                        <input class="form-check-input" type="checkbox" id="config_public_reg" name="config_public_reg"
+                               {% if config.config_public_reg %}checked{% endif %}>
+                        <label class="form-check-label" for="config_public_reg">Enable Public Registration</label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card mb-3">
+                <div class="card-header">Password Policy</div>
+                <div class="card-body">
+                    <div class="form-group">
+                        <label for="config_password_min_length">Minimum Password Length</label>
+                        <input type="number" class="form-control" id="config_password_min_length"
+                               name="config_password_min_length" value="{{ config.config_password_min_length }}" min="1">
+                    </div>
+                    <div class="form-check mb-2">
+                        <input class="form-check-input" type="checkbox" id="config_password_number" name="config_password_number"
+                               {% if config.config_password_number %}checked{% endif %}>
+                        <label class="form-check-label" for="config_password_number">Require Numbers</label>
+                    </div>
+                    <div class="form-check mb-2">
+                        <input class="form-check-input" type="checkbox" id="config_password_lower" name="config_password_lower"
+                               {% if config.config_password_lower %}checked{% endif %}>
+                        <label class="form-check-label" for="config_password_lower">Require Lowercase</label>
+                    </div>
+                    <div class="form-check mb-2">
+                        <input class="form-check-input" type="checkbox" id="config_password_upper" name="config_password_upper"
+                               {% if config.config_password_upper %}checked{% endif %}>
+                        <label class="form-check-label" for="config_password_upper">Require Uppercase</label>
+                    </div>
+                    <div class="form-check mb-2">
+                        <input class="form-check-input" type="checkbox" id="config_password_special" name="config_password_special"
+                               {% if config.config_password_special %}checked{% endif %}>
+                        <label class="form-check-label" for="config_password_special">Require Special Characters</label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card mb-3">
+                <div class="card-header">Server Configuration</div>
+                <div class="card-body">
+                    <div class="form-group">
+                        <label for="config_server_url">Server URL</label>
+                        <input type="text" class="form-control" id="config_server_url" name="config_server_url"
+                               value="{{ config.config_server_url }}">
+                    </div>
+                    <div class="form-group">
+                        <label for="config_calibre_dir">Calibre Database Path</label>
+                        <input type="text" class="form-control" id="config_calibre_dir" value="{{ config.config_calibre_dir }}" disabled>
+                    </div>
+                    <div class="form-group">
+                        <label for="config_access_token">API Access Token</label>
+                        <input type="text" class="form-control" id="config_access_token"
+                               value="{{ config.config_access_token }}" readonly>
+                        <small class="form-text text-muted">Auto-generated access token for API integrations.</small>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card mb-3">
+                <div class="card-header">Features</div>
+                <div class="card-body">
+                    <div class="form-check mb-2">
+                        <input class="form-check-input" type="checkbox" id="config_uploading" name="config_uploading"
+                               {% if config.config_uploading %}checked{% endif %}>
+                        <label class="form-check-label" for="config_uploading">Enable Book Uploading</label>
+                    </div>
+                    <div class="form-check mb-2">
+                        <input class="form-check-input" type="checkbox" id="config_anonbrowse" name="config_anonbrowse"
+                               {% if config.config_anonbrowse %}checked{% endif %}>
+                        <label class="form-check-label" for="config_anonbrowse">Allow Anonymous Browsing</label>
+                    </div>
+                </div>
+            </div>
+
+            <button type="submit" class="btn btn-primary">Save Settings</button>
+            <a href="{{ url_for('admin_panel') }}" class="btn btn-secondary">Back</a>
+        </form>
+    </div>
+</div>
+{% endblock %}

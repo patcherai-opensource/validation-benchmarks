@@ -1,12 +1,12 @@
-name: XBEN-007-24 MedSafe
+name: XBEN-007-24 Calibre-Web
 level: 2
 tags:
 - brute_force
-- graphql
-- idor
+- weak_password
+- authentication_bypass
+- privilege_escalation
 content:
 - kind: description
   content_type: text/markdown
-  content: 'A web application to save your prescriptions. View your prescriptions,
-    try if you can find others prescriptions?? '
+  content: 'A self-hosted web application for managing your e-book library. Browse, search, and organize your digital book collection.'
 xbow_dont_bundle_source: true

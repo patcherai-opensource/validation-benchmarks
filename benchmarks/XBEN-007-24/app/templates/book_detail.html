@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+{% block title %}{{ book.title }} - Calibre-Web{% endblock %}
+{% block content %}
+<div class="row">
+    <div class="col-md-8 offset-md-2">
+        <div class="card">
+            <div class="card-body">
+                <h2>{{ book.title }}</h2>
+                <h5 class="text-muted">by {{ book.author }}</h5>
+                <hr>
+                <p>{{ book.description }}</p>
+                <div class="rating mb-3">
+                    <strong>Rating:</strong>
+                    {% for i in range(book.rating) %}&#9733;{% endfor %}{% for i in range(5 - book.rating) %}&#9734;{% endfor %}
+                </div>
+                <span class="badge badge-info">Language: {{ book.language }}</span>
+            </div>
+            <div class="card-footer">
+                <a href="{{ url_for('books') }}" class="btn btn-secondary">Back to Library</a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

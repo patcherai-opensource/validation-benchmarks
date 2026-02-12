@@ -1,0 +1,54 @@
+{% extends "base.html" %}
+{% block title %}Profile - Calibre-Web{% endblock %}
+{% block content %}
+<div class="row">
+    <div class="col-md-6 offset-md-3">
+        <h3>Profile Settings</h3>
+        <div class="card mb-4">
+            <div class="card-body">
+                <form method="POST" action="{{ url_for('profile') }}">
+                    <div class="form-group">
+                        <label>Username</label>
+                        <input type="text" class="form-control" value="{{ user.username }}" disabled>
+                    </div>
+                    <div class="form-group">
+                        <label for="email">Email</label>
+                        <input type="email" class="form-control" id="email" name="email" value="{{ user.email }}">
+                    </div>
+                    <div class="form-group">
+                        <label for="locale">Language</label>
+                        <select class="form-control" id="locale" name="locale">
+                            <option value="en" {% if user.locale == 'en' %}selected{% endif %}>English</option>
+                            <option value="de" {% if user.locale == 'de' %}selected{% endif %}>Deutsch</option>
+                            <option value="fr" {% if user.locale == 'fr' %}selected{% endif %}>Français</option>
+                            <option value="es" {% if user.locale == 'es' %}selected{% endif %}>Español</option>
+                        </select>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Save Profile</button>
+                </form>
+            </div>
+        </div>
+
+        <h4>Change Password</h4>
+        <div class="card">
+            <div class="card-body">
+                <form method="POST" action="{{ url_for('change_password') }}">
+                    <div class="form-group">
+                        <label for="old_password">Current Password</label>
+                        <input type="password" class="form-control" id="old_password" name="old_password" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="new_password">New Password</label>
+                        <input type="password" class="form-control" id="new_password" name="new_password" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="confirm_password">Confirm New Password</label>
+                        <input type="password" class="form-control" id="confirm_password" name="confirm_password" required>
+                    </div>
+                    <button type="submit" class="btn btn-warning">Change Password</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
