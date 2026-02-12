@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Upload BOM - CycloneDX BOM Analyzer</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: #f5f7fa; color: #333; }
+        .container { max-width: 960px; margin: 0 auto; padding: 2rem; }
+        header { background: #1a1a2e; color: #fff; padding: 1.5rem 0; margin-bottom: 2rem; }
+        header .container { display: flex; align-items: center; gap: 1rem; }
+        header h1 { font-size: 1.5rem; font-weight: 600; }
+        header span { background: #0f3460; padding: 0.25rem 0.5rem; border-radius: 4px; font-size: 0.75rem; }
+        header a { color: #ccc; font-size: 0.85rem; margin-left: auto; }
+        .card { background: #fff; border-radius: 8px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); padding: 1.5rem; margin-bottom: 1.5rem; }
+        .card h2 { font-size: 1.1rem; margin-bottom: 1rem; color: #1a1a2e; }
+        .form-group { margin-bottom: 1rem; }
+        .form-group label { display: block; margin-bottom: 0.5rem; font-weight: 500; font-size: 0.85rem; }
+        textarea { width: 100%; border: 1px solid #ddd; border-radius: 4px; padding: 0.75rem; font-family: 'SF Mono', Menlo, monospace; font-size: 0.8rem; resize: vertical; }
+        input[type="file"] { font-size: 0.85rem; }
+        .btn { display: inline-block; padding: 0.5rem 1rem; background: #1565c0; color: #fff; border: none; border-radius: 4px; font-size: 0.85rem; cursor: pointer; }
+        .btn:hover { background: #0d47a1; }
+        .tabs { display: flex; gap: 0; margin-bottom: 0; }
+        .tab { padding: 0.5rem 1rem; cursor: pointer; font-size: 0.85rem; border: 1px solid #ddd; border-bottom: none; background: #f5f5f5; border-radius: 4px 4px 0 0; }
+        .tab.active { background: #fff; font-weight: 500; }
+        .tab-content { display: none; }
+        .tab-content.active { display: block; }
+        #result { margin-top: 1rem; }
+        pre { background: #f0f0f0; padding: 1rem; border-radius: 4px; overflow-x: auto; font-size: 0.8rem; white-space: pre-wrap; }
+        .separator { text-align: center; color: #999; margin: 1rem 0; font-size: 0.85rem; }
+        .example { font-size: 0.8rem; color: #666; }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <h1>CycloneDX BOM Analyzer</h1>
+            <span>v0.9.3</span>
+            <a href="/">← Back to Home</a>
+        </div>
+    </header>
+    <div class="container">
+        <div class="card">
+            <h2>Upload CycloneDX BOM</h2>
+            <form id="uploadForm" enctype="multipart/form-data">
+                <div class="form-group">
+                    <label for="file">Upload XML file:</label>
+                    <input type="file" name="file" id="file" accept=".xml,.bom">
+                </div>
+                <div class="separator">— or paste XML content —</div>
+                <div class="form-group">
+                    <label for="bom">BOM XML:</label>
+                    <textarea name="bom" id="bom" rows="15" placeholder="Paste CycloneDX BOM XML here..."></textarea>
+                </div>
+                <div style="display: flex; gap: 0.5rem;">
+                    <button type="button" class="btn" onclick="uploadBOM()">Analyze BOM</button>
+                    <button type="button" class="btn" style="background:#43a047" onclick="validateBOM()">Validate Only</button>
+                </div>
+            </form>
+            <div id="result"></div>
+        </div>
+
+        <div class="card">
+            <h2>Example CycloneDX BOM</h2>
+            <p class="example" style="margin-bottom: 0.5rem;">Copy this example to test the analyzer:</p>
+<pre id="exampleBom">&lt;?xml version="1.0" encoding="UTF-8"?&gt;
+&lt;bom xmlns="http://cyclonedx.org/schema/bom/1.5" version="1"
+     serialNumber="urn:uuid:3e671687-395b-41f5-a30f-a58921a69b79"&gt;
+  &lt;metadata&gt;
+    &lt;timestamp&gt;2024-01-15T10:30:00Z&lt;/timestamp&gt;
+    &lt;component type="application" bom-ref="acme-webapp"&gt;
+      &lt;name&gt;acme-webapp&lt;/name&gt;
+      &lt;version&gt;2.1.0&lt;/version&gt;
+    &lt;/component&gt;
+  &lt;/metadata&gt;
+  &lt;components&gt;
+    &lt;component type="library"&gt;
+      &lt;name&gt;flask&lt;/name&gt;
+      &lt;version&gt;3.0.0&lt;/version&gt;
+      &lt;purl&gt;pkg:pypi/flask@3.0.0&lt;/purl&gt;
+    &lt;/component&gt;
+    &lt;component type="library"&gt;
+      &lt;name&gt;requests&lt;/name&gt;
+      &lt;version&gt;2.31.0&lt;/version&gt;
+      &lt;purl&gt;pkg:pypi/requests@2.31.0&lt;/purl&gt;
+    &lt;/component&gt;
+  &lt;/components&gt;
+&lt;/bom&gt;</pre>
+            <button type="button" class="btn" style="background:#666; margin-top:0.5rem;" onclick="loadExample()">Load Example</button>
+        </div>
+    </div>
+    <script>
+        function loadExample() {
+            var pre = document.getElementById('exampleBom');
+            var ta = document.getElementById('bom');
+            var tmp = document.createElement('div');
+            tmp.innerHTML = pre.innerHTML;
+            ta.value = tmp.textContent || tmp.innerText;
+        }
+        function uploadBOM() {
+            var fileInput = document.getElementById('file');
+            var bomText = document.getElementById('bom').value;
+            var fd = new FormData();
+            if (fileInput.files.length > 0) {
+                fd.append('file', fileInput.files[0]);
+            } else if (bomText.trim()) {
+                fd.append('bom', bomText);
+            } else {
+                showResult('Please provide a BOM file or XML content.', true);
+                return;
+            }
+            fetch('/api/v1/bom/upload', { method: 'POST', body: fd })
+                .then(function(r) { return r.json(); })
+                .then(function(data) { showResult(JSON.stringify(data, null, 2), false); })
+                .catch(function(e) { showResult('Request failed: ' + e, true); });
+        }
+        function validateBOM() {
+            var fileInput = document.getElementById('file');
+            var bomText = document.getElementById('bom').value;
+            var fd = new FormData();
+            if (fileInput.files.length > 0) {
+                fd.append('file', fileInput.files[0]);
+            } else if (bomText.trim()) {
+                fd.append('bom', bomText);
+            } else {
+                showResult('Please provide a BOM file or XML content.', true);
+                return;
+            }
+            fetch('/api/v1/bom/validate', { method: 'POST', body: fd })
+                .then(function(r) { return r.json(); })
+                .then(function(data) { showResult(JSON.stringify(data, null, 2), false); })
+                .catch(function(e) { showResult('Request failed: ' + e, true); });
+        }
+        function showResult(text, isError) {
+            var div = document.getElementById('result');
+            div.innerHTML = '<pre style="' + (isError ? 'border-left:3px solid #c62828;' : 'border-left:3px solid #2e7d32;') + '">' + escapeHtml(text) + '</pre>';
+        }
+        function escapeHtml(t) {
+            var d = document.createElement('div');
+            d.appendChild(document.createTextNode(t));
+            return d.innerHTML;
+        }
+    </script>
+</body>
+</html>

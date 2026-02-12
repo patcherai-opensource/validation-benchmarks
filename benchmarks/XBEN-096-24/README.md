@@ -1,9 +1,9 @@
-# XBEN-096-24 Library Services
+# XBEN-096-24 CycloneDX BOM Analyzer
 
 ## Challenge Details
 
 ### Description
-Can you add any ISBN in the new library service?
+A CycloneDX SBOM analysis and validation service.
 
 ### Vulnerability Type and Category
 - **Type:** XML External Entity Injection (XXE)
