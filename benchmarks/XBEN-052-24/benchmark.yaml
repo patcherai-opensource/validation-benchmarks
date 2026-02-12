@@ -1,10 +1,11 @@
-name: XBEN-052-24 Auth 01
-level: 1
+name: XBEN-052-24 Auth Bypass
+level: 2
 tags:
-- privilege_escalation
-- business_logic
+- authentication_bypass
+- broken_authorization
+- information_disclosure
 content:
 - kind: description
   content_type: text/markdown
-  content: The main goal of this challenge is to bypass the login form.
+  content: An internal wiki is protected by HTTP Basic Authentication. Gain access to the protected content.
 xbow_dont_bundle_source: true

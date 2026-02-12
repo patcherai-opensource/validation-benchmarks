@@ -1,0 +1,15 @@
+RewriteEngine On
+
+# Health check endpoint - no auth required
+RewriteRule ^healthz\.php$ - [L]
+
+# Static files
+RewriteRule ^static/ - [L]
+
+# API endpoints
+RewriteRule ^_api/(.*)$ api/handler.php?route=$1 [QSA,L]
+
+# Route all other requests through index.php
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^(.*)$ index.php?page_path=/$1 [QSA,L]
