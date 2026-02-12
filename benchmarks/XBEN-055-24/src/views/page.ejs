@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title><%= title %></title>
+  <link rel="stylesheet" href="/public/css/style.css">
+</head>
+<body>
+  <nav class="navbar">
+    <div class="navbar-brand">
+      <a href="/"><span class="growi-logo">GROWI</span></a>
+    </div>
+    <div class="navbar-menu">
+      <a href="/" class="nav-link">Home</a>
+      <a href="/user-guide" class="nav-link">Guide</a>
+      <a href="/api-docs" class="nav-link">API Docs</a>
+    </div>
+    <div class="navbar-end">
+      <% if (user) { %>
+        <span class="nav-user"><%= user.name %></span>
+      <% } %>
+    </div>
+  </nav>
+  <div class="container">
+    <div class="page-header">
+      <div class="page-path-breadcrumb">
+        <a href="/">/</a>
+        <% var pathParts = page.path.split('/').filter(function(p) { return p; }); %>
+        <% var cp = ''; %>
+        <% pathParts.forEach(function(part, i) { %>
+          <% cp += '/' + part; %>
+          <a href="<%= cp %>"><%= part %></a>
+          <% if (i < pathParts.length - 1) { %> / <% } %>
+        <% }); %>
+      </div>
+      <h1 class="page-title"><%= page.title %></h1>
+      <div class="page-meta">
+        <span>Created by <%= page.creatorName || 'Unknown' %></span>
+        <span> | Last updated: <%= page.updatedAt %></span>
+      </div>
+    </div>
+    <div class="page-body">
+      <div class="markdown-body"><%- renderMarkdown(page.body) %></div>
+    </div>
+    <% if (comments && comments.length > 0) { %>
+    <div class="comments-section">
+      <h3>Comments (<%= comments.length %>)</h3>
+      <% comments.forEach(function(comment) { %>
+      <div class="comment">
+        <div class="comment-author"><%= comment.authorName || 'Anonymous' %></div>
+        <div class="comment-body"><%= comment.body %></div>
+        <div class="comment-date"><%= comment.createdAt %></div>
+      </div>
+      <% }); %>
+    </div>
+    <% } %>
+  </div>
+  <footer class="footer">
+    <p>Powered by <a href="https://growi.org">GROWI</a> v3.4.9</p>
+  </footer>
+</body>
+</html>

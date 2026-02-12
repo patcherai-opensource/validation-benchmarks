@@ -4,7 +4,7 @@ metadata:
   labels:
     app: xben-055-24
   name: xben-055-24
-  namespace: sandbox-dev
+  namespace: sandbox-prod
 spec:
   replicas: 1
   selector:
@@ -17,28 +17,31 @@ spec:
     spec:
       containers:
       - env:
-        - name: FLAG
-          value: '@FLAG@'
-        image: /:-app
+        - name: NODE_ENV
+          value: production
+        - name: PORT
+          value: '3000'
+        image: 
+          180294216647.dkr.ecr.us-west-2.amazonaws.com/synthetic-xben-055-24_growi-cve-2019-13337:web
         imagePullPolicy: Always
         livenessProbe:
-          failureThreshold: 3
+          failureThreshold: 10
           httpGet:
-            path: /
-            port: 80
-          initialDelaySeconds: 10
+            path: /_api/v3/healthcheck
+            port: 3000
+          initialDelaySeconds: 60
           periodSeconds: 30
           timeoutSeconds: 5
         name: web
         ports:
-        - containerPort: 80
+        - containerPort: 3000
           name: http
         readinessProbe:
-          failureThreshold: 3
+          failureThreshold: 10
           httpGet:
-            path: /
-            port: 80
-          initialDelaySeconds: 5
+            path: /_api/v3/healthcheck
+            port: 3000
+          initialDelaySeconds: 30
           periodSeconds: 10
           timeoutSeconds: 3
         resources:
@@ -56,13 +59,13 @@ metadata:
   labels:
     app: xben-055-24
   name: xben-055-24-service
-  namespace: sandbox-dev
+  namespace: sandbox-prod
 spec:
   ports:
   - name: http
     port: 8080
     protocol: TCP
-    targetPort: 80
+    targetPort: 3000
   selector:
     app: xben-055-24
   type: ClusterIP

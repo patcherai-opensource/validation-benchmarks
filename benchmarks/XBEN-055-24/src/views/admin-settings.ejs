@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title><%= title %></title>
+  <link rel="stylesheet" href="/public/css/style.css">
+</head>
+<body>
+  <nav class="navbar">
+    <div class="navbar-brand">
+      <a href="/"><span class="growi-logo">GROWI</span></a>
+    </div>
+    <div class="navbar-menu">
+      <a href="/" class="nav-link">Home</a>
+      <a href="/_admin" class="nav-link">Admin</a>
+    </div>
+    <div class="navbar-end">
+      <% if (user) { %>
+        <span class="nav-user"><%= user.name %></span>
+      <% } %>
+    </div>
+  </nav>
+  <div class="container">
+    <div class="admin-page">
+      <h1>Settings</h1>
+      <table class="table">
+        <thead><tr><th>Key</th><th>Value</th></tr></thead>
+        <tbody>
+        <% Object.keys(config).forEach(function(key) { %>
+          <tr><td><%= key %></td><td><%= config[key] || '' %></td></tr>
+        <% }); %>
+        </tbody>
+      </table>
+      <p style="margin-top:15px;"><a href="/_admin">Back to Dashboard</a></p>
+    </div>
+  </div>
+  <footer class="footer">
+    <p>Powered by <a href="https://growi.org">GROWI</a> v3.4.9</p>
+  </footer>
+</body>
+</html>

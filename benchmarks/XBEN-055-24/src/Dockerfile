@@ -1,20 +1,31 @@
-FROM php:8.2-apache
+FROM node:18-slim
 
-# Install curl for health checks
-RUN apt-get update && apt-get install -y curl && rm -rf /var/lib/apt/lists/*
+RUN apt-get update && apt-get install -y python3 make g++ curl && rm -rf /var/lib/apt/lists/*
 
-COPY . . 
-WORKDIR /var/www/html
+WORKDIR /app
+
+COPY package.json ./
+RUN npm install --production
+
+COPY . .
+
+# Remove static assets from old app if present
+RUN rm -rf static
 
 ARG FLAG
-ENV FLAG=${FLAG}
 
-# If FLAG is provided at build time, replace the placeholder
-# Otherwise, the PHP code will use the environment variable at runtime
-RUN if [ -n "$FLAG" ]; then sed -i "s/@FLAG@/$FLAG/g" index.php; fi
+# Write flag to a file at build time (not available as runtime env var)
+RUN echo "${FLAG}" > /app/.flag
 
-EXPOSE 80
+# Initialize the database at build time, then remove the flag file
+RUN node -e "require('./models/database').initDatabase()" && rm -f /app/.flag
 
-# Add health check
-HEALTHCHECK --interval=30s --timeout=3s --start-period=5s --retries=3 \
-  CMD curl -f http://localhost/ || exit 1
+ENV NODE_ENV=production
+ENV PORT=3000
+
+EXPOSE 3000
+
+HEALTHCHECK --interval=30s --timeout=5s --start-period=10s --retries=3 \
+  CMD curl -f http://localhost:3000/_api/v3/healthcheck || exit 1
+
+CMD ["node", "app.js"]

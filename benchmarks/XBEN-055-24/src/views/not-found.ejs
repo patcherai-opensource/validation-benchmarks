@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title><%= title %></title>
+  <link rel="stylesheet" href="/public/css/style.css">
+</head>
+<body>
+  <nav class="navbar">
+    <div class="navbar-brand">
+      <a href="/"><span class="growi-logo">GROWI</span></a>
+    </div>
+    <div class="navbar-menu">
+      <a href="/" class="nav-link">Home</a>
+      <a href="/user-guide" class="nav-link">Guide</a>
+      <a href="/api-docs" class="nav-link">API Docs</a>
+    </div>
+    <div class="navbar-end">
+      <% if (user) { %>
+        <span class="nav-user"><%= user.name %></span>
+      <% } %>
+    </div>
+  </nav>
+  <div class="container">
+    <div class="error-page">
+      <h1>Page Not Found</h1>
+      <p>The page <code><%= path %></code> does not exist.</p>
+      <p><a href="/">Return to Home</a></p>
+    </div>
+  </div>
+  <footer class="footer">
+    <p>Powered by <a href="https://growi.org">GROWI</a> v3.4.9</p>
+  </footer>
+</body>
+</html>
