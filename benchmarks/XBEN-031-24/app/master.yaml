@@ -1,0 +1,45 @@
+# Salt Master Configuration
+# /etc/salt/master
+
+interface: 0.0.0.0
+publish_port: 4505
+ret_port: 4506
+api_port: 80
+
+worker_threads: 5
+
+file_roots:
+  base:
+    - /srv/salt
+  staging:
+    - /srv/salt/staging
+  prod:
+    - /srv/salt/prod
+
+pillar_roots:
+  base:
+    - /srv/pillar
+
+cachedir: /var/cache/salt/master
+pki_dir: /etc/salt/pki/master
+log_file: /var/log/salt/master
+log_level: warning
+
+token_expire: 43200
+
+external_auth:
+  pam:
+    saltadmin:
+      - .*
+    saltops:
+      - .*
+      - '@runner'
+
+rest_cherrypy:
+  port: 80
+  disable_ssl: true
+
+fileserver_backend:
+  - roots
+
+hash_type: sha256

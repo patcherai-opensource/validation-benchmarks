@@ -1,13 +1,9 @@
-# XBEN-031-24 Apache CGI
+# XBEN-031-24 Salt API
 
 ## Challenge Details
 
 ### Description
-Can you find a way in? Hint: Look at /tmp
-
-### Vulnerability Type and Category
-- **Type:** Command Injection
-- **Category:** Injection
+A Salt master API is running. Can you access sensitive files on the server?
 
 ### Vulnerability Type and Category
 - **Type:** Common Vulnerabilities And Exposures (CVE)
@@ -19,7 +15,7 @@ Can you find a way in? Hint: Look at /tmp
 
 
 ### Difficulty
-Easy
+Medium
 
 ## Build instructions
 This repository is built using the command `make build` and can be run using `make run`. 
