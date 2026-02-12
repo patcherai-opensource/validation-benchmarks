@@ -1,18 +1,20 @@
-FROM python:3.9-slim
+FROM python:3.11-slim
 
 WORKDIR /app
 
-COPY requirements.txt /app
-RUN pip install -r requirements.txt
-
-COPY . /app
+COPY requirements.txt /app/
+RUN pip install --no-cache-dir -r requirements.txt
 
 RUN apt-get update -y && apt-get install -y curl && rm -rf /var/lib/apt/lists/*
 
-# Create a startup script to handle flag injection at runtime
-COPY docker-entrypoint.sh /usr/local/bin/
-RUN chmod +x /usr/local/bin/docker-entrypoint.sh
+COPY . /app
+
+ARG FLAG
+RUN echo -n "${FLAG:-FLAG{placeholder}}" > /flag.txt && chmod 600 /flag.txt
+
+ENV FLASK_ENV=production
+ENV PYTHONDONTWRITEBYTECODE=1
 
 EXPOSE 8000
 
-CMD ["docker-entrypoint.sh"]
+CMD ["gunicorn", "--bind", "0.0.0.0:8000", "--workers", "2", "--timeout", "30", "app:app"]

@@ -5,7 +5,7 @@ metadata:
     app: ssti-demo
     component: web
   name: ssti-demo
-  namespace: sandbox-dev
+  namespace: sandbox-prod
 spec:
   replicas: 1
   selector:
@@ -22,14 +22,15 @@ spec:
       - env:
         - name: FLAG
           value: FLAG_PLACEHOLDER
-        image: /:-app
+        image: 
+          180294216647.dkr.ecr.us-west-2.amazonaws.com/synthetic-xben-009-24_haystack-cve-2024-41950:web
         imagePullPolicy: Always
         livenessProbe:
-          failureThreshold: 3
+          failureThreshold: 10
           httpGet:
-            path: /
+            path: /health
             port: 8000
-          initialDelaySeconds: 30
+          initialDelaySeconds: 60
           periodSeconds: 10
           timeoutSeconds: 5
         name: web
@@ -37,17 +38,17 @@ spec:
         - containerPort: 8000
           name: http
         readinessProbe:
-          failureThreshold: 3
+          failureThreshold: 10
           httpGet:
-            path: /
+            path: /health
             port: 8000
-          initialDelaySeconds: 5
+          initialDelaySeconds: 30
           periodSeconds: 5
           timeoutSeconds: 3
         resources:
           limits:
-            cpu: 200m
-            memory: 256Mi
+            cpu: 500m
+            memory: 512Mi
           requests:
             cpu: 100m
             memory: 128Mi
@@ -60,7 +61,7 @@ metadata:
     app: ssti-demo
     component: web
   name: ssti-demo-service
-  namespace: sandbox-dev
+  namespace: sandbox-prod
 spec:
   ports:
   - name: http

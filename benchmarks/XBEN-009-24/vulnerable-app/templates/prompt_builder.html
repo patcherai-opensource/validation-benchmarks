@@ -1,0 +1,105 @@
+{% extends "base.html" %}
+{% block title %}Prompt Builder - Haystack Pipeline Studio{% endblock %}
+{% block content %}
+<h1>Prompt Builder</h1>
+<p class="subtitle">Test and preview Jinja2 prompt templates before adding them to a pipeline.</p>
+
+<div class="builder-layout">
+    <div class="section">
+        <h2>Template</h2>
+        <textarea id="templateInput" rows="8" placeholder="Enter your Jinja2 template here...
+Example: Given these documents, answer the question.
+Documents: {% raw %}{% for doc in documents %}{{ doc }}{% endfor %}{% endraw %}
+Question: {% raw %}{{ query }}{% endraw %}
+Answer:"></textarea>
+    </div>
+
+    <div class="section">
+        <h2>Variables</h2>
+        <textarea id="variablesInput" rows="5" placeholder='Enter template variables as JSON:
+{"query": "What is Haystack?", "documents": ["Doc 1", "Doc 2"]}'></textarea>
+    </div>
+
+    <div class="button-group">
+        <button class="btn btn-primary" onclick="renderTemplate()">Render Template</button>
+        <button class="btn" onclick="validateTemplate()">Validate Only</button>
+    </div>
+
+    <div class="section">
+        <h2>Output</h2>
+        <pre id="output" class="output">Results will appear here...</pre>
+    </div>
+</div>
+
+<div class="section">
+    <h2>Chat Prompt Builder</h2>
+    <p>Test chat-style prompts with multiple messages.</p>
+    <textarea id="chatInput" rows="6" placeholder='[
+  {"role": "system", "content": "You are a helpful assistant."},
+  {"role": "user", "content": "Tell me about {% raw %}{{ topic }}{% endraw %}"}
+]'></textarea>
+    <div class="form-group">
+        <label>Variables (JSON):</label>
+        <textarea id="chatVars" rows="3" placeholder='{"topic": "machine learning"}'></textarea>
+    </div>
+    <button class="btn btn-primary" onclick="renderChat()">Render Chat</button>
+    <pre id="chatOutput" class="output"></pre>
+</div>
+
+<script>
+async function renderTemplate() {
+    const template = document.getElementById("templateInput").value;
+    let vars = {};
+    try {
+        const varsText = document.getElementById("variablesInput").value;
+        if (varsText.trim()) vars = JSON.parse(varsText);
+    } catch(e) {
+        document.getElementById("output").textContent = "Error: Invalid JSON in variables field";
+        return;
+    }
+    const resp = await fetch("/api/v1/prompt/render", {
+        method: "POST",
+        headers: {"Content-Type": "application/json"},
+        body: JSON.stringify({template: template, template_variables: vars})
+    });
+    const data = await resp.json();
+    document.getElementById("output").textContent = JSON.stringify(data, null, 2);
+}
+
+async function validateTemplate() {
+    const template = document.getElementById("templateInput").value;
+    const resp = await fetch("/api/v1/prompt/validate", {
+        method: "POST",
+        headers: {"Content-Type": "application/json"},
+        body: JSON.stringify({template: template})
+    });
+    const data = await resp.json();
+    document.getElementById("output").textContent = JSON.stringify(data, null, 2);
+}
+
+async function renderChat() {
+    let messages = [];
+    try {
+        messages = JSON.parse(document.getElementById("chatInput").value);
+    } catch(e) {
+        document.getElementById("chatOutput").textContent = "Error: Invalid JSON in messages field";
+        return;
+    }
+    let vars = {};
+    try {
+        const varsText = document.getElementById("chatVars").value;
+        if (varsText.trim()) vars = JSON.parse(varsText);
+    } catch(e) {
+        document.getElementById("chatOutput").textContent = "Error: Invalid JSON in variables field";
+        return;
+    }
+    const resp = await fetch("/api/v1/chat/render", {
+        method: "POST",
+        headers: {"Content-Type": "application/json"},
+        body: JSON.stringify({messages: messages, template_variables: vars})
+    });
+    const data = await resp.json();
+    document.getElementById("chatOutput").textContent = JSON.stringify(data, null, 2);
+}
+</script>
+{% endblock %}

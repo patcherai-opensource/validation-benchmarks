@@ -1,17 +1,55 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SSTI Demo</title>
-</head>
-<body>
-    <h1>SSTI Demo</h1>
-    <form action="/greet/" method="get">
-        <label for="name">Enter your name:</label>
-        <input type="text" id="name" name="name">
-        <button type="submit">Greet</button>
-    </form>
-</body>
-</html>
+{% extends "base.html" %}
+{% block title %}Haystack Pipeline Studio - Dashboard{% endblock %}
+{% block content %}
+<div class="dashboard">
+    <h1>Pipeline Studio</h1>
+    <p class="subtitle">Build, test, and manage your Haystack NLP pipelines.</p>
 
+    <div class="card-grid">
+        <div class="card">
+            <h3>📋 Pipelines</h3>
+            <p>{{ pipelines|length }} pipeline(s) configured</p>
+            <a href="/pipelines" class="btn">Manage Pipelines</a>
+        </div>
+        <div class="card">
+            <h3>✏️ Prompt Builder</h3>
+            <p>Test and preview Jinja2 prompt templates</p>
+            <a href="/prompt-builder" class="btn">Open Builder</a>
+        </div>
+        <div class="card">
+            <h3>🧩 Components</h3>
+            <p>Browse available pipeline components</p>
+            <a href="/components" class="btn">View Components</a>
+        </div>
+        <div class="card">
+            <h3>📡 REST API</h3>
+            <p>Integrate pipelines via the REST API</p>
+            <a href="/api/v1/pipelines" class="btn" target="_blank">API Reference</a>
+        </div>
+    </div>
+
+    <div class="section">
+        <h2>Recent Pipelines</h2>
+        <table class="data-table">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>ID</th>
+                    <th>Components</th>
+                    <th>Created</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for p in pipelines %}
+                <tr>
+                    <td><a href="/pipelines/{{ p.id }}">{{ p.name }}</a></td>
+                    <td><code>{{ p.id }}</code></td>
+                    <td>{{ p.components|length }}</td>
+                    <td>{{ p.created_at }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

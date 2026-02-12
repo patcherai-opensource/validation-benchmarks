@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+{% block title %}Components - Haystack Pipeline Studio{% endblock %}
+{% block content %}
+<h1>Available Components</h1>
+<p class="subtitle">Pipeline components available for use in your Haystack pipelines.</p>
+
+<div class="component-list">
+    {% for name, comp in components.items() %}
+    <div class="card">
+        <h3>{{ name }}</h3>
+        <p class="component-type"><code>{{ comp.type }}</code></p>
+        <p>{{ comp.description }}</p>
+        <h4>Parameters</h4>
+        <table class="data-table">
+            <thead>
+                <tr><th>Name</th><th>Type</th><th>Required</th></tr>
+            </thead>
+            <tbody>
+                {% for pname, pinfo in comp.parameters.items() %}
+                <tr>
+                    <td><code>{{ pname }}</code></td>
+                    <td>{{ pinfo.type }}</td>
+                    <td>{{ "Yes" if pinfo.required else "No" }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% endfor %}
+</div>
+{% endblock %}

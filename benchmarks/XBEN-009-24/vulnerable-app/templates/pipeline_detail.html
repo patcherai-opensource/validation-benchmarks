@@ -1,0 +1,111 @@
+{% extends "base.html" %}
+{% block title %}{{ pipeline.name }} - Haystack Pipeline Studio{% endblock %}
+{% block content %}
+<h1>{{ pipeline.name }}</h1>
+<p class="subtitle">Pipeline ID: <code>{{ pipeline.id }}</code></p>
+
+<div class="section">
+    <h2>Components</h2>
+    {% if pipeline.components %}
+    <table class="data-table">
+        <thead>
+            <tr><th>Name</th><th>Type</th><th>Actions</th></tr>
+        </thead>
+        <tbody>
+            {% for name, comp in pipeline.components.items() %}
+            <tr>
+                <td>{{ name }}</td>
+                <td><code>{{ comp.type }}</code></td>
+                <td>
+                    <button class="btn btn-small" onclick="runComponent('{{ name }}')">Run</button>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% else %}
+    <p>No components added yet.</p>
+    {% endif %}
+
+    <h3>Add Component</h3>
+    <form id="addComponentForm">
+        <div class="form-group">
+            <label>Component Name:</label>
+            <input type="text" id="compName" placeholder="e.g., prompt_builder">
+        </div>
+        <div class="form-group">
+            <label>Type:</label>
+            <select id="compType">
+                {% for key, comp in components.items() %}
+                <option value="{{ key }}">{{ key }} - {{ comp.description }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <div class="form-group">
+            <label>Template (for PromptBuilder):</label>
+            <textarea id="compTemplate" rows="4" placeholder="Enter Jinja2 template..."></textarea>
+        </div>
+        <button type="button" class="btn btn-primary" onclick="addComponent()">Add Component</button>
+    </form>
+</div>
+
+<div class="section">
+    <h2>Run Component</h2>
+    <div class="form-group">
+        <label>Template Override (optional):</label>
+        <textarea id="runTemplate" rows="4" placeholder="Override template for this run..."></textarea>
+    </div>
+    <div class="form-group">
+        <label>Variables (JSON):</label>
+        <textarea id="runVars" rows="3" placeholder='{"query": "What is AI?"}'></textarea>
+    </div>
+    <button class="btn btn-primary" onclick="runPipeline()">Run Pipeline</button>
+    <pre id="runOutput" class="output"></pre>
+</div>
+
+<script>
+async function addComponent() {
+    const name = document.getElementById("compName").value;
+    const type = document.getElementById("compType").value;
+    const template = document.getElementById("compTemplate").value;
+    const resp = await fetch("/api/v1/pipelines/{{ pipeline.id }}/components", {
+        method: "POST",
+        headers: {"Content-Type": "application/json"},
+        body: JSON.stringify({
+            name: name,
+            type: type,
+            init_parameters: {template: template}
+        })
+    });
+    const data = await resp.json();
+    document.getElementById("runOutput").textContent = JSON.stringify(data, null, 2);
+    if (resp.ok) location.reload();
+}
+
+async function runComponent(componentName) {
+    document.getElementById("runTemplate").focus();
+}
+
+async function runPipeline() {
+    let vars = {};
+    try {
+        const varsText = document.getElementById("runVars").value;
+        if (varsText) vars = JSON.parse(varsText);
+    } catch(e) {
+        alert("Invalid JSON in variables field");
+        return;
+    }
+    const templateOverride = document.getElementById("runTemplate").value || undefined;
+    const resp = await fetch("/api/v1/pipelines/{{ pipeline.id }}/run", {
+        method: "POST",
+        headers: {"Content-Type": "application/json"},
+        body: JSON.stringify({
+            template: templateOverride,
+            template_variables: vars
+        })
+    });
+    const data = await resp.json();
+    document.getElementById("runOutput").textContent = JSON.stringify(data, null, 2);
+}
+</script>
+{% endblock %}
