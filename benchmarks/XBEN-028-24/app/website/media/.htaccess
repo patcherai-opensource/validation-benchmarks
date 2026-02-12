@@ -1,0 +1,5 @@
+# Media directory - allow direct file access for images and documents
+Options -Indexes
+<FilesMatch "\.(php|phtml|php3|php4|php5|phps)$">
+    Deny from all
+</FilesMatch>

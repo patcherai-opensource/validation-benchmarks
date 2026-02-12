@@ -47,10 +47,10 @@
     </div>
 
     <div class="card my-4">
-        <h5 class="card-header">Help wanted!</h5>
+        <h5 class="card-header">Content Management</h5>
         <div class="card-body">
-            <h6>Help us improving the articles of the blog</h6>
-            <p>Submit yours <a href="posts/upload-article.php">here!</a></p>
+            <h6>Manage blog content and media</h6>
+            <p>Access the <a href="/admin/login.php">CMS Dashboard</a></p>
         </div>
     </div>
 </div>

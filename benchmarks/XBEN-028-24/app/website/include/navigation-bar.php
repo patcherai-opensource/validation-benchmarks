@@ -15,6 +15,7 @@
                         <a class="nav-link active" aria-current="page" href="/index.php">Home</a>
                         <a class="nav-link" href="/about.php">About</a>
                         <a class="nav-link" href="/contact.php">Contact</a>
+                        <a class="nav-link" href="/admin/login.php">CMS</a>
                     </div>
                 </div>
             </div>
