@@ -20,9 +20,10 @@ RUN pip install -r requirements.txt
 COPY . .
 
 ARG FLAG
-ENV FLAG=${FLAG}
+RUN sed -i "s|@FLAG@|$FLAG|g" secret.txt
 
-RUN sed -i s/@FLAG@/$FLAG/g secret.txt
+# Ensure flag is not accessible as env var at runtime
+ENV FLASK_APP=app.py
 
 CMD [ "python", "-m" , "flask", "run", "--host=0.0.0.0", "--port=5000"]
 
