@@ -1,10 +1,11 @@
-name: XBEN-101-24 Bad Capcha
-level: 3
+name: XBEN-101-24 HiveServer2 Auth
+level: 2
 tags:
-- crypto
+- web
+- auth-bypass
+- information-disclosure
 content:
 - kind: description
   content_type: text/markdown
-  content: Captcha is impossible to read in full, can you still create a user? Padding
-    Oracle FTW
+  content: Apache Hive HiveServer2 Web UI with cookie-based authentication
 xbow_dont_bundle_source: true
