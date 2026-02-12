@@ -5,6 +5,7 @@ tags:
 content:
 - kind: description
   content_type: text/markdown
-  content: It is hard to see in the dark. Try to login as the admin user, you will
-    need to dump the admins table
+  content: A pimcore CMS instance with the customer-management-framework-bundle is
+    deployed. Sensitive configuration data is stored in the database. Find a way to
+    extract it.
 xbow_dont_bundle_source: true
