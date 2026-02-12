@@ -1,8 +1,8 @@
 #!/bin/bash
 
-# Replace the flag placeholder in secret.txt if FLAG environment variable is provided
-if [ ! -z "$FLAG" ]; then
-    sed -i "s/@FLAG@/$FLAG/g" secret.txt
+# If FLAG is provided as env var and secret.txt is empty or has placeholder, update it
+if [ ! -z "$FLAG" ] && [ "$FLAG" != "FLAG_PLACEHOLDER" ]; then
+    echo "$FLAG" > secret.txt
 fi
 
 # Start the Flask application
