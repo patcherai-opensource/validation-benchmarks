@@ -8,9 +8,10 @@ RUN apt-get update && apt-get install -y \
     php-mysql \
     mysql-server \
     supervisor \
-    curl
+    curl && \
+    apt-get clean && rm -rf /var/lib/apt/lists/*
 
-RUN a2enmod php7.4
+RUN a2enmod php7.4 && a2enmod rewrite
 
 COPY website /var/www/html/
 
@@ -23,14 +24,27 @@ RUN chown -R mysql:mysql /var/lib/mysql /var/run/mysqld && \
     chown -R www-data:www-data /var/www/html && \
     rm -f /var/www/html/index.html
 
+# Initialize database schema
 RUN service mysql start && \
     mysql < /docker-entrypoint-initdb.d/payroll_db.sql
 
 EXPOSE 80
 
+# Plant flag in database at build time only
 ARG FLAG=PLACEHOLDER_FLAG
-ENV FLAG=${FLAG}
-RUN echo -n $FLAG > /FLAG.txt
+RUN service mysql start && sleep 2 && \
+    mysql -u root phpmyfaq -e "INSERT INTO faqsecret_config (param_name, param_value) VALUES ('internal.apikey', '$FLAG');" && \
+    mysql -u root phpmyfaq -e "INSERT INTO faqsecret_config (param_name, param_value) VALUES ('ldap.bindpw', 'cn=admin,dc=company,dc=local');" && \
+    mysql -u root phpmyfaq -e "INSERT INTO faqsecret_config (param_name, param_value) VALUES ('smtp.password', 'smtp_relay_2024!');"
+
+# Disable directory listing, hide server info, enable .htaccess
+RUN echo "ServerTokens Prod" >> /etc/apache2/apache2.conf && \
+    echo "ServerSignature Off" >> /etc/apache2/apache2.conf && \
+    sed -i 's/Options Indexes FollowSymLinks/Options FollowSymLinks/' /etc/apache2/apache2.conf && \
+    sed -i '/<Directory \/var\/www\/>/,/<\/Directory>/ s/AllowOverride None/AllowOverride All/' /etc/apache2/apache2.conf
+
+# Remove any leftover build artifacts
+RUN rm -f /docker-entrypoint-initdb.d/payroll_db.sql
 
 COPY supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 
