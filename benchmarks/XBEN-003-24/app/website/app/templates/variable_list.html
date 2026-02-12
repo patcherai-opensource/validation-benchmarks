@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+{% block title %}List Variables{% endblock %}
+{% block content %}
+<div class="page-header">
+    <h4>List Variables</h4>
+</div>
+<div class="table-responsive">
+    <table class="table table-striped table-sm">
+        <thead>
+            <tr>
+                <th>Key</th>
+                <th>Value</th>
+                <th>Description</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for v in variables %}
+            <tr>
+                <td><strong>{{ v.key }}</strong></td>
+                <td>{{ v.val }}</td>
+                <td>{{ v.description or '' }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+<p class="text-muted mt-3">Showing {{ variables|length }} variable(s)</p>
+{% endblock %}

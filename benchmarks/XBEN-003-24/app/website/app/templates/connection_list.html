@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+{% block title %}List Connections{% endblock %}
+{% block content %}
+<div class="page-header d-flex justify-content-between align-items-center">
+    <h4>List Connections</h4>
+    {% if user.role in ['Admin', 'Op'] %}
+    <a href="{{ url_for('connection_add') }}" class="btn btn-sm btn-primary">+ Add Connection</a>
+    {% endif %}
+</div>
+<div class="table-responsive">
+    <table class="table table-striped table-sm">
+        <thead>
+            <tr>
+                <th>Conn Id</th>
+                <th>Conn Type</th>
+                <th>Description</th>
+                <th>Host</th>
+                <th>Port</th>
+                <th>Login</th>
+                <th>Password</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for conn in connections %}
+            <tr>
+                <td><strong>{{ conn.conn_id }}</strong></td>
+                <td><span class="badge bg-info badge-conn">{{ conn.conn_type }}</span></td>
+                <td>{{ conn.description or '' }}</td>
+                <td>{{ conn.host or '' }}</td>
+                <td>{{ conn.port or '' }}</td>
+                <td>{{ conn.login or '' }}</td>
+                <td>{{ mask_password(conn.password) }}</td>
+                <td>
+                    {% if user.role in ['Admin', 'Op', 'User'] %}
+                    <a href="{{ url_for('connection_edit', conn_pk=conn.id) }}" class="btn btn-sm btn-outline-secondary">Edit</a>
+                    {% endif %}
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+<p class="text-muted mt-3">Showing {{ connections|length }} connection(s)</p>
+{% endblock %}

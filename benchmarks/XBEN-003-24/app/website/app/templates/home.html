@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+{% block title %}DAGs{% endblock %}
+{% block content %}
+<div class="page-header">
+    <h4>DAGs</h4>
+</div>
+<div class="table-responsive">
+    <table class="table table-striped table-sm">
+        <thead>
+            <tr>
+                <th style="width:30px;"></th>
+                <th>DAG Id</th>
+                <th>Schedule</th>
+                <th>Owner</th>
+                <th>Description</th>
+                <th>Status</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for dag in dags %}
+            <tr>
+                <td>
+                    {% if dag.is_paused %}
+                    <span style="color:#868e96;" title="Paused">&#10074;&#10074;</span>
+                    {% else %}
+                    <span style="color:#28a745;" title="Active">&#9654;</span>
+                    {% endif %}
+                </td>
+                <td><strong>{{ dag.dag_id }}</strong></td>
+                <td><code>{{ dag.schedule_interval or 'None' }}</code></td>
+                <td>{{ dag.owners }}</td>
+                <td>{{ dag.description }}</td>
+                <td>
+                    {% if dag.is_active %}
+                    <span class="badge bg-success">Active</span>
+                    {% else %}
+                    <span class="badge bg-secondary">Inactive</span>
+                    {% endif %}
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+<p class="text-muted mt-3">Showing {{ dags|length }} DAG(s)</p>
+{% endblock %}

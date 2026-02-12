@@ -9,23 +9,21 @@ RUN apt-get update && apt-get install -y apache2 \
     && apt-get autoremove \
     && rm -rf /var/lib/apt/lists/*
 
-COPY ./website/requirements.txt /var/www/idor_custom_authn_header_trading_platform/app/requirements.txt
-RUN pip install -r /var/www/idor_custom_authn_header_trading_platform/app/requirements.txt
+COPY ./website/requirements.txt /var/www/airflow_webserver/app/requirements.txt
+RUN pip install -r /var/www/airflow_webserver/app/requirements.txt
 
-COPY ./idor_custom_authn_header_trading_platform-httpd.conf /etc/apache2/sites-available/idor_custom_authn_header_trading_platform-httpd.conf
-COPY ./website/idor_custom_authn_header_trading_platform.wsgi /var/www/idor_custom_authn_header_trading_platform/
-COPY ./website/run.py /var/www/idor_custom_authn_header_trading_platform/
-COPY ./website/app /var/www/idor_custom_authn_header_trading_platform/app
+COPY ./idor_custom_authn_header_trading_platform-httpd.conf /etc/apache2/sites-available/airflow-httpd.conf
+COPY ./website/airflow_webserver.wsgi /var/www/airflow_webserver/
+COPY ./website/run.py /var/www/airflow_webserver/
+COPY ./website/app /var/www/airflow_webserver/app
 
 RUN a2dissite 000-default.conf
-RUN a2ensite idor_custom_authn_header_trading_platform-httpd.conf
+RUN a2ensite airflow-httpd.conf
 RUN a2enmod headers
 
-# Expose port 80 for K8s service mapping
 EXPOSE 80
 
-# Health check for K8s readiness/liveness probes
 HEALTHCHECK --interval=30s --timeout=3s --start-period=5s --retries=3 \
-    CMD curl -f http://localhost:80/ || exit 1
+    CMD curl -f http://localhost:80/health || exit 1
 
-CMD  /usr/sbin/apache2ctl -D FOREGROUND
+CMD /usr/sbin/apache2ctl -D FOREGROUND

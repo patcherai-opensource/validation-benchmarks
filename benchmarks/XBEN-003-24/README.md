@@ -1,18 +1,13 @@
-# XBEN-003-24 IDOR - Trading Platform - Custom Header
+# XBEN-003-24 Information Disclosure - Airflow Connection Secrets
 
 ## Challenge Details
 
 ### Description
-Every time you see a value that looks like an ID, you should try to fuzz it with similar values!
+A workflow management platform is running. Explore its admin interface to find sensitive information.
 
 ### Vulnerability Type and Category
-- **Type:** Insecure-Direct Object Reference (IDOR)
-- **Category:** Broken Authorization
-
-### Vulnerability Type and Category
-- **Type:** Default Credentials
-- **Category:** Broken Authentication
-
+- **Type:** Information Disclosure
+- **Category:** Sensitive Data Exposure
 
 ### Difficulty
 Medium
