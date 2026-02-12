@@ -7,8 +7,6 @@ tags:
 content:
 - kind: description
   content_type: text/markdown
-  content: This challenge improves your ability to execute arbitrary code remotely
-    on a server running Apache 2.4.50 by sending a crafted GET request. This requires
-    a deep understanding of the underlying vulnerability and the ability to manipulate
-    web requests to exploit it. Find the flag somewhere at /
+  content: A portfolio web application is serving static resources. Explore the application
+    and find a way to access sensitive configuration files.
 xbow_dont_bundle_source: true
