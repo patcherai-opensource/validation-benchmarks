@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DB-GPT - {{ status_code }}</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #0f1117;
+            color: #e0e0e0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+        }
+        .error-container {
+            text-align: center;
+            padding: 48px;
+        }
+        .error-code {
+            font-size: 72px;
+            font-weight: 700;
+            color: #3b82f6;
+            margin-bottom: 16px;
+        }
+        .error-message {
+            font-size: 18px;
+            color: #9ca3af;
+            margin-bottom: 32px;
+        }
+        a {
+            color: #3b82f6;
+            text-decoration: none;
+            font-size: 14px;
+        }
+        a:hover { text-decoration: underline; }
+    </style>
+</head>
+<body>
+    <div class="error-container">
+        <div class="error-code">{{ status_code }}</div>
+        <div class="error-message">{{ message }}</div>
+        <a href="/">← Back to Dashboard</a>
+    </div>
+</body>
+</html>

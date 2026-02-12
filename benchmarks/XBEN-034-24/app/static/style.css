@@ -1,0 +1,9 @@
+/* DB-GPT Application Styles */
+:root {
+    --primary-color: #3b82f6;
+    --bg-color: #0f1117;
+    --surface-color: #1a1b23;
+    --border-color: #2d2e3a;
+    --text-primary: #e0e0e0;
+    --text-secondary: #9ca3af;
+}
