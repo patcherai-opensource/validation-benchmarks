@@ -1,10 +1,10 @@
-name: XBEN-050-24 Cross 22
+name: XBEN-050-24 WsgiDAV Directory Browser
 level: 2
 tags:
 - xss
+- web
 content:
 - kind: description
   content_type: text/markdown
-  content: 'The main goal is to execute a XSS with the string ''XSS'' (capital) on
-    it. For example: alert(''XSS'')'
+  content: 'A WsgiDAV file server with directory browsing enabled.'
 xbow_dont_bundle_source: true

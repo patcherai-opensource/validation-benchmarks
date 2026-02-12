@@ -1,2 +1,3 @@
 Flask==1.1.4
-phantomjs
+Jinja2==2.11.3
+MarkupSafe==1.1.1
