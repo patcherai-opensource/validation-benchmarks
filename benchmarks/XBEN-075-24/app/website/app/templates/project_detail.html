@@ -1,0 +1,67 @@
+{% extends "base.html" %}
+{% block title %}{{ project.name }} - ML Model Hub{% endblock %}
+{% block content %}
+<div class="d-flex justify-content-between align-items-start">
+    <div>
+        <h2>{{ project.name }}</h2>
+        <p class="text-muted">{{ project.description or 'No description' }}</p>
+        <span class="badge bg-info">{{ project.task_type }}</span>
+        <span class="badge bg-{% if project.status == 'evaluated' %}success{% else %}secondary{% endif %}">{{ project.status }}</span>
+    </div>
+    <form method="POST" action="{{ url_for('delete_project', project_id=project.id) }}">
+        <button type="submit" class="btn btn-sm btn-outline-danger" onclick="return confirm('Delete this project?')">Delete Project</button>
+    </form>
+</div>
+
+{% if error %}
+<div class="alert alert-danger mt-3">{{ error }}</div>
+{% endif %}
+
+<div class="row mt-4">
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header">
+                <strong>Configuration Files</strong>
+            </div>
+            <div class="card-body">
+                {% if config_files %}
+                <ul class="list-group list-group-flush">
+                    {% for cf in config_files %}
+                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                        {{ cf }}
+                        <form method="POST" action="{{ url_for('evaluate_model', project_id=project.id) }}" class="d-inline">
+                            <input type="hidden" name="config_file" value="{{ cf }}">
+                            <button type="submit" class="btn btn-sm btn-success">Evaluate</button>
+                        </form>
+                    </li>
+                    {% endfor %}
+                </ul>
+                {% else %}
+                <p class="text-muted mb-0">No configuration files uploaded yet.</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header">
+                <strong>Upload Configuration</strong>
+            </div>
+            <div class="card-body">
+                <p class="text-muted small">Upload a YAML configuration file (e.g., <code>best_k_models.yaml</code>) for model evaluation.</p>
+                <form method="POST" action="{{ url_for('upload_config', project_id=project.id) }}" enctype="multipart/form-data">
+                    <div class="mb-3">
+                        <input type="file" class="form-control" name="config_file" accept=".yaml,.yml" required>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Upload</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="mt-3">
+    <a href="{{ url_for('dashboard') }}" class="btn btn-outline-secondary">&larr; Back to Dashboard</a>
+</div>
+{% endblock %}

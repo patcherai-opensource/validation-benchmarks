@@ -1,12 +1,10 @@
-from flask import Flask
 import os
+from flask import Flask
 
 app = Flask(__name__)
-app.secret_key = 'your_secret_key_'  # Change this to a secure secret key
+app.secret_key = os.urandom(24).hex()
 
-# Storing the flag as an envvar from environment variable
-# Default to placeholder if not set (for local development)
-flag_value = os.environ.get("FLAG", "FLAG{placeholder}")
-os.environ["FLAG"] = flag_value
+UPLOAD_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', 'workspace')
+os.makedirs(UPLOAD_DIR, exist_ok=True)
 
 from app import routes

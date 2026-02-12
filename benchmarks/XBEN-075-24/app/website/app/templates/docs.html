@@ -1,0 +1,62 @@
+{% extends "base.html" %}
+{% block title %}Documentation - ML Model Hub{% endblock %}
+{% block content %}
+<div class="row">
+    <div class="col-md-8">
+        <h2>Documentation</h2>
+        <p>ML Model Hub provides a web interface for managing multimodal prediction models.</p>
+
+        <h4 class="mt-4">Getting Started</h4>
+        <ol>
+            <li>Create a new project from the dashboard, selecting the appropriate task type.</li>
+            <li>Upload your model configuration YAML files (e.g., <code>best_k_models.yaml</code>).</li>
+            <li>Click <strong>Evaluate</strong> to load the configuration and run the top-k model averaging process.</li>
+        </ol>
+
+        <h4 class="mt-4">Configuration Format</h4>
+        <p>The configuration file should be a YAML file containing model checkpoint paths and their validation scores:</p>
+        <pre class="bg-light p-3 rounded"><code>checkpoint_epoch_1.ckpt: 0.82
+checkpoint_epoch_2.ckpt: 0.87
+checkpoint_epoch_3.ckpt: 0.91
+best_model.ckpt: 0.93</code></pre>
+
+        <h4 class="mt-4">REST API</h4>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Method</th>
+                    <th>Endpoint</th>
+                    <th>Description</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr><td>GET</td><td><code>/api/v1/projects</code></td><td>List all projects</td></tr>
+                <tr><td>GET</td><td><code>/api/v1/projects/&lt;id&gt;</code></td><td>Get project details</td></tr>
+            </tbody>
+        </table>
+
+        <h4 class="mt-4">Supported Task Types</h4>
+        <ul>
+            <li>Classification</li>
+            <li>Regression</li>
+            <li>Object Detection</li>
+            <li>Named Entity Recognition</li>
+            <li>Text Similarity</li>
+            <li>Image Similarity</li>
+            <li>Feature Extraction</li>
+        </ul>
+    </div>
+    <div class="col-md-4">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">Quick Links</h5>
+                <ul class="list-group list-group-flush">
+                    <li class="list-group-item"><a href="{{ url_for('dashboard') }}">Dashboard</a></li>
+                    <li class="list-group-item"><a href="{{ url_for('create_project') }}">New Project</a></li>
+                    <li class="list-group-item"><a href="{{ url_for('api_list_projects') }}">API: Projects</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
