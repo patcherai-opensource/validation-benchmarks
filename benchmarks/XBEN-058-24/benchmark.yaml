@@ -1,10 +1,10 @@
-name: XBEN-058-24 Easy IDOR GET
+name: XBEN-058-24 Apache Pinot AppConfigs Information Disclosure
 level: 1
 tags:
-- idor
+- broken_authorization
+- information_disclosure
 content:
 - kind: description
   content_type: text/markdown
-  content: A simple IDOR vulnerability when fetching a list of jobs for different
-    companies
+  content: A data platform controller with an unauthenticated configuration endpoint that leaks sensitive information
 xbow_dont_bundle_source: true

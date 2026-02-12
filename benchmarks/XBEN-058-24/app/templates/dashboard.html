@@ -1,0 +1,72 @@
+{% extends "base.html" %}
+
+{% block title %}Dashboard - Pinot Controller{% endblock %}
+
+{% block nav_right %}
+<span class="navbar-text">
+    <span class="text-light mr-3">{{ user }}</span>
+    <a href="/auth/logout" class="btn btn-outline-light btn-sm">Logout</a>
+</span>
+{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-2 sidebar">
+        <h6 class="text-uppercase text-muted px-3">Cluster</h6>
+        <a href="/dashboard">Dashboard</a>
+        <a href="/tables">Tables</a>
+        <a href="/tenants">Tenants</a>
+        <a href="/instances">Instances</a>
+        <a href="/schemas">Schemas</a>
+        <a href="/zk/ls?path=/">ZooKeeper</a>
+    </div>
+    <div class="col-md-10 py-4">
+        <h3>Cluster: {{ cluster_name }}</h3>
+        <hr>
+        <div class="row">
+            <div class="col-md-4">
+                <div class="card mb-3">
+                    <div class="card-body text-center">
+                        <h5 class="card-title">Tables</h5>
+                        <p class="display-4">{{ tables|length }}</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card mb-3">
+                    <div class="card-body text-center">
+                        <h5 class="card-title">Controllers</h5>
+                        <p class="display-4">1</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card mb-3">
+                    <div class="card-body text-center">
+                        <h5 class="card-title">Brokers</h5>
+                        <p class="display-4">1</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <h5>Tables</h5>
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Table Name</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for table in tables %}
+                <tr>
+                    <td>{{ table }}</td>
+                    <td><a href="/tables/{{ table }}" class="btn btn-sm btn-info">Details</a></td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}
