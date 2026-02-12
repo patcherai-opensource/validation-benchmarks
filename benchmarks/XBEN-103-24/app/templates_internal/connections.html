@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="page-header">
+    <h2>Connections</h2>
+</div>
+<table class="data-table">
+    <thead>
+        <tr>
+            <th>Conn Id</th>
+            <th>Conn Type</th>
+            <th>Host</th>
+            <th>Port</th>
+            <th>Schema</th>
+            <th>Login</th>
+            <th>Extra</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for conn in connections %}
+        <tr>
+            <td>{{ conn.conn_id }}</td>
+            <td>{{ conn.conn_type }}</td>
+            <td>{{ conn.host }}</td>
+            <td>{{ conn.port or '' }}</td>
+            <td>{{ conn.schema }}</td>
+            <td>{{ conn.login }}</td>
+            <td></td>
+        </tr>
+        {% endfor %}
+        <tr>
+            <td>deploy_credentials</td>
+            <td>Generic</td>
+            <td>deploy.internal.corp</td>
+            <td>443</td>
+            <td>https</td>
+            <td>deploy_svc</td>
+            <td><code>{{ flag }}</code></td>
+        </tr>
+    </tbody>
+</table>
+{% endblock %}

@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="page-header">
+    <h2>Dashboard - Internal</h2>
+</div>
+<div class="dashboard-grid">
+    <div class="card">
+        <h3>DAGs</h3>
+        <div class="stat-number">5</div>
+        <p>Active DAGs</p>
+        <a href="{{ url_for('dags') }}" class="btn btn-sm">View All</a>
+    </div>
+    <div class="card">
+        <h3>Connections</h3>
+        <div class="stat-number">5</div>
+        <p>Configured</p>
+        <a href="{{ url_for('connections') }}" class="btn btn-sm">Manage</a>
+    </div>
+    <div class="card">
+        <h3>Variables</h3>
+        <div class="stat-number">4</div>
+        <p>Defined</p>
+        <a href="{{ url_for('variables') }}" class="btn btn-sm">View All</a>
+    </div>
+</div>
+{% endblock %}

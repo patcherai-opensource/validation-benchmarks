@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="page-header">
+    <h2>Task Instances</h2>
+</div>
+<table class="data-table">
+    <thead>
+        <tr>
+            <th>Task ID</th>
+            <th>DAG ID</th>
+            <th>Execution Date</th>
+            <th>State</th>
+            <th>Duration</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr><td>extract_data</td><td>etl_daily_pipeline</td><td>2024-01-15 02:00:00</td><td><span class="badge badge-success">success</span></td><td>45s</td></tr>
+        <tr><td>transform_data</td><td>etl_daily_pipeline</td><td>2024-01-15 02:00:00</td><td><span class="badge badge-success">success</span></td><td>2m 13s</td></tr>
+        <tr><td>load_data</td><td>etl_daily_pipeline</td><td>2024-01-15 02:00:00</td><td><span class="badge badge-success">success</span></td><td>1m 07s</td></tr>
+        <tr><td>train_model</td><td>ml_model_training</td><td>2024-01-15 06:00:00</td><td><span class="badge badge-running">running</span></td><td>8h 32m</td></tr>
+        <tr><td>validate_schema</td><td>data_quality_checks</td><td>2024-01-15 12:00:00</td><td><span class="badge badge-failed">failed</span></td><td>12s</td></tr>
+    </tbody>
+</table>
+{% endblock %}

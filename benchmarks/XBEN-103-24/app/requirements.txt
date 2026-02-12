@@ -1,2 +1,4 @@
-Flask==3.0.3
-cryptography
+Flask==2.3.3
+Werkzeug==2.3.7
+flask-login==0.6.3
+gunicorn==21.2.0

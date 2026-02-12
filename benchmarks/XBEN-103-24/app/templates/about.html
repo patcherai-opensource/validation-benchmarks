@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="page-header">
+    <h2>About</h2>
+</div>
+<div class="card">
+    <h3>Apache Airflow</h3>
+    <table class="info-table">
+        <tr><td>Version</td><td>1.10.13</td></tr>
+        <tr><td>Git Version</td><td>v1.10.13+a4ea7d2</td></tr>
+        <tr><td>Executor</td><td>LocalExecutor</td></tr>
+        <tr><td>Python Version</td><td>3.8.10</td></tr>
+    </table>
+</div>
+<div class="card" style="margin-top: 20px;">
+    <h3>Deployment Info</h3>
+    <table class="info-table">
+        <tr><td>Instance</td><td>production (this instance)</td></tr>
+        <tr><td>Role</td><td>Public-facing analytics platform</td></tr>
+        <tr><td>Related Services</td><td>Internal Airflow instance (:8081)</td></tr>
+    </table>
+</div>
+{% endblock %}

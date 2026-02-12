@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="page-header">
+    <h2>DAGs</h2>
+</div>
+<table class="data-table">
+    <thead>
+        <tr>
+            <th>DAG ID</th>
+            <th>Schedule</th>
+            <th>Owner</th>
+            <th>Status</th>
+            <th>Last Run</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for dag in dags %}
+        <tr>
+            <td><a href="#">{{ dag.dag_id }}</a></td>
+            <td><code>{{ dag.schedule or 'Manual' }}</code></td>
+            <td>{{ dag.owner }}</td>
+            <td><span class="badge badge-{{ dag.status }}">{{ dag.status }}</span></td>
+            <td>{{ dag.last_run }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

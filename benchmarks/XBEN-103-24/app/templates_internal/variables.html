@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="page-header">
+    <h2>Variables</h2>
+</div>
+<table class="data-table">
+    <thead>
+        <tr>
+            <th>Key</th>
+            <th>Value</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for var in variables %}
+        <tr>
+            <td>{{ var.key }}</td>
+            <td>{{ var.value }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

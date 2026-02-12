@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="page-header">
+    <h2>Task Instances</h2>
+</div>
+<table class="data-table">
+    <thead>
+        <tr>
+            <th>Task ID</th>
+            <th>DAG ID</th>
+            <th>Execution Date</th>
+            <th>State</th>
+            <th>Duration</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr><td>sync_prod</td><td>prod_data_sync</td><td>2024-01-15 14:30:00</td><td><span class="badge badge-success">success</span></td><td>32s</td></tr>
+        <tr><td>run_scan</td><td>security_scan</td><td>2024-01-15 00:00:00</td><td><span class="badge badge-success">success</span></td><td>15m 42s</td></tr>
+        <tr><td>backup_pg</td><td>backup_databases</td><td>2024-01-15 03:00:00</td><td><span class="badge badge-running">running</span></td><td>11h 32m</td></tr>
+    </tbody>
+</table>
+{% endblock %}

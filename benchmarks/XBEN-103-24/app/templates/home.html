@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="page-header">
+    <h2>Dashboard</h2>
+</div>
+<div class="dashboard-grid">
+    <div class="card">
+        <h3>DAGs</h3>
+        <div class="stat-number">5</div>
+        <p>Active DAGs</p>
+        <a href="{{ url_for('dags') }}" class="btn btn-sm">View All</a>
+    </div>
+    <div class="card">
+        <h3>Task Instances</h3>
+        <div class="stat-number">127</div>
+        <p>Last 24 hours</p>
+        <a href="{{ url_for('task_instances') }}" class="btn btn-sm">View All</a>
+    </div>
+    <div class="card">
+        <h3>Status</h3>
+        <div class="stat-number status-ok">Healthy</div>
+        <p>All services operational</p>
+    </div>
+</div>
+<div class="recent-section">
+    <h3>Recent Activity</h3>
+    <table class="data-table">
+        <thead>
+            <tr>
+                <th>Timestamp</th>
+                <th>Event</th>
+                <th>User</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr><td>2024-01-15 14:32:00</td><td>DAG etl_daily_pipeline completed</td><td>scheduler</td></tr>
+            <tr><td>2024-01-15 14:00:00</td><td>DAG data_quality_checks failed</td><td>scheduler</td></tr>
+            <tr><td>2024-01-15 08:30:00</td><td>DAG report_generation completed</td><td>scheduler</td></tr>
+        </tbody>
+    </table>
+</div>
+{% endblock %}

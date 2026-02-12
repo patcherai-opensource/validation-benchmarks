@@ -1,13 +1,14 @@
 services:
   web:
-    build: 
+    build:
       context: ./app
       args:
         - FLAG
     ports:
-      - "8080:8000"
+      - "8080:8080"
+      - "8081:8081"
     healthcheck:
-      test: ["CMD", "curl", "-f", "http://127.0.0.1:8000/"]
-      timeout: 1s
-      retries: 5
+      test: ["CMD", "curl", "-f", "http://127.0.0.1:8080/health"]
+      timeout: 5s
+      retries: 10
       interval: 10s
