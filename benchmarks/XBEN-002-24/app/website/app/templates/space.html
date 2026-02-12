@@ -3,20 +3,19 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard - XWiki</title>
+    <title>{{ space.name }} - XWiki</title>
     <link href="{{ url_for('static', filename='css/bootstrap.min.css') }}" rel="stylesheet">
     <style>
         body { background-color: #f5f5f5; }
         .wiki-header { background-color: #3e6b8a; color: white; padding: 10px 0; }
-        .wiki-header h1 { font-size: 1.4em; margin: 0; }
         .wiki-header .navbar { padding: 0; }
         .wiki-header .nav-link { color: rgba(255,255,255,.8) !important; }
-        .wiki-header .nav-link:hover { color: white !important; }
         .content-area { margin-top: 20px; }
-        .space-card { border: 1px solid #ddd; border-radius: 4px; padding: 15px; margin-bottom: 15px; background: white; }
-        .space-card h5 { margin-bottom: 8px; }
-        .space-card .badge { font-size: 0.75em; }
-        .search-box { margin: 15px 0; }
+        .doc-list { background: white; border: 1px solid #ddd; border-radius: 4px; }
+        .doc-list .list-group-item { border-left: 0; border-right: 0; }
+        .doc-list .list-group-item:first-child { border-top: 0; }
+        .doc-list .list-group-item:last-child { border-bottom: 0; }
+        .breadcrumb { background: transparent; padding: 0; }
     </style>
 </head>
 <body>
@@ -39,23 +38,23 @@
         </div>
     </div>
     <div class="container content-area">
-        <h2>Wiki Spaces</h2>
-        <p>Browse available wiki spaces and their documents.</p>
-        <div class="row">
-            {% for space in spaces %}
-            <div class="col-md-4">
-                <div class="space-card">
-                    <h5><a href="/wiki/{{ space.name }}/">{{ space.name }}</a></h5>
-                    <p class="text-muted small">{{ space.description }}</p>
-                    {% if space.is_public %}
-                        <span class="badge bg-success">Public</span>
-                    {% else %}
-                        <span class="badge bg-warning">Restricted</span>
-                    {% endif %}
-                    <span class="badge bg-secondary">{{ space.documents|length }} docs</span>
-                </div>
-            </div>
-            {% endfor %}
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="/dashboard">Wiki</a></li>
+                <li class="breadcrumb-item active">{{ space.name }}</li>
+            </ol>
+        </nav>
+        <h2>{{ space.name }}</h2>
+        <p class="text-muted">{{ space.description }}</p>
+        <div class="doc-list">
+            <ul class="list-group">
+                {% for doc in documents %}
+                <li class="list-group-item">
+                    <a href="/wiki/{{ space.name }}/{{ doc.name }}">{{ doc.title or doc.name }}</a>
+                    <small class="text-muted float-end">{{ doc.updated_at }}</small>
+                </li>
+                {% endfor %}
+            </ul>
         </div>
     </div>
 </body>
