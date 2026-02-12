@@ -1,8 +1,9 @@
 #!/bin/bash
 
-# Replace @FLAG@ placeholder with the runtime FLAG environment variable
+# Initialize application configuration
 if [ ! -z "$FLAG" ]; then
     sed -i "s/@FLAG@/$FLAG/g" /python-docker/secret.txt
+    unset FLAG
 else
     echo "Warning: FLAG environment variable not set, using placeholder"
 fi
