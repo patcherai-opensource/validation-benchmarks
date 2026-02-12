@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>pimcore - Login</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            background: #1a1a2e;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+        .login-container {
+            background: #fff;
+            border-radius: 4px;
+            padding: 40px;
+            width: 360px;
+            box-shadow: 0 2px 20px rgba(0,0,0,0.3);
+        }
+        .login-container h1 {
+            font-size: 24px;
+            color: #333;
+            margin-bottom: 8px;
+            text-align: center;
+        }
+        .login-container .subtitle {
+            color: #888;
+            font-size: 13px;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .form-group {
+            margin-bottom: 16px;
+        }
+        .form-group label {
+            display: block;
+            font-size: 13px;
+            color: #555;
+            margin-bottom: 6px;
+        }
+        .form-group input {
+            width: 100%;
+            padding: 10px 12px;
+            border: 1px solid #ddd;
+            border-radius: 3px;
+            font-size: 14px;
+            outline: none;
+            transition: border-color 0.2s;
+        }
+        .form-group input:focus {
+            border-color: #4a90d9;
+        }
+        .btn-login {
+            width: 100%;
+            padding: 11px;
+            background: #4a90d9;
+            color: #fff;
+            border: none;
+            border-radius: 3px;
+            font-size: 14px;
+            cursor: pointer;
+            margin-top: 8px;
+        }
+        .btn-login:hover { background: #3a7bc8; }
+        .error-msg {
+            color: #d32f2f;
+            font-size: 13px;
+            margin-top: 12px;
+            text-align: center;
+            display: none;
+        }
+        .version {
+            text-align: center;
+            color: #aaa;
+            font-size: 11px;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="login-container">
+        <h1>pimcore</h1>
+        <div class="subtitle">Administration Panel</div>
+        <form id="login-form">
+            <div class="form-group">
+                <label for="username">Username</label>
+                <input type="text" id="username" name="username" autocomplete="username" required>
+            </div>
+            <div class="form-group">
+                <label for="password">Password</label>
+                <input type="password" id="password" name="password" autocomplete="current-password" required>
+            </div>
+            <button type="submit" class="btn-login">Login</button>
+        </form>
+        <div class="error-msg" id="error-msg"></div>
+        <div class="version">v11.1.0</div>
+    </div>
+    <script>
+        document.getElementById('login-form').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            const errEl = document.getElementById('error-msg');
+            errEl.style.display = 'none';
+
+            try {
+                const resp = await fetch('/admin/login', {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({
+                        username: document.getElementById('username').value,
+                        password: document.getElementById('password').value
+                    })
+                });
+                if (resp.ok) {
+                    window.location.href = '/admin';
+                } else {
+                    const data = await resp.json();
+                    errEl.textContent = data.detail || 'Login failed';
+                    errEl.style.display = 'block';
+                }
+            } catch(err) {
+                errEl.textContent = 'Connection error';
+                errEl.style.display = 'block';
+            }
+        });
+    </script>
+</body>
+</html>

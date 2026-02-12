@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>pimcore - Translations</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; background: #f5f5f5; }
+        .header {
+            background: #2c3e50;
+            color: #fff;
+            padding: 0 20px;
+            height: 48px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        .header h1 { font-size: 18px; font-weight: 500; }
+        .header nav a {
+            color: #bdc3c7;
+            text-decoration: none;
+            margin-left: 24px;
+            font-size: 14px;
+        }
+        .header nav a:hover { color: #fff; }
+        .header nav a.active { color: #3498db; }
+        .container { max-width: 1200px; margin: 30px auto; padding: 0 20px; }
+        .card {
+            background: #fff;
+            border-radius: 3px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            padding: 24px;
+        }
+        .card h2 { font-size: 16px; color: #333; margin-bottom: 16px; }
+        .toolbar {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 16px;
+            align-items: center;
+        }
+        .toolbar select, .toolbar input {
+            padding: 8px 12px;
+            border: 1px solid #ddd;
+            border-radius: 3px;
+            font-size: 13px;
+        }
+        .toolbar input { flex: 1; max-width: 300px; }
+        .btn {
+            padding: 8px 16px;
+            border: none;
+            border-radius: 3px;
+            font-size: 13px;
+            cursor: pointer;
+            background: #3498db;
+            color: #fff;
+        }
+        .btn:hover { background: #2980b9; }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 13px;
+        }
+        th, td {
+            padding: 10px 12px;
+            text-align: left;
+            border-bottom: 1px solid #eee;
+        }
+        th {
+            background: #f8f9fa;
+            color: #555;
+            font-weight: 600;
+            font-size: 12px;
+            text-transform: uppercase;
+        }
+        tr:hover td { background: #f8f9fa; }
+        .pagination {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 16px;
+            font-size: 13px;
+            color: #666;
+        }
+        .pagination button {
+            padding: 6px 12px;
+            border: 1px solid #ddd;
+            background: #fff;
+            border-radius: 3px;
+            cursor: pointer;
+            font-size: 13px;
+        }
+        .pagination button:hover { background: #f5f5f5; }
+        .pagination button:disabled { opacity: 0.5; cursor: not-allowed; }
+        #logout-btn { cursor: pointer; background: none; border: none; color: #bdc3c7; font-size: 14px; }
+        #logout-btn:hover { color: #e74c3c; }
+        .filter-info { font-size: 12px; color: #888; margin-bottom: 8px; }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>pimcore</h1>
+        <nav>
+            <a href="/admin">Dashboard</a>
+            <a href="/admin/translation" class="active">Translations</a>
+            <button id="logout-btn">Logout</button>
+        </nav>
+    </div>
+    <div class="container">
+        <div class="card">
+            <h2>Shared Translations</h2>
+            <div class="toolbar">
+                <select id="trans-type">
+                    <option value="messages">Website Translations</option>
+                    <option value="admin">Admin Translations</option>
+                </select>
+                <select id="filter-field">
+                    <option value="key">Key</option>
+                    <option value="text">Text</option>
+                    <option value="language">Language</option>
+                </select>
+                <input type="text" id="filter-value" placeholder="Filter value...">
+                <button class="btn" id="apply-filter">Apply Filter</button>
+                <button class="btn" id="clear-filter" style="background:#95a5a6;">Clear</button>
+            </div>
+            <div class="filter-info" id="filter-info"></div>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Key</th>
+                        <th>Language</th>
+                        <th>Text</th>
+                        <th>Created</th>
+                        <th>Modified</th>
+                    </tr>
+                </thead>
+                <tbody id="trans-body"></tbody>
+            </table>
+            <div class="pagination">
+                <span id="page-info"></span>
+                <div>
+                    <button id="prev-btn" disabled>&laquo; Previous</button>
+                    <button id="next-btn">Next &raquo;</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+        let currentPage = 0;
+        const pageSize = 20;
+
+        function formatDate(ts) {
+            if (!ts) return '-';
+            return new Date(ts * 1000).toLocaleDateString();
+        }
+
+        async function loadTranslations(page) {
+            const type = document.getElementById('trans-type').value;
+            const filterField = document.getElementById('filter-field').value;
+            const filterValue = document.getElementById('filter-value').value;
+            const start = page * pageSize;
+
+            const params = new URLSearchParams();
+            params.append('type', type);
+            params.append('start', start);
+            params.append('limit', pageSize);
+            params.append('sort', 'key');
+            params.append('dir', 'ASC');
+
+            if (filterValue.trim()) {
+                const filterData = JSON.stringify([{
+                    property: filterField,
+                    type: 'string',
+                    value: filterValue.trim()
+                }]);
+                params.append('filter', filterData);
+                document.getElementById('filter-info').textContent =
+                    'Filtering by ' + filterField + ' containing "' + filterValue.trim() + '"';
+            } else {
+                document.getElementById('filter-info').textContent = '';
+            }
+
+            try {
+                const resp = await fetch('/admin/translation/translations', {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+                    body: params.toString()
+                });
+                const result = await resp.json();
+
+                const tbody = document.getElementById('trans-body');
+                tbody.innerHTML = '';
+
+                if (result.success && result.data) {
+                    result.data.forEach(row => {
+                        const tr = document.createElement('tr');
+                        tr.innerHTML = '<td>' + (row.key || '') + '</td>' +
+                            '<td>' + (row.language || '') + '</td>' +
+                            '<td>' + (row.text || '') + '</td>' +
+                            '<td>' + formatDate(row.creationDate) + '</td>' +
+                            '<td>' + formatDate(row.modificationDate) + '</td>';
+                        tbody.appendChild(tr);
+                    });
+
+                    const total = result.total || 0;
+                    document.getElementById('page-info').textContent =
+                        'Showing ' + (start + 1) + '-' + Math.min(start + pageSize, total) + ' of ' + total;
+                    document.getElementById('prev-btn').disabled = page === 0;
+                    document.getElementById('next-btn').disabled = (start + pageSize) >= total;
+                } else {
+                    tbody.innerHTML = '<tr><td colspan="5" style="text-align:center;color:#999;">No results</td></tr>';
+                    document.getElementById('page-info').textContent = '0 results';
+                }
+            } catch(e) {
+                document.getElementById('trans-body').innerHTML =
+                    '<tr><td colspan="5" style="color:#d32f2f;text-align:center;">Error loading translations</td></tr>';
+            }
+        }
+
+        document.getElementById('apply-filter').addEventListener('click', () => {
+            currentPage = 0;
+            loadTranslations(currentPage);
+        });
+        document.getElementById('clear-filter').addEventListener('click', () => {
+            document.getElementById('filter-value').value = '';
+            currentPage = 0;
+            loadTranslations(currentPage);
+        });
+        document.getElementById('prev-btn').addEventListener('click', () => {
+            if (currentPage > 0) { currentPage--; loadTranslations(currentPage); }
+        });
+        document.getElementById('next-btn').addEventListener('click', () => {
+            currentPage++;
+            loadTranslations(currentPage);
+        });
+        document.getElementById('trans-type').addEventListener('change', () => {
+            currentPage = 0;
+            loadTranslations(currentPage);
+        });
+        document.getElementById('filter-value').addEventListener('keydown', (e) => {
+            if (e.key === 'Enter') { currentPage = 0; loadTranslations(currentPage); }
+        });
+        document.getElementById('logout-btn').addEventListener('click', async () => {
+            await fetch('/admin/logout', {method: 'POST'});
+            window.location.href = '/admin/login';
+        });
+
+        loadTranslations(0);
+    </script>
+</body>
+</html>

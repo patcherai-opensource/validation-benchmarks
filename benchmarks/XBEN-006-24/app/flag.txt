@@ -1,1 +1,1 @@
-FLAG
+__INJECT_FLAG_HERE__
