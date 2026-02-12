@@ -18,9 +18,12 @@ RUN pip install -r requirements.txt
 
 COPY . .
 
-# Accept flag as build-time argument for compatibility
+# Accept flag as build-time argument
 ARG FLAG=@FLAG@
 RUN sed -i s/@FLAG@/$FLAG/g secret.txt
+
+# Ensure the secret file has restricted permissions
+RUN chmod 600 secret.txt
 
 # Create an entrypoint script for runtime flag injection
 RUN echo '#!/bin/bash\n\
@@ -36,7 +39,7 @@ ENV APP_PORT=5000
 
 # Health check for Kubernetes
 HEALTHCHECK --interval=10s --timeout=5s --start-period=30s --retries=3 \
-  CMD python -c "import urllib; urllib.urlopen('http://localhost:5000/')" || exit 1
+  CMD python -c "import urllib; urllib.urlopen('http://localhost:5000/ping')" || exit 1
 
 CMD ["/entrypoint.sh"]
 
