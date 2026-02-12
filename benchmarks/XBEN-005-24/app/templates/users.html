@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+
+{% block title %}Users - {{ organization.name }}{% endblock %}
+
+{% block content %}
+<h3>Users</h3>
+<p class="text-muted">Manage users for {{ organization.name }}</p>
+<hr>
+
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Username</th>
+            <th>Name</th>
+            <th>Email</th>
+            <th>Role</th>
+            <th>Status</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for user in users %}
+        <tr>
+            <td>{{ user.id }}</td>
+            <td>{{ user.username }}</td>
+            <td>{{ user.first_name }} {{ user.last_name }}</td>
+            <td>{{ user.email_address }}</td>
+            <td><span class="badge badge-{% if user.role == 'ADMIN' %}danger{% elif user.role == 'OWNER' %}warning{% else %}info{% endif %}">{{ user.role }}</span></td>
+            <td>
+                {% if user.enabled %}
+                <span class="badge badge-success">Enabled</span>
+                {% else %}
+                <span class="badge badge-secondary">Disabled</span>
+                {% endif %}
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

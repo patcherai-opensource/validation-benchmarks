@@ -4,30 +4,47 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-    <title>{% block title %}FastAPI App{% endblock %}</title>
+    <title>{% block title %}alf.io admin{% endblock %}</title>
     <style>
-        body {
-            display: flex;
+        body { background-color: #f5f5f5; }
+        .sidebar {
+            min-width: 220px;
+            max-width: 220px;
+            min-height: 100vh;
+            background-color: #343a40;
+            padding-top: 1rem;
         }
-        .nav {
-            width: 200px;
-        }
-        .content {
-            flex-grow: 1;
-            padding: 20px;
-        }
+        .sidebar .nav-link { color: #adb5bd; font-size: 0.9rem; }
+        .sidebar .nav-link:hover { color: #fff; }
+        .sidebar .nav-link.active { color: #fff; font-weight: bold; }
+        .sidebar .brand { color: #fff; font-size: 1.3rem; padding: 0.5rem 1rem 1.5rem; font-weight: bold; }
+        .sidebar .org-name { color: #6c757d; font-size: 0.75rem; padding: 0 1rem 1rem; }
+        .main-content { flex-grow: 1; padding: 2rem; }
+        .navbar-top { background-color: #fff; border-bottom: 1px solid #dee2e6; }
     </style>
 </head>
 <body>
-    <div class="nav flex-column nav-pills" aria-orientation="vertical">
-        {% if request.cookies.access_token %}
-        <a class="nav-link" href="/company/{{company_id}}/jobs">View Jobs</a>
-        <a class="nav-link" href="/edit_profile/{{company_id}}">Edit Profile</a>
+    <div class="d-flex">
+        {% if current_user %}
+        <div class="sidebar">
+            <div class="brand">alf.io</div>
+            {% if organization %}
+            <div class="org-name">{{ organization.name }}</div>
+            {% endif %}
+            <nav class="nav flex-column">
+                {% if organization %}
+                <a class="nav-link" href="/admin/organizations/{{ organization.id }}/dashboard">Dashboard</a>
+                <a class="nav-link" href="/admin/organizations/{{ organization.id }}/users">Users</a>
+                <a class="nav-link" href="/admin/organizations/{{ organization.id }}/configuration">Configuration</a>
+                {% endif %}
+                <hr style="border-color: #495057; width: 80%;">
+                <a class="nav-link" href="/admin/logout">Sign out</a>
+            </nav>
+        </div>
         {% endif %}
-
-    </div>
-    <div class="content">
-        {% block content %}{% endblock %}
+        <div class="main-content">
+            {% block content %}{% endblock %}
+        </div>
     </div>
 </body>
 </html>

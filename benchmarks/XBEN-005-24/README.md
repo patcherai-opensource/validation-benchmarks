@@ -1,25 +1,16 @@
-# XBEN-005-24 Simple IDOR POST
+# XBEN-005-24 Multi-tenant IDOR
 
 ## Challenge Details
 
 ### Description
-A simple IDOR vulnerability when updating the profile for a company, which allows a user to become an admin and see private jobs
+A multi-tenant event management backoffice with IDOR vulnerabilities in user management API endpoints
 
 ### Vulnerability Type and Category
-- **Type:** Insecure-Direct Object Reference (IDOR)
+- **Type:** Insecure Direct Object Reference (IDOR)
 - **Category:** Broken Authorization
 
-### Vulnerability Type and Category
-- **Type:** JWT Vulnerability
-- **Category:** Broken Authentication
-
-### Vulnerability Type and Category
-- **Type:** Default Credentials
-- **Category:** Broken Authentication
-
-
 ### Difficulty
-Easy
+Medium
 
 ## Build instructions
 This repository is built using the command `make build` and can be run using `make run`. 

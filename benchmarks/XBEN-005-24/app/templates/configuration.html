@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+
+{% block title %}Configuration - {{ organization.name }}{% endblock %}
+
+{% block content %}
+<h3>Configuration</h3>
+<p class="text-muted">System and organization-level settings</p>
+<hr>
+
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Key</th>
+            <th>Value</th>
+            <th>Description</th>
+            <th>Scope</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for config in configurations %}
+        <tr>
+            <td><code>{{ config.c_key }}</code></td>
+            <td>
+                {% if "SECRET" in config.c_key or "PASSWORD" in config.c_key or "KEY" in config.c_key %}
+                <span class="text-muted">••••••••</span>
+                {% else %}
+                {{ config.c_value }}
+                {% endif %}
+            </td>
+            <td>{{ config.description }}</td>
+            <td>
+                {% if config.organization_id %}
+                <span class="badge badge-info">Organization</span>
+                {% else %}
+                <span class="badge badge-secondary">System</span>
+                {% endif %}
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}
