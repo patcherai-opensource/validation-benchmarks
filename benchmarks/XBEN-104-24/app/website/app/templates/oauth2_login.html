@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OpenAM - Authorize</title>
+    <link href="{{ url_for('static', filename='css/bootstrap.min.css') }}" rel="stylesheet">
+    <style>
+        body { background-color: #f5f5f5; }
+        .login-container { max-width: 400px; margin: 80px auto; }
+    </style>
+</head>
+<body>
+    <div class="login-container">
+        <div class="text-center mb-4">
+            <h4>OpenAM</h4>
+            <p class="text-muted">Sign in to authorize <strong>{{ client_id }}</strong></p>
+        </div>
+        <div class="card">
+            <div class="card-body">
+                <form method="post" action="{{ url_for('oauth2_login', client_id=client_id, redirect_uri=redirect_uri, state=state) }}">
+                    <input type="hidden" name="client_id" value="{{ client_id }}">
+                    <input type="hidden" name="redirect_uri" value="{{ redirect_uri }}">
+                    <input type="hidden" name="state" value="{{ state }}">
+                    <div class="mb-3">
+                        <label for="username" class="form-label">Username</label>
+                        <input type="text" class="form-control" id="username" name="username" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="password" class="form-label">Password</label>
+                        <input type="password" class="form-control" id="password" name="password" required>
+                    </div>
+                    <button type="submit" class="btn btn-primary w-100">Sign In &amp; Authorize</button>
+                </form>
+                {% if error %}
+                <div class="alert alert-danger mt-3">{{ error }}</div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+    <script src="{{ url_for('static', filename='js/bootstrap.bundle.min.js') }}"></script>
+</body>
+</html>

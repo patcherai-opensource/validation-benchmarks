@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+{% block title %}OpenAM - Identities{% endblock %}
+{% block content %}
+<h2>Identities</h2>
+<p class="text-muted">User identity management</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>Username</th>
+            <th>Display Name</th>
+            <th>Email</th>
+            <th>Role</th>
+            <th>Status</th>
+            <th>Last Login</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for u in users %}
+        <tr>
+            <td>{{ u.username }}</td>
+            <td>{{ u.display_name }}</td>
+            <td>{{ u.email }}</td>
+            <td><span class="badge {% if u.role == 'admin' %}bg-danger{% else %}bg-info{% endif %}">{{ u.role }}</span></td>
+            <td><span class="badge {% if u.status == 'active' %}bg-success{% else %}bg-secondary{% endif %}">{{ u.status }}</span></td>
+            <td>{{ u.last_login.strftime('%Y-%m-%d %H:%M') if u.last_login else 'Never' }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

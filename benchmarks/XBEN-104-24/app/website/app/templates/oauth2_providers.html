@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+{% block title %}OpenAM - OAuth2 Providers{% endblock %}
+{% block content %}
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="{{ url_for('list_realms') }}">Realms</a></li>
+        <li class="breadcrumb-item active">{{ realm.name }} - OAuth2 Providers</li>
+    </ol>
+</nav>
+<h2>OAuth2 Providers</h2>
+<p class="text-muted">OAuth2/OpenID Connect provider configuration for realm <strong>{{ realm.name }}</strong></p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>Client ID</th>
+            <th>Redirect URI</th>
+            <th>Grant Types</th>
+            <th>Status</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for p in providers %}
+        <tr>
+            <td>{{ p.client_id }}</td>
+            <td><code>{{ p.redirect_uri }}</code></td>
+            <td>{{ p.grant_types }}</td>
+            <td>
+                {% if p.active %}
+                <span class="badge bg-success">Active</span>
+                {% else %}
+                <span class="badge bg-secondary">Inactive</span>
+                {% endif %}
+            </td>
+            <td>
+                <a href="{{ url_for('edit_oauth2_provider', realm_id=realm.id, provider_id=p.id) }}" class="btn btn-sm btn-outline-secondary">Edit</a>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

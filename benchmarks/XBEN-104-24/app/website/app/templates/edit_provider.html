@@ -1,0 +1,70 @@
+{% extends "base.html" %}
+{% block title %}OpenAM - Edit OAuth2 Provider{% endblock %}
+{% block content %}
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="{{ url_for('list_realms') }}">Realms</a></li>
+        <li class="breadcrumb-item"><a href="{{ url_for('realm_oauth2_providers', realm_id=realm.id) }}">{{ realm.name }}</a></li>
+        <li class="breadcrumb-item active">Edit Provider</li>
+    </ol>
+</nav>
+<h2>OAuth2 Provider Settings</h2>
+<p class="text-muted">Configure the OAuth2/OIDC provider for realm <strong>{{ realm.name }}</strong></p>
+<form method="post">
+    <div class="row">
+        <div class="col-md-6">
+            <h5>Client Configuration</h5>
+            <div class="mb-3">
+                <label for="client_id" class="form-label">Client ID</label>
+                <input type="text" class="form-control" id="client_id" name="client_id" value="{{ provider.client_id }}">
+            </div>
+            <div class="mb-3">
+                <label for="client_secret" class="form-label">Client Secret</label>
+                <input type="text" class="form-control" id="client_secret" name="client_secret" value="{{ provider.client_secret }}">
+            </div>
+            <div class="mb-3">
+                <label for="redirect_uri" class="form-label">Redirect URI</label>
+                <input type="text" class="form-control" id="redirect_uri" name="redirect_uri" value="{{ provider.redirect_uri }}">
+            </div>
+            <div class="mb-3">
+                <label for="scope" class="form-label">Scope</label>
+                <input type="text" class="form-control" id="scope" name="scope" value="{{ provider.scope }}">
+            </div>
+            <div class="mb-3">
+                <label for="response_type" class="form-label">Response Type</label>
+                <input type="text" class="form-control" id="response_type" name="response_type" value="{{ provider.response_type }}">
+            </div>
+        </div>
+        <div class="col-md-6">
+            <h5>Advanced Settings</h5>
+            <div class="mb-3">
+                <label for="token_endpoint_auth_method" class="form-label">Token Endpoint Auth Method</label>
+                <select class="form-select" id="token_endpoint_auth_method" name="token_endpoint_auth_method">
+                    <option value="client_secret_basic" {% if provider.token_endpoint_auth_method == 'client_secret_basic' %}selected{% endif %}>client_secret_basic</option>
+                    <option value="client_secret_post" {% if provider.token_endpoint_auth_method == 'client_secret_post' %}selected{% endif %}>client_secret_post</option>
+                    <option value="private_key_jwt" {% if provider.token_endpoint_auth_method == 'private_key_jwt' %}selected{% endif %}>private_key_jwt</option>
+                </select>
+            </div>
+            <div class="mb-3">
+                <label for="grant_types" class="form-label">Grant Types</label>
+                <input type="text" class="form-control" id="grant_types" name="grant_types" value="{{ provider.grant_types }}">
+            </div>
+            <div class="mb-3">
+                <label for="issuer" class="form-label">Issuer</label>
+                <input type="text" class="form-control" id="issuer" name="issuer" value="{{ provider.issuer or '' }}">
+            </div>
+            <div class="mb-3">
+                <label for="custom_login_url_template" class="form-label">Custom Login URL Template</label>
+                <textarea class="form-control" id="custom_login_url_template" name="custom_login_url_template" rows="3" placeholder="Optional: Custom template for login URL generation">{{ provider.custom_login_url_template or '' }}</textarea>
+                <div class="form-text">Template variables: {{ '{{' }} base_url {{ '}}' }}, {{ '{{' }} client_id {{ '}}' }}, {{ '{{' }} redirect_uri {{ '}}' }}, {{ '{{' }} scope {{ '}}' }}, {{ '{{' }} state {{ '}}' }}, {{ '{{' }} goto {{ '}}' }}</div>
+            </div>
+            <div class="mb-3 form-check">
+                <input type="checkbox" class="form-check-input" id="active" name="active" {% if provider.active %}checked{% endif %}>
+                <label class="form-check-label" for="active">Active</label>
+            </div>
+        </div>
+    </div>
+    <button type="submit" class="btn btn-primary">Save Changes</button>
+    <a href="{{ url_for('realm_oauth2_providers', realm_id=realm.id) }}" class="btn btn-secondary">Cancel</a>
+</form>
+{% endblock %}

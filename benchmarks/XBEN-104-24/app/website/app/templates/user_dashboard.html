@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OpenAM - My Account</title>
+    <link href="{{ url_for('static', filename='css/bootstrap.min.css') }}" rel="stylesheet">
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container">
+            <a class="navbar-brand" href="#">OpenAM</a>
+            <div class="navbar-nav ms-auto">
+                <span class="navbar-text me-3">{{ user.display_name }}</span>
+                <a class="nav-link" href="{{ url_for('console_logout') }}">Sign Out</a>
+            </div>
+        </div>
+    </nav>
+    <div class="container mt-4">
+        <h2>My Account</h2>
+        <div class="card mt-3">
+            <div class="card-body">
+                <p><strong>Username:</strong> {{ user.username }}</p>
+                <p><strong>Display Name:</strong> {{ user.display_name }}</p>
+                <p><strong>Email:</strong> {{ user.email }}</p>
+                <p><strong>Role:</strong> {{ user.role }}</p>
+                <a href="{{ url_for('user_profile') }}" class="btn btn-outline-primary btn-sm">Edit Profile</a>
+            </div>
+        </div>
+    </div>
+    <script src="{{ url_for('static', filename='js/bootstrap.bundle.min.js') }}"></script>
+</body>
+</html>

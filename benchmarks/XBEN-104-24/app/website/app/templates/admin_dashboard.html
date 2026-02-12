@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+{% block title %}OpenAM - Admin Console{% endblock %}
+{% block content %}
+<h2>Dashboard</h2>
+<p class="text-muted">OpenAM Access Management Console</p>
+<div class="row mt-4">
+    <div class="col-md-4">
+        <div class="card">
+            <div class="card-body text-center">
+                <h3>{{ realms|length }}</h3>
+                <p>Realms</p>
+                <a href="{{ url_for('list_realms') }}" class="btn btn-sm btn-outline-primary">Manage</a>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card">
+            <div class="card-body text-center">
+                <h3>{{ user_count }}</h3>
+                <p>Identities</p>
+                <a href="{{ url_for('list_users') }}" class="btn btn-sm btn-outline-primary">Manage</a>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card">
+            <div class="card-body text-center">
+                <h3>{{ provider_count }}</h3>
+                <p>OAuth2 Providers</p>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="card mt-4">
+    <div class="card-header">Server Information</div>
+    <div class="card-body">
+        <table class="table table-sm">
+            <tr><td>Version</td><td>OpenAM 15.0.3</td></tr>
+            <tr><td>Build</td><td>2024.03.15-b47a2c1</td></tr>
+            <tr><td>Status</td><td><span class="badge bg-success">Running</span></td></tr>
+        </table>
+    </div>
+</div>
+{% endblock %}

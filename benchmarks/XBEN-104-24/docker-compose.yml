@@ -4,12 +4,12 @@ services:
     expose:
       - 3306
     healthcheck:
-      test: ["CMD", "mysqladmin" ,"ping", "-h", "localhost","--password=ssti_loan_calculator","-u","root"]
-      timeout: 1s
-      retries: 5
+      test: ["CMD", "mysqladmin" ,"ping", "-h", "localhost","--password=openam","-u","root"]
+      timeout: 5s
+      retries: 10
       interval: 10s
 
-  ssti_loan_calculator:
+  openam:
     build:
       context: ./app
       args:
@@ -19,8 +19,13 @@ services:
         condition: service_healthy                
     ports:
       - "8080:80"
+    environment:
+      - DB_HOST=db
+      - DB_USER=root
+      - DB_PASSWORD=openam
+      - DB_NAME=database
     healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:80/"]
-      timeout: 1s
-      retries: 5
+      test: ["CMD", "curl", "-f", "http://localhost:80/openam/isAlive.jsp"]
+      timeout: 5s
+      retries: 10
       interval: 10s

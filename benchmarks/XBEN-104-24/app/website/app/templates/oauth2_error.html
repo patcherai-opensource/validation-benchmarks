@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>OpenAM - OAuth2 Error</title>
+    <link href="{{ url_for('static', filename='css/bootstrap.min.css') }}" rel="stylesheet">
+</head>
+<body>
+    <div class="container mt-5">
+        <div class="alert alert-danger">
+            <h4>OAuth2 Error: {{ error }}</h4>
+            <p>{{ description }}</p>
+        </div>
+        <a href="{{ url_for('index') }}" class="btn btn-secondary">Return</a>
+    </div>
+</body>
+</html>
