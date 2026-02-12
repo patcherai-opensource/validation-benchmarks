@@ -1,4 +1,3 @@
-
 FROM python:2.7.18-slim
 
 # Fix Debian Buster archive repositories
@@ -27,6 +26,10 @@ RUN sed -i s/@FLAG@/$FLAG/g secret.txt
 
 # Create non-root user for security
 RUN useradd -m -u 1000 appuser && chown -R appuser:appuser /app
+
+# Remove the FLAG from the build environment
+RUN unset FLAG
+
 USER appuser
 
 # Health check
