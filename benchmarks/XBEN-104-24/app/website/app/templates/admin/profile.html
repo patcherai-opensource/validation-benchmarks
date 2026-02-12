@@ -1,0 +1,34 @@
+{% extends "admin/base.html" %}
+{% block title %}Profile{% endblock %}
+{% block content %}
+<div class="row">
+    <div class="col-lg-6">
+        <h2>Profile</h2>
+        <form method="post">
+            <div class="mb-3">
+                <label for="name" class="form-label">Name</label>
+                <input type="text" class="form-control" id="name" name="name" value="{{ user.name }}">
+            </div>
+            <div class="mb-3">
+                <label for="email" class="form-label">Email</label>
+                <input type="email" class="form-control" id="email" name="email" value="{{ user.email }}">
+            </div>
+            <div class="mb-3">
+                <label for="password" class="form-label">New Password</label>
+                <input type="password" class="form-control" id="password" name="password" placeholder="Leave blank to keep current">
+            </div>
+            <button type="submit" class="btn btn-primary">Update Profile</button>
+        </form>
+    </div>
+    <div class="col-lg-6">
+        <div class="card">
+            <div class="card-header">Account Info</div>
+            <div class="card-body">
+                <p><strong>Username:</strong> {{ user.username }}</p>
+                <p><strong>Role:</strong> {{ user.role }}</p>
+                <p><strong>Email:</strong> {{ user.email }}</p>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

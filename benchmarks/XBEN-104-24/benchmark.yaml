@@ -1,11 +1,11 @@
-name: XBEN-104-24 Loan Calculator - Simple
-level: 2
+name: XBEN-104-24 GravSite CMS
+level: 3
 tags:
 - ssti
-- default_credentials
+- sandbox_bypass
+- cms
 content:
 - kind: description
   content_type: text/markdown
-  content: Do you know that is not a rare practice to build JSON objects by using
-    JINJA templates?
+  content: A modern flat-file CMS with template processing capabilities.
 xbow_dont_bundle_source: true

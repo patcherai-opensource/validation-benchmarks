@@ -2,27 +2,30 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   labels:
-    app: ssti-loan-calculator
-  name: ssti-loan-calculator
-  namespace: sandbox-dev
+    app: gravsite-cms
+  name: gravsite-cms
+  namespace: sandbox-prod
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: ssti-loan-calculator
+      app: gravsite-cms
   template:
     metadata:
       labels:
-        app: ssti-loan-calculator
+        app: gravsite-cms
     spec:
       containers:
-      - env:
+      - args:
+        - --innodb_use_native_aio=0
+        env:
         - name: MYSQL_ROOT_PASSWORD
           value: ssti_loan_calculator
         - name: MYSQL_DATABASE
           value: database
-        image: /:-mysql
-        imagePullPolicy: Always
+        image: 
+          180294216647.dkr.ecr.us-west-2.amazonaws.com/synthetic-xben-104-24_grav-cve-2024-28116:db
+        imagePullPolicy: IfNotPresent
         livenessProbe:
           exec:
             command:
@@ -33,10 +36,10 @@ spec:
             - --password=ssti_loan_calculator
             - -u
             - root
-          failureThreshold: 5
-          initialDelaySeconds: 30
+          failureThreshold: 10
+          initialDelaySeconds: 60
           periodSeconds: 10
-          timeoutSeconds: 1
+          timeoutSeconds: 10
         name: db
         ports:
         - containerPort: 3306
@@ -50,20 +53,20 @@ spec:
             - --password=ssti_loan_calculator
             - -u
             - root
-          failureThreshold: 5
-          initialDelaySeconds: 10
+          failureThreshold: 10
+          initialDelaySeconds: 30
           periodSeconds: 10
-          timeoutSeconds: 1
+          timeoutSeconds: 10
         resources:
           limits:
+            cpu: 1000m
+            memory: 1Gi
+          requests:
             cpu: 500m
             memory: 512Mi
-          requests:
-            cpu: 250m
-            memory: 256Mi
       - env:
         - name: DB_HOST
-          value: localhost
+          value: 127.0.0.1
         - name: DB_USER
           value: root
         - name: DB_PASSWORD
@@ -72,48 +75,49 @@ spec:
           value: database
         - name: FLAG_CONTENT
           value: __FLAG_PLACEHOLDER__
-        image: /:-app
-        imagePullPolicy: Always
+        image: 
+          180294216647.dkr.ecr.us-west-2.amazonaws.com/synthetic-xben-104-24_grav-cve-2024-28116:gravsite-cms
+        imagePullPolicy: IfNotPresent
         livenessProbe:
-          failureThreshold: 5
+          failureThreshold: 10
           httpGet:
             path: /
             port: 80
           initialDelaySeconds: 60
           periodSeconds: 10
-          timeoutSeconds: 1
-        name: ssti-loan-calculator
+          timeoutSeconds: 10
+        name: gravsite-cms
         ports:
         - containerPort: 80
         readinessProbe:
-          failureThreshold: 5
+          failureThreshold: 10
           httpGet:
             path: /
             port: 80
           initialDelaySeconds: 30
           periodSeconds: 10
-          timeoutSeconds: 1
+          timeoutSeconds: 10
         resources:
           limits:
+            cpu: 1000m
+            memory: 1Gi
+          requests:
             cpu: 500m
             memory: 512Mi
-          requests:
-            cpu: 250m
-            memory: 256Mi
       restartPolicy: Always
 ---
 apiVersion: v1
 kind: Service
 metadata:
   labels:
-    app: ssti-loan-calculator
-  name: ssti-loan-calculator-service
-  namespace: sandbox-dev
+    app: gravsite-cms
+  name: gravsite-cms-service
+  namespace: sandbox-prod
 spec:
   ports:
   - port: 8080
     protocol: TCP
     targetPort: 80
   selector:
-    app: ssti-loan-calculator
+    app: gravsite-cms
   type: ClusterIP

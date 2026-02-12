@@ -1,0 +1,24 @@
+{% extends "site/base.html" %}
+{% block title %}{{ page.title }} - {{ site_title|default('GravSite CMS') }}{% endblock %}
+{% block content %}
+<div class="row">
+    <div class="col-lg-8">
+        <h1>{{ page.title }}</h1>
+        <div class="page-content">
+            {{ content|safe }}
+        </div>
+    </div>
+    <div class="col-lg-4">
+        <div class="card">
+            <div class="card-header">Pages</div>
+            <ul class="list-group list-group-flush">
+                {% for p in pages %}
+                <li class="list-group-item{% if p.slug == page.slug %} active{% endif %}">
+                    <a href="{{ url_for('view_page', slug=p.slug) }}" class="{% if p.slug == page.slug %}text-white{% endif %}">{{ p.title }}</a>
+                </li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+</div>
+{% endblock %}

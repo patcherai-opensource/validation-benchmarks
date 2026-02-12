@@ -1,0 +1,21 @@
+{% extends "site/base.html" %}
+{% block title %}{{ site_title|default('GravSite CMS') }}{% endblock %}
+{% block content %}
+<div class="row">
+    <div class="col-lg-8">
+        {{ content|safe }}
+    </div>
+    <div class="col-lg-4">
+        <div class="card">
+            <div class="card-header">Pages</div>
+            <ul class="list-group list-group-flush">
+                {% for p in pages %}
+                <li class="list-group-item">
+                    <a href="{{ url_for('view_page', slug=p.slug) }}">{{ p.title }}</a>
+                </li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+</div>
+{% endblock %}

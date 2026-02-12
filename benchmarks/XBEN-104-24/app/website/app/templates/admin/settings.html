@@ -1,0 +1,40 @@
+{% extends "admin/base.html" %}
+{% block title %}Settings{% endblock %}
+{% block content %}
+<div class="row">
+    <div class="col-lg-8">
+        <h2>Site Settings</h2>
+        <form method="post">
+            <div class="mb-3">
+                <label for="site_title" class="form-label">Site Title</label>
+                <input type="text" class="form-control" id="site_title" name="site_title" value="{{ settings.get('site.title', '') }}">
+            </div>
+            <div class="mb-3">
+                <label for="site_description" class="form-label">Site Description</label>
+                <textarea class="form-control" id="site_description" name="site_description" rows="3">{{ settings.get('site.description', '') }}</textarea>
+            </div>
+            <button type="submit" class="btn btn-primary">Save Settings</button>
+        </form>
+        <hr>
+        <h4>System Configuration</h4>
+        <table class="table table-sm">
+            <thead>
+                <tr>
+                    <th>Key</th>
+                    <th>Value</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for key, value in settings.items() %}
+                {% if key.startswith('system.') %}
+                <tr>
+                    <td><code>{{ key }}</code></td>
+                    <td>{{ value }}</td>
+                </tr>
+                {% endif %}
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

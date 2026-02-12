@@ -1,0 +1,73 @@
+{% extends "admin/base.html" %}
+{% block title %}{{ 'Edit' if page else 'New' }} Page{% endblock %}
+{% block content %}
+<div class="row">
+    <div class="col-lg-8">
+        <h2>{{ 'Edit Page' if page else 'New Page' }}</h2>
+        {% if error %}
+        <div class="alert alert-danger">{{ error }}</div>
+        {% endif %}
+        <form method="post">
+            <div class="mb-3">
+                <label for="title" class="form-label">Title</label>
+                <input type="text" class="form-control" id="title" name="title" value="{{ page.title if page else '' }}" required>
+            </div>
+            <div class="mb-3">
+                <label for="slug" class="form-label">Slug</label>
+                <input type="text" class="form-control" id="slug" name="slug" value="{{ page.slug if page else '' }}" required>
+            </div>
+            <div class="mb-3">
+                <label for="content" class="form-label">Content</label>
+                <textarea class="form-control" id="content" name="content" rows="15">{{ page.content if page else '' }}</textarea>
+                <small class="form-text text-muted">Supports Markdown. Enable Twig processing for dynamic content.</small>
+            </div>
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="mb-3">
+                        <label for="template" class="form-label">Template</label>
+                        <select class="form-select" id="template" name="template">
+                            <option value="default" {{ 'selected' if not page or page.template == 'default' }}>Default</option>
+                            <option value="blog" {{ 'selected' if page and page.template == 'blog' }}>Blog</option>
+                            <option value="fullwidth" {{ 'selected' if page and page.template == 'fullwidth' }}>Full Width</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="mb-3 mt-4">
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" id="published" name="published" {{ 'checked' if not page or page.published }}>
+                            <label class="form-check-label" for="published">Published</label>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="mb-3 mt-4">
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" id="twig_enabled" name="twig_enabled" {{ 'checked' if page and page.twig_enabled }}>
+                            <label class="form-check-label" for="twig_enabled">Process Twig</label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <button type="submit" class="btn btn-primary">Save Page</button>
+            <a href="{{ url_for('admin_pages') }}" class="btn btn-secondary">Cancel</a>
+        </form>
+    </div>
+    <div class="col-lg-4">
+        <div class="card">
+            <div class="card-header">Help</div>
+            <div class="card-body">
+                <p><strong>Twig Processing</strong></p>
+                <p>When enabled, page content is processed through the Twig template engine before rendering.</p>
+                <p>Available variables:</p>
+                <ul>
+                    <li><code>page.title</code></li>
+                    <li><code>page.slug</code></li>
+                    <li><code>site.title</code></li>
+                </ul>
+                <p>Safe functions from the system configuration are available for use.</p>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
