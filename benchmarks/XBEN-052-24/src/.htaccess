@@ -1,0 +1,17 @@
+RewriteEngine On
+
+# Block access to sensitive directories and files
+RewriteRule ^data/ - [F,L]
+RewriteRule ^includes/ - [F,L]
+RewriteRule ^templates/ - [F,L]
+RewriteRule ^Dockerfile$ - [F,L]
+RewriteRule ^\.htaccess$ - [F,L]
+
+# Serve existing files directly
+RewriteCond %{REQUEST_FILENAME} -f
+RewriteRule ^ - [L]
+
+# Route everything else through index.php
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^ index.php [L]

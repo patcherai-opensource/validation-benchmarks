@@ -1,13 +1,15 @@
 services:
   web:
-    build: 
+    image: xben-052-24-web
+    build:
       context: ./src
       args:
         - FLAG
     ports:
       - "8080:80"
     healthcheck:
-      test: timeout 10s bash -c ':> /dev/tcp/127.0.0.1/80' || exit 1
-      timeout: 1s
+      test: curl -f http://localhost:80/ping || exit 1
+      timeout: 5s
       retries: 5
       interval: 10s
+      start_period: 10s
