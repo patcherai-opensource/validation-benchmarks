@@ -1,0 +1,109 @@
+:root {
+    --primary: #4e73df;
+    --primary-dark: #2e59d9;
+}
+
+body {
+    font-family: 'Nunito', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+
+.bg-gradient-primary {
+    background: linear-gradient(180deg, var(--primary) 10%, #224abe 100%);
+    min-height: 100vh;
+}
+
+#wrapper {
+    display: flex;
+}
+
+.sidebar {
+    width: 14rem;
+    min-height: 100vh;
+    background: linear-gradient(180deg, #4e73df 10%, #224abe 100%);
+}
+
+.sidebar .nav-item .nav-link {
+    color: rgba(255,255,255,.8);
+    padding: .75rem 1rem;
+    display: block;
+}
+
+.sidebar .nav-item .nav-link:hover {
+    color: #fff;
+    background: rgba(255,255,255,.1);
+}
+
+.sidebar .nav-item.active .nav-link {
+    color: #fff;
+    font-weight: 700;
+}
+
+.sidebar-brand {
+    color: #fff;
+    text-decoration: none;
+    padding: 1.5rem 1rem;
+    text-align: center;
+    font-size: 1rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: .05rem;
+}
+
+.sidebar-brand:hover {
+    color: #fff;
+    text-decoration: none;
+}
+
+.sidebar-brand-icon {
+    font-size: 2rem;
+}
+
+.sidebar-brand-text {
+    display: inline;
+}
+
+.sidebar .sidebar-heading {
+    color: rgba(255,255,255,.4);
+    padding: .75rem 1rem;
+    font-size: .65rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: .13rem;
+}
+
+.sidebar-divider {
+    border-top: 1px solid rgba(255,255,255,.15);
+    margin: 0 1rem;
+}
+
+#content-wrapper {
+    flex: 1;
+    overflow-x: hidden;
+}
+
+#content {
+    flex: 1 0 auto;
+}
+
+.topbar {
+    height: 4.375rem;
+}
+
+.card {
+    border: none;
+}
+
+.form-control-user {
+    border-radius: 10rem;
+    padding: 1.5rem 1rem;
+}
+
+.btn-user {
+    border-radius: 10rem;
+    padding: .75rem 1rem;
+}
+
+.sticky-footer {
+    padding: 2rem 0;
+    flex-shrink: 0;
+}

@@ -1,0 +1,17 @@
+Options -Indexes
+ServerSignature Off
+
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+    
+    # Deny access to includes directory
+    RewriteRule ^includes/ - [F,L]
+    
+    # Deny access to templates directory directly  
+    RewriteRule ^templates/ - [F,L]
+</IfModule>
+
+# Prevent access to hidden files
+<FilesMatch "^\.">
+    Require all denied
+</FilesMatch>
