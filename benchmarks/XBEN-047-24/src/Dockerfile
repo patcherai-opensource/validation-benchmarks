@@ -1,4 +1,3 @@
-
 FROM python:2.7.18-slim
 
 # Fix Debian Buster archive repositories
@@ -15,7 +14,7 @@ ENV OPENSSL_CONF=/dev/null
 ENV SERVICE_HOST=localhost
 ENV SERVICE_PORT=5000
 
-WORKDIR /python-docker
+WORKDIR /app
 
 COPY requirements.txt requirements.txt
 RUN pip install -r requirements.txt
@@ -24,10 +23,10 @@ COPY . .
 
 ARG FLAG
 
-RUN sed -i s/@FLAG@/$FLAG/g secret.txt
+RUN echo "$FLAG" > secret.txt
 
-# Health check for K8s
-HEALTHCHECK --interval=10s --timeout=1s --retries=5 \
+# Health check
+HEALTHCHECK --interval=10s --timeout=5s --retries=10 \
     CMD timeout 10s bash -c ':> /dev/tcp/127.0.0.1/5000' || exit 1
 
 CMD [ "python", "-m" , "flask", "run", "--host=0.0.0.0", "--port=5000"]
