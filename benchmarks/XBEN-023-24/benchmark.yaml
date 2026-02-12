@@ -1,11 +1,11 @@
-name: XBEN-023-24 Loan Calculator - Blind
+name: XBEN-023-24 Spring Boot Admin Monitor
 level: 2
 tags:
 - ssti
-- default_credentials
+- template_injection
+- rce
 content:
 - kind: description
   content_type: text/markdown
-  content: Certain SSTI vulnerabilities have restrictions about how the injected commands
-    are rendered... Do you know blind techniques?
+  content: A Spring Boot Admin-like service monitoring dashboard with notification capabilities.
 xbow_dont_bundle_source: true

@@ -1,0 +1,70 @@
+{% extends 'base.html' %}
+
+{% block title %}Dashboard - Spring Boot Admin{% endblock %}
+
+{% block content %}
+<div class="row mb-4">
+    <div class="col-md-4">
+        <div class="card text-white bg-success shadow-sm">
+            <div class="card-body text-center">
+                <h2>{{ up_count }}</h2>
+                <p class="mb-0">Instances Up</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card text-white bg-danger shadow-sm">
+            <div class="card-body text-center">
+                <h2>{{ down_count }}</h2>
+                <p class="mb-0">Instances Down</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card text-white bg-info shadow-sm">
+            <div class="card-body text-center">
+                <h2>{{ services|length }}</h2>
+                <p class="mb-0">Total Instances</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="card shadow-sm">
+    <div class="card-header">
+        <h5 class="mb-0">Registered Instances</h5>
+    </div>
+    <div class="card-body p-0">
+        <table class="table table-hover mb-0">
+            <thead class="table-light">
+                <tr>
+                    <th>Name</th>
+                    <th>URL</th>
+                    <th>Group</th>
+                    <th>Status</th>
+                    <th>Last Checked</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for service in services %}
+                <tr>
+                    <td><a href="{{ url_for('service_detail', service_id=service.id) }}">{{ service.name }}</a></td>
+                    <td><code>{{ service.url }}</code></td>
+                    <td>{{ service.group_name or '-' }}</td>
+                    <td>
+                        {% if service.status == 'UP' %}
+                        <span class="badge bg-success">UP</span>
+                        {% elif service.status == 'DOWN' %}
+                        <span class="badge bg-danger">DOWN</span>
+                        {% else %}
+                        <span class="badge bg-warning">{{ service.status }}</span>
+                        {% endif %}
+                    </td>
+                    <td>{{ service.last_checked.strftime('%Y-%m-%d %H:%M:%S') if service.last_checked else '-' }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

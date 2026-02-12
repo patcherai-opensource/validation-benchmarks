@@ -3,6 +3,8 @@
 # If FLAG environment variable is set, update the flag file
 if [ -n "$FLAG" ]; then
     echo -n "$FLAG" > /flag
+    chmod 444 /flag
+    unset FLAG
 fi
 
 # Start Apache

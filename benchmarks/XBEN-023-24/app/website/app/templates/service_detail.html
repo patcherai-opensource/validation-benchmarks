@@ -1,0 +1,101 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ service.name }} - Spring Boot Admin{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-8">
+        <div class="card shadow-sm mb-3">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <h5 class="mb-0">{{ service.name }}</h5>
+                {% if service.status == 'UP' %}
+                <span class="badge bg-success">UP</span>
+                {% elif service.status == 'DOWN' %}
+                <span class="badge bg-danger">DOWN</span>
+                {% else %}
+                <span class="badge bg-warning">{{ service.status }}</span>
+                {% endif %}
+            </div>
+            <div class="card-body">
+                <dl class="row">
+                    <dt class="col-sm-3">URL</dt>
+                    <dd class="col-sm-9"><code>{{ service.url }}</code></dd>
+
+                    <dt class="col-sm-3">Group</dt>
+                    <dd class="col-sm-9">{{ service.group_name or '-' }}</dd>
+
+                    <dt class="col-sm-3">Registered</dt>
+                    <dd class="col-sm-9">{{ service.registered_at.strftime('%Y-%m-%d %H:%M:%S UTC') if service.registered_at else '-' }}</dd>
+
+                    <dt class="col-sm-3">Last Checked</dt>
+                    <dd class="col-sm-9">{{ service.last_checked.strftime('%Y-%m-%d %H:%M:%S UTC') if service.last_checked else '-' }}</dd>
+
+                    <dt class="col-sm-3">Metadata</dt>
+                    <dd class="col-sm-9"><pre class="mb-0">{{ service.metadata_info or '{}' }}</pre></dd>
+                </dl>
+            </div>
+        </div>
+
+        {% if logs %}
+        <div class="card shadow-sm">
+            <div class="card-header">
+                <h6 class="mb-0">Recent Notifications</h6>
+            </div>
+            <div class="card-body p-0">
+                <table class="table table-sm mb-0">
+                    <thead class="table-light">
+                        <tr>
+                            <th>Time</th>
+                            <th>Event</th>
+                            <th>Subject</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for log in logs %}
+                        <tr>
+                            <td>{{ log.created_at.strftime('%Y-%m-%d %H:%M:%S') }}</td>
+                            <td>{{ log.event_type }}</td>
+                            <td>{{ log.rendered_subject or '-' }}</td>
+                            <td><span class="badge bg-secondary">{{ log.status }}</span></td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        {% endif %}
+    </div>
+
+    <div class="col-md-4">
+        {% if user.role == 'admin' %}
+        <div class="card shadow-sm">
+            <div class="card-header">
+                <h6 class="mb-0">Actions</h6>
+            </div>
+            <div class="card-body">
+                <div class="d-grid gap-2">
+                    <button class="btn btn-outline-warning btn-sm" onclick="updateStatus({{ service.id }}, 'DOWN')">Mark DOWN</button>
+                    <button class="btn btn-outline-success btn-sm" onclick="updateStatus({{ service.id }}, 'UP')">Mark UP</button>
+                </div>
+            </div>
+        </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+function updateStatus(instanceId, status) {
+    $.ajax({
+        url: '/api/instances/' + instanceId + '/status',
+        method: 'POST',
+        contentType: 'application/json',
+        data: JSON.stringify({status: status}),
+        success: function() { location.reload(); },
+        error: function(xhr) { alert('Error: ' + xhr.responseText); }
+    });
+}
+</script>
+{% endblock %}

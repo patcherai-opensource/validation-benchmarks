@@ -1,0 +1,118 @@
+{% extends 'base.html' %}
+
+{% block title %}Configure {{ channel.channel_type | capitalize }} Notifier - Spring Boot Admin{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-8">
+        <div class="card shadow-sm">
+            <div class="card-header">
+                <h5 class="mb-0">{{ channel.channel_type | capitalize }} Notification Settings</h5>
+            </div>
+            <div class="card-body">
+                <form method="post" action="{{ url_for('notification_settings', channel_id=channel.id) }}">
+                    <div class="form-check mb-3">
+                        <input class="form-check-input" type="checkbox" id="enabled" name="enabled" {{ 'checked' if channel.enabled }}>
+                        <label class="form-check-label" for="enabled">Enable notifications</label>
+                    </div>
+
+                    <div class="row mb-3">
+                        <div class="col-md-8">
+                            <label for="smtp_host" class="form-label">SMTP Host</label>
+                            <input type="text" class="form-control" id="smtp_host" name="smtp_host" value="{{ channel.smtp_host or '' }}">
+                        </div>
+                        <div class="col-md-4">
+                            <label for="smtp_port" class="form-label">SMTP Port</label>
+                            <input type="number" class="form-control" id="smtp_port" name="smtp_port" value="{{ channel.smtp_port or 587 }}">
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="sender_address" class="form-label">Sender Address</label>
+                        <input type="text" class="form-control" id="sender_address" name="sender_address" value="{{ channel.sender_address or '' }}">
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="recipients" class="form-label">Recipients</label>
+                        <input type="text" class="form-control" id="recipients" name="recipients" value="{{ channel.recipients or '' }}" placeholder="Comma-separated email addresses">
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="subject_template" class="form-label">Subject Template</label>
+                        <input type="text" class="form-control" id="subject_template" name="subject_template" value="{{ channel.subject_template or '' }}">
+                        <div class="form-text">Available variables: {{ '{{ instance.name }}' }}, {{ '{{ event.to_status }}' }}, {{ '{{ event.from_status }}' }}</div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="template" class="form-label">Body Template</label>
+                        <textarea class="form-control" id="template" name="template" rows="12">{{ channel.template or '' }}</textarea>
+                        <div class="form-text">
+                            HTML template for notification body. Available variables:
+                            <code>instance.name</code>, <code>instance.url</code>, <code>instance.group</code>,
+                            <code>event.from_status</code>, <code>event.to_status</code>, <code>event.timestamp</code>
+                        </div>
+                    </div>
+
+                    <div class="d-flex gap-2">
+                        <button type="submit" class="btn btn-primary">Save Settings</button>
+                        <a href="{{ url_for('notifications') }}" class="btn btn-secondary">Cancel</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-4">
+        <div class="card shadow-sm">
+            <div class="card-header">
+                <h6 class="mb-0">Test Notification</h6>
+            </div>
+            <div class="card-body">
+                <p class="text-muted small">Send a test notification using the current saved template configuration.</p>
+                <button id="btnTestNotify" class="btn btn-warning btn-sm w-100">Send Test</button>
+                <div id="testResult" class="mt-2" style="display:none;">
+                    <hr>
+                    <h6>Preview:</h6>
+                    <p><strong>Subject:</strong> <span id="previewSubject"></span></p>
+                    <div id="previewBody" class="border p-2 bg-light" style="max-height:300px; overflow:auto;"></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card shadow-sm mt-3">
+            <div class="card-header">
+                <h6 class="mb-0">Last Updated</h6>
+            </div>
+            <div class="card-body">
+                <p class="mb-0">{{ channel.updated_at.strftime('%Y-%m-%d %H:%M:%S UTC') if channel.updated_at else 'Never' }}</p>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+$('#btnTestNotify').click(function() {
+    var btn = $(this);
+    btn.prop('disabled', true).text('Sending...');
+    $.ajax({
+        url: '/notifications/{{ channel.id }}/test',
+        method: 'POST',
+        contentType: 'application/json',
+        success: function(data) {
+            btn.prop('disabled', false).text('Send Test');
+            if (data.preview) {
+                $('#previewSubject').text(data.preview.subject);
+                $('#previewBody').html(data.preview.body);
+                $('#testResult').show();
+            }
+        },
+        error: function(xhr) {
+            btn.prop('disabled', false).text('Send Test');
+            alert('Failed to send test notification');
+        }
+    });
+});
+</script>
+{% endblock %}

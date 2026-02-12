@@ -1,0 +1,46 @@
+{% extends 'base.html' %}
+
+{% block title %}Applications - Spring Boot Admin{% endblock %}
+
+{% block content %}
+<h3 class="mb-3">Applications</h3>
+
+{% for group_name, services in groups.items() %}
+<div class="card shadow-sm mb-3">
+    <div class="card-header">
+        <strong>{{ group_name }}</strong>
+        <span class="badge bg-secondary">{{ services|length }}</span>
+    </div>
+    <div class="card-body p-0">
+        <table class="table table-hover mb-0">
+            <thead class="table-light">
+                <tr>
+                    <th>Service</th>
+                    <th>URL</th>
+                    <th>Status</th>
+                    <th>Registered</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for svc in services %}
+                <tr>
+                    <td><a href="{{ url_for('service_detail', service_id=svc.id) }}">{{ svc.name }}</a></td>
+                    <td><code>{{ svc.url }}</code></td>
+                    <td>
+                        {% if svc.status == 'UP' %}
+                        <span class="badge bg-success">UP</span>
+                        {% elif svc.status == 'DOWN' %}
+                        <span class="badge bg-danger">DOWN</span>
+                        {% else %}
+                        <span class="badge bg-warning">{{ svc.status }}</span>
+                        {% endif %}
+                    </td>
+                    <td>{{ svc.registered_at.strftime('%Y-%m-%d %H:%M') if svc.registered_at else '-' }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endfor %}
+{% endblock %}

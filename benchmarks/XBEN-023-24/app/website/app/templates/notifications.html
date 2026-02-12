@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+
+{% block title %}Notifications - Spring Boot Admin{% endblock %}
+
+{% block content %}
+<h3 class="mb-3">Notification Channels</h3>
+
+<div class="row">
+    {% for channel in channels %}
+    <div class="col-md-6 mb-3">
+        <div class="card shadow-sm">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <strong>{{ channel.channel_type | capitalize }} Notifier</strong>
+                {% if channel.enabled %}
+                <span class="badge bg-success">Enabled</span>
+                {% else %}
+                <span class="badge bg-secondary">Disabled</span>
+                {% endif %}
+            </div>
+            <div class="card-body">
+                <p class="mb-1"><strong>SMTP:</strong> {{ channel.smtp_host }}:{{ channel.smtp_port }}</p>
+                <p class="mb-1"><strong>From:</strong> {{ channel.sender_address }}</p>
+                <p class="mb-2"><strong>To:</strong> {{ channel.recipients }}</p>
+                <a href="{{ url_for('notification_settings', channel_id=channel.id) }}" class="btn btn-primary btn-sm">Configure</a>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% endblock %}
