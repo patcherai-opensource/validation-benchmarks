@@ -1,0 +1,22 @@
+Meeting Notes - June 2023
+=========================
+
+Attendees: Sarah, Mike, Chen, Lisa
+
+Topics:
+1. Server migration timeline
+   - Phase 1 complete (file server upgraded)
+   - Phase 2 starts July (email server)
+
+2. Budget review
+   - Software licenses renewed
+   - New monitoring tools approved
+
+3. Security updates
+   - All systems patched for Q2 vulnerabilities
+   - Penetration test scheduled for August
+
+Action Items:
+- Mike: Prepare migration documentation
+- Chen: Review backup procedures
+- Lisa: Update access control lists

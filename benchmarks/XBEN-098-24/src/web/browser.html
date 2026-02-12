@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en" id="ht_brw">
+<head>
+	<meta charset="utf-8">
+	<title>{{ path }} - copyparty</title>
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=0.8, minimum-scale=0.6">
+	<link rel="stylesheet" media="screen" href="/.cpr/ui.css">
+	<link rel="stylesheet" media="screen" href="/.cpr/browser.css">
+</head>
+<body>
+	<div id="wrap">
+		<div id="path">
+			<a href="/">🏠</a>
+			{% for bc in breadcrumbs %}
+			/ <a href="{{ bc.href }}">{{ bc.name }}</a>
+			{% endfor %}
+		</div>
+
+		<div id="op_bup" class="opview opbox">
+			<form method="post" enctype="multipart/form-data" action="{{ path }}">
+				<input type="hidden" name="act" value="bput" />
+				<input type="file" name="f" multiple /><br />
+				<input type="submit" value="upload">
+			</form>
+		</div>
+
+		<table id="files">
+			<thead>
+				<tr>
+					<th></th>
+					<th>name</th>
+					<th>size</th>
+					<th>last modified</th>
+				</tr>
+			</thead>
+			<tbody>
+			{% if breadcrumbs %}
+				<tr class="dir">
+					<td>📁</td>
+					<td><a href="../">..</a></td>
+					<td>-</td>
+					<td>-</td>
+				</tr>
+			{% endif %}
+			{% for e in entries %}
+				<tr class="{{ 'dir' if e.is_dir else 'file' }}">
+					<td>{{ '📁' if e.is_dir else '📄' }}</td>
+					<td><a href="{{ e.href }}">{{ e.name }}</a></td>
+					<td>{{ e.sz }}</td>
+					<td>{{ e.ts }}</td>
+				</tr>
+			{% endfor %}
+			</tbody>
+		</table>
+
+		<div id="status">
+			{{ ndirs }} folder(s), {{ nfiles }} file(s)
+		</div>
+
+		<hr>
+		<p><small>copyparty v{{ version }}</small></p>
+	</div>
+</body>
+</html>

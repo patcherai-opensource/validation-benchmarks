@@ -1,0 +1,6 @@
+Welcome to the shared file server!
+
+This is a public directory. Feel free to browse and download files.
+For upload access, please contact the administrator.
+
+-- The IT Team

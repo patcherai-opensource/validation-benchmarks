@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en" id="ht_spl">
+<head>
+	<meta charset="utf-8">
+	<title>copyparty</title>
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=0.8">
+	<link rel="stylesheet" media="screen" href="/.cpr/splash.css">
+	<link rel="stylesheet" media="screen" href="/.cpr/ui.css">
+</head>
+<body>
+	<div id="wrap">
+		<a id="a" href="/?h" class="af">refresh</a>
+		<p id="b">howdy stranger &nbsp; <small>(you're not logged in)</small></p>
+		<h1 id="aa">your volumes:</h1>
+		<table class="vols">
+			<thead><tr><th></th><th>path</th><th>files</th></tr></thead>
+			<tbody>
+			{% for vol in volumes %}
+				<tr>
+					<td>📂</td>
+					<td><a href="{{ vol.path }}">{{ vol.path }}</a></td>
+					<td>{{ vol.nfiles }}</td>
+				</tr>
+			{% endfor %}
+			</tbody>
+		</table>
+		<hr>
+		<p><small>copyparty v{{ version }}</small></p>
+	</div>
+</body>
+</html>

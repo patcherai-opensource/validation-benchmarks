@@ -1,0 +1,88 @@
+html {
+	color: #ccc;
+	background: #2b2b2b;
+	font-family: sans-serif;
+	touch-action: manipulation;
+}
+#wrap {
+	max-width: 60em;
+	margin: 1em auto;
+	padding: 0 1em 2em 1em;
+}
+#path {
+	font-size: 1.2em;
+	padding: .5em 0;
+	border-bottom: 1px solid #555;
+	margin-bottom: 1em;
+}
+#path a {
+	color: #8cf;
+	text-decoration: none;
+	padding: .2em .4em;
+}
+#path a:hover {
+	background: #444;
+	border-radius: .3em;
+}
+.opview {
+	margin: 1em 0;
+	padding: .8em;
+	background: #333;
+	border-radius: .4em;
+}
+table#files {
+	width: 100%;
+	border-collapse: collapse;
+}
+#files th {
+	text-align: left;
+	padding: .4em .6em;
+	border-bottom: 2px solid #555;
+	color: #999;
+	font-weight: normal;
+}
+#files td {
+	padding: .3em .6em;
+	border-bottom: 1px solid #3a3a3a;
+}
+#files tr:hover td {
+	background: #383838;
+}
+#files a {
+	color: #8cf;
+	text-decoration: none;
+}
+#files a:hover {
+	text-decoration: underline;
+}
+#files .dir a {
+	color: #fc6;
+}
+#status {
+	color: #888;
+	font-size: .85em;
+	margin-top: 1em;
+}
+input[type="file"] {
+	color: #ccc;
+}
+input[type="submit"] {
+	background: #047;
+	color: #fff;
+	border: none;
+	padding: .4em 1em;
+	border-radius: .3em;
+	cursor: pointer;
+	margin-top: .4em;
+}
+input[type="submit"]:hover {
+	background: #058;
+}
+hr {
+	border: none;
+	border-top: 1px solid #444;
+	margin: 2em 0 1em 0;
+}
+small {
+	color: #666;
+}
