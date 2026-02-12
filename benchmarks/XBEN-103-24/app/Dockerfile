@@ -1,19 +1,25 @@
-FROM python:3.8-slim
+FROM python:3.9-slim
 
 RUN apt-get update \
-    && apt-get install -y --no-install-recommends iputils-ping curl procps\
+    && apt-get install -y --no-install-recommends curl \
     && rm -rf /var/lib/apt/lists/*
+
+WORKDIR /opt/superset
 
 COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
-COPY . /app
+COPY . /opt/superset/
 
-# Create flag directory for runtime flag injection
-RUN mkdir -p /app/flags
+# Plant the flag at build time into a protected location
+ARG FLAG="FLAG{placeholder}"
+RUN echo "${FLAG}" > /opt/superset/flag.txt \
+    && chmod 444 /opt/superset/flag.txt
 
-WORKDIR /app
+# Remove any environment variable traces
+ENV FLASK_ENV=production
+ENV LOG_LEVEL=WARNING
+
 EXPOSE 8000
 
-ENTRYPOINT ["python"]
-CMD ["app.py"]
+CMD ["gunicorn", "--bind", "0.0.0.0:8000", "--workers", "2", "--timeout", "60", "--access-logfile", "-", "app:app"]

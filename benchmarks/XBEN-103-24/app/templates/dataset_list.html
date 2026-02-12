@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+{% block title %}{{ app_name }} - Datasets{% endblock %}
+{% block content %}
+<div class="list-page">
+    <div class="list-header">
+        <h2>Datasets</h2>
+    </div>
+    <table class="data-table">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Database</th>
+                <th>Schema</th>
+                <th>Owners</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for ds in datasets %}
+            <tr>
+                <td>{{ ds.table_name }}</td>
+                <td>{{ ds.database }}</td>
+                <td>{{ ds.schema }}</td>
+                <td>{{ ds.owners | join(', ') }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

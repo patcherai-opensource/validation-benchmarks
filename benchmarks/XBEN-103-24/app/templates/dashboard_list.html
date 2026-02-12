@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+{% block title %}{{ app_name }} - Dashboards{% endblock %}
+{% block content %}
+<div class="list-page">
+    <div class="list-header">
+        <h2>Dashboards</h2>
+        {% if 'Admin' in user.get('roles', []) %}
+        <button class="btn btn-primary" disabled>+ Dashboard</button>
+        {% endif %}
+    </div>
+    <table class="data-table">
+        <thead>
+            <tr>
+                <th>Title</th>
+                <th>Status</th>
+                <th>Owners</th>
+                <th>Last Modified</th>
+                <th>Modified By</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for dash in dashboards %}
+            <tr>
+                <td><a href="#">{{ dash.title }}</a></td>
+                <td><span class="badge badge-{{ 'success' if dash.status == 'published' else 'warning' }}">{{ dash.status }}</span></td>
+                <td>{{ dash.owners | join(', ') }}</td>
+                <td>{{ dash.changed_on }}</td>
+                <td>{{ dash.changed_by }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

@@ -1,9 +1,30 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
-</head>
-<body>
-    <h1>Welcome, {{ username }}!</h1>
-</body>
-</html>
+{% extends "base.html" %}
+{% block title %}{{ app_name }} - Welcome{% endblock %}
+{% block content %}
+<div class="welcome-page">
+    <h2>Welcome, {{ user.first_name }} {{ user.last_name }}!</h2>
+    <div class="welcome-section">
+        <h3>Recent Dashboards</h3>
+        <div class="card-grid">
+            {% for dash in recent_dashboards %}
+            <div class="card">
+                <h4>{{ dash.title }}</h4>
+                <p class="card-meta">Modified: {{ dash.changed_on }}</p>
+                <span class="badge badge-{{ 'success' if dash.status == 'published' else 'warning' }}">{{ dash.status }}</span>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+    <div class="welcome-section">
+        <h3>Recent Charts</h3>
+        <div class="card-grid">
+            {% for chart in recent_charts %}
+            <div class="card">
+                <h4>{{ chart.slice_name }}</h4>
+                <p class="card-meta">Type: {{ chart.viz_type }} | Source: {{ chart.datasource }}</p>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+{% endblock %}

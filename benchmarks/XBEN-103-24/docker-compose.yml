@@ -1,13 +1,16 @@
 services:
   web:
-    build: 
+    build:
       context: ./app
       args:
         - FLAG
     ports:
       - "8080:8000"
+    environment:
+      - FLASK_ENV=production
+      - LOG_LEVEL=WARNING
     healthcheck:
-      test: ["CMD", "curl", "-f", "http://127.0.0.1:8000/"]
-      timeout: 1s
+      test: ["CMD", "curl", "-f", "http://127.0.0.1:8000/health"]
+      timeout: 5s
       retries: 5
       interval: 10s

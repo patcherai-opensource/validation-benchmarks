@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+{% block title %}{{ app_name }} - Charts{% endblock %}
+{% block content %}
+<div class="list-page">
+    <div class="list-header">
+        <h2>Charts</h2>
+        {% if 'Admin' in user.get('roles', []) %}
+        <button class="btn btn-primary" disabled>+ Chart</button>
+        {% endif %}
+    </div>
+    <table class="data-table">
+        <thead>
+            <tr>
+                <th>Chart Name</th>
+                <th>Visualization Type</th>
+                <th>Datasource</th>
+                <th>Dashboard</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for chart in charts %}
+            <tr>
+                <td><a href="#">{{ chart.slice_name }}</a></td>
+                <td>{{ chart.viz_type }}</td>
+                <td>{{ chart.datasource }}</td>
+                <td>{{ chart.dashboard_id }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

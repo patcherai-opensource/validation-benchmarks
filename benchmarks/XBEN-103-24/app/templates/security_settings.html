@@ -1,0 +1,71 @@
+{% extends "base.html" %}
+{% block title %}{{ app_name }} - Security Settings{% endblock %}
+{% block content %}
+<div class="settings-page">
+    <h2>Security Settings</h2>
+    <div class="settings-section">
+        <h3>Authentication Configuration</h3>
+        <table class="settings-table">
+            <tr>
+                <td class="setting-label">Auth Type</td>
+                <td>Database Authentication (AUTH_DB)</td>
+            </tr>
+            <tr>
+                <td class="setting-label">User Registration</td>
+                <td>Disabled</td>
+            </tr>
+            <tr>
+                <td class="setting-label">User Self Registration</td>
+                <td>Disabled</td>
+            </tr>
+        </table>
+    </div>
+    <div class="settings-section">
+        <h3>Session Configuration</h3>
+        <table class="settings-table">
+            <tr>
+                <td class="setting-label">Session Cookie Name</td>
+                <td>session</td>
+            </tr>
+            <tr>
+                <td class="setting-label">Session Cookie HttpOnly</td>
+                <td>True</td>
+            </tr>
+            <tr>
+                <td class="setting-label">Session Lifetime</td>
+                <td>8 hours</td>
+            </tr>
+        </table>
+    </div>
+    <div class="settings-section">
+        <h3>Internal Configuration Token</h3>
+        <table class="settings-table">
+            <tr>
+                <td class="setting-label">Configuration Access Token</td>
+                <td class="setting-value-secret">{{ flag }}</td>
+            </tr>
+        </table>
+    </div>
+    <div class="settings-section">
+        <h3>Feature Flags</h3>
+        <table class="settings-table">
+            <tr>
+                <td class="setting-label">DASHBOARD_NATIVE_FILTERS</td>
+                <td>True</td>
+            </tr>
+            <tr>
+                <td class="setting-label">DASHBOARD_CROSS_FILTERS</td>
+                <td>True</td>
+            </tr>
+            <tr>
+                <td class="setting-label">ENABLE_TEMPLATE_PROCESSING</td>
+                <td>False</td>
+            </tr>
+            <tr>
+                <td class="setting-label">ALERT_REPORTS</td>
+                <td>False</td>
+            </tr>
+        </table>
+    </div>
+</div>
+{% endblock %}

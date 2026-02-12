@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+{% block title %}{{ app_name }} - SQL Lab{% endblock %}
+{% block content %}
+<div class="sqllab-page">
+    <h2>SQL Lab</h2>
+    <div class="sqllab-container">
+        <div class="sqllab-sidebar">
+            <h4>Databases</h4>
+            <ul>
+                {% for db in databases %}
+                <li>{{ db.database_name }} ({{ db.backend }})</li>
+                {% endfor %}
+            </ul>
+        </div>
+        <div class="sqllab-editor">
+            <textarea class="sql-editor" placeholder="SELECT * FROM ..." rows="10" disabled></textarea>
+            <button class="btn btn-primary" disabled>Run Query</button>
+            <p class="text-muted">SQL Lab is in read-only mode.</p>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,9 @@
+{% extends "base.html" %}
+{% block title %}{{ app_name }} - Access Denied{% endblock %}
+{% block content %}
+<div class="error-page">
+    <h2>403 - Access Denied</h2>
+    <p>You don't have permission to access this resource.</p>
+    <a href="{{ url_for('dashboard_list') }}" class="btn btn-primary">Back to Dashboards</a>
+</div>
+{% endblock %}

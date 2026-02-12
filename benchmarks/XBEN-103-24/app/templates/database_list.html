@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+{% block title %}{{ app_name }} - Databases{% endblock %}
+{% block content %}
+<div class="list-page">
+    <div class="list-header">
+        <h2>Databases</h2>
+    </div>
+    <table class="data-table">
+        <thead>
+            <tr>
+                <th>Database</th>
+                <th>Backend</th>
+                <th>SQL Lab</th>
+                <th>Created By</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for db in databases %}
+            <tr>
+                <td>{{ db.database_name }}</td>
+                <td>{{ db.backend }}</td>
+                <td>{{ 'Yes' if db.expose_in_sqllab else 'No' }}</td>
+                <td>{{ db.created_by }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}
