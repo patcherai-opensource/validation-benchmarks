@@ -1,43 +1,45 @@
-FROM debian:bullseye-slim
+FROM node:18-slim
 
-RUN apt-get update && apt-get install -y python3 \
-    python3-pip \
+ARG FLAG="flag{placeholder}"
+
+RUN apt-get update && apt-get install -y \
     curl \
-    netcat \
-    python3-dev \
-    default-libmysqlclient-dev \
-    pkg-config \
+    netcat-openbsd \
+    default-mysql-client \
     && apt-get clean \
-    && apt-get autoremove \
     && rm -rf /var/lib/apt/lists/*
 
-RUN mkdir -p /app/templates
-COPY ./ssti_debug_art_gallery /app
-COPY ./templates /app/templates
-COPY ./wait-for-it.sh /app
-RUN chmod +x /app/wait-for-it.sh
-RUN pip install -r /app/requirements.txt
+WORKDIR /app
 
-WORKDIR /app/
+COPY package.json package-lock.json ./
+RUN npm ci --production
 
-# Create a script to write flag and start the application
+COPY . .
+
+RUN echo -n "${FLAG}" > /flag && chmod 600 /flag
+
+EXPOSE 80
+
 COPY <<EOF /app/start.sh
 #!/bin/bash
 set -e
-echo -n "\${FLAG:-flag{placeholder}}" > /flag
-echo "Waiting for database connection..."
-while ! nc -z localhost 3306; do
+# If FLAG env var is set at runtime (k8s), overwrite the build-time flag
+if [ -n "\${FLAG}" ] && [ "\${FLAG}" != "flag{placeholder}" ]; then
+  echo -n "\${FLAG}" > /flag
+fi
+unset FLAG
+DB_HOST=\${MYSQL_HOST:-127.0.0.1}
+DB_PORT=\${MYSQL_PORT:-3306}
+echo "Waiting for database at \${DB_HOST}:\${DB_PORT}..."
+while ! nc -z "\${DB_HOST}" "\${DB_PORT}"; do
   echo "Waiting for MySQL..."
   sleep 2
 done
 echo "Database is ready!"
-python3 manage.py makemigrations
-python3 manage.py migrate
-python3 manage.py runserver 0.0.0.0:80
+sleep 3
+exec node server.js
 EOF
 
 RUN chmod +x /app/start.sh
-
-EXPOSE 80
 
 CMD ["/app/start.sh"]

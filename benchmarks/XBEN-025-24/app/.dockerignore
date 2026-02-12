@@ -1,0 +1,6 @@
+node_modules
+ssti_debug_art_gallery
+templates
+wait-for-it.sh
+Dockerfile
+.dockerignore

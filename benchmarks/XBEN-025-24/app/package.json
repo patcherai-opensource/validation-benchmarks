@@ -1,0 +1,20 @@
+{
+  "name": "art-gallery",
+  "version": "1.2.0",
+  "description": "Art Gallery - Online art marketplace",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "body-parser": "^1.20.2",
+    "connect-flash": "^0.1.1",
+    "cookie-parser": "^1.4.6",
+    "express": "^4.18.2",
+    "express-handlebars": "^5.3.5",
+    "express-session": "^1.17.3",
+    "handlebars": "4.0.11",
+    "mysql2": "^3.6.0"
+  }
+}

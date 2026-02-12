@@ -1,0 +1,27 @@
+<div class="row">
+    <div class="col-md-6">
+        <img src="/static/img/{{item.image}}" alt="{{item.name}}" class="img-fluid">
+    </div>
+    <div class="col-md-6">
+        <h2>{{item.name}}</h2>
+        <p class="text-muted">by {{item.artist}}</p>
+        <p>{{item.description}}</p>
+        <p><strong>Category:</strong> {{item.category}}</p>
+        <h4>$ {{formatPrice item.price}}</h4>
+        {{#if user}}
+        <a href="/gallery/{{item.id}}/label" class="btn btn-primary mt-3">Create Custom Label</a>
+        {{/if}}
+    </div>
+</div>
+
+{{#if labels.length}}
+<hr>
+<h4>Custom Labels</h4>
+{{#each labels}}
+<div class="card mb-2">
+    <div class="card-body">
+        <small class="text-muted">by {{this.display_name}}</small>
+    </div>
+</div>
+{{/each}}
+{{/if}}

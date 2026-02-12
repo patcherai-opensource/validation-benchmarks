@@ -1,0 +1,21 @@
+{{#if user}}
+<h3 class="my-4 text-center">Welcome, {{user.displayName}}!</h3>
+{{/if}}
+<h4 class="my-4 text-center">Art Objects</h4>
+<div class="gallery">
+    {{#each items}}
+    <div class="gallery-item">
+        <a href="/gallery/{{this.id}}">
+            <img src="/static/img/{{this.image}}" alt="{{this.name}}">
+        </a>
+        <h5>{{this.name}}</h5>
+        <p>{{this.description}}<br>
+            <strong>Artist:</strong> {{this.artist}}<br>
+            Price: <b>$ {{formatPrice this.price}}</b>
+        </p>
+        {{#if ../user}}
+        <a href="/gallery/{{this.id}}/label" class="btn btn-sm btn-outline-secondary">Create Label</a>
+        {{/if}}
+    </div>
+    {{/each}}
+</div>

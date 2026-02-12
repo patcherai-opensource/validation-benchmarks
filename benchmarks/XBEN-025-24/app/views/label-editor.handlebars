@@ -1,0 +1,67 @@
+<div class="row">
+    <div class="col-md-8">
+        <h3>Custom Label for "{{item.name}}"</h3>
+        <p class="text-muted">Create a personalized label using Handlebars template syntax. Available variables: <code>itemName</code>, <code>artist</code>, <code>description</code>, <code>price</code>, <code>category</code>.</p>
+
+        <form id="labelForm">
+            <div class="form-group">
+                <label for="templateInput">Label Template</label>
+                <textarea class="form-control" id="templateInput" name="template" rows="6" placeholder="Example: &lt;h3&gt;{{itemName}}&lt;/h3&gt;&lt;p&gt;By {{artist}} - ${{price}}&lt;/p&gt;"></textarea>
+            </div>
+            <button type="button" class="btn btn-primary" id="previewBtn">Preview</button>
+            <button type="button" class="btn btn-success" id="saveBtn">Save Label</button>
+            <a href="/gallery/{{item.id}}" class="btn btn-secondary">Back to Item</a>
+        </form>
+
+        <h4 class="mt-4">Preview</h4>
+        <div class="label-preview" id="previewArea">
+            <em>Click "Preview" to see your label</em>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card">
+            <img src="/static/img/{{item.image}}" class="card-img-top" alt="{{item.name}}">
+            <div class="card-body">
+                <h5 class="card-title">{{item.name}}</h5>
+                <p class="card-text">{{item.description}}</p>
+                <p><strong>$ {{formatPrice item.price}}</strong></p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+document.getElementById('previewBtn').addEventListener('click', function() {
+    var template = document.getElementById('templateInput').value;
+    fetch('/gallery/{{item.id}}/label/preview', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ template: template })
+    })
+    .then(function(r) { return r.json(); })
+    .then(function(data) {
+        if (data.error) {
+            document.getElementById('previewArea').innerHTML = '<div class="text-danger">' + data.error + '</div>';
+        } else {
+            document.getElementById('previewArea').innerHTML = data.preview;
+        }
+    })
+    .catch(function(err) {
+        document.getElementById('previewArea').innerHTML = '<div class="text-danger">Preview failed</div>';
+    });
+});
+
+document.getElementById('saveBtn').addEventListener('click', function() {
+    var template = document.getElementById('templateInput').value;
+    var form = document.createElement('form');
+    form.method = 'POST';
+    form.action = '/gallery/{{item.id}}/label/save';
+    var input = document.createElement('input');
+    input.type = 'hidden';
+    input.name = 'template';
+    input.value = template;
+    form.appendChild(input);
+    document.body.appendChild(form);
+    form.submit();
+});
+</script>
