@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Donate - Whoogle Search</title>
+    <link href="{{ url_for('static', filename='css/style.css') }}" rel="stylesheet">
+</head>
+<body class="about-page">
+    <header class="results-header">
+        <a href="{{ url_for('index') }}" class="logo-small">Whoogle</a>
+        <div class="header-links">
+            <a href="{{ url_for('index') }}">Home</a>
+            <a href="{{ url_for('preferences') }}">Preferences</a>
+        </div>
+    </header>
+
+    <main class="about-container">
+        <h2>Support Whoogle Search</h2>
+
+        <div class="about-section">
+            <p>Whoogle Search is free, open source software maintained by volunteers. If you find it useful, please consider supporting development.</p>
+        </div>
+
+        <div class="about-section">
+            <h3>Ways to Contribute</h3>
+            <ul>
+                <li>Star the project on <a href="https://github.com/benbusby/whoogle-search">GitHub</a></li>
+                <li>Report bugs and suggest features</li>
+                <li>Submit pull requests</li>
+                <li>Help with translations</li>
+                <li>Host a public instance</li>
+            </ul>
+        </div>
+    </main>
+</body>
+</html>

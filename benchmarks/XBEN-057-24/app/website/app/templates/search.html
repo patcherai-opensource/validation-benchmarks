@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ query }} - Whoogle Search</title>
+    <link href="{{ url_for('static', filename='css/style.css') }}" rel="stylesheet">
+</head>
+<body class="results-page">
+    <header class="results-header">
+        <a href="{{ url_for('index') }}" class="logo-small">Whoogle</a>
+        <form action="{{ url_for('search') }}" method="get" class="search-form-header">
+            <div class="search-bar-small">
+                <input type="text" name="q" value="{{ query }}" autocomplete="off">
+                <button type="submit" class="search-btn-small">Search</button>
+            </div>
+        </form>
+        <div class="header-links">
+            <a href="{{ url_for('preferences') }}">Preferences</a>
+        </div>
+    </header>
+
+    <main class="results-container">
+        <p class="results-info">Results via {{ engine.name }} (privacy proxied)</p>
+
+        {% for result in results %}
+        <div class="result-item">
+            <a href="{{ url_for('url_redirect', url=result.url) }}" class="result-url">{{ result.url }}</a>
+            <h3><a href="{{ url_for('url_redirect', url=result.url) }}" class="result-title">{{ result.title }}</a></h3>
+            <p class="result-snippet">{{ result.snippet }}</p>
+        </div>
+        {% endfor %}
+
+        {% if not results %}
+        <div class="no-results">
+            <p>No results found for "{{ query }}"</p>
+        </div>
+        {% endif %}
+    </main>
+
+    <footer class="results-footer">
+        <p>Whoogle Search - A self-hosted, ad-free, privacy-respecting metasearch engine</p>
+    </footer>
+</body>
+</html>

@@ -3,33 +3,53 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>About us</title>
-    <link href="{{ url_for('static', filename='css/bootstrap.min.css') }}" rel="stylesheet">
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <title>About - Whoogle Search</title>
+    <link href="{{ url_for('static', filename='css/style.css') }}" rel="stylesheet">
 </head>
-<body>
-    <div class="container">
-        <div class="row justify-content-between mt-5">
-            <div class="col-md-9">
-                <h2>Welcome to the best URL bookmarks application ever seen.</h2>
-                <p>Here you can check and add new URLs to this online bookmark app</p>
-                <p>If you believe this application is useful, please share it</p>
-            </div>
-            <div class="col-md-3">
-                <div class="card">
-                    <div class="card-body">
-                        <h5 class="card-title">Navigation</h5>
-                        <ul class="list-group">
-                            <li class="list-group-item"><a href="/list">Home</a></li>
-                            <li class="list-group-item"><a href="{{ url_for('add') }}">Bookmark URL</a></li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
+<body class="about-page">
+    <header class="results-header">
+        <a href="{{ url_for('index') }}" class="logo-small">Whoogle</a>
+        <div class="header-links">
+            <a href="{{ url_for('index') }}">Home</a>
+            <a href="{{ url_for('preferences') }}">Preferences</a>
         </div>
-    </div>
+    </header>
 
-    <!-- Bootstrap Bundle with Popper -->
-    <script src="{{ url_for('static', filename='js/bootstrap.bundle.min.js') }}"></script>
+    <main class="about-container">
+        <h2>About Whoogle Search</h2>
+
+        <div class="about-section">
+            <h3>What is Whoogle?</h3>
+            <p>Whoogle Search is a self-hosted, ad-free, privacy-respecting metasearch engine. It proxies your searches through Google (or other engines) while stripping out ads, trackers, AMP links, and other privacy-invasive elements.</p>
+        </div>
+
+        <div class="about-section">
+            <h3>Features</h3>
+            <ul>
+                <li>No ads or sponsored content</li>
+                <li>No JavaScript required</li>
+                <li>No cookies (unless you save preferences)</li>
+                <li>No tracking or IP logging</li>
+                <li>Tor and HTTP/SOCKS proxy support</li>
+                <li>Autocomplete/search suggestions</li>
+                <li>POST request search support</li>
+                <li>Custom CSS theming</li>
+                <li>View images directly with full size</li>
+                <li>Light/dark/system theme modes</li>
+                <li>Easily deployable via Docker</li>
+            </ul>
+        </div>
+
+        <div class="about-section">
+            <h3>Privacy</h3>
+            <p>Whoogle routes your search queries through the server, meaning search engines never see your IP address or personal information. No logs are kept, and preferences are stored entirely client-side using URL-safe encoded tokens.</p>
+        </div>
+
+        <div class="about-section">
+            <h3>Open Source</h3>
+            <p>Whoogle Search is open source software. View the source code, report issues, or contribute on <a href="https://github.com/benbusby/whoogle-search">GitHub</a>.</p>
+            <p>Version: 0.8.4</p>
+        </div>
+    </main>
 </body>
 </html>

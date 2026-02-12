@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Preferences - Whoogle Search</title>
+    <link href="{{ url_for('static', filename='css/style.css') }}" rel="stylesheet">
+</head>
+<body class="preferences-page">
+    <header class="results-header">
+        <a href="{{ url_for('index') }}" class="logo-small">Whoogle</a>
+        <div class="header-links">
+            <a href="{{ url_for('index') }}">Home</a>
+        </div>
+    </header>
+
+    <main class="preferences-container">
+        <h2>Search Preferences</h2>
+
+        {% if saved %}
+        <div class="alert alert-success">
+            <p>Preferences saved. Use this token to restore your preferences on any device:</p>
+            <div class="preferences-token">
+                <code>{{ preferences_token }}</code>
+            </div>
+            <p class="hint">Append <code>?preferences={{ preferences_token }}</code> to any search URL to apply these settings.</p>
+        </div>
+        {% endif %}
+
+        <form action="{{ url_for('preferences') }}" method="post" class="preferences-form">
+            <div class="form-group">
+                <label for="lang_search">Search language:</label>
+                <select name="lang_search" id="lang_search">
+                    <option value="" {% if not config.lang_search %}selected{% endif %}>Any</option>
+                    <option value="en" {% if config.lang_search == 'en' %}selected{% endif %}>English</option>
+                    <option value="es" {% if config.lang_search == 'es' %}selected{% endif %}>Spanish</option>
+                    <option value="fr" {% if config.lang_search == 'fr' %}selected{% endif %}>French</option>
+                    <option value="de" {% if config.lang_search == 'de' %}selected{% endif %}>German</option>
+                    <option value="ja" {% if config.lang_search == 'ja' %}selected{% endif %}>Japanese</option>
+                    <option value="zh" {% if config.lang_search == 'zh' %}selected{% endif %}>Chinese</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="lang_interface">Interface language:</label>
+                <select name="lang_interface" id="lang_interface">
+                    <option value="" {% if not config.lang_interface %}selected{% endif %}>Default</option>
+                    <option value="en" {% if config.lang_interface == 'en' %}selected{% endif %}>English</option>
+                    <option value="es" {% if config.lang_interface == 'es' %}selected{% endif %}>Spanish</option>
+                    <option value="fr" {% if config.lang_interface == 'fr' %}selected{% endif %}>French</option>
+                    <option value="de" {% if config.lang_interface == 'de' %}selected{% endif %}>German</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="theme">Theme:</label>
+                <select name="theme" id="theme">
+                    <option value="system" {% if config.theme == 'system' %}selected{% endif %}>System</option>
+                    <option value="light" {% if config.theme == 'light' %}selected{% endif %}>Light</option>
+                    <option value="dark" {% if config.theme == 'dark' %}selected{% endif %}>Dark</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="near">Near (location):</label>
+                <input type="text" name="near" id="near" value="{{ config.near }}" placeholder="City, State, Country">
+            </div>
+
+            <div class="form-group">
+                <label for="block">Block sites (comma separated):</label>
+                <input type="text" name="block" id="block" value="{{ config.block }}" placeholder="example.com, spam.net">
+            </div>
+
+            <div class="form-group checkbox-group">
+                <label>
+                    <input type="checkbox" name="safe" {% if config.safe %}checked{% endif %}>
+                    Safe search
+                </label>
+            </div>
+
+            <div class="form-group checkbox-group">
+                <label>
+                    <input type="checkbox" name="dark" {% if config.dark %}checked{% endif %}>
+                    Dark mode
+                </label>
+            </div>
+
+            <div class="form-group checkbox-group">
+                <label>
+                    <input type="checkbox" name="nojs" {% if config.nojs %}checked{% endif %}>
+                    Disable JavaScript
+                </label>
+            </div>
+
+            <div class="form-group checkbox-group">
+                <label>
+                    <input type="checkbox" name="new_tab" {% if config.new_tab %}checked{% endif %}>
+                    Open results in new tab
+                </label>
+            </div>
+
+            <div class="form-group checkbox-group">
+                <label>
+                    <input type="checkbox" name="get_only" {% if config.get_only %}checked{% endif %}>
+                    GET requests only
+                </label>
+            </div>
+
+            <button type="submit" class="btn-save">Save Preferences</button>
+        </form>
+    </main>
+</body>
+</html>

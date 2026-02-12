@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Error {{ error_code }} - Whoogle Search</title>
+    <link href="{{ url_for('static', filename='css/style.css') }}" rel="stylesheet">
+</head>
+<body class="home">
+    <div class="search-container">
+        <div class="logo">
+            <h1>Whoogle<span class="accent">Search</span></h1>
+        </div>
+        <div class="error-container">
+            <h2>Error {{ error_code }}</h2>
+            <p>{{ error_message }}</p>
+            <a href="{{ url_for('index') }}" class="btn-save">Return Home</a>
+        </div>
+    </div>
+</body>
+</html>

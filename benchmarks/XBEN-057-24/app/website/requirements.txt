@@ -1,1 +1,6 @@
 flask
+brotli
+requests
+beautifulsoup4
+lxml
+defusedxml
