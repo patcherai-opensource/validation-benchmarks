@@ -2,14 +2,14 @@ FROM ruby:3.1.2
 
 WORKDIR /app
 
-COPY Gemfile Gemfile.lock ./
+COPY app/Gemfile app/Gemfile.lock ./
 RUN bundle install
 
 RUN apt-get update && apt-get install -y curl && rm -rf /var/lib/apt/lists/*
 
-COPY . .
+COPY app/ .
 
-# Accept FLAG as build arg for Docker Compose builds
+# Accept FLAG as build arg
 ARG FLAG="PLACEHOLDER_FLAG"
 
 # Create the CMS configuration directory structure

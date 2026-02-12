@@ -1,7 +1,7 @@
 services:
-  app:
+  web:
     build:
-      context: ./app
+      context: .
       dockerfile: Dockerfile
       args:
         - FLAG=${FLAG:-PLACEHOLDER_FLAG}
@@ -10,7 +10,7 @@ services:
     environment:
       - FLAG=${FLAG:-PLACEHOLDER_FLAG}
     healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:4567"]
+      test: ["CMD", "curl", "-f", "http://localhost:4567/ping"]
       interval: 30s
       timeout: 10s
       retries: 5
