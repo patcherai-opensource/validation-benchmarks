@@ -1,0 +1,290 @@
+/* YesWiki-inspired styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    color: #333;
+    background-color: #f5f5f5;
+    line-height: 1.6;
+}
+
+a {
+    color: #1a73a7;
+    text-decoration: none;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
+.yw-container {
+    max-width: 1140px;
+    margin: 0 auto;
+    padding: 0 15px;
+}
+
+/* Header */
+#yw-header {
+    background-color: #2c3e50;
+    color: #fff;
+    padding: 12px 0;
+    border-bottom: 3px solid #1abc9c;
+}
+
+#yw-header .yw-container {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.yw-brand {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: #fff;
+    margin-right: 15px;
+}
+
+.yw-brand:hover {
+    text-decoration: none;
+    color: #1abc9c;
+}
+
+.yw-tagline {
+    color: #bdc3c7;
+    font-size: 0.85rem;
+    margin-right: auto;
+}
+
+.yw-nav ul {
+    list-style: none;
+    display: flex;
+    gap: 0;
+}
+
+.yw-nav li a {
+    display: block;
+    padding: 6px 14px;
+    color: #ecf0f1;
+    font-size: 0.9rem;
+    border-radius: 3px;
+    transition: background 0.2s;
+}
+
+.yw-nav li a:hover {
+    background-color: rgba(255,255,255,0.1);
+    text-decoration: none;
+}
+
+.yw-nav li.active a {
+    background-color: #1abc9c;
+    color: #fff;
+}
+
+/* Main content */
+#yw-main {
+    padding: 25px 15px;
+    min-height: calc(100vh - 160px);
+}
+
+.yw-page {
+    background: #fff;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    padding: 25px 30px;
+    margin-bottom: 20px;
+}
+
+.yw-page-title {
+    font-size: 1.6rem;
+    color: #2c3e50;
+    border-bottom: 2px solid #1abc9c;
+    padding-bottom: 10px;
+    margin-bottom: 15px;
+}
+
+.yw-page-meta {
+    font-size: 0.8rem;
+    color: #999;
+    margin-bottom: 20px;
+}
+
+.yw-page-content {
+    margin-bottom: 25px;
+    font-size: 0.95rem;
+}
+
+.yw-page-content p {
+    margin-bottom: 10px;
+}
+
+.yw-page-actions {
+    margin-top: 20px;
+    padding-top: 15px;
+    border-top: 1px solid #eee;
+    display: flex;
+    gap: 8px;
+}
+
+.yw-attachments-link {
+    margin: 15px 0;
+    padding: 10px;
+    background: #f8f9fa;
+    border: 1px solid #e9ecef;
+    border-radius: 3px;
+}
+
+.yw-attachments-link a {
+    font-weight: 500;
+}
+
+/* Buttons */
+.yw-btn {
+    display: inline-block;
+    padding: 8px 16px;
+    background-color: #1abc9c;
+    color: #fff;
+    border: none;
+    border-radius: 3px;
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.yw-btn:hover {
+    background-color: #16a085;
+    text-decoration: none;
+    color: #fff;
+}
+
+.yw-btn-secondary {
+    background-color: #95a5a6;
+}
+
+.yw-btn-secondary:hover {
+    background-color: #7f8c8d;
+}
+
+/* Forms */
+.yw-form-group {
+    margin-bottom: 15px;
+}
+
+.yw-form-group label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: 500;
+    font-size: 0.9rem;
+    color: #555;
+}
+
+.yw-form-control {
+    width: 100%;
+    padding: 8px 12px;
+    border: 1px solid #ccc;
+    border-radius: 3px;
+    font-size: 0.9rem;
+}
+
+.yw-form-control:focus {
+    border-color: #1abc9c;
+    outline: none;
+    box-shadow: 0 0 0 2px rgba(26, 188, 156, 0.2);
+}
+
+.yw-textarea {
+    resize: vertical;
+    font-family: monospace;
+}
+
+/* Upload form */
+.yw-upload-form {
+    background: #f8f9fa;
+    border: 1px solid #e9ecef;
+    border-radius: 4px;
+    padding: 20px;
+    margin-bottom: 25px;
+}
+
+.yw-upload-form form {
+    max-width: 500px;
+}
+
+.yw-existing-attachments {
+    margin-bottom: 20px;
+}
+
+.yw-existing-attachments h4 {
+    margin-bottom: 10px;
+    color: #555;
+}
+
+/* Tables */
+.yw-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 15px;
+}
+
+.yw-table th,
+.yw-table td {
+    padding: 8px 12px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+}
+
+.yw-table thead th {
+    background-color: #f8f9fa;
+    font-weight: 600;
+    font-size: 0.85rem;
+    color: #555;
+    border-bottom: 2px solid #ddd;
+}
+
+.yw-table tbody tr:hover {
+    background-color: #f8f9fa;
+}
+
+/* System messages */
+.yw-system-message {
+    padding: 15px;
+    background-color: #d4edda;
+    border: 1px solid #c3e6cb;
+    border-radius: 4px;
+    color: #155724;
+    margin: 15px 0;
+}
+
+/* Footer */
+#yw-footer {
+    background-color: #2c3e50;
+    color: #bdc3c7;
+    padding: 15px 0;
+    text-align: center;
+    font-size: 0.8rem;
+}
+
+#yw-footer a {
+    color: #1abc9c;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    #yw-header .yw-container {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+    .yw-nav ul {
+        flex-wrap: wrap;
+        margin-top: 8px;
+    }
+    .yw-page {
+        padding: 15px;
+    }
+    .yw-page-actions {
+        flex-wrap: wrap;
+    }
+}
