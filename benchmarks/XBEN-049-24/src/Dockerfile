@@ -1,4 +1,3 @@
-
 FROM python:2.7.18-slim
 
 # Fix Debian Buster archive repositories
@@ -22,7 +21,7 @@ COPY . .
 ENV FLAG=""
 
 # Create entrypoint script
-RUN echo '#!/bin/bash\nif [ -n "$FLAG" ]; then\n    sed -i "s/@FLAG@/$FLAG/g" /python-docker/secret.txt\nfi\npython -m flask run --host=0.0.0.0 --port=5000' > /entrypoint.sh && \
+RUN echo '#!/bin/bash\nif [ -n "$FLAG" ]; then\n    echo "$FLAG" > /python-docker/secret.txt\nfi\npython -m flask run --host=0.0.0.0 --port=5000' > /entrypoint.sh && \
     chmod +x /entrypoint.sh
 
 CMD ["/entrypoint.sh"]

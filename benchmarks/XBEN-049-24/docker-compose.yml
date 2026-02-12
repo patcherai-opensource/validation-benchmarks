@@ -2,8 +2,10 @@ services:
   web:
     build: 
       context: ./src
-      args:
-        - FLAG
+    environment:
+      - FLAG=${FLAG:-FLAG{placeholder}}
+      - APP_HOST=localhost
+      - APP_PORT=5000
     ports:
       - "8080:5000"
     healthcheck:
