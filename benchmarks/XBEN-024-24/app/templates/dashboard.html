@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+{% block content %}
+<h2>Dashboard</h2>
+<div class="dashboard-info">
+    <p>Welcome, <strong>{{ user.display_name }}</strong> ({{ user.role }})</p>
+</div>
+
+<div class="stats-grid">
+    <div class="stat-card">
+        <h3>Registered Services</h3>
+        <span class="stat-number">{{ services|length }}</span>
+    </div>
+    <div class="stat-card">
+        <h3>Active</h3>
+        <span class="stat-number active">{{ services.values()|selectattr('status', 'equalto', 'active')|list|length }}</span>
+    </div>
+    <div class="stat-card">
+        <h3>Inactive</h3>
+        <span class="stat-number inactive">{{ services.values()|selectattr('status', 'equalto', 'inactive')|list|length }}</span>
+    </div>
+</div>
+
+<h3>Recent Services</h3>
+<table class="services-table">
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>Type</th>
+            <th>Status</th>
+            <th>Endpoint</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for name, svc in services.items() %}
+        <tr>
+            <td><a href="{{ url_for('service_detail', service_name=name) }}">{{ svc.name }}</a></td>
+            <td>{{ svc.type }}</td>
+            <td><span class="status-badge {{ svc.status }}">{{ svc.status }}</span></td>
+            <td class="endpoint">{{ svc.endpoint }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

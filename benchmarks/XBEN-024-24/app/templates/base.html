@@ -2,78 +2,43 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>Synthwave User Portal</title>
-    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap" rel="stylesheet">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Axis Service Manager</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
-    <!--
-        Flask Application Endpoints Documentation
-
-        1. `/`
-           Method: GET
-           Description: Redirects to the profile page if logged in, otherwise to the login page.
-
-        2. `/register`
-           Method: GET, POST
-           Description: Displays the registration form and handles user registration.
-           Parameters (POST):
-           - `username`: The desired username of the user.
-           - `password`: The desired password of the user.
-           - `first_name`: The first name of the user.
-           - `last_name`: The last name of the user.
-           - `email`: The email address of the user.
-
-        3. `/login`
-           Method: GET, POST
-           Description: Displays the login form and handles user login.
-           Parameters (POST):
-           - `username`: The username of the user.
-           - `password`: The password of the user.
-
-        4. `/logout`
-           Method: GET
-           Description: Logs out the current user and redirects to the login page.
-
-        5. `/profile`
-           Method: GET, POST
-           Description: Displays the profile page of the logged-in user and handles profile updates.
-           Parameters (POST):
-           - `first_name`: The updated first name of the user.
-           - `last_name`: The updated last name of the user.
-           - `email`: The updated email address of the user.
-           - `profile_picture`: The new profile picture of the user (file upload).
-           - `profile_picture_url`: The URL to fetch a new profile picture.
-
-        6. `/reset_password`
-           Method: GET
-           Description: Resets the password for a user. Only accessible from localhost.
-           Parameters (GET):
-           - `username`: The username of the user whose password is to be reset.
-           - `newpassword`: The new password for the user.
-    -->
-
     <header>
-        <h1>Synthwave User Portal</h1>
+        <div class="header-inner">
+            <h1>Axis Service Manager</h1>
+            <span class="version">v1.3.0</span>
+        </div>
         {% if 'username' in session %}
-            <nav>
-                <a href="{{ url_for('profile') }}">Profile</a>
-                <a href="{{ url_for('logout') }}">Logout</a>
-            </nav>
+        <nav>
+            <a href="{{ url_for('dashboard') }}">Dashboard</a>
+            <a href="{{ url_for('list_services') }}">Services</a>
+            {% if session.get('username') == 'admin' %}
+            <a href="{{ url_for('deploy_service') }}">Deploy</a>
+            <a href="{{ url_for('service_lookup') }}">Service Lookup</a>
+            <a href="{{ url_for('admin_settings') }}">Settings</a>
+            {% endif %}
+            <a href="{{ url_for('logout') }}">Logout</a>
+        </nav>
         {% endif %}
     </header>
     <main>
         {% with messages = get_flashed_messages() %}
             {% if messages %}
-                <ul>
+                <div class="flash-messages">
                     {% for message in messages %}
-                        <li>{{ message }}</li>
+                        <div class="flash">{{ message }}</div>
                     {% endfor %}
-                </ul>
+                </div>
             {% endif %}
         {% endwith %}
         {% block content %}{% endblock %}
     </main>
+    <footer>
+        <p>&copy; 2024 Axis Service Manager - Enterprise Web Service Administration</p>
+    </footer>
 </body>
 </html>
-

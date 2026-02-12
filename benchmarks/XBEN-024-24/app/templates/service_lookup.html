@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+{% block content %}
+<h2>Service Factory Lookup</h2>
+<p>Resolve and test service endpoints. Enter a registered service name or provide a direct URL to verify connectivity and retrieve service metadata.</p>
+
+<form method="post">
+    <label for="serviceName">Service Name or URL:</label>
+    <input type="text" name="serviceName" id="serviceName" required
+           placeholder="e.g., OrderProcessingService or http://endpoint/service?wsdl">
+    <button type="submit">Lookup</button>
+</form>
+
+{% if error %}
+<div class="lookup-error">
+    <h3>Lookup Error</h3>
+    <pre>{{ error }}</pre>
+</div>
+{% endif %}
+
+{% if result %}
+<div class="lookup-result">
+    <h3>Response</h3>
+    <pre>{{ result }}</pre>
+</div>
+{% endif %}
+
+<div class="lookup-info">
+    <h3>Registered Services</h3>
+    <p>You can look up any of these by name:</p>
+    <ul>
+        <li>OrderProcessingService</li>
+        <li>InventoryService</li>
+        <li>NotificationService</li>
+        <li>AuthenticationService</li>
+    </ul>
+</div>
+{% endblock %}

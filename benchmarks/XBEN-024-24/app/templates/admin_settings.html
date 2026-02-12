@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+{% block content %}
+<h2>Administration Settings</h2>
+<div class="settings-section">
+    <h3>Server Configuration</h3>
+    <table class="detail-table">
+        <tr>
+            <th>Server Version</th>
+            <td>Axis Service Manager 1.3.0</td>
+        </tr>
+        <tr>
+            <th>Engine</th>
+            <td>AxisEngine/1.3</td>
+        </tr>
+        <tr>
+            <th>Transport</th>
+            <td>HTTP/1.1</td>
+        </tr>
+        <tr>
+            <th>JNDI Provider</th>
+            <td>Built-in ServiceFactory</td>
+        </tr>
+    </table>
+</div>
+
+<div class="settings-section">
+    <h3>Security Settings</h3>
+    <table class="detail-table">
+        <tr>
+            <th>Authentication</th>
+            <td>Enabled (session-based)</td>
+        </tr>
+        <tr>
+            <th>Protocol Filtering</th>
+            <td>Active - dangerous protocol schemes are blocked in service lookups</td>
+        </tr>
+        <tr>
+            <th>Admin Role Required</th>
+            <td>Yes - for service deployment and lookup operations</td>
+        </tr>
+    </table>
+</div>
+{% endblock %}

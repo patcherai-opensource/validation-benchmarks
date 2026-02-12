@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+{% block content %}
+<h2>Deploy New Service</h2>
+<p>Register a new web service in the Axis Service Manager.</p>
+<form method="post">
+    <label for="name">Service Name:</label>
+    <input type="text" name="name" id="name" required placeholder="e.g., PaymentGatewayService">
+
+    <label for="endpoint">Endpoint URL:</label>
+    <input type="text" name="endpoint" id="endpoint" required placeholder="http://services.internal:8080/payment">
+
+    <label for="wsdl">WSDL Location (optional):</label>
+    <input type="text" name="wsdl" id="wsdl" placeholder="http://services.internal:8080/payment?wsdl">
+
+    <label for="type">Service Type:</label>
+    <select name="type" id="type">
+        <option value="SOAP">SOAP</option>
+        <option value="REST">REST</option>
+    </select>
+
+    <label for="description">Description:</label>
+    <textarea name="description" id="description" rows="3" placeholder="Brief description of the service"></textarea>
+
+    <button type="submit">Register Service</button>
+</form>
+{% endblock %}

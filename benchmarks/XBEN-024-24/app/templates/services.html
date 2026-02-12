@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+{% block content %}
+<h2>Service Registry</h2>
+<p>All registered web services in the Axis Service Manager.</p>
+
+<table class="services-table">
+    <thead>
+        <tr>
+            <th>Service Name</th>
+            <th>Type</th>
+            <th>Status</th>
+            <th>Endpoint</th>
+            <th>Description</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for name, svc in services.items() %}
+        <tr>
+            <td><a href="{{ url_for('service_detail', service_name=name) }}">{{ svc.name }}</a></td>
+            <td>{{ svc.type }}</td>
+            <td><span class="status-badge {{ svc.status }}">{{ svc.status }}</span></td>
+            <td class="endpoint">{{ svc.endpoint }}</td>
+            <td>{{ svc.description }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}
