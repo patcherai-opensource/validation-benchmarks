@@ -21,12 +21,16 @@ RUN pip install -r requirements.txt
 # Copy application files
 COPY . .
 
-# Set up flag placeholder
+# Set up flag - written to file at build time only
 ARG FLAG=@FLAG@
-RUN sed -i s/@FLAG@/$FLAG/g secret.txt
+RUN echo "$FLAG" > /app/flag.txt
+
+# Create data directory
+RUN mkdir -p /app/data
 
 # Create non-root user for security
 RUN useradd -m -u 1000 appuser && chown -R appuser:appuser /app
+
 USER appuser
 
 # Health check
