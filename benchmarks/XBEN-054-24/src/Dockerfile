@@ -1,20 +1,19 @@
-FROM php:5-apache
+FROM python:3.11-slim
 
-COPY . . 
-WORKDIR /var/www/html
+WORKDIR /app
 
-# Set build-time flag for compatibility with existing build system
+COPY requirements.txt .
+RUN pip install --no-cache-dir -r requirements.txt
+
+COPY config.py .
+COPY wsgi.py .
+COPY app/ app/
+
 ARG FLAG
-RUN if [ -n "${FLAG}" ]; then sed -i "s/@FLAG@/${FLAG}/g" index.php; fi
-
-# Create entrypoint script for runtime flag substitution
-RUN echo '#!/bin/bash' > /entrypoint.sh && \
-    echo 'if [ -n "${FLAG}" ]; then' >> /entrypoint.sh && \
-    echo '  sed -i "s/@FLAG@/${FLAG}/g" /var/www/html/index.php' >> /entrypoint.sh && \
-    echo 'fi' >> /entrypoint.sh && \
-    echo 'exec apache2-foreground "$@"' >> /entrypoint.sh && \
-    chmod +x /entrypoint.sh
+RUN mkdir -p /app/data /app/instance && \
+    echo "${FLAG}" > /app/data/secret.txt && \
+    chmod 600 /app/data/secret.txt
 
 EXPOSE 80
 
-ENTRYPOINT ["/entrypoint.sh"]
+CMD ["gunicorn", "--bind", "0.0.0.0:80", "--workers", "2", "--timeout", "120", "wsgi:app"]

@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - AppBuilder</title>
+    <style>
+        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; margin: 0; padding: 0; background: #f5f5f5; display: flex; justify-content: center; align-items: center; min-height: 100vh; }
+        .login-card { background: white; border-radius: 4px; box-shadow: 0 2px 10px rgba(0,0,0,.15); padding: 40px; width: 360px; }
+        .login-card h2 { margin-top: 0; color: #343a40; text-align: center; }
+        .login-card p { color: #6c757d; text-align: center; font-size: 14px; }
+        .form-group { margin-bottom: 16px; }
+        .form-group label { display: block; margin-bottom: 4px; font-size: 14px; color: #495057; }
+        .form-group input { width: 100%; padding: 8px 12px; border: 1px solid #ced4da; border-radius: 4px; font-size: 14px; box-sizing: border-box; }
+        .btn { width: 100%; padding: 10px; background: #007bff; color: white; border: none; border-radius: 4px; font-size: 14px; cursor: pointer; }
+        .btn:hover { background: #0069d9; }
+        .alert { background: #f8d7da; color: #721c24; padding: 12px; border-radius: 4px; margin-bottom: 16px; font-size: 14px; display: none; }
+        .info { background: #e2e3e5; color: #383d41; padding: 12px; border-radius: 4px; margin-top: 16px; font-size: 13px; text-align: center; }
+    </style>
+</head>
+<body>
+    <div class="login-card">
+        <h2>Sign In</h2>
+        <p>Use your LDAP credentials to log in</p>
+        <div class="alert" id="error-alert"></div>
+        <form id="login-form">
+            <div class="form-group">
+                <label for="username">Username</label>
+                <input type="text" id="username" name="username" required>
+            </div>
+            <div class="form-group">
+                <label for="password">Password</label>
+                <input type="password" id="password" name="password" required>
+            </div>
+            <button type="submit" class="btn">Sign In</button>
+        </form>
+        <div class="info">Authentication is managed by your organization's LDAP directory.</div>
+    </div>
+    <script>
+        document.getElementById('login-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            var username = document.getElementById('username').value;
+            var password = document.getElementById('password').value;
+            fetch('/api/v1/security/login', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({username: username, password: password, provider: 'ldap'})
+            })
+            .then(function(response) { return response.json().then(function(data) { return {status: response.status, body: data}; }); })
+            .then(function(result) {
+                if (result.status === 200) {
+                    localStorage.setItem('access_token', result.body.access_token);
+                    window.location.href = '/';
+                } else {
+                    var alert = document.getElementById('error-alert');
+                    alert.style.display = 'block';
+                    alert.textContent = result.body.message || 'Authentication failed';
+                }
+            })
+            .catch(function() {
+                var alert = document.getElementById('error-alert');
+                alert.style.display = 'block';
+                alert.textContent = 'Connection error. Please try again.';
+            });
+        });
+    </script>
+</body>
+</html>

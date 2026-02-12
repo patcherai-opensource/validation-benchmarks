@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>API Documentation - AppBuilder</title>
+    <style>
+        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; margin: 0; padding: 0; background: #fafafa; }
+        .navbar { background: #343a40; color: white; padding: 12px 24px; }
+        .navbar h1 { margin: 0; font-size: 18px; font-weight: 500; }
+        .container { max-width: 960px; margin: 30px auto; padding: 0 20px; }
+        .section { background: white; border: 1px solid #e0e0e0; border-radius: 4px; margin-bottom: 16px; overflow: hidden; }
+        .section-header { padding: 12px 16px; background: #f8f9fa; border-bottom: 1px solid #e0e0e0; cursor: pointer; display: flex; align-items: center; }
+        .section-header h3 { margin: 0; font-size: 15px; color: #333; }
+        .method { display: inline-block; padding: 2px 8px; border-radius: 3px; color: white; font-size: 12px; font-weight: 600; margin-right: 8px; text-transform: uppercase; }
+        .method-post { background: #49cc90; }
+        .method-get { background: #61affe; }
+        .endpoint { font-family: monospace; font-size: 14px; color: #333; }
+        .section-body { padding: 16px; display: none; }
+        .section-body.active { display: block; }
+        .param-table { width: 100%; border-collapse: collapse; margin: 12px 0; }
+        .param-table th, .param-table td { text-align: left; padding: 8px 12px; border: 1px solid #e0e0e0; font-size: 13px; }
+        .param-table th { background: #f8f9fa; }
+        .tag { font-size: 20px; color: #333; margin: 24px 0 12px; padding: 0; border-bottom: 1px solid #e0e0e0; padding-bottom: 8px; }
+        code { background: #f4f4f4; padding: 2px 6px; border-radius: 3px; font-size: 13px; }
+        .desc { color: #666; font-size: 13px; line-height: 1.5; }
+    </style>
+</head>
+<body>
+    <div class="navbar"><h1>API Documentation</h1></div>
+    <div class="container">
+        <h2 class="tag">Security</h2>
+
+        <div class="section">
+            <div class="section-header" onclick="this.nextElementSibling.classList.toggle('active')">
+                <span class="method method-post">POST</span>
+                <span class="endpoint">/api/v1/security/login</span>
+            </div>
+            <div class="section-body">
+                <p class="desc">Authenticate and get a JWT access and refresh token</p>
+                <h4>Request Body (application/json)</h4>
+                <table class="param-table">
+                    <tr><th>Parameter</th><th>Type</th><th>Required</th><th>Description</th></tr>
+                    <tr><td>username</td><td>string</td><td>Yes</td><td>The username for authentication</td></tr>
+                    <tr><td>password</td><td>string</td><td>Yes</td><td>The password for authentication</td></tr>
+                    <tr><td>provider</td><td>string</td><td>Yes</td><td>Authentication provider (<code>db</code> or <code>ldap</code>)</td></tr>
+                    <tr><td>refresh</td><td>boolean</td><td>No</td><td>If true a refresh token is also provided</td></tr>
+                </table>
+                <h4>Responses</h4>
+                <table class="param-table">
+                    <tr><th>Code</th><th>Description</th></tr>
+                    <tr><td>200</td><td>Authentication successful. Returns <code>access_token</code> and optionally <code>refresh_token</code></td></tr>
+                    <tr><td>400</td><td>Bad request (missing parameters or unsupported provider)</td></tr>
+                    <tr><td>401</td><td>Unauthorized</td></tr>
+                </table>
+            </div>
+        </div>
+
+        <div class="section">
+            <div class="section-header" onclick="this.nextElementSibling.classList.toggle('active')">
+                <span class="method method-post">POST</span>
+                <span class="endpoint">/api/v1/security/refresh</span>
+            </div>
+            <div class="section-body">
+                <p class="desc">Use the refresh token to get a new JWT access token</p>
+                <h4>Authorization</h4>
+                <p>Bearer token (refresh token)</p>
+            </div>
+        </div>
+
+        <h2 class="tag">Application</h2>
+
+        <div class="section">
+            <div class="section-header" onclick="this.nextElementSibling.classList.toggle('active')">
+                <span class="method method-get">GET</span>
+                <span class="endpoint">/api/v1/me/</span>
+            </div>
+            <div class="section-body">
+                <p class="desc">Get current user information. Requires JWT authentication.</p>
+            </div>
+        </div>
+
+        <div class="section">
+            <div class="section-header" onclick="this.nextElementSibling.classList.toggle('active')">
+                <span class="method method-get">GET</span>
+                <span class="endpoint">/api/v1/users/</span>
+            </div>
+            <div class="section-body">
+                <p class="desc">List all users. Requires admin role.</p>
+            </div>
+        </div>
+
+        <div class="section">
+            <div class="section-header" onclick="this.nextElementSibling.classList.toggle('active')">
+                <span class="method method-get">GET</span>
+                <span class="endpoint">/api/v1/users/{user_id}</span>
+            </div>
+            <div class="section-body">
+                <p class="desc">Get a specific user by ID. Requires JWT authentication.</p>
+            </div>
+        </div>
+
+        <div class="section">
+            <div class="section-header" onclick="this.nextElementSibling.classList.toggle('active')">
+                <span class="method method-get">GET</span>
+                <span class="endpoint">/api/v1/roles/</span>
+            </div>
+            <div class="section-body">
+                <p class="desc">List all roles. Requires JWT authentication.</p>
+            </div>
+        </div>
+
+        <div class="section">
+            <div class="section-header" onclick="this.nextElementSibling.classList.toggle('active')">
+                <span class="method method-get">GET</span>
+                <span class="endpoint">/api/v1/config/</span>
+            </div>
+            <div class="section-body">
+                <p class="desc">Get application configuration. Requires admin role.</p>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
