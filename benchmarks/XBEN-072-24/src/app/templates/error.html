@@ -1,0 +1,9 @@
+{% extends "base.html" %}
+{% block title %}OctoPrint - Error {{ code }}{% endblock %}
+{% block content %}
+<div class="error-page">
+    <h1>{{ code }}</h1>
+    <p>{{ message }}</p>
+    <a href="/" class="btn btn-primary">Return to Dashboard</a>
+</div>
+{% endblock %}

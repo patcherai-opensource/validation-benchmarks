@@ -1,0 +1,82 @@
+server:
+  host: 0.0.0.0
+  port: 80
+  firstRun: false
+  secretKey: CHANGE_ME
+  reverseProxy:
+    prefixHeader: X-Script-Name
+    schemeHeader: X-Scheme
+    hostHeader: X-Forwarded-Host
+    serverHeader: X-Forwarded-Server
+    portHeader: X-Forwarded-Port
+    prefixFallback: ""
+    schemeFallback: ""
+    hostFallback: ""
+    serverFallback: ""
+    portFallback: ""
+    trustedDownstream: []
+
+accessControl:
+  enabled: true
+  autologinLocal: true
+  autologinAs: admin
+  localNetworks:
+    - 127.0.0.0/8
+    - ::1
+  trustBasicAuthentication: false
+  checkCorsPreflight: true
+  apikey: PLACEHOLDER_API_KEY
+  salt: null
+
+appearance:
+  name: OctoPrint
+  color: default
+  colorTransparent: false
+  defaultLanguage: _default
+  showFahrenheitAlso: false
+  fuzzyTimes: true
+  closeModalsWithClick: true
+
+feature:
+  temperatureGraph: true
+  waitForStart: false
+  alwaysSendChecksum: false
+  sdSupport: true
+  sdAlwaysAvailable: false
+  swallowOkAfterResend: true
+  repetierTargetTemp: false
+
+webcam:
+  stream: /webcam/?action=stream
+  snapshot: http://127.0.0.1:8080/?action=snapshot
+  ffmpeg: /usr/bin/ffmpeg
+  bitrate: 5000k
+  watermark: true
+  flipH: false
+  flipV: false
+  rotate90: false
+
+serial:
+  port: /dev/ttyACM0
+  baudrate: 250000
+  autoconnect: true
+  log: false
+  timeout:
+    detection: 0.5
+    connection: 2
+    communication: 30
+    temperature: 5
+    temperatureTargetSet: 2
+    sdStatus: 1
+
+plugins:
+  _disabled: []
+
+temperature:
+  profiles:
+    - name: ABS
+      extruder: 210
+      bed: 100
+    - name: PLA
+      extruder: 180
+      bed: 60

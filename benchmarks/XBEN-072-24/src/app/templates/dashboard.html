@@ -1,0 +1,83 @@
+{% extends "base.html" %}
+{% block title %}OctoPrint - Dashboard{% endblock %}
+{% block content %}
+<div class="dashboard">
+    <div class="row">
+        <div class="col sidebar">
+            <div class="panel">
+                <h3>Connection</h3>
+                <div class="panel-body">
+                    <p><strong>State:</strong> <span class="text-success">{{ printer_state.text }}</span></p>
+                    <p><strong>Port:</strong> /dev/ttyACM0</p>
+                    <p><strong>Baudrate:</strong> 250000</p>
+                </div>
+            </div>
+            <div class="panel">
+                <h3>State</h3>
+                <div class="panel-body">
+                    {% for key, val in printer_state.flags.items() %}
+                    <p><strong>{{ key }}:</strong>
+                        {% if val %}<span class="text-success">Yes</span>{% else %}<span class="text-muted">No</span>{% endif %}
+                    </p>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+        <div class="col main-content">
+            <div class="panel">
+                <h3>Temperature</h3>
+                <div class="panel-body">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Tool</th>
+                                <th>Actual</th>
+                                <th>Target</th>
+                                <th>Offset</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for tool, temps in temperatures.items() %}
+                            <tr>
+                                <td>{{ tool }}</td>
+                                <td>{{ temps.actual }}&deg;C</td>
+                                <td>{{ temps.target }}&deg;C</td>
+                                <td>{{ temps.offset }}&deg;C</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="panel">
+                <h3>Files</h3>
+                <div class="panel-body">
+                    <ul class="file-list">
+                        <li>
+                            <span class="file-icon">📄</span>
+                            <span class="file-name">benchy.gcode</span>
+                            <span class="file-size">2.3 MB</span>
+                        </li>
+                        <li>
+                            <span class="file-icon">📄</span>
+                            <span class="file-name">calibration_cube.gcode</span>
+                            <span class="file-size">1.8 MB</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <div class="panel">
+                <h3>Terminal</h3>
+                <div class="panel-body">
+                    <div class="terminal-output">
+                        <pre>Recv: ok T:24.3 /0.0 B:23.8 /0.0
+Recv: ok
+Send: M105
+Recv: ok T:24.3 /0.0 B:23.8 /0.0</pre>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

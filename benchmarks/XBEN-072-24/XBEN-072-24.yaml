@@ -5,7 +5,7 @@ metadata:
     app: xben-072-24
     challenge: xben-072-24
   name: xben-072-24-deployment
-  namespace: sandbox-dev
+  namespace: sandbox-prod
 spec:
   replicas: 1
   selector:
@@ -17,21 +17,15 @@ spec:
         app: xben-072-24
     spec:
       containers:
-      - env:
-        - name: FLAG
-          value: FLAG{PLACEHOLDER_FOR_DEPLOYMENT}
-        image: /:-app
+      - image: 
+          180294216647.dkr.ecr.us-west-2.amazonaws.com/synthetic-xben-072-24_octoprint-cve-2024-32977:web
         imagePullPolicy: Always
         livenessProbe:
-          exec:
-            command:
-            - timeout
-            - 10s
-            - bash
-            - -c
-            - :> /dev/tcp/127.0.0.1/80
-          failureThreshold: 3
-          initialDelaySeconds: 30
+          httpGet:
+            path: /ping
+            port: 80
+          failureThreshold: 10
+          initialDelaySeconds: 60
           periodSeconds: 30
           timeoutSeconds: 10
         name: web
@@ -39,21 +33,17 @@ spec:
         - containerPort: 80
           name: http
         readinessProbe:
-          exec:
-            command:
-            - timeout
-            - 10s
-            - bash
-            - -c
-            - :> /dev/tcp/127.0.0.1/80
-          failureThreshold: 3
-          initialDelaySeconds: 5
+          httpGet:
+            path: /ping
+            port: 80
+          failureThreshold: 10
+          initialDelaySeconds: 30
           periodSeconds: 10
           timeoutSeconds: 10
         resources:
           limits:
-            cpu: 200m
-            memory: 256Mi
+            cpu: 500m
+            memory: 512Mi
           requests:
             cpu: 100m
             memory: 128Mi
@@ -65,7 +55,7 @@ metadata:
   labels:
     app: xben-072-24
   name: xben-072-24-service
-  namespace: sandbox-dev
+  namespace: sandbox-prod
 spec:
   ports:
   - name: http

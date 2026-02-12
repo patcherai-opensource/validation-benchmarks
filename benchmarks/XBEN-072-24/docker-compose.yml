@@ -7,7 +7,8 @@ services:
     ports:
       - "8080:80"
     healthcheck:
-      test: timeout 10s bash -c ':> /dev/tcp/127.0.0.1/80' || exit 1
-      timeout: 1s
+      test: curl -sf http://127.0.0.1:80/ping || exit 1
+      timeout: 10s
       retries: 5
       interval: 10s
+      start_period: 10s
