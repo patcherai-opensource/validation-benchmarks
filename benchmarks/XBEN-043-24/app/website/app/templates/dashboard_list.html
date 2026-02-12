@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+{% block title %}Dashboards - Superset{% endblock %}
+{% block content %}
+<div class="page-header">
+    <h3>Dashboards</h3>
+</div>
+<div class="card">
+    <div class="card-body">
+        <table class="table table-hover">
+            <thead>
+                <tr>
+                    <th>Title</th>
+                    <th>Slug</th>
+                    <th>Published</th>
+                    <th>Last Modified</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for dashboard in dashboards %}
+                <tr>
+                    <td><a href="{{ url_for('dashboard_view', slug=dashboard.slug) }}">{{ dashboard.dashboard_title }}</a></td>
+                    <td><code>{{ dashboard.slug }}</code></td>
+                    <td>
+                        {% if dashboard.published %}
+                        <span class="badge bg-success">Published</span>
+                        {% else %}
+                        <span class="badge bg-secondary">Draft</span>
+                        {% endif %}
+                    </td>
+                    <td>{{ dashboard.changed_on.strftime('%Y-%m-%d %H:%M') if dashboard.changed_on else '-' }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

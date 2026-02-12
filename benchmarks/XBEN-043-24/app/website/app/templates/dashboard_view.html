@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{% block title %}{{ dashboard.dashboard_title }} - Superset{% endblock %}
+{% block content %}
+<div class="page-header">
+    <h3>{{ dashboard.dashboard_title }}</h3>
+    <p class="text-muted">Slug: {{ dashboard.slug }} | Last modified: {{ dashboard.changed_on.strftime('%Y-%m-%d %H:%M') if dashboard.changed_on else 'N/A' }}</p>
+</div>
+<div class="card">
+    <div class="card-body" style="min-height: 400px;">
+        <div class="text-center text-muted" style="padding-top: 150px;">
+            <h5>Dashboard visualization area</h5>
+            <p>Charts and filters would be rendered here.</p>
+        </div>
+    </div>
+</div>
+{% endblock %}

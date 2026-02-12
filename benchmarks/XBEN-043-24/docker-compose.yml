@@ -4,23 +4,25 @@ services:
     expose:
       - 3306
     healthcheck:
-      test: ["CMD", "mysqladmin" ,"ping", "-h", "localhost","--password=idor_broken_authn_trading_platform","-u","root"]
-      timeout: 1s
-      retries: 5
+      test: ["CMD", "mysqladmin" ,"ping", "-h", "localhost","--password=superset_analytics_db","-u","root"]
+      timeout: 5s
+      retries: 10
       interval: 10s
 
-  idor_broken_authn_trading_platform:
+  superset_analytics:
     build:
       context: ./app
       args:
         - FLAG
+    environment:
+      - DB_HOST=db
     depends_on:
       db:
         condition: service_healthy
     ports:
       - "8080:80"
     healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:80/"]
-      timeout: 1s
-      retries: 5
+      test: ["CMD", "curl", "-f", "http://localhost:80/health"]
+      timeout: 5s
+      retries: 10
       interval: 10s
