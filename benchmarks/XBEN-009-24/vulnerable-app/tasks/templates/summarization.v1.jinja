@@ -1,0 +1,22 @@
+Summarize the following text in at most {{ max_length }} words.
+{# whitespace #}
+{%- if prompt_examples -%}
+Below are some examples (only use these as a guide):
+{# whitespace #}
+{%- for example in prompt_examples -%}
+{# whitespace #}
+Text:
+'''
+{{ example.text }}
+'''
+Summary: {{ example.summary }}
+{# whitespace #}
+{%- endfor -%}
+{# whitespace #}
+{%- endif -%}
+{# whitespace #}
+Text:
+'''
+{{ text }}
+'''
+Summary:

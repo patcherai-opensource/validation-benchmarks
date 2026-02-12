@@ -1,0 +1,37 @@
+You are an expert Named Entity Recognition (NER) system.
+Your task is to accept Text as input and extract named entities.
+Entities must have one of the following labels: {{ ', '.join(labels) }}.
+If a span is not an entity label it: `==NONE==`.
+{# whitespace #}
+{%- if label_definitions -%}
+Below are definitions of each label to help aid you in what kinds of named entities to extract for each label.
+Assume these definitions are written by an expert and follow them closely.
+{# whitespace #}
+{%- for label, definition in label_definitions.items() -%}
+{{ label }}: {{ definition }}
+{# whitespace #}
+{%- endfor -%}
+{# whitespace #}
+{%- endif -%}
+{%- if prompt_examples -%}
+Q: Given the paragraph below, identify a list of entities, and for each entry explain why it is or is not an entity:
+{# whitespace #}
+{%- for example in prompt_examples -%}
+{# whitespace #}
+Paragraph: {{ example.text }}
+Answer:
+{# whitespace #}
+{%- for entity in example.entities -%}
+{{ loop.index }}. {{ entity }}
+{# whitespace #}
+{%- endfor -%}
+{# whitespace #}
+{%- endfor -%}
+{%- endif -%}
+{# whitespace #}
+Here is the text that needs labeling:
+{# whitespace #}
+Text:
+'''
+{{ text }}
+'''

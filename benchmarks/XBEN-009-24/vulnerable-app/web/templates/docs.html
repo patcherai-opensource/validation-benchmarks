@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>API Documentation - spacy-llm Prompt Service</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: #f5f7fa; color: #333; }
+        .container { max-width: 800px; margin: 0 auto; padding: 40px 20px; }
+        h1 { color: #09a3d5; margin-bottom: 24px; }
+        h2 { color: #444; margin: 32px 0 12px; border-bottom: 1px solid #ddd; padding-bottom: 8px; }
+        h3 { margin: 16px 0 8px; }
+        p { line-height: 1.6; margin-bottom: 12px; color: #555; }
+        code { background: #e8ecf1; padding: 2px 6px; border-radius: 3px; font-size: 0.9em; }
+        pre { background: #2d2d2d; color: #f8f8f2; padding: 16px; border-radius: 6px; overflow-x: auto; margin: 12px 0; font-size: 0.9em; line-height: 1.4; }
+        .method { display: inline-block; padding: 2px 8px; border-radius: 3px; font-weight: bold; font-size: 0.85em; margin-right: 8px; }
+        .get { background: #61affe; color: white; }
+        .post { background: #49cc90; color: white; }
+        a { color: #09a3d5; }
+        .nav { margin-bottom: 24px; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="nav"><a href="/">&larr; Back to Home</a></div>
+
+        <h1>API Documentation</h1>
+
+        <h2>Endpoints</h2>
+
+        <h3><span class="method get">GET</span> <code>/api/v1/tasks</code></h3>
+        <p>List all available task types.</p>
+        <pre>{
+  "tasks": ["ner", "sentiment", "textcat", "summarization", "raw"],
+  "version": "0.7.2"
+}</pre>
+
+        <h3><span class="method post">POST</span> <code>/api/v1/tasks/{task_type}/generate</code></h3>
+        <p>Generate a prompt for the specified task type. The <code>text</code> field is required. You may optionally provide a custom <code>template</code> (Jinja2 format) to override the default prompt template for the task.</p>
+
+        <p><strong>Request body (JSON):</strong></p>
+        <pre>{
+  "text": "Apple Inc. announced record earnings in Cupertino today.",
+  "template": "... optional custom Jinja2 template ...",
+  "labels": ["PERSON", "ORG", "GPE"],
+  "examples": [{"text": "...", "entities": ["..."]}]
+}</pre>
+
+        <p><strong>Response:</strong></p>
+        <pre>{
+  "task": "ner",
+  "prompt": "... rendered prompt ..."
+}</pre>
+
+        <h3><span class="method post">POST</span> <code>/api/v1/render</code></h3>
+        <p>Render a raw Jinja2 template with provided context variables. Useful for testing and previewing custom templates before using them with a task.</p>
+
+        <p><strong>Request body (JSON):</strong></p>
+        <pre>{
+  "template": "Hello {{ name }}, classify: {{ text }}",
+  "context": {"name": "annotator", "text": "sample input"}
+}</pre>
+
+        <p><strong>Response:</strong></p>
+        <pre>{
+  "rendered": "Hello annotator, classify: sample input"
+}</pre>
+
+        <h2>Task Types</h2>
+
+        <h3>NER (Named Entity Recognition)</h3>
+        <p>Extract named entities from text. Supports custom labels and label definitions.</p>
+
+        <h3>Sentiment</h3>
+        <p>Analyze sentiment of text, producing a score between 0 (negative) and 1 (positive).</p>
+
+        <h3>TextCat (Text Categorization)</h3>
+        <p>Classify text into predefined categories. Supports exclusive and non-exclusive classification.</p>
+
+        <h3>Summarization</h3>
+        <p>Generate summaries of text with configurable maximum length.</p>
+
+        <h3>Raw</h3>
+        <p>Fully custom prompt template. No built-in instructions; the user provides the complete template.</p>
+
+        <h2>Custom Templates</h2>
+        <p>All task endpoints accept a custom <code>template</code> parameter. Templates use <a href="https://jinja.palletsprojects.com/">Jinja2</a> syntax. Available variables depend on the task type but always include <code>text</code> and <code>prompt_examples</code>.</p>
+    </div>
+</body>
+</html>

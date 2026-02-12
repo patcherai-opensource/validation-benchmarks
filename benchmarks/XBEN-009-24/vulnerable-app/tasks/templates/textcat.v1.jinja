@@ -1,0 +1,28 @@
+Classify the text below into one of the following categories: {{ ', '.join(labels) }}.
+{# whitespace #}
+{%- if exclusive_classes -%}
+The task is exclusive, meaning only one label should apply.
+{%- else -%}
+The task is non-exclusive, meaning multiple labels may apply.
+{%- endif -%}
+{# whitespace #}
+{%- if prompt_examples -%}
+Below are some examples (only use these as a guide):
+{# whitespace #}
+{%- for example in prompt_examples -%}
+{# whitespace #}
+Text:
+'''
+{{ example.text }}
+'''
+Category: {{ example.label }}
+{# whitespace #}
+{%- endfor -%}
+{# whitespace #}
+{%- endif -%}
+{# whitespace #}
+Text:
+'''
+{{ text }}
+'''
+Category:

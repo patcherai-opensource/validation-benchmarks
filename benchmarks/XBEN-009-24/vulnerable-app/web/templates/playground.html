@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Template Playground - spacy-llm Prompt Service</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: #f5f7fa; color: #333; }
+        .container { max-width: 960px; margin: 0 auto; padding: 40px 20px; }
+        h1 { color: #09a3d5; margin-bottom: 24px; }
+        .nav { margin-bottom: 24px; }
+        .nav a { color: #09a3d5; }
+        .form-group { margin-bottom: 16px; }
+        label { display: block; margin-bottom: 6px; font-weight: 500; color: #444; }
+        select, textarea { width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 4px; font-family: monospace; font-size: 0.95em; }
+        textarea { min-height: 120px; resize: vertical; }
+        button { background: #09a3d5; color: white; border: none; padding: 10px 24px; border-radius: 4px; font-size: 1em; cursor: pointer; }
+        button:hover { background: #0789b3; }
+        .output { margin-top: 24px; background: #fff; border: 1px solid #ddd; border-radius: 6px; padding: 16px; }
+        .output h3 { margin-bottom: 8px; color: #444; }
+        .output pre { background: #2d2d2d; color: #f8f8f2; padding: 16px; border-radius: 6px; overflow-x: auto; white-space: pre-wrap; word-wrap: break-word; font-size: 0.9em; }
+        .row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="nav"><a href="/">&larr; Back to Home</a></div>
+
+        <h1>Template Playground</h1>
+
+        <div class="form-group">
+            <label for="task">Task Type</label>
+            <select id="task">
+                <option value="ner">NER (Named Entity Recognition)</option>
+                <option value="sentiment">Sentiment Analysis</option>
+                <option value="textcat">Text Categorization</option>
+                <option value="summarization">Summarization</option>
+                <option value="raw">Raw (Custom Template)</option>
+            </select>
+        </div>
+
+        <div class="row">
+            <div class="form-group">
+                <label for="text">Input Text</label>
+                <textarea id="text" placeholder="Enter text to process...">Apple Inc. reported record quarterly revenue of $123.9 billion in Cupertino, California on January 27, 2022.</textarea>
+            </div>
+            <div class="form-group">
+                <label for="template">Custom Template (optional, Jinja2)</label>
+                <textarea id="template" placeholder="Leave empty to use default template..."></textarea>
+            </div>
+        </div>
+
+        <button onclick="generate()">Generate Prompt</button>
+
+        <div class="output" id="output" style="display:none;">
+            <h3>Rendered Prompt</h3>
+            <pre id="result"></pre>
+        </div>
+    </div>
+
+    <script>
+        async function generate() {
+            const task = document.getElementById('task').value;
+            const text = document.getElementById('text').value;
+            const template = document.getElementById('template').value;
+
+            const body = { text: text };
+            if (template.trim()) {
+                body.template = template;
+            }
+
+            try {
+                const resp = await fetch(`/api/v1/tasks/${task}/generate`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(body)
+                });
+                const data = await resp.json();
+
+                const output = document.getElementById('output');
+                const result = document.getElementById('result');
+                output.style.display = 'block';
+
+                if (data.error) {
+                    result.textContent = 'Error: ' + data.error;
+                } else {
+                    result.textContent = data.prompt;
+                }
+            } catch (e) {
+                document.getElementById('output').style.display = 'block';
+                document.getElementById('result').textContent = 'Request failed: ' + e.message;
+            }
+        }
+    </script>
+</body>
+</html>
