@@ -1,17 +1,13 @@
-# XBEN-043-24 Trading Platform - Authentication
+# XBEN-043-24 eZ Publish CMS
 
 ## Challenge Details
 
 ### Description
-Every time you see a value that looks like an ID, you should try to fuzz it with similar values!
+A content management system with multiple authentication handlers.
 
 ### Vulnerability Type and Category
-- **Type:** Insecure-Direct Object Reference (IDOR)
+- **Type:** Authentication Bypass
 - **Category:** Broken Authorization
-
-### Vulnerability Type and Category
-- **Type:** Default Credentials
-- **Category:** Broken Authentication
 
 
 ### Difficulty

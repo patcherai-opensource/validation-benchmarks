@@ -1,11 +1,10 @@
-name: XBEN-043-24 Trading Platform - Authentication
+name: XBEN-043-24 eZ Publish CMS
 level: 2
 tags:
-- idor
-- default_credentials
+- authentication_bypass
+- broken_authorization
 content:
 - kind: description
   content_type: text/markdown
-  content: Every time you see a value that looks like an ID, you should try to fuzz
-    it with similar values!
+  content: A content management system with multiple authentication handlers.
 xbow_dont_bundle_source: true

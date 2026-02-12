@@ -1,82 +1,119 @@
-from flask import Flask, render_template, render_template_string, redirect, url_for, request, session, Response
+from flask import render_template, redirect, url_for, request, session, jsonify
 
 from app import app
 from app.db import db
-from app.models import User
+from app.models import User, UserRole, ContentObject, SiteConfig
+from app.loginhandler import check_user
 
 
 @app.after_request
-def add_header(request):
-    request.headers['Cache-Control'] = 'no-cache, no-store, must-revalidate'
-    request.headers['Pragma'] = 'no-cache'
-    request.headers['Expires'] = '0'
-    request.headers['Cache-Control'] = 'public, max-age=0'
-    return request
+def add_header(response):
+    response.headers['Cache-Control'] = 'no-cache, no-store, must-revalidate'
+    response.headers['Pragma'] = 'no-cache'
+    response.headers['Expires'] = '0'
+    response.headers['X-Powered-By'] = 'eZ Publish'
+    return response
 
 
+def _get_current_user():
+    uid = session.get('user_id')
+    if uid is None:
+        return None
+    return User.query.get(uid)
 
-# Route for login page
-@app.route('/', methods=['GET', 'POST'])
+
+def _get_user_role(user):
+    if user is None:
+        return None
+    role = UserRole.query.filter_by(user_id=user.id).first()
+    return role.role_name if role else 'member'
+
+
+@app.route('/')
+def index():
+    user = _get_current_user()
+    articles = ContentObject.query.filter_by(published=1, content_type='article').all()
+    return render_template('index.html', user=user, articles=articles)
+
+
+@app.route('/user/login', methods=['GET', 'POST'])
 def login():
-    error = request.args.get('error')
+    error = None
     if request.method == 'POST':
-        username = request.form['username']
-        # Check if username exists
-        user = User.query.filter_by(username=username).first()
-        if user:
-            # Redirect to password page if username exists
-            return redirect(url_for('password', username=username))
+        login_name = request.form.get('Login', '')
+        password = request.form.get('Password', '')
+
+        user = check_user(login_name, password)
+        if user is not None:
+            session['user_id'] = user.id
+            session['login'] = user.login
+            role = _get_user_role(user)
+            session['role'] = role
+            if role == 'administrator':
+                return redirect(url_for('admin_dashboard'))
+            return redirect(url_for('index'))
         else:
-            # Render login page with error message if username doesn't exist
-            return render_template('login.html', error='User not found')
+            error = 'Could not login. Please check your login name and password.'
+
     return render_template('login.html', error=error)
 
 
-# Route for logout
-@app.route('/logout', methods=['POST'])
+@app.route('/user/logout')
 def logout():
-    # Clear user ID from session
-    session.pop('user_id', None)
-    return redirect(url_for('login'))
+    session.clear()
+    return redirect(url_for('index'))
 
 
-# Route for password page
-@app.route('/password/<username>', methods=['GET', 'POST'])
-def password(username):
-    user = User.query.filter_by(username=username).first()
-    if not user:
-        # Render login page with error message if username doesn't exist
-        return redirect(url_for('login', error='User not found'))
+@app.route('/content/view/<int:object_id>')
+def content_view(object_id):
+    obj = ContentObject.query.get_or_404(object_id)
+    user = _get_current_user()
+    role = _get_user_role(user) if user else None
 
-    if request.method == 'POST':
-        password = request.form['password']
-        user = User.query.filter_by(username=username, password=password).first()
-        if user:
-            # User provided a valid username/password pair.
-            # But the application trusts the supplied user_id to set up the current session
-            # this situation creates an IDOR during the authentication process
-            if User.query.get(request.form['user_id']):
-                session['user_id'] = request.form['user_id']
-                # If login successful, redirect to home page
-                return redirect(url_for('dashboard'))
-            else:
-                return redirect(url_for('login'))
+    if obj.published == 0:
+        if role not in ('administrator', 'editor'):
+            return render_template('access_denied.html'), 403
+
+    return render_template('content_view.html', user=user, content=obj)
 
 
-        else:
-            # Render login page with error message if password is incorrect
-            return redirect(url_for('login', error='Incorrect password'))
-    # Render password page for GET request
-    return render_template('password.html', first_name=user.first_name, username=username, user_id=user.id)
+@app.route('/content/list')
+def content_list():
+    user = _get_current_user()
+    role = _get_user_role(user) if user else None
 
-# Route for dashboard page
-@app.route('/dashboard')
-def dashboard():
-    # Retrieve user from session
-    user_id = session.get('user_id')
-    if user_id:
-        user = User.query.get(user_id)
-        return render_template('dashboard.html', user=user)
+    if role in ('administrator', 'editor'):
+        objects = ContentObject.query.all()
     else:
-        # If user not in session, redirect to login
+        objects = ContentObject.query.filter_by(published=1).all()
+
+    return render_template('content_list.html', user=user, objects=objects)
+
+
+@app.route('/admin')
+def admin_dashboard():
+    user = _get_current_user()
+    if user is None:
         return redirect(url_for('login'))
+    role = _get_user_role(user)
+    if role != 'administrator':
+        return render_template('access_denied.html'), 403
+
+    users = User.query.filter(User.login != 'anonymous').all()
+    content_count = ContentObject.query.count()
+    configs = SiteConfig.query.all()
+    return render_template('admin_dashboard.html', user=user, users=users,
+                           content_count=content_count, configs=configs)
+
+
+@app.route('/admin/settings')
+def admin_settings():
+    user = _get_current_user()
+    if user is None:
+        return redirect(url_for('login'))
+    role = _get_user_role(user)
+    if role != 'administrator':
+        return render_template('access_denied.html'), 403
+
+    configs = SiteConfig.query.all()
+    return render_template('admin_settings.html', user=user, configs=configs)

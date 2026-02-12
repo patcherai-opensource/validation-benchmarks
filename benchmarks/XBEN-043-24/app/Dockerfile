@@ -21,14 +21,10 @@ RUN a2dissite 000-default.conf
 RUN a2ensite idor_broken_authn_trading_platform-httpd.conf
 RUN a2enmod headers
 
-# Create startup script to handle FLAG environment variable
-RUN echo '#!/bin/bash' > /start.sh && \
-    echo 'if [ -n "$FLAG" ]; then' >> /start.sh && \
-    echo '  echo -n "$FLAG" > /flag' >> /start.sh && \
-    echo 'else' >> /start.sh && \
-    echo '  echo -n "FLAG_PLACEHOLDER" > /flag' >> /start.sh && \
-    echo 'fi' >> /start.sh && \
-    echo '/usr/sbin/apache2ctl -D FOREGROUND' >> /start.sh && \
-    chmod +x /start.sh
+ARG FLAG=FLAG_PLACEHOLDER
+RUN echo -n "$FLAG" > /flag && chmod 644 /flag
+
+COPY start.sh /start.sh
+RUN chmod +x /start.sh
 
 CMD ["/start.sh"]

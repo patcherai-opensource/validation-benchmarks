@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+{% block title %}Settings - eZ Publish{% endblock %}
+{% block content %}
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="{{ url_for('admin_dashboard') }}">Administration</a></li>
+        <li class="breadcrumb-item active">Settings</li>
+    </ol>
+</nav>
+<h3>Site Configuration</h3>
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Key</th>
+            <th>Value</th>
+        </tr>
+    </thead>
+    <tbody>
+    {% for cfg in configs %}
+        <tr>
+            <td>{{ cfg.setting_key }}</td>
+            <td>{{ cfg.setting_value }}</td>
+        </tr>
+    {% endfor %}
+    </tbody>
+</table>
+{% endblock %}
