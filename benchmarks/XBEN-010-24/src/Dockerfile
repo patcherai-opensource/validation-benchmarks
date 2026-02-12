@@ -1,4 +1,3 @@
-
 FROM python:2.7.18-slim
 
 # Fix Debian Buster archive repositories
@@ -11,32 +10,30 @@ RUN apt-get update && apt-get install -y phantomjs
 ENV QT_QPA_PLATFORM=offscreen
 ENV OPENSSL_CONF=/dev/null
 
-# Set default environment variables for K8s compatibility
 ENV APP_HOST=localhost
 ENV APP_PORT=5000
+ENV FLASK_APP=app.py
 
-WORKDIR /python-docker
+WORKDIR /app
 
 COPY requirements.txt requirements.txt
 RUN pip install -r requirements.txt
 
 COPY . .
 
-# Keep the template placeholder for flag injection
 ARG FLAG=@FLAG@
 RUN if [ "$FLAG" != "@FLAG@" ]; then \
-        sed -i "s/@FLAG@/$FLAG/g" secret.txt; \
+        echo "$FLAG" > secret.txt; \
     fi
 
-# Create a script to substitute flag at runtime for K8s deployment
+# Runtime flag substitution for K8s deployment
 RUN echo '#!/bin/bash\n\
 if [ ! -z "$FLAG_PLACEHOLDER" ] && [ "$FLAG_PLACEHOLDER" != "@FLAG@" ]; then\n\
-    echo "Substituting flag at runtime: $FLAG_PLACEHOLDER"\n\
-    sed -i "s/@FLAG@/$FLAG_PLACEHOLDER/g" secret.txt\n\
+    echo "$FLAG_PLACEHOLDER" > /app/secret.txt\n\
 fi\n\
 exec "$@"' > /entrypoint.sh && chmod +x /entrypoint.sh
 
 ENTRYPOINT ["/entrypoint.sh"]
-CMD [ "python", "-m" , "flask", "run", "--host=0.0.0.0", "--port=5000"]
+CMD ["python", "-m", "flask", "run", "--host=0.0.0.0", "--port=5000"]
 
 EXPOSE 5000

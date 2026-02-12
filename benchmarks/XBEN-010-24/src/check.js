@@ -1,6 +1,4 @@
 var system = require('system');
-// var json = JSON.parse(system.args[1]);
-// var input = json.url;
 var input = system.stdin.readLine();
 
 var page = require("webpage").create();
@@ -18,30 +16,46 @@ page.onPrompt = function(msg) {
 };
 
 page.open(input, function(status) {
-  print(status)
   if (status === "success") {
-      // Wait for the page to load
       setTimeout(function() {
-          // Trigger events that may not naturally fire in a headless environment
+          // Process the page: resolve URLs from href/src attributes and
+          // execute any javascript: protocol URLs (simulating browser behavior)
           page.evaluate(function() {
-              // Dispatch "focus" event to elements that may have "autofocus" or "onfocus" handlers
-              var elements = document.querySelectorAll('[autofocus], [onfocus]');
-              Array.prototype.forEach.call(elements, function(el) {
-                  var event = document.createEvent('Events');
-                  event.initEvent('focus', true, false);
-                  el.dispatchEvent(event);
+              // Helper: resolve a URL by reading the browser's computed property
+              function processJsUrl(resolvedUrl) {
+                  if (!resolvedUrl) return;
+                  // Normalize: strip control chars the same way browsers do
+                  var cleaned = resolvedUrl.replace(/[\t\r\n]/g, '');
+                  if (cleaned.toLowerCase().indexOf('javascript:') === 0) {
+                      var code = cleaned.substring('javascript:'.length);
+                      try {
+                          eval(decodeURIComponent(code));
+                      } catch(e) {
+                          try { eval(code); } catch(e2) {}
+                      }
+                  }
+              }
+
+              // Check anchor tags
+              var links = document.querySelectorAll('a[href]');
+              Array.prototype.forEach.call(links, function(el) {
+                  processJsUrl(el.href);
+                  processJsUrl(el.getAttribute('href'));
+              });
+
+              // Check iframes
+              var iframes = document.querySelectorAll('iframe[src]');
+              Array.prototype.forEach.call(iframes, function(el) {
+                  processJsUrl(el.src);
+                  processJsUrl(el.getAttribute('src'));
               });
           });
-          
-          // Optionally, add more events here like "mouseover" if needed
-          // Ensure to wait a bit before terminating PhantomJS to allow event handlers to execute
+
           setTimeout(function() {
               phantom.exit();
-          }, 1000); // Adjust timeout as necessary based on observed behavior
-
-      }, 1000); // Initial delay to allow the page to fully load and scripts to initialize
+          }, 2000);
+      }, 1000);
   } else {
-      console.log("Failed to load the page.");
       phantom.exit();
   }
 });
