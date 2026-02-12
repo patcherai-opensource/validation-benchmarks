@@ -1,0 +1,156 @@
+{% extends "base.html" %}
+{% block title %}StreamPark - Dashboard{% endblock %}
+{% block content %}
+<div class="row mb-4">
+    <div class="col-12">
+        <h4><i class="bi bi-speedometer2 me-2"></i>Dashboard</h4>
+        <hr>
+    </div>
+</div>
+
+<div class="row mb-4">
+    <div class="col-md-3">
+        <div class="card text-white" style="background-color: #1890ff;">
+            <div class="card-body">
+                <div class="d-flex justify-content-between">
+                    <div>
+                        <h6 class="card-title">Total Applications</h6>
+                        <h2>{{ apps|length }}</h2>
+                    </div>
+                    <i class="bi bi-diagram-3" style="font-size: 2.5rem; opacity: 0.7;"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card text-white bg-success">
+            <div class="card-body">
+                <div class="d-flex justify-content-between">
+                    <div>
+                        <h6 class="card-title">Running</h6>
+                        <h2>{{ apps|selectattr('state', 'equalto', 1)|list|length }}</h2>
+                    </div>
+                    <i class="bi bi-play-circle" style="font-size: 2.5rem; opacity: 0.7;"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card text-white bg-warning">
+            <div class="card-body">
+                <div class="d-flex justify-content-between">
+                    <div>
+                        <h6 class="card-title">Alert Configs</h6>
+                        <h2>{{ alerts|length }}</h2>
+                    </div>
+                    <i class="bi bi-bell" style="font-size: 2.5rem; opacity: 0.7;"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card text-white bg-info">
+            <div class="card-body">
+                <div class="d-flex justify-content-between">
+                    <div>
+                        <h6 class="card-title">Cluster Mode</h6>
+                        <h2>YARN</h2>
+                    </div>
+                    <i class="bi bi-hdd-rack" style="font-size: 2.5rem; opacity: 0.7;"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-8">
+        <div class="card">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <span><i class="bi bi-diagram-3 me-1"></i>Flink Applications</span>
+            </div>
+            <div class="card-body p-0">
+                <table class="table table-hover mb-0">
+                    <thead class="table-light">
+                        <tr>
+                            <th>ID</th>
+                            <th>Application Name</th>
+                            <th>Execution Mode</th>
+                            <th>State</th>
+                            <th>Created</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for app in apps %}
+                        <tr>
+                            <td>{{ app.id }}</td>
+                            <td><i class="bi bi-file-earmark-code me-1"></i>{{ app.app_name }}</td>
+                            <td>
+                                {% if app.execution_mode == 4 %}
+                                <span class="badge bg-primary">YARN Application</span>
+                                {% elif app.execution_mode == 1 %}
+                                <span class="badge bg-secondary">Local</span>
+                                {% else %}
+                                <span class="badge bg-info">Standalone</span>
+                                {% endif %}
+                            </td>
+                            <td>
+                                {% if app.state == 1 %}
+                                <span class="badge bg-success"><i class="bi bi-circle-fill me-1"></i>Running</span>
+                                {% elif app.state == 0 %}
+                                <span class="badge bg-secondary"><i class="bi bi-circle-fill me-1"></i>Stopped</span>
+                                {% else %}
+                                <span class="badge bg-danger"><i class="bi bi-circle-fill me-1"></i>Failed</span>
+                                {% endif %}
+                            </td>
+                            <td>{{ app.create_time }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card">
+            <div class="card-header">
+                <i class="bi bi-bell me-1"></i>Alert Configurations
+            </div>
+            <div class="card-body">
+                {% if alerts %}
+                    <ul class="list-group list-group-flush">
+                    {% for alert in alerts %}
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            {{ alert.alert_name }}
+                            <span class="badge bg-primary rounded-pill">
+                                {% if alert.alert_type == 1 %}Email
+                                {% elif alert.alert_type == 2 %}DingTalk
+                                {% elif alert.alert_type == 3 %}WeChat
+                                {% elif alert.alert_type == 4 %}HTTP Callback
+                                {% elif alert.alert_type == 5 %}Lark
+                                {% endif %}
+                            </span>
+                        </li>
+                    {% endfor %}
+                    </ul>
+                {% else %}
+                    <p class="text-muted mb-0">No alert configurations yet. <a href="/flink/alert/list">Create one</a></p>
+                {% endif %}
+            </div>
+        </div>
+        <div class="card mt-3">
+            <div class="card-header">
+                <i class="bi bi-info-circle me-1"></i>System Info
+            </div>
+            <div class="card-body">
+                <table class="table table-sm table-borderless mb-0">
+                    <tr><td class="text-muted">Version</td><td>2.1.2</td></tr>
+                    <tr><td class="text-muted">Flink</td><td>1.17.1</td></tr>
+                    <tr><td class="text-muted">Scala</td><td>2.12</td></tr>
+                    <tr><td class="text-muted">Hadoop</td><td>3.3.4</td></tr>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

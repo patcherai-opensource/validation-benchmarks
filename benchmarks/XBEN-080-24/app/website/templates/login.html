@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+{% block title %}StreamPark - Login{% endblock %}
+{% block content %}
+<div class="row justify-content-center" style="min-height: 80vh; align-items: center;">
+    <div class="col-md-4">
+        <div class="card shadow">
+            <div class="card-body p-4">
+                <div class="text-center mb-4">
+                    <i class="bi bi-water" style="font-size: 3rem; color: #1890ff;"></i>
+                    <h3 class="mt-2">Apache StreamPark™</h3>
+                    <p class="text-muted">Stream Processing Platform</p>
+                </div>
+                <form method="POST" action="/user/login">
+                    <div class="mb-3">
+                        <label for="username" class="form-label">Username</label>
+                        <div class="input-group">
+                            <span class="input-group-text"><i class="bi bi-person"></i></span>
+                            <input type="text" class="form-control" id="username" name="username" placeholder="Enter username" required>
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <label for="password" class="form-label">Password</label>
+                        <div class="input-group">
+                            <span class="input-group-text"><i class="bi bi-lock"></i></span>
+                            <input type="password" class="form-control" id="password" name="password" placeholder="Enter password" required>
+                        </div>
+                    </div>
+                    <button type="submit" class="btn w-100" style="background-color: #1890ff; color: white;">Sign In</button>
+                </form>
+            </div>
+        </div>
+        <p class="text-center text-muted mt-3">
+            <small>Apache StreamPark™ 2.1.2 &copy; 2024 The Apache Software Foundation</small>
+        </p>
+    </div>
+</div>
+{% endblock %}
