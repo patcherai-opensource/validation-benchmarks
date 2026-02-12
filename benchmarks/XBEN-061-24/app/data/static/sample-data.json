@@ -1,0 +1,31 @@
+{
+  "products": [
+    {
+      "id": 1,
+      "sku": "WK-001",
+      "name": "Wireless Keyboard",
+      "price": 49.99,
+      "category": "electronics",
+      "description": "Ergonomic wireless keyboard with mechanical switches",
+      "inStock": true
+    },
+    {
+      "id": 2,
+      "sku": "UH-002",
+      "name": "USB-C Hub",
+      "price": 35.00,
+      "category": "electronics",
+      "description": "7-port USB-C hub with 4K HDMI output",
+      "inStock": true
+    },
+    {
+      "id": 3,
+      "sku": "DL-003",
+      "name": "Desk Lamp",
+      "price": 28.50,
+      "category": "office",
+      "description": "LED desk lamp with adjustable brightness",
+      "inStock": false
+    }
+  ]
+}

@@ -1,0 +1,19 @@
+{
+  "name": "app",
+  "version": "9.1.0",
+  "description": "Lightweight API mocking server with template support",
+  "main": "src/server.js",
+  "scripts": {
+    "start": "node src/server.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": ["mock", "api", "server", "template"],
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "express": "^4.18.2",
+    "handlebars": "^4.7.8",
+    "mime-types": "^2.1.35",
+    "uuid": "^9.0.0"
+  }
+}

@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+<head><title>Getting Started - MockAPI</title></head>
+<body>
+<h1>Getting Started with MockAPI</h1>
+<p>MockAPI Server provides a lightweight way to mock REST APIs for development and testing.</p>
+
+<h2>Quick Start</h2>
+<ol>
+  <li>Define your routes in <code>environment.json</code></li>
+  <li>Start the server</li>
+  <li>Send requests to your mock endpoints</li>
+</ol>
+
+<h2>Available Endpoints</h2>
+<ul>
+  <li><code>GET /api/products</code> - List all products</li>
+  <li><code>GET /api/products/:id</code> - Get product by ID</li>
+  <li><code>GET /api/categories</code> - List categories</li>
+  <li><code>POST /api/orders</code> - Create an order</li>
+  <li><code>GET /api/users</code> - List users</li>
+  <li><code>GET /api/static?filename=&lt;file&gt;</code> - Serve static files</li>
+  <li><code>GET /api/docs/:page</code> - View documentation</li>
+  <li><code>GET /api/health</code> - Health check</li>
+</ul>
+
+<h2>Template Helpers</h2>
+<p>MockAPI supports Handlebars templates in response bodies and file paths:</p>
+<ul>
+  <li><code>{{queryParam 'name'}}</code> - Access query parameters</li>
+  <li><code>{{urlParam 'name'}}</code> - Access URL parameters</li>
+  <li><code>{{header 'name'}}</code> - Access request headers</li>
+  <li><code>{{body 'path'}}</code> - Access request body fields</li>
+  <li><code>{{now}}</code> - Current timestamp</li>
+</ul>
+</body>
+</html>

@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+<head><title>API Reference - MockAPI</title></head>
+<body>
+<h1>API Reference</h1>
+
+<h2>Products</h2>
+<h3>GET /api/products</h3>
+<p>Returns a list of all products in the catalog.</p>
+<pre>
+Response: 200 OK
+[
+  {"id": 1, "name": "Wireless Keyboard", "price": 49.99, "category": "electronics"},
+  ...
+]
+</pre>
+
+<h3>GET /api/products/:id</h3>
+<p>Returns details for a specific product.</p>
+<pre>
+Response: 200 OK
+{"id": "1", "name": "Product 1", "price": 29.99, "description": "A high-quality product.", "inStock": true}
+</pre>
+
+<h2>Categories</h2>
+<h3>GET /api/categories</h3>
+<p>Returns available product categories with item counts.</p>
+
+<h2>Orders</h2>
+<h3>POST /api/orders</h3>
+<p>Creates a new order. Returns order confirmation with tracking ID.</p>
+
+<h2>Users</h2>
+<h3>GET /api/users</h3>
+<p>Returns list of registered users.</p>
+
+<h2>Static Files</h2>
+<h3>GET /api/static?filename=&lt;file&gt;</h3>
+<p>Serves static files from the assets directory. Use the <code>filename</code> query parameter to specify the file.</p>
+
+<h2>Health</h2>
+<h3>GET /api/health</h3>
+<p>Returns server health status and version information.</p>
+</body>
+</html>

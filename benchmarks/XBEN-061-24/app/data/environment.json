@@ -1,0 +1,141 @@
+{
+  "uuid": "e8b2c4a1-9f3d-4e5a-b6c7-d8e9f0a1b2c3",
+  "name": "Product Catalog API",
+  "port": 80,
+  "hostname": "0.0.0.0",
+  "endpointPrefix": "api",
+  "latency": 0,
+  "cors": true,
+  "routes": [
+    {
+      "uuid": "a1b2c3d4-e5f6-7890-abcd-ef1234567890",
+      "method": "get",
+      "endpoint": "products",
+      "responses": [
+        {
+          "uuid": "r-001",
+          "statusCode": 200,
+          "label": "Success",
+          "body": "[{\"id\":1,\"name\":\"Wireless Keyboard\",\"price\":49.99,\"category\":\"electronics\"},{\"id\":2,\"name\":\"USB-C Hub\",\"price\":35.00,\"category\":\"electronics\"},{\"id\":3,\"name\":\"Desk Lamp\",\"price\":28.50,\"category\":\"office\"},{\"id\":4,\"name\":\"Notebook Set\",\"price\":12.99,\"category\":\"office\"},{\"id\":5,\"name\":\"Monitor Stand\",\"price\":65.00,\"category\":\"furniture\"}]",
+          "headers": {
+            "X-Request-Id": "{{now}}",
+            "X-Total-Count": "5"
+          },
+          "responseType": "inline"
+        }
+      ]
+    },
+    {
+      "uuid": "b2c3d4e5-f6a7-8901-bcde-f12345678901",
+      "method": "get",
+      "endpoint": "products/:id",
+      "responses": [
+        {
+          "uuid": "r-002",
+          "statusCode": 200,
+          "label": "Product detail",
+          "body": "{\"id\":\"{{urlParam 'id'}}\",\"name\":\"Product {{urlParam 'id'}}\",\"price\":29.99,\"description\":\"A high-quality product.\",\"inStock\":true}",
+          "headers": {},
+          "responseType": "inline"
+        }
+      ]
+    },
+    {
+      "uuid": "c3d4e5f6-a7b8-9012-cdef-123456789012",
+      "method": "get",
+      "endpoint": "categories",
+      "responses": [
+        {
+          "uuid": "r-003",
+          "statusCode": 200,
+          "label": "Categories list",
+          "body": "[{\"id\":1,\"name\":\"electronics\",\"count\":2},{\"id\":2,\"name\":\"office\",\"count\":2},{\"id\":3,\"name\":\"furniture\",\"count\":1}]",
+          "headers": {},
+          "responseType": "inline"
+        }
+      ]
+    },
+    {
+      "uuid": "d4e5f6a7-b8c9-0123-def0-234567890123",
+      "method": "post",
+      "endpoint": "orders",
+      "responses": [
+        {
+          "uuid": "r-004",
+          "statusCode": 201,
+          "label": "Order created",
+          "body": "{\"orderId\":\"ORD-{{now}}\",\"status\":\"pending\",\"message\":\"Order received successfully\"}",
+          "headers": {},
+          "responseType": "inline"
+        }
+      ]
+    },
+    {
+      "uuid": "e5f6a7b8-c9d0-1234-ef01-345678901234",
+      "method": "get",
+      "endpoint": "health",
+      "responses": [
+        {
+          "uuid": "r-005",
+          "statusCode": 200,
+          "label": "Health check",
+          "body": "{\"status\":\"healthy\",\"version\":\"9.1.0\",\"uptime\":\"{{now}}\"}",
+          "headers": {},
+          "responseType": "inline"
+        }
+      ]
+    },
+    {
+      "uuid": "f6a7b8c9-d0e1-2345-f012-456789012345",
+      "method": "get",
+      "endpoint": "static",
+      "responses": [
+        {
+          "uuid": "r-006",
+          "statusCode": 200,
+          "label": "Static file",
+          "filePath": "./static/{{queryParam 'filename'}}",
+          "headers": {},
+          "responseType": "file"
+        }
+      ]
+    },
+    {
+      "uuid": "a7b8c9d0-e1f2-3456-0123-567890123456",
+      "method": "get",
+      "endpoint": "docs/:page",
+      "responses": [
+        {
+          "uuid": "r-007",
+          "statusCode": 200,
+          "label": "Documentation page",
+          "filePath": "./docs/{{urlParam 'page'}}.html",
+          "headers": {},
+          "responseType": "file"
+        }
+      ]
+    },
+    {
+      "uuid": "b8c9d0e1-f2a3-4567-1234-678901234567",
+      "method": "get",
+      "endpoint": "users",
+      "responses": [
+        {
+          "uuid": "r-008",
+          "statusCode": 200,
+          "label": "Users list",
+          "body": "[{\"id\":1,\"name\":\"Alice Johnson\",\"email\":\"alice@example.com\",\"role\":\"admin\"},{\"id\":2,\"name\":\"Bob Smith\",\"email\":\"bob@example.com\",\"role\":\"user\"},{\"id\":3,\"name\":\"Charlie Brown\",\"email\":\"charlie@example.com\",\"role\":\"user\"}]",
+          "headers": {
+            "X-Total-Count": "3"
+          },
+          "responseType": "inline"
+        }
+      ]
+    }
+  ],
+  "proxyMode": false,
+  "tlsOptions": {
+    "enabled": false
+  },
+  "logging": true
+}

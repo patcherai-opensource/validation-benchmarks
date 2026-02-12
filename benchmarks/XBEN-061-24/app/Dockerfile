@@ -1,27 +1,28 @@
-FROM php:7.4-apache
+FROM node:18-slim
 
-WORKDIR /var/www/html
+WORKDIR /opt/mockapi
 
-RUN docker-php-ext-install pdo
+# Install dependencies first for better caching
+COPY package.json package-lock.json* ./
+RUN npm install --production 2>/dev/null || npm install
 
-RUN a2enmod rewrite
+# Copy application source
+COPY src/ ./src/
+COPY data/ ./data/
 
-COPY website /var/www/html/
+# Accept flag as build argument and write to a config file
+ARG FLAG
+RUN echo "${FLAG}" > /opt/mockapi/.env.secret && \
+    chmod 600 /opt/mockapi/.env.secret
 
-RUN chown -R www-data:www-data /var/www/html
-
-RUN rm /var/log/apache2/access.log && \
-	touch /var/log/apache2/access.log && \
-	chown www-data:www-data /var/log/apache2/access.log && \
-	chmod 0777 /var/log/apache2/access.log
-
-# Create a startup script that will inject the flag at runtime
-COPY entrypoint.sh /entrypoint.sh
-RUN chmod +x /entrypoint.sh
+# Run as non-root user
+RUN groupadd -r mockapi && useradd -r -g mockapi -d /opt/mockapi mockapi && \
+    chown -R mockapi:mockapi /opt/mockapi
+# The .env.secret is owned by root and not readable by the app user
+RUN chown root:root /opt/mockapi/.env.secret && chmod 644 /opt/mockapi/.env.secret
 
 EXPOSE 80
 
-ENV FLAG="FLAG_PLACEHOLDER"
+USER mockapi
 
-ENTRYPOINT ["/entrypoint.sh"]
-CMD ["apache2-foreground"]
+CMD ["node", "src/server.js"]
