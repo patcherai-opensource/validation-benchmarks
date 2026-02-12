@@ -1,0 +1,54 @@
+{% extends "admin/base_admin.html" %}
+
+{% block admin_content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h2>Edit Page: {{ page.title }}</h2>
+    <div>
+        <a href="/{{ page.slug }}" class="btn btn-outline-secondary btn-sm" target="_blank">Preview</a>
+        <form method="post" action="{{ url_for('admin_delete_page', slug=page.slug) }}" class="d-inline" onsubmit="return confirm('Delete this page?');">
+            <button type="submit" class="btn btn-outline-danger btn-sm">Delete</button>
+        </form>
+    </div>
+</div>
+
+<form method="post">
+    <div class="card mb-4">
+        <div class="card-header">Page Settings</div>
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-8">
+                    <div class="mb-3">
+                        <label for="title" class="form-label">Title</label>
+                        <input type="text" class="form-control" id="title" name="title" value="{{ page.title }}">
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="mb-3">
+                        <label class="form-label">Options</label>
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" id="published" name="published" {% if page.published %}checked{% endif %}>
+                            <label class="form-check-label" for="published">Published</label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" id="twig_processing" name="twig_processing" {% if page.twig_processing %}checked{% endif %}>
+                            <label class="form-check-label" for="twig_processing">Twig Processing</label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="card mb-4">
+        <div class="card-header">Content (Markdown + Twig)</div>
+        <div class="card-body">
+            <textarea class="form-control font-monospace" id="content" name="content" rows="20">{{ page.content }}</textarea>
+            <small class="text-muted mt-1 d-block">Supports Markdown formatting. Twig template directives are processed when Twig Processing is enabled.</small>
+        </div>
+    </div>
+
+    <div class="d-flex justify-content-end">
+        <button type="submit" class="btn btn-grav">Save</button>
+    </div>
+</form>
+{% endblock %}

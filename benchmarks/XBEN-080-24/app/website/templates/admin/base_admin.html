@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin - {{ site_title | default('Grav') }}</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body { background-color: #323640; color: #ccc; }
+        .sidebar { background-color: #2e3138; min-height: 100vh; padding-top: 1rem; }
+        .sidebar a { color: #9ca0a8; text-decoration: none; padding: 0.5rem 1rem; display: block; }
+        .sidebar a:hover, .sidebar a.active { color: #fff; background-color: #3d4049; }
+        .content-area { background-color: #f5f7fa; color: #333; min-height: 100vh; padding: 2rem; }
+        .admin-header { background-color: #2e3138; padding: 0.75rem 1.5rem; border-bottom: 1px solid #444; }
+        .admin-header a { color: #9ca0a8; }
+        .btn-grav { background-color: #4a8eff; border: none; color: #fff; }
+        .btn-grav:hover { background-color: #3a7eef; color: #fff; }
+    </style>
+</head>
+<body>
+    <div class="admin-header d-flex justify-content-between align-items-center">
+        <div>
+            <strong class="text-white">Grav</strong>
+            <span class="text-muted ms-2">Admin Panel</span>
+        </div>
+        <div>
+            <span class="text-muted me-3">{{ session.get('fullname', '') }}</span>
+            <a href="{{ url_for('admin_logout') }}">Logout</a>
+            <a href="/" class="ms-3">View Site</a>
+        </div>
+    </div>
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-2 sidebar p-0">
+                <div class="py-3">
+                    <a href="{{ url_for('admin_pages') }}" class="{% if request.path.startswith('/admin/pages') or request.path == '/admin' %}active{% endif %}">
+                        📄 Pages
+                    </a>
+                    <a href="{{ url_for('admin_config') }}" class="{% if request.path.startswith('/admin/config') %}active{% endif %}">
+                        ⚙️ Configuration
+                    </a>
+                </div>
+            </div>
+            <div class="col-md-10 content-area">
+                {% with messages = get_flashed_messages(with_categories=true) %}
+                {% if messages %}
+                    {% for category, message in messages %}
+                    <div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
+                        {{ message }}
+                        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                    </div>
+                    {% endfor %}
+                {% endif %}
+                {% endwith %}
+                {% block admin_content %}{% endblock %}
+            </div>
+        </div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

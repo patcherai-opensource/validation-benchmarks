@@ -1,0 +1,25 @@
+{% extends "admin/base_admin.html" %}
+
+{% block admin_content %}
+<h2 class="mb-4">System Configuration</h2>
+
+<div class="card">
+    <div class="card-header">system.yaml (read-only)</div>
+    <div class="card-body">
+        <p class="text-muted">Configuration can only be modified by administrators with config access.</p>
+        <table class="table table-sm">
+            <thead>
+                <tr><th>Key</th><th>Value</th></tr>
+            </thead>
+            <tbody>
+                {% for key, value in config.items() %}
+                <tr>
+                    <td><code>{{ key }}</code></td>
+                    <td>{{ value }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}
