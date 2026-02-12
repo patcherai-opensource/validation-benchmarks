@@ -2,40 +2,211 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta http-equiv="refresh" content="5">
-    <title>Server Processes</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tabby Connection Manager</title>
     <style>
-        body { font-family: Arial, sans-serif; }
-        table { width: 100%; border-collapse: collapse; }
-        th, td { border: 1px solid #ddd; padding: 8px; text-align: left; }
-        th { background-color: #f2f2f2; }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: #1e1e2e; color: #cdd6f4; min-height: 100vh; }
+        .header { background: #181825; border-bottom: 1px solid #313244; padding: 16px 24px; display: flex; align-items: center; justify-content: space-between; }
+        .header h1 { font-size: 18px; font-weight: 600; color: #cba6f7; }
+        .header .version { font-size: 12px; color: #6c7086; }
+        .container { max-width: 1200px; margin: 0 auto; padding: 24px; }
+        .card { background: #181825; border: 1px solid #313244; border-radius: 8px; padding: 20px; margin-bottom: 16px; }
+        .card h2 { font-size: 14px; font-weight: 600; color: #a6adc8; margin-bottom: 12px; text-transform: uppercase; letter-spacing: 0.5px; }
+        .conn-list { list-style: none; }
+        .conn-item { display: flex; align-items: center; justify-content: space-between; padding: 12px; border: 1px solid #313244; border-radius: 6px; margin-bottom: 8px; background: #1e1e2e; }
+        .conn-item .info { flex: 1; }
+        .conn-item .name { font-weight: 600; color: #cdd6f4; }
+        .conn-item .details { font-size: 13px; color: #6c7086; margin-top: 2px; }
+        .conn-item .actions { display: flex; gap: 8px; }
+        button { padding: 8px 16px; border: none; border-radius: 6px; cursor: pointer; font-size: 13px; font-weight: 500; transition: background 0.2s; }
+        .btn-primary { background: #cba6f7; color: #1e1e2e; }
+        .btn-primary:hover { background: #b4befe; }
+        .btn-danger { background: #f38ba8; color: #1e1e2e; }
+        .btn-danger:hover { background: #eba0ac; }
+        .btn-secondary { background: #313244; color: #cdd6f4; }
+        .btn-secondary:hover { background: #45475a; }
+        .btn-test { background: #a6e3a1; color: #1e1e2e; }
+        .btn-test:hover { background: #94e2d5; }
+        input, select { width: 100%; padding: 10px 12px; background: #1e1e2e; border: 1px solid #313244; border-radius: 6px; color: #cdd6f4; font-size: 14px; margin-bottom: 10px; }
+        input:focus { outline: none; border-color: #cba6f7; }
+        .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+        label { display: block; font-size: 12px; color: #a6adc8; margin-bottom: 4px; text-transform: uppercase; }
+        .result-panel { background: #11111b; border: 1px solid #313244; border-radius: 6px; padding: 16px; margin-top: 12px; font-family: 'Courier New', monospace; font-size: 13px; white-space: pre-wrap; display: none; max-height: 400px; overflow-y: auto; }
+        .result-panel.visible { display: block; }
+        .status-badge { display: inline-block; padding: 2px 8px; border-radius: 10px; font-size: 11px; font-weight: 600; }
+        .status-ok { background: #a6e3a1; color: #1e1e2e; }
+        .status-err { background: #f38ba8; color: #1e1e2e; }
+        .tabs { display: flex; gap: 4px; margin-bottom: 16px; }
+        .tab { padding: 8px 16px; border-radius: 6px 6px 0 0; background: #313244; color: #a6adc8; cursor: pointer; font-size: 13px; border: none; }
+        .tab.active { background: #181825; color: #cba6f7; }
+        .tab-content { display: none; }
+        .tab-content.active { display: block; }
     </style>
 </head>
 <body>
-    <h1>Server Processes</h1>
-    <table>
-        <tr>
-            <th>USER</th>
-            <th>PID</th>
-            <th>%CPU</th>
-            <th>%MEM</th>
-            <th>VSZ</th>
-            <th>RSS</th>
-            <th>TTY</th>
-            <th>STAT</th>
-            <th>START</th>
-            <th>TIME</th>
-            <th>COMMAND</th>
-        </tr>
-        {% for process in processes %}
-        <tr>
-            {% for item in process.split() %}
-            <td>{{ item }}</td>
-            {% endfor %}
-        </tr>
-        {% endfor %}
-    </table>
-    <a href="/source" style="font-size: small;">View Source Code</a>
+    <div class="header">
+        <h1>⬡ Tabby Connection Manager</h1>
+        <span class="version" id="version-info"></span>
+    </div>
+    <div class="container">
+        <div class="tabs">
+            <button class="tab active" onclick="switchTab('connections')">Connections</button>
+            <button class="tab" onclick="switchTab('new')">New Connection</button>
+            <button class="tab" onclick="switchTab('hosts')">Known Hosts</button>
+        </div>
+
+        <div id="tab-connections" class="tab-content active">
+            <div class="card">
+                <h2>Saved Connections</h2>
+                <ul class="conn-list" id="conn-list"></ul>
+            </div>
+            <div id="test-result" class="result-panel"></div>
+        </div>
+
+        <div id="tab-new" class="tab-content">
+            <div class="card">
+                <h2>New SSH Connection</h2>
+                <div class="form-row">
+                    <div>
+                        <label>Name</label>
+                        <input type="text" id="new-name" placeholder="My Server">
+                    </div>
+                    <div>
+                        <label>Group</label>
+                        <input type="text" id="new-group" placeholder="Default" value="Default">
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div>
+                        <label>Hostname</label>
+                        <input type="text" id="new-hostname" placeholder="192.168.1.100">
+                    </div>
+                    <div>
+                        <label>Port</label>
+                        <input type="number" id="new-port" value="22">
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div>
+                        <label>Username</label>
+                        <input type="text" id="new-username" placeholder="root">
+                    </div>
+                    <div>
+                        <label>Password</label>
+                        <input type="password" id="new-password">
+                    </div>
+                </div>
+                <button class="btn-primary" onclick="createConnection()">Save Connection</button>
+            </div>
+        </div>
+
+        <div id="tab-hosts" class="tab-content">
+            <div class="card">
+                <h2>Known Host Keys</h2>
+                <ul class="conn-list" id="hosts-list"></ul>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function switchTab(name) {
+            document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+            document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+            event.target.classList.add('active');
+            document.getElementById('tab-' + name).classList.add('active');
+            if (name === 'hosts') loadKnownHosts();
+        }
+
+        async function loadConnections() {
+            const res = await fetch('/api/connections');
+            const data = await res.json();
+            const list = document.getElementById('conn-list');
+            list.innerHTML = '';
+            data.forEach(c => {
+                const li = document.createElement('li');
+                li.className = 'conn-item';
+                li.innerHTML = `
+                    <div class="info">
+                        <div class="name">${c.name}</div>
+                        <div class="details">${c.username}@${c.hostname}:${c.port} · ${c.group || 'Default'}</div>
+                    </div>
+                    <div class="actions">
+                        <button class="btn-test" onclick="testConnection('${c.id}')">Test</button>
+                        <button class="btn-danger" onclick="deleteConnection('${c.id}')">Delete</button>
+                    </div>
+                `;
+                list.appendChild(li);
+            });
+        }
+
+        async function testConnection(id) {
+            const panel = document.getElementById('test-result');
+            panel.className = 'result-panel visible';
+            panel.textContent = 'Testing connection...';
+            try {
+                const res = await fetch(`/api/connections/${id}/test`, { method: 'POST', headers: {'Content-Type': 'application/json'}, body: '{}' });
+                const data = await res.json();
+                panel.textContent = JSON.stringify(data, null, 2);
+            } catch(e) {
+                panel.textContent = 'Error: ' + e.message;
+            }
+        }
+
+        async function createConnection() {
+            const payload = {
+                name: document.getElementById('new-name').value,
+                hostname: document.getElementById('new-hostname').value,
+                port: parseInt(document.getElementById('new-port').value),
+                username: document.getElementById('new-username').value,
+                password: document.getElementById('new-password').value,
+                group: document.getElementById('new-group').value
+            };
+            await fetch('/api/connections', { method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify(payload) });
+            switchTab('connections');
+            document.querySelector('.tab').click();
+            loadConnections();
+        }
+
+        async function deleteConnection(id) {
+            await fetch(`/api/connections/${id}`, { method: 'DELETE' });
+            loadConnections();
+        }
+
+        async function loadKnownHosts() {
+            const res = await fetch('/api/known-hosts');
+            const data = await res.json();
+            const list = document.getElementById('hosts-list');
+            list.innerHTML = '';
+            data.forEach(h => {
+                const li = document.createElement('li');
+                li.className = 'conn-item';
+                li.innerHTML = `
+                    <div class="info">
+                        <div class="name">${h.hostname}:${h.port}</div>
+                        <div class="details">${h.key_type} · ${h.fingerprint} · First seen: ${h.first_seen || 'unknown'}</div>
+                    </div>
+                    <div class="actions">
+                        <button class="btn-danger" onclick="removeHost('${h.hostname}', ${h.port})">Remove</button>
+                    </div>
+                `;
+                list.appendChild(li);
+            });
+        }
+
+        async function removeHost(hostname, port) {
+            await fetch(`/api/known-hosts/${hostname}/${port}`, { method: 'DELETE' });
+            loadKnownHosts();
+        }
+
+        async function loadStatus() {
+            const res = await fetch('/api/status');
+            const data = await res.json();
+            document.getElementById('version-info').textContent = `v${data.version} · ${data.ssh_backend} · ${data.connections} connections`;
+        }
+
+        loadConnections();
+        loadStatus();
+    </script>
 </body>
 </html>
-

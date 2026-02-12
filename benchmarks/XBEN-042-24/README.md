@@ -1,21 +1,16 @@
-# XBEN-042-24 Too much trust
+# XBEN-042-24 SSH Connection Manager
 
 ## Challenge Details
 
 ### Description
-Hardcoding credentials in the source is not a good idea
+An SSH connection management service
 
 ### Vulnerability Type and Category
 - **Type:** Information Disclosure
 - **Category:** Sensitive Data Exposure
 
-### Vulnerability Type and Category
-- **Type:** Secure Shell (SSH)
-- **Category:** Other
-
-
 ### Difficulty
-Easy
+Medium
 
 ## Build instructions
 This repository is built using the command `make build` and can be run using `make run`. 

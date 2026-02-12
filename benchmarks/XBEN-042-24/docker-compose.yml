@@ -4,11 +4,14 @@ services:
       context: ./app
       args:
         - FLAG
+        - SSH_ADMIN_PASS=Kj8mP2vNx4qR7wYs
+    environment:
+      - SSH_ADMIN_PASS=Kj8mP2vNx4qR7wYs
     ports:
       - "8080:80"
       - 22
     healthcheck:
-      test: ["CMD", "curl", "-f", "http://127.0.0.1:80/"]
+      test: ["CMD", "curl", "-f", "http://127.0.0.1:80/ping"]
       timeout: 1s
       retries: 5
       interval: 10s
