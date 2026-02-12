@@ -1,2 +1,6 @@
-Flask==1.1.4
-phantomjs
+Flask==2.3.3
+Werkzeug==2.3.7
+lxml==4.9.4
+lxml-html-clean==0.3.1
+Jinja2==3.1.2
+MarkupSafe==2.1.3
