@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MathDoc - Upload</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-brand">MathDoc</div>
+        <div class="nav-links">
+            <a href="{{ url_for('dashboard') }}">Dashboard</a>
+            <a href="{{ url_for('list_documents') }}">Documents</a>
+            <a href="{{ url_for('upload_mathml') }}" class="active">Upload</a>
+            <a href="{{ url_for('logout') }}">Sign Out</a>
+        </div>
+    </nav>
+    <div class="main-content">
+        <div class="page-header">
+            <h2>Upload MathML Document</h2>
+        </div>
+        {% if error %}
+        <div class="alert alert-error">{{ error }}</div>
+        {% endif %}
+        <form method="post" enctype="multipart/form-data" class="upload-form">
+            <div class="form-group">
+                <label for="title">Document Title</label>
+                <input type="text" id="title" name="title" placeholder="Enter document title">
+            </div>
+            <div class="form-group">
+                <label for="file">MathML File (.xml, .mathml, .mml)</label>
+                <input type="file" id="file" name="file" accept=".xml,.mathml,.mml">
+            </div>
+            <button type="submit" class="btn btn-primary">Upload &amp; Process</button>
+        </form>
+
+        <div class="section">
+            <h3>API Reference</h3>
+            <div class="api-docs">
+                <div class="api-endpoint">
+                    <code>POST /api/v1/mathml/render</code>
+                    <p>Render MathML content to HTML. Send raw MathML XML in the request body with Content-Type: application/xml.</p>
+                </div>
+                <div class="api-endpoint">
+                    <code>POST /api/v1/documents</code>
+                    <p>Create a new document. Form parameters: title, mathml (MathML content as string).</p>
+                </div>
+                <div class="api-endpoint">
+                    <code>GET /api/v1/documents/&lt;id&gt;</code>
+                    <p>Retrieve document metadata and rendered preview.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

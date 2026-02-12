@@ -11,12 +11,17 @@ COPY . /app
 
 WORKDIR /app
 
-# Create a placeholder flag file (will be overwritten by environment variable at runtime)
-RUN echo -n "CTF{placeholder_flag}" > /app/flag.txt
+# Accept flag at build time and store as service license key
+ARG FLAG="CTF{placeholder_flag}"
+RUN mkdir -p /opt/mathml-service/config && \
+    echo -n "${FLAG}" > /opt/mathml-service/config/license.key && \
+    chmod 644 /opt/mathml-service/config/license.key
 
-# Health check for K8s compatibility
-HEALTHCHECK --interval=10s --timeout=1s --retries=5 \
-    CMD curl -f http://127.0.0.1:80/ || exit 1
+# Clean up any development artifacts
+RUN rm -f /app/flag.txt
+
+HEALTHCHECK --interval=10s --timeout=5s --retries=10 \
+    CMD curl -f http://127.0.0.1:80/api/v1/health || exit 1
 
 EXPOSE 80
 
