@@ -21,9 +21,9 @@ COPY . .
 
 ARG FLAG
 
-RUN sed -i s/@FLAG@/$FLAG/g secret.txt
+RUN sed -i "s/@FLAG@/$FLAG/g" secret.txt && \
+    chmod 600 secret.txt
 
-# Add health check
 HEALTHCHECK --interval=10s --timeout=5s --start-period=30s --retries=3 \
     CMD python -c "import urllib2; urllib2.urlopen('http://localhost:5000/', timeout=5)" || exit 1
 

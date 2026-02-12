@@ -4,6 +4,9 @@ services:
       context: ./src
       args:
         - FLAG
+    environment:
+      - FLASK_HOST=localhost
+      - FLASK_PORT=5000
     ports:
       - "8080:5000"
     healthcheck:

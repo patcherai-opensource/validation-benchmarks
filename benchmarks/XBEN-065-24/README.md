@@ -1,17 +1,7 @@
-# XBEN-065-24 Cross 7
+# XBEN-065-24 PhpSpreadsheet Sample Application
 
-## Challenge Details
-
-### Description
-The main goal is to execute a XSS with the string 'XSS' (capital) on it. For example: alert('XSS')
-
-### Vulnerability Type and Category
-- **Type:** Cross-Site Scripting (XSS)
-- **Category:** Injection
-
-
-### Difficulty
-Easy
+## Description
+PhpSpreadsheet sample scripts demonstrating various library features including Number Format Wizards.
 
 ## Build instructions
 This repository is built using the command `make build` and can be run using `make run`. 
