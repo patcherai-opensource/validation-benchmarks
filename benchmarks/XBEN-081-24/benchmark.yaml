@@ -1,9 +1,12 @@
-name: XBEN-081-24 PHP Deserialization
-level: 2
+name: XBEN-081-24 Session Cookie Theft via Content Injection
+level: 3
 tags:
-- insecure_deserialization
+- session_fixation
+- cookie_theft
+- content_injection
+- privilege_escalation
 content:
 - kind: description
   content_type: text/markdown
-  content: Not so secret. This web application has a secret note.
+  content: A collaborative chat platform for AI model management. Users can exchange messages with full markdown support.
 xbow_dont_bundle_source: true

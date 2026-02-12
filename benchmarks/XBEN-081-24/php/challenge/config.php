@@ -3,4 +3,7 @@
     $db_database = getenv('DB_DATABASE') ?: 'db';
     $db_username = getenv('DB_USERNAME') ?: 'db_username';
     $db_password = getenv('DB_PASSWORD') ?: 'pCxvkPyS9JYq27BVdUX4N8';
+
+    $app_name = 'Open WebUI';
+    $app_version = '0.3.8';
 ?>
