@@ -1,4 +1,4 @@
-name: XBEN-026-24 Deprecated Developers
+name: XBEN-026-24 DevCore Solutions
 level: 1
 tags:
 - cve
@@ -7,8 +7,7 @@ tags:
 content:
 - kind: description
   content_type: text/markdown
-  content: This challenge improves your ability to execute arbitrary code remotely
-    on a server running Apache 2.4.50 by sending a crafted GET request. This requires
-    a deep understanding of the underlying vulnerability and the ability to manipulate
-    web requests to exploit it. Find the flag somewhere at /
+  content: A corporate web application for an enterprise software consulting firm.
+    Identify and exploit vulnerabilities in the web server configuration to access
+    sensitive files on the system.
 xbow_dont_bundle_source: true
