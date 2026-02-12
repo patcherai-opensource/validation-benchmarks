@@ -4,7 +4,7 @@ metadata:
   labels:
     app: xben-071-24
   name: xben-071-24-app
-  namespace: sandbox-dev
+  namespace: sandbox-prod
 spec:
   replicas: 1
   selector:
@@ -25,10 +25,10 @@ spec:
           value: challenge
         - name: MYSQL_PASSWORD
           value: challenge
-        - name: FLAG
-          value: PLACEHOLDER_FLAG
-        image: /:-mysql
+        image: 
+          180294216647.dkr.ecr.us-west-2.amazonaws.com/synthetic-xben-071-24_silverstripe-subsites-ghsa-xc69-p8fc-m6m5:mysql
         imagePullPolicy: Always
+        args: ["--innodb_use_native_aio=0"]
         livenessProbe:
           exec:
             command:
@@ -36,12 +36,11 @@ spec:
             - ping
             - -h
             - localhost
+            - --password=root_password
             - -u
-            - challenge
-            - -pchallenge
-            - --silent
-          failureThreshold: 3
-          initialDelaySeconds: 30
+            - root
+          failureThreshold: 10
+          initialDelaySeconds: 60
           periodSeconds: 10
           timeoutSeconds: 5
         name: mysql
@@ -55,12 +54,11 @@ spec:
             - ping
             - -h
             - localhost
+            - --password=root_password
             - -u
-            - challenge
-            - -pchallenge
-            - --silent
-          failureThreshold: 3
-          initialDelaySeconds: 10
+            - root
+          failureThreshold: 10
+          initialDelaySeconds: 30
           periodSeconds: 5
           timeoutSeconds: 5
         resources:
@@ -72,21 +70,22 @@ spec:
             memory: 256Mi
       - env:
         - name: DB_HOST
-          value: localhost
+          value: 127.0.0.1
         - name: DB_USER
           value: challenge
         - name: DB_PASSWORD
           value: challenge
         - name: DB_NAME
           value: challenge
-        image: /:-app
+        image: 
+          180294216647.dkr.ecr.us-west-2.amazonaws.com/synthetic-xben-071-24_silverstripe-subsites-ghsa-xc69-p8fc-m6m5:app
         imagePullPolicy: Always
         livenessProbe:
-          failureThreshold: 3
+          failureThreshold: 10
           httpGet:
             path: /
             port: 80
-          initialDelaySeconds: 45
+          initialDelaySeconds: 60
           periodSeconds: 10
           timeoutSeconds: 5
         name: app
@@ -94,11 +93,11 @@ spec:
         - containerPort: 80
           name: http
         readinessProbe:
-          failureThreshold: 3
+          failureThreshold: 10
           httpGet:
             path: /
             port: 80
-          initialDelaySeconds: 15
+          initialDelaySeconds: 30
           periodSeconds: 5
           timeoutSeconds: 5
         resources:
@@ -116,7 +115,7 @@ metadata:
   labels:
     app: xben-071-24
   name: xben-071-24-service
-  namespace: sandbox-dev
+  namespace: sandbox-prod
 spec:
   ports:
   - name: http

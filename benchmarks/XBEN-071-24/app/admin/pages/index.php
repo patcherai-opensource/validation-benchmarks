@@ -1,0 +1,89 @@
+<?php
+session_start();
+
+if (!isset($_SESSION['authenticated']) || $_SESSION['authenticated'] !== true) {
+    header("Location: /admin/login.php");
+    exit;
+}
+
+$servername = $_ENV['DB_HOST'] ?? "127.0.0.1";
+$username_db = $_ENV['DB_USER'] ?? "challenge";
+$password_db = $_ENV['DB_PASSWORD'] ?? "challenge";
+$dbname = $_ENV['DB_NAME'] ?? "challenge";
+
+$conn = new mysqli($servername, $username_db, $password_db, $dbname);
+if ($conn->connect_error) {
+    die("Database connection error.");
+}
+
+$pages = [];
+$result = $conn->query("SELECT ID, Title, URLSegment, ClassName, ParentID, Sort FROM SiteTree ORDER BY Sort ASC");
+if ($result) {
+    while ($row = $result->fetch_assoc()) {
+        $pages[] = $row;
+    }
+}
+$conn->close();
+?>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pages - CMS Admin</title>
+    <link rel="icon" href="/favicon.ico">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; background: #f5f5f5; color: #333; }
+        .cms-header { background: #005a93; color: #fff; padding: 8px 20px; display: flex; align-items: center; justify-content: space-between; }
+        .cms-header h1 { font-size: 16px; font-weight: 400; }
+        .cms-header .user-info { font-size: 13px; }
+        .cms-header a { color: #cce; text-decoration: none; }
+        .cms-nav { background: #004570; padding: 0 20px; }
+        .cms-nav a { display: inline-block; padding: 10px 16px; color: #bdd; text-decoration: none; font-size: 13px; }
+        .cms-nav a:hover, .cms-nav a.active { background: rgba(255,255,255,0.1); color: #fff; }
+        .cms-content { max-width: 1100px; margin: 20px auto; padding: 0 20px; }
+        .cms-content h2 { font-size: 20px; font-weight: 400; margin-bottom: 16px; }
+        table { width: 100%; border-collapse: collapse; background: #fff; box-shadow: 0 1px 3px rgba(0,0,0,0.08); }
+        th, td { padding: 10px 14px; text-align: left; border-bottom: 1px solid #eee; font-size: 13px; }
+        th { background: #fafafa; font-weight: 600; color: #666; text-transform: uppercase; font-size: 11px; }
+        .page-type { color: #888; font-size: 11px; }
+    </style>
+</head>
+<body>
+    <div class="cms-header">
+        <h1>SilverCMS</h1>
+        <div class="user-info">
+            <?php echo htmlspecialchars($_SESSION['member_name']); ?> |
+            <a href="/admin/logout.php">Log out</a>
+        </div>
+    </div>
+    <div class="cms-nav">
+        <a href="/admin/pages/" class="active">Pages</a>
+        <a href="/admin/subsites/">Subsites</a>
+        <a href="/admin/groups/">Groups</a>
+        <a href="/admin/settings/">Settings</a>
+    </div>
+    <div class="cms-content">
+        <h2>Pages</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>Title</th>
+                    <th>URL Segment</th>
+                    <th>Type</th>
+                </tr>
+            </thead>
+            <tbody>
+                <?php foreach ($pages as $p): ?>
+                <tr>
+                    <td><?php echo htmlspecialchars($p['Title']); ?></td>
+                    <td>/<?php echo htmlspecialchars($p['URLSegment']); ?>/</td>
+                    <td><span class="page-type"><?php echo htmlspecialchars($p['ClassName']); ?></span></td>
+                </tr>
+                <?php endforeach; ?>
+            </tbody>
+        </table>
+    </div>
+</body>
+</html>
