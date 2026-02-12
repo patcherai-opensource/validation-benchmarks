@@ -1,0 +1,26 @@
+{% extends "admin/base_admin.html" %}
+{% block title %}Preview - {{ page.title }}{% endblock %}
+{% block content %}
+<div class="page-header d-flex justify-content-between align-items-center">
+    <h2>Preview: {{ page.title }}</h2>
+    <a href="{{ url_for('admin_page_edit', page_id=page.id) }}" class="btn btn-outline-secondary">Back to Editor</a>
+</div>
+
+{% if error_msg %}
+<div class="alert alert-warning">
+    <strong>Template Processing Error:</strong> {{ error_msg }}
+</div>
+{% endif %}
+
+<div class="card">
+    <div class="card-header">
+        Rendered Output
+        {% if page.process_twig %}<span class="badge bg-info ms-2">Twig Processing Active</span>{% endif %}
+    </div>
+    <div class="card-body">
+        <div class="preview-content">
+            {{ rendered_content | safe }}
+        </div>
+    </div>
+</div>
+{% endblock %}

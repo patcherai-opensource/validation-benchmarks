@@ -1,0 +1,56 @@
+{% extends "admin/base_admin.html" %}
+{% block title %}Pages{% endblock %}
+{% block content %}
+<div class="page-header d-flex justify-content-between align-items-center">
+    <h2>Pages</h2>
+    <a href="{{ url_for('admin_page_new') }}" class="btn btn-primary">+ Add Page</a>
+</div>
+
+<div class="card">
+    <div class="card-body">
+        <table class="table table-hover">
+            <thead>
+                <tr>
+                    <th>Title</th>
+                    <th>Slug</th>
+                    <th>Template</th>
+                    <th>Category</th>
+                    <th>Status</th>
+                    <th>Twig Processing</th>
+                    <th>Updated</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for page in pages %}
+                <tr>
+                    <td><a href="{{ url_for('admin_page_edit', page_id=page.id) }}">{{ page.title }}</a></td>
+                    <td><code>/{{ page.slug }}</code></td>
+                    <td>{{ page.template }}</td>
+                    <td>{{ page.category }}</td>
+                    <td>
+                        {% if page.published %}
+                        <span class="badge bg-success">Published</span>
+                        {% else %}
+                        <span class="badge bg-warning text-dark">Draft</span>
+                        {% endif %}
+                    </td>
+                    <td>
+                        {% if page.process_twig %}
+                        <span class="badge bg-info">Enabled</span>
+                        {% else %}
+                        <span class="text-muted">Disabled</span>
+                        {% endif %}
+                    </td>
+                    <td>{{ page.updated_at.strftime('%Y-%m-%d %H:%M') if page.updated_at else '-' }}</td>
+                    <td>
+                        <a href="{{ url_for('admin_page_edit', page_id=page.id) }}" class="btn btn-sm btn-outline-primary">Edit</a>
+                        <a href="{{ url_for('view_page', slug=page.slug) }}" class="btn btn-sm btn-outline-secondary" target="_blank">View</a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

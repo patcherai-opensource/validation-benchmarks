@@ -1,0 +1,85 @@
+{% extends "admin/base_admin.html" %}
+{% block title %}Dashboard{% endblock %}
+{% block content %}
+<div class="page-header">
+    <h2>Dashboard</h2>
+</div>
+
+<div class="row mb-4">
+    <div class="col-md-3">
+        <div class="card text-white bg-primary">
+            <div class="card-body">
+                <h5 class="card-title">{{ pages|length }}</h5>
+                <p class="card-text">Total Pages</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card text-white bg-success">
+            <div class="card-body">
+                <h5 class="card-title">{{ total_published }}</h5>
+                <p class="card-text">Published</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card text-white bg-warning">
+            <div class="card-body">
+                <h5 class="card-title">{{ total_drafts }}</h5>
+                <p class="card-text">Drafts</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card text-white bg-info">
+            <div class="card-body">
+                <h5 class="card-title">v1.7.42</h5>
+                <p class="card-text">Grav Version</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="card">
+    <div class="card-header d-flex justify-content-between align-items-center">
+        <span>Recent Pages</span>
+        <a href="{{ url_for('admin_page_new') }}" class="btn btn-sm btn-primary">+ New Page</a>
+    </div>
+    <div class="card-body">
+        <table class="table table-hover">
+            <thead>
+                <tr>
+                    <th>Title</th>
+                    <th>Slug</th>
+                    <th>Status</th>
+                    <th>Twig</th>
+                    <th>Updated</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for page in pages[:10] %}
+                <tr>
+                    <td><a href="{{ url_for('admin_page_edit', page_id=page.id) }}">{{ page.title }}</a></td>
+                    <td><code>/{{ page.slug }}</code></td>
+                    <td>
+                        {% if page.published %}
+                        <span class="badge badge-published bg-success">Published</span>
+                        {% else %}
+                        <span class="badge badge-draft bg-warning text-dark">Draft</span>
+                        {% endif %}
+                    </td>
+                    <td>
+                        {% if page.process_twig %}
+                        <span class="badge bg-info">Enabled</span>
+                        {% else %}
+                        <span class="text-muted">-</span>
+                        {% endif %}
+                    </td>
+                    <td>{{ page.updated_at.strftime('%Y-%m-%d %H:%M') if page.updated_at else '-' }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

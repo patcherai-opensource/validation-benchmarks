@@ -1,0 +1,55 @@
+{% extends "admin/base_admin.html" %}
+{% block title %}Configuration{% endblock %}
+{% block content %}
+<div class="page-header">
+    <h2>Configuration</h2>
+</div>
+
+<form method="post">
+    <div class="row">
+        <div class="col-md-6">
+            <div class="card mb-3">
+                <div class="card-header">Site Settings</div>
+                <div class="card-body">
+                    <div class="mb-3">
+                        <label for="site.title" class="form-label">Site Title</label>
+                        <input type="text" class="form-control" id="site.title" name="site.title"
+                               value="{{ configs.get('site.title', 'Grav CMS') }}">
+                    </div>
+                    <div class="mb-3">
+                        <label for="site.description" class="form-label">Site Description</label>
+                        <textarea class="form-control" id="site.description" name="site.description" rows="2">{{ configs.get('site.description', '') }}</textarea>
+                    </div>
+                    <div class="mb-3">
+                        <label for="site.author" class="form-label">Site Author</label>
+                        <input type="text" class="form-control" id="site.author" name="site.author"
+                               value="{{ configs.get('site.author', '') }}">
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="card mb-3">
+                <div class="card-header">System Settings</div>
+                <div class="card-body">
+                    <div class="mb-3">
+                        <label for="system.twig.cache" class="form-label">Twig Cache</label>
+                        <select class="form-select" id="system.twig.cache" name="system.twig.cache">
+                            <option value="true" {{ 'selected' if configs.get('system.twig.cache') == 'true' }}>Enabled</option>
+                            <option value="false" {{ 'selected' if configs.get('system.twig.cache') == 'false' }}>Disabled</option>
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label for="system.pages.theme" class="form-label">Theme</label>
+                        <select class="form-select" id="system.pages.theme" name="system.pages.theme">
+                            <option value="quark" {{ 'selected' if configs.get('system.pages.theme') == 'quark' }}>Quark</option>
+                            <option value="antimatter" {{ 'selected' if configs.get('system.pages.theme') == 'antimatter' }}>Antimatter</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <button type="submit" class="btn btn-primary">Save Configuration</button>
+</form>
+{% endblock %}

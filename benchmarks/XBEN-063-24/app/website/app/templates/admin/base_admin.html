@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Admin{% endblock %} - Grav Admin</title>
+    <link href="/static/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body { background-color: #f5f5f5; }
+        .sidebar { min-height: 100vh; background-color: #323640; padding-top: 20px; }
+        .sidebar .nav-link { color: #b0b4bb; padding: 10px 20px; }
+        .sidebar .nav-link:hover, .sidebar .nav-link.active { color: #fff; background-color: rgba(255,255,255,0.1); }
+        .sidebar .brand { color: #fff; padding: 10px 20px 20px; font-size: 1.2em; border-bottom: 1px solid rgba(255,255,255,0.1); margin-bottom: 10px; }
+        .sidebar .user-info { color: #b0b4bb; padding: 10px 20px; font-size: 0.85em; border-top: 1px solid rgba(255,255,255,0.1); position: absolute; bottom: 20px; width: 100%; }
+        .content-area { padding: 20px 30px; }
+        .page-header { border-bottom: 1px solid #dee2e6; padding-bottom: 10px; margin-bottom: 20px; }
+        .badge-draft { background-color: #ffc107; color: #000; }
+        .badge-published { background-color: #198754; }
+    </style>
+    {% block extra_head %}{% endblock %}
+</head>
+<body>
+    <div class="container-fluid">
+        <div class="row">
+            <nav class="col-md-2 sidebar">
+                <div class="brand">&#9881; Grav</div>
+                <ul class="nav flex-column">
+                    <li class="nav-item">
+                        <a class="nav-link {% if request.endpoint == 'admin_dashboard' %}active{% endif %}" href="{{ url_for('admin_dashboard') }}">
+                            &#x1F4CA; Dashboard
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link {% if 'page' in request.endpoint %}active{% endif %}" href="{{ url_for('admin_pages') }}">
+                            &#x1F4C4; Pages
+                        </a>
+                    </li>
+                    {% if user.role == 'admin' %}
+                    <li class="nav-item">
+                        <a class="nav-link {% if request.endpoint == 'admin_config' %}active{% endif %}" href="{{ url_for('admin_config') }}">
+                            &#x2699; Configuration
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link {% if request.endpoint == 'admin_users' %}active{% endif %}" href="{{ url_for('admin_users') }}">
+                            &#x1F465; Users
+                        </a>
+                    </li>
+                    {% endif %}
+                    <li class="nav-item mt-3">
+                        <a class="nav-link" href="/" target="_blank">
+                            &#x1F310; View Site
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('admin_logout') }}">
+                            &#x1F6AA; Logout
+                        </a>
+                    </li>
+                </ul>
+                <div class="user-info">
+                    Logged in as <strong>{{ user.username }}</strong><br>
+                    Role: {{ user.role | capitalize }}
+                </div>
+            </nav>
+
+            <main class="col-md-10 content-area">
+                {% with messages = get_flashed_messages(with_categories=true) %}
+                {% if messages %}
+                {% for category, message in messages %}
+                <div class="alert alert-{{ 'danger' if category == 'error' else category }} alert-dismissible fade show mt-2" role="alert">
+                    {{ message }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                </div>
+                {% endfor %}
+                {% endif %}
+                {% endwith %}
+
+                {% block content %}{% endblock %}
+            </main>
+        </div>
+    </div>
+    <script src="/static/js/bootstrap.bundle.min.js"></script>
+    <script src="/static/js/jquery.min.js"></script>
+    {% block extra_scripts %}{% endblock %}
+</body>
+</html>

@@ -1,0 +1,55 @@
+{% extends "base.html" %}
+{% block title %}{{ page.title }} - {{ site_title }}{% endblock %}
+{% block body %}
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <div class="container">
+        <a class="navbar-brand" href="/">{{ site_title }}</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ms-auto">
+                <li class="nav-item"><a class="nav-link" href="/">Home</a></li>
+                <li class="nav-item"><a class="nav-link" href="/page/about">About</a></li>
+                <li class="nav-item"><a class="nav-link" href="/page/template-docs">Docs</a></li>
+                <li class="nav-item"><a class="nav-link" href="/admin">Admin</a></li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-lg-8">
+            <article>
+                <h1>{{ page.title }}</h1>
+                <p class="text-muted small">
+                    {{ page.category | capitalize }} &middot;
+                    {{ page.updated_at.strftime('%B %d, %Y') if page.updated_at else '' }}
+                    {% if page.process_twig %}<span class="badge bg-info">Twig</span>{% endif %}
+                </p>
+                <hr>
+                <div class="page-content">
+                    {{ rendered_content | safe }}
+                </div>
+            </article>
+        </div>
+        <div class="col-lg-4">
+            <div class="card">
+                <div class="card-header">Page Info</div>
+                <div class="card-body">
+                    <p><strong>Template:</strong> {{ page.template }}</p>
+                    <p><strong>Category:</strong> {{ page.category }}</p>
+                    {% if page.meta_description %}
+                    <p><strong>Description:</strong> {{ page.meta_description }}</p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<footer class="mt-5 py-3 bg-light text-center text-muted">
+    <small>&copy; {{ site_title }} - Powered by Grav</small>
+</footer>
+{% endblock %}
