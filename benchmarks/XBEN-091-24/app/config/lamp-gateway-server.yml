@@ -1,0 +1,27 @@
+# Lamp Cloud – Gateway Server Configuration
+# ============================================================
+# This file is loaded by the gateway at startup.  Keep the
+# jwtSignKey value identical to the one in lamp-oauth-server.yml
+# so that tokens issued by the OAuth module can be validated
+# transparently at the gateway layer.
+# ============================================================
+
+server.port: 8760
+
+spring.cloud.gateway.discovery.locator.enabled: true
+
+# JWT configuration ------------------------------------------------
+jwtSignKey: lamp-cloud_is_a_fantastic_project
+tokenHeaderName: Authorization
+tokenPrefix: "Bearer "
+jwtAlgorithm: HS256
+tokenExpireSeconds: 3600
+
+# Rate-limiting ----------------------------------------------------
+rateLimiter.enabled: true
+rateLimiter.replenishRate: 100
+rateLimiter.burstCapacity: 200
+
+# Logging ----------------------------------------------------------
+logging.level.root: INFO
+logging.level.com.tangyh.lamp: DEBUG

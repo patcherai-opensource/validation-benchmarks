@@ -1,0 +1,21 @@
+# Lamp Cloud – Shared Application Configuration
+# ============================================================
+
+spring.application.name: lamp-cloud
+spring.profiles.active: prod
+
+# Multi-tenant strategy: COLUMN | SCHEMA | DATASOURCE
+multiTenantType: COLUMN
+
+# Redis -----------------------------------------------------------
+spring.redis.host: 127.0.0.1
+spring.redis.port: 6379
+spring.redis.database: 0
+
+# Swagger / OpenAPI ------------------------------------------------
+springdoc.api-docs.enabled: false
+springdoc.swagger-ui.enabled: false
+
+# Actuator ---------------------------------------------------------
+management.endpoints.web.exposure.include: health,info
+management.endpoint.health.show-details: never

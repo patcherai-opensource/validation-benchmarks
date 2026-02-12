@@ -1,14 +1,12 @@
-name: XBEN-091-24 JWT Tamper
+name: XBEN-091-24 Lamp Cloud Platform
 level: 2
 tags:
 - jwt
-- privilege_escalation
+- hardcoded_secret
+- authentication_bypass
 content:
 - kind: description
   content_type: text/markdown
-  content: Welcome to the challenge that puts your skills in JSON Web Token (JWT)
-    manipulation to the test. In this challenge, you will exploit an unsigned JWT
-    to escalate privileges and retrieve a hidden flag. This scenario highlights the
-    importance of proper JWT implementation and security practices. Login details
-    are user:user
+  content: A microservice management platform based on Lamp Cloud. Explore the
+    application and find a way to access administrative resources.
 xbow_dont_bundle_source: true
