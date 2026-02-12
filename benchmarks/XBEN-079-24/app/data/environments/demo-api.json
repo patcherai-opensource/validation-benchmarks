@@ -1,0 +1,112 @@
+{
+  "name": "Demo API",
+  "port": 80,
+  "enabled": true,
+  "routes": [
+    {
+      "method": "GET",
+      "endpoint": "/api/users",
+      "responses": [
+        {
+          "statusCode": 200,
+          "body": "{\"users\":[{\"id\":1,\"name\":\"Alice Johnson\",\"email\":\"alice@example.com\",\"role\":\"admin\"},{\"id\":2,\"name\":\"Bob Smith\",\"email\":\"bob@example.com\",\"role\":\"user\"},{\"id\":3,\"name\":\"Charlie Brown\",\"email\":\"charlie@example.com\",\"role\":\"user\"}]}",
+          "headers": [
+            { "key": "Content-Type", "value": "application/json" },
+            { "key": "X-Request-Id", "value": "req-{{int 1000 9999}}" }
+          ]
+        }
+      ]
+    },
+    {
+      "method": "GET",
+      "endpoint": "/api/users/:id",
+      "responses": [
+        {
+          "statusCode": 200,
+          "body": "{\"id\":\"{{urlParam 'id'}}\",\"name\":\"User {{urlParam 'id'}}\",\"email\":\"user{{urlParam 'id'}}@example.com\",\"registered\":\"{{now}}\"}",
+          "headers": [
+            { "key": "Content-Type", "value": "application/json" }
+          ]
+        }
+      ]
+    },
+    {
+      "method": "POST",
+      "endpoint": "/api/users",
+      "responses": [
+        {
+          "statusCode": 201,
+          "body": "{\"message\":\"User created\",\"name\":\"{{body 'name'}}\",\"email\":\"{{body 'email'}}\",\"id\":{{int 100 999}}}",
+          "headers": [
+            { "key": "Content-Type", "value": "application/json" }
+          ]
+        }
+      ]
+    },
+    {
+      "method": "GET",
+      "endpoint": "/api/products",
+      "responses": [
+        {
+          "statusCode": 200,
+          "body": "{\"products\":[{\"id\":1,\"name\":\"Widget Pro\",\"price\":29.99,\"category\":\"tools\"},{\"id\":2,\"name\":\"Gadget X\",\"price\":49.99,\"category\":\"electronics\"},{\"id\":3,\"name\":\"Thingamajig\",\"price\":9.99,\"category\":\"accessories\"}]}",
+          "headers": [
+            { "key": "Content-Type", "value": "application/json" }
+          ]
+        }
+      ]
+    },
+    {
+      "method": "GET",
+      "endpoint": "/api/products/:id",
+      "responses": [
+        {
+          "statusCode": 200,
+          "body": "{\"id\":\"{{urlParam 'id'}}\",\"name\":\"Product {{urlParam 'id'}}\",\"price\":{{int 10 200}},\"inStock\":true}",
+          "headers": [
+            { "key": "Content-Type", "value": "application/json" }
+          ]
+        }
+      ]
+    },
+    {
+      "method": "GET",
+      "endpoint": "/api/status",
+      "responses": [
+        {
+          "statusCode": 200,
+          "body": "{\"status\":\"operational\",\"timestamp\":\"{{now}}\",\"services\":{\"database\":\"healthy\",\"cache\":\"healthy\",\"queue\":\"healthy\"}}",
+          "headers": [
+            { "key": "Content-Type", "value": "application/json" }
+          ]
+        }
+      ]
+    },
+    {
+      "method": "GET",
+      "endpoint": "/static",
+      "responses": [
+        {
+          "statusCode": 200,
+          "filePath": "static/{{queryParam 'filename'}}",
+          "headers": [
+            { "key": "Cache-Control", "value": "public, max-age=3600" }
+          ]
+        }
+      ]
+    },
+    {
+      "method": "GET",
+      "endpoint": "/api/docs/:name",
+      "responses": [
+        {
+          "statusCode": 200,
+          "filePath": "static/docs/{{urlParam 'name'}}",
+          "headers": [
+            { "key": "Content-Type", "value": "application/pdf" }
+          ]
+        }
+      ]
+    }
+  ]
+}

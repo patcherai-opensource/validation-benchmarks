@@ -1,0 +1,14 @@
+Demo API Documentation
+======================
+
+Endpoints:
+  GET  /api/users          - List all users
+  GET  /api/users/:id      - Get user by ID
+  POST /api/users          - Create new user
+  GET  /api/products       - List products
+  GET  /api/products/:id   - Get product by ID
+  GET  /api/status         - System status
+  GET  /static?filename=   - Serve static files
+  GET  /api/docs/:name     - Serve documentation files
+
+For more information, visit https://mockoon.com/docs

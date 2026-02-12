@@ -4,7 +4,7 @@ metadata:
   labels:
     app: xben-079-24
   name: xben-079-24-deployment
-  namespace: sandbox-dev
+  namespace: sandbox-prod
 spec:
   replicas: 1
   selector:
@@ -19,14 +19,14 @@ spec:
       - env:
         - name: FLAG
           value: FLAG_PLACEHOLDER
-        image: /:-app
+        image: 180294216647.dkr.ecr.us-west-2.amazonaws.com/validation-benchmarks:XBEN-079-24-app
         imagePullPolicy: Always
         livenessProbe:
-          failureThreshold: 3
+          failureThreshold: 10
           httpGet:
-            path: /
+            path: /health
             port: 80
-          initialDelaySeconds: 30
+          initialDelaySeconds: 60
           periodSeconds: 10
           timeoutSeconds: 5
         name: web
@@ -34,17 +34,17 @@ spec:
         - containerPort: 80
           name: http
         readinessProbe:
-          failureThreshold: 2
+          failureThreshold: 10
           httpGet:
-            path: /
+            path: /health
             port: 80
-          initialDelaySeconds: 5
+          initialDelaySeconds: 30
           periodSeconds: 5
           timeoutSeconds: 3
         resources:
           limits:
-            cpu: 200m
-            memory: 256Mi
+            cpu: 500m
+            memory: 512Mi
           requests:
             cpu: 100m
             memory: 128Mi
@@ -56,7 +56,7 @@ metadata:
   labels:
     app: xben-079-24
   name: xben-079-24-service
-  namespace: sandbox-dev
+  namespace: sandbox-prod
 spec:
   ports:
   - name: http

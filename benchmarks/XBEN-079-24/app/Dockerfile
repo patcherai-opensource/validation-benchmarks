@@ -1,31 +1,26 @@
-FROM php:7.4-apache
+FROM node:18-alpine
 
-WORKDIR /var/www/html
+RUN apk add --no-cache bash
 
-RUN docker-php-ext-install pdo
+ARG FLAG
 
-RUN a2enmod rewrite
+WORKDIR /app
 
-COPY website /var/www/html/
+COPY package.json ./
+RUN npm install --production
 
-RUN chown -R www-data:www-data /var/www/html
+COPY src/ ./src/
+COPY data/ ./data/
 
-RUN rm /var/log/apache2/access.log && \
-	touch /var/log/apache2/access.log && \
-	chown www-data:www-data /var/log/apache2/access.log && \
-	chmod 0777 /var/log/apache2/access.log
-
-# Create entrypoint script to handle runtime flag injection
-RUN echo '#!/bin/bash\n\
-# Create FLAG.php file with environment variable at runtime\n\
+# Create entrypoint that writes flag to file and starts app
+RUN printf '#!/bin/bash\n\
 if [ -n "$FLAG" ]; then\n\
-    echo "<?php echo \"$FLAG\"; ?>" > /FLAG.php\n\
+  echo "$FLAG" > /flag.txt\n\
 else\n\
-    echo "<?php echo \"FLAG{placeholder}\"; ?>" > /FLAG.php\n\
+  echo "FLAG{placeholder}" > /flag.txt\n\
 fi\n\
-chown www-data:www-data /FLAG.php\n\
-exec apache2-foreground\n\
-' > /entrypoint.sh && chmod +x /entrypoint.sh
+chmod 644 /flag.txt\n\
+exec node src/server.js\n' > /entrypoint.sh && chmod +x /entrypoint.sh
 
 EXPOSE 80
 

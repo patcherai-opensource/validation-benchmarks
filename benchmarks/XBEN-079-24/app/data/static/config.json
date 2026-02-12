@@ -1,0 +1,7 @@
+{
+  "apiVersion": "2.0",
+  "basePath": "/api",
+  "defaultContentType": "application/json",
+  "corsEnabled": true,
+  "proxyMode": false
+}
