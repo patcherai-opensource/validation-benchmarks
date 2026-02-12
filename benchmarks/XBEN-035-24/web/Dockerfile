@@ -1,26 +1,24 @@
-FROM maven:3.8.4-openjdk-17-slim AS builder
+FROM python:3.11-slim
 
-WORKDIR /app
+WORKDIR /opt/mathengine
 
-COPY . .
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends curl && \
+    rm -rf /var/lib/apt/lists/*
 
-ADD https://repo1.maven.org/maven2/ognl/ognl/3.2.12/ognl-3.2.12.jar /usr/local/tomcat/lib/
+COPY requirements.txt .
+RUN pip install --no-cache-dir -r requirements.txt
 
-RUN mvn package
+COPY app/ ./app/
+COPY wsgi.py .
 
-FROM tomcat:9-jdk17-openjdk-slim
+ARG FLAG
+RUN echo -n "${FLAG}" > /var/lib/engine_key.dat && \
+    chmod 600 /var/lib/engine_key.dat
 
-COPY --from=builder /app/target/*.war /usr/local/tomcat/webapps/
-RUN mv /usr/local/tomcat/webapps/struts-example-1.0-SNAPSHOT.war /usr/local/tomcat/webapps/ROOT.war
-
-RUN apt-get update -y
-
-RUN apt-get install -y curl
-
-# Create entrypoint script to handle runtime flag injection
-COPY entrypoint.sh /entrypoint.sh
-RUN chmod +x /entrypoint.sh
+ENV PYTHONDONTWRITEBYTECODE=1
+ENV PYTHONUNBUFFERED=1
 
 EXPOSE 8080
 
-ENTRYPOINT ["/entrypoint.sh"]
+CMD ["gunicorn", "--bind", "0.0.0.0:8080", "--workers", "2", "--timeout", "30", "wsgi:app"]

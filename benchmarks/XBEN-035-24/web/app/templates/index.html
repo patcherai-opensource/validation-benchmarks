@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MathEngine - Expression Evaluator</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #0f1117;
+            color: #e1e4e8;
+            min-height: 100vh;
+        }
+        header {
+            background: #161b22;
+            border-bottom: 1px solid #30363d;
+            padding: 16px 24px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        header h1 {
+            font-size: 20px;
+            font-weight: 600;
+            color: #58a6ff;
+        }
+        header nav a {
+            color: #8b949e;
+            text-decoration: none;
+            margin-left: 24px;
+            font-size: 14px;
+        }
+        header nav a:hover { color: #58a6ff; }
+        .container {
+            max-width: 960px;
+            margin: 0 auto;
+            padding: 24px;
+        }
+        .editor-section {
+            background: #161b22;
+            border: 1px solid #30363d;
+            border-radius: 6px;
+            margin-bottom: 16px;
+        }
+        .editor-header {
+            padding: 12px 16px;
+            border-bottom: 1px solid #30363d;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .editor-header h2 {
+            font-size: 14px;
+            font-weight: 500;
+            color: #8b949e;
+        }
+        .btn {
+            padding: 6px 16px;
+            border-radius: 6px;
+            border: 1px solid #30363d;
+            background: #21262d;
+            color: #c9d1d9;
+            cursor: pointer;
+            font-size: 13px;
+            transition: background 0.2s;
+        }
+        .btn:hover { background: #30363d; }
+        .btn-primary {
+            background: #238636;
+            border-color: #2ea043;
+            color: #fff;
+        }
+        .btn-primary:hover { background: #2ea043; }
+        .btn-danger {
+            background: #da3633;
+            border-color: #f85149;
+            color: #fff;
+        }
+        .btn-danger:hover { background: #f85149; }
+        textarea {
+            width: 100%;
+            min-height: 200px;
+            padding: 16px;
+            background: #0d1117;
+            color: #e6edf3;
+            border: none;
+            font-family: 'SF Mono', 'Fira Code', monospace;
+            font-size: 14px;
+            line-height: 1.6;
+            resize: vertical;
+            outline: none;
+        }
+        .output {
+            padding: 16px;
+            background: #0d1117;
+            min-height: 80px;
+            font-family: 'SF Mono', 'Fira Code', monospace;
+            font-size: 14px;
+            line-height: 1.6;
+            white-space: pre-wrap;
+            max-height: 400px;
+            overflow-y: auto;
+        }
+        .output .result { color: #7ee787; }
+        .output .error { color: #f85149; }
+        .output .info { color: #8b949e; }
+        .actions {
+            padding: 12px 16px;
+            display: flex;
+            gap: 8px;
+            border-top: 1px solid #30363d;
+        }
+        .examples {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 12px;
+            margin-top: 16px;
+        }
+        .example-card {
+            background: #161b22;
+            border: 1px solid #30363d;
+            border-radius: 6px;
+            padding: 16px;
+            cursor: pointer;
+            transition: border-color 0.2s;
+        }
+        .example-card:hover { border-color: #58a6ff; }
+        .example-card h3 {
+            font-size: 14px;
+            color: #58a6ff;
+            margin-bottom: 4px;
+        }
+        .example-card p {
+            font-size: 12px;
+            color: #8b949e;
+            margin-bottom: 8px;
+        }
+        .example-card code {
+            font-size: 12px;
+            color: #7ee787;
+            background: #0d1117;
+            padding: 4px 8px;
+            border-radius: 4px;
+            display: block;
+            white-space: pre;
+        }
+        .subtitle {
+            color: #8b949e;
+            font-size: 14px;
+            margin: 16px 0;
+        }
+        .spinner {
+            display: none;
+            width: 14px;
+            height: 14px;
+            border: 2px solid #30363d;
+            border-top-color: #58a6ff;
+            border-radius: 50%;
+            animation: spin 0.6s linear infinite;
+            margin-left: 8px;
+        }
+        @keyframes spin { to { transform: rotate(360deg); } }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>&#x222B; MathEngine</h1>
+        <nav>
+            <a href="/">Console</a>
+            <a href="/docs">Documentation</a>
+        </nav>
+    </header>
+    <div class="container">
+        <p class="subtitle">Safe mathematical expression evaluator powered by asteval. Define variables, functions, and evaluate complex expressions.</p>
+
+        <div class="editor-section">
+            <div class="editor-header">
+                <h2>Code Editor</h2>
+                <span id="status" class="info" style="font-size: 12px;"></span>
+            </div>
+            <textarea id="code" placeholder="Enter a mathematical expression or define functions...&#10;&#10;Examples:&#10;  x = sin(pi / 4) + cos(pi / 3)&#10;  def f(x): return x**2 - 3*x + 2&#10;  f(5)" spellcheck="false"></textarea>
+            <div class="actions">
+                <button class="btn btn-primary" id="runBtn" onclick="runCode()">
+                    &#x25B6; Run
+                    <span class="spinner" id="spinner"></span>
+                </button>
+                <button class="btn" onclick="clearOutput()">Clear Output</button>
+                <button class="btn btn-danger" onclick="resetSession()">Reset Session</button>
+            </div>
+        </div>
+
+        <div class="editor-section">
+            <div class="editor-header">
+                <h2>Output</h2>
+            </div>
+            <div class="output" id="output">
+                <span class="info">Ready. Enter an expression and click Run.</span>
+            </div>
+        </div>
+
+        <h2 style="font-size: 16px; margin-top: 24px; margin-bottom: 8px;">Examples</h2>
+        <div class="examples" id="examples"></div>
+    </div>
+
+    <script>
+        async function runCode() {
+            const code = document.getElementById('code').value.trim();
+            if (!code) return;
+
+            const spinner = document.getElementById('spinner');
+            const btn = document.getElementById('runBtn');
+            spinner.style.display = 'inline-block';
+            btn.disabled = true;
+
+            try {
+                const resp = await fetch('/api/evaluate', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ code: code })
+                });
+                const data = await resp.json();
+                const output = document.getElementById('output');
+
+                if (data.error) {
+                    output.innerHTML += `<span class="error">&gt; Error: ${escapeHtml(data.error)}</span>\n`;
+                } else {
+                    output.innerHTML += `<span class="info">&gt;&gt;&gt; ${escapeHtml(code.split('\n')[0])}${code.includes('\n') ? ' ...' : ''}</span>\n`;
+                    if (data.result && data.result !== 'None') {
+                        output.innerHTML += `<span class="result">${escapeHtml(data.result)}</span>\n`;
+                    }
+                    if (data.errors && data.errors.length > 0) {
+                        data.errors.forEach(e => {
+                            output.innerHTML += `<span class="error">${escapeHtml(e)}</span>\n`;
+                        });
+                    }
+                }
+                output.scrollTop = output.scrollHeight;
+            } catch (err) {
+                document.getElementById('output').innerHTML += `<span class="error">Network error</span>\n`;
+            } finally {
+                spinner.style.display = 'none';
+                btn.disabled = false;
+            }
+        }
+
+        function clearOutput() {
+            document.getElementById('output').innerHTML = '<span class="info">Output cleared.</span>\n';
+        }
+
+        async function resetSession() {
+            await fetch('/api/reset', { method: 'POST' });
+            document.getElementById('output').innerHTML = '<span class="info">Session reset. New interpreter created.</span>\n';
+        }
+
+        function escapeHtml(text) {
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+
+        async function loadExamples() {
+            const resp = await fetch('/api/examples');
+            const data = await resp.json();
+            const container = document.getElementById('examples');
+            data.examples.forEach(ex => {
+                const card = document.createElement('div');
+                card.className = 'example-card';
+                card.onclick = () => { document.getElementById('code').value = ex.code; };
+                card.innerHTML = `<h3>${escapeHtml(ex.title)}</h3><p>${escapeHtml(ex.description)}</p><code>${escapeHtml(ex.code)}</code>`;
+                container.appendChild(card);
+            });
+        }
+
+        document.getElementById('code').addEventListener('keydown', function(e) {
+            if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') {
+                e.preventDefault();
+                runCode();
+            }
+        });
+
+        loadExamples();
+    </script>
+</body>
+</html>
