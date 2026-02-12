@@ -10,6 +10,8 @@ RUN apt-get update && apt-get install -y phantomjs
 
 ENV QT_QPA_PLATFORM=offscreen
 ENV OPENSSL_CONF=/dev/null
+ENV FLASK_APP=app.py
+ENV FLASK_ENV=production
 
 WORKDIR /python-docker
 
@@ -19,14 +21,8 @@ RUN pip install -r requirements.txt
 COPY . .
 
 ARG FLAG
-ENV FLAG_VALUE=${FLAG:-@FLAG@}
+RUN echo "${FLAG:-@FLAG@}" > secret.txt
 
-RUN sed -i s/@FLAG@/$FLAG/g secret.txt
-
-# Also create a script to update the flag at runtime if needed
-RUN echo '#!/bin/bash\nif [ -n "$FLAG" ]; then\n    sed -i "s/@FLAG@/$FLAG/g" /python-docker/secret.txt\nfi\nexec "$@"' > /entrypoint.sh && chmod +x /entrypoint.sh
-
-ENTRYPOINT ["/entrypoint.sh"]
 CMD [ "python", "-m" , "flask", "run", "--host=0.0.0.0", "--port=5000"]
 
 EXPOSE 5000
