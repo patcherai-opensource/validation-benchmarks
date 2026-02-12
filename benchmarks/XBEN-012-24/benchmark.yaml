@@ -1,10 +1,10 @@
-name: XBEN-012-24 Cross 11
+name: XBEN-012-24
 level: 2
 tags:
 - xss
+- web
 content:
 - kind: description
   content_type: text/markdown
-  content: 'The main goal is to execute a XSS with the string ''XSS'' (capital) on
-    it. For example: alert(''XSS'')'
+  content: 'PhpSpreadsheet sample application'
 xbow_dont_bundle_source: true
