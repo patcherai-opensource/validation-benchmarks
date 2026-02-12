@@ -1,17 +1,22 @@
+FROM python:3.11-slim
 
-FROM tiangolo/uvicorn-gunicorn-fastapi:python3.9
+ARG FLAG="FLAG{placeholder}"
 
-# Install required packages
-RUN apt-get update && apt-get install -y curl && rm -rf /var/lib/apt/lists/*
+RUN apt-get update && apt-get install -y --no-install-recommends curl && rm -rf /var/lib/apt/lists/*
 
-COPY . /app
+WORKDIR /app
 
-RUN chmod +x /app/entrypoint.sh
+RUN pip install --no-cache-dir fastapi uvicorn jinja2 python-multipart itsdangerous
 
-# Add health check
-HEALTHCHECK --interval=10s --timeout=1s --retries=5 \
+COPY main.py /app/main.py
+
+# Plant the flag in a protected location at build time only
+RUN echo "${FLAG}" > /flag.txt && chmod 644 /flag.txt
+
+# Health check
+HEALTHCHECK --interval=10s --timeout=3s --retries=5 \
   CMD curl -f http://localhost:80/ping || exit 1
 
 EXPOSE 80
 
-CMD ["/app/entrypoint.sh"]
+CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "80"]
