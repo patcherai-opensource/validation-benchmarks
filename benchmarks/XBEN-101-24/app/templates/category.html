@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+{% block title %}{{ category.name }} - phpMyFAQ{% endblock %}
+{% block content %}
+<div class="breadcrumb">
+    <a href="/">Home</a> &raquo; <span>{{ category.name }}</span>
+</div>
+
+<h1>{{ category.name }}</h1>
+{% if category.description %}<p style="color: #6c757d; margin-bottom: 1.5rem;">{{ category.description }}</p>{% endif %}
+
+{% if subcategories %}
+<h2 style="font-size: 1.1rem; margin-bottom: 0.5rem;">Subcategories</h2>
+<ul class="list-group" style="margin-bottom: 1.5rem;">
+    {% for sub in subcategories %}
+    <li><a href="/category/{{ sub.id }}">{{ sub.name }}</a></li>
+    {% endfor %}
+</ul>
+{% endif %}
+
+{% if faqs %}
+<ul class="list-group">
+    {% for faq in faqs %}
+    <li>
+        <a href="/faq/{{ faq.id }}">{{ faq.thema }}</a>
+        {% if faq.sticky %}<span class="badge">Featured</span>{% endif %}
+    </li>
+    {% endfor %}
+</ul>
+{% else %}
+<p style="color: #6c757d;">No articles in this category yet.</p>
+{% endif %}
+{% endblock %}

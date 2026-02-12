@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="phpMyFAQ - open source FAQ system">
+    <title>{% block title %}phpMyFAQ Knowledge Base{% endblock %}</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            background-color: #f8f9fa;
+            color: #212529;
+            line-height: 1.6;
+        }
+        .navbar {
+            background-color: #343a40;
+            padding: 0.75rem 1.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        .navbar a { color: #fff; text-decoration: none; }
+        .navbar .brand {
+            font-size: 1.25rem;
+            font-weight: 600;
+        }
+        .navbar .nav-links { display: flex; gap: 1.5rem; align-items: center; }
+        .navbar .nav-links a { font-size: 0.9rem; opacity: 0.85; }
+        .navbar .nav-links a:hover { opacity: 1; }
+        .search-form { display: flex; }
+        .search-form input[type="text"] {
+            padding: 0.35rem 0.75rem;
+            border: 1px solid #555;
+            border-radius: 4px 0 0 4px;
+            outline: none;
+            font-size: 0.9rem;
+            background: #495057;
+            color: #fff;
+        }
+        .search-form input[type="text"]::placeholder { color: #adb5bd; }
+        .search-form button {
+            padding: 0.35rem 0.75rem;
+            border: 1px solid #555;
+            border-left: none;
+            border-radius: 0 4px 4px 0;
+            background: #6c757d;
+            color: #fff;
+            cursor: pointer;
+            font-size: 0.9rem;
+        }
+        .container { max-width: 960px; margin: 2rem auto; padding: 0 1rem; }
+        .card {
+            background: #fff;
+            border: 1px solid #dee2e6;
+            border-radius: 6px;
+            padding: 1.5rem;
+            margin-bottom: 1rem;
+        }
+        .card h2 { margin-bottom: 0.5rem; font-size: 1.2rem; }
+        .card p { color: #6c757d; font-size: 0.95rem; }
+        a { color: #0d6efd; text-decoration: none; }
+        a:hover { text-decoration: underline; }
+        h1 { font-size: 1.75rem; margin-bottom: 1rem; color: #343a40; }
+        .breadcrumb {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+            font-size: 0.9rem;
+            color: #6c757d;
+        }
+        .breadcrumb a { color: #6c757d; }
+        .badge {
+            display: inline-block;
+            background: #0d6efd;
+            color: #fff;
+            padding: 0.15rem 0.5rem;
+            border-radius: 3px;
+            font-size: 0.75rem;
+            margin-left: 0.5rem;
+        }
+        .footer {
+            text-align: center;
+            padding: 2rem;
+            color: #adb5bd;
+            font-size: 0.85rem;
+        }
+        .btn {
+            display: inline-block;
+            padding: 0.5rem 1rem;
+            background: #0d6efd;
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            text-decoration: none;
+        }
+        .btn:hover { background: #0b5ed7; text-decoration: none; }
+        .btn-secondary { background: #6c757d; }
+        .btn-secondary:hover { background: #5a6268; }
+        .form-group { margin-bottom: 1rem; }
+        .form-group label {
+            display: block;
+            margin-bottom: 0.25rem;
+            font-weight: 500;
+            font-size: 0.9rem;
+        }
+        .form-group input[type="text"],
+        .form-group input[type="email"],
+        .form-group textarea {
+            width: 100%;
+            padding: 0.5rem;
+            border: 1px solid #ced4da;
+            border-radius: 4px;
+            font-size: 0.9rem;
+            font-family: inherit;
+        }
+        .form-group textarea { min-height: 100px; resize: vertical; }
+        .captcha-container { display: flex; align-items: center; gap: 1rem; margin-bottom: 1rem; }
+        .captcha-img { border: 1px solid #dee2e6; border-radius: 4px; }
+        .comment { border-top: 1px solid #eee; padding: 0.75rem 0; }
+        .comment:first-child { border-top: none; }
+        .comment .meta { font-size: 0.8rem; color: #6c757d; }
+        .alert { padding: 0.75rem 1rem; border-radius: 4px; margin-bottom: 1rem; }
+        .alert-success { background: #d1e7dd; color: #0f5132; border: 1px solid #badbcc; }
+        .alert-danger { background: #f8d7da; color: #842029; border: 1px solid #f5c2c7; }
+        .list-group { list-style: none; }
+        .list-group li {
+            padding: 0.75rem 1rem;
+            border: 1px solid #dee2e6;
+            border-bottom: none;
+            background: #fff;
+        }
+        .list-group li:first-child { border-radius: 6px 6px 0 0; }
+        .list-group li:last-child { border-bottom: 1px solid #dee2e6; border-radius: 0 0 6px 6px; }
+        .list-group li:only-child { border-radius: 6px; border-bottom: 1px solid #dee2e6; }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <a href="/" class="brand">phpMyFAQ</a>
+        <div class="nav-links">
+            <a href="/">Home</a>
+            <a href="/sitemap">Sitemap</a>
+            <form class="search-form" action="/search" method="GET">
+                <input type="text" name="q" placeholder="Search FAQ...">
+                <button type="submit">Search</button>
+            </form>
+        </div>
+    </nav>
+    <div class="container">
+        {% block content %}{% endblock %}
+    </div>
+    <div class="footer">
+        Powered by phpMyFAQ 3.1.11
+    </div>
+</body>
+</html>

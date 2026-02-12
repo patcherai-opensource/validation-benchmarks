@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+{% block title %}Sitemap - phpMyFAQ{% endblock %}
+{% block content %}
+<h1>Sitemap</h1>
+<ul class="list-group">
+    {% for faq in faqs %}
+    <li>
+        <a href="/faq/{{ faq.id }}">{{ faq.thema }}</a>
+        <span style="float: right; color: #6c757d; font-size: 0.85rem;">{{ faq.date_start }}</span>
+    </li>
+    {% endfor %}
+</ul>
+{% endblock %}

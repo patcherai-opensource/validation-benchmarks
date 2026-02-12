@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+{% block title %}Search{% if query %}: {{ query }}{% endif %} - phpMyFAQ{% endblock %}
+{% block content %}
+<h1>Search Results</h1>
+
+<form action="/search" method="GET" style="margin-bottom: 1.5rem;">
+    <div style="display: flex; gap: 0.5rem;">
+        <input type="text" name="q" value="{{ query }}" placeholder="Search FAQ..." style="flex: 1; padding: 0.5rem; border: 1px solid #ced4da; border-radius: 4px;">
+        <button type="submit" class="btn">Search</button>
+    </div>
+</form>
+
+{% if query %}
+<p style="color: #6c757d; margin-bottom: 1rem;">{{ results|length }} result{% if results|length != 1 %}s{% endif %} for "{{ query }}"</p>
+{% endif %}
+
+{% if results %}
+<ul class="list-group">
+    {% for faq in results %}
+    <li>
+        <a href="/faq/{{ faq.id }}">{{ faq.thema }}</a>
+        {% if faq.sticky %}<span class="badge">Featured</span>{% endif %}
+    </li>
+    {% endfor %}
+</ul>
+{% elif query %}
+<p style="color: #6c757d;">No results found.</p>
+{% endif %}
+{% endblock %}

@@ -1,0 +1,90 @@
+{% extends "base.html" %}
+{% block title %}{{ faq.thema }} - phpMyFAQ{% endblock %}
+{% block content %}
+<div class="breadcrumb">
+    <a href="/">Home</a> &raquo; <span>{{ faq.thema }}</span>
+</div>
+
+<div class="card">
+    <h1>{{ faq.thema }}</h1>
+    <p style="font-size: 0.85rem; color: #6c757d; margin-bottom: 1rem;">
+        By {{ faq.author }} &middot; {{ faq.date_start }}
+    </p>
+    <div style="line-height: 1.7;">{{ faq.content }}</div>
+</div>
+
+<div class="card" style="margin-top: 1.5rem;">
+    <h2 style="margin-bottom: 1rem;">Comments ({{ comments|length }})</h2>
+    {% for comment in comments %}
+    <div class="comment">
+        <div class="meta">{{ comment.usr }} &middot; {{ comment.date }}</div>
+        <p style="margin-top: 0.25rem;">{{ comment.comment }}</p>
+    </div>
+    {% endfor %}
+    {% if not comments %}
+    <p style="color: #6c757d;">No comments yet. Be the first to comment!</p>
+    {% endif %}
+</div>
+
+<div class="card" style="margin-top: 1.5rem;">
+    <h2 style="margin-bottom: 1rem;">Add a Comment</h2>
+    <div id="comment-alert" style="display:none;"></div>
+    <form id="comment-form">
+        <input type="hidden" name="action" value="savecomment">
+        <input type="hidden" name="record_id" value="{{ faq.id }}">
+        <input type="hidden" name="lang" value="en">
+
+        <div class="form-group">
+            <label for="user">Name</label>
+            <input type="text" id="user" name="user" required>
+        </div>
+        <div class="form-group">
+            <label for="mail">Email</label>
+            <input type="email" id="mail" name="mail" required>
+        </div>
+        <div class="form-group">
+            <label for="comment">Comment</label>
+            <textarea id="comment" name="comment" required></textarea>
+        </div>
+        <div class="form-group">
+            <label for="captcha">Please enter the CAPTCHA code</label>
+            <div class="captcha-container">
+                <img src="data:image/png;base64,{{ captcha_img }}" alt="CAPTCHA" class="captcha-img">
+            </div>
+            <input type="text" id="captcha" name="captcha" autocomplete="off" required>
+        </div>
+        <button type="submit" class="btn">Submit Comment</button>
+    </form>
+</div>
+
+<script>
+document.getElementById('comment-form').addEventListener('submit', function(e) {
+    e.preventDefault();
+    var formData = new FormData(this);
+    var alertDiv = document.getElementById('comment-alert');
+
+    fetch('/api/ajaxservice', {
+        method: 'POST',
+        body: formData
+    })
+    .then(function(resp) { return resp.json(); })
+    .then(function(data) {
+        if (data.error) {
+            alertDiv.className = 'alert alert-danger';
+            alertDiv.textContent = data.error;
+            alertDiv.style.display = 'block';
+        } else if (data.success) {
+            alertDiv.className = 'alert alert-success';
+            alertDiv.textContent = data.success;
+            alertDiv.style.display = 'block';
+            document.getElementById('comment-form').reset();
+        }
+    })
+    .catch(function() {
+        alertDiv.className = 'alert alert-danger';
+        alertDiv.textContent = 'An error occurred. Please try again.';
+        alertDiv.style.display = 'block';
+    });
+});
+</script>
+{% endblock %}

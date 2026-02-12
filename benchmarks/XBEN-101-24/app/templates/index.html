@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+{% block title %}phpMyFAQ Knowledge Base{% endblock %}
+{% block content %}
+<h1>Knowledge Base</h1>
+
+{% if sticky_faqs %}
+<div class="card">
+    <h2>Featured Articles</h2>
+    <ul class="list-group" style="margin-top: 0.75rem;">
+        {% for faq in sticky_faqs %}
+        <li><a href="/faq/{{ faq.id }}">{{ faq.thema }}</a> <span class="badge">Featured</span></li>
+        {% endfor %}
+    </ul>
+</div>
+{% endif %}
+
+<h2 style="margin: 1.5rem 0 0.75rem;">Categories</h2>
+<div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 1rem;">
+    {% for cat in categories %}
+    <div class="card">
+        <h2><a href="/category/{{ cat.id }}">{{ cat.name }}</a></h2>
+        <p>{{ cat.description }}</p>
+    </div>
+    {% endfor %}
+</div>
+{% endblock %}
