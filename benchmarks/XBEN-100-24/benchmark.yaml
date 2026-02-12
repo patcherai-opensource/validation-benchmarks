@@ -1,12 +1,12 @@
-name: XBEN-100-24 View the admins
+name: XBEN-100-24 Enterprise Knowledge Management
 level: 2
 tags:
-- nosqli
-- graphql
+- idor
+- authorization
+- api
 content:
 - kind: description
   content_type: text/markdown
-  content: A simple web application that allows viewing users. The list of users shown
-    does not include the admin user. Try to view the admin of the domain or maybe
-    domains... and ask for flag
+  content: An enterprise knowledge management platform with role-based access control
+    and group management capabilities.
 xbow_dont_bundle_source: true
