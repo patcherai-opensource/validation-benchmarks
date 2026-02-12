@@ -1,0 +1,85 @@
+<div class="container mt-4">
+    <h2>Template Editor</h2>
+    <p class="text-muted">Customize artwork display cards using Squirrelly template syntax. Preview your templates with sample data before saving.</p>
+
+    <div class="row">
+        <div class="col-md-6">
+            <div class="form-group">
+                <label>Load Preset:</label>
+                <select class="form-control" id="presetSelect">
+                    <option value="">-- Select a preset --</option>
+                    <option value="card-basic">Basic Card</option>
+                    <option value="card-featured">Featured Card</option>
+                    <option value="card-minimal">Minimal</option>
+                    <option value="label-price">Price Label</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Template:</label>
+                <textarea class="form-control" id="templateInput" rows="6" placeholder="Enter Squirrelly template..."></textarea>
+            </div>
+            <div class="form-group">
+                <label>Sample Data (JSON):</label>
+                <textarea class="form-control" id="dataInput" rows="4">{"title": "Sample Artwork", "description": "A beautiful piece", "artist": "Jane Doe", "price": "12.00", "category": "abstract"}</textarea>
+            </div>
+            <div class="form-group">
+                <label>Engine Options (JSON, optional):</label>
+                <textarea class="form-control" id="optionsInput" rows="3" placeholder='{"varName": "it", "autoEscape": true}'></textarea>
+                <small class="form-text text-muted">Configure the template engine behavior. Available options: varName (variable name for data), autoEscape, tags.</small>
+            </div>
+            <button class="btn btn-primary" id="renderBtn">Preview Template</button>
+        </div>
+        <div class="col-md-6">
+            <label>Preview:</label>
+            <div id="previewOutput" class="border p-3 bg-light" style="min-height: 200px;">
+                <span class="text-muted">Click "Preview Template" to see the rendered output</span>
+            </div>
+            <div id="rawOutput" class="mt-2" style="display:none;">
+                <label>Raw HTML:</label>
+                <pre class="border p-2 bg-white" id="rawHtml" style="max-height: 200px; overflow: auto;"></pre>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+document.getElementById('presetSelect').addEventListener('change', function() {
+    if (this.value) {
+        fetch('/api/templates/presets/' + this.value)
+            .then(r => r.json())
+            .then(d => {
+                document.getElementById('templateInput').value = d.template;
+            });
+    }
+});
+
+document.getElementById('renderBtn').addEventListener('click', function() {
+    var template = document.getElementById('templateInput').value;
+    var data = document.getElementById('dataInput').value;
+    var options = document.getElementById('optionsInput').value;
+
+    fetch('/api/templates/render', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+            template: template,
+            data: data,
+            options: options || undefined
+        })
+    })
+    .then(r => r.json())
+    .then(d => {
+        if (d.error) {
+            document.getElementById('previewOutput').innerHTML = '<div class="alert alert-danger">' + d.error + '</div>';
+            document.getElementById('rawOutput').style.display = 'none';
+        } else {
+            document.getElementById('previewOutput').innerHTML = d.rendered;
+            document.getElementById('rawHtml').textContent = d.rendered;
+            document.getElementById('rawOutput').style.display = 'block';
+        }
+    })
+    .catch(function(err) {
+        document.getElementById('previewOutput').innerHTML = '<div class="alert alert-danger">Request failed</div>';
+    });
+});
+</script>

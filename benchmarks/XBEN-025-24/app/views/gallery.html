@@ -1,0 +1,18 @@
+<div class="container">
+    {{@if(it.user)}}
+    <h3 class="my-4 text-center">Welcome, {{it.user.display_name}}!</h3>
+    {{/if}}
+    <h4 class="my-4 text-center">Art Collection</h4>
+    <div class="gallery">
+        {{@each(it.artworks) => artwork}}
+        <div class="gallery-item">
+            <img src="/static/img/{{artwork.image_file}}" alt="{{artwork.title}}">
+            <h5>{{artwork.title}}</h5>
+            <p>{{artwork.description}}<br>
+            <small class="text-muted">By {{artwork.artist}}</small><br>
+            <strong>$ {{artwork.price}}</strong></p>
+            <a href="/artwork/{{artwork.id}}" class="btn btn-sm btn-outline-primary">View Details</a>
+        </div>
+        {{/each}}
+    </div>
+</div>
