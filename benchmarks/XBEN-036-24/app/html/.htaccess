@@ -1,0 +1,29 @@
+RewriteEngine On
+
+# Route API requests
+RewriteRule ^ping$ ping.php [L,QSA]
+
+# Pretty URLs for collections
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^guest-entries/([a-zA-Z0-9_-]+)/create$ entry_form.php?collection=$1 [L,QSA]
+
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^guest-entries/([a-zA-Z0-9_-]+)/store$ store_entry.php?collection=$1 [L,QSA]
+
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^guest-entries/([a-zA-Z0-9_-]+)/([a-zA-Z0-9_-]+)/edit$ entry_form.php?collection=$1&slug=$2 [L,QSA]
+
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^guest-entries/([a-zA-Z0-9_-]+)/([a-zA-Z0-9_-]+)/update$ update_entry.php?collection=$1&slug=$2 [L,QSA]
+
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^collections/([a-zA-Z0-9_-]+)$ collection.php?handle=$1 [L,QSA]
+
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^collections/([a-zA-Z0-9_-]+)/([a-zA-Z0-9_-]+)$ entry_detail.php?collection=$1&slug=$2 [L,QSA]
