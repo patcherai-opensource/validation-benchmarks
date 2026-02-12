@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Akeneo PIM{% endblock %}</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: #f5f5f5; color: #333; }
+        .header { background: #11324d; color: #fff; padding: 12px 24px; display: flex; align-items: center; justify-content: space-between; }
+        .header h1 { font-size: 18px; font-weight: 500; }
+        .header .nav-links { display: flex; gap: 20px; align-items: center; }
+        .header a { color: #93c5fd; text-decoration: none; font-size: 14px; }
+        .header a:hover { color: #fff; }
+        .header .user-info { font-size: 13px; color: #9ca3af; }
+        .container { max-width: 1200px; margin: 24px auto; padding: 0 24px; }
+        .breadcrumb { font-size: 13px; color: #6b7280; margin-bottom: 16px; }
+        .breadcrumb a { color: #3b82f6; text-decoration: none; }
+        .page-title { font-size: 24px; font-weight: 600; margin-bottom: 20px; color: #11324d; }
+        .card { background: #fff; border-radius: 4px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); padding: 20px; margin-bottom: 20px; }
+        table { width: 100%; border-collapse: collapse; }
+        th { background: #f8f9fa; text-align: left; padding: 10px 12px; font-size: 12px; text-transform: uppercase; color: #6b7280; border-bottom: 2px solid #e5e7eb; }
+        td { padding: 10px 12px; border-bottom: 1px solid #f3f4f6; font-size: 14px; }
+        tr:hover td { background: #f8fbff; }
+        .btn { padding: 8px 16px; border: none; border-radius: 4px; cursor: pointer; font-size: 14px; text-decoration: none; display: inline-block; }
+        .btn-primary { background: #3b82f6; color: #fff; }
+        .btn-primary:hover { background: #2563eb; }
+        .btn-danger { background: #ef4444; color: #fff; font-size: 12px; padding: 4px 10px; }
+        .btn-secondary { background: #6b7280; color: #fff; }
+        .form-group { margin-bottom: 16px; }
+        .form-group label { display: block; margin-bottom: 4px; font-size: 13px; font-weight: 500; color: #374151; }
+        .form-group input, .form-group select, .form-group textarea { width: 100%; padding: 8px 12px; border: 1px solid #d1d5db; border-radius: 4px; font-size: 14px; }
+        .form-group textarea { height: 80px; resize: vertical; }
+        .alert { padding: 12px 16px; border-radius: 4px; margin-bottom: 16px; font-size: 14px; }
+        .alert-success { background: #d1fae5; color: #065f46; border: 1px solid #a7f3d0; }
+        .alert-error { background: #fee2e2; color: #991b1b; border: 1px solid #fca5a5; }
+        .badge { display: inline-block; padding: 2px 8px; border-radius: 10px; font-size: 11px; font-weight: 500; }
+        .badge-success { background: #d1fae5; color: #065f46; }
+        .badge-secondary { background: #e5e7eb; color: #374151; }
+        .stats { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 16px; margin-bottom: 24px; }
+        .stat-card { background: #fff; padding: 20px; border-radius: 4px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
+        .stat-card .value { font-size: 28px; font-weight: 600; color: #11324d; }
+        .stat-card .label { font-size: 13px; color: #6b7280; margin-top: 4px; }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>Akeneo PIM</h1>
+        <div class="nav-links">
+            <a href="/index.php">Dashboard</a>
+            <a href="/sku_system.php">Products</a>
+            <a href="/sku_search.php">Search</a>
+            <a href="/sku_url.php">Categories</a>
+            <a href="/media_upload.php">Media</a>
+            {% if user is defined and user %}
+                <span class="user-info">{{ user.username }} ({{ user.role }})</span>
+                <a href="/logout.php">Logout</a>
+            {% endif %}
+        </div>
+    </div>
+    <div class="container">
+        {% block content %}{% endblock %}
+    </div>
+</body>
+</html>

@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Akeneo PIM - Login</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: #11324d; display: flex; justify-content: center; align-items: center; min-height: 100vh; }
+        .login-container { background: #fff; border-radius: 8px; padding: 40px; width: 380px; box-shadow: 0 4px 20px rgba(0,0,0,0.3); }
+        .login-container h1 { text-align: center; color: #11324d; margin-bottom: 8px; font-size: 22px; }
+        .login-container p.subtitle { text-align: center; color: #6b7280; font-size: 13px; margin-bottom: 24px; }
+        .form-group { margin-bottom: 16px; }
+        .form-group label { display: block; margin-bottom: 4px; font-size: 13px; font-weight: 500; color: #374151; }
+        .form-group input { width: 100%; padding: 10px 12px; border: 1px solid #d1d5db; border-radius: 4px; font-size: 14px; }
+        .btn-login { width: 100%; padding: 10px; background: #3b82f6; color: #fff; border: none; border-radius: 4px; font-size: 14px; cursor: pointer; font-weight: 500; }
+        .btn-login:hover { background: #2563eb; }
+        .error { color: #991b1b; background: #fee2e2; padding: 10px; border-radius: 4px; font-size: 13px; margin-bottom: 16px; text-align: center; }
+    </style>
+</head>
+<body>
+    <div class="login-container">
+        <h1>Akeneo PIM</h1>
+        <p class="subtitle">Product Information Management</p>
+        {% if error %}
+            <div class="error">{{ error }}</div>
+        {% endif %}
+        <form method="post" action="/login.php">
+            <div class="form-group">
+                <label for="username">Username</label>
+                <input type="text" id="username" name="_username" required autocomplete="username">
+            </div>
+            <div class="form-group">
+                <label for="password">Password</label>
+                <input type="password" id="password" name="_password" required autocomplete="current-password">
+            </div>
+            <button type="submit" class="btn-login">Log in</button>
+        </form>
+    </div>
+</body>
+</html>

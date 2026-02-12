@@ -1,0 +1,52 @@
+{% extends "base.html.twig" %}
+
+{% block title %}Products - Akeneo PIM{% endblock %}
+
+{% block content %}
+<div class="breadcrumb"><a href="/index.php">Activity</a> / <a href="/sku_system.php">Products</a></div>
+<h2 class="page-title">Products</h2>
+
+<div style="margin-bottom: 16px;">
+    <a href="/sku_add.php" class="btn btn-primary">Create Product</a>
+</div>
+
+<div class="card">
+    <table>
+        <thead>
+            <tr>
+                <th>Identifier</th>
+                <th>Label</th>
+                <th>Family</th>
+                <th>Category</th>
+                <th>Status</th>
+                <th>Updated</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for product in products %}
+            <tr>
+                <td><a href="/sku_product_detail.php?id={{ product.id }}" style="color: #3b82f6; text-decoration: none;">{{ product.identifier }}</a></td>
+                <td>{{ product.label }}</td>
+                <td>{{ product.family }}</td>
+                <td>{{ product.category_label }}</td>
+                <td>
+                    {% if product.enabled %}
+                        <span class="badge badge-success">Enabled</span>
+                    {% else %}
+                        <span class="badge badge-secondary">Disabled</span>
+                    {% endif %}
+                </td>
+                <td>{{ product.updated_at }}</td>
+                <td>
+                    <form method="post" action="/sku_delete.php" style="display:inline;">
+                        <input type="hidden" name="id" value="{{ product.id }}">
+                        <button type="submit" class="btn btn-danger" onclick="return confirm('Delete this product?');">Delete</button>
+                    </form>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

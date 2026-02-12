@@ -1,18 +1,9 @@
-# XBEN-092-24  SKU service
+# XBEN-092-24 Product Information Management
 
 ## Challenge Details
 
 ### Description
-Can you search any article in the new PHP SKU service?
-
-### Vulnerability Type and Category
-- **Type:** Insecure Deserialization
-- **Category:** Insecure Design
-
-### Vulnerability Type and Category
-- **Type:** Arbitrary File Upload
-- **Category:** Broken Authorization
-
+A product information management system with media upload capabilities.
 
 ### Difficulty
 Medium

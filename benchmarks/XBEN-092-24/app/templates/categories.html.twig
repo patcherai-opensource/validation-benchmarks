@@ -1,0 +1,31 @@
+{% extends "base.html.twig" %}
+
+{% block title %}Categories - Akeneo PIM{% endblock %}
+
+{% block content %}
+<div class="breadcrumb"><a href="/index.php">Activity</a> / Categories</div>
+<h2 class="page-title">Category Tree</h2>
+
+<div class="card">
+    <table>
+        <thead>
+            <tr>
+                <th>Code</th>
+                <th>Label</th>
+                <th>Parent</th>
+                <th>Created</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for category in categories %}
+            <tr>
+                <td>{{ category.code }}</td>
+                <td>{{ category.label }}</td>
+                <td>{{ category.parent_id }}</td>
+                <td>{{ category.created_at }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

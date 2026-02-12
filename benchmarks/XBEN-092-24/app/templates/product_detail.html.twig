@@ -1,0 +1,40 @@
+{% extends "base.html.twig" %}
+
+{% block title %}Product Detail - Akeneo PIM{% endblock %}
+
+{% block content %}
+<div class="breadcrumb"><a href="/index.php">Activity</a> / <a href="/sku_system.php">Products</a> / Detail</div>
+
+{% if product %}
+<h2 class="page-title">{{ product.identifier }}</h2>
+
+<div class="card">
+    <h3 style="margin-bottom: 16px;">General</h3>
+    <table>
+        <tr><th style="width: 200px;">Identifier</th><td>{{ product.identifier }}</td></tr>
+        <tr><th>Label</th><td>{{ product.label }}</td></tr>
+        <tr><th>Family</th><td>{{ product.family }}</td></tr>
+        <tr><th>Category</th><td>{{ product.category_label }}</td></tr>
+        <tr><th>Description</th><td>{{ product.description }}</td></tr>
+        <tr><th>Status</th><td>
+            {% if product.enabled %}
+                <span class="badge badge-success">Enabled</span>
+            {% else %}
+                <span class="badge badge-secondary">Disabled</span>
+            {% endif %}
+        </td></tr>
+        <tr><th>Created</th><td>{{ product.created_at }}</td></tr>
+        <tr><th>Updated</th><td>{{ product.updated_at }}</td></tr>
+        {% if product.media_file %}
+        <tr><th>Media</th><td><a href="{{ product.media_file }}" target="_blank">{{ product.media_file }}</a></td></tr>
+        {% endif %}
+    </table>
+</div>
+
+<a href="/sku_system.php" class="btn btn-secondary">Back to Products</a>
+{% else %}
+<div class="card">
+    <p>Product not found.</p>
+</div>
+{% endif %}
+{% endblock %}

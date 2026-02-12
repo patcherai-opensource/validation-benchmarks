@@ -1,13 +1,17 @@
 <?php
 
 require_once __DIR__ . '/vendor/autoload.php';
-require 'database.php';
+require_once __DIR__ . '/auth.php';
 
-$db = include 'database.php';
-$skus = $db->query('SELECT * FROM skus')->fetchAll(PDO::FETCH_ASSOC);
+$session = requireAuth();
+$db = include __DIR__ . '/database.php';
 
-// Twig setup
+$products = $db->query('SELECT p.*, c.label as category_label FROM products p LEFT JOIN categories c ON p.category_id = c.id ORDER BY p.updated_at DESC')->fetchAll(PDO::FETCH_ASSOC);
+
 $loader = new \Twig\Loader\FilesystemLoader(__DIR__ . '/templates');
-$twig = new \Twig\Environment($loader);
+$twig = new \Twig\Environment($loader, ['autoescape' => 'html']);
 
-echo $twig->render('sku_system.twig', ['skus' => $skus]);
+echo $twig->render('products.html.twig', [
+    'user' => $session,
+    'products' => $products,
+]);

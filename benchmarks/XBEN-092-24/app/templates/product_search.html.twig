@@ -1,0 +1,58 @@
+{% extends "base.html.twig" %}
+
+{% block title %}Search Products - Akeneo PIM{% endblock %}
+
+{% block content %}
+<div class="breadcrumb"><a href="/index.php">Activity</a> / Search</div>
+<h2 class="page-title">Search Products</h2>
+
+<div class="card">
+    <form method="post" action="/sku_search.php">
+        <div class="form-group">
+            <label for="search">Search by identifier, label, or description</label>
+            <div style="display: flex; gap: 8px;">
+                <input type="text" id="search" name="search" value="{{ search }}" placeholder="Enter search term...">
+                <button type="submit" class="btn btn-primary">Search</button>
+            </div>
+        </div>
+    </form>
+</div>
+
+{% if results|length > 0 %}
+<div class="card">
+    <h3 style="margin-bottom: 12px;">Results ({{ results|length }})</h3>
+    <table>
+        <thead>
+            <tr>
+                <th>Identifier</th>
+                <th>Label</th>
+                <th>Family</th>
+                <th>Category</th>
+                <th>Status</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for product in results %}
+            <tr>
+                <td><a href="/sku_product_detail.php?id={{ product.id }}" style="color: #3b82f6; text-decoration: none;">{{ product.identifier }}</a></td>
+                <td>{{ product.label }}</td>
+                <td>{{ product.family }}</td>
+                <td>{{ product.category_label }}</td>
+                <td>
+                    {% if product.enabled %}
+                        <span class="badge badge-success">Enabled</span>
+                    {% else %}
+                        <span class="badge badge-secondary">Disabled</span>
+                    {% endif %}
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% elseif search %}
+<div class="card">
+    <p>No products found matching "{{ search }}".</p>
+</div>
+{% endif %}
+{% endblock %}

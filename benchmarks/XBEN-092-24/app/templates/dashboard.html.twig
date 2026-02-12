@@ -1,0 +1,59 @@
+{% extends "base.html.twig" %}
+
+{% block title %}Dashboard - Akeneo PIM{% endblock %}
+
+{% block content %}
+<div class="breadcrumb"><a href="/index.php">Activity</a> / Dashboard</div>
+<h2 class="page-title">Dashboard</h2>
+
+<div class="stats">
+    <div class="stat-card">
+        <div class="value">{{ product_count }}</div>
+        <div class="label">Products</div>
+    </div>
+    <div class="stat-card">
+        <div class="value">{{ category_count }}</div>
+        <div class="label">Categories</div>
+    </div>
+    <div class="stat-card">
+        <div class="value">4</div>
+        <div class="label">Attribute Groups</div>
+    </div>
+    <div class="stat-card">
+        <div class="value">2</div>
+        <div class="label">Channels</div>
+    </div>
+</div>
+
+<div class="card">
+    <h3 style="margin-bottom: 16px; color: #11324d;">Recent Products</h3>
+    <table>
+        <thead>
+            <tr>
+                <th>Identifier</th>
+                <th>Label</th>
+                <th>Family</th>
+                <th>Status</th>
+                <th>Updated</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for product in recent_products %}
+            <tr>
+                <td><a href="/sku_product_detail.php?id={{ product.id }}" style="color: #3b82f6; text-decoration: none;">{{ product.identifier }}</a></td>
+                <td>{{ product.label }}</td>
+                <td>{{ product.family }}</td>
+                <td>
+                    {% if product.enabled %}
+                        <span class="badge badge-success">Enabled</span>
+                    {% else %}
+                        <span class="badge badge-secondary">Disabled</span>
+                    {% endif %}
+                </td>
+                <td>{{ product.updated_at }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}
