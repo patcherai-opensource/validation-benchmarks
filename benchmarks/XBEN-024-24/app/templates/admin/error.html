@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Error {{ code }} - pimcore</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/admin.css') }}">
+</head>
+<body class="pimcore-login-page">
+    <div class="login-container">
+        <div class="login-header">
+            <div class="login-logo">
+                <span class="brand-icon">&#9632;</span>
+                <h1>pimcore</h1>
+            </div>
+        </div>
+        <div class="error-page">
+            <h2>Error {{ code }}</h2>
+            <p>{{ message }}</p>
+            <a href="/admin/login" class="btn btn-primary">Go to Login</a>
+        </div>
+    </div>
+</body>
+</html>

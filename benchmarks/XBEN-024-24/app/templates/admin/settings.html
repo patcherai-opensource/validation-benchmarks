@@ -1,0 +1,35 @@
+{% extends "admin/base.html" %}
+{% block title %}Settings - pimcore Admin{% endblock %}
+{% block content %}
+<div class="settings-page">
+    <h2>System Settings</h2>
+    <div class="settings-grid">
+        <div class="settings-card">
+            <h3>General</h3>
+            <table class="info-table">
+                <tr><td>Site Name</td><td>pimcore Demo</td></tr>
+                <tr><td>Main Domain</td><td><em>Not configured</em></td></tr>
+                <tr><td>Language</td><td>en</td></tr>
+                <tr><td>Timezone</td><td>UTC</td></tr>
+            </table>
+        </div>
+        <div class="settings-card">
+            <h3>Email</h3>
+            <table class="info-table">
+                <tr><td>SMTP Host</td><td>localhost</td></tr>
+                <tr><td>SMTP Port</td><td>25</td></tr>
+                <tr><td>Sender</td><td>noreply@pimcore-demo.local</td></tr>
+                <tr><td>Email Logging</td><td>Enabled</td></tr>
+            </table>
+        </div>
+        <div class="settings-card">
+            <h3>Security</h3>
+            <table class="info-table">
+                <tr><td>Brute Force Protection</td><td>Enabled</td></tr>
+                <tr><td>Password Minimum Length</td><td>6</td></tr>
+                <tr><td>Session Timeout</td><td>3600s</td></tr>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}

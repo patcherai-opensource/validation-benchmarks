@@ -1,0 +1,21 @@
+{% extends "admin/base.html" %}
+{% block title %}Email Detail - pimcore Admin{% endblock %}
+{% block content %}
+<div class="email-detail">
+    <h2>Email #{{ email.id }}</h2>
+    <a href="/admin/email/log" class="btn btn-small">&larr; Back to Email Log</a>
+    <div class="email-meta">
+        <table class="info-table">
+            <tr><td>To</td><td>{{ email.to }}</td></tr>
+            <tr><td>Subject</td><td>{{ email.subject }}</td></tr>
+            <tr><td>Sent Date</td><td>{{ email.sentDate }}</td></tr>
+        </table>
+    </div>
+    <div class="email-body">
+        <h3>Body</h3>
+        <div class="email-content-frame">
+            {{ email.body | safe }}
+        </div>
+    </div>
+</div>
+{% endblock %}

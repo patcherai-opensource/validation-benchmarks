@@ -1,0 +1,31 @@
+{% extends "admin/base.html" %}
+{% block title %}Users - pimcore Admin{% endblock %}
+{% block content %}
+<div class="users-page">
+    <h2>User Management</h2>
+    <table class="data-table">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Username</th>
+                <th>Name</th>
+                <th>Email</th>
+                <th>Role</th>
+                <th>Active</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for uname, u in users.items() %}
+            <tr>
+                <td>{{ u.id }}</td>
+                <td>{{ u.username }}</td>
+                <td>{{ u.name }}</td>
+                <td>{{ u.email }}</td>
+                <td>{{ u.role }}</td>
+                <td>{{ 'Yes' if u.active else 'No' }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

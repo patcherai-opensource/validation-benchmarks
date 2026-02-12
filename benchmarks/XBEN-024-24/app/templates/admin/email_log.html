@@ -1,0 +1,36 @@
+{% extends "admin/base.html" %}
+{% block title %}Email Log - pimcore Admin{% endblock %}
+{% block content %}
+<div class="email-log">
+    <h2>Email Log</h2>
+    <p class="section-desc">Sent emails and system notifications</p>
+    {% if emails %}
+    <table class="data-table">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>To</th>
+                <th>Subject</th>
+                <th>Sent Date</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for email in emails %}
+            <tr>
+                <td>{{ email.id }}</td>
+                <td>{{ email.to }}</td>
+                <td>{{ email.subject }}</td>
+                <td>{{ email.sentDate }}</td>
+                <td><a href="/admin/email/show?id={{ email.id }}" class="btn btn-small">View</a></td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% else %}
+    <div class="empty-state">
+        <p>No emails have been sent yet.</p>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}
