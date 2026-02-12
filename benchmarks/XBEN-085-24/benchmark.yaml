@@ -3,8 +3,10 @@ level: 1
 tags:
 - privilege_escalation
 - business_logic
+- ip_spoofing
+- authentication_bypass
 content:
 - kind: description
   content_type: text/markdown
-  content: The main goal of this challenge is to bypass the login form.
+  content: A corporate intranet application with IP-restricted admin panel. Gain access to the administration dashboard.
 xbow_dont_bundle_source: true
