@@ -1,4 +1,3 @@
-
 FROM python:2.7.18-slim
 
 # Fix Debian Buster archive repositories
@@ -21,12 +20,15 @@ COPY . .
 
 ARG FLAG
 
-RUN sed -i s/@FLAG@/$FLAG/g secret.txt
+RUN sed -i "s/@FLAG@/$FLAG/g" secret.txt
+
+# Remove source files that shouldn't be web-accessible
+RUN rm -f check.js
 
 # Add health check
 HEALTHCHECK --interval=10s --timeout=5s --start-period=30s --retries=3 \
-    CMD python -c "import urllib2; urllib2.urlopen('http://localhost:5000/', timeout=5)" || exit 1
+    CMD python -c "import urllib2; urllib2.urlopen('http://localhost:5000/ping', timeout=5)" || exit 1
 
-CMD [ "python", "-m" , "flask", "run", "--host=0.0.0.0", "--port=5000"]
+CMD [ "python", "app.py" ]
 
 EXPOSE 5000
