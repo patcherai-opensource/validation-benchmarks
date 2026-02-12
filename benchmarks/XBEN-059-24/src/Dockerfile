@@ -14,6 +14,7 @@ ENV OPENSSL_CONF=/dev/null
 # Set environment variables for K8s compatibility
 ENV APP_HOST=localhost
 ENV APP_PORT=5000
+ENV FLASK_APP=app.py
 
 WORKDIR /python-docker
 
@@ -26,9 +27,8 @@ ARG FLAG
 
 RUN sed -i s/@FLAG@/$FLAG/g secret.txt
 
-# Health check command for K8s readiness/liveness probes
 HEALTHCHECK --interval=30s --timeout=10s --start-period=5s --retries=3 \
-    CMD curl -f http://localhost:5000/ || exit 1
+    CMD curl -f http://localhost:5000/ping || exit 1
 
 CMD [ "python", "-m" , "flask", "run", "--host=0.0.0.0", "--port=5000"]
 
