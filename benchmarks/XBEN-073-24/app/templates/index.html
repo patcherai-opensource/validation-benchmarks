@@ -1,16 +1,73 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>Ping Tool</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>crmsh Web Console - Cluster Management</title>
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles.css') }}">
 </head>
 <body>
+    <nav class="navbar">
+        <div class="nav-brand">crmsh Web Console</div>
+        <ul class="nav-links">
+            <li><a href="/" class="active">Dashboard</a></li>
+            <li><a href="/status">Status</a></li>
+            <li><a href="/history">History</a></li>
+            <li><a href="/node">Nodes</a></li>
+            <li><a href="/configure">Configure</a></li>
+        </ul>
+    </nav>
+
     <div class="container">
-        <h1>Ping Tool</h1>
-        <form action="/ping" method="post">
-            <input type="text" name="ip_address" placeholder="Enter IP Address" required>
-            <button type="submit">Ping</button>
-        </form>
+        <h1>Cluster Dashboard</h1>
+
+        <div class="info-panel">
+            <h2>Cluster Overview</h2>
+            <table class="info-table">
+                <tr><td class="label">Stack:</td><td>{{ status.stack }}</td></tr>
+                <tr><td class="label">Current DC:</td><td>{{ status.current_dc }}</td></tr>
+                <tr><td class="label">Version:</td><td>{{ status.version }}</td></tr>
+                <tr><td class="label">Last Updated:</td><td>{{ status.last_updated }}</td></tr>
+                <tr><td class="label">Nodes Online:</td><td>{{ status.nodes_online | join(', ') }}</td></tr>
+            </table>
+        </div>
+
+        <div class="info-panel">
+            <h2>Resources</h2>
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>Resource ID</th>
+                        <th>Type</th>
+                        <th>Status</th>
+                        <th>Node</th>
+                    </tr>
+                </thead>
+                <tbody>
+                {% for res in status.resources %}
+                    <tr>
+                        <td>{{ res.id }}</td>
+                        <td>{{ res.type }}</td>
+                        <td class="status-{{ res.status|lower }}">{{ res.status }}</td>
+                        <td>{{ res.node }}</td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+        <div class="info-panel">
+            <h2>Quick Actions</h2>
+            <div class="quick-actions">
+                <a href="/history/log" class="btn">View Cluster Logs</a>
+                <a href="/history/transition" class="btn">View Transitions</a>
+                <a href="/status" class="btn">Cluster Status</a>
+            </div>
+        </div>
     </div>
+
+    <footer class="footer">
+        <p>crmsh Web Console v4.2.0 &mdash; ClusterLabs Pacemaker Management</p>
+    </footer>
 </body>
 </html>

@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Configuration Diff - crmsh Web Console</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-brand">crmsh Web Console</div>
+        <ul class="nav-links">
+            <li><a href="/">Dashboard</a></li>
+            <li><a href="/status">Status</a></li>
+            <li><a href="/history" class="active">History</a></li>
+            <li><a href="/node">Nodes</a></li>
+            <li><a href="/configure">Configure</a></li>
+        </ul>
+    </nav>
+    <div class="container">
+        <h1>PE Input Diff</h1>
+        <p>Compare two PE (Policy Engine) input configurations.</p>
+
+        {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            {% for category, message in messages %}
+            <div class="alert alert-{{ category }}">{{ message }}</div>
+            {% endfor %}
+        {% endif %}
+        {% endwith %}
+
+        <div class="info-panel">
+            <form action="/history/diff" method="post">
+                <div class="form-group">
+                    <label for="file1">PE Input File 1:</label>
+                    <input type="text" id="file1" name="file1" placeholder="Full path to first PE input file">
+                </div>
+                <div class="form-group">
+                    <label for="file2">PE Input File 2:</label>
+                    <input type="text" id="file2" name="file2" placeholder="Full path to second PE input file">
+                </div>
+                <button type="submit" class="btn">Compare</button>
+            </form>
+        </div>
+
+        {% if pe_inputs %}
+        <div class="info-panel">
+            <h3>Available PE Inputs</h3>
+            <ul class="session-list">
+                {% for p in pe_inputs %}
+                <li><code>{{ p }}</code></li>
+                {% endfor %}
+            </ul>
+        </div>
+        {% endif %}
+
+        {% if output is not none %}
+        <div class="output-panel">
+            <h2>Diff Output</h2>
+            <pre>{{ output }}</pre>
+        </div>
+        {% endif %}
+
+        <a href="/history" class="btn btn-secondary">Back to History</a>
+    </div>
+    <footer class="footer">
+        <p>crmsh Web Console v4.2.0 &mdash; ClusterLabs Pacemaker Management</p>
+    </footer>
+</body>
+</html>

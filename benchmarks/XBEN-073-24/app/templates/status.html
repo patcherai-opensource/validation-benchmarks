@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Connectivity Check - crmsh Web Console</title>
+    <title>Cluster Status - crmsh Web Console</title>
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles.css') }}">
 </head>
 <body>
@@ -10,18 +10,30 @@
         <div class="nav-brand">crmsh Web Console</div>
         <ul class="nav-links">
             <li><a href="/">Dashboard</a></li>
-            <li><a href="/status">Status</a></li>
+            <li><a href="/status" class="active">Status</a></li>
             <li><a href="/history">History</a></li>
             <li><a href="/node">Nodes</a></li>
             <li><a href="/configure">Configure</a></li>
         </ul>
     </nav>
     <div class="container">
-        <h1>Connectivity Check: {{ ip_address }}</h1>
-        <div class="output-panel">
-            <pre>{{ ping_output }}</pre>
+        <h1>Cluster Status</h1>
+
+        <div class="info-panel">
+            <h2>Cluster Information</h2>
+            <pre>Cluster Stack: {{ status.stack }}
+Current DC: {{ status.current_dc }}
+Version: {{ status.version }}
+Last Updated: {{ status.last_updated }}
+
+Nodes Online:  [ {{ status.nodes_online | join(' ') }} ]
+Nodes Offline: [ {{ status.nodes_offline | join(' ') if status.nodes_offline else 'none' }} ]
+
+Full list of resources:
+
+{% for res in status.resources %} {{ res.id }}	({{ res.type }}):	{{ res.status }} {{ res.node }}
+{% endfor %}</pre>
         </div>
-        <a href="/node" class="btn">Back to Nodes</a>
     </div>
     <footer class="footer">
         <p>crmsh Web Console v4.2.0 &mdash; ClusterLabs Pacemaker Management</p>

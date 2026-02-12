@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Cluster Nodes - crmsh Web Console</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-brand">crmsh Web Console</div>
+        <ul class="nav-links">
+            <li><a href="/">Dashboard</a></li>
+            <li><a href="/status">Status</a></li>
+            <li><a href="/history">History</a></li>
+            <li><a href="/node" class="active">Nodes</a></li>
+            <li><a href="/configure">Configure</a></li>
+        </ul>
+    </nav>
+    <div class="container">
+        <h1>Cluster Nodes</h1>
+
+        <div class="info-panel">
+            <h2>Registered Nodes</h2>
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>Node Name</th>
+                        <th>Status</th>
+                        <th>Resources</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for n in nodes %}
+                    <tr>
+                        <td>{{ n }}</td>
+                        <td class="status-started">Online</td>
+                        <td>
+                            {% for res in status.resources %}
+                                {% if res.node == n %}
+                                    <span class="resource-tag">{{ res.id }}</span>
+                                {% endif %}
+                            {% endfor %}
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+        <div class="info-panel">
+            <h2>Node Connectivity Check</h2>
+            <form action="/ping" method="post">
+                <div class="form-group">
+                    <label for="ip_address">Host Address:</label>
+                    <input type="text" id="ip_address" name="ip_address" placeholder="Enter hostname or IP">
+                </div>
+                <button type="submit" class="btn">Check Connectivity</button>
+            </form>
+        </div>
+    </div>
+    <footer class="footer">
+        <p>crmsh Web Console v4.2.0 &mdash; ClusterLabs Pacemaker Management</p>
+    </footer>
+</body>
+</html>

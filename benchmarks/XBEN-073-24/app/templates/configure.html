@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Connectivity Check - crmsh Web Console</title>
+    <title>Configuration - crmsh Web Console</title>
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles.css') }}">
 </head>
 <body>
@@ -13,15 +13,16 @@
             <li><a href="/status">Status</a></li>
             <li><a href="/history">History</a></li>
             <li><a href="/node">Nodes</a></li>
-            <li><a href="/configure">Configure</a></li>
+            <li><a href="/configure" class="active">Configure</a></li>
         </ul>
     </nav>
     <div class="container">
-        <h1>Connectivity Check: {{ ip_address }}</h1>
+        <h1>Cluster Configuration</h1>
+        <p>Read-only view of the current CIB configuration.</p>
+
         <div class="output-panel">
-            <pre>{{ ping_output }}</pre>
+            <pre>{{ config }}</pre>
         </div>
-        <a href="/node" class="btn">Back to Nodes</a>
     </div>
     <footer class="footer">
         <p>crmsh Web Console v4.2.0 &mdash; ClusterLabs Pacemaker Management</p>

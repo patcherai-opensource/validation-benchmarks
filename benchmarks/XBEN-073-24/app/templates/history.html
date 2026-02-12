@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>History Explorer - crmsh Web Console</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-brand">crmsh Web Console</div>
+        <ul class="nav-links">
+            <li><a href="/">Dashboard</a></li>
+            <li><a href="/status">Status</a></li>
+            <li><a href="/history" class="active">History</a></li>
+            <li><a href="/node">Nodes</a></li>
+            <li><a href="/configure">Configure</a></li>
+        </ul>
+    </nav>
+    <div class="container">
+        <h1>History Explorer</h1>
+        <p>Browse cluster history sessions, view logs, and analyze transitions.</p>
+
+        {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            {% for category, message in messages %}
+            <div class="alert alert-{{ category }}">{{ message }}</div>
+            {% endfor %}
+        {% endif %}
+        {% endwith %}
+
+        <div class="info-panel">
+            <h2>Available Commands</h2>
+            <table class="data-table">
+                <thead>
+                    <tr><th>Command</th><th>Description</th><th>Action</th></tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><code>history log</code></td>
+                        <td>View cluster logs filtered by node and time range</td>
+                        <td><a href="/history/log" class="btn btn-sm">Open</a></td>
+                    </tr>
+                    <tr>
+                        <td><code>history transition</code></td>
+                        <td>View transition details for a history session</td>
+                        <td><a href="/history/transition" class="btn btn-sm">Open</a></td>
+                    </tr>
+                    <tr>
+                        <td><code>history diff</code></td>
+                        <td>Compare two PE input configurations</td>
+                        <td><a href="/history/diff" class="btn btn-sm">Open</a></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        {% if sessions %}
+        <div class="info-panel">
+            <h2>Stored Sessions</h2>
+            <ul class="session-list">
+                {% for s in sessions %}
+                <li><code>{{ s }}</code></li>
+                {% endfor %}
+            </ul>
+        </div>
+        {% else %}
+        <div class="info-panel">
+            <h2>Stored Sessions</h2>
+            <p>No stored history sessions found.</p>
+        </div>
+        {% endif %}
+    </div>
+    <footer class="footer">
+        <p>crmsh Web Console v4.2.0 &mdash; ClusterLabs Pacemaker Management</p>
+    </footer>
+</body>
+</html>

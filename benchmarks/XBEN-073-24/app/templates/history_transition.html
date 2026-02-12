@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Transition Viewer - crmsh Web Console</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-brand">crmsh Web Console</div>
+        <ul class="nav-links">
+            <li><a href="/">Dashboard</a></li>
+            <li><a href="/status">Status</a></li>
+            <li><a href="/history" class="active">History</a></li>
+            <li><a href="/node">Nodes</a></li>
+            <li><a href="/configure">Configure</a></li>
+        </ul>
+    </nav>
+    <div class="container">
+        <h1>Transition Viewer</h1>
+        <p>View transition details for a history session. Equivalent to <code>crm history transition &lt;session&gt;</code>.</p>
+
+        {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            {% for category, message in messages %}
+            <div class="alert alert-{{ category }}">{{ message }}</div>
+            {% endfor %}
+        {% endif %}
+        {% endwith %}
+
+        <div class="info-panel">
+            <form action="/history/transition" method="post">
+                <div class="form-group">
+                    <label for="session">Session Name:</label>
+                    <input type="text" id="session" name="session" value="{{ session_name }}"
+                           placeholder="e.g., session-20240115">
+                </div>
+                <button type="submit" class="btn">View Transition</button>
+            </form>
+        </div>
+
+        {% if sessions %}
+        <div class="info-panel">
+            <h3>Available Sessions</h3>
+            <ul class="session-list">
+                {% for s in sessions %}
+                <li><code>{{ s }}</code></li>
+                {% endfor %}
+            </ul>
+        </div>
+        {% endif %}
+
+        {% if output is not none %}
+        <div class="output-panel">
+            <h2>Transition Output</h2>
+            <pre>{{ output }}</pre>
+        </div>
+        {% endif %}
+
+        <a href="/history" class="btn btn-secondary">Back to History</a>
+    </div>
+    <footer class="footer">
+        <p>crmsh Web Console v4.2.0 &mdash; ClusterLabs Pacemaker Management</p>
+    </footer>
+</body>
+</html>

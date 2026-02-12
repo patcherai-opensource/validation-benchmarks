@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>History Log - crmsh Web Console</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-brand">crmsh Web Console</div>
+        <ul class="nav-links">
+            <li><a href="/">Dashboard</a></li>
+            <li><a href="/status">Status</a></li>
+            <li><a href="/history" class="active">History</a></li>
+            <li><a href="/node">Nodes</a></li>
+            <li><a href="/configure">Configure</a></li>
+        </ul>
+    </nav>
+    <div class="container">
+        <h1>Cluster Log Viewer</h1>
+        <p>View cluster log entries filtered by node. Equivalent to <code>crm history log &lt;node&gt;</code>.</p>
+
+        {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            {% for category, message in messages %}
+            <div class="alert alert-{{ category }}">{{ message }}</div>
+            {% endfor %}
+        {% endif %}
+        {% endwith %}
+
+        <div class="info-panel">
+            <form action="/history/log" method="post">
+                <div class="form-group">
+                    <label for="node">Node Name:</label>
+                    <input type="text" id="node" name="node" value="{{ node }}"
+                           placeholder="e.g., node1" list="node-list">
+                    <datalist id="node-list">
+                        {% for n in nodes %}
+                        <option value="{{ n }}">
+                        {% endfor %}
+                    </datalist>
+                </div>
+                <div class="form-group">
+                    <label for="from_time">From Time (optional):</label>
+                    <input type="text" id="from_time" name="from_time" value="{{ from_time }}"
+                           placeholder="e.g., 2024-01-15 or Jan 15">
+                </div>
+                <button type="submit" class="btn">View Logs</button>
+            </form>
+        </div>
+
+        {% if output is not none %}
+        <div class="output-panel">
+            <h2>Log Output</h2>
+            <pre>{{ output }}</pre>
+        </div>
+        {% endif %}
+
+        <a href="/history" class="btn btn-secondary">Back to History</a>
+    </div>
+    <footer class="footer">
+        <p>crmsh Web Console v4.2.0 &mdash; ClusterLabs Pacemaker Management</p>
+    </footer>
+</body>
+</html>
