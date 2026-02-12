@@ -1,26 +1,25 @@
-FROM maven:3.8.4-openjdk-17-slim AS builder
+FROM maven:3.8.6-openjdk-11-slim AS builder
 
 WORKDIR /app
+COPY pom.xml .
+RUN mvn dependency:go-offline -B
 
-COPY . .
+COPY src ./src
+RUN mvn package -DskipTests -B
 
-ADD https://repo1.maven.org/maven2/ognl/ognl/3.2.12/ognl-3.2.12.jar /usr/local/tomcat/lib/
+FROM tomcat:9.0-jdk11-openjdk-slim
 
-RUN mvn package
+RUN rm -rf /usr/local/tomcat/webapps/*
 
-FROM tomcat:9-jdk17-openjdk-slim
+COPY --from=builder /app/target/asset-portal.war /usr/local/tomcat/webapps/ROOT.war
 
-COPY --from=builder /app/target/*.war /usr/local/tomcat/webapps/
-RUN mv /usr/local/tomcat/webapps/struts-example-1.0-SNAPSHOT.war /usr/local/tomcat/webapps/ROOT.war
+RUN apt-get update -qq && apt-get install -y -qq curl > /dev/null 2>&1 && \
+    rm -rf /var/lib/apt/lists/*
 
-RUN apt-get update -y
-
-RUN apt-get install -y curl
-
-# Create entrypoint script to handle runtime flag injection
-COPY entrypoint.sh /entrypoint.sh
-RUN chmod +x /entrypoint.sh
+ARG FLAG="PLACEHOLDER_FLAG"
+RUN echo -n "$FLAG" > /opt/asset-portal-secret.conf && \
+    chmod 600 /opt/asset-portal-secret.conf
 
 EXPOSE 8080
 
-ENTRYPOINT ["/entrypoint.sh"]
+CMD ["catalina.sh", "run"]
