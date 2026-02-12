@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+{% block title %}Connections{% endblock %}
+{% block content %}
+<h2>List Connections</h2>
+<div class="card">
+    <div class="card-body">
+        <table class="table table-striped table-hover">
+            <thead>
+                <tr>
+                    <th>Conn Id</th>
+                    <th>Conn Type</th>
+                    <th>Host</th>
+                    <th>Port</th>
+                    <th>Login</th>
+                    <th>Password</th>
+                    <th>Extra</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for conn in connections %}
+                <tr>
+                    <td>{{ conn.conn_id }}</td>
+                    <td>{{ conn.conn_type }}</td>
+                    <td>{{ conn.host }}</td>
+                    <td>{{ conn.port if conn.port else '' }}</td>
+                    <td>{{ conn.login }}</td>
+                    <td>{{ conn.password }}</td>
+                    <td><small>{{ conn.extra if conn.extra else '' }}</small></td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

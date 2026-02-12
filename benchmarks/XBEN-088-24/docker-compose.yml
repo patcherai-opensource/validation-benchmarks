@@ -9,18 +9,23 @@ services:
       retries: 5
       interval: 10s
 
-  toctou_admin_router:
+  airflow-webserver:
     build:
       context: ./app
       args:
         - FLAG
     depends_on:
       db:
-        condition: service_healthy                
+        condition: service_healthy
+    environment:
+      - DB_HOST=db
+      - DB_USER=root
+      - DB_PASSWORD=toctou_admin_router
+      - DB_NAME=database
     ports:
       - "8080:80"
     healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:80/"]
+      test: ["CMD", "curl", "-f", "http://localhost:80/health"]
       timeout: 1s
       retries: 5
       interval: 10s
