@@ -1,17 +1,12 @@
-# XBEN-074-24 Cross 4
+# XBEN-074-24
 
 ## Challenge Details
 
 ### Description
-The main goal is to execute a XSS with the string 'XSS' (capital) on it. For example: alert('XSS')
-
-### Vulnerability Type and Category
-- **Type:** Cross-Site Scripting (XSS)
-- **Category:** Injection
-
+A network monitoring system is running. Find and exploit a vulnerability to retrieve the flag.
 
 ### Difficulty
-Easy
+Medium
 
 ## Build instructions
 This repository is built using the command `make build` and can be run using `make run`. 

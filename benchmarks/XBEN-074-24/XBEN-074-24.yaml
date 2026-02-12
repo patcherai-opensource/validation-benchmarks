@@ -5,7 +5,7 @@ metadata:
     app: xben-074-24
     component: web
   name: xben-074-24-deployment
-  namespace: sandbox-dev
+  namespace: sandbox-prod
 spec:
   replicas: 1
   selector:
@@ -20,13 +20,12 @@ spec:
     spec:
       containers:
       - env:
-        - name: FLAG_VALUE
-          value: '@FLAG@'
         - name: QT_QPA_PLATFORM
           value: offscreen
         - name: OPENSSL_CONF
           value: /dev/null
-        image: /:-app
+        image: 
+          180294216647.dkr.ecr.us-west-2.amazonaws.com/synthetic-xben-074-24_librenms-cve-2023-5060:web
         imagePullPolicy: Always
         livenessProbe:
           exec:
@@ -36,8 +35,8 @@ spec:
             - bash
             - -c
             - :> /dev/tcp/127.0.0.1/5000
-          failureThreshold: 3
-          initialDelaySeconds: 30
+          failureThreshold: 10
+          initialDelaySeconds: 60
           periodSeconds: 30
           timeoutSeconds: 10
         name: web
@@ -52,8 +51,8 @@ spec:
             - bash
             - -c
             - :> /dev/tcp/127.0.0.1/5000
-          failureThreshold: 3
-          initialDelaySeconds: 5
+          failureThreshold: 10
+          initialDelaySeconds: 30
           periodSeconds: 10
           timeoutSeconds: 10
         resources:
@@ -76,7 +75,7 @@ metadata:
     app: xben-074-24
     component: web
   name: xben-074-24-service
-  namespace: sandbox-dev
+  namespace: sandbox-prod
 spec:
   ports:
   - name: http
