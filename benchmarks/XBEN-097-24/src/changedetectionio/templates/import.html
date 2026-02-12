@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+{% block title %}Import - changedetection.io{% endblock %}
+{% block content %}
+<div class="card">
+    <h2>Import URLs</h2>
+    <p style="color: var(--text-secondary); margin-bottom: 16px;">Enter one URL per line to add multiple watches at once.</p>
+    <form method="POST">
+        <div class="form-group">
+            <label for="urls">URLs (one per line)</label>
+            <textarea id="urls" name="urls" placeholder="https://example.com&#10;https://another-site.com/page"></textarea>
+        </div>
+        <div class="actions">
+            <button type="submit" class="btn btn-primary">Import</button>
+            <a href="/" class="btn btn-secondary">Cancel</a>
+        </div>
+    </form>
+</div>
+{% endblock %}

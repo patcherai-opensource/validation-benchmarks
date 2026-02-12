@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}changedetection.io{% endblock %}</title>
+    <link rel="icon" type="image/png" href="{{ url_for('static', filename='images/logo.png') }}">
+    <style>
+        :root {
+            --bg-primary: #1a1a2e;
+            --bg-secondary: #16213e;
+            --bg-card: #0f3460;
+            --text-primary: #e0e0e0;
+            --text-secondary: #a0a0a0;
+            --accent: #e94560;
+            --accent-hover: #ff6b81;
+            --success: #2ecc71;
+            --warning: #f39c12;
+            --error: #e74c3c;
+            --border: #2a2a4a;
+        }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: var(--bg-primary); color: var(--text-primary); min-height: 100vh; }
+        a { color: var(--accent); text-decoration: none; }
+        a:hover { color: var(--accent-hover); }
+
+        .header { background: var(--bg-secondary); border-bottom: 1px solid var(--border); padding: 12px 24px; display: flex; align-items: center; justify-content: space-between; }
+        .header .logo { display: flex; align-items: center; gap: 12px; font-size: 18px; font-weight: 600; }
+        .header .logo img { height: 32px; }
+        .header nav a { margin-left: 20px; color: var(--text-secondary); font-size: 14px; }
+        .header nav a:hover { color: var(--text-primary); }
+        .header .version { color: var(--text-secondary); font-size: 12px; }
+
+        .container { max-width: 1200px; margin: 0 auto; padding: 24px; }
+
+        .flash { padding: 10px 16px; border-radius: 4px; margin-bottom: 16px; font-size: 14px; }
+        .flash.notice { background: rgba(46,204,113,0.15); border: 1px solid var(--success); color: var(--success); }
+        .flash.error { background: rgba(231,76,60,0.15); border: 1px solid var(--error); color: var(--error); }
+
+        .quick-add { background: var(--bg-secondary); padding: 16px; border-radius: 6px; margin-bottom: 24px; border: 1px solid var(--border); }
+        .quick-add form { display: flex; gap: 12px; align-items: center; }
+        .quick-add input[type="text"], .quick-add input[type="url"] { flex: 1; padding: 10px 14px; background: var(--bg-primary); border: 1px solid var(--border); border-radius: 4px; color: var(--text-primary); font-size: 14px; }
+        .quick-add input[type="text"]:focus, .quick-add input[type="url"]:focus { outline: none; border-color: var(--accent); }
+        .quick-add .tag-input { max-width: 150px; }
+
+        .btn { padding: 10px 20px; border: none; border-radius: 4px; cursor: pointer; font-size: 14px; font-weight: 500; transition: background 0.2s; }
+        .btn-primary { background: var(--accent); color: white; }
+        .btn-primary:hover { background: var(--accent-hover); }
+        .btn-secondary { background: var(--bg-card); color: var(--text-primary); border: 1px solid var(--border); }
+        .btn-secondary:hover { background: var(--border); }
+        .btn-sm { padding: 6px 12px; font-size: 12px; }
+        .btn-danger { background: var(--error); color: white; }
+        .btn-danger:hover { background: #c0392b; }
+
+        table { width: 100%; border-collapse: collapse; }
+        table th, table td { text-align: left; padding: 12px 16px; border-bottom: 1px solid var(--border); }
+        table th { background: var(--bg-secondary); color: var(--text-secondary); font-size: 12px; text-transform: uppercase; letter-spacing: 0.5px; }
+        table td { font-size: 14px; }
+        table tr:hover { background: rgba(255,255,255,0.02); }
+
+        .watch-url { max-width: 400px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+        .status-ok { color: var(--success); }
+        .status-error { color: var(--error); }
+        .status-waiting { color: var(--warning); }
+
+        .card { background: var(--bg-secondary); border: 1px solid var(--border); border-radius: 6px; padding: 20px; margin-bottom: 20px; }
+        .card h2 { margin-bottom: 16px; font-size: 18px; }
+
+        .form-group { margin-bottom: 16px; }
+        .form-group label { display: block; margin-bottom: 6px; font-size: 14px; color: var(--text-secondary); }
+        .form-group input, .form-group textarea, .form-group select { width: 100%; padding: 10px 14px; background: var(--bg-primary); border: 1px solid var(--border); border-radius: 4px; color: var(--text-primary); font-size: 14px; }
+        .form-group textarea { min-height: 120px; resize: vertical; }
+
+        .preview-content { background: var(--bg-primary); border: 1px solid var(--border); border-radius: 4px; padding: 16px; font-family: monospace; font-size: 13px; white-space: pre-wrap; word-break: break-all; max-height: 600px; overflow-y: auto; }
+
+        .empty-state { text-align: center; padding: 60px 20px; color: var(--text-secondary); }
+        .empty-state h3 { margin-bottom: 8px; color: var(--text-primary); }
+
+        .actions { display: flex; gap: 8px; }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div class="logo">
+            <img src="{{ url_for('static', filename='images/logo.png') }}" alt="Logo">
+            <span>changedetection.io</span>
+            <span class="version">v{{ version }}</span>
+        </div>
+        <nav>
+            <a href="/">Dashboard</a>
+            <a href="/settings">Settings</a>
+            <a href="/import">Import</a>
+        </nav>
+    </div>
+    <div class="container">
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                    <div class="flash {{ category }}">{{ message }}</div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+        {% block content %}{% endblock %}
+    </div>
+</body>
+</html>

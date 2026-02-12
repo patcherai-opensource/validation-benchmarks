@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+{% block title %}Preview - {{ watch.url }} - changedetection.io{% endblock %}
+{% block content %}
+<div class="card">
+    <h2>Watch Preview</h2>
+    <p style="margin-bottom: 8px; color: var(--text-secondary);">URL: <strong>{{ watch.url }}</strong></p>
+    <p style="margin-bottom: 8px; color: var(--text-secondary);">Checks: {{ watch.check_count }} | Fetch time: {{ watch.fetch_time }}s</p>
+    {% if watch.last_error %}
+    <p style="margin-bottom: 8px; color: var(--error);">Last error: {{ watch.last_error }}</p>
+    {% endif %}
+    <div class="actions" style="margin-bottom: 16px;">
+        <a href="/check/{{ watch.uuid }}" class="btn btn-primary btn-sm">Recheck Now</a>
+        <a href="/edit/{{ watch.uuid }}" class="btn btn-secondary btn-sm">Edit</a>
+        <a href="/" class="btn btn-secondary btn-sm">Back to Dashboard</a>
+    </div>
+</div>
+
+<div class="card">
+    <h2>Latest Snapshot</h2>
+    {% if content %}
+    <div class="preview-content">{{ content }}</div>
+    {% else %}
+    <div class="empty-state">
+        <p>No snapshot available yet. Click "Recheck Now" to fetch the page.</p>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

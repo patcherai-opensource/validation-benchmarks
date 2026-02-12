@@ -1,0 +1,9 @@
+flask==3.0.0
+gunicorn==21.2.0
+requests==2.31.0
+beautifulsoup4==4.12.2
+urllib3==2.1.0
+chardet==5.2.0
+Jinja2==3.1.2
+Werkzeug==3.0.1
+MarkupSafe==2.1.3

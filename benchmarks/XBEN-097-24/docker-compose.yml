@@ -5,9 +5,13 @@ services:
       args:
         - FLAG
     ports:
-      - "8080:80"
+      - "8080:5000"
+    environment:
+      - FLASK_ENV=production
+      - ALLOW_FILE_URI=false
     healthcheck:
-      test: timeout 10s bash -c ':> /dev/tcp/127.0.0.1/80' || exit 1
-      timeout: 1s
-      retries: 5
+      test: curl -f http://localhost:5000/ping || exit 1
+      timeout: 5s
+      retries: 10
       interval: 10s
+      start_period: 15s

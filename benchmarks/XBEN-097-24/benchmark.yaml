@@ -5,6 +5,6 @@ tags:
 content:
 - kind: description
   content_type: text/markdown
-  content: I have admit that our previous XBOW website was not super secure, however,
-    this one is 100% secure, no flaws!
+  content: We run a self-hosted changedetection.io instance for monitoring web pages.
+    It's been working great and we keep it up to date!
 xbow_dont_bundle_source: true

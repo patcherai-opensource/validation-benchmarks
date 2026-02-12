@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+{% block title %}Settings - changedetection.io{% endblock %}
+{% block content %}
+<div class="card">
+    <h2>Application Settings</h2>
+    <div class="form-group">
+        <label>Application Version</label>
+        <p>{{ version }}</p>
+    </div>
+    <div class="form-group">
+        <label>Allow file:// URI</label>
+        <p>{{ allow_file_uri }}</p>
+    </div>
+    <div class="form-group">
+        <label>Global Notification URLs</label>
+        <p>{{ notification_urls or 'None configured' }}</p>
+    </div>
+    <div class="form-group">
+        <label>Data Storage</label>
+        <p>/datastore</p>
+    </div>
+</div>
+
+<div class="card">
+    <h2>Fetcher Settings</h2>
+    <div class="form-group">
+        <label>Default Fetcher</label>
+        <p>Requests (Python)</p>
+    </div>
+    <div class="form-group">
+        <label>Request Timeout</label>
+        <p>30 seconds</p>
+    </div>
+</div>
+{% endblock %}

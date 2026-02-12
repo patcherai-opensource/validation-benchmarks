@@ -1,0 +1,61 @@
+{% extends "base.html" %}
+{% block title %}Dashboard - changedetection.io{% endblock %}
+{% block content %}
+<div class="quick-add">
+    <form action="/form/add/quickwatch" method="POST">
+        <input type="text" name="url" placeholder="Enter a URL to watch for changes..." required>
+        <input type="text" name="tag" placeholder="Tag (optional)" class="tag-input">
+        <button type="submit" class="btn btn-primary">Watch</button>
+    </form>
+</div>
+
+{% if watches %}
+<table>
+    <thead>
+        <tr>
+            <th>URL</th>
+            <th>Tag</th>
+            <th>Last Checked</th>
+            <th>Status</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for uuid, watch in watches.items() %}
+        <tr>
+            <td class="watch-url">
+                <a href="/preview/{{ uuid }}">{{ watch.url }}</a>
+            </td>
+            <td>{{ watch.tag or '-' }}</td>
+            <td>
+                {% if watch.last_checked > 0 %}
+                    {{ watch.last_checked }}
+                {% else %}
+                    <span class="status-waiting">Waiting</span>
+                {% endif %}
+            </td>
+            <td>
+                {% if watch.last_error %}
+                    <span class="status-error" title="{{ watch.last_error }}">Error</span>
+                {% elif watch.check_count > 0 %}
+                    <span class="status-ok">OK</span>
+                {% else %}
+                    <span class="status-waiting">Pending</span>
+                {% endif %}
+            </td>
+            <td class="actions">
+                <a href="/check/{{ uuid }}" class="btn btn-secondary btn-sm">Recheck</a>
+                <a href="/edit/{{ uuid }}" class="btn btn-secondary btn-sm">Edit</a>
+                <a href="/delete/{{ uuid }}" class="btn btn-danger btn-sm" onclick="return confirm('Delete this watch?')">Delete</a>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% else %}
+<div class="empty-state">
+    <h3>No watches yet</h3>
+    <p>Add a URL above to start monitoring for changes.</p>
+</div>
+{% endif %}
+{% endblock %}
