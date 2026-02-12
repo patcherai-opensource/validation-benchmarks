@@ -1,0 +1,20 @@
+[2024-01-08 03:22:15] production.INFO: TaskFlow v5.6.28 booting...
+[2024-01-08 03:22:15] production.INFO: Configuration cached successfully.
+[2024-01-08 03:22:15] production.INFO: Application key [base64:G/QvHN4k69vpPVmQQwk5SLzKN161zBK6lUEMA/2mlPI=] configured.
+[2024-01-08 03:22:16] production.INFO: Database connection established [sqlite].
+[2024-01-08 03:22:16] production.INFO: Session driver [file] initialized.
+[2024-01-08 03:22:16] production.INFO: Cache driver [file] initialized.
+[2024-01-08 03:22:16] production.INFO: Routes loaded: 8 routes registered.
+[2024-01-08 03:22:16] production.INFO: Application ready to serve requests.
+[2024-01-08 14:05:33] production.INFO: User [admin@taskflow.local] logged in from 10.0.0.1
+[2024-01-08 14:12:47] production.INFO: Task #3 marked as completed by user [1].
+[2024-01-08 15:30:02] production.WARNING: Failed login attempt for [test@test.com] from 192.168.1.50
+[2024-01-09 08:00:01] production.INFO: TaskFlow v5.6.28 booting...
+[2024-01-09 08:00:01] production.INFO: Configuration cached successfully.
+[2024-01-09 08:00:01] production.INFO: Application key [base64:G/QvHN4k69vpPVmQQwk5SLzKN161zBK6lUEMA/2mlPI=] configured.
+[2024-01-09 08:00:02] production.INFO: Database connection established [sqlite].
+[2024-01-09 08:00:02] production.INFO: Application ready to serve requests.
+[2024-01-09 09:15:22] production.INFO: User [jane@taskflow.local] logged in from 10.0.0.3
+[2024-01-09 09:22:10] production.INFO: Task #2 status updated to in_progress by user [2].
+[2024-01-09 11:45:00] production.INFO: Cache cleared by user [1].
+[2024-01-09 16:30:15] production.WARNING: Session expired for user [3].

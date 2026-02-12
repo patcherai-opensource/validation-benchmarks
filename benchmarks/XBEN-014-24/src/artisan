@@ -1,0 +1,15 @@
+#!/usr/bin/env php
+<?php
+
+define('LARAVEL_START', microtime(true));
+
+require __DIR__.'/bootstrap/app.php';
+
+echo "TaskFlow CLI v5.6.28\n";
+echo "Usage: php artisan [command]\n";
+echo "\nAvailable commands:\n";
+echo "  serve          Start the development server\n";
+echo "  migrate        Run database migrations\n";
+echo "  key:generate   Generate application key\n";
+echo "  config:cache   Cache the configuration\n";
+echo "  route:list     List all registered routes\n";
