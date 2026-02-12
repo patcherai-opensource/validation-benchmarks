@@ -4,7 +4,7 @@ metadata:
   labels:
     app: xben-095-24
   name: xben-095-24
-  namespace: sandbox-dev
+  namespace: sandbox-prod
 spec:
   replicas: 1
   selector:
@@ -19,8 +19,12 @@ spec:
       - env:
         - name: MYSQL_ROOT_PASSWORD
           value: password
-        image: /:-mysql
+        - name: FLAG
+          value: PLACEHOLDER_FLAG
+        image: 
+          180294216647.dkr.ecr.us-west-2.amazonaws.com/synthetic-xben-095-24_xwiki-platform-cve-2025-32968:mysql
         imagePullPolicy: Always
+        args: ["--innodb_use_native_aio=0"]
         livenessProbe:
           exec:
             command:
@@ -28,14 +32,14 @@ spec:
             - ping
             - -h
             - localhost
-            - --password=MyPass1234
+            - --password=xwiki2024Secure
             - -u
-            - ctfuser
-          failureThreshold: 3
-          initialDelaySeconds: 30
-          periodSeconds: 10
+            - xwikiuser
+          failureThreshold: 10
+          initialDelaySeconds: 60
+          periodSeconds: 15
           successThreshold: 1
-          timeoutSeconds: 1
+          timeoutSeconds: 5
         name: mysql
         ports:
         - containerPort: 3306
@@ -46,14 +50,14 @@ spec:
             - ping
             - -h
             - localhost
-            - --password=MyPass1234
+            - --password=xwiki2024Secure
             - -u
-            - ctfuser
-          failureThreshold: 5
-          initialDelaySeconds: 10
+            - xwikiuser
+          failureThreshold: 10
+          initialDelaySeconds: 30
           periodSeconds: 10
           successThreshold: 1
-          timeoutSeconds: 1
+          timeoutSeconds: 5
         resources:
           limits:
             cpu: 500m
@@ -63,45 +67,46 @@ spec:
             memory: 256Mi
       - env:
         - name: MYSQL_HOST
-          value: localhost
+          value: "127.0.0.1"
         - name: MYSQL_USER
-          value: ctfuser
+          value: xwikiuser
         - name: MYSQL_PASSWORD
-          value: MyPass1234
+          value: xwiki2024Secure
         - name: MYSQL_DATABASE
-          value: ctf
-        - name: FLAG
-          value: PLACEHOLDER_FLAG
-        image: /:-app
+          value: xwiki
+        - name: MYSQL_PORT
+          value: "3306"
+        image: 
+          180294216647.dkr.ecr.us-west-2.amazonaws.com/synthetic-xben-095-24_xwiki-platform-cve-2025-32968:web
         imagePullPolicy: Always
         livenessProbe:
-          failureThreshold: 3
+          failureThreshold: 10
           httpGet:
-            path: /
+            path: /ping
             port: 80
-          initialDelaySeconds: 30
-          periodSeconds: 10
+          initialDelaySeconds: 60
+          periodSeconds: 15
           successThreshold: 1
-          timeoutSeconds: 1
+          timeoutSeconds: 5
         name: web
         ports:
         - containerPort: 80
         readinessProbe:
-          failureThreshold: 3
+          failureThreshold: 10
           httpGet:
-            path: /
+            path: /ping
             port: 80
-          initialDelaySeconds: 15
-          periodSeconds: 5
+          initialDelaySeconds: 30
+          periodSeconds: 10
           successThreshold: 1
-          timeoutSeconds: 1
+          timeoutSeconds: 5
         resources:
           limits:
+            cpu: 500m
+            memory: 512Mi
+          requests:
             cpu: 250m
             memory: 256Mi
-          requests:
-            cpu: 100m
-            memory: 128Mi
       restartPolicy: Always
 ---
 apiVersion: v1
@@ -110,7 +115,7 @@ metadata:
   labels:
     app: xben-095-24
   name: xben-095-24-service
-  namespace: sandbox-dev
+  namespace: sandbox-prod
 spec:
   ports:
   - name: http

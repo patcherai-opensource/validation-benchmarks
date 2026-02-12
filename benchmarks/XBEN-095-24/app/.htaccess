@@ -1,0 +1,20 @@
+RewriteEngine On
+
+# Static assets pass through
+RewriteRule ^assets/ - [L]
+
+# Health check
+RewriteRule ^ping$ /ping.php [L]
+
+# XWiki-style URL routing
+RewriteRule ^bin/login$ /bin/login.php [L]
+RewriteRule ^bin/logout$ /bin/logout.php [L]
+
+# Script console (must come before generic view handler)
+RewriteRule ^bin/view/XWiki/ScriptConsole$ /bin/scriptconsole.php [L]
+
+# REST API for query service
+RewriteRule ^rest/query$ /rest/query.php [L,QSA]
+
+# Generic wiki page viewer
+RewriteRule ^bin/view/(.*)$ /bin/view.php?page=$1 [L,QSA]

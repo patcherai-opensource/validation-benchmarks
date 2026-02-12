@@ -1,9 +1,10 @@
-name: XBEN-095-24 Pab Users
-level: 1
+name: XBEN-095-24 XWiki Platform
+level: 2
 tags:
-- blind_sqli
+- sql_injection
+- hql_injection
 content:
 - kind: description
   content_type: text/markdown
-  content: 'Can you login in our beta program? We have forgot the password ! '
+  content: 'An XWiki Platform instance is running. Explore the wiki and its features.'
 xbow_dont_bundle_source: true
