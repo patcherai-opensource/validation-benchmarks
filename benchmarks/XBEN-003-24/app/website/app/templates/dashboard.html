@@ -3,47 +3,79 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard - Trading Platform</title>
+    <title>Dashboard - Lunary</title>
     <link href="{{ url_for('static', filename='css/bootstrap.min.css') }}" rel="stylesheet">
     <style>
-        body {
-            background-color: #2c3e50;
-            color: #ffffff;
-        }
-        .card {
-            background-color: #34495e;
-            color: #ffffff;
-        }
+        body { background-color: #0f1117; color: #e0e0e0; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; }
+        .sidebar { background-color: #1a1b23; border-right: 1px solid #2a2b35; min-height: 100vh; padding: 1.5rem 1rem; width: 240px; position: fixed; }
+        .sidebar .logo span { font-size: 1.4rem; font-weight: 700; color: #6366f1; }
+        .sidebar .nav-link { color: #888; padding: 0.5rem 0.8rem; border-radius: 6px; font-size: 0.9rem; margin-bottom: 2px; }
+        .sidebar .nav-link:hover, .sidebar .nav-link.active { color: #fff; background-color: #2a2b35; }
+        .main-content { margin-left: 240px; padding: 2rem; }
+        .card { background-color: #1a1b23; border: 1px solid #2a2b35; border-radius: 10px; }
+        .card-header { background-color: #1f2029; border-bottom: 1px solid #2a2b35; font-weight: 600; }
+        .table { color: #e0e0e0; }
+        .table thead th { border-color: #2a2b35; color: #888; font-size: 0.8rem; text-transform: uppercase; }
+        .table td { border-color: #2a2b35; font-size: 0.9rem; }
+        .badge-running { background-color: #22c55e; color: #fff; }
+        .badge-completed { background-color: #6366f1; color: #fff; }
+        .badge-pending { background-color: #f59e0b; color: #fff; }
+        .user-info { color: #888; font-size: 0.85rem; border-top: 1px solid #2a2b35; padding-top: 1rem; margin-top: auto; }
+        .user-info .name { color: #e0e0e0; font-weight: 500; }
     </style>
 </head>
 <body>
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-        <div class="container">
-            <a class="navbar-brand" href="#">Trading Platform</a>
-            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav ml-auto">
-                    <li class="nav-item">
-                        <form action="/logout" method="post">
-                            <button type="submit" class="btn btn-success">Logout</button>
-                        </form>
-                    </li>
-                </ul>
-            </div>
+    <div class="sidebar d-flex flex-column">
+        <div class="logo mb-4"><span>🌙 lunary</span></div>
+        <nav class="nav flex-column">
+            <a class="nav-link active" href="/dashboard">Dashboard</a>
+            <a class="nav-link" href="#">Analytics</a>
+            <a class="nav-link" href="#">Traces</a>
+            <a class="nav-link" href="#">Evaluations</a>
+            <a class="nav-link" href="#">Datasets</a>
+            <a class="nav-link" href="#">Prompts</a>
+            <a class="nav-link" href="#">Users</a>
+            <a class="nav-link" href="#">Settings</a>
+        </nav>
+        <div class="user-info mt-auto">
+            <div class="name">{{ user.name }}</div>
+            <div>{{ user.email }}</div>
+            <form action="/logout" method="post" class="mt-2">
+                <button type="submit" class="btn btn-sm btn-outline-secondary">Sign out</button>
+            </form>
         </div>
-    </nav>
-    <div class="container mt-3">
-        <div class="row justify-content-center">
-            <div class="col-md-6">
-                <h2 class="text-center mb-4">Dashboard</h2>
+    </div>
+    <div class="main-content">
+        <h4 class="mb-4">Projects</h4>
+        <div class="row">
+            {% for project in projects %}
+            <div class="col-md-4 mb-3">
                 <div class="card">
                     <div class="card-body">
-                        <h5 class="card-title">Welcome, {{ user.first_name }} {{ user.last_name }}</h5>
-                        <p class="card-text">This is your dashboard.</p>
+                        <h6>{{ project.name }}</h6>
+                        <p class="text-muted small mb-0">Project #{{ project.id }}</p>
                     </div>
                 </div>
+            </div>
+            {% endfor %}
+        </div>
+
+        <h4 class="mt-4 mb-3">API Reference</h4>
+        <div class="card">
+            <div class="card-body">
+                <p class="small text-muted mb-2">Use the API to manage your datasets and evaluations programmatically.</p>
+                <table class="table table-sm mb-0">
+                    <thead><tr><th>Method</th><th>Endpoint</th><th>Description</th></tr></thead>
+                    <tbody>
+                        <tr><td><span class="badge bg-success">GET</span></td><td>/api/v1/projects</td><td>List your projects</td></tr>
+                        <tr><td><span class="badge bg-success">GET</span></td><td>/api/v1/datasets?projectId=</td><td>List datasets in a project</td></tr>
+                        <tr><td><span class="badge bg-success">GET</span></td><td>/api/v1/datasets/:id/prompts</td><td>List prompts in a dataset</td></tr>
+                        <tr><td><span class="badge bg-warning text-dark">POST</span></td><td>/api/v1/datasets/prompts</td><td>Create a prompt</td></tr>
+                        <tr><td><span class="badge bg-info">PATCH</span></td><td>/api/v1/datasets/prompts/:id</td><td>Update a prompt</td></tr>
+                        <tr><td><span class="badge bg-danger">DELETE</span></td><td>/api/v1/datasets/prompts/:id</td><td>Delete a prompt</td></tr>
+                        <tr><td><span class="badge bg-success">GET</span></td><td>/api/v1/evaluations?projectId=</td><td>List evaluations</td></tr>
+                    </tbody>
+                </table>
             </div>
         </div>
     </div>
