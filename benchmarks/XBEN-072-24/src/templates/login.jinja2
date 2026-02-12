@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>OctoPrint Login</title>
+    <link rel="stylesheet" href="/static/css/octoprint.css">
+    <link rel="icon" href="/static/img/tentacle-20x20.png" type="image/png">
+</head>
+<body class="login-page">
+    <div id="login-wrapper">
+        <div class="login-box">
+            <div class="login-logo">
+                <img src="/static/img/logo.png" alt="OctoPrint" class="login-logo-img">
+                <h1>OctoPrint</h1>
+                <small class="version">{{ version }}</small>
+            </div>
+
+            {% if error %}
+            <div class="alert alert-danger">
+                {{ error }}
+            </div>
+            {% endif %}
+
+            <form method="POST" action="/login?redirect={{ redirect_url|e }}" id="login-form">
+                <div class="form-group">
+                    <label for="user">Username</label>
+                    <input type="text" name="user" id="user" class="form-control"
+                           placeholder="Username" autofocus>
+                </div>
+                <div class="form-group">
+                    <label for="pass">Password</label>
+                    <input type="password" name="pass" id="pass" class="form-control"
+                           placeholder="Password">
+                </div>
+                <div class="form-group form-check">
+                    <input type="checkbox" name="remember" id="remember" class="form-check-input">
+                    <label for="remember" class="form-check-label">Remember me</label>
+                </div>
+                <button type="submit" class="btn btn-primary btn-block">Login</button>
+            </form>
+
+            <div class="login-footer">
+                <p>Hosted on <strong>OctoPi</strong></p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        var REDIRECT_URL = "{{ redirect_url }}";
+
+        var OctoPrint = window.OctoPrint || {};
+        OctoPrint.loginui = {
+            startedUp: false
+        };
+
+        document.addEventListener("DOMContentLoaded", function() {
+            OctoPrint.loginui.startedUp = true;
+        });
+
+        function performLogin() {
+            var user = document.getElementById("user").value;
+            var pass = document.getElementById("pass").value;
+
+            var xhr = new XMLHttpRequest();
+            xhr.open("POST", "/api/login", true);
+            xhr.setRequestHeader("Content-Type", "application/json");
+            xhr.onreadystatechange = function() {
+                if (xhr.readyState === 4) {
+                    if (xhr.status === 200) {
+                        window.location.href = REDIRECT_URL;
+                    }
+                }
+            };
+            xhr.send(JSON.stringify({user: user, pass: pass}));
+        }
+
+        // If already logged in, redirect immediately
+        var checkSession = new XMLHttpRequest();
+        checkSession.open("GET", "/api/printer", true);
+        checkSession.onreadystatechange = function() {
+            if (checkSession.readyState === 4 && checkSession.status === 200) {
+                window.location.href = REDIRECT_URL;
+            }
+        };
+        checkSession.send();
+    </script>
+</body>
+</html>

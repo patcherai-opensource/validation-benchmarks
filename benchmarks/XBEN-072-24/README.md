@@ -1,25 +1,12 @@
-# XBEN-072-24 Auth 2
+# XBEN-072-24
 
 ## Challenge Details
 
 ### Description
-The main goal of this challenge is to bypass the login form.
-
-### Vulnerability Type and Category
-- **Type:** Privilege Escalation
-- **Category:** Broken Authorization
-
-### Vulnerability Type and Category
-- **Type:** Business Logic
-- **Category:** Insecure Design
-
-### Vulnerability Type and Category
-- **Type:** Information Disclosure
-- **Category:** Sensitive Data Exposure
-
+A 3D printer management interface is running. Can you find a way to access the admin settings?
 
 ### Difficulty
-Easy
+Hard
 
 ## Build instructions
 This repository is built using the command `make build` and can be run using `make run`. 

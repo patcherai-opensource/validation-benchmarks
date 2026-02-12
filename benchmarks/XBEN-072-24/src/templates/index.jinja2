@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>OctoPrint</title>
+    <link rel="stylesheet" href="/static/css/octoprint.css">
+    <link rel="icon" href="/static/img/tentacle-20x20.png" type="image/png">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="navbar-brand">
+            <img src="/static/img/logo.png" alt="OctoPrint" height="28">
+            <span class="navbar-title">OctoPrint</span>
+        </div>
+        <div class="navbar-nav">
+            <span class="nav-item">Logged in as <strong>{{ user.name }}</strong></span>
+            <a href="/logout" class="nav-link">Logout</a>
+        </div>
+    </nav>
+
+    <div class="container">
+        <div class="row">
+            <div class="col-sidebar">
+                <div class="panel">
+                    <h3>Connection</h3>
+                    <div class="panel-body" id="connection-panel">
+                        <p>State: <span id="conn-state">Loading...</span></p>
+                        <p>Port: <span id="conn-port">-</span></p>
+                    </div>
+                </div>
+                <div class="panel">
+                    <h3>State</h3>
+                    <div class="panel-body" id="state-panel">
+                        <p>Status: <span id="printer-state">Loading...</span></p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-main">
+                <div class="tabs">
+                    <button class="tab active" data-tab="temperature">Temperature</button>
+                    <button class="tab" data-tab="control">Control</button>
+                    <button class="tab" data-tab="terminal">Terminal</button>
+                </div>
+                <div class="tab-content" id="tab-temperature">
+                    <div class="panel">
+                        <h3>Temperature</h3>
+                        <div class="panel-body">
+                            <table class="table">
+                                <thead>
+                                    <tr><th>Tool</th><th>Actual</th><th>Target</th></tr>
+                                </thead>
+                                <tbody id="temp-table">
+                                    <tr><td colspan="3">Loading...</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                <div class="tab-content" id="tab-control" style="display:none">
+                    <div class="panel">
+                        <h3>Printer Control</h3>
+                        <div class="panel-body">
+                            <p>Printer control panel</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="tab-content" id="tab-terminal" style="display:none">
+                    <div class="panel">
+                        <h3>Terminal</h3>
+                        <div class="panel-body">
+                            <pre id="terminal-output" style="height:200px;overflow:auto;background:#1a1a1a;color:#0f0;padding:10px;">
+OctoPrint Terminal
+&gt; Connected
+                            </pre>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer class="footer">
+        <p>OctoPrint 1.7.3 &copy; 2022 Gina H&auml;u&szlig;ge</p>
+    </footer>
+
+    <script>
+        // Tab switching
+        document.querySelectorAll('.tab').forEach(function(tab) {
+            tab.addEventListener('click', function() {
+                document.querySelectorAll('.tab').forEach(function(t) { t.classList.remove('active'); });
+                document.querySelectorAll('.tab-content').forEach(function(c) { c.style.display = 'none'; });
+                this.classList.add('active');
+                document.getElementById('tab-' + this.dataset.tab).style.display = 'block';
+            });
+        });
+
+        // Load connection info
+        fetch('/api/connection')
+            .then(function(r) { return r.json(); })
+            .then(function(data) {
+                document.getElementById('conn-state').textContent = data.current.state;
+                document.getElementById('conn-port').textContent = data.current.port || 'N/A';
+            })
+            .catch(function() {});
+
+        // Load printer state
+        fetch('/api/printer')
+            .then(function(r) { return r.json(); })
+            .then(function(data) {
+                document.getElementById('printer-state').textContent = data.state.text;
+                var tbody = document.getElementById('temp-table');
+                var html = '';
+                if (data.temperature) {
+                    for (var key in data.temperature) {
+                        html += '<tr><td>' + key + '</td><td>' +
+                                data.temperature[key].actual + '°C</td><td>' +
+                                data.temperature[key].target + '°C</td></tr>';
+                    }
+                }
+                tbody.innerHTML = html || '<tr><td colspan="3">No data</td></tr>';
+            })
+            .catch(function() {});
+
+        // Check for redirect after login
+        var stored = sessionStorage.getItem("octoprint.redirect");
+        if (stored) {
+            sessionStorage.removeItem("octoprint.redirect");
+        }
+    </script>
+</body>
+</html>

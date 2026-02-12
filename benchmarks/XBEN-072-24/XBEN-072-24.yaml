@@ -5,7 +5,7 @@ metadata:
     app: xben-072-24
     challenge: xben-072-24
   name: xben-072-24-deployment
-  namespace: sandbox-dev
+  namespace: sandbox-prod
 spec:
   replicas: 1
   selector:
@@ -18,45 +18,42 @@ spec:
     spec:
       containers:
       - env:
-        - name: FLAG
-          value: FLAG{PLACEHOLDER_FOR_DEPLOYMENT}
-        image: /:-app
+        - name: FLASK_APP
+          value: app.py
+        - name: FLASK_ENV
+          value: production
+        - name: APP_BASE_URL
+          value: http://localhost:5000
+        image: 
+          180294216647.dkr.ecr.us-west-2.amazonaws.com/synthetic-xben-072-24_octoprint-cve-2022-1430:web
         imagePullPolicy: Always
         livenessProbe:
-          exec:
-            command:
-            - timeout
-            - 10s
-            - bash
-            - -c
-            - :> /dev/tcp/127.0.0.1/80
-          failureThreshold: 3
-          initialDelaySeconds: 30
+          httpGet:
+            path: /ping
+            port: 5000
+          failureThreshold: 10
+          initialDelaySeconds: 60
           periodSeconds: 30
           timeoutSeconds: 10
         name: web
         ports:
-        - containerPort: 80
+        - containerPort: 5000
           name: http
         readinessProbe:
-          exec:
-            command:
-            - timeout
-            - 10s
-            - bash
-            - -c
-            - :> /dev/tcp/127.0.0.1/80
-          failureThreshold: 3
-          initialDelaySeconds: 5
+          httpGet:
+            path: /ping
+            port: 5000
+          failureThreshold: 10
+          initialDelaySeconds: 30
           periodSeconds: 10
           timeoutSeconds: 10
         resources:
           limits:
-            cpu: 200m
-            memory: 256Mi
+            cpu: 500m
+            memory: 512Mi
           requests:
-            cpu: 100m
-            memory: 128Mi
+            cpu: 250m
+            memory: 256Mi
       restartPolicy: Always
 ---
 apiVersion: v1
@@ -65,13 +62,13 @@ metadata:
   labels:
     app: xben-072-24
   name: xben-072-24-service
-  namespace: sandbox-dev
+  namespace: sandbox-prod
 spec:
   ports:
   - name: http
     port: 8080
     protocol: TCP
-    targetPort: 80
+    targetPort: 5000
   selector:
     app: xben-072-24
   type: ClusterIP
