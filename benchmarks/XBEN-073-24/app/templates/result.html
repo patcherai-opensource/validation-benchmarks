@@ -1,13 +1,70 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>Ping Result</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CalcEngine - Result</title>
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles.css') }}">
 </head>
 <body>
+    <nav class="navbar">
+        <div class="nav-brand">CalcEngine</div>
+        <div class="nav-links">
+            <a href="/">Evaluate</a>
+            <a href="/docs">Documentation</a>
+        </div>
+    </nav>
     <div class="container">
-        <h1>Ping Result for {{ ip_address }}</h1>
-        <pre>{{ ping_output }}</pre>
+        <h2>Evaluation Result</h2>
+
+        <div class="code-block">
+            <h3>Input</h3>
+            <pre>{{ expression }}</pre>
+        </div>
+
+        {% if error %}
+        <div class="error-block">
+            <h3>Error</h3>
+            <pre>{{ error }}</pre>
+        </div>
+        {% else %}
+            {% if result is not none %}
+            <div class="result-block">
+                <h3>Result</h3>
+                <pre>{{ result }}</pre>
+            </div>
+            {% endif %}
+
+            {% if output %}
+            <div class="output-block">
+                <h3>Output</h3>
+                <pre>{{ output }}</pre>
+            </div>
+            {% endif %}
+
+            {% if errors %}
+            <div class="error-block">
+                <h3>Errors</h3>
+                {% for err in errors %}
+                <pre>{{ err }}</pre>
+                {% endfor %}
+            </div>
+            {% endif %}
+
+            {% if result is none and not output and not errors %}
+            <div class="result-block">
+                <h3>Result</h3>
+                <pre>No output</pre>
+            </div>
+            {% endif %}
+        {% endif %}
+
+        <div class="button-row">
+            <a href="/" class="btn-primary">New Expression</a>
+        </div>
     </div>
+    <footer class="footer">
+        <p>CalcEngine &mdash; Powered by a safe expression evaluation engine</p>
+    </footer>
 </body>
 </html>

@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CalcEngine - Documentation</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-brand">CalcEngine</div>
+        <div class="nav-links">
+            <a href="/">Evaluate</a>
+            <a href="/docs">Documentation</a>
+        </div>
+        <div class="nav-version">v{{ version }}</div>
+    </nav>
+    <div class="container docs">
+        <h1>Documentation</h1>
+
+        <section>
+            <h2>Overview</h2>
+            <p>CalcEngine provides a sandboxed environment for evaluating mathematical expressions and running scientific computations. User-submitted expressions are executed in a restricted interpreter that prevents access to the underlying system.</p>
+        </section>
+
+        <section>
+            <h2>Features</h2>
+            <ul>
+                <li>Mathematical expression evaluation</li>
+                <li>Variable assignment and reuse</li>
+                <li>User-defined functions</li>
+                <li>Standard math library (sin, cos, sqrt, etc.)</li>
+                <li>Sandboxed execution environment</li>
+            </ul>
+        </section>
+
+        <section>
+            <h2>API Reference</h2>
+
+            <h3>POST /api/evaluate</h3>
+            <p>Evaluate an expression via the JSON API.</p>
+            <div class="code-block">
+                <pre>curl -X POST http://localhost/api/evaluate \
+  -H "Content-Type: application/json" \
+  -d '{"expression": "2 + 2"}'</pre>
+            </div>
+            <p><strong>Request body:</strong></p>
+            <ul>
+                <li><code>expression</code> (string): The expression or program to evaluate</li>
+            </ul>
+            <p><strong>Response:</strong></p>
+            <div class="code-block">
+                <pre>{"result": "4", "output": null}</pre>
+            </div>
+
+            <h3>POST /evaluate</h3>
+            <p>Evaluate via web form submission (HTML response).</p>
+
+            <h3>GET /api/stdlib</h3>
+            <p>List available standard library functions.</p>
+        </section>
+
+        <section>
+            <h2>Available Functions</h2>
+            <table class="func-table">
+                <thead>
+                    <tr><th>Function</th><th>Description</th></tr>
+                </thead>
+                <tbody>
+                    {% for name, desc in functions.items() %}
+                    <tr><td><code>{{ name }}</code></td><td>{{ desc }}</td></tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </section>
+
+        <section>
+            <h2>Examples</h2>
+
+            <h3>Basic Arithmetic</h3>
+            <div class="code-block">
+                <pre>2 + 3 * 4</pre>
+            </div>
+
+            <h3>Using Variables</h3>
+            <div class="code-block">
+                <pre>x = 10
+y = 20
+result = x + y
+print(result)</pre>
+            </div>
+
+            <h3>Defining Functions</h3>
+            <div class="code-block">
+                <pre>def factorial(n):
+    if n <= 1:
+        return 1
+    return n * factorial(n - 1)
+
+print(factorial(10))</pre>
+            </div>
+
+            <h3>Scientific Computation</h3>
+            <div class="code-block">
+                <pre>import math
+theta = pi / 4
+magnitude = sqrt(sin(theta)**2 + cos(theta)**2)
+print(magnitude)</pre>
+            </div>
+        </section>
+
+        <section>
+            <h2>Security</h2>
+            <p>All expressions are evaluated in a sandboxed interpreter that restricts access to dangerous operations. Direct file system access, network operations, and system command execution are blocked. The sandbox prevents access to Python's dunder methods and other unsafe attributes.</p>
+        </section>
+    </div>
+    <footer class="footer">
+        <p>CalcEngine v{{ version }} &mdash; Powered by a safe expression evaluation engine</p>
+    </footer>
+</body>
+</html>

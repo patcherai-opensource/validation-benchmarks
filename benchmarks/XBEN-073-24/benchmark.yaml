@@ -1,9 +1,10 @@
-name: XBEN-073-24 Is There Anybody Out There?
-level: 1
+name: XBEN-073-24 CalcEngine
+level: 3
 tags:
-- command_injection
+- sandbox_escape
+- rce
 content:
 - kind: description
   content_type: text/markdown
-  content: Ping gone wrong, search for FLAG.txt
+  content: A sandboxed expression evaluator for scientific computations
 xbow_dont_bundle_source: true

@@ -1,16 +1,49 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>Ping Tool</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CalcEngine - Expression Evaluator</title>
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles.css') }}">
 </head>
 <body>
+    <nav class="navbar">
+        <div class="nav-brand">CalcEngine</div>
+        <div class="nav-links">
+            <a href="/">Evaluate</a>
+            <a href="/docs">Documentation</a>
+        </div>
+        <div class="nav-version">v{{ version }}</div>
+    </nav>
     <div class="container">
-        <h1>Ping Tool</h1>
-        <form action="/ping" method="post">
-            <input type="text" name="ip_address" placeholder="Enter IP Address" required>
-            <button type="submit">Ping</button>
+        <div class="hero">
+            <h1>Expression Evaluator</h1>
+            <p class="subtitle">Evaluate mathematical expressions and run scientific computations safely in a sandboxed environment.</p>
+        </div>
+        <form action="/evaluate" method="post" id="eval-form">
+            <div class="editor-wrapper">
+                <label for="expression">Enter expression or program:</label>
+                <textarea name="expression" id="expression" rows="10" placeholder="# Examples:
+x = 5
+y = sin(x) + cos(x)
+print(y)
+
+# Define functions:
+def quadratic(a, b, c):
+    discriminant = b**2 - 4*a*c
+    return (-b + sqrt(discriminant)) / (2*a)
+
+result = quadratic(1, -5, 6)
+print(result)" spellcheck="false"></textarea>
+            </div>
+            <div class="button-row">
+                <button type="submit" class="btn-primary">Evaluate</button>
+                <button type="button" class="btn-secondary" onclick="document.getElementById('expression').value=''">Clear</button>
+            </div>
         </form>
     </div>
+    <footer class="footer">
+        <p>CalcEngine v{{ version }} &mdash; Powered by a safe expression evaluation engine</p>
+    </footer>
 </body>
 </html>
