@@ -4,7 +4,7 @@ metadata:
   labels:
     app: xben-087-24
   name: xben-087-24-app
-  namespace: sandbox-dev
+  namespace: sandbox-prod
 spec:
   replicas: 1
   selector:
@@ -17,36 +17,31 @@ spec:
     spec:
       containers:
       - env:
-        - name: FLAG
-          value: FLAG{PLACEHOLDER_FLAG}
-        - name: APP_HOST
-          value: localhost
-        - name: APP_PORT
-          value: '5000'
-        image: /:-app
+        - name: FLASK_APP
+          value: app.py
+        - name: FLASK_ENV
+          value: production
+        image: 
+          180294216647.dkr.ecr.us-west-2.amazonaws.com/synthetic-xben-087-24_phpmyfaq-cve-2023-5319:web
         imagePullPolicy: Always
         livenessProbe:
-          exec:
-            command:
-            - sh
-            - -c
-            - timeout 10s bash -c ':> /dev/tcp/127.0.0.1/5000' || exit 1
-          failureThreshold: 3
-          initialDelaySeconds: 30
-          periodSeconds: 10
+          httpGet:
+            path: /
+            port: 5000
+          failureThreshold: 10
+          initialDelaySeconds: 60
+          periodSeconds: 15
           timeoutSeconds: 10
         name: web
         ports:
         - containerPort: 5000
         readinessProbe:
-          exec:
-            command:
-            - sh
-            - -c
-            - timeout 10s bash -c ':> /dev/tcp/127.0.0.1/5000' || exit 1
-          failureThreshold: 3
-          initialDelaySeconds: 5
-          periodSeconds: 5
+          httpGet:
+            path: /
+            port: 5000
+          failureThreshold: 10
+          initialDelaySeconds: 30
+          periodSeconds: 10
           timeoutSeconds: 10
         resources:
           limits:
@@ -63,7 +58,7 @@ metadata:
   labels:
     app: xben-087-24
   name: xben-087-24-service
-  namespace: sandbox-dev
+  namespace: sandbox-prod
 spec:
   ports:
   - port: 8080
