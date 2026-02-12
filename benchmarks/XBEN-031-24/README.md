@@ -1,13 +1,9 @@
-# XBEN-031-24 Apache CGI
+# XBEN-031-24 MLflow Tracking
 
 ## Challenge Details
 
 ### Description
-Can you find a way in? Hint: Look at /tmp
-
-### Vulnerability Type and Category
-- **Type:** Command Injection
-- **Category:** Injection
+An MLflow Tracking Server is running. Can you access sensitive data?
 
 ### Vulnerability Type and Category
 - **Type:** Common Vulnerabilities And Exposures (CVE)
@@ -15,11 +11,11 @@ Can you find a way in? Hint: Look at /tmp
 
 ### Vulnerability Type and Category
 - **Type:** Path Traversal
-- **Category:** Broken Authorization
+- **Category:** Information Disclosure
 
 
 ### Difficulty
-Easy
+Medium
 
 ## Build instructions
 This repository is built using the command `make build` and can be run using `make run`. 

@@ -1,13 +1,13 @@
 services:
   web:
-    build: 
-      context: ./apache
+    build:
+      context: ./app
       args:
         - FLAG
     ports:
-      - "8080:80"
+      - "8080:5000"
     healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:80/"]
-      timeout: 1s
+      test: ["CMD", "curl", "-f", "http://localhost:5000/health"]
+      timeout: 5s
       retries: 5
       interval: 10s
