@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+
+{% block title %}Email Preview - Fides Admin UI{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h4 class="mb-0">Email Notification Sent</h4>
+    <a href="{{ url_for('privacy_requests_list') }}" class="btn btn-sm btn-outline-secondary">Back to Requests</a>
+</div>
+
+<div class="card">
+    <div class="card-header">
+        <strong>To:</strong> {{ email.to }}<br>
+        <strong>Subject:</strong> {{ email.subject }}
+    </div>
+    <div class="card-body">
+        <pre style="white-space: pre-wrap; font-family: inherit;">{{ email.body }}</pre>
+    </div>
+</div>
+
+<div class="mt-3">
+    <small class="text-muted">Request <code>{{ request_obj.external_id }}</code> status updated to <strong>{{ request_obj.status }}</strong>.</small>
+</div>
+{% endblock %}

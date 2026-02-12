@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+
+{% block title %}Not Found - Fides Admin UI{% endblock %}
+
+{% block content %}
+<div class="text-center mt-5">
+    <h1 class="display-4 text-muted">404</h1>
+    <p class="lead">The page you're looking for could not be found.</p>
+    <a href="{{ url_for('index') }}" class="btn btn-primary">Go to Dashboard</a>
+</div>
+{% endblock %}

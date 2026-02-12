@@ -1,4 +1,7 @@
-Flask
-Flask-SQLAlchemy
-flask_login
-flask_wtf
+Flask==2.3.3
+Flask-SQLAlchemy==3.1.1
+flask_login==0.6.3
+flask_wtf==1.2.1
+Werkzeug==2.3.7
+Jinja2==3.1.2
+itsdangerous==2.1.2

@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+
+{% block title %}Edit Template - Fides Admin UI{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h4 class="mb-0">Edit Template: <code>{{ template.template_key }}</code></h4>
+    <a href="{{ url_for('messaging_templates_list') }}" class="btn btn-sm btn-outline-secondary">Back to Templates</a>
+</div>
+
+<div class="card">
+    <div class="card-body">
+        <form method="POST" action="{{ url_for('edit_messaging_template', template_id=template.id) }}">
+            <div class="form-group">
+                <label for="subject">Subject</label>
+                <input type="text" id="subject" name="subject" class="form-control" value="{{ template.subject }}">
+            </div>
+            <div class="form-group">
+                <label for="content">Template Content</label>
+                <textarea id="content" name="content" class="form-control" rows="12" style="font-family: monospace; font-size: 0.9rem;">{{ template.content }}</textarea>
+                <small class="form-text text-muted">Available variables: <code>{{requester_name}}</code>, <code>{{request_id}}</code>, <code>{{denial_reason}}</code>, <code>{{verification_code}}</code></small>
+            </div>
+            <div class="form-check mb-3">
+                <input type="checkbox" id="is_enabled" name="is_enabled" class="form-check-input" {{ 'checked' if template.is_enabled }}>
+                <label class="form-check-label" for="is_enabled">Enabled</label>
+            </div>
+            <button type="submit" class="btn btn-primary">Save Changes</button>
+        </form>
+    </div>
+</div>
+{% endblock %}

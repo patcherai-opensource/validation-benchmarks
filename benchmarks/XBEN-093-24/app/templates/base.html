@@ -3,34 +3,98 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{% block title %}PayMeBack{% endblock %}</title>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"> 
+    <title>{% block title %}Fides Admin UI{% endblock %}</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        body { background-color: #f5f7fa; }
+        .sidebar {
+            min-height: 100vh;
+            background-color: #1a1c2e;
+            padding-top: 1rem;
+        }
+        .sidebar .nav-link {
+            color: #a3a6b7;
+            padding: 0.6rem 1.2rem;
+            font-size: 0.9rem;
+        }
+        .sidebar .nav-link:hover, .sidebar .nav-link.active {
+            color: #fff;
+            background-color: rgba(255,255,255,0.08);
+        }
+        .sidebar .brand {
+            color: #fff;
+            font-size: 1.3rem;
+            font-weight: 700;
+            padding: 0.5rem 1.2rem 1.5rem;
+            display: block;
+        }
+        .sidebar .section-label {
+            color: #6c6f85;
+            font-size: 0.72rem;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            padding: 1rem 1.2rem 0.3rem;
+        }
+        .main-content { padding: 2rem; }
+        .card { border: none; box-shadow: 0 1px 3px rgba(0,0,0,0.08); }
+        .badge-pending { background-color: #ffc107; color: #333; }
+        .badge-approved { background-color: #28a745; color: #fff; }
+        .badge-denied { background-color: #dc3545; color: #fff; }
+        .badge-in_processing { background-color: #17a2b8; color: #fff; }
+        .badge-complete { background-color: #6c757d; color: #fff; }
+        .user-info { color: #a3a6b7; font-size: 0.85rem; padding: 0.6rem 1.2rem; border-top: 1px solid rgba(255,255,255,0.1); }
+    </style>
 </head>
 <body>
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-        <a class="navbar-brand" href="{{ url_for('transactions') }}">PayMeBack</a>
-        <div class="collapse navbar-collapse" id="navbarNav">
-            <ul class="navbar-nav">
-                {% if current_user.is_authenticated %}
-                <li class="nav-item">
-                    <a class="nav-link" href="{{ url_for('transactions') }}">Transactions</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="{{ url_for('add_transaction') }}">Add Transaction</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="{{ url_for('logout') }}">Logout</a>
-                </li>
-                {% else %}
-                <li class="nav-item">
-                    <a class="nav-link" href="{{ url_for('login') }}">Login</a>
-                </li> 
-                {% endif %}
-            </ul>
+    <div class="container-fluid">
+        <div class="row">
+            {% if current_user.is_authenticated %}
+            <nav class="col-md-2 d-none d-md-block sidebar">
+                <a class="brand" href="{{ url_for('dashboard') }}">fides</a>
+                <div class="section-label">Management</div>
+                <ul class="nav flex-column">
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('dashboard') }}">Dashboard</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('privacy_requests_list') }}">Privacy Requests</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('connections_list') }}">Connections</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('data_categories_list') }}">Data Categories</a>
+                    </li>
+                </ul>
+                <div class="section-label">Configuration</div>
+                <ul class="nav flex-column">
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('messaging_templates_list') }}">Messaging Templates</a>
+                    </li>
+                </ul>
+                <div class="user-info mt-auto">
+                    {{ current_user.first_name }} {{ current_user.last_name }}<br>
+                    <small>{{ current_user.role | title }}</small><br>
+                    <a href="{{ url_for('logout') }}" class="text-muted" style="font-size:0.8rem;">Sign Out</a>
+                </div>
+            </nav>
+            <main class="col-md-10 ml-sm-auto main-content">
+            {% else %}
+            <main class="col-12 main-content">
+            {% endif %}
+                {% with messages = get_flashed_messages(with_categories=true) %}
+                    {% if messages %}
+                        {% for category, message in messages %}
+                        <div class="alert alert-{{ 'danger' if category == 'error' else category }} alert-dismissible fade show" role="alert">
+                            {{ message }}
+                            <button type="button" class="close" data-dismiss="alert"><span>&times;</span></button>
+                        </div>
+                        {% endfor %}
+                    {% endif %}
+                {% endwith %}
+                {% block content %}{% endblock %}
+            </main>
         </div>
-    </nav>
-    <div class="container mt-4">
-        {% block content %}{% endblock %}
     </div>
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>

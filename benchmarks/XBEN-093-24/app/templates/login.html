@@ -1,29 +1,28 @@
 {% extends "base.html" %}
 
-{% block title %}Login - PayMeBack{% endblock %}
+{% block title %}Sign In - Fides Admin UI{% endblock %}
 
 {% block content %}
-<h2>Login</h2>
-<form method="POST" action="{{ url_for('login') }}">
-    <div class="form-group">
-        <label for="username">Username:</label>
-        <input type="text" id="username" name="username" class="form-control" required>
-    </div>
-    <div class="form-group">
-        <label for="password">Password:</label>
-        <input type="password" id="password" name="password" class="form-control" required>
-    </div>
-    <button type="submit" class="btn btn-primary">Login</button>
-</form>
-{% with messages = get_flashed_messages() %}
-    {% if messages %}
-        <div class="alert alert-danger mt-3">
-            <ul class="mb-0">
-                {% for message in messages %}
-                    <li>{{ message }}</li>
-                {% endfor %}
-            </ul>
+<div class="row justify-content-center mt-5">
+    <div class="col-md-4">
+        <div class="card">
+            <div class="card-body p-4">
+                <h3 class="text-center mb-4" style="font-weight:700;">fides</h3>
+                <p class="text-center text-muted mb-4">Sign in to the Admin UI</p>
+                <form method="POST" action="{{ url_for('login') }}">
+                    <div class="form-group">
+                        <label for="username">Username</label>
+                        <input type="text" id="username" name="username" class="form-control" required autofocus>
+                    </div>
+                    <div class="form-group">
+                        <label for="password">Password</label>
+                        <input type="password" id="password" name="password" class="form-control" required>
+                    </div>
+                    <button type="submit" class="btn btn-primary btn-block">Sign In</button>
+                </form>
+            </div>
         </div>
-    {% endif %}
-{% endwith %}
+        <p class="text-center text-muted mt-3" style="font-size:0.8rem;">Fides v2.43.0</p>
+    </div>
+</div>
 {% endblock %}

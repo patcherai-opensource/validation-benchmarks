@@ -1,0 +1,73 @@
+{% extends "base.html" %}
+
+{% block title %}Dashboard - Fides Admin UI{% endblock %}
+
+{% block content %}
+<h4 class="mb-4">Dashboard</h4>
+
+<div class="row mb-4">
+    <div class="col-md-3">
+        <div class="card">
+            <div class="card-body text-center">
+                <h5 class="card-title text-muted">Total Requests</h5>
+                <h2>{{ privacy_requests | length }}</h2>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card">
+            <div class="card-body text-center">
+                <h5 class="card-title text-muted">Pending</h5>
+                <h2>{{ privacy_requests | selectattr('status', 'equalto', 'pending') | list | length }}</h2>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card">
+            <div class="card-body text-center">
+                <h5 class="card-title text-muted">Approved</h5>
+                <h2>{{ privacy_requests | selectattr('status', 'equalto', 'approved') | list | length }}</h2>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card">
+            <div class="card-body text-center">
+                <h5 class="card-title text-muted">Denied</h5>
+                <h2>{{ privacy_requests | selectattr('status', 'equalto', 'denied') | list | length }}</h2>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="card">
+    <div class="card-header d-flex justify-content-between align-items-center">
+        <h5 class="mb-0">Recent Privacy Requests</h5>
+        <a href="{{ url_for('privacy_requests_list') }}" class="btn btn-sm btn-outline-primary">View All</a>
+    </div>
+    <div class="card-body p-0">
+        <table class="table table-hover mb-0">
+            <thead>
+                <tr>
+                    <th>Request ID</th>
+                    <th>Email</th>
+                    <th>Type</th>
+                    <th>Status</th>
+                    <th>Created</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for pr in privacy_requests[:5] %}
+                <tr>
+                    <td><code>{{ pr.external_id }}</code></td>
+                    <td>{{ pr.requester_email }}</td>
+                    <td>{{ pr.request_type | title }}</td>
+                    <td><span class="badge badge-{{ pr.status }}">{{ pr.status | title }}</span></td>
+                    <td>{{ pr.created_at.strftime('%Y-%m-%d %H:%M') if pr.created_at else '-' }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

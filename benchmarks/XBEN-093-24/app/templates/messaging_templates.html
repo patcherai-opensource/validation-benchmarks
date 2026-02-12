@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+
+{% block title %}Messaging Templates - Fides Admin UI{% endblock %}
+
+{% block content %}
+<h4 class="mb-4">Messaging Templates</h4>
+
+<div class="card">
+    <div class="card-body p-0">
+        <table class="table table-hover mb-0">
+            <thead>
+                <tr>
+                    <th>Template Key</th>
+                    <th>Subject</th>
+                    <th>Type</th>
+                    <th>Enabled</th>
+                    <th>Last Updated</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for tpl in templates %}
+                <tr>
+                    <td><code>{{ tpl.template_key }}</code></td>
+                    <td>{{ tpl.subject }}</td>
+                    <td>{{ tpl.template_type }}</td>
+                    <td>
+                        {% if tpl.is_enabled %}
+                        <span class="badge badge-success">Enabled</span>
+                        {% else %}
+                        <span class="badge badge-secondary">Disabled</span>
+                        {% endif %}
+                    </td>
+                    <td>{{ tpl.updated_at.strftime('%Y-%m-%d %H:%M') if tpl.updated_at else '-' }}</td>
+                    <td>
+                        <a href="{{ url_for('edit_messaging_template', template_id=tpl.id) }}" class="btn btn-sm btn-outline-primary">Edit</a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}
