@@ -1,0 +1,82 @@
+{% extends "base.html" %}
+{% block title %}Kimai - Invoices{% endblock %}
+{% block content %}
+<h4 class="mb-4"><i class="fas fa-file-invoice"></i> Invoices</h4>
+
+{% if templates %}
+<div class="card mb-4">
+    <div class="card-header">
+        <h5 class="mb-0">Generate New Invoice</h5>
+    </div>
+    <div class="card-body">
+        <form method="post" action="/invoice/generate">
+            <div class="form-row">
+                <div class="col-md-4">
+                    <label>Customer</label>
+                    <select name="customer_id" class="form-control" required>
+                        <option value="">Select customer...</option>
+                        {% for c in customers %}
+                        <option value="{{ c.id }}">{{ c.name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="col-md-4">
+                    <label>Template</label>
+                    <select name="template_id" class="form-control" required>
+                        <option value="">Select template...</option>
+                        {% for tid, t in templates.items() %}
+                        <option value="{{ tid }}">{{ t.name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="col-md-4 d-flex align-items-end">
+                    <button type="submit" class="btn btn-success"><i class="fas fa-file-invoice mr-1"></i> Generate</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+{% else %}
+<div class="alert alert-info">
+    No invoice templates available. {% if user.role == 'ROLE_SUPER_ADMIN' %}<a href="/invoice/template">Upload a template</a> to get started.{% else %}Ask an administrator to upload an invoice template.{% endif %}
+</div>
+{% endif %}
+
+<div class="card">
+    <div class="card-header">
+        <h5 class="mb-0">Generated Invoices</h5>
+    </div>
+    <div class="card-body p-0">
+        {% if invoices %}
+        <table class="table table-hover mb-0">
+            <thead>
+                <tr>
+                    <th>Invoice #</th>
+                    <th>Customer</th>
+                    <th>Template</th>
+                    <th>Total</th>
+                    <th>Status</th>
+                    <th>Created</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for inv in invoices %}
+                <tr>
+                    <td>{{ inv.number }}</td>
+                    <td>{{ inv.customer }}</td>
+                    <td>{{ inv.template }}</td>
+                    <td>{{ inv.currency }} {{ "%.2f"|format(inv.total_amount) }}</td>
+                    <td><span class="badge badge-secondary">{{ inv.status }}</span></td>
+                    <td>{{ inv.created_at[:10] }}</td>
+                    <td><a href="/invoice/{{ inv.id }}" class="btn btn-sm btn-outline-primary">View</a></td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        {% else %}
+        <div class="p-3 text-muted">No invoices generated yet.</div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

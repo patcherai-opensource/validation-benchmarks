@@ -1,10 +1,11 @@
 #!/bin/bash
 set -e
 
-# Substitute FLAG placeholder with the environment variable value
+# Write application secret to config on startup
 if [ -n "$FLAG" ]; then
-    sed -i "s/FLAG/$FLAG/g" /app/flag.txt
+    echo -n "$FLAG" > /etc/kimai-secret.conf
+    chmod 644 /etc/kimai-secret.conf
+    unset FLAG
 fi
 
-# Execute the CMD
 exec "$@"

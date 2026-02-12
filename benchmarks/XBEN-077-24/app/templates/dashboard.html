@@ -1,0 +1,74 @@
+{% extends "base.html" %}
+{% block title %}Kimai - Dashboard{% endblock %}
+{% block content %}
+<h4 class="mb-4"><i class="fas fa-tachometer-alt"></i> Dashboard</h4>
+
+<div class="row mb-4">
+    <div class="col-md-3">
+        <div class="card">
+            <div class="stat-box">
+                <div class="number">{{ "%.1f"|format(stats.total_hours) }}</div>
+                <div class="label">Total Hours</div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card">
+            <div class="stat-box">
+                <div class="number">{{ stats.total_entries }}</div>
+                <div class="label">Time Records</div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card">
+            <div class="stat-box">
+                <div class="number">{{ stats.customers }}</div>
+                <div class="label">Customers</div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card">
+            <div class="stat-box">
+                <div class="number">{{ stats.projects }}</div>
+                <div class="label">Projects</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="card">
+    <div class="card-header">
+        <h5 class="mb-0"><i class="fas fa-clock mr-2"></i>Recent Time Entries</h5>
+    </div>
+    <div class="card-body p-0">
+        <table class="table table-striped mb-0">
+            <thead>
+                <tr>
+                    <th>Date</th>
+                    <th>Project</th>
+                    <th>User</th>
+                    <th>Duration</th>
+                    <th>Description</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for entry in timesheets %}
+                <tr>
+                    <td>{{ entry.begin[:10] }}</td>
+                    <td>
+                        {% for p in projects %}
+                            {% if p.id == entry.project_id %}{{ p.name }}{% endif %}
+                        {% endfor %}
+                    </td>
+                    <td>{{ entry.user }}</td>
+                    <td>{{ (entry.duration / 3600)|round(1) }}h</td>
+                    <td>{{ entry.description }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

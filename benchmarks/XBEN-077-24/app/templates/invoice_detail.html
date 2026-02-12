@@ -1,0 +1,62 @@
+{% extends "base.html" %}
+{% block title %}Kimai - Invoice {{ invoice.number }}{% endblock %}
+{% block content %}
+<h4 class="mb-4"><i class="fas fa-file-invoice"></i> Invoice {{ invoice.number }}</h4>
+
+<div class="card mb-4">
+    <div class="card-header">
+        <h5 class="mb-0">Invoice Details</h5>
+    </div>
+    <div class="card-body">
+        <div class="row">
+            <div class="col-md-6">
+                <table class="table table-borderless">
+                    <tr><th>Invoice Number:</th><td>{{ invoice.number }}</td></tr>
+                    <tr><th>Customer:</th><td>{{ invoice.customer }}</td></tr>
+                    <tr><th>Template:</th><td>{{ invoice.template }}</td></tr>
+                    <tr><th>Created:</th><td>{{ invoice.created_at[:19] }}</td></tr>
+                    <tr><th>Created By:</th><td>{{ invoice.created_by }}</td></tr>
+                    <tr><th>Status:</th><td><span class="badge badge-secondary">{{ invoice.status }}</span></td></tr>
+                </table>
+            </div>
+            <div class="col-md-6">
+                <table class="table table-borderless">
+                    <tr><th>Total Hours:</th><td>{{ invoice.total_hours }}h</td></tr>
+                    <tr><th>Total Amount:</th><td>{{ invoice.currency }} {{ "%.2f"|format(invoice.total_amount) }}</td></tr>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% if invoice.template_data %}
+<div class="card mb-4">
+    <div class="card-header">
+        <h5 class="mb-0">Template Data</h5>
+    </div>
+    <div class="card-body">
+        {% if invoice.template_data.sheets %}
+        <p><strong>Sheets:</strong> {{ invoice.template_data.sheets | join(', ') }}</p>
+        {% endif %}
+        {% if invoice.template_data.content %}
+        <div class="mt-3">
+            <strong>Template Content:</strong>
+            <ul class="list-group mt-2">
+                {% for item in invoice.template_data.content %}
+                <li class="list-group-item">{{ item }}</li>
+                {% endfor %}
+            </ul>
+        </div>
+        {% endif %}
+        {% if invoice.template_data.metadata and invoice.template_data.metadata.workbook %}
+        <div class="mt-3">
+            <strong>Workbook Metadata:</strong>
+            <pre class="bg-light p-3 rounded mt-2" style="max-height: 300px; overflow: auto;">{{ invoice.template_data.metadata.workbook }}</pre>
+        </div>
+        {% endif %}
+    </div>
+</div>
+{% endif %}
+
+<a href="/invoice" class="btn btn-secondary"><i class="fas fa-arrow-left mr-1"></i> Back to Invoices</a>
+{% endblock %}
