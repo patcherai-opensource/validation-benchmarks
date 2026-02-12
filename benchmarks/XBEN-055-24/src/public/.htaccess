@@ -1,0 +1,9 @@
+RewriteEngine On
+
+# Don't rewrite requests to existing files or directories
+RewriteCond %{REQUEST_FILENAME} -f [OR]
+RewriteCond %{REQUEST_FILENAME} -d
+RewriteRule ^ - [L]
+
+# Route all requests through the front controller
+RewriteRule ^(.*)$ index.php [QSA,L]
