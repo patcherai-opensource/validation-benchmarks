@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MediaGrab - Library</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-brand">MediaGrab</div>
+        <div class="nav-links">
+            <a href="/">Download</a>
+            <a href="/downloads" class="active">Library</a>
+        </div>
+    </nav>
+
+    <div class="container">
+        <h1>Download Library</h1>
+        {% if files %}
+        <table class="file-table">
+            <thead>
+                <tr>
+                    <th>Filename</th>
+                    <th>Size</th>
+                    <th>Date</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for file in files %}
+                <tr>
+                    <td>{{ file.name }}</td>
+                    <td>{{ file.size }} B</td>
+                    <td>{{ file.modified }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        {% else %}
+        <p class="empty-state">No downloads yet. <a href="/">Start downloading</a></p>
+        {% endif %}
+    </div>
+
+    <footer>
+        <p>MediaGrab v2023.06.15 &mdash; Self-hosted media processing</p>
+    </footer>
+</body>
+</html>

@@ -1,47 +1,240 @@
-body {
-    font-family: Arial, sans-serif;
+* {
     margin: 0;
     padding: 0;
-    background-color: #f0f0f0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    background-color: #0f0f0f;
+    color: #e0e0e0;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+.navbar {
+    background-color: #1a1a1a;
+    padding: 12px 24px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 1px solid #333;
+}
+
+.nav-brand {
+    font-size: 1.4em;
+    font-weight: 700;
+    color: #ff4444;
+}
+
+.nav-links a {
+    color: #999;
+    text-decoration: none;
+    margin-left: 24px;
+    font-size: 0.95em;
+    transition: color 0.2s;
+}
+
+.nav-links a:hover,
+.nav-links a.active {
+    color: #fff;
 }
 
 .container {
-    width: 50%;  /* Adjusted width */
-    margin: 50px auto;
-    padding: 20px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    background-color: #ffffff;
+    max-width: 720px;
+    margin: 40px auto;
+    padding: 0 20px;
+    flex: 1;
 }
 
-h1 {
+.hero {
     text-align: center;
+    margin-bottom: 32px;
 }
 
-input[type="text"], button {
+.hero h1 {
+    font-size: 1.8em;
+    margin-bottom: 8px;
+    color: #fff;
+}
+
+.hero p {
+    color: #888;
+}
+
+.download-form {
+    background: #1a1a1a;
+    border: 1px solid #333;
+    border-radius: 8px;
+    padding: 24px;
+}
+
+.form-group {
+    margin-bottom: 20px;
+}
+
+.form-group label {
     display: block;
-    width: 95%;
-    margin-bottom: 10px;
-    padding: 10px;
-    border: 1px solid #ccc;
+    margin-bottom: 6px;
+    font-weight: 600;
+    font-size: 0.9em;
+    color: #ccc;
+}
+
+.form-group .optional {
+    font-weight: 400;
+    color: #666;
+    font-size: 0.85em;
+}
+
+.form-group input[type="text"],
+.form-group input[type="url"] {
+    width: 100%;
+    padding: 10px 14px;
+    background: #0f0f0f;
+    border: 1px solid #444;
+    border-radius: 6px;
+    color: #e0e0e0;
+    font-size: 0.95em;
+    font-family: inherit;
+    transition: border-color 0.2s;
+}
+
+.form-group input:focus {
+    outline: none;
+    border-color: #ff4444;
+}
+
+.help-text {
+    display: block;
+    margin-top: 6px;
+    color: #666;
+    font-size: 0.82em;
+    line-height: 1.5;
+}
+
+.help-text code {
+    background: #222;
+    padding: 2px 5px;
     border-radius: 3px;
+    font-size: 0.9em;
+    color: #aaa;
 }
 
-button {
-    background-color: #4CAF50;
-    color: white;
+button[type="submit"] {
+    width: 100%;
+    padding: 12px;
+    background: #ff4444;
+    color: #fff;
     border: none;
+    border-radius: 6px;
+    font-size: 1em;
+    font-weight: 600;
     cursor: pointer;
+    transition: background 0.2s;
 }
 
-button:hover {
-    background-color: #45a049;
+button[type="submit"]:hover {
+    background: #e03333;
 }
 
-pre {
-    white-space: pre-wrap; /* Ensures whitespace and newlines are preserved */
-    background-color: #f4f4f4;
-    padding: 10px;
-    border-radius: 5px;
-    border: 1px solid #ddd;
+button[type="submit"]:disabled {
+    background: #666;
+    cursor: not-allowed;
+}
+
+.result-panel {
+    margin-top: 24px;
+    background: #1a1a1a;
+    border: 1px solid #333;
+    border-radius: 8px;
+    padding: 20px;
+}
+
+.result-panel h3 {
+    margin-bottom: 12px;
+    color: #fff;
+}
+
+.result-panel pre {
+    background: #0f0f0f;
+    padding: 12px;
+    border-radius: 6px;
+    border: 1px solid #333;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+    color: #ccc;
+    font-size: 0.9em;
+    max-height: 300px;
+    overflow-y: auto;
+}
+
+.success p {
+    margin-bottom: 8px;
+    color: #ccc;
+}
+
+.error {
+    color: #ff6666;
+    padding: 12px;
+    background: rgba(255, 68, 68, 0.1);
+    border-radius: 6px;
+    border: 1px solid rgba(255, 68, 68, 0.3);
+}
+
+.file-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 16px;
+}
+
+.file-table th,
+.file-table td {
+    text-align: left;
+    padding: 10px 14px;
+    border-bottom: 1px solid #333;
+}
+
+.file-table th {
+    color: #888;
+    font-size: 0.85em;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.file-table td {
+    color: #ccc;
+    font-size: 0.9em;
+}
+
+.file-table tr:hover td {
+    background: rgba(255, 255, 255, 0.03);
+}
+
+.empty-state {
+    text-align: center;
+    color: #666;
+    padding: 40px;
+}
+
+.empty-state a {
+    color: #ff4444;
+    text-decoration: none;
+}
+
+.btn-link {
+    display: inline-block;
+    margin-top: 16px;
+    color: #ff4444;
+    text-decoration: none;
+    font-weight: 600;
+}
+
+footer {
+    text-align: center;
+    padding: 20px;
+    color: #444;
+    font-size: 0.8em;
+    border-top: 1px solid #222;
 }
