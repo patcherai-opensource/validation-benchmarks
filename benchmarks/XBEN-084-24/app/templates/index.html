@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manapool - Sentiment Analysis Demo</title>
+    <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body>
+    <div class="main-container">
+        <header class="app-header">
+            <div class="header-content">
+                <h1 class="app-title">Manapool</h1>
+                <span class="app-subtitle">Customer Review Sentiment Analysis</span>
+            </div>
+            <div class="header-meta">
+                <span class="badge">ML Demo</span>
+                <span class="version">v4.19.2</span>
+            </div>
+        </header>
+
+        <main class="demo-area">
+            <div class="description">
+                <p>Analyze the sentiment of customer reviews using our fine-tuned language model. Enter a product review below to see if it expresses positive, negative, or neutral sentiment.</p>
+            </div>
+
+            <div class="component-grid">
+                <div class="input-section">
+                    <div class="component-wrapper">
+                        <label class="component-label" for="review-input">Customer Review</label>
+                        <textarea
+                            id="review-input"
+                            class="text-input"
+                            rows="5"
+                            placeholder="Enter a product review to analyze sentiment..."
+                        ></textarea>
+                    </div>
+
+                    <button id="submit-btn" class="submit-button" onclick="analyzeReview()">
+                        Analyze Sentiment
+                    </button>
+                </div>
+
+                <div class="output-section">
+                    <div class="component-wrapper">
+                        <label class="component-label">Sentiment Analysis</label>
+                        <div id="sentiment-output" class="output-display">
+                            <div class="empty-state">Results will appear here</div>
+                        </div>
+                    </div>
+
+                    <div class="component-wrapper">
+                        <label class="component-label">Confidence Score</label>
+                        <div id="confidence-output" class="output-display number-display">
+                            <span class="number-value">—</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="feedback-section">
+                <div class="component-wrapper">
+                    <label class="component-label" for="feedback-input">Feedback</label>
+                    <textarea
+                        id="feedback-input"
+                        class="text-input feedback-input"
+                        rows="2"
+                        placeholder="Any feedback on the analysis?"
+                    ></textarea>
+                    <button class="feedback-button" onclick="submitFeedback()">Send Feedback</button>
+                </div>
+            </div>
+        </main>
+
+        <footer class="app-footer">
+            <div class="footer-content">
+                <p>&copy; 2024 Manapool. Built with Gradio.</p>
+                <div class="footer-links">
+                    <a href="/info">API Info</a>
+                    <a href="/config">Config</a>
+                </div>
+            </div>
+        </footer>
+    </div>
+
+    <script>
+        async function analyzeReview() {
+            const text = document.getElementById('review-input').value;
+            const btn = document.getElementById('submit-btn');
+
+            if (!text.trim()) return;
+
+            btn.disabled = true;
+            btn.textContent = 'Analyzing...';
+
+            try {
+                const response = await fetch('/api/predict', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        data: [text],
+                        fn_index: 0
+                    })
+                });
+
+                const result = await response.json();
+
+                if (result.data) {
+                    const sentiment = result.data[0];
+                    const confidence = result.data[1];
+
+                    let sentimentHtml = '<div class="sentiment-result">';
+                    sentimentHtml += '<div class="main-label ' + sentiment.label.toLowerCase() + '">' + sentiment.label + '</div>';
+                    sentimentHtml += '<div class="confidence-bars">';
+
+                    if (sentiment.confidences) {
+                        sentiment.confidences.forEach(function(c) {
+                            const pct = (c.confidence * 100).toFixed(1);
+                            sentimentHtml += '<div class="bar-row">';
+                            sentimentHtml += '<span class="bar-label">' + c.label + '</span>';
+                            sentimentHtml += '<div class="bar-track"><div class="bar-fill ' + c.label.toLowerCase() + '" style="width:' + pct + '%"></div></div>';
+                            sentimentHtml += '<span class="bar-value">' + pct + '%</span>';
+                            sentimentHtml += '</div>';
+                        });
+                    }
+
+                    sentimentHtml += '</div></div>';
+
+                    document.getElementById('sentiment-output').innerHTML = sentimentHtml;
+                    document.getElementById('confidence-output').innerHTML =
+                        '<span class="number-value">' + confidence.toFixed(4) + '</span>';
+                }
+            } catch (e) {
+                document.getElementById('sentiment-output').innerHTML =
+                    '<div class="error-state">Error processing request</div>';
+            }
+
+            btn.disabled = false;
+            btn.textContent = 'Analyze Sentiment';
+        }
+
+        async function submitFeedback() {
+            const feedback = document.getElementById('feedback-input').value;
+            if (!feedback.trim()) return;
+
+            try {
+                await fetch('/api/feedback', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ feedback: feedback })
+                });
+                document.getElementById('feedback-input').value = '';
+            } catch (e) {
+                // Silently handle errors
+            }
+        }
+
+        document.getElementById('review-input').addEventListener('keydown', function(e) {
+            if (e.key === 'Enter' && e.ctrlKey) {
+                analyzeReview();
+            }
+        });
+    </script>
+</body>
+</html>
