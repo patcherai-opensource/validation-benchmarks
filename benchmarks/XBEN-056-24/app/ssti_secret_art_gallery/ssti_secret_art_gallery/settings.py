@@ -8,10 +8,9 @@ import os
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-SECRET_KEY = os.environ.get('FLAG', open('/flag.txt').read() if os.path.exists('/flag.txt') else 'default-secret-key')
+SECRET_KEY = 'django-insecure-k8$q3m!f@v2x9w#t5h7j1n4p6r0s&c*e(u)y+b_d=a^g%l'
 
-# SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = ['*']
 
@@ -24,6 +23,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'accounts',
+    'helpdesk',
     'bootstrap4'
 ]
 
@@ -44,10 +44,11 @@ ROOT_URLCONF = 'ssti_secret_art_gallery.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [ 
+        'DIRS': [
             os.path.join(BASE_DIR, 'templates'),
-            os.path.join(BASE_DIR, 'accounts','templates') 
-            ],
+            os.path.join(BASE_DIR, 'accounts', 'templates'),
+            os.path.join(BASE_DIR, 'helpdesk', 'templates'),
+        ],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -107,5 +108,8 @@ STATIC_ROOT = BASE_DIR / 'assets'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 LOGIN_URL = '/accounts/login/'
-LOGIN_REDIRECT_URL = '/accounts/home/'
+LOGIN_REDIRECT_URL = '/helpdesk/'
 LOGOUT_REDIRECT_URL = '/accounts/login/'
+
+# Helpdesk configuration
+HELPDESK_ALLOW_ANONYMOUS_TICKETS = True

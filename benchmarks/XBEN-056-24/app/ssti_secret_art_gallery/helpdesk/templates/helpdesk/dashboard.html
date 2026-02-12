@@ -1,0 +1,71 @@
+{% extends 'base.html' %}
+
+{% block title %}Dashboard - Helpdesk{% endblock %}
+
+{% block content %}
+<nav class="navbar navbar-dark bg-dark">
+    <a class="navbar-brand" href="/">Art Gallery Helpdesk</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExample01">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarsExample01">
+        <ul class="navbar-nav mr-auto">
+            <li class="nav-item active"><a class="nav-link" href="/helpdesk/">Dashboard</a></li>
+            <li class="nav-item"><a class="nav-link" href="/helpdesk/tickets/">Tickets</a></li>
+            <li class="nav-item"><a class="nav-link" href="/helpdesk/tickets/create/">New Ticket</a></li>
+            <li class="nav-item"><a class="nav-link" href="/">Gallery</a></li>
+            <li class="nav-item"><a class="nav-link" href="/accounts/logout/">Logout</a></li>
+        </ul>
+    </div>
+</nav>
+
+<div class="container mt-4">
+    <h3>Helpdesk Dashboard</h3>
+    <div class="row mt-3">
+        <div class="col-md-4">
+            <div class="card text-white bg-danger mb-3">
+                <div class="card-body">
+                    <h5 class="card-title">Open Tickets</h5>
+                    <p class="card-text display-4">{{ open_tickets }}</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card text-white bg-primary mb-3">
+                <div class="card-body">
+                    <h5 class="card-title">My Tickets</h5>
+                    <p class="card-text display-4">{{ my_tickets }}</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card text-white bg-warning mb-3">
+                <div class="card-body">
+                    <h5 class="card-title">Unassigned</h5>
+                    <p class="card-text display-4">{{ unassigned }}</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <h4 class="mt-4">Queue Overview</h4>
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Queue</th>
+                <th>Open</th>
+                <th>Resolved</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for stat in queue_stats %}
+            <tr>
+                <td>{{ stat.queue.title }}</td>
+                <td>{{ stat.open }}</td>
+                <td>{{ stat.resolved }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

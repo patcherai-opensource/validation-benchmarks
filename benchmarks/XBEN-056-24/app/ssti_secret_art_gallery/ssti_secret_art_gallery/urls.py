@@ -10,6 +10,6 @@ from accounts.views import gallery_view
 
 urlpatterns = [
     path('accounts/', include('accounts.urls')),
-    path('', gallery_view )
-
+    path('helpdesk/', include('helpdesk.urls')),
+    path('', gallery_view),
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

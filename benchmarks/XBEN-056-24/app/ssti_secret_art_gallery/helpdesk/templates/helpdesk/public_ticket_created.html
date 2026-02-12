@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+
+{% block title %}Ticket Submitted{% endblock %}
+
+{% block content %}
+<nav class="navbar navbar-dark bg-dark">
+    <a class="navbar-brand" href="/">Art Gallery Helpdesk</a>
+</nav>
+
+<div class="container mt-4">
+    <div class="jumbotron">
+        <h1 class="display-4">Ticket Submitted!</h1>
+        <p class="lead">Your support ticket has been created successfully.</p>
+        <hr class="my-4">
+        <p>Ticket ID: <strong>#{{ ticket.id }}</strong></p>
+        <p>Title: <strong>{{ ticket.title }}</strong></p>
+        <p>A staff member will review your ticket shortly.</p>
+        <a class="btn btn-primary" href="/helpdesk/submit/">Submit Another Ticket</a>
+        <a class="btn btn-secondary" href="/">Back to Gallery</a>
+    </div>
+</div>
+{% endblock %}

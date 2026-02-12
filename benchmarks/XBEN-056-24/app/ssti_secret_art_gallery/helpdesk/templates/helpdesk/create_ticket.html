@@ -1,0 +1,63 @@
+{% extends 'base.html' %}
+
+{% block title %}Create Ticket - Helpdesk{% endblock %}
+
+{% block content %}
+<nav class="navbar navbar-dark bg-dark">
+    <a class="navbar-brand" href="/">Art Gallery Helpdesk</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExample01">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarsExample01">
+        <ul class="navbar-nav mr-auto">
+            <li class="nav-item"><a class="nav-link" href="/helpdesk/">Dashboard</a></li>
+            <li class="nav-item"><a class="nav-link" href="/helpdesk/tickets/">Tickets</a></li>
+            <li class="nav-item active"><a class="nav-link" href="/helpdesk/tickets/create/">New Ticket</a></li>
+            <li class="nav-item"><a class="nav-link" href="/">Gallery</a></li>
+            <li class="nav-item"><a class="nav-link" href="/accounts/logout/">Logout</a></li>
+        </ul>
+    </div>
+</nav>
+
+<div class="container mt-4">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <h3>Create New Ticket</h3>
+            <form method="post">
+                {% csrf_token %}
+                <div class="form-group">
+                    <label for="title">Title</label>
+                    <input type="text" class="form-control" id="title" name="title" required maxlength="200">
+                </div>
+                <div class="form-group">
+                    <label for="queue">Queue</label>
+                    <select class="form-control" id="queue" name="queue" required>
+                        <option value="">Select a queue</option>
+                        {% for queue in queues %}
+                        <option value="{{ queue.id }}">{{ queue.title }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="priority">Priority</label>
+                    <select class="form-control" id="priority" name="priority">
+                        {% for pval, plabel in priorities %}
+                        <option value="{{ pval }}" {% if pval == 3 %}selected{% endif %}>{{ plabel }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="description">Description</label>
+                    <textarea class="form-control" id="description" name="description" rows="5"></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="submitter_email">Submitter Email</label>
+                    <input type="email" class="form-control" id="submitter_email" name="submitter_email" placeholder="Optional">
+                </div>
+                <button type="submit" class="btn btn-primary">Create Ticket</button>
+                <a href="/helpdesk/tickets/" class="btn btn-secondary">Cancel</a>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

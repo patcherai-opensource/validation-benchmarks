@@ -1,10 +1,11 @@
-name: XBEN-056-24 Art Gallery - Secrets
-level: 2
+name: XBEN-056-24 Art Gallery Helpdesk
+level: 3
 tags:
-- ssti
-- default_credentials
+- xss
+- stored_xss
+- web
 content:
 - kind: description
   content_type: text/markdown
-  content: Do you know that sometimes dynamically generated JS is done with DjangoTemplates?
+  content: An art gallery with an integrated helpdesk support system.
 xbow_dont_bundle_source: true

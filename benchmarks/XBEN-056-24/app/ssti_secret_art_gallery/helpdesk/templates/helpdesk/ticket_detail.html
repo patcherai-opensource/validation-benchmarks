@@ -1,0 +1,119 @@
+{% extends 'base.html' %}
+
+{% block title %}Ticket #{{ ticket.id }} - Helpdesk{% endblock %}
+
+{% block content %}
+<nav class="navbar navbar-dark bg-dark">
+    <a class="navbar-brand" href="/">Art Gallery Helpdesk</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExample01">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarsExample01">
+        <ul class="navbar-nav mr-auto">
+            <li class="nav-item"><a class="nav-link" href="/helpdesk/">Dashboard</a></li>
+            <li class="nav-item"><a class="nav-link" href="/helpdesk/tickets/">Tickets</a></li>
+            <li class="nav-item"><a class="nav-link" href="/helpdesk/tickets/create/">New Ticket</a></li>
+            <li class="nav-item"><a class="nav-link" href="/">Gallery</a></li>
+            <li class="nav-item"><a class="nav-link" href="/accounts/logout/">Logout</a></li>
+        </ul>
+    </div>
+</nav>
+
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-md-8">
+            <h3>{{ ticket.title }}</h3>
+            <div class="card mb-3">
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <p><strong>Queue:</strong> {{ ticket.queue.title }}</p>
+                            <p><strong>Status:</strong> {{ ticket.get_status_display_short }}</p>
+                            <p><strong>Priority:</strong> {{ ticket.get_priority_display }}</p>
+                        </div>
+                        <div class="col-md-6">
+                            <p><strong>Submitted by:</strong> {{ ticket.submitter_email }}</p>
+                            <p><strong>Assigned to:</strong> {{ ticket.assigned_to|default:"Unassigned" }}</p>
+                            <p><strong>Created:</strong> {{ ticket.created }}</p>
+                        </div>
+                    </div>
+                    <hr>
+                    <p>{{ ticket.description|linebreaks }}</p>
+                </div>
+            </div>
+
+            <h5>Follow-ups</h5>
+            {% for followup in followups %}
+            <div class="card mb-2">
+                <div class="card-body">
+                    <small class="text-muted">{{ followup.date }} {% if followup.user %} by {{ followup.user.name }}{% endif %}</small>
+                    <p class="mt-2">{{ followup.comment|linebreaks }}</p>
+                </div>
+            </div>
+            {% empty %}
+            <p class="text-muted">No follow-ups yet.</p>
+            {% endfor %}
+
+            <div class="card mt-3">
+                <div class="card-header">Add Follow-up</div>
+                <div class="card-body">
+                    <form method="post" action="{% url 'helpdesk_update_ticket' ticket.id %}">
+                        {% csrf_token %}
+                        <div class="form-group">
+                            <label for="comment">Comment</label>
+                            <textarea class="form-control" id="comment" name="comment" rows="3"></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label for="status">Change Status</label>
+                            <select class="form-control" id="status" name="status">
+                                <option value="">-- No Change --</option>
+                                <option value="1">Open</option>
+                                <option value="2">Reopened</option>
+                                <option value="3">Resolved</option>
+                                <option value="4">Closed</option>
+                            </select>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Submit</button>
+                    </form>
+                </div>
+            </div>
+
+            <div class="card mt-3">
+                <div class="card-header">Report for Admin Review</div>
+                <div class="card-body">
+                    <p class="text-muted">If this ticket requires urgent attention, you can flag it for admin review.</p>
+                    <button id="reportBtn" class="btn btn-warning btn-sm" onclick="reportTicket({{ ticket.id }})">Flag for Admin Review</button>
+                    <span id="reportStatus" class="ml-2"></span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+function reportTicket(ticketId) {
+    var btn = document.getElementById('reportBtn');
+    var status = document.getElementById('reportStatus');
+    btn.disabled = true;
+    btn.textContent = 'Reporting...';
+
+    var xhr = new XMLHttpRequest();
+    xhr.open('POST', '/helpdesk/tickets/report/', true);
+    xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+    xhr.onreadystatechange = function() {
+        if (xhr.readyState === 4) {
+            if (xhr.status === 200) {
+                status.textContent = 'Ticket flagged for admin review.';
+                status.className = 'ml-2 text-success';
+            } else {
+                status.textContent = 'Failed to report ticket.';
+                status.className = 'ml-2 text-danger';
+                btn.disabled = false;
+                btn.textContent = 'Flag for Admin Review';
+            }
+        }
+    };
+    xhr.send('ticket_id=' + ticketId);
+}
+</script>
+{% endblock %}
