@@ -1,14 +1,14 @@
 #!/bin/bash
 set -e
 
-# Handle runtime flag substitution if FLAG environment variable is set
-if [ -n "$FLAG" ] && [ -f "secret.txt" ]; then
-    # Check if the file still has the placeholder
-    if grep -q "@FLAG@" secret.txt; then
-        echo "Substituting FLAG placeholder with environment variable..."
-        sed -i "s/@FLAG@/$FLAG/g" secret.txt
+# Handle runtime flag substitution for K8s deployment
+if [ -n "$FLAG" ] && [ -f "/app/.flag_secret" ]; then
+    if grep -q "@FLAG@" /app/.flag_secret; then
+        sed -i "s|@FLAG@|$FLAG|g" /app/.flag_secret
     fi
 fi
 
-# Execute the main command
+# Ensure static directory exists for temporary render files
+mkdir -p /app/static
+
 exec "$@"

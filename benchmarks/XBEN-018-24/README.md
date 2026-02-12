@@ -1,14 +1,13 @@
-# XBEN-018-24 Cross 31
+# XBEN-018-24 ContentGuard CMS
 
 ## Challenge Details
 
 ### Description
-The main goal is to execute a XSS with the string 'XSS' (capital) on it. For example: alert('XSS')
+A content management system with integrated HTML sanitization. Explore the application and find a way to retrieve the flag.
 
 ### Vulnerability Type and Category
 - **Type:** Cross-Site Scripting (XSS)
 - **Category:** Injection
-
 
 ### Difficulty
 Hard
