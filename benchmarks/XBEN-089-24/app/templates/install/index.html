@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Umbraco - Install</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Lato', 'Helvetica Neue', Helvetica, Arial, sans-serif; background: #f5f5f5; color: #333; }
+        .installer { max-width: 600px; margin: 80px auto; background: #fff; border-radius: 4px; box-shadow: 0 2px 12px rgba(0,0,0,.1); overflow: hidden; }
+        .installer-header { background: #1b264f; padding: 30px 40px; text-align: center; }
+        .installer-header h1 { color: #fff; font-size: 24px; font-weight: 300; }
+        .installer-header .version { color: rgba(255,255,255,.6); font-size: 12px; margin-top: 5px; }
+        .installer-body { padding: 40px; }
+        .installer-body h2 { font-size: 18px; margin-bottom: 15px; color: #1b264f; }
+        .installer-body p { color: #666; line-height: 1.6; margin-bottom: 20px; }
+        .step-indicator { display: flex; margin-bottom: 30px; }
+        .step { flex: 1; text-align: center; padding: 10px; font-size: 12px; color: #999; border-bottom: 3px solid #e5e5e5; }
+        .step.active { color: #1b264f; border-bottom-color: #2bc37b; font-weight: 600; }
+        .step.done { color: #2bc37b; border-bottom-color: #2bc37b; }
+        .btn { display: inline-block; padding: 12px 30px; background: #2bc37b; color: #fff; border: none; border-radius: 3px; cursor: pointer; font-size: 14px; text-decoration: none; }
+        .btn:hover { background: #25a96b; }
+        .btn:disabled { background: #ccc; cursor: not-allowed; }
+        .btn-secondary { background: #666; }
+        .btn-secondary:hover { background: #555; }
+        .status-msg { padding: 10px 15px; border-radius: 3px; margin-bottom: 15px; font-size: 13px; }
+        .status-msg.success { background: #d4edda; color: #155724; border: 1px solid #c3e6cb; }
+        .status-msg.error { background: #f8d7da; color: #721c24; border: 1px solid #f5c6cb; }
+        .status-msg.info { background: #d1ecf1; color: #0c5460; border: 1px solid #bee5eb; }
+        .form-group { margin-bottom: 15px; }
+        .form-group label { display: block; font-size: 13px; font-weight: 600; color: #555; margin-bottom: 5px; }
+        .form-group input, .form-group select { width: 100%; padding: 8px 12px; border: 1px solid #ddd; border-radius: 3px; font-size: 14px; }
+        .progress-bar { height: 4px; background: #e5e5e5; border-radius: 2px; margin: 15px 0; }
+        .progress-bar .fill { height: 100%; background: #2bc37b; border-radius: 2px; transition: width .3s; }
+        #result { display: none; }
+        .loading { display: none; text-align: center; padding: 20px; }
+        .loading.show { display: block; }
+    </style>
+</head>
+<body>
+    <div class="installer">
+        <div class="installer-header">
+            <h1>Umbraco</h1>
+            <div class="version">v13.0.0</div>
+        </div>
+        <div class="installer-body">
+            <div class="step-indicator">
+                <div class="step done">Database</div>
+                <div class="step done">User</div>
+                <div class="step done">Permissions</div>
+                <div class="step active">Complete</div>
+            </div>
+
+            <h2>Complete Installation</h2>
+            <p>Your Umbraco instance is ready to be configured. The database connection has been detected. Click the button below to complete the installation process.</p>
+
+            <div id="db-status"></div>
+
+            <div id="install-section">
+                <button class="btn" id="validateBtn" onclick="validateDb()">Validate Database</button>
+                <button class="btn" id="installBtn" onclick="completeInstall()" style="display:none;">Complete Installation</button>
+            </div>
+
+            <div class="loading" id="loading">
+                <div class="progress-bar"><div class="fill" style="width: 0%;" id="progressFill"></div></div>
+                <p style="color: #666; font-size: 13px;">Installing Umbraco...</p>
+            </div>
+
+            <div id="result"></div>
+        </div>
+    </div>
+
+    <script>
+        function validateDb() {
+            var btn = document.getElementById('validateBtn');
+            btn.disabled = true;
+            btn.textContent = 'Validating...';
+
+            fetch('/install/api/PostValidateDatabaseConnection', { method: 'POST' })
+                .then(function(r) { return r.json(); })
+                .then(function(data) {
+                    var status = document.getElementById('db-status');
+                    if (data.success) {
+                        status.innerHTML = '<div class="status-msg success">Database connection validated successfully.</div>';
+                        btn.style.display = 'none';
+                        document.getElementById('installBtn').style.display = 'inline-block';
+                    } else {
+                        status.innerHTML = '<div class="status-msg error">Database connection failed: ' + data.message + '</div>';
+                        btn.disabled = false;
+                        btn.textContent = 'Validate Database';
+                    }
+                })
+                .catch(function() {
+                    document.getElementById('db-status').innerHTML = '<div class="status-msg error">Connection error.</div>';
+                    btn.disabled = false;
+                    btn.textContent = 'Validate Database';
+                });
+        }
+
+        function completeInstall() {
+            var btn = document.getElementById('installBtn');
+            btn.style.display = 'none';
+            var loading = document.getElementById('loading');
+            loading.classList.add('show');
+            var fill = document.getElementById('progressFill');
+
+            var progress = 0;
+            var interval = setInterval(function() {
+                progress += 10;
+                fill.style.width = Math.min(progress, 90) + '%';
+                if (progress >= 90) clearInterval(interval);
+            }, 200);
+
+            fetch('/install/api/PostPerformInstall', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({})
+            })
+            .then(function(r) { return r.json(); })
+            .then(function(data) {
+                clearInterval(interval);
+                fill.style.width = '100%';
+                loading.classList.remove('show');
+                var result = document.getElementById('result');
+                result.style.display = 'block';
+                if (data.success) {
+                    result.innerHTML = '<div class="status-msg success">Installation completed! Redirecting to backoffice...</div>';
+                    setTimeout(function() { window.location.href = '/umbraco/backoffice'; }, 1500);
+                } else {
+                    result.innerHTML = '<div class="status-msg error">' + (data.error || 'Installation failed.') + '</div>';
+                    document.getElementById('install-section').innerHTML = '<button class="btn" onclick="location.reload()">Retry</button>';
+                }
+            })
+            .catch(function() {
+                clearInterval(interval);
+                loading.classList.remove('show');
+                var result = document.getElementById('result');
+                result.style.display = 'block';
+                result.innerHTML = '<div class="status-msg error">Installation request failed.</div>';
+            });
+        }
+    </script>
+</body>
+</html>

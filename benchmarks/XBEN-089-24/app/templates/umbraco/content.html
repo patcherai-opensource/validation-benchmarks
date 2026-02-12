@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Umbraco - Content</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Lato', 'Helvetica Neue', Helvetica, Arial, sans-serif; background: #f5f5f5; }
+        .topbar { background: #1b264f; height: 50px; display: flex; align-items: center; justify-content: space-between; padding: 0 20px; position: fixed; top: 0; left: 0; right: 0; z-index: 100; }
+        .topbar .logo { color: #fff; font-size: 18px; font-weight: 300; letter-spacing: 1px; }
+        .topbar .user-info { color: rgba(255,255,255,.8); font-size: 13px; display: flex; align-items: center; gap: 15px; }
+        .topbar .user-info a { color: rgba(255,255,255,.6); text-decoration: none; font-size: 12px; }
+        .sidebar { position: fixed; top: 50px; left: 0; bottom: 0; width: 220px; background: #fff; border-right: 1px solid #e5e5e5; padding-top: 10px; }
+        .sidebar a { display: flex; align-items: center; padding: 12px 20px; color: #555; text-decoration: none; font-size: 14px; border-left: 3px solid transparent; }
+        .sidebar a:hover, .sidebar a.active { background: #f9f9f9; color: #1b264f; border-left-color: #2bc37b; }
+        .sidebar .section-title { font-size: 11px; text-transform: uppercase; color: #999; padding: 15px 20px 5px; letter-spacing: 1px; font-weight: 600; }
+        .main { margin-left: 220px; margin-top: 50px; padding: 30px; }
+        .admin-only { display: none; }
+        {% if is_admin %}.admin-only { display: block; }{% endif %}
+        table { width: 100%; background: #fff; border-radius: 4px; box-shadow: 0 1px 3px rgba(0,0,0,.08); border-collapse: collapse; }
+        th { background: #f9f9f9; text-align: left; padding: 12px 15px; font-size: 12px; text-transform: uppercase; color: #999; letter-spacing: .5px; border-bottom: 1px solid #e5e5e5; }
+        td { padding: 12px 15px; font-size: 14px; color: #555; border-bottom: 1px solid #f0f0f0; }
+        h1 { font-size: 24px; color: #1b264f; font-weight: 300; margin-bottom: 20px; }
+    </style>
+</head>
+<body>
+    <div class="topbar">
+        <div class="logo">UMBRACO</div>
+        <div class="user-info">
+            <span>{{ user_name }}</span>
+            <a href="/umbraco/logout">Sign out</a>
+        </div>
+    </div>
+
+    <div class="sidebar">
+        <div class="section-title">Sections</div>
+        <a href="/umbraco/backoffice/content" class="active">Content</a>
+        <a href="/umbraco/backoffice">Dashboard</a>
+        <div class="admin-only">
+            <a href="/umbraco/backoffice/users">Users</a>
+            <a href="/umbraco/backoffice/settings">Settings</a>
+        </div>
+    </div>
+
+    <div class="main">
+        <h1>Content</h1>
+        <table>
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Level</th>
+                    <th>Sort Order</th>
+                    <th>Path</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for node in nodes %}
+                <tr>
+                    <td>{{ node.text }}</td>
+                    <td>{{ node.level }}</td>
+                    <td>{{ node.sortOrder }}</td>
+                    <td>{{ node.path }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</body>
+</html>

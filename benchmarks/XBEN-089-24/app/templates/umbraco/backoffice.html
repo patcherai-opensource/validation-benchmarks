@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Umbraco - Backoffice</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Lato', 'Helvetica Neue', Helvetica, Arial, sans-serif; background: #f5f5f5; }
+        .topbar { background: #1b264f; height: 50px; display: flex; align-items: center; justify-content: space-between; padding: 0 20px; position: fixed; top: 0; left: 0; right: 0; z-index: 100; }
+        .topbar .logo { color: #fff; font-size: 18px; font-weight: 300; letter-spacing: 1px; }
+        .topbar .user-info { color: rgba(255,255,255,.8); font-size: 13px; display: flex; align-items: center; gap: 15px; }
+        .topbar .user-info a { color: rgba(255,255,255,.6); text-decoration: none; font-size: 12px; }
+        .topbar .user-info a:hover { color: #fff; }
+        .sidebar { position: fixed; top: 50px; left: 0; bottom: 0; width: 220px; background: #fff; border-right: 1px solid #e5e5e5; padding-top: 10px; }
+        .sidebar a { display: flex; align-items: center; padding: 12px 20px; color: #555; text-decoration: none; font-size: 14px; border-left: 3px solid transparent; }
+        .sidebar a:hover, .sidebar a.active { background: #f9f9f9; color: #1b264f; border-left-color: #2bc37b; }
+        .sidebar .section-title { font-size: 11px; text-transform: uppercase; color: #999; padding: 15px 20px 5px; letter-spacing: 1px; font-weight: 600; }
+        .main { margin-left: 220px; margin-top: 50px; padding: 30px; }
+        .dashboard-header { margin-bottom: 30px; }
+        .dashboard-header h1 { font-size: 24px; color: #1b264f; font-weight: 300; }
+        .dashboard-header p { color: #888; font-size: 14px; margin-top: 5px; }
+        .cards { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 20px; }
+        .card { background: #fff; border-radius: 4px; padding: 25px; box-shadow: 0 1px 3px rgba(0,0,0,.08); }
+        .card h3 { font-size: 14px; color: #1b264f; margin-bottom: 8px; }
+        .card p { font-size: 13px; color: #777; line-height: 1.5; }
+        .card .stat { font-size: 32px; color: #2bc37b; font-weight: 300; }
+        .admin-only { display: none; }
+        {% if is_admin %}.admin-only { display: block; }{% endif %}
+    </style>
+</head>
+<body>
+    <div class="topbar">
+        <div class="logo">UMBRACO</div>
+        <div class="user-info">
+            <span>{{ user_name }}</span>
+            <a href="/umbraco/logout">Sign out</a>
+        </div>
+    </div>
+
+    <div class="sidebar">
+        <div class="section-title">Sections</div>
+        <a href="/umbraco/backoffice/content">Content</a>
+        <a href="/umbraco/backoffice" class="active">Dashboard</a>
+        <div class="admin-only">
+            <a href="/umbraco/backoffice/users">Users</a>
+            <a href="/umbraco/backoffice/settings">Settings</a>
+        </div>
+    </div>
+
+    <div class="main">
+        <div class="dashboard-header">
+            <h1>Welcome, {{ user_name }}</h1>
+            <p>Here's an overview of your Umbraco installation</p>
+        </div>
+
+        <div class="cards">
+            <div class="card">
+                <h3>Content</h3>
+                <div class="stat">3</div>
+                <p>Published content nodes</p>
+            </div>
+            <div class="card">
+                <h3>Media</h3>
+                <div class="stat">0</div>
+                <p>Uploaded media files</p>
+            </div>
+            <div class="card admin-only">
+                <h3>Users</h3>
+                <div class="stat">2</div>
+                <p>Registered backoffice users</p>
+            </div>
+            <div class="card">
+                <h3>Version</h3>
+                <p style="font-size: 18px; color: #1b264f;">13.0.0</p>
+                <p>Umbraco CMS</p>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

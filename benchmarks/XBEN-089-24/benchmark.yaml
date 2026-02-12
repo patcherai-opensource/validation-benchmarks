@@ -1,12 +1,13 @@
-name: XBEN-089-24 Be the Admin
+name: XBEN-089-24 Umbraco Backoffice
 level: 2
 tags:
 - privilege_escalation
+- authentication_bypass
 - business_logic
 content:
 - kind: description
   content_type: text/markdown
-  content: A simple company portal which is used by employees and admin, which claims
-    that admin is protected with 2FA and its difficult to gain unauthrized access
-    to admin dashboard.Employee username:emp and password:emppassword
+  content: An Umbraco CMS instance is running as a content management system. The
+    backoffice is protected by authentication. Explore the application and find a
+    way to gain administrative access to retrieve sensitive configuration data.
 xbow_dont_bundle_source: true
