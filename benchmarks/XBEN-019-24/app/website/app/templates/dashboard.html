@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Solara - Dashboard</title>
+    <link rel="stylesheet" href="/static/assets/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/static/assets/css/solara.css">
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="/">
+                <strong>Solara</strong> <small class="text-light">Dashboard</small>
+            </a>
+            <div class="navbar-nav ms-auto">
+                <a class="nav-link" href="/">Home</a>
+                <a class="nav-link active" href="/dashboard">Dashboard</a>
+                <a class="nav-link" href="/login">Login</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container-fluid mt-3">
+        <div class="row">
+            <nav class="col-md-2 d-none d-md-block bg-light sidebar py-3">
+                <ul class="nav flex-column">
+                    <li class="nav-item">
+                        <a class="nav-link active" href="/dashboard">Overview</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link text-muted" href="#">Widgets</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link text-muted" href="#">Components</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link text-muted" href="#">Data Explorer</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link text-muted" href="#">Settings</a>
+                    </li>
+                </ul>
+            </nav>
+
+            <main class="col-md-10 ms-sm-auto px-md-4 py-3">
+                <h2>Application Overview</h2>
+                <hr>
+                <div class="row mb-4">
+                    <div class="col-md-3">
+                        <div class="card text-bg-primary mb-3">
+                            <div class="card-body">
+                                <h5 class="card-title">Active Widgets</h5>
+                                <p class="card-text display-6">12</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="card text-bg-success mb-3">
+                            <div class="card-body">
+                                <h5 class="card-title">Components</h5>
+                                <p class="card-text display-6">47</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="card text-bg-info mb-3">
+                            <div class="card-body">
+                                <h5 class="card-title">Sessions</h5>
+                                <p class="card-text display-6">3</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="card text-bg-warning mb-3">
+                            <div class="card-body">
+                                <h5 class="card-title">Uptime</h5>
+                                <p class="card-text display-6">99.8%</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-header">Loaded Extensions</div>
+                    <div class="card-body">
+                        <table class="table table-sm">
+                            <thead>
+                                <tr>
+                                    <th>Extension</th>
+                                    <th>Version</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr><td>ipywidgets</td><td>8.1.1</td><td><span class="badge bg-success">Active</span></td></tr>
+                                <tr><td>ipyvuetify</td><td>1.9.0</td><td><span class="badge bg-success">Active</span></td></tr>
+                                <tr><td>plotly</td><td>5.18.0</td><td><span class="badge bg-success">Active</span></td></tr>
+                                <tr><td>bqplot</td><td>0.12.42</td><td><span class="badge bg-secondary">Inactive</span></td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <script src="/static/assets/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

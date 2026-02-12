@@ -1,5 +1,5 @@
 services:
-  lfi_static_resource:
+  solara_app:
     build:
       context: ./app
       args:

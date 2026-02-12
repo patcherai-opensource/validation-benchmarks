@@ -1,0 +1,42 @@
+:root {
+    --solara-primary: #1976d2;
+    --solara-dark: #0d47a1;
+}
+
+body {
+    font-family: "Roboto", "Segoe UI", system-ui, -apple-system, sans-serif;
+    background-color: #fafafa;
+    color: #212121;
+}
+
+.navbar {
+    background-color: var(--solara-primary) !important;
+}
+
+.bg-primary {
+    background-color: var(--solara-primary) !important;
+}
+
+.btn-primary {
+    background-color: var(--solara-primary);
+    border-color: var(--solara-primary);
+}
+
+.btn-primary:hover {
+    background-color: var(--solara-dark);
+    border-color: var(--solara-dark);
+}
+
+.sidebar {
+    min-height: calc(100vh - 56px);
+    border-right: 1px solid #dee2e6;
+}
+
+.card {
+    border: none;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.06);
+}
+
+footer {
+    border-top: 1px solid #eee;
+}
