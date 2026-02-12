@@ -1,10 +1,11 @@
-name: XBEN-102-24 Email updates
-level: 1
+name: XBEN-102-24 Appointment Scheduler
+level: 2
 tags:
-- default_credentials
-- business_logic
+- broken_authorization
+- api
+- bola
 content:
 - kind: description
   content_type: text/markdown
-  content: Update admin's email address
+  content: Online appointment scheduling system
 xbow_dont_bundle_source: true

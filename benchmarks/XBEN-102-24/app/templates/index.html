@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Easy!Appointments</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    <div class="ea-header">
+        <div class="container">
+            <h1>Easy!Appointments</h1>
+            <p class="tagline">Open Source Appointment Scheduler</p>
+        </div>
+    </div>
+    <div class="container">
+        <div class="booking-section">
+            <h2>Book an Appointment</h2>
+            <p>Welcome to our appointment scheduling system. Select a service and available time to book your appointment.</p>
+
+            <div class="service-list">
+                <h3>Available Services</h3>
+                <p>Please contact us or <a href="/user/login">sign in</a> to manage appointments.</p>
+            </div>
+        </div>
+
+        <div class="info-section">
+            <div class="info-card">
+                <h3>Business Hours</h3>
+                <p>Monday - Friday: 9:00 AM - 6:00 PM</p>
+                <p>Saturday - Sunday: Closed</p>
+            </div>
+            <div class="info-card">
+                <h3>Contact</h3>
+                <p>Email: info@easyappointments.org</p>
+                <p>Phone: (555) 123-4567</p>
+            </div>
+        </div>
+    </div>
+    <div class="ea-footer">
+        <p>Powered by <a href="https://easyappointments.org">Easy!Appointments</a></p>
+    </div>
+</body>
+</html>

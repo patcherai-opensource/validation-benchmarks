@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Easy!Appointments - Backend</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    <div class="ea-header">
+        <div class="container">
+            <h1>Easy!Appointments</h1>
+            <nav class="backend-nav">
+                <a href="/backend">Dashboard</a>
+                <a href="/backend/services">Services</a>
+                <a href="/backend/categories">Categories</a>
+                {% if session.get('role') == 'admin' %}
+                <a href="/backend/users">Users</a>
+                <a href="/backend/settings">Settings</a>
+                {% endif %}
+                <a href="/user/logout" class="nav-logout">Logout ({{ session.get('first_name', '') }})</a>
+            </nav>
+        </div>
+    </div>
+    <div class="container">
+        <div class="dashboard">
+            <h2>Dashboard</h2>
+            <p>Welcome, {{ session.get('first_name', '') }} {{ session.get('last_name', '') }} ({{ session.get('role', '') }})</p>
+
+            <div class="dashboard-grid">
+                <div class="dashboard-card">
+                    <h3>Services</h3>
+                    <p class="count">{{ services|length }}</p>
+                    <a href="/backend/services">Manage Services</a>
+                </div>
+                <div class="dashboard-card">
+                    <h3>Appointments</h3>
+                    <p class="count">{{ appointments|length }}</p>
+                </div>
+            </div>
+
+            <h3>Recent Appointments</h3>
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Service</th>
+                        <th>Provider</th>
+                        <th>Start</th>
+                        <th>End</th>
+                        <th>Notes</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for appt in appointments %}
+                    <tr>
+                        <td>{{ appt.id }}</td>
+                        <td>{{ appt.service_name or '-' }}</td>
+                        <td>{{ appt.provider_name or '-' }}</td>
+                        <td>{{ appt.start_datetime }}</td>
+                        <td>{{ appt.end_datetime }}</td>
+                        <td>{{ appt.notes or '-' }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div class="ea-footer">
+        <p>Powered by <a href="https://easyappointments.org">Easy!Appointments</a></p>
+    </div>
+</body>
+</html>

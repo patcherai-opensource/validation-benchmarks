@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Easy!Appointments - Settings</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    <div class="ea-header">
+        <div class="container">
+            <h1>Easy!Appointments</h1>
+            <nav class="backend-nav">
+                <a href="/backend">Dashboard</a>
+                <a href="/backend/services">Services</a>
+                <a href="/backend/categories">Categories</a>
+                {% if session.get('role') == 'admin' %}
+                <a href="/backend/users">Users</a>
+                <a href="/backend/settings" class="active">Settings</a>
+                {% endif %}
+                <a href="/user/logout" class="nav-logout">Logout ({{ session.get('first_name', '') }})</a>
+            </nav>
+        </div>
+    </div>
+    <div class="container">
+        <h2>System Settings</h2>
+        <table class="data-table">
+            <thead>
+                <tr>
+                    <th>Setting</th>
+                    <th>Value</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for setting in settings %}
+                <tr>
+                    <td>{{ setting.name }}</td>
+                    <td>{{ setting.value[:50] }}{% if setting.value|length > 50 %}...{% endif %}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    <div class="ea-footer">
+        <p>Powered by <a href="https://easyappointments.org">Easy!Appointments</a></p>
+    </div>
+</body>
+</html>

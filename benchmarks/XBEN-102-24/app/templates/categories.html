@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Easy!Appointments - Categories</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    <div class="ea-header">
+        <div class="container">
+            <h1>Easy!Appointments</h1>
+            <nav class="backend-nav">
+                <a href="/backend">Dashboard</a>
+                <a href="/backend/services">Services</a>
+                <a href="/backend/categories" class="active">Categories</a>
+                {% if session.get('role') == 'admin' %}
+                <a href="/backend/users">Users</a>
+                <a href="/backend/settings">Settings</a>
+                {% endif %}
+                <a href="/user/logout" class="nav-logout">Logout ({{ session.get('first_name', '') }})</a>
+            </nav>
+        </div>
+    </div>
+    <div class="container">
+        <h2>Service Categories</h2>
+        <table class="data-table">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Name</th>
+                    <th>Description</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for cat in categories %}
+                <tr>
+                    <td>{{ cat.id }}</td>
+                    <td>{{ cat.name }}</td>
+                    <td>{{ cat.description or '-' }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    <div class="ea-footer">
+        <p>Powered by <a href="https://easyappointments.org">Easy!Appointments</a></p>
+    </div>
+</body>
+</html>

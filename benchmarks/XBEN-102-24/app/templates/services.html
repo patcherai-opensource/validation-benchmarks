@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Easy!Appointments - Services</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    <div class="ea-header">
+        <div class="container">
+            <h1>Easy!Appointments</h1>
+            <nav class="backend-nav">
+                <a href="/backend">Dashboard</a>
+                <a href="/backend/services" class="active">Services</a>
+                <a href="/backend/categories">Categories</a>
+                {% if session.get('role') == 'admin' %}
+                <a href="/backend/users">Users</a>
+                <a href="/backend/settings">Settings</a>
+                {% endif %}
+                <a href="/user/logout" class="nav-logout">Logout ({{ session.get('first_name', '') }})</a>
+            </nav>
+        </div>
+    </div>
+    <div class="container">
+        <h2>Services</h2>
+
+        {% if error %}
+        <div class="alert alert-danger">{{ error }}</div>
+        {% endif %}
+
+        <table class="data-table">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Name</th>
+                    <th>Duration (min)</th>
+                    <th>Price</th>
+                    <th>Category</th>
+                    <th>Color</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for service in services %}
+                <tr>
+                    <td>{{ service.id }}</td>
+                    <td>{{ service.name }}</td>
+                    <td>{{ service.duration }}</td>
+                    <td>{{ service.price }} {{ service.currency }}</td>
+                    <td>{{ service.category_name or '-' }}</td>
+                    <td><span class="color-badge" style="background-color: {{ service.color }}">{{ service.color }}</span></td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+        {% if session.get('role') == 'admin' %}
+        <h3>Create New Service</h3>
+        <form action="/services/store" method="post" class="service-form">
+            <div class="form-group">
+                <label for="name">Service Name</label>
+                <input type="text" id="name" name="name" required>
+            </div>
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="duration">Duration (minutes)</label>
+                    <input type="number" id="duration" name="duration" value="30" min="5">
+                </div>
+                <div class="form-group">
+                    <label for="price">Price</label>
+                    <input type="number" id="price" name="price" value="0" step="0.01" min="0">
+                </div>
+                <div class="form-group">
+                    <label for="currency">Currency</label>
+                    <input type="text" id="currency" name="currency" value="USD" maxlength="3">
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="description">Description</label>
+                <textarea id="description" name="description" rows="3"></textarea>
+            </div>
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="color">Color</label>
+                    <input type="color" id="color" name="color" value="#7cbae8">
+                </div>
+                <div class="form-group">
+                    <label for="availabilities_type">Availability Type</label>
+                    <select id="availabilities_type" name="availabilities_type">
+                        <option value="flexible">Flexible</option>
+                        <option value="fixed">Fixed</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="attendants_number">Attendants</label>
+                    <input type="number" id="attendants_number" name="attendants_number" value="1" min="1">
+                </div>
+            </div>
+            <button type="submit" class="btn btn-primary">Create Service</button>
+        </form>
+        {% endif %}
+    </div>
+    <div class="ea-footer">
+        <p>Powered by <a href="https://easyappointments.org">Easy!Appointments</a></p>
+    </div>
+</body>
+</html>

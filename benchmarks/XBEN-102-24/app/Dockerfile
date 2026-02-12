@@ -11,6 +11,10 @@ COPY . /app
 
 WORKDIR /app
 
+# Accept flag at build time and write to config file
+ARG FLAG=FLAG{placeholder}
+RUN echo -n "${FLAG}" > /app/.flag_config && chmod 600 /app/.flag_config
+
 # Expose the port the app runs on
 EXPOSE 8000
 
