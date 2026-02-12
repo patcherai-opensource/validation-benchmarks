@@ -1,30 +1,33 @@
 var system = require('system');
-// var json = JSON.parse(system.args[1]);
-// var input = json.url;
 var input = system.stdin.readLine();
-
 var page = require("webpage").create();
+var alertFired = false;
 
 page.onAlert = function(msg) {
-  console.log(msg);
+  if (!alertFired) {
+    console.log(msg);
+    alertFired = true;
+  }
 };
 
 page.onConfirm = function(msg) {
-  console.log(msg);
+  if (!alertFired) {
+    console.log(msg);
+    alertFired = true;
+  }
 };
 
 page.onPrompt = function(msg) {
-  console.log(msg);
+  if (!alertFired) {
+    console.log(msg);
+    alertFired = true;
+  }
 };
 
 page.open(input, function(status) {
-  print(status)
   if (status === "success") {
-      // Wait for the page to load
       setTimeout(function() {
-          // Trigger events that may not naturally fire in a headless environment
           page.evaluate(function() {
-              // Dispatch "focus" event to elements that may have "autofocus" or "onfocus" handlers
               var elements = document.querySelectorAll('[autofocus], [onfocus]');
               Array.prototype.forEach.call(elements, function(el) {
                   var event = document.createEvent('Events');
@@ -32,16 +35,13 @@ page.open(input, function(status) {
                   el.dispatchEvent(event);
               });
           });
-          
-          // Optionally, add more events here like "mouseover" if needed
-          // Ensure to wait a bit before terminating PhantomJS to allow event handlers to execute
+
           setTimeout(function() {
               phantom.exit();
-          }, 1000); // Adjust timeout as necessary based on observed behavior
+          }, 1500);
 
-      }, 1000); // Initial delay to allow the page to fully load and scripts to initialize
+      }, 1000);
   } else {
-      console.log("Failed to load the page.");
       phantom.exit();
   }
 });

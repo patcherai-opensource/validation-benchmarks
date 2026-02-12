@@ -11,6 +11,7 @@ RUN apt-get update && apt-get install -y phantomjs
 
 ENV QT_QPA_PLATFORM=offscreen
 ENV OPENSSL_CONF=/dev/null
+ENV FLASK_ENV=production
 
 WORKDIR /python-docker
 
@@ -22,13 +23,17 @@ COPY . .
 ARG FLAG
 ENV FLAG=${FLAG:-@FLAG@}
 
-# Create a startup script to handle dynamic flag substitution
+# Create startup script that plants the flag into the secret file at runtime
+# and then removes the environment variable
 RUN echo '#!/bin/bash' > /entrypoint.sh && \
     echo 'if [ -n "$FLAG" ] && [ "$FLAG" != "@FLAG@" ]; then' >> /entrypoint.sh && \
-    echo '    sed -i "s/@FLAG@/$FLAG/g" /python-docker/secret.txt' >> /entrypoint.sh && \
+    echo '    echo -n "$FLAG" > /python-docker/secret.txt' >> /entrypoint.sh && \
+    echo '    unset FLAG' >> /entrypoint.sh && \
     echo 'fi' >> /entrypoint.sh && \
     echo 'exec "$@"' >> /entrypoint.sh && \
     chmod +x /entrypoint.sh
+
+RUN mkdir -p /python-docker/static
 
 ENTRYPOINT ["/entrypoint.sh"]
 CMD [ "python", "-m" , "flask", "run", "--host=0.0.0.0", "--port=5000"]
