@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+{% block title %}Team Management - StreamPark{% endblock %}
+{% block content %}
+<div class="row mb-3">
+    <div class="col-12">
+        <h4>Team Management</h4>
+    </div>
+</div>
+<div class="card">
+    <div class="card-body">
+        <table class="table table-hover">
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Team Name</th>
+                    <th>Description</th>
+                    <th>Applications</th>
+                    <th>Created</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for td in team_data %}
+                <tr>
+                    <td>{{ td.team.id }}</td>
+                    <td>{{ td.team.team_name }}</td>
+                    <td>{{ td.team.description or '-' }}</td>
+                    <td>{{ td.app_count }}</td>
+                    <td>{{ td.team.create_time.strftime('%Y-%m-%d %H:%M') if td.team.create_time else '-' }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

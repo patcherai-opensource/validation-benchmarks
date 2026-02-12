@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+{% block title %}Applications - StreamPark{% endblock %}
+{% block content %}
+<div class="row mb-3">
+    <div class="col-12">
+        <h4>Flink Applications</h4>
+    </div>
+</div>
+<div class="card">
+    <div class="card-body">
+        <table class="table table-hover">
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Application Name</th>
+                    <th>Type</th>
+                    <th>Execution Mode</th>
+                    <th>State</th>
+                    <th>Alert</th>
+                    <th>Created</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for a in apps %}
+                <tr>
+                    <td>{{ a.id }}</td>
+                    <td><a href="{{ url_for('flink_app_detail', app_id=a.id) }}">{{ a.app_name }}</a></td>
+                    <td>{% if a.app_type == 1 %}StreamPark Flink{% elif a.app_type == 2 %}Apache Flink{% else %}Custom{% endif %}</td>
+                    <td>{% if a.execution_mode == 1 %}Remote{% elif a.execution_mode == 2 %}YARN{% elif a.execution_mode == 4 %}K8s Session{% else %}Other{% endif %}</td>
+                    <td>
+                        {% if a.state == 0 %}<span class="badge bg-secondary">Added</span>
+                        {% elif a.state == 1 %}<span class="badge bg-info">Starting</span>
+                        {% elif a.state == 5 %}<span class="badge bg-success">Running</span>
+                        {% elif a.state == 9 %}<span class="badge bg-danger">Failed</span>
+                        {% else %}<span class="badge bg-warning">Unknown</span>{% endif %}
+                    </td>
+                    <td>{% if a.alert_id %}<span class="badge bg-info">Configured</span>{% else %}-{% endif %}</td>
+                    <td>{{ a.create_time.strftime('%Y-%m-%d %H:%M') if a.create_time else '-' }}</td>
+                    <td>
+                        <a href="{{ url_for('flink_app_detail', app_id=a.id) }}" class="btn btn-sm btn-outline-primary">Detail</a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

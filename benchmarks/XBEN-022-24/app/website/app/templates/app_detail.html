@@ -1,0 +1,63 @@
+{% extends "base.html" %}
+{% block title %}{{ app.app_name }} - StreamPark{% endblock %}
+{% block content %}
+<div class="row mb-3">
+    <div class="col-12">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="{{ url_for('flink_app_list') }}">Applications</a></li>
+                <li class="breadcrumb-item active">{{ app.app_name }}</li>
+            </ol>
+        </nav>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-8">
+        <div class="card mb-3">
+            <div class="card-header"><h5 class="mb-0">Application Detail</h5></div>
+            <div class="card-body">
+                <table class="table">
+                    <tr><th width="200">Application Name</th><td>{{ app.app_name }}</td></tr>
+                    <tr><th>ID</th><td>{{ app.id }}</td></tr>
+                    <tr><th>Type</th><td>{% if app.app_type == 1 %}StreamPark Flink{% elif app.app_type == 2 %}Apache Flink{% else %}Custom{% endif %}</td></tr>
+                    <tr><th>Execution Mode</th><td>{% if app.execution_mode == 1 %}Remote{% elif app.execution_mode == 2 %}YARN Application{% elif app.execution_mode == 4 %}Kubernetes Session{% else %}Other{% endif %}</td></tr>
+                    <tr>
+                        <th>State</th>
+                        <td>
+                            {% if app.state == 0 %}<span class="badge bg-secondary">Added</span>
+                            {% elif app.state == 1 %}<span class="badge bg-info">Starting</span>
+                            {% elif app.state == 5 %}<span class="badge bg-success">Running</span>
+                            {% elif app.state == 9 %}<span class="badge bg-danger">Failed</span>
+                            {% else %}<span class="badge bg-warning">Unknown</span>{% endif %}
+                        </td>
+                    </tr>
+                    <tr><th>Description</th><td>{{ app.description or '-' }}</td></tr>
+                    <tr><th>Created</th><td>{{ app.create_time.strftime('%Y-%m-%d %H:%M:%S') if app.create_time else '-' }}</td></tr>
+                    <tr><th>Modified</th><td>{{ app.modify_time.strftime('%Y-%m-%d %H:%M:%S') if app.modify_time else '-' }}</td></tr>
+                </table>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card">
+            <div class="card-header"><h5 class="mb-0">Alert Configuration</h5></div>
+            <div class="card-body">
+                {% if alert %}
+                <p><strong>Name:</strong> {{ alert.alert_name }}</p>
+                <p><strong>Type:</strong>
+                    {% if alert.alert_type == 1 %}Email
+                    {% elif alert.alert_type == 2 %}DingTalk
+                    {% elif alert.alert_type == 3 %}WeChat
+                    {% elif alert.alert_type == 4 %}HTTP Callback
+                    {% endif %}
+                </p>
+                {% else %}
+                <p class="text-muted">No alert configured for this application.</p>
+                {% endif %}
+                <a href="{{ url_for('alert_list') }}" class="btn btn-sm btn-outline-secondary">Manage Alerts</a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

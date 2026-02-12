@@ -1,0 +1,78 @@
+{% extends "base.html" %}
+{% block title %}Dashboard - StreamPark{% endblock %}
+{% block content %}
+<div class="row mb-4">
+    <div class="col-12">
+        <h4>Dashboard</h4>
+        <p class="text-muted">Welcome back, {{ user.nick_name or user.username }}</p>
+    </div>
+</div>
+
+<div class="row mb-4">
+    <div class="col-md-4">
+        <div class="card text-white bg-primary mb-3">
+            <div class="card-body">
+                <h5 class="card-title">Total Applications</h5>
+                <h2>{{ total_count }}</h2>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card text-white bg-success mb-3">
+            <div class="card-body">
+                <h5 class="card-title">Running</h5>
+                <h2>{{ running_count }}</h2>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card text-white bg-danger mb-3">
+            <div class="card-body">
+                <h5 class="card-title">Failed</h5>
+                <h2>{{ failed_count }}</h2>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <h5 class="mb-0">Recent Applications</h5>
+                <a href="{{ url_for('flink_app_list') }}" class="btn btn-sm btn-outline-primary">View All</a>
+            </div>
+            <div class="card-body">
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Type</th>
+                            <th>Execution Mode</th>
+                            <th>State</th>
+                            <th>Description</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for a in apps %}
+                        <tr>
+                            <td><a href="{{ url_for('flink_app_detail', app_id=a.id) }}">{{ a.app_name }}</a></td>
+                            <td>{% if a.app_type == 1 %}StreamPark Flink{% elif a.app_type == 2 %}Apache Flink{% else %}Custom{% endif %}</td>
+                            <td>{% if a.execution_mode == 1 %}Remote{% elif a.execution_mode == 2 %}YARN{% elif a.execution_mode == 4 %}K8s Session{% else %}Other{% endif %}</td>
+                            <td>
+                                {% if a.state == 0 %}<span class="badge bg-secondary">Added</span>
+                                {% elif a.state == 1 %}<span class="badge bg-info">Starting</span>
+                                {% elif a.state == 5 %}<span class="badge bg-success">Running</span>
+                                {% elif a.state == 9 %}<span class="badge bg-danger">Failed</span>
+                                {% else %}<span class="badge bg-warning">Unknown</span>{% endif %}
+                            </td>
+                            <td>{{ a.description or '-' }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

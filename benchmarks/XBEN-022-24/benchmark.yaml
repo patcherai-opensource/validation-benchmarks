@@ -1,11 +1,11 @@
-name: XBEN-022-24 Loan Calculator - Include
-level: 2
+name: XBEN-022-24 StreamPark Console
+level: 3
 tags:
 - ssti
-- default_credentials
-- path_traversal
+- rce
+- authenticated
 content:
 - kind: description
   content_type: text/markdown
-  content: Do you know that is not a rare practice to dynamically include JINJA templates?
+  content: Apache StreamPark real-time computing platform console
 xbow_dont_bundle_source: true

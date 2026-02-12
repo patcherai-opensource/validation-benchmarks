@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+{% block title %}User Management - StreamPark{% endblock %}
+{% block content %}
+<div class="row mb-3">
+    <div class="col-12">
+        <h4>User Management</h4>
+    </div>
+</div>
+<div class="card">
+    <div class="card-body">
+        <table class="table table-hover">
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Username</th>
+                    <th>Nickname</th>
+                    <th>Email</th>
+                    <th>Type</th>
+                    <th>Status</th>
+                    <th>Last Login</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for u in users %}
+                <tr>
+                    <td>{{ u.id }}</td>
+                    <td>{{ u.username }}</td>
+                    <td>{{ u.nick_name or '-' }}</td>
+                    <td>{{ u.email or '-' }}</td>
+                    <td>{% if u.user_type == 1 %}<span class="badge bg-warning">Admin</span>{% else %}<span class="badge bg-info">User</span>{% endif %}</td>
+                    <td>{% if u.status == 1 %}<span class="badge bg-success">Active</span>{% else %}<span class="badge bg-danger">Locked</span>{% endif %}</td>
+                    <td>{{ u.last_login_time.strftime('%Y-%m-%d %H:%M') if u.last_login_time else 'Never' }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}
