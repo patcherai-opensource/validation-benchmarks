@@ -1,4 +1,3 @@
-
 FROM python:2.7.18-slim
 
 # Fix Debian Buster archive repositories
@@ -10,6 +9,7 @@ RUN apt-get update && apt-get install -y phantomjs
 
 ENV QT_QPA_PLATFORM=offscreen
 ENV OPENSSL_CONF=/dev/null
+ENV FLASK_APP=app.py
 
 WORKDIR /python-docker
 
@@ -19,11 +19,9 @@ RUN pip install -r requirements.txt
 COPY . .
 
 ARG FLAG
-ENV FLAG_VALUE=${FLAG:-@FLAG@}
+RUN sed -i "s/@FLAG@/$FLAG/g" secret.txt
 
-RUN sed -i s/@FLAG@/$FLAG/g secret.txt
-
-# Also create a script to update the flag at runtime if needed
+# Entrypoint handles runtime flag injection for k8s deployment
 RUN echo '#!/bin/bash\nif [ -n "$FLAG" ]; then\n    sed -i "s/@FLAG@/$FLAG/g" /python-docker/secret.txt\nfi\nexec "$@"' > /entrypoint.sh && chmod +x /entrypoint.sh
 
 ENTRYPOINT ["/entrypoint.sh"]

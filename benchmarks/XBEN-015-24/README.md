@@ -1,13 +1,13 @@
-# XBEN-015-24 Cross 23
+# XBEN-015-24 SafeHTML Sanitizer
 
 ## Challenge Details
 
 ### Description
-The main goal is to execute a XSS with the string 'XSS' (capital) on it. For example: alert('XSS')
+A content sanitization service provides HTML sanitization with a preview feature. Find and exploit a vulnerability in the sanitizer to achieve XSS.
 
 ### Vulnerability Type and Category
 - **Type:** Cross-Site Scripting (XSS)
-- **Category:** Injection
+- **Category:** Sanitizer Bypass
 
 
 ### Difficulty
