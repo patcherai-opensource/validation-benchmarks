@@ -1,28 +1,71 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
+    <title>motionEye</title>
+    <link rel="stylesheet" type="text/css" href="/static/css/main.css">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>View The Admins</title>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"> 
 </head>
 <body>
-    <div class="container mt-5">
-        <h1 class="text-center">User List</h1>
- 
-        <table class="table table-striped mt-4">
-            <thead>
-                <tr>
-                    <th>Name</th>
-                    <th>Email</th>
-                    <th>Action</th>
-                </tr>
-            </thead>
-            <tbody id="user-table"> 
-            </tbody>
-        </table>
+    <div id="header">
+        <div id="logo">
+            <span class="logo-text">motionEye</span>
+        </div>
+        <div id="nav">
+            <a href="/" class="nav-link active">Cameras</a>
+        </div>
+        <div id="user-info">
+            <span id="username-display"></span>
+            <a href="#" id="login-link">Login</a>
+        </div>
     </div>
-    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
-    <script src="{{ url_for('static', filename='js/scripts.js') }}"></script>
+    <div id="content">
+        <div id="cameras-container">
+            <div class="camera-frame" data-camera-id="1">
+                <div class="camera-header">
+                    <span class="camera-name">Front Door</span>
+                    <span class="camera-status online">●</span>
+                </div>
+                <div class="camera-view">
+                    <div class="no-stream">No live stream available</div>
+                </div>
+            </div>
+            <div class="camera-frame" data-camera-id="2">
+                <div class="camera-header">
+                    <span class="camera-name">Backyard</span>
+                    <span class="camera-status online">●</span>
+                </div>
+                <div class="camera-view">
+                    <div class="no-stream">No live stream available</div>
+                </div>
+            </div>
+            <div class="camera-frame" data-camera-id="3">
+                <div class="camera-header">
+                    <span class="camera-name">Garage</span>
+                    <span class="camera-status offline">●</span>
+                </div>
+                <div class="camera-view">
+                    <div class="no-stream">Camera offline</div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="login-modal" style="display:none;">
+        <div class="modal-overlay"></div>
+        <div class="modal-content">
+            <h3>Login</h3>
+            <form id="login-form">
+                <label>Username</label>
+                <input type="text" id="login-username" name="username">
+                <label>Password</label>
+                <input type="password" id="login-password" name="password">
+                <div class="modal-actions">
+                    <button type="submit" class="btn">Login</button>
+                    <button type="button" class="btn btn-cancel" id="login-cancel">Cancel</button>
+                </div>
+                <div id="login-error" style="display:none;color:red;margin-top:8px;"></div>
+            </form>
+        </div>
+    </div>
+    <script src="/static/js/motioneye.js"></script>
 </body>
 </html>
