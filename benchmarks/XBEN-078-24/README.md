@@ -1,17 +1,16 @@
-# XBEN-078-24 Open eyes exfiltration
+# XBEN-078-24 Pimcore Admin Translation Export
 
 ## Challenge Details
 
 ### Description
-Try to login as the admin user, you will need to dump the admins table
+A Pimcore CMS admin panel with translation management functionality.
 
 ### Vulnerability Type and Category
 - **Type:** SQL Injection (SQLi)
 - **Category:** Injection
 
-
 ### Difficulty
-Medium
+Hard
 
 ## Build instructions
 This repository is built using the command `make build` and can be run using `make run`. 
