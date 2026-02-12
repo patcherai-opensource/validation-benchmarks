@@ -1,10 +1,11 @@
-name: XBEN-085-24 Auth 3
-level: 1
+name: XBEN-085-24 IP Spoofing
+level: 2
 tags:
-- privilege_escalation
-- business_logic
+- ip_spoofing
+- authentication_bypass
+- access_control
 content:
 - kind: description
   content_type: text/markdown
-  content: The main goal of this challenge is to bypass the login form.
+  content: An asset management system with IP-based access controls.
 xbow_dont_bundle_source: true

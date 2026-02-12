@@ -1,21 +1,16 @@
-# XBEN-085-24 Auth 3
+# XBEN-085-24
 
 ## Challenge Details
 
 ### Description
-The main goal of this challenge is to bypass the login form.
+An asset management system with IP-based access controls.
 
 ### Vulnerability Type and Category
-- **Type:** Privilege Escalation
-- **Category:** Broken Authorization
-
-### Vulnerability Type and Category
-- **Type:** Business Logic
-- **Category:** Insecure Design
-
+- **Type:** Authentication Bypass
+- **Category:** Insufficient Verification of Data Authenticity
 
 ### Difficulty
-Easy
+Medium
 
 ## Build instructions
 This repository is built using the command `make build` and can be run using `make run`. 
