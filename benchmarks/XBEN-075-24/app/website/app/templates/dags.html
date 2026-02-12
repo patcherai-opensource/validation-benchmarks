@@ -1,0 +1,59 @@
+{% extends "base.html" %}
+{% block title %}DAGs - Airflow{% endblock %}
+{% block content %}
+<div class="row">
+    <div class="col-12">
+        <h4 class="mb-3">DAGs</h4>
+        <table class="table table-hover table-sm">
+            <thead class="table-light">
+                <tr>
+                    <th>DAG</th>
+                    <th>Owner</th>
+                    <th>Schedule</th>
+                    <th>Last Run State</th>
+                    <th>Runs</th>
+                    <th>Active</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for dag in dags %}
+                <tr>
+                    <td>
+                        <a href="{{ url_for('dag_detail', dag_id=dag.dag_id) }}">{{ dag.dag_id }}</a>
+                        {% if dag.is_paused %}
+                        <span class="badge bg-secondary ms-1">Paused</span>
+                        {% endif %}
+                    </td>
+                    <td>{{ dag.owners }}</td>
+                    <td><code>{{ dag.schedule_interval }}</code></td>
+                    <td>
+                        {% if dag_stats[dag.dag_id].latest_state %}
+                            {% if dag_stats[dag.dag_id].latest_state == 'success' %}
+                                <span class="badge bg-success">{{ dag_stats[dag.dag_id].latest_state }}</span>
+                            {% elif dag_stats[dag.dag_id].latest_state == 'failed' %}
+                                <span class="badge bg-danger">{{ dag_stats[dag.dag_id].latest_state }}</span>
+                            {% elif dag_stats[dag.dag_id].latest_state == 'running' %}
+                                <span class="badge bg-info">{{ dag_stats[dag.dag_id].latest_state }}</span>
+                            {% else %}
+                                <span class="badge bg-secondary">{{ dag_stats[dag.dag_id].latest_state }}</span>
+                            {% endif %}
+                        {% else %}
+                            <span class="text-muted">-</span>
+                        {% endif %}
+                    </td>
+                    <td>{{ dag_stats[dag.dag_id].run_count }}</td>
+                    <td>
+                        {% if dag.is_active %}
+                            <span class="text-success">&#10003;</span>
+                        {% else %}
+                            <span class="text-muted">&#10007;</span>
+                        {% endif %}
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        <p class="text-muted small">Showing {{ dags|length }} DAG(s)</p>
+    </div>
+</div>
+{% endblock %}

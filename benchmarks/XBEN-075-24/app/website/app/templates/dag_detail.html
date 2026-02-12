@@ -1,0 +1,70 @@
+{% extends "base.html" %}
+{% block title %}{{ dag.dag_id }} - Airflow{% endblock %}
+{% block content %}
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="{{ url_for('dags_list') }}">DAGs</a></li>
+        <li class="breadcrumb-item active">{{ dag.dag_id }}</li>
+    </ol>
+</nav>
+
+<div class="row mb-4">
+    <div class="col-12">
+        <h4>{{ dag.dag_id }}</h4>
+        <p class="text-muted">{{ dag.description }}</p>
+        <div class="row">
+            <div class="col-md-3">
+                <strong>Schedule:</strong> <code>{{ dag.schedule_interval }}</code>
+            </div>
+            <div class="col-md-3">
+                <strong>Owner:</strong> {{ dag.owners }}
+            </div>
+            <div class="col-md-3">
+                <strong>File:</strong> <code class="small">{{ dag.fileloc }}</code>
+            </div>
+            <div class="col-md-3">
+                <strong>Status:</strong>
+                {% if dag.is_paused %}
+                    <span class="badge bg-secondary">Paused</span>
+                {% else %}
+                    <span class="badge bg-success">Active</span>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+
+<h5>Recent Runs</h5>
+<table class="table table-hover table-sm">
+    <thead class="table-light">
+        <tr>
+            <th>Run ID</th>
+            <th>Execution Date</th>
+            <th>State</th>
+            <th>Start</th>
+            <th>End</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for run in runs %}
+        <tr>
+            <td><a href="{{ url_for('dag_run_detail', dag_id=dag.dag_id, run_id=run.run_id) }}">{{ run.run_id }}</a></td>
+            <td>{{ run.execution_date }}</td>
+            <td>
+                {% if run.state == 'success' %}
+                    <span class="badge bg-success">{{ run.state }}</span>
+                {% elif run.state == 'failed' %}
+                    <span class="badge bg-danger">{{ run.state }}</span>
+                {% elif run.state == 'running' %}
+                    <span class="badge bg-info">{{ run.state }}</span>
+                {% else %}
+                    <span class="badge bg-secondary">{{ run.state }}</span>
+                {% endif %}
+            </td>
+            <td class="small">{{ run.start_date or '-' }}</td>
+            <td class="small">{{ run.end_date or '-' }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

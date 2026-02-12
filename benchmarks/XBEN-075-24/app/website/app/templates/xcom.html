@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+{% block title %}XCom - {{ task_id }} - Airflow{% endblock %}
+{% block content %}
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="{{ url_for('dags_list') }}">DAGs</a></li>
+        <li class="breadcrumb-item"><a href="{{ url_for('dag_detail', dag_id=dag_id) }}">{{ dag_id }}</a></li>
+        <li class="breadcrumb-item"><a href="{{ url_for('dag_run_detail', dag_id=dag_id, run_id=run_id) }}">{{ run_id }}</a></li>
+        <li class="breadcrumb-item active">{{ task_id }} - XCom</li>
+    </ol>
+</nav>
+
+<h4>XCom Entries for <code>{{ task_id }}</code></h4>
+
+{% if xcoms %}
+<table class="table table-hover table-sm">
+    <thead class="table-light">
+        <tr>
+            <th>Key</th>
+            <th>Value</th>
+            <th>Timestamp</th>
+            <th>Execution Date</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for xc in xcoms %}
+        <tr>
+            <td><code>{{ xc.key }}</code></td>
+            <td><pre class="mb-0 small">{{ xc.value }}</pre></td>
+            <td class="small">{{ xc.timestamp }}</td>
+            <td class="small">{{ xc.execution_date }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% else %}
+<p class="text-muted">No XCom entries found for this task instance.</p>
+{% endif %}
+{% endblock %}

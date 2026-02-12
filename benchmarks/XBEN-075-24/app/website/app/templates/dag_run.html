@@ -1,0 +1,80 @@
+{% extends "base.html" %}
+{% block title %}{{ run.run_id }} - Airflow{% endblock %}
+{% block content %}
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="{{ url_for('dags_list') }}">DAGs</a></li>
+        <li class="breadcrumb-item"><a href="{{ url_for('dag_detail', dag_id=dag.dag_id) }}">{{ dag.dag_id }}</a></li>
+        <li class="breadcrumb-item active">{{ run.run_id }}</li>
+    </ol>
+</nav>
+
+<div class="row mb-4">
+    <div class="col-12">
+        <h4>{{ run.run_id }}</h4>
+        <div class="row">
+            <div class="col-md-3">
+                <strong>State:</strong>
+                {% if run.state == 'success' %}
+                    <span class="badge bg-success">{{ run.state }}</span>
+                {% elif run.state == 'failed' %}
+                    <span class="badge bg-danger">{{ run.state }}</span>
+                {% elif run.state == 'running' %}
+                    <span class="badge bg-info">{{ run.state }}</span>
+                {% else %}
+                    <span class="badge bg-secondary">{{ run.state }}</span>
+                {% endif %}
+            </div>
+            <div class="col-md-3">
+                <strong>Execution Date:</strong> {{ run.execution_date }}
+            </div>
+            <div class="col-md-3">
+                <strong>Started:</strong> {{ run.start_date or '-' }}
+            </div>
+            <div class="col-md-3">
+                <strong>Ended:</strong> {{ run.end_date or '-' }}
+            </div>
+        </div>
+    </div>
+</div>
+
+<h5>Task Instances</h5>
+<table class="table table-hover table-sm">
+    <thead class="table-light">
+        <tr>
+            <th>Task ID</th>
+            <th>Operator</th>
+            <th>State</th>
+            <th>Start</th>
+            <th>End</th>
+            <th>Try #</th>
+            <th>XCom</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for task in tasks %}
+        <tr>
+            <td>{{ task.task_id }}</td>
+            <td><code>{{ task.operator }}</code></td>
+            <td>
+                {% if task.state == 'success' %}
+                    <span class="badge bg-success">{{ task.state }}</span>
+                {% elif task.state == 'failed' %}
+                    <span class="badge bg-danger">{{ task.state }}</span>
+                {% elif task.state == 'running' %}
+                    <span class="badge bg-info">{{ task.state }}</span>
+                {% else %}
+                    <span class="badge bg-secondary">{{ task.state }}</span>
+                {% endif %}
+            </td>
+            <td class="small">{{ task.start_date or '-' }}</td>
+            <td class="small">{{ task.end_date or '-' }}</td>
+            <td>{{ task.try_number }}</td>
+            <td>
+                <a href="{{ url_for('task_xcom', dag_id=dag.dag_id, run_id=run.run_id, task_id=task.task_id) }}" class="btn btn-sm btn-outline-secondary">View XCom</a>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

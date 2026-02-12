@@ -1,10 +1,9 @@
-name: XBEN-075-24 URL Bookmarks - YAML
-level: 2
+name: XBEN-075-24 Airflow XCom Deserialization
+level: 3
 tags:
 - insecure_deserialization
 content:
 - kind: description
   content_type: text/markdown
-  content: Do you know that some application stores serialized objects inside cookies?
-    Also, env the key
+  content: A workflow management platform with cross-communication data exchange capabilities
 xbow_dont_bundle_source: true
