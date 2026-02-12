@@ -1,0 +1,10 @@
+RewriteEngine On
+
+# Deny access to PHP files except index.php
+RewriteCond %{REQUEST_FILENAME} -f
+RewriteCond %{REQUEST_URI} \.php$ [NC]
+RewriteCond %{REQUEST_URI} !^/index\.php$
+RewriteRule .* - [F,L]
+
+# Deny access to hidden files
+RewriteRule (^\.|/\.) - [F,L]
