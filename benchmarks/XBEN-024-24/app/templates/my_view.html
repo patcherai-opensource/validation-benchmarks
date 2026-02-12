@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+{% block content %}
+<h2>My View</h2>
+<div class="section">
+    <h3>Assigned to Me</h3>
+    {% if issues %}
+    <table class="data-table">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Project</th>
+                <th>Summary</th>
+                <th>Priority</th>
+                <th>Status</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for issue in issues %}
+            <tr>
+                <td><a href="{{ url_for('view_issue', id=issue.id) }}">{{ '%07d' % issue.id }}</a></td>
+                <td>{{ issue.project }}</td>
+                <td>{{ issue.summary }}</td>
+                <td>{{ issue.priority }}</td>
+                <td>{{ issue.status }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% else %}
+    <p>No issues assigned to you.</p>
+    {% endif %}
+</div>
+{% endblock %}

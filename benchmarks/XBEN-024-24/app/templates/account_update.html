@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="form-container">
+    <h2>Set Your Password</h2>
+    <p>Please enter your new password to complete the account setup.</p>
+    <form method="post" action="{{ url_for('account_update') }}">
+        <input type="hidden" name="verify_user_id" value="{{ user_id }}">
+        <input type="hidden" name="confirm_hash" value="{{ confirm_hash }}">
+        <table class="form-table">
+            <tr>
+                <td class="form-label">Password</td>
+                <td><input type="password" name="password" size="32" maxlength="64" required></td>
+            </tr>
+            <tr>
+                <td class="form-label">Confirm Password</td>
+                <td><input type="password" name="password_confirm" size="32" maxlength="64" required></td>
+            </tr>
+            <tr>
+                <td class="form-label">Real Name</td>
+                <td><input type="text" name="realname" size="32" maxlength="128"></td>
+            </tr>
+            <tr>
+                <td></td>
+                <td><input type="submit" value="Update Account" class="btn"></td>
+            </tr>
+        </table>
+    </form>
+</div>
+{% endblock %}

@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+{% block content %}
+<h2>View Issue Details</h2>
+<div class="section">
+    <table class="detail-table">
+        <tr>
+            <td class="detail-label">ID</td>
+            <td>{{ '%07d' % issue.id }}</td>
+        </tr>
+        <tr>
+            <td class="detail-label">Project</td>
+            <td>{{ project.name }}</td>
+        </tr>
+        <tr>
+            <td class="detail-label">Summary</td>
+            <td>{{ issue.summary }}</td>
+        </tr>
+        <tr>
+            <td class="detail-label">Priority</td>
+            <td>{{ issue.priority }}</td>
+        </tr>
+        <tr>
+            <td class="detail-label">Status</td>
+            <td>{{ issue.status }}</td>
+        </tr>
+        <tr>
+            <td class="detail-label">Description</td>
+            <td><pre>{{ issue.description }}</pre></td>
+        </tr>
+    </table>
+</div>
+<div class="form-links">
+    <a href="{{ url_for('my_view') }}">Back to My View</a>
+</div>
+{% endblock %}

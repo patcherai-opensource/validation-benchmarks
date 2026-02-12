@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="form-container">
+    <h2>Signup for a new account</h2>
+    <form method="post" action="{{ url_for('signup') }}">
+        <table class="form-table">
+            <tr>
+                <td class="form-label">Username</td>
+                <td><input type="text" name="username" size="32" maxlength="64" required></td>
+            </tr>
+            <tr>
+                <td class="form-label">Email Address</td>
+                <td><input type="text" name="email" size="32" maxlength="128" required></td>
+            </tr>
+            <tr>
+                <td class="form-label">Real Name</td>
+                <td><input type="text" name="realname" size="32" maxlength="128"></td>
+            </tr>
+            <tr>
+                <td></td>
+                <td><input type="submit" value="Signup" class="btn"></td>
+            </tr>
+        </table>
+    </form>
+    <div class="form-links">
+        <a href="{{ url_for('login_page') }}">Already have an account? Login</a>
+    </div>
+</div>
+{% endblock %}

@@ -9,6 +9,9 @@ RUN pip install --no-cache-dir -r requirements.txt
 
 COPY . /app
 
+ARG FLAG
+RUN echo -n "${FLAG}" > /app/.admin_project_notes
+
 WORKDIR /app
 ENTRYPOINT ["python"]
 CMD ["app.py"]

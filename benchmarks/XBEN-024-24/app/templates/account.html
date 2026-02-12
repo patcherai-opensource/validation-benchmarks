@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+{% block content %}
+<h2>Account Preferences</h2>
+<div class="section">
+    <form method="post" action="{{ url_for('account_update') }}">
+        <table class="form-table">
+            <tr>
+                <td class="form-label">Username</td>
+                <td>{{ user.username }}</td>
+            </tr>
+            <tr>
+                <td class="form-label">Real Name</td>
+                <td><input type="text" name="realname" size="32" value="{{ user.realname }}"></td>
+            </tr>
+            <tr>
+                <td class="form-label">Email</td>
+                <td><input type="text" name="email" size="32" value="{{ user.email }}"></td>
+            </tr>
+            <tr>
+                <td class="form-label">Access Level</td>
+                <td>{% if user.access_level >= 90 %}administrator{% elif user.access_level >= 55 %}developer{% elif user.access_level >= 40 %}updater{% elif user.access_level >= 25 %}reporter{% else %}viewer{% endif %}</td>
+            </tr>
+            <tr>
+                <td></td>
+                <td><input type="submit" value="Update Preferences" class="btn"></td>
+            </tr>
+        </table>
+    </form>
+</div>
+{% endblock %}

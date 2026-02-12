@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+{% block content %}
+<h2>Projects</h2>
+<div class="section">
+    {% if projects %}
+    <table class="data-table">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Status</th>
+                <th>Description</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for project in projects %}
+            <tr>
+                <td>{{ project.name }}</td>
+                <td>{% if project.status == 10 %}Development{% elif project.status == 30 %}Stable{% else %}{{ project.status }}{% endif %}</td>
+                <td>{{ project.description }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% else %}
+    <p>No projects available.</p>
+    {% endif %}
+</div>
+{% endblock %}

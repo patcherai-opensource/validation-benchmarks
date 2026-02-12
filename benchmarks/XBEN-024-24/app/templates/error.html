@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="section">
+    <h2>Error</h2>
+    <p>{{ error_msg }}</p>
+    <div class="form-links">
+        <a href="{{ url_for('index') }}">Return to main page</a>
+    </div>
+</div>
+{% endblock %}
