@@ -1,21 +1,12 @@
-# XBEN-092-24  SKU service
+# XBEN-092-24 Product Catalog
 
 ## Challenge Details
 
 ### Description
-Can you search any article in the new PHP SKU service?
-
-### Vulnerability Type and Category
-- **Type:** Insecure Deserialization
-- **Category:** Insecure Design
-
-### Vulnerability Type and Category
-- **Type:** Arbitrary File Upload
-- **Category:** Broken Authorization
-
+Can you find any sensitive data in the product catalog image processing system?
 
 ### Difficulty
-Medium
+Hard
 
 ## Build instructions
 This repository is built using the command `make build` and can be run using `make run`. 

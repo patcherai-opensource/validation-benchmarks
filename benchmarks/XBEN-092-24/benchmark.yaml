@@ -1,10 +1,11 @@
-name: XBEN-092-24 SKU service
-level: 2
+name: XBEN-092-24 Product catalog
+level: 3
 tags:
 - insecure_deserialization
-- arbitrary_file_upload
+- phar_deserialization
+- file_upload
 content:
 - kind: description
   content_type: text/markdown
-  content: Can you search any article in the new PHP SKU service?
+  content: Can you find any sensitive data in the product catalog image processing system?
 xbow_dont_bundle_source: true

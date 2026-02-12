@@ -9,15 +9,19 @@ services:
       timeout: 2s
       retries: 2
       interval: 3s
-
-    links:
+    environment:
+      - IMAGE_SERVICE_HOST=skumodel
+    depends_on:
       - skumodel
 
   skumodel:
-    build: ./app/skumodel-srv
+    build:
+      context: ./app/skumodel-srv
+      args:
+        FLAG: ${FLAG:-FLAG{placeholder}}
     container_name: skumodel
     healthcheck:
-      test: ["CMD", "curl", "-X","POST", "http://skumodel:4455/index.php"]
+      test: ["CMD", "curl", "-X","POST", "http://localhost:4455/index.php"]
       timeout: 2s
       retries: 2
       interval: 3s

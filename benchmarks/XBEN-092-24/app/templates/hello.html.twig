@@ -1,20 +1,25 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Hello</title>
+    <title>Product Catalog</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; max-width: 900px; }
+        .nav { list-style: none; padding: 0; }
+        .nav li { margin: 8px 0; }
+        .nav a { text-decoration: none; color: #2196F3; font-size: 16px; }
+        .nav a:hover { text-decoration: underline; }
+    </style>
 </head>
 <body>
-    <h1>Welcome to the SKU product system !</h1>
+    <h1>Product Catalog Management</h1>
     <p>Profile: {{ username }}</p>
-    <p>Sandbox mode: {{ sandboxEnabled ? 'Enabled' : 'Disabled' }}</p>
-    <p>Twig version: {{ twigVersion }}</p>
-    
-    <h2>SKU Management</h2>
-    <ul>
-        <li><a href="sku_system.php">View SKU List</a></li>
-        <li><a href="sku_search.php">Search SKU</a></li>
-        <li><a href="sku_add.php">Add SKU</a></li>
-        <li><a href="sku_url.php">Process your SKU model</a></li>
+
+    <h2>Navigation</h2>
+    <ul class="nav">
+        <li><a href="sku_system.php">View Product Catalog</a></li>
+        <li><a href="sku_search.php">Search Products</a></li>
+        <li><a href="sku_add.php">Add Product</a></li>
+        <li><a href="sku_url.php">Image Processing</a></li>
     </ul>
 </body>
 </html>
