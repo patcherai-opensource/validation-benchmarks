@@ -1,0 +1,28 @@
+{% extends "templates/base.html" %}
+{% block title %}{{ page.title }} - My CMS{% endblock %}
+{% block content %}
+<div class="row">
+    <div class="col-lg-9">
+        <article>
+            <h1>{{ page.title }}</h1>
+            <hr>
+            <div class="page-content">
+                {{ rendered_body | safe }}
+            </div>
+        </article>
+    </div>
+    <div class="col-lg-3">
+        <div class="card">
+            <div class="card-header">Pages</div>
+            <div class="list-group list-group-flush">
+                {% for p in pages_nav %}
+                <a href="{{ url_for('view_page', slug=p.slug) }}"
+                   class="list-group-item list-group-item-action {% if p.slug == page.slug %}active{% endif %}">
+                    {{ p.title }}
+                </a>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

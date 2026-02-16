@@ -1,0 +1,38 @@
+{% extends "templates/admin/base_admin.html" %}
+{% block title %}Profile{% endblock %}
+{% block content %}
+<h2>Account Settings</h2>
+
+<form method="post" action="{{ url_for('admin_profile') }}">
+    <div class="row">
+        <div class="col-md-6">
+            <div class="mb-3">
+                <label for="display_name" class="form-label">Display Name</label>
+                <input type="text" class="form-control" id="display_name" name="display_name"
+                       value="{{ account.display_name }}">
+            </div>
+            <div class="mb-3">
+                <label for="email" class="form-label">Email</label>
+                <input type="email" class="form-control" id="email" name="email"
+                       value="{{ account.email }}">
+            </div>
+            <div class="mb-3">
+                <label for="new_password" class="form-label">New Password</label>
+                <input type="password" class="form-control" id="new_password" name="new_password"
+                       placeholder="Leave blank to keep current password">
+            </div>
+            <button type="submit" class="btn btn-primary">Update Profile</button>
+        </div>
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Account Info</h5>
+                    <p><strong>Username:</strong> {{ account.username }}</p>
+                    <p><strong>Role:</strong> {{ account.role }}</p>
+                    <p><strong>Created:</strong> {{ account.created_at.strftime('%Y-%m-%d') if account.created_at else 'N/A' }}</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+{% endblock %}

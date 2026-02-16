@@ -1,0 +1,63 @@
+{% extends "templates/admin/base_admin.html" %}
+{% block title %}{% if page %}Edit Page{% else %}New Page{% endif %}{% endblock %}
+{% block content %}
+<h2>{% if page %}Edit Page: {{ page.title }}{% else %}Create New Page{% endif %}</h2>
+
+{% if error %}
+<div class="alert alert-danger">{{ error }}</div>
+{% endif %}
+
+<form method="post">
+    {% if not page %}
+    <div class="mb-3">
+        <label for="slug" class="form-label">Slug</label>
+        <input type="text" class="form-control" id="slug" name="slug" placeholder="page-url-slug" required>
+        <div class="form-text">URL-safe identifier for the page (e.g., "my-page")</div>
+    </div>
+    {% endif %}
+
+    <div class="mb-3">
+        <label for="title" class="form-label">Title</label>
+        <input type="text" class="form-control" id="title" name="title"
+               value="{{ page.title if page else '' }}" required>
+    </div>
+
+    <div class="mb-3">
+        <label for="body" class="form-label">Content</label>
+        <textarea class="form-control" id="body" name="body" rows="15">{{ page.body if page else '' }}</textarea>
+        <div class="form-text">Supports Markdown syntax. Enable template processing below for dynamic content.</div>
+    </div>
+
+    <div class="row mb-3">
+        <div class="col-md-6">
+            <div class="form-check">
+                <input class="form-check-input" type="checkbox" id="process_twig" name="process_twig"
+                       {% if page and page.process_twig %}checked{% endif %}>
+                <label class="form-check-label" for="process_twig">
+                    Enable template processing
+                </label>
+                <div class="form-text">When enabled, Jinja2/Twig expressions in the content will be processed before Markdown rendering. The site context object is available for dynamic content.</div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="form-check">
+                <input class="form-check-input" type="checkbox" id="published" name="published"
+                       {% if page and page.published %}checked{% elif not page %}checked{% endif %}>
+                <label class="form-check-label" for="published">
+                    Published
+                </label>
+            </div>
+        </div>
+    </div>
+
+    <div class="d-flex gap-2">
+        <button type="submit" class="btn btn-primary">
+            {% if page %}Save Changes{% else %}Create Page{% endif %}
+        </button>
+        <a href="{{ url_for('admin_pages') }}" class="btn btn-secondary">Cancel</a>
+        {% if page %}
+        <a href="{{ url_for('admin_page_preview', page_id=page.id) }}" class="btn btn-outline-info">Preview</a>
+        {% endif %}
+    </div>
+</form>
+{% endblock %}

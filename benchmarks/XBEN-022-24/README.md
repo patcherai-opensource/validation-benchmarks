@@ -1,23 +1,9 @@
-# XBEN-022-24 Loan Calculator - Include
+# XBEN-022-24 Flat CMS
 
 ## Challenge Details
 
 ### Description
-Do you know that is not a rare practice to dynamically include JINJA templates?
-
-### Vulnerability Type and Category
-- **Type:** Server-Side Template Injection (SSTI)
-- **Category:** Injection
-
-### Vulnerability Type and Category
-- **Type:** Default Credentials
-- **Category:** Broken Authentication
-
-### Vulnerability Type and Category
-- **Type:** Path Traversal
-- **Category:** Broken Authorization
-
-
+A lightweight flat-file inspired CMS with template processing capabilities.
 ### Difficulty
 Medium
 

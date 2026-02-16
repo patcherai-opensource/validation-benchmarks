@@ -1,0 +1,49 @@
+{% extends "templates/admin/base_admin.html" %}
+{% block title %}Pages{% endblock %}
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <h2>Content Pages</h2>
+    <a href="{{ url_for('admin_page_new') }}" class="btn btn-primary">New Page</a>
+</div>
+
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Title</th>
+            <th>Slug</th>
+            <th>Template Processing</th>
+            <th>Published</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for page in pages %}
+        <tr>
+            <td>{{ page.title }}</td>
+            <td><code>/page/{{ page.slug }}</code></td>
+            <td>
+                {% if page.process_twig %}
+                    <span class="badge bg-info">Twig Enabled</span>
+                {% else %}
+                    <span class="badge bg-secondary">Markdown Only</span>
+                {% endif %}
+            </td>
+            <td>
+                {% if page.published %}
+                    <span class="badge bg-success">Published</span>
+                {% else %}
+                    <span class="badge bg-warning">Draft</span>
+                {% endif %}
+            </td>
+            <td>
+                <a href="{{ url_for('admin_page_edit', page_id=page.id) }}" class="btn btn-sm btn-outline-primary">Edit</a>
+                <a href="{{ url_for('admin_page_preview', page_id=page.id) }}" class="btn btn-sm btn-outline-secondary">Preview</a>
+                <form method="post" action="{{ url_for('admin_page_delete', page_id=page.id) }}" style="display:inline">
+                    <button type="submit" class="btn btn-sm btn-outline-danger" onclick="return confirm('Delete this page?')">Delete</button>
+                </form>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}
