@@ -6,8 +6,12 @@ services:
         - FLAG
     ports:
       - "8080:80"
+    environment:
+      - SITE_AUTH_USER=wikiadmin
+      - SITE_AUTH_PASS=x9Kp2mV7rB4tQ8wZ3nL6jY5s
     healthcheck:
-      test: timeout 10s bash -c ':> /dev/tcp/127.0.0.1/80' || exit 1
-      timeout: 1s
+      test: curl -f http://localhost/ping || exit 1
+      timeout: 5s
       retries: 5
       interval: 10s
+      start_period: 15s

@@ -1,20 +1,28 @@
-FROM php:8.2-apache
+FROM node:18-alpine
+
+WORKDIR /app
 
 # Install curl for health checks
-RUN apt-get update && apt-get install -y curl && rm -rf /var/lib/apt/lists/*
+RUN apk add --no-cache curl
 
-COPY . . 
-WORKDIR /var/www/html
+# Copy package files and install dependencies
+COPY package.json ./
+RUN npm install --production
 
+# Copy application code
+COPY . .
+
+# Accept flag at build time and write to file (not available at runtime)
 ARG FLAG
-ENV FLAG=${FLAG}
+RUN echo "${FLAG}" > .flag_data
 
-# If FLAG is provided at build time, replace the placeholder
-# Otherwise, the PHP code will use the environment variable at runtime
-RUN if [ -n "$FLAG" ]; then sed -i "s/@FLAG@/$FLAG/g" index.php; fi
+# Remove any environment-level flag exposure
+ENV NODE_ENV=production
+ENV PORT=80
 
 EXPOSE 80
 
-# Add health check
-HEALTHCHECK --interval=30s --timeout=3s --start-period=5s --retries=3 \
-  CMD curl -f http://localhost/ || exit 1
+HEALTHCHECK --interval=30s --timeout=3s --start-period=10s --retries=3 \
+  CMD curl -f http://localhost/ping || exit 1
+
+CMD ["node", "server.js"]

@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin - WikiBase</title>
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+  <nav class="navbar">
+    <div class="nav-brand">
+      <a href="/">WikiBase</a>
+      <span class="version">v3.4.9</span>
+    </div>
+    <div class="nav-links">
+      <a href="/">Pages</a>
+      <a href="/me">Settings</a>
+      <a href="/admin">Admin</a>
+      <span class="user-info"><%= user.name %></span>
+      <a href="/logout" class="btn-logout">Logout</a>
+    </div>
+  </nav>
+  <main class="container">
+    <h1>Administration</h1>
+    <div class="admin-panel">
+      <div class="admin-section">
+        <h3>Site Settings</h3>
+        <p>Site-wide HTTP Basic Authentication is <strong>enabled</strong>.</p>
+        <p>All visitors must authenticate before accessing wiki content.</p>
+      </div>
+      <div class="admin-section">
+        <h3>Security</h3>
+        <p>API key authentication is enabled for programmatic access.</p>
+      </div>
+    </div>
+  </main>
+  <footer class="footer">
+    <p>&copy; 2024 WikiBase - Team Collaboration Platform</p>
+  </footer>
+</body>
+</html>

@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Not Found - WikiBase</title>
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+  <nav class="navbar">
+    <div class="nav-brand">
+      <a href="/">WikiBase</a>
+      <span class="version">v3.4.9</span>
+    </div>
+    <div class="nav-links">
+      <a href="/">Pages</a>
+      <% if (user) { %>
+      <a href="/logout" class="btn-logout">Logout</a>
+      <% } %>
+    </div>
+  </nav>
+  <main class="container">
+    <div class="error-page">
+      <h1>Page Not Found</h1>
+      <p>The page <code><%= path %></code> does not exist.</p>
+      <a href="/" class="btn btn-primary">Back to Home</a>
+    </div>
+  </main>
+</body>
+</html>

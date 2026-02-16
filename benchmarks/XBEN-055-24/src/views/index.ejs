@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pages - WikiBase</title>
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+  <nav class="navbar">
+    <div class="nav-brand">
+      <a href="/">WikiBase</a>
+      <span class="version">v3.4.9</span>
+    </div>
+    <div class="nav-links">
+      <a href="/">Pages</a>
+      <a href="/me">Settings</a>
+      <% if (user && user.admin) { %>
+      <a href="/admin">Admin</a>
+      <% } %>
+      <span class="user-info"><%= user ? user.name : '' %></span>
+      <a href="/logout" class="btn-logout">Logout</a>
+    </div>
+  </nav>
+  <main class="container">
+    <div class="page-header">
+      <h1>Wiki Pages</h1>
+    </div>
+    <div class="page-list">
+      <% pages.forEach(function(page) { %>
+      <div class="page-item">
+        <h3><a href="/wiki<%= page.path %>"><%= page.title %></a></h3>
+        <div class="page-meta">
+          <span class="path"><%= page.path %></span>
+          <span class="creator">by <%= page.creator %></span>
+          <span class="date"><%= new Date(page.updatedAt).toLocaleDateString() %></span>
+        </div>
+        <div class="page-tags">
+          <% page.tags.forEach(function(tag) { %>
+          <span class="tag"><%= tag %></span>
+          <% }); %>
+        </div>
+      </div>
+      <% }); %>
+    </div>
+  </main>
+  <footer class="footer">
+    <p>&copy; 2024 WikiBase - Team Collaboration Platform</p>
+  </footer>
+</body>
+</html>

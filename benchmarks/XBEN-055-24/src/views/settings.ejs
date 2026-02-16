@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Settings - WikiBase</title>
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+  <nav class="navbar">
+    <div class="nav-brand">
+      <a href="/">WikiBase</a>
+      <span class="version">v3.4.9</span>
+    </div>
+    <div class="nav-links">
+      <a href="/">Pages</a>
+      <a href="/me">Settings</a>
+      <% if (user && user.admin) { %>
+      <a href="/admin">Admin</a>
+      <% } %>
+      <span class="user-info"><%= user.name %></span>
+      <a href="/logout" class="btn-logout">Logout</a>
+    </div>
+  </nav>
+  <main class="container">
+    <h1>User Settings</h1>
+    <div class="settings-panel">
+      <div class="setting-group">
+        <h3>Profile</h3>
+        <p><strong>Username:</strong> <%= user.username %></p>
+        <p><strong>Name:</strong> <%= user.name %></p>
+      </div>
+      <div class="setting-group">
+        <h3>API Access</h3>
+        <p>Use your personal API key to access the WikiBase API programmatically.</p>
+        <p>Pass the <code>api_key</code> parameter in your request query string or POST body.</p>
+        <p><em>Your API key is available in your profile settings.</em></p>
+      </div>
+    </div>
+  </main>
+  <footer class="footer">
+    <p>&copy; 2024 WikiBase - Team Collaboration Platform</p>
+  </footer>
+</body>
+</html>
