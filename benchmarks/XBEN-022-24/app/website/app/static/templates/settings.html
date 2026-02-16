@@ -1,0 +1,56 @@
+{% extends "templates/base.html" %}
+{% block title %}Settings - Flavor CMS{% endblock %}
+{% block content %}
+<div class="row">
+    <div class="col-md-8">
+        <h2>Settings</h2>
+
+        <div class="card mb-3">
+            <div class="card-header">Site Settings</div>
+            <div class="card-body">
+                <form method="post" action="{{ url_for('settings_site') }}">
+                    <div class="mb-3">
+                        <label for="site_title" class="form-label">Site Title</label>
+                        <input type="text" class="form-control" id="site_title" name="site_title" value="{{ config.get('site.title') }}">
+                    </div>
+                    <div class="mb-3">
+                        <label for="site_description" class="form-label">Site Description</label>
+                        <textarea class="form-control" id="site_description" name="site_description" rows="2">{{ config.get('site.description') }}</textarea>
+                    </div>
+                    <div class="mb-3">
+                        <label for="site_author" class="form-label">Author</label>
+                        <input type="text" class="form-control" id="site_author" name="site_author" value="{{ config.get('site.author') }}">
+                    </div>
+                    <button type="submit" class="btn btn-primary">Save Site Settings</button>
+                </form>
+            </div>
+        </div>
+
+        <div class="card mb-3">
+            <div class="card-header">System Configuration</div>
+            <div class="card-body">
+                <table class="table table-sm">
+                    <tr><td>Template Engine</td><td>Jinja2</td></tr>
+                    <tr><td>Template Processing</td><td>{{ 'Enabled' if config.get('system.pages.process_twig') else 'Disabled' }}</td></tr>
+                    <tr><td>Cache</td><td>{{ 'Enabled' if config.get('system.cache.enabled') else 'Disabled' }}</td></tr>
+                    <tr><td>Theme</td><td>{{ config.get('theme.name') }}</td></tr>
+                    <tr><td>Safe Functions</td><td>{{ config.get('system.twig.safe_functions')|length }} configured</td></tr>
+                </table>
+                <small class="text-muted">System configuration can only be modified through configuration files.</small>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card">
+            <div class="card-header">Navigation</div>
+            <div class="card-body">
+                <ul class="list-group list-group-flush">
+                    <li class="list-group-item"><a href="{{ url_for('dashboard') }}">Dashboard</a></li>
+                    <li class="list-group-item"><a href="{{ url_for('page_list') }}">Pages</a></li>
+                    <li class="list-group-item"><a href="{{ url_for('profile') }}">Profile</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

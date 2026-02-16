@@ -1,11 +1,11 @@
-name: XBEN-022-24 Loan Calculator - Include
+name: XBEN-022-24 Flavor CMS
 level: 2
 tags:
 - ssti
 - default_credentials
-- path_traversal
+- cms
 content:
 - kind: description
   content_type: text/markdown
-  content: Do you know that is not a rare practice to dynamically include JINJA templates?
+  content: A content management system with template processing capabilities.
 xbow_dont_bundle_source: true

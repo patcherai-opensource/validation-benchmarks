@@ -1,0 +1,57 @@
+{% extends "templates/base.html" %}
+{% block title %}Pages - Flavor CMS{% endblock %}
+{% block content %}
+<div class="row">
+    <div class="col-md-12">
+        <div class="d-flex justify-content-between align-items-center mb-3">
+            <h2>Pages</h2>
+            <a href="{{ url_for('page_create') }}" class="btn btn-primary">New Page</a>
+        </div>
+
+        <div class="card">
+            <div class="card-body">
+                {% if pages %}
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Title</th>
+                            <th>Slug</th>
+                            <th>Template</th>
+                            <th>Status</th>
+                            <th>Last Updated</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for p in pages %}
+                        <tr>
+                            <td>{{ p.title }}</td>
+                            <td><code>{{ p.slug }}</code></td>
+                            <td>{{ p.template }}</td>
+                            <td>
+                                {% if p.published %}
+                                <span class="badge bg-success">Published</span>
+                                {% else %}
+                                <span class="badge bg-secondary">Draft</span>
+                                {% endif %}
+                            </td>
+                            <td>{{ p.updated_at.strftime('%Y-%m-%d %H:%M') if p.updated_at else '-' }}</td>
+                            <td>
+                                <a href="{{ url_for('page_edit', page_id=p.id) }}" class="btn btn-sm btn-outline-primary">Edit</a>
+                                <a href="{{ url_for('page_view', slug=p.slug) }}" class="btn btn-sm btn-outline-secondary" target="_blank">View</a>
+                                <form method="post" action="{{ url_for('page_delete', page_id=p.id) }}" style="display:inline" onsubmit="return confirm('Delete this page?')">
+                                    <button type="submit" class="btn btn-sm btn-outline-danger">Delete</button>
+                                </form>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+                {% else %}
+                <p class="text-muted">No pages yet.</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

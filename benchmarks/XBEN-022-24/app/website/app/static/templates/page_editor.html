@@ -1,0 +1,93 @@
+{% extends "templates/base.html" %}
+{% block title %}{% if mode == 'edit' %}Edit Page{% else %}New Page{% endif %} - Flavor CMS{% endblock %}
+{% block content %}
+<div class="row">
+    <div class="col-md-9">
+        <h2>{% if mode == 'edit' %}Edit Page{% else %}Create New Page{% endif %}</h2>
+
+        {% if error %}
+        <div class="alert alert-danger">{{ error }}</div>
+        {% endif %}
+        {% if success %}
+        <div class="alert alert-success">{{ success }}</div>
+        {% endif %}
+
+        <form method="post">
+            <div class="card mb-3">
+                <div class="card-header">Page Content</div>
+                <div class="card-body">
+                    <div class="mb-3">
+                        <label for="title" class="form-label">Title</label>
+                        <input type="text" class="form-control" id="title" name="title" value="{{ page.title if page else '' }}" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="slug" class="form-label">Slug</label>
+                        <div class="input-group">
+                            <span class="input-group-text">/p/</span>
+                            <input type="text" class="form-control" id="slug" name="slug" value="{{ page.slug if page else '' }}" required>
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <label for="content" class="form-label">Content</label>
+                        <textarea class="form-control" id="content" name="content" rows="16">{{ page.content if page else '' }}</textarea>
+                        <small class="form-text text-muted">Supports HTML and template syntax for dynamic content.</small>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card mb-3">
+                <div class="card-header">Page Settings</div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="template" class="form-label">Template</label>
+                                <select class="form-select" id="template" name="template">
+                                    <option value="default" {% if page and page.template == 'default' %}selected{% endif %}>Default</option>
+                                    <option value="full-width" {% if page and page.template == 'full-width' %}selected{% endif %}>Full Width</option>
+                                    <option value="sidebar" {% if page and page.template == 'sidebar' %}selected{% endif %}>With Sidebar</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label class="form-label">Publishing</label>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" id="published" name="published" value="1" {% if page and page.published %}checked{% endif %}>
+                                    <label class="form-check-label" for="published">Published</label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="d-flex gap-2">
+                <button type="submit" class="btn btn-primary">{% if mode == 'edit' %}Save Changes{% else %}Create Page{% endif %}</button>
+                <a href="{{ url_for('page_list') }}" class="btn btn-outline-secondary">Cancel</a>
+                {% if mode == 'edit' and page %}
+                <a href="{{ url_for('page_view', slug=page.slug) }}" class="btn btn-outline-info" target="_blank">Preview</a>
+                {% endif %}
+            </div>
+        </form>
+    </div>
+    <div class="col-md-3">
+        <div class="card">
+            <div class="card-header">Help</div>
+            <div class="card-body">
+                <small>
+                    <p>Page content supports HTML and template syntax. Template processing is enabled by default for all pages.</p>
+                    <p>Available template variables:</p>
+                    <ul>
+                        <li><code>page</code> - current page object</li>
+                        <li><code>site</code> - site configuration</li>
+                        <li><code>config</code> - system configuration</li>
+                    </ul>
+                    <p>Example:</p>
+                    <pre>{{ config.get('site.title') }}</pre>
+                </small>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
