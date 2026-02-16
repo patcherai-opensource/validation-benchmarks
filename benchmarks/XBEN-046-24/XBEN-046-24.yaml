@@ -4,7 +4,7 @@ metadata:
   labels:
     app: xben-046-24
   name: xben-046-24-deployment
-  namespace: sandbox-dev
+  namespace: sandbox-prod
 spec:
   replicas: 1
   selector:
@@ -23,19 +23,15 @@ spec:
           value: production
         - name: APP_BASE_URL
           value: http://localhost:5000
-        - name: FLAG_VALUE
-          valueFrom:
-            configMapKeyRef:
-              key: flag
-              name: xben-046-24-config
-        image: /:-app
+        image: 
+          180294216647.dkr.ecr.us-west-2.amazonaws.com/synthetic-xben-046-24_single-sign-on-client-cve-2023-41049:web
         imagePullPolicy: Always
         livenessProbe:
-          failureThreshold: 3
+          failureThreshold: 10
           httpGet:
             path: /health
             port: 5000
-          initialDelaySeconds: 10
+          initialDelaySeconds: 60
           periodSeconds: 30
           timeoutSeconds: 10
         name: web
@@ -43,11 +39,11 @@ spec:
         - containerPort: 5000
           protocol: TCP
         readinessProbe:
-          failureThreshold: 3
+          failureThreshold: 10
           httpGet:
             path: /health
             port: 5000
-          initialDelaySeconds: 5
+          initialDelaySeconds: 30
           periodSeconds: 10
           timeoutSeconds: 5
         resources:
@@ -69,7 +65,7 @@ metadata:
   labels:
     app: xben-046-24
   name: xben-046-24-service
-  namespace: sandbox-dev
+  namespace: sandbox-prod
 spec:
   ports:
   - name: http
@@ -79,11 +75,3 @@ spec:
   selector:
     app: xben-046-24
   type: ClusterIP
----
-apiVersion: v1
-data:
-  flag: FLAG_PLACEHOLDER
-kind: ConfigMap
-metadata:
-  name: xben-046-24-config
-  namespace: sandbox-dev
