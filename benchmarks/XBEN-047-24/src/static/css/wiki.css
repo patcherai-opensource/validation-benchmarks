@@ -1,0 +1,248 @@
+:root {
+    --primary-color: #0c5d6a;
+    --secondary-color: #d8604c;
+    --neutral-color: #4e5056;
+    --neutral-light: #f2f2f2;
+    --success-color: #3cab3b;
+    --danger-color: #d8604c;
+    --warning-color: #d78958;
+    --font-family: 'Nunito', 'Segoe UI', sans-serif;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: var(--font-family);
+    font-size: 15px;
+    line-height: 1.6;
+    color: #333;
+    background: #f5f5f5;
+}
+
+.container {
+    max-width: 1140px;
+    margin: 0 auto;
+    padding: 0 15px;
+}
+
+.navbar {
+    background: var(--primary-color);
+    padding: 10px 0;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.navbar .container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.navbar-brand {
+    color: #fff;
+    font-size: 1.4em;
+    font-weight: bold;
+    text-decoration: none;
+}
+
+.nav-links {
+    list-style: none;
+    display: flex;
+    gap: 5px;
+}
+
+.nav-links li a {
+    color: rgba(255,255,255,0.85);
+    text-decoration: none;
+    padding: 5px 12px;
+    border-radius: 3px;
+    font-size: 0.9em;
+}
+
+.nav-links li a:hover,
+.nav-links li.active a {
+    background: rgba(255,255,255,0.15);
+    color: #fff;
+}
+
+.main-content {
+    background: #fff;
+    margin: 20px auto;
+    padding: 30px;
+    border-radius: 4px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+    min-height: 400px;
+}
+
+.footer {
+    text-align: center;
+    padding: 15px 0;
+    color: #999;
+    font-size: 0.85em;
+}
+
+h1, h2, h3 {
+    color: var(--neutral-color);
+    margin-bottom: 15px;
+}
+
+h1 { font-size: 1.8em; }
+h2 { font-size: 1.5em; }
+h3 { font-size: 1.25em; }
+
+.page-header {
+    border-bottom: 1px solid #eee;
+    padding-bottom: 15px;
+    margin-bottom: 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.page-actions {
+    display: flex;
+    gap: 8px;
+}
+
+.page-content {
+    margin-bottom: 30px;
+}
+
+.page-meta {
+    border-top: 1px solid #eee;
+    padding-top: 10px;
+    color: #999;
+}
+
+.btn {
+    display: inline-block;
+    padding: 6px 16px;
+    border-radius: 3px;
+    text-decoration: none;
+    font-size: 0.9em;
+    cursor: pointer;
+    border: 1px solid transparent;
+}
+
+.btn-primary {
+    background: var(--primary-color);
+    color: #fff;
+    border-color: var(--primary-color);
+}
+
+.btn-primary:hover {
+    background: #094a55;
+}
+
+.btn-default {
+    background: #fff;
+    color: var(--neutral-color);
+    border-color: #ddd;
+}
+
+.btn-default:hover {
+    background: var(--neutral-light);
+}
+
+.form-group {
+    margin-bottom: 15px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: 600;
+    color: var(--neutral-color);
+}
+
+.form-control {
+    width: 100%;
+    padding: 8px 12px;
+    border: 1px solid #ddd;
+    border-radius: 3px;
+    font-size: 0.95em;
+}
+
+textarea.form-control {
+    font-family: monospace;
+    resize: vertical;
+}
+
+.wiki-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 10px;
+}
+
+.wiki-table th,
+.wiki-table td {
+    padding: 10px 12px;
+    border: 1px solid #eee;
+    text-align: left;
+}
+
+.wiki-table th {
+    background: var(--neutral-light);
+    font-weight: 600;
+}
+
+.wiki-table tr:hover td {
+    background: #fafafa;
+}
+
+.alert {
+    padding: 12px 16px;
+    border-radius: 3px;
+    margin-bottom: 15px;
+}
+
+.alert-success {
+    background: #d4edda;
+    color: #155724;
+    border: 1px solid #c3e6cb;
+}
+
+.alert-danger {
+    background: #f8d7da;
+    color: #721c24;
+    border: 1px solid #f5c6cb;
+}
+
+.alert-warning {
+    background: #fff3cd;
+    color: #856404;
+    border: 1px solid #ffeaa7;
+}
+
+.search-group {
+    display: flex;
+    gap: 10px;
+}
+
+.search-group .form-control {
+    flex: 1;
+}
+
+a {
+    color: var(--primary-color);
+}
+
+a:hover {
+    color: #094a55;
+}
+
+ul {
+    margin-left: 20px;
+    margin-bottom: 15px;
+}
+
+code {
+    background: var(--neutral-light);
+    padding: 2px 6px;
+    border-radius: 2px;
+    font-size: 0.9em;
+}

@@ -4,6 +4,12 @@ services:
       context: ./src
       args:
         - FLAG
+    environment:
+      - FLASK_APP=app.py
+      - SERVICE_HOST=localhost
+      - SERVICE_PORT=5000
+      - QT_QPA_PLATFORM=offscreen
+      - OPENSSL_CONF=/dev/null
     ports:
       - "8080:5000"
     healthcheck:

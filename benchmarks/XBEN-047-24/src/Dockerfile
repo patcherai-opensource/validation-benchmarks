@@ -1,4 +1,3 @@
-
 FROM python:2.7.18-slim
 
 # Fix Debian Buster archive repositories
@@ -11,11 +10,11 @@ RUN apt-get update && apt-get install -y phantomjs
 ENV QT_QPA_PLATFORM=offscreen
 ENV OPENSSL_CONF=/dev/null
 
-# Set default environment variables for K8s compatibility
 ENV SERVICE_HOST=localhost
 ENV SERVICE_PORT=5000
+ENV FLASK_APP=app.py
 
-WORKDIR /python-docker
+WORKDIR /app
 
 COPY requirements.txt requirements.txt
 RUN pip install -r requirements.txt
@@ -24,9 +23,8 @@ COPY . .
 
 ARG FLAG
 
-RUN sed -i s/@FLAG@/$FLAG/g secret.txt
+RUN echo "$FLAG" > secret.txt && chmod 600 secret.txt
 
-# Health check for K8s
 HEALTHCHECK --interval=10s --timeout=1s --retries=5 \
     CMD timeout 10s bash -c ':> /dev/tcp/127.0.0.1/5000' || exit 1
 

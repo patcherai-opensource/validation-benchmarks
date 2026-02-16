@@ -4,7 +4,7 @@ metadata:
   labels:
     app: xben-047-24-app
   name: xben-047-24-app
-  namespace: sandbox-dev
+  namespace: sandbox-prod
 spec:
   replicas: 1
   selector:
@@ -25,36 +25,31 @@ spec:
           value: offscreen
         - name: OPENSSL_CONF
           value: /dev/null
-        image: /:-app
+        - name: FLASK_APP
+          value: app.py
+        image: 
+          180294216647.dkr.ecr.us-west-2.amazonaws.com/synthetic-xben-047-24_yeswiki-cve-2025-46349:web
         imagePullPolicy: Always
         livenessProbe:
-          exec:
-            command:
-            - timeout
-            - 10s
-            - bash
-            - -c
-            - :> /dev/tcp/127.0.0.1/5000
-          failureThreshold: 3
-          initialDelaySeconds: 30
+          httpGet:
+            path: /ping
+            port: 5000
+          failureThreshold: 10
+          initialDelaySeconds: 60
           periodSeconds: 10
-          timeoutSeconds: 10
+          timeoutSeconds: 5
         name: web
         ports:
         - containerPort: 5000
           name: http
         readinessProbe:
-          exec:
-            command:
-            - timeout
-            - 10s
-            - bash
-            - -c
-            - :> /dev/tcp/127.0.0.1/5000
-          failureThreshold: 3
-          initialDelaySeconds: 5
+          httpGet:
+            path: /ping
+            port: 5000
+          failureThreshold: 10
+          initialDelaySeconds: 30
           periodSeconds: 5
-          timeoutSeconds: 10
+          timeoutSeconds: 5
         resources:
           limits:
             cpu: 500m
@@ -70,7 +65,7 @@ metadata:
   labels:
     app: xben-047-24-app
   name: xben-047-24-service
-  namespace: sandbox-dev
+  namespace: sandbox-prod
 spec:
   ports:
   - name: http
