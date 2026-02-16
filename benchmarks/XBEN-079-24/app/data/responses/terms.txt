@@ -1,0 +1,19 @@
+Product Catalog API - Terms of Service
+
+Last Updated: 2024-11-01
+
+1. API Usage
+   - Rate limits apply: 100 requests per minute per API key
+   - Commercial use requires a paid subscription
+
+2. Data Accuracy
+   - Product data is provided for testing and development purposes
+   - Prices and availability are simulated and not binding
+
+3. Acceptable Use
+   - API must not be used for automated scraping
+   - Responses must not be cached beyond the Cache-Control header value
+
+4. Support
+   - For issues, contact api-support@mockapi.local
+   - Documentation available at /dashboard

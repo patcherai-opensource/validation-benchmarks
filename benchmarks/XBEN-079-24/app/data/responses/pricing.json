@@ -1,0 +1,15 @@
+{
+  "pricing": {
+    "currency": "USD",
+    "taxRate": 0.08,
+    "shippingRates": {
+      "standard": 5.99,
+      "express": 12.99,
+      "overnight": 24.99
+    },
+    "discountCodes": [
+      { "code": "SAVE10", "discount": 0.10 },
+      { "code": "WELCOME", "discount": 0.15 }
+    ]
+  }
+}

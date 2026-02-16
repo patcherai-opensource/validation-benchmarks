@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MockAPI Studio - Dashboard</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: #1a1a2e; color: #e0e0e0; }
+    .header { background: #16213e; padding: 16px 24px; display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid #0f3460; }
+    .header h1 { font-size: 20px; color: #e94560; }
+    .header .version { font-size: 12px; color: #888; }
+    .container { max-width: 1200px; margin: 0 auto; padding: 24px; }
+    .status-bar { display: flex; gap: 16px; margin-bottom: 24px; }
+    .status-card { background: #16213e; border: 1px solid #0f3460; border-radius: 8px; padding: 16px; flex: 1; }
+    .status-card h3 { color: #e94560; font-size: 12px; text-transform: uppercase; margin-bottom: 8px; }
+    .status-card .value { font-size: 24px; font-weight: 600; }
+    .routes-section { background: #16213e; border: 1px solid #0f3460; border-radius: 8px; overflow: hidden; }
+    .routes-header { padding: 16px; border-bottom: 1px solid #0f3460; }
+    .routes-header h2 { font-size: 16px; }
+    .route-item { display: flex; align-items: center; padding: 12px 16px; border-bottom: 1px solid #0f3460; }
+    .route-item:last-child { border-bottom: none; }
+    .method { display: inline-block; padding: 2px 8px; border-radius: 4px; font-size: 11px; font-weight: 700; min-width: 50px; text-align: center; margin-right: 12px; }
+    .method-get { background: #27ae60; color: #fff; }
+    .method-post { background: #f39c12; color: #fff; }
+    .method-put { background: #3498db; color: #fff; }
+    .method-delete { background: #e74c3c; color: #fff; }
+    .endpoint { font-family: 'Fira Code', monospace; font-size: 14px; flex: 1; }
+    .response-count { color: #888; font-size: 12px; }
+    .docs-section { margin-top: 24px; background: #16213e; border: 1px solid #0f3460; border-radius: 8px; padding: 16px; }
+    .docs-section h2 { font-size: 16px; margin-bottom: 12px; }
+    .docs-section p { color: #aaa; font-size: 13px; line-height: 1.6; }
+    .docs-section code { background: #0f3460; padding: 2px 6px; border-radius: 3px; font-size: 12px; color: #e94560; }
+    .helper-list { margin-top: 12px; }
+    .helper-item { padding: 6px 0; border-bottom: 1px solid #0f3460; font-size: 13px; }
+    .helper-item code { margin-right: 8px; }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <div>
+      <h1>MockAPI Studio</h1>
+      <span class="version">Dashboard</span>
+    </div>
+    <div class="version" id="env-name">Loading...</div>
+  </div>
+  <div class="container">
+    <div class="status-bar">
+      <div class="status-card">
+        <h3>Environment</h3>
+        <div class="value" id="status-env">-</div>
+      </div>
+      <div class="status-card">
+        <h3>Routes</h3>
+        <div class="value" id="status-routes">-</div>
+      </div>
+      <div class="status-card">
+        <h3>Status</h3>
+        <div class="value" style="color: #27ae60;" id="status-health">-</div>
+      </div>
+      <div class="status-card">
+        <h3>Uptime</h3>
+        <div class="value" id="status-uptime">-</div>
+      </div>
+    </div>
+    <div class="routes-section">
+      <div class="routes-header">
+        <h2>Configured Routes</h2>
+      </div>
+      <div id="routes-list">Loading routes...</div>
+    </div>
+    <div class="docs-section">
+      <h2>Template Helpers</h2>
+      <p>MockAPI Studio supports Handlebars-based templating in response bodies, file paths, and header values. Use these helpers to generate dynamic responses based on incoming request data:</p>
+      <div class="helper-list">
+        <div class="helper-item"><code>{{queryValue 'key'}}</code> Access query string parameters</div>
+        <div class="helper-item"><code>{{reqParam 'name'}}</code> Access URL route parameters</div>
+        <div class="helper-item"><code>{{headerVal 'name'}}</code> Access request headers</div>
+        <div class="helper-item"><code>{{cookieVal 'name'}}</code> Access cookies</div>
+        <div class="helper-item"><code>{{bodyField 'path'}}</code> Access JSON body fields</div>
+        <div class="helper-item"><code>{{uuid}}</code> Generate random UUID</div>
+        <div class="helper-item"><code>{{timestamp}}</code> Current ISO timestamp</div>
+        <div class="helper-item"><code>{{randomInt min max}}</code> Random integer</div>
+      </div>
+    </div>
+  </div>
+  <script>
+    async function loadStatus() {
+      try {
+        const r = await fetch('/mockapi/status');
+        const d = await r.json();
+        document.getElementById('status-env').textContent = d.name;
+        document.getElementById('env-name').textContent = d.name + ' v' + d.version;
+        document.getElementById('status-routes').textContent = d.routeCount;
+        document.getElementById('status-health').textContent = 'Running';
+        document.getElementById('status-uptime').textContent = Math.floor(d.uptime) + 's';
+      } catch(e) {
+        document.getElementById('status-health').textContent = 'Error';
+      }
+    }
+    async function loadRoutes() {
+      try {
+        const r = await fetch('/mockapi/routes');
+        const d = await r.json();
+        const list = document.getElementById('routes-list');
+        list.innerHTML = '';
+        d.routes.forEach(route => {
+          const m = route.method.toLowerCase();
+          const div = document.createElement('div');
+          div.className = 'route-item';
+          div.innerHTML = `<span class="method method-${m}">${route.method}</span><span class="endpoint">/api/v1${route.endpoint}</span><span class="response-count">${route.responseCount} response(s)</span>`;
+          list.appendChild(div);
+        });
+      } catch(e) {
+        document.getElementById('routes-list').innerHTML = '<div style="padding:16px;color:#888;">Failed to load routes</div>';
+      }
+    }
+    loadStatus();
+    loadRoutes();
+    setInterval(loadStatus, 10000);
+  </script>
+</body>
+</html>

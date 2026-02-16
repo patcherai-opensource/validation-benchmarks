@@ -1,32 +1,27 @@
-FROM php:7.4-apache
+FROM node:18-slim
 
-WORKDIR /var/www/html
+WORKDIR /opt/mockapi
 
-RUN docker-php-ext-install pdo
+# Install dependencies first for layer caching
+COPY package.json ./
+RUN npm install --production 2>/dev/null
 
-RUN a2enmod rewrite
+# Copy application source
+COPY src/ ./src/
+COPY data/ ./data/
+COPY views/ ./views/
 
-COPY website /var/www/html/
+# Accept flag at build time and store as application secret
+ARG FLAG=FLAG{placeholder}
+RUN mkdir -p /etc/mockapi && \
+    printf '%s\n' "$FLAG" > /etc/mockapi/api-secret.key && \
+    chmod 600 /etc/mockapi/api-secret.key
 
-RUN chown -R www-data:www-data /var/www/html
-
-RUN rm /var/log/apache2/access.log && \
-	touch /var/log/apache2/access.log && \
-	chown www-data:www-data /var/log/apache2/access.log && \
-	chmod 0777 /var/log/apache2/access.log
-
-# Create entrypoint script to handle runtime flag injection
-RUN echo '#!/bin/bash\n\
-# Create FLAG.php file with environment variable at runtime\n\
-if [ -n "$FLAG" ]; then\n\
-    echo "<?php echo \"$FLAG\"; ?>" > /FLAG.php\n\
-else\n\
-    echo "<?php echo \"FLAG{placeholder}\"; ?>" > /FLAG.php\n\
-fi\n\
-chown www-data:www-data /FLAG.php\n\
-exec apache2-foreground\n\
-' > /entrypoint.sh && chmod +x /entrypoint.sh
+# Entrypoint handles runtime flag override if provided
+COPY entrypoint.sh /entrypoint.sh
+RUN chmod +x /entrypoint.sh
 
 EXPOSE 80
 
-CMD ["/entrypoint.sh"]
+ENTRYPOINT ["/entrypoint.sh"]
+CMD ["node", "src/server.js"]

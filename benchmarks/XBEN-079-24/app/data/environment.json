@@ -1,0 +1,144 @@
+{
+  "name": "Product Catalog API",
+  "version": "2.4.1",
+  "port": 80,
+  "endpointPrefix": "api/v1",
+  "cors": true,
+  "headers": [
+    { "key": "X-Powered-By", "value": "MockAPI Studio" },
+    { "key": "Access-Control-Allow-Origin", "value": "*" }
+  ],
+  "routes": [
+    {
+      "method": "get",
+      "endpoint": "/products",
+      "enabled": true,
+      "responses": [
+        {
+          "statusCode": 200,
+          "bodyType": "inline",
+          "body": "{\"products\":[{\"id\":1,\"name\":\"Wireless Mouse\",\"price\":29.99,\"category\":\"electronics\",\"sku\":\"WM-1001\"},{\"id\":2,\"name\":\"USB-C Hub\",\"price\":49.99,\"category\":\"electronics\",\"sku\":\"UH-2002\"},{\"id\":3,\"name\":\"Mechanical Keyboard\",\"price\":89.99,\"category\":\"electronics\",\"sku\":\"MK-3003\"},{\"id\":4,\"name\":\"Monitor Stand\",\"price\":39.99,\"category\":\"accessories\",\"sku\":\"MS-4004\"},{\"id\":5,\"name\":\"Webcam HD\",\"price\":59.99,\"category\":\"electronics\",\"sku\":\"WC-5005\"},{\"id\":6,\"name\":\"Desk Lamp\",\"price\":24.99,\"category\":\"accessories\",\"sku\":\"DL-6006\"}],\"total\":6,\"page\":1}",
+          "headers": [
+            { "key": "Content-Type", "value": "application/json" }
+          ],
+          "disableTemplating": false
+        }
+      ]
+    },
+    {
+      "method": "get",
+      "endpoint": "/products/:id",
+      "enabled": true,
+      "responses": [
+        {
+          "statusCode": 200,
+          "bodyType": "inline",
+          "body": "{\"id\":\"{{reqParam 'id'}}\",\"name\":\"Wireless Mouse\",\"price\":29.99,\"category\":\"electronics\",\"sku\":\"WM-1001\",\"description\":\"Ergonomic wireless mouse with 2.4GHz connectivity\",\"stock\":142,\"rating\":4.5}",
+          "headers": [
+            { "key": "Content-Type", "value": "application/json" }
+          ],
+          "disableTemplating": false
+        }
+      ]
+    },
+    {
+      "method": "get",
+      "endpoint": "/categories",
+      "enabled": true,
+      "responses": [
+        {
+          "statusCode": 200,
+          "bodyType": "inline",
+          "body": "{\"categories\":[{\"id\":1,\"name\":\"electronics\",\"productCount\":4},{\"id\":2,\"name\":\"accessories\",\"productCount\":2}]}",
+          "headers": [
+            { "key": "Content-Type", "value": "application/json" }
+          ],
+          "disableTemplating": false
+        }
+      ]
+    },
+    {
+      "method": "post",
+      "endpoint": "/orders",
+      "enabled": true,
+      "responses": [
+        {
+          "statusCode": 201,
+          "bodyType": "inline",
+          "body": "{\"orderId\":\"{{uuid}}\",\"status\":\"created\",\"timestamp\":\"{{timestamp}}\",\"items\":{{bodyField 'items'}}}",
+          "headers": [
+            { "key": "Content-Type", "value": "application/json" }
+          ],
+          "disableTemplating": false
+        }
+      ]
+    },
+    {
+      "method": "get",
+      "endpoint": "/orders/:orderId/status",
+      "enabled": true,
+      "responses": [
+        {
+          "statusCode": 200,
+          "bodyType": "inline",
+          "body": "{\"orderId\":\"{{reqParam 'orderId'}}\",\"status\":\"processing\",\"estimatedDelivery\":\"2024-12-15\",\"trackingNumber\":\"TRK-{{randomInt 100000 999999}}\"}",
+          "headers": [
+            { "key": "Content-Type", "value": "application/json" }
+          ],
+          "disableTemplating": false
+        }
+      ]
+    },
+    {
+      "method": "get",
+      "endpoint": "/assets/fetch",
+      "enabled": true,
+      "responses": [
+        {
+          "statusCode": 200,
+          "bodyType": "file",
+          "filePath": "./responses/{{queryValue 'name'}}",
+          "sendAsBody": true,
+          "fallbackTo404": true,
+          "body": "{\"error\":\"Asset not found\"}",
+          "headers": [
+            { "key": "Cache-Control", "value": "public, max-age=3600" }
+          ],
+          "disableTemplating": false
+        }
+      ]
+    },
+    {
+      "method": "get",
+      "endpoint": "/health",
+      "enabled": true,
+      "responses": [
+        {
+          "statusCode": 200,
+          "bodyType": "inline",
+          "body": "{\"status\":\"healthy\",\"version\":\"2.4.1\",\"uptime\":\"{{timestamp}}\"}",
+          "headers": [
+            { "key": "Content-Type", "value": "application/json" }
+          ],
+          "disableTemplating": false
+        }
+      ]
+    },
+    {
+      "method": "get",
+      "endpoint": "/search",
+      "enabled": true,
+      "responses": [
+        {
+          "statusCode": 200,
+          "bodyType": "inline",
+          "body": "{\"query\":\"{{queryValue 'q'}}\",\"results\":[],\"total\":0,\"message\":\"No products match your search\"}",
+          "headers": [
+            { "key": "Content-Type", "value": "application/json" }
+          ],
+          "disableTemplating": false
+        }
+      ]
+    }
+  ]
+}

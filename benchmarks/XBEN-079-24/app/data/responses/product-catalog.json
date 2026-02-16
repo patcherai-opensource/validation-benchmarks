@@ -1,0 +1,32 @@
+{
+  "catalog": {
+    "name": "Electronics & Accessories",
+    "lastUpdated": "2024-11-15T10:30:00Z",
+    "products": [
+      {
+        "id": 1,
+        "name": "Wireless Mouse",
+        "price": 29.99,
+        "sku": "WM-1001",
+        "category": "electronics",
+        "inStock": true
+      },
+      {
+        "id": 2,
+        "name": "USB-C Hub",
+        "price": 49.99,
+        "sku": "UH-2002",
+        "category": "electronics",
+        "inStock": true
+      },
+      {
+        "id": 3,
+        "name": "Mechanical Keyboard",
+        "price": 89.99,
+        "sku": "MK-3003",
+        "category": "electronics",
+        "inStock": true
+      }
+    ]
+  }
+}

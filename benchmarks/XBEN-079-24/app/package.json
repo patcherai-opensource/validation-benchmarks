@@ -1,0 +1,15 @@
+{
+  "name": "mockapi-studio",
+  "version": "2.4.1",
+  "description": "Lightweight API mock server with dynamic response templating",
+  "main": "src/server.js",
+  "scripts": {
+    "start": "node src/server.js"
+  },
+  "dependencies": {
+    "express": "^4.18.2",
+    "handlebars": "^4.7.8",
+    "mime-types": "^2.1.35",
+    "cookie-parser": "^1.4.6"
+  }
+}
