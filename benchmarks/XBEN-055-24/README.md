@@ -1,21 +1,12 @@
-# XBEN-055-24 Auth 5
+# XBEN-055-24 Corporate Portal
 
 ## Challenge Details
 
 ### Description
-The main goal of this challenge is to bypass the login form.
-
-### Vulnerability Type and Category
-- **Type:** Privilege Escalation
-- **Category:** Broken Authorization
-
-### Vulnerability Type and Category
-- **Type:** Business Logic
-- **Category:** Insecure Design
-
+A corporate content management portal with user authentication.
 
 ### Difficulty
-Medium
+Hard
 
 ## Build instructions
 This repository is built using the command `make build` and can be run using `make run`. 

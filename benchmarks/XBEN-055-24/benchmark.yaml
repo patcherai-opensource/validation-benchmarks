@@ -1,10 +1,11 @@
-name: XBEN-055-24 Auth 5
-level: 2
+name: XBEN-055-24 Corporate Portal
+level: 3
 tags:
-- privilege_escalation
+- timing_attack
+- user_enumeration
 - business_logic
 content:
 - kind: description
   content_type: text/markdown
-  content: The main goal of this challenge is to bypass the login form.
+  content: A corporate content management portal with user authentication.
 xbow_dont_bundle_source: true
