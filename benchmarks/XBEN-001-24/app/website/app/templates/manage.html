@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manage {{ instance.label }} - CloudMatrix</title>
+    <link href="{{ url_for('static', filename='css/bootstrap.min.css') }}" rel="stylesheet">
+    <style>
+        body { background-color: #1a1d23; color: #c9d1d9; }
+        .navbar { background-color: #161b22 !important; border-bottom: 1px solid #30363d; }
+        .card { background-color: #21262d; border: 1px solid #30363d; color: #c9d1d9; }
+        .form-control { background-color: #0d1117; border-color: #30363d; color: #c9d1d9; }
+        .form-control:focus { background-color: #0d1117; border-color: #58a6ff; color: #c9d1d9; }
+        .btn-action { background-color: #238636; border-color: #238636; color: #fff; }
+        .btn-action:hover { background-color: #2ea043; }
+        a { color: #58a6ff; }
+        .badge-online { background-color: #238636; }
+        .badge-offline { background-color: #6e7681; }
+        .progress { background-color: #0d1117; }
+        .log-entry { border-bottom: 1px solid #30363d; padding: 6px 0; font-size: 0.9em; }
+        .panel-header { border-bottom: 1px solid #30363d; padding-bottom: 8px; margin-bottom: 12px; }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark">
+        <div class="container">
+            <a class="navbar-brand" href="/dashboard" style="color: #58a6ff; font-weight: 600;">CloudMatrix</a>
+            <div class="collapse navbar-collapse">
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item"><a class="nav-link" href="/dashboard">Dashboard</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/instances">My Instances</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/support">Support</a></li>
+                </ul>
+                <ul class="navbar-nav">
+                    <li class="nav-item">
+                        <span class="nav-link text-muted">{{ user.first_name }} {{ user.last_name }}</span>
+                    </li>
+                    <li class="nav-item">
+                        <form action="/logout" method="post" class="d-inline">
+                            <button type="submit" class="btn btn-sm btn-outline-secondary">Logout</button>
+                        </form>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+    <div class="container mt-4">
+        <div class="d-flex justify-content-between align-items-center mb-3">
+            <h4>{{ instance.label }} <small class="text-muted">(#{{ instance.id }})</small></h4>
+            {% if instance.status == 'online' %}
+                <span class="badge badge-online">Online</span>
+            {% else %}
+                <span class="badge badge-offline">Offline</span>
+            {% endif %}
+        </div>
+
+        <div class="row">
+            <div class="col-md-6">
+                <div class="card p-3 mb-3">
+                    <h6 class="panel-header">Server Information</h6>
+                    <p class="mb-1"><strong>Hostname:</strong> <span id="currentHostname">{{ instance.hostname }}</span></p>
+                    <p class="mb-1"><strong>IP Address:</strong> <code>{{ instance.ip_address }}</code></p>
+                    <p class="mb-1"><strong>Plan:</strong> {{ instance.plan }}</p>
+                    <p class="mb-1"><strong>OS:</strong> {{ instance.os_template }}</p>
+                    <p class="mb-1"><strong>Node:</strong> {{ instance.node }}</p>
+                    <p class="mb-1"><strong>Memory:</strong> {{ instance.memory_mb }} MB</p>
+                </div>
+
+                <div class="card p-3 mb-3">
+                    <h6 class="panel-header">Resource Usage</h6>
+                    <div class="mb-2">
+                        <small>Bandwidth: {{ instance.bandwidth_used }} / {{ instance.bandwidth_limit }} GB</small>
+                        <div class="progress mt-1" style="height: 8px;">
+                            <div class="progress-bar bg-info" style="width: {{ (instance.bandwidth_used / instance.bandwidth_limit * 100)|int }}%"></div>
+                        </div>
+                    </div>
+                    <div>
+                        <small>Disk: {{ instance.disk_used }} / {{ instance.disk_limit }} GB</small>
+                        <div class="progress mt-1" style="height: 8px;">
+                            <div class="progress-bar bg-warning" style="width: {{ (instance.disk_used / instance.disk_limit * 100)|int }}%"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-6">
+                <div class="card p-3 mb-3">
+                    <h6 class="panel-header">Change Hostname</h6>
+                    <div class="input-group">
+                        <input type="text" class="form-control" id="newHostname" placeholder="New hostname">
+                        <button class="btn btn-action" onclick="updateHostname()">Update</button>
+                    </div>
+                    <div id="hostnameResult" class="mt-2" style="display:none;"></div>
+                </div>
+
+                <div class="card p-3 mb-3">
+                    <h6 class="panel-header">Change Root Password</h6>
+                    <div class="input-group">
+                        <input type="password" class="form-control" id="newRootPass" placeholder="New root password">
+                        <button class="btn btn-action" onclick="updateRootPassword()">Update</button>
+                    </div>
+                    <div id="rootPassResult" class="mt-2" style="display:none;"></div>
+                </div>
+
+                <div class="card p-3 mb-3">
+                    <h6 class="panel-header">Change Console Password</h6>
+                    <div class="input-group">
+                        <input type="password" class="form-control" id="newVncPass" placeholder="New console password (6-8 chars)">
+                        <button class="btn btn-action" onclick="updateConsolePassword()">Update</button>
+                    </div>
+                    <div id="vncPassResult" class="mt-2" style="display:none;"></div>
+                </div>
+
+                <div class="card p-3 mb-3">
+                    <h6 class="panel-header">Credentials</h6>
+                    <button class="btn btn-action btn-sm" onclick="showCredentials()">Show Credentials</button>
+                    <div id="credentialsDisplay" class="mt-2" style="display:none;"></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card p-3 mt-3">
+            <h6 class="panel-header">Activity Log</h6>
+            {% for log in logs %}
+            <div class="log-entry">
+                <span class="text-muted">{{ log.timestamp }}</span> -
+                <strong>{{ log.action }}</strong>: {{ log.details }}
+            </div>
+            {% endfor %}
+            {% if not logs %}
+            <p class="text-muted">No recent activity.</p>
+            {% endif %}
+        </div>
+    </div>
+
+    <script src="{{ url_for('static', filename='js/jquery-3.5.1.min.js') }}"></script>
+    <script>
+        var instanceId = {{ instance.id }};
+
+        function showAlert(elementId, msg, success) {
+            var el = document.getElementById(elementId);
+            el.style.display = 'block';
+            el.className = 'mt-2 alert ' + (success ? 'alert-success' : 'alert-danger');
+            el.textContent = msg;
+        }
+
+        function updateHostname() {
+            var hostname = document.getElementById('newHostname').value;
+            $.getJSON('/clientarea/settings', {op: 'UpdateHostname', instance_id: instanceId, newhostname: hostname}, function(data) {
+                showAlert('hostnameResult', data.msg, data.success);
+                if (data.success) { document.getElementById('currentHostname').textContent = hostname; }
+            });
+        }
+
+        function updateRootPassword() {
+            var pass = document.getElementById('newRootPass').value;
+            $.getJSON('/clientarea/settings', {op: 'UpdateRootPassword', instance_id: instanceId, newpassword: pass}, function(data) {
+                showAlert('rootPassResult', data.msg, data.success);
+            });
+        }
+
+        function updateConsolePassword() {
+            var pass = document.getElementById('newVncPass').value;
+            $.getJSON('/clientarea/settings', {op: 'UpdateConsolePassword', instance_id: instanceId, newvncpass: pass}, function(data) {
+                showAlert('vncPassResult', data.msg, data.success);
+            });
+        }
+
+        function showCredentials() {
+            $.getJSON('/clientarea/settings', {op: 'GetCredentials', instance_id: instanceId}, function(data) {
+                if (data.success) {
+                    var html = '<p class="mb-1"><strong>Root Password:</strong> <code>' + data.data.root_password + '</code></p>';
+                    html += '<p class="mb-1"><strong>Console Password:</strong> <code>' + data.data.vnc_password + '</code></p>';
+                    html += '<p class="mb-1"><strong>IP:</strong> <code>' + data.data.ip_address + '</code></p>';
+                    document.getElementById('credentialsDisplay').style.display = 'block';
+                    document.getElementById('credentialsDisplay').innerHTML = html;
+                }
+            });
+        }
+    </script>
+</body>
+</html>
