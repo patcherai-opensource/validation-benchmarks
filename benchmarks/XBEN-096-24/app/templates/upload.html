@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+
+{% block title %}Upload BOM - SBOM Manager{% endblock %}
+
+{% block content %}
+<h1>Upload CycloneDX BOM</h1>
+
+{% if error %}
+<div class="alert alert-error">{{ error }}</div>
+{% endif %}
+
+<div class="card">
+    <h3>File Upload</h3>
+    <form action="/upload" method="POST" enctype="multipart/form-data">
+        <p>Select a CycloneDX XML BOM file:</p>
+        <input type="file" name="file" accept=".xml,.bom">
+        <div style="margin-top: 1rem;">
+            <button type="submit" class="btn">Upload &amp; Analyze</button>
+        </div>
+    </form>
+</div>
+
+<div class="card">
+    <h3>Paste XML Content</h3>
+    <form action="/upload" method="POST">
+        <p>Or paste CycloneDX XML BOM content directly:</p>
+        <textarea name="xml_content" rows="16" placeholder='<?xml version="1.0" encoding="UTF-8"?>
+<bom xmlns="http://cyclonedx.org/schema/bom/1.5" version="1" serialNumber="urn:uuid:example">
+  <components>
+    <component type="library">
+      <name>example-lib</name>
+      <version>1.0.0</version>
+    </component>
+  </components>
+</bom>'></textarea>
+        <div style="margin-top: 1rem;">
+            <button type="submit" class="btn">Parse &amp; Analyze</button>
+        </div>
+    </form>
+</div>
+{% endblock %}

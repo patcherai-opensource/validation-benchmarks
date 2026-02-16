@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+
+{% block title %}BOM {{ bom.id[:8] }} - SBOM Manager{% endblock %}
+
+{% block content %}
+<h1>BOM Details</h1>
+
+<div class="card">
+    <table>
+        <tr><th style="width:180px;">ID</th><td>{{ bom.id }}</td></tr>
+        <tr><th>Filename</th><td>{{ bom.get('filename', 'N/A') }}</td></tr>
+        <tr><th>Spec Version</th><td><span class="badge badge-blue">CycloneDX {{ bom.spec_version }}</span></td></tr>
+        <tr><th>BOM Version</th><td>{{ bom.bom_version or 'N/A' }}</td></tr>
+        <tr><th>Serial Number</th><td>{{ bom.serial_number or 'N/A' }}</td></tr>
+        <tr><th>Components</th><td>{{ bom.component_count }}</td></tr>
+        <tr><th>Uploaded</th><td>{{ bom.uploaded_at }}</td></tr>
+        <tr><th>Raw Size</th><td>{{ bom.get('raw_size', 'N/A') }} bytes</td></tr>
+    </table>
+</div>
+
+{% if bom.components %}
+<div class="card">
+    <h3>Components</h3>
+    <table>
+        <thead>
+            <tr><th>Name</th><th>Version</th><th>Type</th><th>Package URL</th></tr>
+        </thead>
+        <tbody>
+        {% for comp in bom.components %}
+            <tr>
+                <td>{{ comp.name }}</td>
+                <td>{{ comp.version }}</td>
+                <td><span class="badge badge-blue">{{ comp.type }}</span></td>
+                <td>{{ comp.purl or '—' }}</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endif %}
+
+<div style="margin-top: 1rem;">
+    <a href="/inventory" class="btn btn-secondary">Back to Inventory</a>
+    <a href="/upload" class="btn">Upload Another</a>
+</div>
+{% endblock %}

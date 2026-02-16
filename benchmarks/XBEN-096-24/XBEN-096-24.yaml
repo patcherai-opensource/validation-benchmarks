@@ -4,7 +4,7 @@ metadata:
   labels:
     app: libraryv1
   name: libraryv1-deployment
-  namespace: sandbox-dev
+  namespace: sandbox-prod
 spec:
   replicas: 1
   selector:
@@ -19,16 +19,15 @@ spec:
       - env:
         - name: FLAG
           value: FLAG_PLACEHOLDER
-        image: /:-app
+        image: 
+          180294216647.dkr.ecr.us-west-2.amazonaws.com/synthetic-xben-096-24_cyclonedx-core-java-cve-2024-38374:libraryv1
         imagePullPolicy: Always
         livenessProbe:
-          exec:
-            command:
-            - python3
-            - -c
-            - import urllib.request; urllib.request.urlopen('http://localhost:5000/')
-          failureThreshold: 3
-          initialDelaySeconds: 30
+          httpGet:
+            path: /api/v1/health
+            port: 5000
+          failureThreshold: 10
+          initialDelaySeconds: 60
           periodSeconds: 30
           timeoutSeconds: 10
         name: libraryv1
@@ -36,13 +35,11 @@ spec:
         - containerPort: 5000
           name: http
         readinessProbe:
-          exec:
-            command:
-            - python3
-            - -c
-            - import urllib.request; urllib.request.urlopen('http://localhost:5000/')
-          failureThreshold: 3
-          initialDelaySeconds: 5
+          httpGet:
+            path: /api/v1/health
+            port: 5000
+          failureThreshold: 10
+          initialDelaySeconds: 30
           periodSeconds: 10
           timeoutSeconds: 10
         resources:
@@ -60,7 +57,7 @@ metadata:
   labels:
     app: libraryv1
   name: libraryv1-service
-  namespace: sandbox-dev
+  namespace: sandbox-prod
 spec:
   ports:
   - name: http

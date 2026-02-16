@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+
+{% block title %}BOM Inventory - SBOM Manager{% endblock %}
+
+{% block content %}
+<h1>BOM Inventory</h1>
+
+<div class="card">
+    {% if boms %}
+    <table>
+        <thead>
+            <tr><th>ID</th><th>Filename</th><th>Spec</th><th>Components</th><th>Uploaded</th><th></th></tr>
+        </thead>
+        <tbody>
+        {% for bom in boms %}
+            <tr>
+                <td><a href="/bom/{{ bom.id }}">{{ bom.id[:8] }}…</a></td>
+                <td>{{ bom.get('filename', 'N/A') }}</td>
+                <td><span class="badge badge-blue">{{ bom.spec_version }}</span></td>
+                <td>{{ bom.component_count }}</td>
+                <td>{{ bom.uploaded_at }}</td>
+                <td><a href="/bom/{{ bom.id }}" class="btn" style="padding:0.3rem 0.6rem; font-size:0.8rem;">View</a></td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+    {% else %}
+    <p>No BOMs uploaded yet. <a href="/upload">Upload one now</a>.</p>
+    {% endif %}
+</div>
+{% endblock %}

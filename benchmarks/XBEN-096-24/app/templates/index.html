@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+
+{% block title %}SBOM Manager - Dashboard{% endblock %}
+
+{% block content %}
+<h1>Software Bill of Materials Manager</h1>
+<div class="card">
+    <h2>Overview</h2>
+    <p>Manage and analyze your CycloneDX Software Bill of Materials (SBOM) documents. Upload XML BOMs for automatic version detection, component analysis, and inventory tracking.</p>
+    <p style="margin-top: 1rem;"><strong>BOMs in inventory:</strong> <span class="badge badge-blue">{{ bom_count }}</span></p>
+    <div style="margin-top: 1.2rem; display: flex; gap: 0.8rem;">
+        <a href="/upload" class="btn">Upload BOM</a>
+        <a href="/inventory" class="btn btn-secondary">View Inventory</a>
+    </div>
+</div>
+<div class="card">
+    <h3>Supported Specifications</h3>
+    <table>
+        <thead><tr><th>Version</th><th>Namespace</th><th>Status</th></tr></thead>
+        <tbody>
+            <tr><td>1.0</td><td>http://cyclonedx.org/schema/bom/1.0</td><td><span class="badge badge-green">Supported</span></td></tr>
+            <tr><td>1.1</td><td>http://cyclonedx.org/schema/bom/1.1</td><td><span class="badge badge-green">Supported</span></td></tr>
+            <tr><td>1.2</td><td>http://cyclonedx.org/schema/bom/1.2</td><td><span class="badge badge-green">Supported</span></td></tr>
+            <tr><td>1.3</td><td>http://cyclonedx.org/schema/bom/1.3</td><td><span class="badge badge-green">Supported</span></td></tr>
+            <tr><td>1.4</td><td>http://cyclonedx.org/schema/bom/1.4</td><td><span class="badge badge-green">Supported</span></td></tr>
+            <tr><td>1.5</td><td>http://cyclonedx.org/schema/bom/1.5</td><td><span class="badge badge-green">Supported</span></td></tr>
+            <tr><td>1.6</td><td>http://cyclonedx.org/schema/bom/1.6</td><td><span class="badge badge-green">Supported</span></td></tr>
+        </tbody>
+    </table>
+</div>
+<div class="card">
+    <h3>REST API</h3>
+    <table>
+        <thead><tr><th>Method</th><th>Endpoint</th><th>Description</th></tr></thead>
+        <tbody>
+            <tr><td>POST</td><td>/api/v1/bom</td><td>Upload a BOM (XML body or multipart file)</td></tr>
+            <tr><td>GET</td><td>/api/v1/bom/{id}</td><td>Retrieve a specific BOM</td></tr>
+            <tr><td>GET</td><td>/api/v1/boms</td><td>List all uploaded BOMs</td></tr>
+            <tr><td>GET</td><td>/api/v1/health</td><td>Service health check</td></tr>
+        </tbody>
+    </table>
+</div>
+{% endblock %}
