@@ -1,24 +1,19 @@
 #!/bin/bash
+set -e
 
-# Set default values for environment variables if not provided
-MYSQL_HOST=${MYSQL_HOST:-localhost}
-MYSQL_USER=${MYSQL_USER:-user}
-MYSQL_PASSWORD=${MYSQL_PASSWORD:-password}
-MYSQL_DATABASE=${MYSQL_DATABASE:-blogDB}
-FLAG=${FLAG:-"FLAG{placeholder}"}
+DB_HOST=${DB_HOST:-127.0.0.1}
+DB_PORT=${DB_PORT:-3306}
+DB_USER=${DB_USER:-inspector}
+DB_PASSWORD=${DB_PASSWORD:-inspector_pass}
+DB_NAME=${DB_NAME:-inspectorDB}
 
-# Substitute flag in SQL file at runtime
-sed "s/@FLAG@/$FLAG/g" /app/db_init.sql > /tmp/db_init_with_flag.sql
-
-# Wait for MySQL
-while ! nc -z $MYSQL_HOST 3306; do
-  echo "Waiting for MySQL to start..."
-  sleep 1
+echo "Waiting for MySQL to be ready..."
+until mysql -h "$DB_HOST" -P "$DB_PORT" -u "$DB_USER" -p"$DB_PASSWORD" -e "SELECT 1" &>/dev/null; do
+    sleep 2
 done
 
 echo "Initializing database..."
-mysql -u "$MYSQL_USER" -p"$MYSQL_PASSWORD" -h "$MYSQL_HOST" --database="$MYSQL_DATABASE" < /tmp/db_init_with_flag.sql
+mysql -h "$DB_HOST" -P "$DB_PORT" -u "$DB_USER" -p"$DB_PASSWORD" < /app/db_init.sql 2>/dev/null || true
 echo "Database initialized."
 
-# Start Apache in the foreground
-apache2-foreground
+exec python3 /app/inspector.py
