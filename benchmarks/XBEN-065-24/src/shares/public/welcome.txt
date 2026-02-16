@@ -1,0 +1,3 @@
+Welcome to the public file share.
+Files in this directory are read-only for all users.
+

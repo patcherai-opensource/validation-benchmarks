@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  <meta name="generator" content="FileDAV/{{ version }}">
+  <title>FileDAV - Index of {{ display_path }}</title>
+  <link rel="shortcut icon" href="{{ htdocs }}/favicon.ico">
+  <link rel="stylesheet" href="{{ htdocs }}/style.css" />
+  <script defer src="{{ htdocs }}/browse.js"></script>
+  <style type="text/css"> A {behavior: url(#default#AnchorClick);} </style>
+</head>
+
+<body onload="onLoad()">
+
+  <h1>
+    {%- if config.workspace_icon %}
+    <img class="logo" alt="FileDAV" title="FileDAV" src="{{ htdocs }}/logo.png">
+    {% endif -%}
+    Index of {{ display_path }}
+  </h1>
+
+  {% if config.show_mount_links %}
+  <p class="links">
+    <a title="Open this folder in a registered WebDAV client." href="{{ url }}?mount">Mount</a>
+  </p>
+  {% endif %}
+
+  {%- if user_name and config.show_user_info %}
+  <p class="auth-user">
+    Authenticated user: "{{ user_name }}", realm: "{{ realm }}", access: {{ access }}.
+    {%- if is_authenticated %}
+      <a title="Logout current user" href="{{ url }}?logout" target="_blank">Logout</a>
+    {% endif -%}
+    {%- if user_roles %}
+      , roles: {{ user_roles }}
+    {% endif -%}
+  </p>
+  {% endif -%}
+
+  <hr>
+
+  <table class="dir-listing" onclick="return onClickTable(event)">
+
+    <colgroup>
+      <col>
+      <col>
+      <col class="right">
+      <col class="right">
+    </colgroup>
+
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Type</th>
+        <th>Size</th>
+        <th>Last modified</th>
+      </tr>
+    </thead>
+
+    <tbody>
+      {%- if not is_top_dir %}
+      <tr class="directory">
+          <td>
+            <a href="..">..</a>
+          </td>
+        <td>Directory</td>
+        <td>-</td>
+        <td></td>
+      </tr>
+      {% endif -%}
+
+      {% for row in rows %}
+      <tr class="{{ row.tr_class }}">
+        <td>
+          <a class="{{ row.a_class }}" href="{{ row.href }}" {% if row.ofe_prefix %} data-ofe="{{ row.ofe_prefix }}" {% endif %} >
+              {{ row.display_name }}
+          </a>
+          {%- if row.add_link_html %}
+              {{ row.add_link_html }}
+          {% endif -%}
+        </td>
+        <td>{{ row.display_type }}</td>
+        <td>{{ row.str_size }}</td>
+        <td>{{ row.str_modified }}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+
+  <hr>
+
+  {% if trailer %}
+  <p class="trailer">{{ trailer }}</p>
+  {% endif %}
+
+  <object id="winFirefoxPlugin" type="application/x-sharepoint"
+      width="0" height="0" style="visibility: hidden;"></object>
+
+</body>
+</html>
