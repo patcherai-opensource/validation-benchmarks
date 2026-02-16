@@ -1,11 +1,8 @@
 #!/bin/bash
 set -e
 
-# Create static directory if it doesn't exist
-mkdir -p /var/www/lfi_static_resource/app/static
+# Ensure cache directory permissions
+chmod -R 755 /var/lib/vizboard/cache
 
-# Inject flag from environment variable
-echo -n "${FLAG:-FLAG{default_flag_placeholder}}" > /var/www/lfi_static_resource/app/static/flag
-
-# Start Apache
-exec /usr/sbin/apache2ctl -D FOREGROUND
+cd /var/www/vizboard
+exec gunicorn --bind 0.0.0.0:80 --workers 2 --timeout 120 "app:app"
