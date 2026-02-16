@@ -1,48 +1,71 @@
 var system = require('system');
-// var json = JSON.parse(system.args[1]);
-// var input = json.url;
 var input = system.stdin.readLine();
-
 var page = require("webpage").create();
+var alertMsg = '';
 
 page.onAlert = function(msg) {
-  console.log(msg);
+    if (!alertMsg) {
+        alertMsg = msg;
+    }
 };
 
 page.onConfirm = function(msg) {
-  console.log(msg);
+    if (!alertMsg) {
+        alertMsg = msg;
+    }
 };
 
 page.onPrompt = function(msg) {
-  console.log(msg);
+    if (!alertMsg) {
+        alertMsg = msg;
+    }
 };
 
-page.open(input, function(status) {
-  print(status)
-  if (status === "success") {
-      // Wait for the page to load
-      setTimeout(function() {
-          // Trigger events that may not naturally fire in a headless environment
-          page.evaluate(function() {
-              // Dispatch "focus" event to elements that may have "autofocus" or "onfocus" handlers
-              var elements = document.querySelectorAll('[autofocus], [onfocus]');
-              Array.prototype.forEach.call(elements, function(el) {
-                  var event = document.createEvent('Events');
-                  event.initEvent('focus', true, false);
-                  el.dispatchEvent(event);
-              });
-          });
-          
-          // Optionally, add more events here like "mouseover" if needed
-          // Ensure to wait a bit before terminating PhantomJS to allow event handlers to execute
-          setTimeout(function() {
-              phantom.exit();
-          }, 1000); // Adjust timeout as necessary based on observed behavior
+page.onError = function(msg, trace) {};
 
-      }, 1000); // Initial delay to allow the page to fully load and scripts to initialize
-  } else {
-      console.log("Failed to load the page.");
-      phantom.exit();
-  }
+page.onConsoleMessage = function(msg) {};
+
+page.open(input, function(status) {
+    if (status === "success") {
+        setTimeout(function() {
+            try {
+                page.evaluate(function() {
+                    try {
+                        var selectors = '[onfocus], [onerror], [onload], [onmouseover]';
+                        var elements = document.querySelectorAll(selectors);
+                        for (var i = 0; i < elements.length; i++) {
+                            var el = elements[i];
+                            var events = ['focus', 'error', 'load', 'mouseover'];
+                            for (var j = 0; j < events.length; j++) {
+                                try {
+                                    var ev = document.createEvent('Events');
+                                    ev.initEvent(events[j], true, false);
+                                    el.dispatchEvent(ev);
+                                } catch(e) {}
+                            }
+                        }
+                        var imgs = document.querySelectorAll('img');
+                        for (var k = 0; k < imgs.length; k++) {
+                            try {
+                                if (!imgs[k].complete || imgs[k].naturalWidth === 0) {
+                                    var imgEv = document.createEvent('Events');
+                                    imgEv.initEvent('error', true, false);
+                                    imgs[k].dispatchEvent(imgEv);
+                                }
+                            } catch(e) {}
+                        }
+                    } catch(e) {}
+                });
+            } catch(e) {}
+            setTimeout(function() {
+                if (alertMsg) {
+                    console.log(alertMsg);
+                }
+                phantom.exit();
+            }, 2000);
+        }, 1500);
+    } else {
+        phantom.exit();
+    }
 });
 

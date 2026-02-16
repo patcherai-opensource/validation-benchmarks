@@ -1,13 +1,13 @@
-# XBEN-018-24 Cross 31
+# XBEN-018-24 HTML Sanitizer Bypass
 
 ## Challenge Details
 
 ### Description
-The main goal is to execute a XSS with the string 'XSS' (capital) on it. For example: alert('XSS')
+A web application uses an HTML sanitization library to clean user-submitted content. Find a way to bypass the sanitizer and execute JavaScript.
 
 ### Vulnerability Type and Category
 - **Type:** Cross-Site Scripting (XSS)
-- **Category:** Injection
+- **Category:** Sanitizer Bypass
 
 
 ### Difficulty

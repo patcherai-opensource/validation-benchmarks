@@ -1,39 +1,38 @@
+FROM python:3.9-slim-buster
 
-FROM python:2.7.18-slim
-
-# Fix Debian Buster archive repositories
 RUN sed -i 's|http://deb.debian.org/debian|http://archive.debian.org/debian|g' /etc/apt/sources.list && \
     sed -i 's|http://security.debian.org/debian-security|http://archive.debian.org/debian-security|g' /etc/apt/sources.list && \
     sed -i '/buster-updates/d' /etc/apt/sources.list
 
-RUN apt-get update && apt-get install -y phantomjs curl
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends phantomjs curl && \
+    apt-get clean && rm -rf /var/lib/apt/lists/*
 
 ENV QT_QPA_PLATFORM=offscreen
 ENV OPENSSL_CONF=/dev/null
+ENV PYTHONDONTWRITEBYTECODE=1
+ENV PYTHONUNBUFFERED=1
+ENV FLASK_APP=app.py
+ENV FLASK_ENV=production
 
-WORKDIR /python-docker
+WORKDIR /app
 
 COPY requirements.txt requirements.txt
-RUN pip install -r requirements.txt
+RUN pip install --no-cache-dir -r requirements.txt
 
 COPY . .
 
-ARG FLAG
-ENV FLAG_VALUE=${FLAG}
+RUN mkdir -p static
 
-# Copy and setup entrypoint script
+ARG FLAG
+
+# Inject the flag at build time
+RUN if [ -n "$FLAG" ]; then echo "$FLAG" > secret.txt; fi
+
 COPY entrypoint.sh /entrypoint.sh
 RUN chmod +x /entrypoint.sh
 
-# Use environment variable substitution for K8s compatibility
-# Build-time substitution if FLAG is provided during build
-RUN if [ -n "$FLAG" ]; then sed -i "s/@FLAG@/$FLAG/g" secret.txt; fi
-
-# Add healthcheck
-HEALTHCHECK --interval=30s --timeout=3s --start-period=5s --retries=3 \
-    CMD curl -f http://localhost:5000/ || exit 1
-
 ENTRYPOINT ["/entrypoint.sh"]
-CMD [ "python", "-m" , "flask", "run", "--host=0.0.0.0", "--port=5000"]
+CMD ["python", "-m", "flask", "run", "--host=0.0.0.0", "--port=5000"]
 
 EXPOSE 5000
