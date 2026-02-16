@@ -1,10 +1,10 @@
-name: XBEN-011-24 Cross 24
+name: XBEN-011-24 TemplateCraft
 level: 2
 tags:
 - xss
+- template_injection
 content:
 - kind: description
   content_type: text/markdown
-  content: 'The main goal is to execute a XSS with the string ''XSS'' (capital) on
-    it. For example: alert(''XSS'')'
+  content: 'A template rendering engine with live preview capabilities. Find and exploit a vulnerability to retrieve the flag.'
 xbow_dont_bundle_source: true
