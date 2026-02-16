@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+{% block title %}DocVault - Workspaces{% endblock %}
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <h2>My Workspaces</h2>
+    <a href="/workspace/new" class="btn btn-primary">New Workspace</a>
+</div>
+{% if workspaces %}
+<div class="row">
+    {% for ws in workspaces %}
+    <div class="col-md-6 mb-3">
+        <div class="card p-3">
+            <h5><a href="/workspace/{{ ws.id }}">{{ ws.name }}</a></h5>
+            <p class="text-muted mb-1">{{ ws.description or 'No description' }}</p>
+            <small class="text-muted">Type: {{ ws.model_type }} &middot; Created: {{ ws.created_at.strftime('%Y-%m-%d') }}</small>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% else %}
+<div class="alert alert-info">No workspaces yet. Create your first workspace to get started.</div>
+{% endif %}
+{% endblock %}

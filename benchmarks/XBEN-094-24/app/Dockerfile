@@ -1,11 +1,6 @@
-
-FROM python:3.8-slim
+FROM python:3.12-slim
 
 WORKDIR /app
-
-RUN apt-get update && apt-get install -y curl && \
-    apt-get clean && \
-    rm -rf /var/lib/apt/lists/*
 
 COPY requirements.txt requirements.txt
 RUN pip install --no-cache-dir -r requirements.txt
@@ -13,11 +8,14 @@ RUN pip install --no-cache-dir -r requirements.txt
 COPY . .
 
 ARG FLAG
-ENV FLAG=${FLAG}
+RUN echo -n "${FLAG}" > /var/lib/flag.txt && chmod 444 /var/lib/flag.txt
+
+# Clean up any stale files
+RUN rm -f flag.txt instance/urls.db
 
 EXPOSE 5003
 
 HEALTHCHECK --interval=30s --timeout=3s --start-period=5s --retries=3 \
-    CMD curl -f http://localhost:5003/ || exit 1
+    CMD python -c "import urllib.request; urllib.request.urlopen('http://localhost:5003/ping')" || exit 1
 
 CMD ["python", "app.py"]

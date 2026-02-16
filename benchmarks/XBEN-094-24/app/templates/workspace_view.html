@@ -1,0 +1,88 @@
+{% extends "base.html" %}
+{% block title %}DocVault - {{ workspace.name }}{% endblock %}
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-2">
+    <div>
+        <h2>{{ workspace.name }}</h2>
+        <p class="text-muted">{{ workspace.description or '' }}</p>
+    </div>
+    <div class="d-flex gap-2">
+        <a href="/workspace/{{ workspace.id }}/edit" class="btn btn-outline-secondary btn-sm">Edit</a>
+        <form method="POST" action="/workspace/{{ workspace.id }}/delete" class="d-inline">
+            <button type="submit" class="btn btn-outline-danger btn-sm" onclick="return confirm('Delete this workspace?')">Delete</button>
+        </form>
+    </div>
+</div>
+
+<div class="row mb-3">
+    <div class="col-md-6">
+        <small class="text-muted">Type: <strong>{{ workspace.model_type }}</strong></small>
+    </div>
+    <div class="col-md-6 text-end">
+        <small class="text-muted">Filter: <code>{{ workspace.filter_expr }}</code></small>
+    </div>
+</div>
+
+{% if filter_error %}
+<div class="alert alert-warning">
+    <strong>Filter error:</strong> {{ filter_error }}
+</div>
+{% endif %}
+
+{% if filter_result and filter_result != '[]' %}
+<div class="alert alert-info">
+    <strong>Filter result:</strong> <code>{{ filter_result }}</code>
+</div>
+{% endif %}
+
+{% if children %}
+<h5 class="mt-4">Sub-workspaces</h5>
+<div class="list-group mb-3">
+    {% for child in children %}
+    <a href="/workspace/{{ child.id }}" class="list-group-item list-group-item-action">
+        <strong>{{ child.name }}</strong>
+        <small class="text-muted ms-2">{{ child.model_type }}</small>
+    </a>
+    {% endfor %}
+</div>
+{% endif %}
+
+<div class="d-flex justify-content-between align-items-center mt-4 mb-2">
+    <h5>Documents</h5>
+    <a href="/workspace/{{ workspace.id }}/document/new" class="btn btn-sm btn-primary">Add Document</a>
+</div>
+
+{% if documents %}
+<table class="table table-hover">
+    <thead class="table-light">
+        <tr>
+            <th>Name</th>
+            <th>Type</th>
+            <th>Modified</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for doc in documents %}
+        <tr>
+            <td>{{ doc.name }}</td>
+            <td><span class="badge bg-secondary">{{ doc.doc_type }}</span></td>
+            <td><small>{{ doc.modified_at.strftime('%Y-%m-%d %H:%M') if doc.modified_at else '' }}</small></td>
+            <td class="text-end">
+                <a href="/workspace/{{ workspace.id }}/document/{{ doc.id }}/edit" class="btn btn-sm btn-outline-primary">Edit</a>
+                <form method="POST" action="/workspace/{{ workspace.id }}/document/{{ doc.id }}/delete" class="d-inline">
+                    <button type="submit" class="btn btn-sm btn-outline-danger">Delete</button>
+                </form>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% else %}
+<div class="alert alert-light">No documents in this workspace.</div>
+{% endif %}
+
+<div class="mt-3">
+    <a href="/workspaces" class="btn btn-secondary">Back to Workspaces</a>
+</div>
+{% endblock %}
