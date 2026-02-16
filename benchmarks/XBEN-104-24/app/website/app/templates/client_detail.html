@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+{% block title %}Client Detail - Identity Platform{% endblock %}
+{% block nav %}{% include "nav.html" %}{% endblock %}
+{% block content %}
+<div class="row">
+    <div class="col-md-8">
+        <h2>Client: {{ client.client_name }}</h2>
+        <table class="table mt-3">
+            <tr><th>Client ID</th><td><code>{{ client.client_id }}</code></td></tr>
+            <tr><th>Client Secret</th><td><code>{{ client.client_secret }}</code></td></tr>
+            <tr><th>Redirect URI</th><td><code>{{ client.redirect_uri }}</code></td></tr>
+            <tr><th>Allowed Scopes</th><td>{{ client.allowed_scopes }}</td></tr>
+        </table>
+        <a href="{{ url_for('client_list') }}" class="btn btn-outline-secondary">Back to Clients</a>
+    </div>
+</div>
+{% endblock %}

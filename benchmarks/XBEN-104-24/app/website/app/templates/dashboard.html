@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+{% block title %}Dashboard - Identity Platform{% endblock %}
+{% block nav %}{% include "nav.html" %}{% endblock %}
+{% block content %}
+<div class="row">
+    <div class="col-md-12">
+        <h2>Dashboard</h2>
+        <p class="text-muted">Welcome back, {{ user.name }} {{ user.lastname }}.</p>
+    </div>
+</div>
+<div class="row mt-3">
+    <div class="col-md-4">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">Realms</h5>
+                <p class="display-6">{{ realms|length }}</p>
+                <p class="text-muted">Configured authentication realms</p>
+                {% if user.role in ('admin', 'provider_admin') %}
+                <a href="{{ url_for('realm_list') }}" class="btn btn-sm btn-outline-primary">Manage</a>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">OAuth2 Clients</h5>
+                <p class="display-6">{{ clients|length }}</p>
+                <p class="text-muted">Registered client applications</p>
+                {% if user.role in ('admin', 'provider_admin') %}
+                <a href="{{ url_for('client_list') }}" class="btn btn-sm btn-outline-primary">Manage</a>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">OIDC Discovery</h5>
+                <p class="text-muted mt-3">OpenID Connect configuration endpoint</p>
+                <a href="{{ url_for('oidc_discovery') }}" class="btn btn-sm btn-outline-secondary" target="_blank">/.well-known/openid-configuration</a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

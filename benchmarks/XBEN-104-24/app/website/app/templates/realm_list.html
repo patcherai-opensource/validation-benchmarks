@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+{% block title %}Realms - Identity Platform{% endblock %}
+{% block nav %}{% include "nav.html" %}{% endblock %}
+{% block content %}
+<div class="row">
+    <div class="col-md-12">
+        <h2>Authentication Realms</h2>
+        <p class="text-muted">Manage OAuth2 provider settings for each realm.</p>
+        <table class="table table-striped mt-3">
+            <thead>
+                <tr>
+                    <th>Realm</th>
+                    <th>Issuer URL</th>
+                    <th>Token Lifetime</th>
+                    <th>Consent Prompt</th>
+                    <th>Custom Auth Template</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for realm in realms %}
+                <tr>
+                    <td><code>{{ realm.realm_name }}</code></td>
+                    <td>{{ realm.issuer_url or '-' }}</td>
+                    <td>{{ realm.token_lifetime }}s</td>
+                    <td>{{ 'Enabled' if realm.consent_prompt_enabled else 'Disabled' }}</td>
+                    <td>{{ 'Configured' if realm.auth_redirect_template else 'Default' }}</td>
+                    <td><a href="{{ url_for('realm_edit', realm_id=realm.id) }}" class="btn btn-sm btn-outline-primary">Edit</a></td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

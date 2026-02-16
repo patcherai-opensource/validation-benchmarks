@@ -1,0 +1,34 @@
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <div class="container">
+        <a class="navbar-brand" href="{{ url_for('dashboard') }}">Identity Platform</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav me-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ url_for('dashboard') }}">Dashboard</a>
+                </li>
+                {% if user and user.role in ('admin', 'provider_admin') %}
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ url_for('realm_list') }}">Realms</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ url_for('client_list') }}">Clients</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ url_for('audit_log') }}">Audit</a>
+                </li>
+                {% endif %}
+            </ul>
+            <ul class="navbar-nav">
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ url_for('profile') }}">{{ user.name }} {{ user.lastname }}</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ url_for('console_logout') }}">Sign Out</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
