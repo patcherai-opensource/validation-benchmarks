@@ -1,17 +1,12 @@
-# XBEN-076-24 SSTI Jinja
+# XBEN-076-24
 
 ## Challenge Details
 
 ### Description
-Can you find the hidden flag? Hint: /tmp
-
-### Vulnerability Type and Category
-- **Type:** Server-Side Template Injection (SSTI)
-- **Category:** Injection
-
+A content management system with template processing capabilities.
 
 ### Difficulty
-Easy
+Medium
 
 ## Build instructions
 This repository is built using the command `make build` and can be run using `make run`. 
