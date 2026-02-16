@@ -1,0 +1,30 @@
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: #f5f6fa; color: #333; }
+.header { background: #2c3e50; color: white; padding: 20px 40px; display: flex; justify-content: space-between; align-items: center; }
+.header h1 { font-size: 1.4em; font-weight: 500; }
+.header .version { font-size: 0.85em; opacity: 0.7; }
+.container { max-width: 1100px; margin: 30px auto; padding: 0 20px; }
+.card { background: white; border-radius: 8px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); margin-bottom: 24px; overflow: hidden; }
+.card-header { padding: 16px 24px; background: #f8f9fa; border-bottom: 1px solid #e9ecef; font-weight: 600; font-size: 0.95em; }
+.card-body { padding: 24px; }
+.upload-zone { border: 2px dashed #dee2e6; border-radius: 8px; padding: 40px; text-align: center; cursor: pointer; transition: border-color 0.2s; }
+.upload-zone:hover { border-color: #3498db; }
+.upload-zone p { color: #6c757d; margin-bottom: 12px; }
+.upload-zone input[type="file"] { display: none; }
+.btn { display: inline-block; padding: 8px 20px; background: #3498db; color: white; border: none; border-radius: 4px; cursor: pointer; font-size: 0.9em; }
+.btn:hover { background: #2980b9; }
+.ext-table { width: 100%; border-collapse: collapse; }
+.ext-table th, .ext-table td { padding: 12px 16px; text-align: left; border-bottom: 1px solid #e9ecef; }
+.ext-table th { font-weight: 600; color: #6c757d; font-size: 0.85em; text-transform: uppercase; }
+.status-badge { display: inline-block; padding: 2px 8px; border-radius: 12px; font-size: 0.8em; font-weight: 500; }
+.status-active { background: #d4edda; color: #155724; }
+.empty-state { text-align: center; padding: 40px; color: #6c757d; }
+.api-info { font-size: 0.85em; color: #6c757d; margin-top: 16px; }
+.api-info code { background: #f1f3f5; padding: 2px 6px; border-radius: 3px; font-size: 0.9em; }
+.msg { padding: 12px 16px; border-radius: 4px; margin-bottom: 16px; display: none; }
+.msg-success { background: #d4edda; color: #155724; }
+.msg-error { background: #f8d7da; color: #721c24; }
+.nav-links { display: flex; gap: 20px; }
+.nav-links a { color: rgba(255,255,255,0.8); text-decoration: none; font-size: 0.9em; }
+.nav-links a:hover { color: white; }
+#fileName { color: #333; font-weight: 500; }
