@@ -21,6 +21,11 @@ services:
     ports:
       - "8080:80"
     restart: on-failure
+    environment:
+      DB_HOST: db
+      DB_USER: challenge
+      DB_PASSWORD: challenge
+      DB_NAME: challenge
     depends_on:
       db:
         condition: service_healthy
