@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ space.display_name }} - Wiki Platform</title>
+    <link href="{{ url_for('static', filename='css/bootstrap.min.css') }}" rel="stylesheet">
+    <style>
+        body { background-color: #f8f9fa; }
+        .wiki-header { background-color: #3e6b89; color: white; padding: 15px; }
+        .wiki-header a { color: white; }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg wiki-header">
+        <div class="container">
+            <a class="navbar-brand" href="/">Wiki Platform</a>
+            <div class="navbar-nav ms-auto">
+                <a class="nav-link" href="/wiki/spaces">Spaces</a>
+                {% if user %}
+                <span class="nav-link">{{ user.display_name }}</span>
+                <form action="/logout" method="post" class="d-inline">
+                    <button type="submit" class="btn btn-outline-light btn-sm">Logout</button>
+                </form>
+                {% else %}
+                <a class="nav-link" href="/login">Log in</a>
+                {% endif %}
+            </div>
+        </div>
+    </nav>
+    <div class="container mt-4">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="/wiki/spaces">Spaces</a></li>
+                <li class="breadcrumb-item active">{{ space.display_name }}</li>
+            </ol>
+        </nav>
+        <h3>{{ space.display_name }}</h3>
+        <p class="text-muted">{{ space.description or '' }}</p>
+        <table class="table table-striped mt-3">
+            <thead>
+                <tr>
+                    <th>Title</th>
+                    <th>Author</th>
+                    <th>Last Modified</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for doc in documents %}
+                <tr>
+                    <td><a href="/wiki/doc/{{ doc.id }}">{{ doc.title }}</a></td>
+                    <td>{{ doc.author }}</td>
+                    <td>{{ doc.updated_at }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</body>
+</html>

@@ -2,26 +2,30 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   labels:
-    app: idor-indirect-trading-platform
-  name: idor-indirect-trading-platform
-  namespace: sandbox-dev
+    app: wiki-platform
+  name: wiki-platform
+  namespace: sandbox-prod
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: idor-indirect-trading-platform
+      app: wiki-platform
   template:
     metadata:
       labels:
-        app: idor-indirect-trading-platform
+        app: wiki-platform
     spec:
       containers:
-      - env:
+      - args:
+        # Disable native AIO to prevent node exhaustion (EAGAIN errors) when running many instances
+        - --innodb_use_native_aio=0
+        env:
         - name: MYSQL_ROOT_PASSWORD
-          value: idor_indirect_trading_platform
+          value: wikidb_platform
         - name: MYSQL_DATABASE
           value: database
-        image: /:-mysql
+        image: 
+          180294216647.dkr.ecr.us-west-2.amazonaws.com/synthetic-xben-002-24_xwiki-platform-cve-2023-48241:db
         imagePullPolicy: Always
         livenessProbe:
           exec:
@@ -30,13 +34,13 @@ spec:
             - ping
             - -h
             - localhost
-            - --password=idor_indirect_trading_platform
+            - --password=wikidb_platform
             - -u
             - root
-          failureThreshold: 5
-          initialDelaySeconds: 30
+          failureThreshold: 10
+          initialDelaySeconds: 60
           periodSeconds: 10
-          timeoutSeconds: 1
+          timeoutSeconds: 5
         name: db
         ports:
         - containerPort: 3306
@@ -47,37 +51,39 @@ spec:
             - ping
             - -h
             - localhost
-            - --password=idor_indirect_trading_platform
+            - --password=wikidb_platform
             - -u
             - root
-          failureThreshold: 5
-          initialDelaySeconds: 10
+          failureThreshold: 10
+          initialDelaySeconds: 30
           periodSeconds: 10
-          timeoutSeconds: 1
+          timeoutSeconds: 5
         resources:
           limits:
+            cpu: 1000m
+            memory: 1Gi
+          requests:
             cpu: 500m
             memory: 512Mi
-          requests:
-            cpu: 250m
-            memory: 256Mi
       - env:
         - name: DB_HOST
-          value: localhost
+          # Use 127.0.0.1 to force TCP connection over loopback (shared in pod), as localhost might resolve to unix socket path which isn't shared
+          value: 127.0.0.1
         - name: DB_USER
           value: root
         - name: DB_PASSWORD
-          value: idor_indirect_trading_platform
+          value: wikidb_platform
         - name: DB_NAME
           value: database
         - name: FLAG
           value: FLAG_PLACEHOLDER
-        image: /:-app
+        image: 
+          180294216647.dkr.ecr.us-west-2.amazonaws.com/synthetic-xben-002-24_xwiki-platform-cve-2023-48241:app
         imagePullPolicy: Always
         livenessProbe:
-          failureThreshold: 5
+          failureThreshold: 10
           httpGet:
-            path: /
+            path: /ping
             port: 80
           initialDelaySeconds: 120
           periodSeconds: 10
@@ -86,29 +92,29 @@ spec:
         ports:
         - containerPort: 80
         readinessProbe:
-          failureThreshold: 5
+          failureThreshold: 10
           httpGet:
-            path: /
+            path: /ping
             port: 80
           initialDelaySeconds: 90
           periodSeconds: 10
           timeoutSeconds: 5
         resources:
           limits:
+            cpu: 1000m
+            memory: 1Gi
+          requests:
             cpu: 500m
             memory: 512Mi
-          requests:
-            cpu: 250m
-            memory: 256Mi
       restartPolicy: Always
 ---
 apiVersion: v1
 kind: Service
 metadata:
   labels:
-    app: idor-indirect-trading-platform
-  name: idor-indirect-trading-platform-service
-  namespace: sandbox-dev
+    app: wiki-platform
+  name: wiki-platform-service
+  namespace: sandbox-prod
 spec:
   ports:
   - name: http
@@ -116,5 +122,5 @@ spec:
     protocol: TCP
     targetPort: 80
   selector:
-    app: idor-indirect-trading-platform
+    app: wiki-platform
   type: ClusterIP

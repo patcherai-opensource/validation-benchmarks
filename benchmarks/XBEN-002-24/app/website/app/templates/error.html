@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Error - Wiki Platform</title>
+    <link href="{{ url_for('static', filename='css/bootstrap.min.css') }}" rel="stylesheet">
+    <style>
+        body { background-color: #f8f9fa; }
+        .wiki-header { background-color: #3e6b89; color: white; padding: 15px; }
+        .wiki-header a { color: white; }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg wiki-header">
+        <div class="container">
+            <a class="navbar-brand" href="/">Wiki Platform</a>
+            <div class="navbar-nav ms-auto">
+                <a class="nav-link" href="/wiki/spaces">Spaces</a>
+                <a class="nav-link" href="/login">Log in</a>
+            </div>
+        </div>
+    </nav>
+    <div class="container mt-5">
+        <div class="alert alert-danger">
+            <strong>Error:</strong> {{ message }}
+        </div>
+        <a href="/" class="btn btn-primary">Return to Home</a>
+    </div>
+</body>
+</html>

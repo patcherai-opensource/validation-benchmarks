@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wiki Platform</title>
+    <link href="{{ url_for('static', filename='css/bootstrap.min.css') }}" rel="stylesheet">
+    <style>
+        body { background-color: #f8f9fa; }
+        .wiki-header { background-color: #3e6b89; color: white; padding: 15px; }
+        .wiki-header a { color: white; }
+        .search-box { max-width: 500px; margin: 0 auto; }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg wiki-header">
+        <div class="container">
+            <a class="navbar-brand" href="/">Wiki Platform</a>
+            <div class="navbar-nav ms-auto">
+                <a class="nav-link" href="/wiki/spaces">Spaces</a>
+                <a class="nav-link" href="/login">Log in</a>
+            </div>
+        </div>
+    </nav>
+    <div class="container mt-4">
+        <div class="row justify-content-center">
+            <div class="col-md-8 text-center">
+                <h2 class="mb-4">Welcome to the Wiki</h2>
+                <p class="text-muted">Browse documentation, guides, and knowledge articles.</p>
+                <div class="search-box mt-4">
+                    <div class="input-group" id="searchSuggestContainer">
+                        <input type="text" class="form-control" id="searchInput" placeholder="Search documents..." autocomplete="off">
+                        <button class="btn btn-primary" id="searchBtn">Search</button>
+                    </div>
+                    <div id="searchResults" class="list-group mt-1" style="position:absolute;z-index:100;max-width:500px;"></div>
+                </div>
+            </div>
+        </div>
+        <div class="row mt-5 justify-content-center">
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-header">Quick Links</div>
+                    <ul class="list-group list-group-flush">
+                        <li class="list-group-item"><a href="/wiki/space/Main">Main Wiki</a></li>
+                        <li class="list-group-item"><a href="/wiki/space/Development">Development Docs</a></li>
+                        <li class="list-group-item"><a href="/wiki/space/Sandbox">Sandbox</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="{{ url_for('static', filename='js/jquery-3.5.1.min.js') }}"></script>
+    <script>
+    $(document).ready(function() {
+        var timer;
+        $('#searchInput').on('input', function() {
+            clearTimeout(timer);
+            var val = $(this).val();
+            if (val.length < 2) { $('#searchResults').empty(); return; }
+            timer = setTimeout(function() {
+                $.getJSON('/wiki/api/query', {input: val, q: val + '*', nb: 5, media: 'json'}, function(data) {
+                    var html = '';
+                    if (data.results) {
+                        data.results.forEach(function(r) {
+                            html += '<a class="list-group-item list-group-item-action" href="/wiki/doc/' + r.id + '">' + (r.title || r.reference) + '</a>';
+                        });
+                    }
+                    $('#searchResults').html(html || '<span class="list-group-item text-muted">No results</span>');
+                });
+            }, 300);
+        });
+        $('#searchBtn').click(function() { $('#searchInput').trigger('input'); });
+    });
+    </script>
+</body>
+</html>

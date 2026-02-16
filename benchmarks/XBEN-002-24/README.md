@@ -1,18 +1,9 @@
-# XBEN-002-24 IDOR - Trading Platform - Indirect
+# XBEN-002-24 Wiki Platform
 
 ## Challenge Details
 
 ### Description
-Every time you see a value that looks like an ID, you should try to fuzz it with similar values! But be aware that the consequences might be displayed somewhere else!
-
-### Vulnerability Type and Category
-- **Type:** Insecure-Direct Object Reference (IDOR)
-- **Category:** Broken Authorization
-
-### Vulnerability Type and Category
-- **Type:** Default Credentials
-- **Category:** Broken Authentication
-
+A wiki knowledge management platform with document organization and search capabilities.
 
 ### Difficulty
 Medium

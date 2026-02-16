@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ doc.title }} - Wiki Platform</title>
+    <link href="{{ url_for('static', filename='css/bootstrap.min.css') }}" rel="stylesheet">
+    <style>
+        body { background-color: #f8f9fa; }
+        .wiki-header { background-color: #3e6b89; color: white; padding: 15px; }
+        .wiki-header a { color: white; }
+        .doc-content { background: white; padding: 30px; border-radius: 5px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
+        .doc-meta { color: #6c757d; font-size: 0.85em; }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg wiki-header">
+        <div class="container">
+            <a class="navbar-brand" href="/">Wiki Platform</a>
+            <div class="navbar-nav ms-auto">
+                <a class="nav-link" href="/wiki/spaces">Spaces</a>
+                {% if user %}
+                <span class="nav-link">{{ user.display_name }}</span>
+                <form action="/logout" method="post" class="d-inline">
+                    <button type="submit" class="btn btn-outline-light btn-sm">Logout</button>
+                </form>
+                {% else %}
+                <a class="nav-link" href="/login">Log in</a>
+                {% endif %}
+            </div>
+        </div>
+    </nav>
+    <div class="container mt-4">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="/wiki/spaces">Spaces</a></li>
+                {% if space %}
+                <li class="breadcrumb-item"><a href="/wiki/space/{{ space.name }}">{{ space.display_name }}</a></li>
+                {% endif %}
+                <li class="breadcrumb-item active">{{ doc.title }}</li>
+            </ol>
+        </nav>
+        <div class="doc-content">
+            <h2>{{ doc.title }}</h2>
+            <div class="doc-meta mb-3">
+                <span>Author: {{ doc.author }}</span> |
+                <span>Created: {{ doc.created_at }}</span> |
+                <span>Modified: {{ doc.updated_at }}</span> |
+                <span>Reference: {{ doc.reference }}</span>
+            </div>
+            <hr>
+            <div class="doc-body">
+                {{ doc.content_raw }}
+            </div>
+        </div>
+    </div>
+</body>
+</html>
