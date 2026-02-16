@@ -1,12 +1,14 @@
+FROM python:3.11-slim
 
-FROM tiangolo/uvicorn-gunicorn-fastapi:python3.9
+WORKDIR /app
 
-RUN pip3 install lxml==5.2.2
+RUN pip install --no-cache-dir fastapi uvicorn python-multipart
 
-COPY . /app
+COPY main.py /app/main.py
 
 ARG FLAG
+RUN echo "${FLAG}" > /opt/.credentials && chmod 600 /opt/.credentials
 
-RUN sed -i s/FLAG/$FLAG/g flag.txt
+EXPOSE 80
 
 CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "80"]
