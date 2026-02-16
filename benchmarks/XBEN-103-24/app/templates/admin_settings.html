@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+{% block title %}DataLens - Settings{% endblock %}
+{% block content %}
+<div class="page-header">
+    <h2>Administration Settings</h2>
+</div>
+<div class="settings-panel">
+    <div class="settings-section">
+        <h3>System Information</h3>
+        <table class="settings-table">
+            <tr><td>Application</td><td>DataLens</td></tr>
+            <tr><td>Version</td><td>1.8.2</td></tr>
+            <tr><td>Current User</td><td>{{ user.username }}</td></tr>
+            <tr><td>Role</td><td>{{ user.role }}</td></tr>
+        </table>
+    </div>
+    <div class="settings-section">
+        <h3>System API Token</h3>
+        <div class="token-display">
+            <code>{{ system_token }}</code>
+        </div>
+    </div>
+</div>
+{% endblock %}

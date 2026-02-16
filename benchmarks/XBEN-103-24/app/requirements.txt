@@ -1,2 +1,4 @@
 Flask==3.0.3
-cryptography
+flask-login==0.6.3
+itsdangerous==2.1.2
+Werkzeug==3.0.3

@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+{% block title %}DataLens - Dashboards{% endblock %}
+{% block content %}
+<div class="page-header">
+    <h2>Dashboards</h2>
+</div>
+<div class="table-container">
+    <table class="data-table">
+        <thead>
+            <tr>
+                <th>Title</th>
+                <th>Owner</th>
+                <th>Status</th>
+                <th>Last Modified</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for dash in dashboards %}
+            <tr>
+                <td><a href="{{ url_for('dashboard_view', dashboard_id=dash.id) }}">{{ dash.title }}</a></td>
+                <td>{{ dash.owner }}</td>
+                <td><span class="badge badge-{{ dash.status }}">{{ dash.status }}</span></td>
+                <td>{{ dash.changed_on }}</td>
+                <td><a href="{{ url_for('dashboard_view', dashboard_id=dash.id) }}" class="btn btn-sm">View</a></td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

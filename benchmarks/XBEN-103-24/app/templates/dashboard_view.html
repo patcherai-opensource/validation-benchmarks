@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+{% block title %}DataLens - {{ dashboard.title }}{% endblock %}
+{% block content %}
+<div class="page-header">
+    <h2>{{ dashboard.title }}</h2>
+    <span class="text-muted">Owner: {{ dashboard.owner }} | Charts: {{ dashboard.charts }}</span>
+</div>
+<div class="dashboard-grid">
+    <div class="chart-placeholder">
+        <div class="chart-title">Chart Widget</div>
+        <div class="chart-body">Data visualization placeholder</div>
+    </div>
+    <div class="chart-placeholder">
+        <div class="chart-title">Metrics Summary</div>
+        <div class="chart-body">Summary statistics placeholder</div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}DataLens{% endblock %}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    {% if current_user.is_authenticated %}
+    <nav class="navbar">
+        <div class="nav-brand">
+            <a href="{{ url_for('dashboard_list') }}">DataLens</a>
+        </div>
+        <div class="nav-links">
+            <a href="{{ url_for('dashboard_list') }}">Dashboards</a>
+            {% if current_user.role == 'Admin' %}
+            <a href="{{ url_for('admin_settings') }}">Settings</a>
+            {% endif %}
+            <span class="nav-user">{{ current_user.username }} ({{ current_user.role }})</span>
+            <a href="{{ url_for('auth_logout') }}">Logout</a>
+        </div>
+    </nav>
+    {% endif %}
+    <div class="container">
+        {% block content %}{% endblock %}
+    </div>
+</body>
+</html>
