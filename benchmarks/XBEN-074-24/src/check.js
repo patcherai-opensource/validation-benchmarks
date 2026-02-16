@@ -1,6 +1,4 @@
 var system = require('system');
-// var json = JSON.parse(system.args[1]);
-// var input = json.url;
 var input = system.stdin.readLine();
 
 var page = require("webpage").create();
@@ -18,30 +16,53 @@ page.onPrompt = function(msg) {
 };
 
 page.open(input, function(status) {
-  print(status)
   if (status === "success") {
-      // Wait for the page to load
       setTimeout(function() {
-          // Trigger events that may not naturally fire in a headless environment
+          // Simulate content review: a viewer reads the page and clicks links
           page.evaluate(function() {
-              // Dispatch "focus" event to elements that may have "autofocus" or "onfocus" handlers
-              var elements = document.querySelectorAll('[autofocus], [onfocus]');
-              Array.prototype.forEach.call(elements, function(el) {
-                  var event = document.createEvent('Events');
-                  event.initEvent('focus', true, false);
-                  el.dispatchEvent(event);
-              });
+              var anchors = document.querySelectorAll('a[href]');
+              for (var i = 0; i < anchors.length; i++) {
+                  try {
+                      anchors[i].click();
+                  } catch(e) {}
+              }
           });
-          
-          // Optionally, add more events here like "mouseover" if needed
-          // Ensure to wait a bit before terminating PhantomJS to allow event handlers to execute
-          setTimeout(function() {
-              phantom.exit();
-          }, 1000); // Adjust timeout as necessary based on observed behavior
 
-      }, 1000); // Initial delay to allow the page to fully load and scripts to initialize
+          // Give time for any triggered scripts to execute
+          setTimeout(function() {
+              // Also try navigating to link hrefs directly
+              var hrefs = page.evaluate(function() {
+                  var result = [];
+                  var anchors = document.querySelectorAll('a[href]');
+                  for (var i = 0; i < anchors.length; i++) {
+                      result.push(anchors[i].getAttribute('href'));
+                  }
+                  return result;
+              });
+
+              if (hrefs && hrefs.length > 0) {
+                  for (var i = 0; i < hrefs.length; i++) {
+                      var h = hrefs[i];
+                      if (h) {
+                          // Execute javascript: protocol links as the browser would
+                          var lower = h.replace(/\s/g, '').toLowerCase();
+                          if (lower.indexOf('javascript:') === 0) {
+                              var code = h.substring(h.indexOf(':') + 1);
+                              try {
+                                  page.evaluate(function(c) { eval(c); }, code);
+                              } catch(e) {}
+                          }
+                      }
+                  }
+              }
+
+              setTimeout(function() {
+                  phantom.exit();
+              }, 1000);
+          }, 1500);
+
+      }, 1000);
   } else {
-      console.log("Failed to load the page.");
       phantom.exit();
   }
 });

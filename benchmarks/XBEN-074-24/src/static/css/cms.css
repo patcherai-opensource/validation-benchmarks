@@ -1,0 +1,357 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+    background: #f5f7fa;
+    color: #333;
+    line-height: 1.6;
+}
+
+.navbar {
+    background: #1a1a2e;
+    padding: 0 2rem;
+    display: flex;
+    align-items: center;
+    height: 56px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.nav-brand {
+    color: #e94560;
+    font-size: 1.3rem;
+    font-weight: 700;
+    text-decoration: none;
+    margin-right: 2rem;
+}
+
+.nav-links a {
+    color: #ccc;
+    text-decoration: none;
+    margin-right: 1.5rem;
+    font-size: 0.9rem;
+}
+
+.nav-links a:hover {
+    color: #fff;
+}
+
+.container {
+    max-width: 960px;
+    margin: 2rem auto;
+    padding: 0 1.5rem;
+}
+
+.hero {
+    text-align: center;
+    padding: 4rem 2rem;
+    background: #fff;
+    border-radius: 8px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+}
+
+.hero h1 {
+    font-size: 2.5rem;
+    color: #1a1a2e;
+    margin-bottom: 0.5rem;
+}
+
+.hero-sub {
+    font-size: 1.1rem;
+    color: #e94560;
+    margin-bottom: 1rem;
+}
+
+.hero-desc {
+    color: #666;
+    max-width: 600px;
+    margin: 0 auto 2rem;
+}
+
+.hero-actions {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+}
+
+.btn {
+    display: inline-block;
+    padding: 0.6rem 1.5rem;
+    border-radius: 4px;
+    text-decoration: none;
+    font-size: 0.9rem;
+    border: none;
+    cursor: pointer;
+    font-weight: 500;
+}
+
+.btn-primary {
+    background: #e94560;
+    color: #fff;
+}
+
+.btn-primary:hover {
+    background: #c13550;
+}
+
+.btn-secondary {
+    background: #eee;
+    color: #333;
+}
+
+.btn-secondary:hover {
+    background: #ddd;
+}
+
+.btn-small {
+    padding: 0.3rem 0.8rem;
+    font-size: 0.8rem;
+}
+
+.login-box {
+    max-width: 400px;
+    margin: 3rem auto;
+    background: #fff;
+    padding: 2rem;
+    border-radius: 8px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+}
+
+.login-box h2 {
+    margin-bottom: 1.5rem;
+    color: #1a1a2e;
+}
+
+.form-group {
+    margin-bottom: 1rem;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 0.3rem;
+    font-weight: 500;
+    color: #444;
+    font-size: 0.9rem;
+}
+
+.form-group input,
+.form-group textarea,
+.form-group select {
+    width: 100%;
+    padding: 0.6rem 0.8rem;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 0.9rem;
+    font-family: inherit;
+}
+
+.form-group textarea {
+    font-family: 'Courier New', monospace;
+    resize: vertical;
+}
+
+.form-hint {
+    font-size: 0.8rem;
+    color: #888;
+    margin-bottom: 0.4rem;
+}
+
+.form-actions {
+    margin-top: 1.5rem;
+    display: flex;
+    gap: 1rem;
+}
+
+.alert {
+    padding: 0.8rem 1rem;
+    border-radius: 4px;
+    margin-bottom: 1rem;
+    font-size: 0.9rem;
+}
+
+.alert-error {
+    background: #fee;
+    color: #c00;
+    border: 1px solid #fcc;
+}
+
+.alert-success {
+    background: #efe;
+    color: #060;
+    border: 1px solid #cfc;
+}
+
+.dashboard-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.5rem;
+}
+
+.content-table {
+    width: 100%;
+    background: #fff;
+    border-radius: 8px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+    border-collapse: collapse;
+    overflow: hidden;
+}
+
+.content-table th,
+.content-table td {
+    padding: 0.8rem 1rem;
+    text-align: left;
+    border-bottom: 1px solid #eee;
+    font-size: 0.9rem;
+}
+
+.content-table th {
+    background: #f8f9fa;
+    font-weight: 600;
+    color: #555;
+}
+
+.content-table a {
+    color: #e94560;
+    text-decoration: none;
+}
+
+.status {
+    padding: 0.2rem 0.6rem;
+    border-radius: 12px;
+    font-size: 0.75rem;
+    font-weight: 500;
+}
+
+.status-published {
+    background: #e6f9e6;
+    color: #2d7d2d;
+}
+
+.status-draft {
+    background: #fff3e0;
+    color: #e65100;
+}
+
+.content-grid {
+    display: grid;
+    gap: 1.5rem;
+    margin-top: 1.5rem;
+}
+
+.content-card {
+    background: #fff;
+    padding: 1.5rem;
+    border-radius: 8px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+}
+
+.content-card h3 a {
+    color: #1a1a2e;
+    text-decoration: none;
+}
+
+.content-card h3 a:hover {
+    color: #e94560;
+}
+
+.card-meta {
+    color: #888;
+    font-size: 0.85rem;
+    margin: 0.3rem 0 0.8rem;
+}
+
+.card-excerpt {
+    color: #666;
+    font-size: 0.9rem;
+}
+
+.content-article {
+    background: #fff;
+    padding: 2rem;
+    border-radius: 8px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+}
+
+.article-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+}
+
+.article-title {
+    font-size: 2rem;
+    color: #1a1a2e;
+    margin-bottom: 0.5rem;
+}
+
+.article-meta {
+    color: #888;
+    font-size: 0.9rem;
+    margin-bottom: 1.5rem;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid #eee;
+}
+
+.article-body {
+    font-size: 1rem;
+    line-height: 1.8;
+}
+
+.article-body a {
+    color: #e94560;
+}
+
+.article-body p {
+    margin-bottom: 1rem;
+}
+
+.article-body h2 {
+    margin: 1.5rem 0 0.8rem;
+    font-size: 1.5rem;
+}
+
+.article-body h3 {
+    margin: 1.2rem 0 0.6rem;
+    font-size: 1.2rem;
+}
+
+.article-body ul, .article-body ol {
+    margin: 0.8rem 0;
+    padding-left: 2rem;
+}
+
+.article-body blockquote {
+    border-left: 3px solid #e94560;
+    padding: 0.5rem 1rem;
+    margin: 1rem 0;
+    background: #f9f9f9;
+    color: #555;
+}
+
+.back-link {
+    margin-top: 1.5rem;
+}
+
+.back-link a {
+    color: #e94560;
+    text-decoration: none;
+    font-size: 0.9rem;
+}
+
+.empty-state {
+    text-align: center;
+    padding: 3rem;
+    color: #999;
+}
+
+.editor-form {
+    background: #fff;
+    padding: 2rem;
+    border-radius: 8px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+    margin-top: 1rem;
+}

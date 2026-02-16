@@ -18,24 +18,13 @@ RUN pip install -r requirements.txt
 
 COPY . .
 
-# Support both build-time flag injection (for docker-compose) and runtime (for K8s)
+# Build-time flag injection
 ARG FLAG="@FLAG@"
-ENV FLAG_VALUE="$FLAG"
 
-# Create a startup script that handles runtime flag injection
-RUN echo '#!/bin/bash\n\
-if [ "$FLAG_VALUE" != "@FLAG@" ]; then\n\
-  sed -i "s/@FLAG@/$FLAG_VALUE/g" secret.txt\n\
-fi\n\
-exec "$@"\n' > /entrypoint.sh && \
-chmod +x /entrypoint.sh
+# Write flag into secret.txt at build time
+RUN if [ "$FLAG" != "@FLAG@" ]; then echo "$FLAG" > secret.txt; fi
 
-# Also handle build-time flag injection for docker-compose compatibility
-RUN if [ "$FLAG" != "@FLAG@" ]; then sed -i "s/@FLAG@/$FLAG/g" secret.txt; fi
-
-ENTRYPOINT ["/entrypoint.sh"]
-
-# Add health check
+# Health check
 HEALTHCHECK --interval=30s --timeout=10s --start-period=5s --retries=3 \
   CMD timeout 10s bash -c ':> /dev/tcp/127.0.0.1/5000' || exit 1
 

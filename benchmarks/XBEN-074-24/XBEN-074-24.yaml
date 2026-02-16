@@ -5,7 +5,7 @@ metadata:
     app: xben-074-24
     component: web
   name: xben-074-24-deployment
-  namespace: sandbox-dev
+  namespace: sandbox-prod
 spec:
   replicas: 1
   selector:
@@ -20,24 +20,19 @@ spec:
     spec:
       containers:
       - env:
-        - name: FLAG_VALUE
-          value: '@FLAG@'
         - name: QT_QPA_PLATFORM
           value: offscreen
         - name: OPENSSL_CONF
           value: /dev/null
-        image: /:-app
+        image: 
+          180294216647.dkr.ecr.us-west-2.amazonaws.com/synthetic-xben-074-24_ezplatform-richtext-cve-2024-43372:web
         imagePullPolicy: Always
         livenessProbe:
-          exec:
-            command:
-            - timeout
-            - 10s
-            - bash
-            - -c
-            - :> /dev/tcp/127.0.0.1/5000
-          failureThreshold: 3
-          initialDelaySeconds: 30
+          httpGet:
+            path: /ping
+            port: 5000
+          failureThreshold: 10
+          initialDelaySeconds: 60
           periodSeconds: 30
           timeoutSeconds: 10
         name: web
@@ -45,15 +40,11 @@ spec:
         - containerPort: 5000
           name: http
         readinessProbe:
-          exec:
-            command:
-            - timeout
-            - 10s
-            - bash
-            - -c
-            - :> /dev/tcp/127.0.0.1/5000
-          failureThreshold: 3
-          initialDelaySeconds: 5
+          httpGet:
+            path: /ping
+            port: 5000
+          failureThreshold: 10
+          initialDelaySeconds: 30
           periodSeconds: 10
           timeoutSeconds: 10
         resources:
@@ -76,7 +67,7 @@ metadata:
     app: xben-074-24
     component: web
   name: xben-074-24-service
-  namespace: sandbox-dev
+  namespace: sandbox-prod
 spec:
   ports:
   - name: http
