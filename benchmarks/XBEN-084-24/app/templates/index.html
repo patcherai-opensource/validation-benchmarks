@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DataHub Workspace</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            background: #f5f6f8;
+            color: #333;
+        }
+        .topbar {
+            background: #2c3e50;
+            color: white;
+            padding: 12px 24px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        .topbar h1 { font-size: 18px; font-weight: 600; }
+        .topbar .version { font-size: 12px; opacity: 0.7; }
+        .container {
+            max-width: 960px;
+            margin: 40px auto;
+            padding: 0 20px;
+        }
+        .card {
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            padding: 24px;
+            margin-bottom: 20px;
+        }
+        .card h2 {
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 12px;
+            color: #2c3e50;
+        }
+        .card p, .card li {
+            font-size: 14px;
+            color: #666;
+            line-height: 1.6;
+        }
+        .card code {
+            background: #f0f0f0;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-size: 13px;
+        }
+        .endpoint-list {
+            list-style: none;
+            padding: 0;
+        }
+        .endpoint-list li {
+            padding: 8px 0;
+            border-bottom: 1px solid #eee;
+            font-size: 14px;
+        }
+        .endpoint-list li:last-child { border: none; }
+        .method {
+            display: inline-block;
+            padding: 2px 8px;
+            border-radius: 3px;
+            font-size: 11px;
+            font-weight: 700;
+            margin-right: 8px;
+            min-width: 52px;
+            text-align: center;
+        }
+        .method.get { background: #61affe; color: white; }
+        .method.put { background: #fca130; color: white; }
+        .method.post { background: #49cc90; color: white; }
+        .method.delete { background: #f93e3e; color: white; }
+        .method.patch { background: #50e3c2; color: white; }
+        .login-form {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            max-width: 400px;
+        }
+        .login-form input {
+            padding: 10px 12px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 14px;
+        }
+        .login-form button {
+            padding: 10px 12px;
+            background: #2c3e50;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+        .login-form button:hover { background: #34495e; }
+        #login-result {
+            margin-top: 12px;
+            font-family: monospace;
+            font-size: 13px;
+            white-space: pre-wrap;
+            background: #f8f9fa;
+            padding: 12px;
+            border-radius: 4px;
+            display: none;
+        }
+        .auth-note {
+            background: #fff3cd;
+            border: 1px solid #ffc107;
+            border-radius: 4px;
+            padding: 12px;
+            font-size: 13px;
+            margin-top: 12px;
+        }
+    </style>
+</head>
+<body>
+    <div class="topbar">
+        <div>
+            <h1>DataHub Workspace</h1>
+        </div>
+        <div class="version">v2.3.1</div>
+    </div>
+
+    <div class="container">
+        <div class="card">
+            <h2>Workspace File Manager</h2>
+            <p>
+                DataHub Workspace provides a REST API for managing files and directories
+                within the configured workspace. Use the API endpoints below to browse,
+                create, update, and delete workspace content.
+            </p>
+        </div>
+
+        <div class="card">
+            <h2>Login</h2>
+            <p style="margin-bottom:12px">Authenticate to obtain a session token for API access.</p>
+            <div class="login-form">
+                <input type="text" id="username" placeholder="Username" value="analyst" />
+                <input type="password" id="password" placeholder="Password" value="workspace" />
+                <button onclick="doLogin()">Sign In</button>
+            </div>
+            <div id="login-result"></div>
+        </div>
+
+        <div class="card">
+            <h2>API Endpoints</h2>
+            <ul class="endpoint-list">
+                <li>
+                    <span class="method post">POST</span>
+                    <code>/api/session</code> — Authenticate and get session token
+                </li>
+                <li>
+                    <span class="method get">GET</span>
+                    <code>/api/workspace/&lt;path&gt;</code> — Retrieve file or directory contents
+                </li>
+                <li>
+                    <span class="method put">PUT</span>
+                    <code>/api/workspace/&lt;path&gt;</code> — Create or update a file/directory
+                </li>
+                <li>
+                    <span class="method delete">DELETE</span>
+                    <code>/api/workspace/&lt;path&gt;</code> — Delete a file or directory
+                </li>
+                <li>
+                    <span class="method patch">PATCH</span>
+                    <code>/api/workspace/&lt;path&gt;</code> — Rename/move a file or directory
+                </li>
+                <li>
+                    <span class="method get">GET</span>
+                    <code>/api/status</code> — Server status and runtime information
+                </li>
+            </ul>
+            <div class="auth-note">
+                All <code>/api/workspace</code> endpoints require authentication.
+                Include your session token as <code>?token=&lt;your-token&gt;</code> query parameter
+                or via <code>Authorization: token &lt;your-token&gt;</code> header.
+            </div>
+        </div>
+
+        <div class="card">
+            <h2>Query Parameters</h2>
+            <ul class="endpoint-list">
+                <li><code>content</code> — Set to <code>0</code> to exclude content (metadata only)</li>
+                <li><code>type</code> — Filter by type: <code>file</code> or <code>directory</code></li>
+                <li><code>format</code> — File format: <code>text</code> or <code>base64</code></li>
+            </ul>
+        </div>
+    </div>
+
+    <script>
+    async function doLogin() {
+        const username = document.getElementById('username').value;
+        const password = document.getElementById('password').value;
+        const resultEl = document.getElementById('login-result');
+
+        try {
+            const resp = await fetch('/api/session', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({username, password})
+            });
+            const data = await resp.json();
+            resultEl.style.display = 'block';
+            if (resp.ok) {
+                resultEl.textContent = JSON.stringify(data, null, 2);
+                resultEl.style.borderLeft = '3px solid #49cc90';
+            } else {
+                resultEl.textContent = data.message || 'Login failed';
+                resultEl.style.borderLeft = '3px solid #f93e3e';
+            }
+        } catch(e) {
+            resultEl.style.display = 'block';
+            resultEl.textContent = 'Connection error';
+            resultEl.style.borderLeft = '3px solid #f93e3e';
+        }
+    }
+    </script>
+</body>
+</html>
