@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BookSchedule - {% block title %}Dashboard{% endblock %}</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    <div class="app-layout">
+        <nav class="sidebar">
+            <div class="sidebar-header">
+                <h3>BookSchedule</h3>
+            </div>
+            <ul class="nav-menu">
+                <li><a href="{{ url_for('calendar_view') }}" class="{% if request.endpoint == 'calendar_view' %}active{% endif %}">Calendar</a></li>
+                <li><a href="{{ url_for('customers_view') }}" class="{% if request.endpoint == 'customers_view' %}active{% endif %}">Customers</a></li>
+                <li><a href="{{ url_for('offerings_view') }}" class="{% if request.endpoint == 'offerings_view' %}active{% endif %}">Offerings</a></li>
+                <li><a href="{{ url_for('system_settings_view') }}" class="{% if request.endpoint == 'system_settings_view' %}active{% endif %}">Settings</a></li>
+                <li class="nav-divider"></li>
+                <li><a href="{{ url_for('account_view') }}" class="{% if request.endpoint == 'account_view' %}active{% endif %}">My Account</a></li>
+                <li><a href="{{ url_for('logout') }}">Sign Out</a></li>
+            </ul>
+            <div class="sidebar-footer">
+                <small>{{ session.get('display_name', '') }}</small><br>
+                <small class="text-muted">{{ session.get('role_slug', '') }}</small>
+            </div>
+        </nav>
+        <main class="content">
+            {% block content %}{% endblock %}
+        </main>
+    </div>
+    <script src="{{ url_for('static', filename='js/calendar.js') }}"></script>
+</body>
+</html>

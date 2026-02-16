@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+{% block title %}Calendar{% endblock %}
+{% block content %}
+<div class="page-header">
+    <h2>Calendar</h2>
+</div>
+<div class="card">
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Date/Time</th>
+                <th>Customer</th>
+                <th>Offering</th>
+                <th>Location</th>
+                <th>Status</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for appt in appointments %}
+            <tr>
+                <td>{{ appt.start_datetime }} - {{ appt.end_datetime }}</td>
+                <td>{{ appt.customer_name or 'N/A' }}</td>
+                <td>{{ appt.offering_name or 'N/A' }}</td>
+                <td>{{ appt.location or '' }}</td>
+                <td><span class="badge badge-{{ appt.status }}">{{ appt.status }}</span></td>
+            </tr>
+            {% endfor %}
+            {% if not appointments %}
+            <tr><td colspan="5" class="text-center">No appointments found.</td></tr>
+            {% endif %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

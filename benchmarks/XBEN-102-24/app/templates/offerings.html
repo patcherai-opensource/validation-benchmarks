@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+{% block title %}Offerings{% endblock %}
+{% block content %}
+<div class="page-header">
+    <h2>Offerings</h2>
+</div>
+<div class="card">
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Duration</th>
+                <th>Price</th>
+                <th>Category</th>
+                <th>Location</th>
+                <th>Private</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for offering in offerings %}
+            <tr>
+                <td><span class="color-dot" style="background-color: {{ offering.color }}"></span> {{ offering.name }}</td>
+                <td>{{ offering.duration }} min</td>
+                <td>{{ offering.currency }} {{ "%.2f"|format(offering.price) }}</td>
+                <td>{{ offering.category_name or '-' }}</td>
+                <td>{{ offering.location or '' }}</td>
+                <td>{{ 'Yes' if offering.is_private else 'No' }}</td>
+            </tr>
+            {% endfor %}
+            {% if not offerings %}
+            <tr><td colspan="6" class="text-center">No offerings found.</td></tr>
+            {% endif %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

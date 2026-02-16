@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BookSchedule - Book an Appointment</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    <div class="booking-container">
+        <div class="booking-header">
+            <h2>BookSchedule Medical Center</h2>
+            <p>Select a service and provider to schedule your appointment</p>
+        </div>
+
+        <div class="booking-section">
+            <h3>Available Services</h3>
+            <div class="service-list">
+                {% for offering in offerings %}
+                <div class="service-card">
+                    <h4>{{ offering.name }}</h4>
+                    <p>{{ offering.description or '' }}</p>
+                    <div class="service-meta">
+                        <span>{{ offering.duration }} min</span>
+                        <span>{{ offering.currency }} {{ "%.2f"|format(offering.price) }}</span>
+                        {% if offering.location %}<span>{{ offering.location }}</span>{% endif %}
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+
+        <div class="booking-section">
+            <h3>Our Providers</h3>
+            <div class="provider-list">
+                {% for provider in providers %}
+                <div class="provider-card">
+                    <strong>{{ provider.first_name }} {{ provider.last_name }}</strong>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+
+        <div class="booking-footer">
+            <p><a href="{{ url_for('login') }}">Staff Login</a></p>
+            <small>Powered by BookSchedule v1.4.3</small>
+        </div>
+    </div>
+
+    <style>
+        .booking-container { max-width: 800px; margin: 30px auto; padding: 20px; }
+        .booking-header { text-align: center; margin-bottom: 30px; }
+        .booking-header h2 { color: #3498db; }
+        .booking-header p { color: #888; }
+        .booking-section { margin-bottom: 30px; }
+        .booking-section h3 { color: #2c3e50; margin-bottom: 15px; border-bottom: 1px solid #eee; padding-bottom: 8px; }
+        .service-card { background: #fff; border: 1px solid #eee; border-radius: 6px; padding: 15px; margin-bottom: 10px; }
+        .service-card h4 { margin-bottom: 5px; color: #2c3e50; }
+        .service-card p { color: #666; font-size: 14px; margin-bottom: 8px; }
+        .service-meta { display: flex; gap: 15px; font-size: 13px; color: #888; }
+        .provider-card { background: #fff; border: 1px solid #eee; border-radius: 6px; padding: 12px 15px; margin-bottom: 8px; }
+        .booking-footer { text-align: center; margin-top: 40px; color: #aaa; }
+        .booking-footer a { color: #3498db; text-decoration: none; }
+    </style>
+    <script src="{{ url_for('static', filename='js/booking.js') }}"></script>
+</body>
+</html>
