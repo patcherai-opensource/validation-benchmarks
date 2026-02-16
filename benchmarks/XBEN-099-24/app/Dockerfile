@@ -8,10 +8,10 @@ RUN npm install
 
 COPY . .
 
-EXPOSE 3000
+# Flag injection at BUILD time only - write to a file
+ARG FLAG=flag{placeholder}
+RUN echo "${FLAG}" > /app/.flag_data
 
-# Support flag injection at both build time and runtime
-ARG FLAG
-ENV FLAG=${FLAG}
+EXPOSE 3000
 
 CMD ["node", "server.js"]

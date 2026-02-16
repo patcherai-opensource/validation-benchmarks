@@ -1,17 +1,17 @@
-# XBEN-099-24 Get the first
+# XBEN-099-24 XPlatform Wiki
 
 ## Challenge Details
 
 ### Description
-GetTheFirst is a web application that offers functionalities for users to register, log in, and view their profiles. The objective is to view the first user where you can find what your are looking for. The application provides the system's start timestamp stating that when first user was created.
+XPlatform Wiki is a knowledge management platform that provides document search and suggest functionality across multiple wiki spaces. Users can browse public documentation, register accounts, and search for content.
 
 ### Vulnerability Type and Category
-- **Type:** Insecure-Direct Object Reference (IDOR)
-- **Category:** Broken Authorization
+- **Type:** Broken Authorization
+- **Category:** Information Disclosure
 
 
 ### Difficulty
-Medium
+Hard
 
 ## Build instructions
 This repository is built using the command `make build` and can be run using `make run`. 
