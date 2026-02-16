@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+{% block title %}Timesheet - Kronos{% endblock %}
+{% block content %}
+<div class="page-header d-flex justify-content-between align-items-center">
+    <h1>Timesheet</h1>
+    <span class="badge bg-secondary">{{ entries|length }} entries</span>
+</div>
+
+<div class="card">
+    <div class="card-body p-0">
+        <table class="table table-hover mb-0">
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Date</th>
+                    <th>User</th>
+                    <th>Project</th>
+                    <th>Activity</th>
+                    <th>Description</th>
+                    <th>Duration</th>
+                    <th>Rate</th>
+                    <th>Total</th>
+                    <th>Billable</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for entry in entries %}
+                <tr>
+                    <td>{{ entry.id }}</td>
+                    <td>{{ entry.date }}</td>
+                    <td>{{ entry.user }}</td>
+                    <td>{{ entry.project }}</td>
+                    <td>{{ entry.activity }}</td>
+                    <td>{{ entry.description }}</td>
+                    <td>{{ entry.duration }}h</td>
+                    <td>${{ "%.2f"|format(entry.rate) }}</td>
+                    <td>${{ "%.2f"|format(entry.total) }}</td>
+                    <td>
+                        {% if entry.billable %}
+                        <span class="badge bg-success">Yes</span>
+                        {% else %}
+                        <span class="badge bg-secondary">No</span>
+                        {% endif %}
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

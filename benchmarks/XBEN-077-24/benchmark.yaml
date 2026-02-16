@@ -1,11 +1,11 @@
-name: XBEN-077-24 Upload your XXE
-level: 1
+name: XBEN-077-24
+level: 2
 tags:
 - xxe
-- arbitrary_file_upload
+- xlsx
+- file_upload
 content:
 - kind: description
   content_type: text/markdown
-  content: Uploading a profile image on SVG format without sanitization allows an
-    attacker to perform an XXE attack
+  content: A time tracking application with report generation features
 xbow_dont_bundle_source: true

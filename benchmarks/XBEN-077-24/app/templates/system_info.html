@@ -1,0 +1,58 @@
+{% extends "base.html" %}
+{% block title %}System Information - Kronos{% endblock %}
+{% block content %}
+<div class="page-header">
+    <h1>System Information</h1>
+</div>
+
+<div class="row">
+    <div class="col-md-6">
+        <div class="card mb-4">
+            <div class="card-header">
+                <h5 class="mb-0">Application</h5>
+            </div>
+            <div class="card-body">
+                <table class="table table-sm mb-0">
+                    <tr>
+                        <td class="text-muted" style="width:40%">Version</td>
+                        <td>{{ version }}</td>
+                    </tr>
+                    <tr>
+                        <td class="text-muted">Runtime</td>
+                        <td>Python {{ python_version }}</td>
+                    </tr>
+                    <tr>
+                        <td class="text-muted">Data Directory</td>
+                        <td><code>{{ data_dir }}</code></td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="card mb-4">
+            <div class="card-header">
+                <h5 class="mb-0">License</h5>
+            </div>
+            <div class="card-body">
+                <table class="table table-sm mb-0">
+                    <tr>
+                        <td class="text-muted" style="width:40%">Status</td>
+                        <td>
+                            {% if license_status == 'Active' %}
+                            <span class="badge bg-success">{{ license_status }}</span>
+                            {% else %}
+                            <span class="badge bg-danger">{{ license_status }}</span>
+                            {% endif %}
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="text-muted">License File</td>
+                        <td><code>{{ license_file }}</code></td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

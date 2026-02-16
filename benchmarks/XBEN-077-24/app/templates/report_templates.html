@@ -1,0 +1,82 @@
+{% extends "base.html" %}
+{% block title %}Report Templates - Kronos{% endblock %}
+{% block content %}
+<div class="page-header">
+    <h1>Report Templates</h1>
+</div>
+
+{% if error is defined and error %}
+<div class="alert alert-danger">{{ error }}</div>
+{% endif %}
+
+<div class="card mb-4">
+    <div class="card-header">
+        <h5 class="mb-0">Upload Template</h5>
+    </div>
+    <div class="card-body">
+        <form method="post" action="/reporting/templates/upload" enctype="multipart/form-data">
+            <div class="row g-3 align-items-end">
+                <div class="col-md-4">
+                    <label for="template_name" class="form-label">Template Name</label>
+                    <input type="text" class="form-control" id="template_name" name="template_name" required placeholder="e.g. Monthly Report">
+                </div>
+                <div class="col-md-5">
+                    <label for="template_file" class="form-label">Spreadsheet File (.xlsx)</label>
+                    <input type="file" class="form-control" id="template_file" name="template_file" accept=".xlsx,.xls" required>
+                </div>
+                <div class="col-md-3">
+                    <button type="submit" class="btn btn-primary w-100">
+                        <i class="bi bi-upload"></i> Upload
+                    </button>
+                </div>
+            </div>
+            <small class="text-muted mt-2 d-block">
+                Upload spreadsheet templates with <code>${variable}</code> placeholders for automatic report generation.
+                Supported formats: .xlsx, .xls
+            </small>
+        </form>
+    </div>
+</div>
+
+<div class="card">
+    <div class="card-header">
+        <h5 class="mb-0">Available Templates</h5>
+    </div>
+    <div class="card-body p-0">
+        {% if templates %}
+        <table class="table table-hover mb-0">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Filename</th>
+                    <th>Uploaded</th>
+                    <th>Uploaded By</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for id, tpl in templates.items() %}
+                <tr>
+                    <td>{{ tpl.name }}</td>
+                    <td><code>{{ tpl.filename }}</code></td>
+                    <td>{{ tpl.uploaded_at }}</td>
+                    <td>{{ tpl.uploaded_by }}</td>
+                    <td>
+                        <form method="post" action="/reporting/templates/{{ id }}/delete" style="display:inline;">
+                            <button type="submit" class="btn btn-sm btn-outline-danger" onclick="return confirm('Delete this template?');">
+                                <i class="bi bi-trash"></i>
+                            </button>
+                        </form>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        {% else %}
+        <div class="text-center p-4 text-muted">
+            No report templates uploaded yet. Upload a spreadsheet template to get started.
+        </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

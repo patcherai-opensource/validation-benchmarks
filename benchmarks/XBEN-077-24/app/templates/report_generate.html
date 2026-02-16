@@ -1,0 +1,75 @@
+{% extends "base.html" %}
+{% block title %}Generate Report - Kronos{% endblock %}
+{% block content %}
+<div class="page-header">
+    <h1>Generate Report</h1>
+</div>
+
+{% if error is defined and error %}
+<div class="alert alert-danger">{{ error }}</div>
+{% endif %}
+
+{% if result is defined and result %}
+<div class="alert alert-success">
+    <h5><i class="bi bi-check-circle"></i> Report Generated Successfully</h5>
+    <p class="mb-1">Template: {{ result.template }}</p>
+    <p class="mb-1">Entries: {{ result.entries }} | Hours: {{ result.total_hours }}h | Amount: ${{ "%.2f"|format(result.total_amount) }}</p>
+    <p class="mb-0">Generated: {{ result.generated_at }}</p>
+    <a href="/reporting/download/{{ report_id }}" class="btn btn-success mt-2">
+        <i class="bi bi-download"></i> Download Report
+    </a>
+</div>
+{% endif %}
+
+<div class="card">
+    <div class="card-header">
+        <h5 class="mb-0">Report Configuration</h5>
+    </div>
+    <div class="card-body">
+        {% if templates %}
+        <form method="post" action="/reporting/generate">
+            <div class="row g-3">
+                <div class="col-md-4">
+                    <label for="template_id" class="form-label">Report Template</label>
+                    <select class="form-select" id="template_id" name="template_id" required>
+                        <option value="">Select template...</option>
+                        {% for id, tpl in templates.items() %}
+                        <option value="{{ id }}">{{ tpl.name }} ({{ tpl.filename }})</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="col-md-2">
+                    <label for="date_from" class="form-label">Date From</label>
+                    <input type="date" class="form-control" id="date_from" name="date_from">
+                </div>
+                <div class="col-md-2">
+                    <label for="date_to" class="form-label">Date To</label>
+                    <input type="date" class="form-control" id="date_to" name="date_to">
+                </div>
+                <div class="col-md-3">
+                    <label for="project_filter" class="form-label">Project</label>
+                    <select class="form-select" id="project_filter" name="project_filter">
+                        <option value="">All Projects</option>
+                        {% if projects %}
+                        {% for project in projects %}
+                        <option value="{{ project }}">{{ project }}</option>
+                        {% endfor %}
+                        {% endif %}
+                    </select>
+                </div>
+                <div class="col-md-1 d-flex align-items-end">
+                    <button type="submit" class="btn btn-primary w-100">
+                        <i class="bi bi-printer"></i>
+                    </button>
+                </div>
+            </div>
+        </form>
+        {% else %}
+        <div class="text-center p-4 text-muted">
+            <p>No report templates available.</p>
+            <a href="/reporting/templates" class="btn btn-outline-primary">Upload a Template</a>
+        </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}
