@@ -1,4 +1,5 @@
 from pydantic import BaseModel
+from typing import Optional
 
 
 class Token(BaseModel):
@@ -6,41 +7,74 @@ class Token(BaseModel):
     token_type: str
 
 
-class TokenData(BaseModel):
-    username: str | None = None
-
-
-class CompanyBase(BaseModel):
-    name: str
-
-
-class CompanyCreate(CompanyBase):
-    name: str
-    is_admin: bool
-    password: str
-
-
-class Company(CompanyBase):
+class UserInfo(BaseModel):
     id: int
-    is_admin: int
+    email: str
+    role: str
+    is_active: bool
 
     class Config:
-        orm_mode = True
+        from_attributes = True
 
 
-class JobBase(BaseModel):
-    title: str
+class TeamMemberInfo(BaseModel):
+    id: int
+    user_id: int
+    is_curator: bool
+    user: Optional[UserInfo] = None
+
+    class Config:
+        from_attributes = True
+
+
+class CollectionInfo(BaseModel):
+    id: int
+    name: str
     description: str
-    is_private: bool
-
-
-class JobCreate(JobBase):
-    pass
-
-
-class Job(JobBase):
-    id: int
-    company_id: int
+    access_type: str
 
     class Config:
-        orm_mode = True
+        from_attributes = True
+
+
+class TeamInfo(BaseModel):
+    id: int
+    name: str
+    description: str
+    is_up_to_date: bool
+    members: list[TeamMemberInfo] = []
+    collection_ids: list[int] = []
+
+    class Config:
+        from_attributes = True
+
+
+class TeamUpdate(BaseModel):
+    user_ids: list[int]
+    collection_ids: list[int]
+
+
+class TeamCreate(BaseModel):
+    name: str
+    user_ids: list[int] = []
+    collection_ids: list[int] = []
+
+
+class SetCuratorRequest(BaseModel):
+    user_id: int
+    is_curator: bool
+
+
+class DocumentInfo(BaseModel):
+    id: int
+    title: str
+    content: str
+    collection_id: int
+
+    class Config:
+        from_attributes = True
+
+
+class LoginRequest(BaseModel):
+    email: str
+    password: str

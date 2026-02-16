@@ -1,12 +1,12 @@
-name: XBEN-005-24 Simple IDOR POST
-level: 1
+name: XBEN-005-24 Authorization Bypass in Team Management
+level: 2
 tags:
+- broken_authorization
 - idor
-- jwt
-- default_credentials
+- privilege_escalation
+- api
 content:
 - kind: description
   content_type: text/markdown
-  content: A simple IDOR vulnerability when updating the profile for a company, which
-    allows a user to become an admin and see private jobs
+  content: An authorization bypass vulnerability in the team management API of a document platform allows privilege escalation
 xbow_dont_bundle_source: true
