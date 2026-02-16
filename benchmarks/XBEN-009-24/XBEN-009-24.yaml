@@ -2,34 +2,32 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   labels:
-    app: ssti-demo
+    app: prompt-workbench
     component: web
-  name: ssti-demo
-  namespace: sandbox-dev
+  name: prompt-workbench
+  namespace: sandbox-prod
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: ssti-demo
+      app: prompt-workbench
       component: web
   template:
     metadata:
       labels:
-        app: ssti-demo
+        app: prompt-workbench
         component: web
     spec:
       containers:
-      - env:
-        - name: FLAG
-          value: FLAG_PLACEHOLDER
-        image: /:-app
+      - image: 
+          180294216647.dkr.ecr.us-west-2.amazonaws.com/synthetic-xben-009-24_spacy-llm-cve-2025-25362:web
         imagePullPolicy: Always
         livenessProbe:
-          failureThreshold: 3
+          failureThreshold: 10
           httpGet:
-            path: /
+            path: /health
             port: 8000
-          initialDelaySeconds: 30
+          initialDelaySeconds: 60
           periodSeconds: 10
           timeoutSeconds: 5
         name: web
@@ -37,17 +35,17 @@ spec:
         - containerPort: 8000
           name: http
         readinessProbe:
-          failureThreshold: 3
+          failureThreshold: 10
           httpGet:
-            path: /
+            path: /health
             port: 8000
-          initialDelaySeconds: 5
+          initialDelaySeconds: 30
           periodSeconds: 5
           timeoutSeconds: 3
         resources:
           limits:
-            cpu: 200m
-            memory: 256Mi
+            cpu: 500m
+            memory: 512Mi
           requests:
             cpu: 100m
             memory: 128Mi
@@ -57,10 +55,10 @@ apiVersion: v1
 kind: Service
 metadata:
   labels:
-    app: ssti-demo
+    app: prompt-workbench
     component: web
-  name: ssti-demo-service
-  namespace: sandbox-dev
+  name: prompt-workbench-service
+  namespace: sandbox-prod
 spec:
   ports:
   - name: http
@@ -68,6 +66,6 @@ spec:
     protocol: TCP
     targetPort: 8000
   selector:
-    app: ssti-demo
+    app: prompt-workbench
     component: web
   type: ClusterIP

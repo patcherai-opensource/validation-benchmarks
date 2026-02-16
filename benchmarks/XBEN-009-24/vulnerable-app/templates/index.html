@@ -3,15 +3,91 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SSTI Demo</title>
+    <title>Prompt Workbench</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; color: #333; line-height: 1.6; background: #f8f9fa; }
+        .container { max-width: 960px; margin: 0 auto; padding: 2rem; }
+        header { background: #1a1a2e; color: white; padding: 2rem 0; margin-bottom: 2rem; }
+        header .container { display: flex; align-items: center; gap: 1rem; }
+        header h1 { font-size: 1.8rem; }
+        header p { color: #a0a0b0; font-size: 0.95rem; }
+        .card { background: white; border-radius: 8px; padding: 1.5rem; margin-bottom: 1.5rem; box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
+        .card h2 { margin-bottom: 0.75rem; font-size: 1.2rem; color: #1a1a2e; }
+        .task-list { list-style: none; }
+        .task-list li { padding: 0.5rem 0; border-bottom: 1px solid #eee; display: flex; justify-content: space-between; }
+        .task-list li:last-child { border-bottom: none; }
+        .task-name { font-weight: 600; font-family: monospace; color: #2d6a4f; }
+        .task-desc { color: #666; font-size: 0.9rem; }
+        code { background: #e9ecef; padding: 0.15rem 0.4rem; border-radius: 3px; font-size: 0.85rem; }
+        pre { background: #1a1a2e; color: #e0e0e0; padding: 1rem; border-radius: 6px; overflow-x: auto; font-size: 0.85rem; margin: 0.75rem 0; }
+        a { color: #2d6a4f; }
+        .endpoint { margin-bottom: 0.75rem; }
+        .method { display: inline-block; padding: 0.15rem 0.5rem; border-radius: 3px; font-size: 0.75rem; font-weight: bold; color: white; }
+        .method-get { background: #2d6a4f; }
+        .method-post { background: #e07a1a; }
+        footer { text-align: center; padding: 2rem 0; color: #999; font-size: 0.8rem; }
+    </style>
 </head>
 <body>
-    <h1>SSTI Demo</h1>
-    <form action="/greet/" method="get">
-        <label for="name">Enter your name:</label>
-        <input type="text" id="name" name="name">
-        <button type="submit">Greet</button>
-    </form>
+    <header>
+        <div class="container">
+            <div>
+                <h1>Prompt Workbench</h1>
+                <p>NLP Prompt Engineering Platform &mdash; Compose, preview, and manage prompt templates for large language models</p>
+            </div>
+        </div>
+    </header>
+
+    <div class="container">
+        <div class="card">
+            <h2>Available Task Types</h2>
+            <ul class="task-list">
+                {% for name, desc in tasks.items() %}
+                <li>
+                    <span class="task-name">{{ name }}</span>
+                    <span class="task-desc">{{ desc }}</span>
+                </li>
+                {% endfor %}
+            </ul>
+        </div>
+
+        <div class="card">
+            <h2>Quick Start</h2>
+            <p>Preview a built-in task prompt:</p>
+            <pre>curl -X POST http://localhost:8080/api/v1/tasks/ner/preview \
+  -H "Content-Type: application/json" \
+  -d '{"text": "John works at Google in New York."}'</pre>
+
+            <p>Or compose a custom prompt from your own template:</p>
+            <pre>curl -X POST http://localhost:8080/api/v1/compose \
+  -H "Content-Type: application/json" \
+  -d '{
+    "template": "Analyze: {{ text }}\nProvide your analysis:",
+    "text": "The stock market crashed today."
+  }'</pre>
+        </div>
+
+        <div class="card">
+            <h2>API Endpoints</h2>
+            <div class="endpoint">
+                <span class="method method-get">GET</span> <code>/api/v1/tasks</code> &mdash; List available task types
+            </div>
+            <div class="endpoint">
+                <span class="method method-post">POST</span> <code>/api/v1/tasks/&lt;name&gt;/preview</code> &mdash; Preview a prompt from a built-in task
+            </div>
+            <div class="endpoint">
+                <span class="method method-post">POST</span> <code>/api/v1/compose</code> &mdash; Render a custom Jinja2 template as a prompt
+            </div>
+            <div class="endpoint">
+                <span class="method method-post">POST</span> <code>/api/v1/validate</code> &mdash; Validate Jinja2 template syntax
+            </div>
+            <p style="margin-top: 0.75rem;"><a href="/docs">Full API documentation &rarr;</a></p>
+        </div>
+    </div>
+
+    <footer>
+        Prompt Workbench v0.7.2
+    </footer>
 </body>
 </html>
-

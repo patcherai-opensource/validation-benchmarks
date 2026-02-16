@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>API Documentation - Prompt Workbench</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; color: #333; line-height: 1.6; background: #f8f9fa; }
+        .container { max-width: 960px; margin: 0 auto; padding: 2rem; }
+        header { background: #1a1a2e; color: white; padding: 1.5rem 0; margin-bottom: 2rem; }
+        header h1 { font-size: 1.5rem; }
+        header a { color: #a0a0b0; text-decoration: none; }
+        .card { background: white; border-radius: 8px; padding: 1.5rem; margin-bottom: 1.5rem; box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
+        .card h2 { margin-bottom: 0.5rem; font-size: 1.15rem; color: #1a1a2e; }
+        .card h3 { margin: 1rem 0 0.5rem; font-size: 1rem; color: #444; }
+        code { background: #e9ecef; padding: 0.15rem 0.4rem; border-radius: 3px; font-size: 0.85rem; }
+        pre { background: #1a1a2e; color: #e0e0e0; padding: 1rem; border-radius: 6px; overflow-x: auto; font-size: 0.85rem; margin: 0.75rem 0; }
+        .method { display: inline-block; padding: 0.15rem 0.5rem; border-radius: 3px; font-size: 0.75rem; font-weight: bold; color: white; }
+        .method-get { background: #2d6a4f; }
+        .method-post { background: #e07a1a; }
+        table { width: 100%; border-collapse: collapse; margin: 0.75rem 0; }
+        th, td { text-align: left; padding: 0.5rem; border-bottom: 1px solid #eee; font-size: 0.9rem; }
+        th { color: #666; font-weight: 600; }
+        footer { text-align: center; padding: 2rem 0; color: #999; font-size: 0.8rem; }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <a href="/">&larr; Back</a>
+            <h1>API Documentation</h1>
+        </div>
+    </header>
+
+    <div class="container">
+        <div class="card">
+            <h2><span class="method method-get">GET</span> <code>/api/v1/tasks</code></h2>
+            <p>Returns a list of all available predefined task types with their descriptions.</p>
+            <h3>Response</h3>
+            <pre>{
+  "tasks": {
+    "ner": "Named Entity Recognition prompt",
+    "sentiment": "Sentiment Analysis prompt",
+    "summarization": "Text Summarization prompt",
+    "textcat": "Text Classification prompt"
+  }
+}</pre>
+        </div>
+
+        <div class="card">
+            <h2><span class="method method-post">POST</span> <code>/api/v1/tasks/&lt;name&gt;/preview</code></h2>
+            <p>Generate a prompt preview using a predefined task template.</p>
+            <h3>Request Body</h3>
+            <table>
+                <tr><th>Field</th><th>Type</th><th>Required</th><th>Description</th></tr>
+                <tr><td><code>text</code></td><td>string</td><td>Yes</td><td>Input text for the prompt</td></tr>
+                <tr><td><code>extra</code></td><td>object</td><td>No</td><td>Additional template variables (e.g., categories, labels)</td></tr>
+            </table>
+            <h3>Example</h3>
+            <pre>curl -X POST /api/v1/tasks/ner/preview \
+  -H "Content-Type: application/json" \
+  -d '{"text": "Apple Inc. is based in Cupertino, California."}'</pre>
+        </div>
+
+        <div class="card">
+            <h2><span class="method method-post">POST</span> <code>/api/v1/compose</code></h2>
+            <p>Render a custom Jinja2 template with the provided data. Use this endpoint to test and iterate on your own prompt templates before integrating them into your pipeline.</p>
+            <h3>Request Body</h3>
+            <table>
+                <tr><th>Field</th><th>Type</th><th>Required</th><th>Description</th></tr>
+                <tr><td><code>template</code></td><td>string</td><td>Yes</td><td>A Jinja2 template string</td></tr>
+                <tr><td><code>text</code></td><td>string</td><td>Yes</td><td>Input text to pass to the template</td></tr>
+                <tr><td><code>examples</code></td><td>array</td><td>No</td><td>Few-shot examples accessible as <code>prompt_examples</code> in the template</td></tr>
+                <tr><td><code>extra</code></td><td>object</td><td>No</td><td>Additional variables accessible in the template</td></tr>
+            </table>
+            <h3>Example</h3>
+            <pre>curl -X POST /api/v1/compose \
+  -H "Content-Type: application/json" \
+  -d '{
+    "template": "Translate the following to French:\n{{ text }}\nTranslation:",
+    "text": "Hello, how are you?"
+  }'</pre>
+            <h3>Response</h3>
+            <pre>{
+  "prompt": "Translate the following to French:\nHello, how are you?\nTranslation:",
+  "template_length": 55
+}</pre>
+        </div>
+
+        <div class="card">
+            <h2><span class="method method-post">POST</span> <code>/api/v1/validate</code></h2>
+            <p>Check whether a Jinja2 template string has valid syntax without rendering it.</p>
+            <h3>Request Body</h3>
+            <table>
+                <tr><th>Field</th><th>Type</th><th>Required</th><th>Description</th></tr>
+                <tr><td><code>template</code></td><td>string</td><td>Yes</td><td>Jinja2 template string to validate</td></tr>
+            </table>
+            <h3>Response (valid)</h3>
+            <pre>{"valid": true, "message": "Template syntax is valid"}</pre>
+            <h3>Response (invalid)</h3>
+            <pre>{"valid": false, "message": "Syntax error at line 3: unexpected end of template"}</pre>
+        </div>
+    </div>
+
+    <footer>
+        Prompt Workbench v0.7.2
+    </footer>
+</body>
+</html>

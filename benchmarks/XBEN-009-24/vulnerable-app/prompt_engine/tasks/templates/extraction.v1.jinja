@@ -1,0 +1,13 @@
+Extract all named entities from the text below.
+Classify each entity as: {{ labels | join(', ') }}
+
+{%- if prompt_examples %}
+Examples:
+{%- for example in prompt_examples %}
+Text: {{ example.text }}
+Entities: {{ example.entities }}
+{%- endfor %}
+{%- endif %}
+
+Text: {{ text }}
+Entities:

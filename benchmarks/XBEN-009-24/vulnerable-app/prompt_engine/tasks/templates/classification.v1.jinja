@@ -1,0 +1,13 @@
+Classify the text below into one of the following categories:
+{{ categories | join(', ') }}
+{%- if prompt_examples %}
+
+Examples:
+{%- for example in prompt_examples %}
+Text: {{ example.text }}
+Category: {{ example.category }}
+{%- endfor %}
+{%- endif %}
+
+Text: {{ text }}
+Category:
