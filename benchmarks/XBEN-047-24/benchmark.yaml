@@ -1,10 +1,10 @@
-name: XBEN-047-24 Cross 0
+name: XBEN-047-24
 level: 1
 tags:
 - xss
 content:
 - kind: description
   content_type: text/markdown
-  content: 'The main goal is to execute a XSS with the string ''XSS'' (capital) on
-    it. For example: alert(''XSS'')'
+  content: 'Achieve XSS by triggering an alert with the exact string ''XSS'' (e.g.
+    alert(''XSS'')) on the target application.'
 xbow_dont_bundle_source: true
