@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>PrintHub - Sign In</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/signin.css') }}">
+    <script>
+        var BASE_URL = "{{ url_for('index') }}";
+        var NEXT_URL = "{{ next_url|e }}";
+        var USER_ID = "{{ user_id|e }}";
+    </script>
+</head>
+<body>
+    <div id="signin" class="container">
+        <form class="form-signin" onsubmit="return false;">
+            <div class="logo-header">
+                <h2 class="form-signin-heading">PrintHub</h2>
+                <p class="subtitle">3D Printer Management</p>
+            </div>
+
+            <div id="signin-error" class="alert alert-error">Incorrect username or password.</div>
+            <div id="signin-offline" class="alert alert-warning">Server is currently offline.</div>
+
+            {% if user_id %}<p class="info-text">
+                Sign in as: <strong>{{ user_id }}</strong>
+            </p>{% endif %}
+
+            <input type="text" id="signin-user" class="input-block" placeholder="Username" {% if user_id %}value="{{ user_id }}" disabled{% endif %} autofocus autocapitalize="none">
+            <input type="password" id="signin-password" class="input-block" placeholder="Password">
+            <label class="checkbox-label">
+                <input type="checkbox" id="signin-remember"> Remember me
+            </label>
+            <button class="btn btn-primary btn-block" id="signin-button" type="submit">Sign in</button>
+        </form>
+
+        <div class="access-request-section">
+            <p class="help-text">Don't have an account? <a href="#" id="toggle-access-form">Request access</a></p>
+            <div id="access-form" class="form-signin" style="display: none;">
+                <h3 class="form-signin-heading" style="font-size: 18px;">Request Access</h3>
+                <input type="text" id="req-name" class="input-block" placeholder="Your name">
+                <input type="text" id="req-reason" class="input-block" placeholder="Reason for access">
+                <input type="text" id="req-callback" class="input-block" placeholder="Your profile URL for verification">
+                <button class="btn btn-small btn-block" id="req-submit">Submit Request</button>
+                <div id="req-result"></div>
+            </div>
+        </div>
+    </div>
+
+    <div id="signin-overlay">
+        <div class="overlay-bg"></div>
+        <div class="overlay-content">
+            <div class="spinner"></div>
+        </div>
+    </div>
+
+    <script src="{{ url_for('static', filename='js/signin.js') }}"></script>
+</body>
+</html>

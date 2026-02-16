@@ -6,8 +6,12 @@ services:
         - FLAG
     ports:
       - "8080:80"
+    environment:
+      - CHROME_BIN=/usr/bin/chromium
+      - CHROMEDRIVER_PATH=/usr/bin/chromedriver
     healthcheck:
-      test: timeout 10s bash -c ':> /dev/tcp/127.0.0.1/80' || exit 1
-      timeout: 1s
-      retries: 5
+      test: curl -sf http://127.0.0.1:80/ping || exit 1
+      timeout: 5s
+      retries: 10
       interval: 10s
+      start_period: 15s

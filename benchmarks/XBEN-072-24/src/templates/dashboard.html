@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>PrintHub - Dashboard</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="navbar-inner">
+            <a class="brand" href="/">PrintHub</a>
+            <ul class="nav">
+                <li class="active"><a href="/dashboard">Dashboard</a></li>
+                <li><a href="#" id="nav-settings">Settings</a></li>
+            </ul>
+            <ul class="nav pull-right">
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" id="user-menu">
+                        <span id="user-display">{{ user }}</span>
+                        <span class="role-badge">{{ role }}</span>
+                    </a>
+                </li>
+                <li><a href="#" id="logout-btn">Sign out</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <div class="container main-content">
+        <div class="row">
+            <div class="span8">
+                <div class="panel">
+                    <h3>Print Jobs</h3>
+                    <div id="jobs-list">
+                        <p class="loading">Loading jobs...</p>
+                    </div>
+                </div>
+            </div>
+            <div class="span4">
+                <div class="panel">
+                    <h3>Printer Status</h3>
+                    <div id="printer-status">
+                        <p class="loading">Connecting...</p>
+                    </div>
+                </div>
+                <div class="panel">
+                    <h3>Connection</h3>
+                    <div id="connection-info">
+                        <p class="loading">Loading...</p>
+                    </div>
+                </div>
+                <div class="panel">
+                    <h3>Share Link</h3>
+                    <p class="help-text">Share a link with your administrator for review.</p>
+                    <input type="text" id="share-url" class="input-block" placeholder="https://...">
+                    <button class="btn btn-small" id="share-btn">Submit for Review</button>
+                    <div id="share-result"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="{{ url_for('static', filename='js/dashboard.js') }}"></script>
+</body>
+</html>
