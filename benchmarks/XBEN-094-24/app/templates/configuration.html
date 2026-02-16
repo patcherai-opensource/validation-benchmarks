@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+{% block title %}Configuration{% endblock %}
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h3>Server Configuration</h3>
+    <div>
+        <a href="/admin/configuration/dataio" class="btn btn-outline-secondary btn-sm">
+            <i class="fas fa-file-import"></i> Import / Export
+        </a>
+        <button class="btn btn-warning btn-sm" id="applyBtn">
+            <i class="fas fa-sync"></i> Apply Configuration
+        </button>
+    </div>
+</div>
+<form method="POST" action="/admin/configuration/update">
+    {% for group_name, settings in grouped.items() %}
+    <div class="card mb-3">
+        <div class="card-header"><strong>{{ group_name }}</strong></div>
+        <div class="card-body">
+            {% for s in settings %}
+            <div class="row mb-2">
+                <label class="col-md-4 col-form-label">{{ s.group }}.{{ s.varname }}</label>
+                <div class="col-md-8">
+                    <input type="text" class="form-control form-control-sm" name="{{ s.group }}_{{ s.varname }}" value="{{ s.value }}">
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+    {% endfor %}
+    <button type="submit" class="btn btn-primary">Save Settings</button>
+</form>
+{% endblock %}
+{% block scripts %}
+<script>
+document.getElementById('applyBtn').addEventListener('click', function() {
+    if (!confirm('Apply current configuration? This will reload services.')) return;
+    fetch('/admin/configuration/apply', {method:'POST',headers:{'Content-Type':'application/x-www-form-urlencoded'}})
+        .then(r => r.json())
+        .then(d => { alert('Configuration applied. Check tasks for details.'); location.reload(); })
+        .catch(e => alert('Error applying configuration.'));
+});
+</script>
+{% endblock %}

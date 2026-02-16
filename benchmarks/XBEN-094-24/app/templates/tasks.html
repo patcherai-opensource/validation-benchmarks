@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+{% block title %}Tasks{% endblock %}
+{% block content %}
+<h3 class="mb-4">Recent Tasks</h3>
+<div class="card">
+    <div class="card-body p-0">
+        <table class="table table-hover mb-0">
+            <thead class="table-light">
+                <tr>
+                    <th>#</th>
+                    <th>Type</th>
+                    <th>Data</th>
+                    <th>Created</th>
+                </tr>
+            </thead>
+            <tbody>
+            {% for t in tasks %}
+                <tr>
+                    <td>{{ t.id }}</td>
+                    <td>{% if t.task_type == 1 %}Config Apply{% elif t.task_type == 2 %}DNS Rebuild{% else %}Other{% endif %}</td>
+                    <td><code style="font-size:.85em">{{ t.data[:200] }}</code></td>
+                    <td>{{ t.created_at }}</td>
+                </tr>
+            {% else %}
+                <tr><td colspan="4" class="text-muted text-center py-3">No recent tasks.</td></tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

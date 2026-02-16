@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+{% block title %}Import / Export Settings{% endblock %}
+{% block content %}
+<h3 class="mb-4">Import / Export Configuration</h3>
+<div class="row">
+    <div class="col-md-6">
+        <div class="card mb-3">
+            <div class="card-header"><i class="fas fa-file-export"></i> Export Settings</div>
+            <div class="card-body">
+                <p class="text-muted">Download current server configuration as a JSON file.</p>
+                <form method="POST" action="/admin/configuration/dataio">
+                    <input type="hidden" name="action" value="export">
+                    <button type="submit" class="btn btn-outline-primary">
+                        <i class="fas fa-download"></i> Export
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="card mb-3">
+            <div class="card-header"><i class="fas fa-file-import"></i> Import Settings</div>
+            <div class="card-body">
+                <p class="text-muted">Upload a previously exported configuration file to restore settings.</p>
+                <form method="POST" action="/admin/configuration/dataio" enctype="multipart/form-data">
+                    <input type="hidden" name="action" value="import">
+                    <div class="mb-3">
+                        <input type="file" class="form-control" name="config_file" accept=".json" required>
+                    </div>
+                    <button type="submit" class="btn btn-outline-success">
+                        <i class="fas fa-upload"></i> Import
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
