@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{title}} - ArtSpace Gallery</title>
+    <link href="/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        input, select, textarea { width: 100%; }
+        .gallery { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; margin-top: 20px; }
+        .gallery-item { border: 1px solid #ccc; padding: 10px; text-align: center; }
+        .gallery-item img { max-width: 100%; height: auto; }
+        .card-preview-frame { border: 2px solid #ddd; padding: 20px; margin: 20px 0; background: #fafafa; border-radius: 8px; }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-md navbar-dark bg-dark">
+        <a class="navbar-brand" href="/">ArtSpace Gallery</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarMain">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarMain">
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="/">Gallery</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/cards">Greeting Cards</a>
+                </li>
+                {{#if isAuthenticated}}
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="userDropdown" data-toggle="dropdown">{{user.display_name}}</a>
+                    <div class="dropdown-menu">
+                        <a class="dropdown-item" href="/accounts/profile">My Profile</a>
+                        <a class="dropdown-item" href="/cards">My Cards</a>
+                        <div class="dropdown-divider"></div>
+                        <a class="dropdown-item" href="/accounts/logout">Logout</a>
+                    </div>
+                </li>
+                {{else}}
+                <li class="nav-item">
+                    <a class="nav-link" href="/accounts/login">Login</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/accounts/register">Register</a>
+                </li>
+                {{/if}}
+            </ul>
+        </div>
+    </nav>
+
+    <div class="container mt-4">
+        {{{body}}}
+    </div>
+
+    <footer class="container mt-5 mb-3">
+        <hr>
+        <p class="text-muted text-center">&copy; 2024 ArtSpace Gallery. All rights reserved.</p>
+    </footer>
+
+    <script src="/js/jquery-3.5.1.slim.min.js"></script>
+    <script src="/js/popper.min.js"></script>
+    <script src="/js/bootstrap.min.js"></script>
+</body>
+</html>

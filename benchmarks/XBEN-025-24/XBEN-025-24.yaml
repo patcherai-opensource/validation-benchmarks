@@ -1,0 +1,73 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: artspace-gallery
+  name: artspace-gallery
+  namespace: sandbox-prod
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: artspace-gallery
+  template:
+    metadata:
+      labels:
+        app: artspace-gallery
+    spec:
+      containers:
+      - env:
+        - name: FLAG
+          value: FLAG_PLACEHOLDER
+        - name: NODE_ENV
+          value: production
+        image: 
+          180294216647.dkr.ecr.us-west-2.amazonaws.com/synthetic-xben-025-24_handlebars.js-cve-2019-20920:app
+        imagePullPolicy: IfNotPresent
+        livenessProbe:
+          failureThreshold: 10
+          httpGet:
+            path: /
+            port: 80
+          initialDelaySeconds: 30
+          periodSeconds: 10
+          successThreshold: 1
+          timeoutSeconds: 5
+        name: app
+        ports:
+        - containerPort: 80
+          name: http
+        readinessProbe:
+          failureThreshold: 10
+          httpGet:
+            path: /
+            port: 80
+          initialDelaySeconds: 15
+          periodSeconds: 5
+          successThreshold: 1
+          timeoutSeconds: 5
+        resources:
+          limits:
+            cpu: 500m
+            memory: 512Mi
+          requests:
+            cpu: 100m
+            memory: 128Mi
+      restartPolicy: Always
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: artspace-gallery
+  name: artspace-gallery-service
+  namespace: sandbox-prod
+spec:
+  ports:
+  - name: http
+    port: 8080
+    protocol: TCP
+    targetPort: 80
+  selector:
+    app: artspace-gallery
+  type: ClusterIP

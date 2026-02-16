@@ -1,41 +1,33 @@
-FROM debian:bullseye-slim
+FROM node:18-slim
 
-RUN apt-get update && apt-get install -y python3 \
-    python3-pip \
+RUN apt-get update && apt-get install -y \
     curl \
-    netcat \
-    python3-dev \
-    default-libmysqlclient-dev \
-    pkg-config \
+    python3 \
+    make \
+    g++ \
     && apt-get clean \
-    && apt-get autoremove \
     && rm -rf /var/lib/apt/lists/*
 
-RUN mkdir -p /app/templates
-COPY ./ssti_debug_art_gallery /app
-COPY ./templates /app/templates
-COPY ./wait-for-it.sh /app
-RUN chmod +x /app/wait-for-it.sh
-RUN pip install -r /app/requirements.txt
+WORKDIR /app
 
-WORKDIR /app/
+COPY src/package*.json ./
 
-# Create a script to write flag and start the application
-COPY <<EOF /app/start.sh
+RUN npm install --production 2>&1
+
+COPY src/ .
+
+ARG FLAG
+RUN echo -n "${FLAG:-FLAG{placeholder}}" > /flag && chmod 600 /flag
+
+COPY <<'STARTSCRIPT' /app/start.sh
 #!/bin/bash
 set -e
-echo -n "\${FLAG:-flag{placeholder}}" > /flag
-echo "Waiting for database connection..."
-while ! nc -z localhost 3306; do
-  echo "Waiting for MySQL..."
-  sleep 2
-done
-echo "Database is ready!"
-python3 manage.py makemigrations
-python3 manage.py migrate
-python3 manage.py runserver 0.0.0.0:80
-EOF
-
+if [ -n "$FLAG" ]; then
+  echo -n "$FLAG" > /flag
+  chmod 600 /flag
+fi
+exec node /app/server.js
+STARTSCRIPT
 RUN chmod +x /app/start.sh
 
 EXPOSE 80

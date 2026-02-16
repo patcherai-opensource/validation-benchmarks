@@ -1,0 +1,33 @@
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <h2>Create Greeting Card</h2>
+        <p>Design your personalized greeting card using our template engine. Available variables:</p>
+        <ul>
+            <li><code>&#123;&#123;recipientName&#125;&#125;</code> - The recipient's name</li>
+            <li><code>&#123;&#123;senderName&#125;&#125;</code> - Your name</li>
+            <li><code>&#123;&#123;galleryName&#125;&#125;</code> - Gallery name</li>
+            <li><code>&#123;&#123;currentYear&#125;&#125;</code> - Current year</li>
+        </ul>
+
+        {{#if errorMessage}}
+        <div class="alert alert-danger">{{errorMessage}}</div>
+        {{/if}}
+
+        <form method="post" action="/cards/preview">
+            <div class="form-group mb-3">
+                <label for="recipientName">Recipient Name</label>
+                <input type="text" class="form-control" id="recipientName" name="recipientName" value="{{recipientName}}" placeholder="Friend">
+            </div>
+            <div class="form-group mb-3">
+                <label for="senderName">Sender Name</label>
+                <input type="text" class="form-control" id="senderName" name="senderName" value="{{senderName}}" placeholder="ArtSpace Gallery">
+            </div>
+            <div class="form-group mb-3">
+                <label for="cardBody">Card Content (HTML + Template Syntax)</label>
+                <textarea class="form-control" id="cardBody" name="cardBody" rows="8" placeholder="<h3>Hello, &#123;&#123;recipientName&#125;&#125;!</h3>&#10;<p>From &#123;&#123;senderName&#125;&#125;</p>">{{cardBody}}</textarea>
+            </div>
+            <button type="submit" class="btn btn-primary">Preview Card</button>
+            <a href="/cards" class="btn btn-secondary">Cancel</a>
+        </form>
+    </div>
+</div>

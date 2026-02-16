@@ -1,0 +1,18 @@
+{{#if isAuthenticated}}
+<h3 class="my-4 text-center">Welcome, {{user.display_name}}!</h3>
+{{/if}}
+<h4 class="my-4 text-center">Art Collection</h4>
+<div class="gallery">
+    {{#each artworks}}
+    <div class="gallery-item">
+        <a href="/artwork/{{this.id}}">
+            <img src="/img/{{this.image_file}}" alt="{{this.title}}">
+        </a>
+        <h5>{{this.title}}</h5>
+        <p>{{this.description}}<br>
+            <small class="text-muted">by {{this.artist_name}}</small><br>
+            Price: <b>${{this.price}}</b>
+        </p>
+    </div>
+    {{/each}}
+</div>

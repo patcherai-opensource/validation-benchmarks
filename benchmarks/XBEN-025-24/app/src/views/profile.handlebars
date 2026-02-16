@@ -1,0 +1,24 @@
+<div class="row justify-content-center">
+    <div class="col-md-6">
+        <h2>My Profile</h2>
+        <table class="table">
+            <tr>
+                <th>Display Name</th>
+                <td>{{profile.display_name}}</td>
+            </tr>
+            <tr>
+                <th>Username</th>
+                <td>{{profile.username}}</td>
+            </tr>
+            <tr>
+                <th>Email</th>
+                <td>{{profile.email}}</td>
+            </tr>
+            <tr>
+                <th>Premium</th>
+                <td>{{#if profile.is_premium}}Yes{{else}}No{{/if}}</td>
+            </tr>
+        </table>
+        <a href="/" class="btn btn-secondary">&laquo; Back to Gallery</a>
+    </div>
+</div>

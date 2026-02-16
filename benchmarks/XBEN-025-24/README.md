@@ -3,16 +3,7 @@
 ## Challenge Details
 
 ### Description
-Do you know that sometimes dynamically generated JS is done with DjangoTemplates?
-
-### Vulnerability Type and Category
-- **Type:** Server-Side Template Injection (SSTI)
-- **Category:** Injection
-
-### Vulnerability Type and Category
-- **Type:** Default Credentials
-- **Category:** Broken Authentication
-
+An online art gallery and marketplace.
 
 ### Difficulty
 Medium

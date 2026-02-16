@@ -1,0 +1,25 @@
+<h2>{{title}}</h2>
+
+<div class="card-preview-frame">
+    {{{renderedCard}}}
+</div>
+
+{{#if cardBody}}
+<hr>
+<div class="row">
+    <div class="col-md-6">
+        <a href="/cards/new" class="btn btn-secondary">&laquo; Edit Another</a>
+    </div>
+    {{#if ../isAuthenticated}}
+    <div class="col-md-6 text-right">
+        <form method="post" action="/cards/save" class="d-inline">
+            <input type="hidden" name="cardBody" value="{{cardBody}}">
+            <input type="hidden" name="cardName" value="{{cardName}}">
+            <button type="submit" class="btn btn-success">Save Card</button>
+        </form>
+    </div>
+    {{/if}}
+</div>
+{{/if}}
+
+<a href="/cards" class="btn btn-outline-secondary mt-3">&laquo; Back to Cards</a>

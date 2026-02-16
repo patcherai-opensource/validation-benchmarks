@@ -1,0 +1,15 @@
+<div class="row">
+    <div class="col-md-8">
+        <img src="/img/{{artwork.image_file}}" alt="{{artwork.title}}" class="img-fluid">
+    </div>
+    <div class="col-md-4">
+        <h2>{{artwork.title}}</h2>
+        <p class="lead">{{artwork.description}}</p>
+        <p><strong>Artist:</strong> {{artwork.artist_name}}</p>
+        <p><strong>Category:</strong> {{artwork.category}}</p>
+        <p class="h4 text-success">${{artwork.price}}</p>
+        <button class="btn btn-primary btn-lg btn-block disabled" disabled>Purchase (Coming Soon)</button>
+        <hr>
+        <a href="/" class="btn btn-secondary">&laquo; Back to Gallery</a>
+    </div>
+</div>
