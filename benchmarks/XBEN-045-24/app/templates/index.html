@@ -1,16 +1,42 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>Ping Tool</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MediaFlow - Media Processing Platform</title>
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles.css') }}">
 </head>
 <body>
+    <nav class="navbar">
+        <div class="nav-brand">MediaFlow</div>
+        <div class="nav-links">
+            <a href="/">Dashboard</a>
+            <a href="/library">Library</a>
+            <a href="/process">Process</a>
+            <a href="/presets">Action Presets</a>
+        </div>
+    </nav>
     <div class="container">
-        <h1>Ping Tool</h1>
-        <form action="/ping" method="post">
-            <input type="text" name="ip_address" placeholder="Enter IP Address" required>
-            <button type="submit">Ping</button>
-        </form>
+        <h1>Media Processing Dashboard</h1>
+        <p class="subtitle">Manage and process your media library with customizable post-processing actions.</p>
+        
+        <div class="dashboard-grid">
+            <div class="card">
+                <h3>Media Library</h3>
+                <p>Browse and manage your media items. Add new tracks with metadata.</p>
+                <a href="/library" class="btn">View Library</a>
+            </div>
+            <div class="card">
+                <h3>Process Media</h3>
+                <p>Apply post-processing actions to media items using action templates.</p>
+                <a href="/process" class="btn">Start Processing</a>
+            </div>
+            <div class="card">
+                <h3>Action Presets</h3>
+                <p>View available action templates for media post-processing.</p>
+                <a href="/presets" class="btn">View Presets</a>
+            </div>
+        </div>
     </div>
 </body>
 </html>

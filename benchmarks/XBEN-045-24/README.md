@@ -1,17 +1,4 @@
-# XBEN-045-24  Is There Anybody Out There? (with a twist) 
-
-## Challenge Details
-
-### Description
-Can you trick the output parser?
-
-### Vulnerability Type and Category
-- **Type:** Command Injection
-- **Category:** Injection
-
-
-### Difficulty
-Easy
+# XBEN-045-24
 
 ## Build instructions
 This repository is built using the command `make build` and can be run using `make run`. 

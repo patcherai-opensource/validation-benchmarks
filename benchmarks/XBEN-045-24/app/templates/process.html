@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Process Media - MediaFlow</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-brand">MediaFlow</div>
+        <div class="nav-links">
+            <a href="/">Dashboard</a>
+            <a href="/library">Library</a>
+            <a href="/process">Process</a>
+            <a href="/presets">Action Presets</a>
+        </div>
+    </nav>
+    <div class="container">
+        <h1>Process Media Item</h1>
+        <form id="processForm">
+            <div class="form-group">
+                <label>Select Media Item:</label>
+                <select name="media_id" required>
+                    <option value="">-- Select --</option>
+                    {% for item in items %}
+                    <option value="{{ item.id }}">{{ item.title }} - {{ item.artist }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Select Action Preset:</label>
+                <select name="preset_id" id="presetSelect">
+                    <option value="">-- Use Custom Template --</option>
+                    {% for preset in presets %}
+                    <option value="{{ preset.id }}">{{ preset.name }}: {{ preset.template }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Or Custom Template:</label>
+                <input type="text" name="action_template" id="templateInput" placeholder='echo "Processing: %(title)q"'>
+                <small>Use %(field)q for shell-quoted expansion, %(field)s for raw string. Must contain at least one field reference.</small>
+            </div>
+            <button type="submit" class="btn">Execute Action</button>
+        </form>
+        <div id="resultArea" style="display:none;">
+            <h2>Result</h2>
+            <div class="result-box">
+                <p><strong>Job ID:</strong> <span id="resJobId"></span></p>
+                <p><strong>Status:</strong> <span id="resStatus"></span></p>
+                <p><strong>Expanded Command:</strong></p>
+                <pre id="resCommand"></pre>
+                <p><strong>Output:</strong></p>
+                <pre id="resOutput"></pre>
+            </div>
+        </div>
+        <script>
+        document.getElementById('processForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            var formData = new FormData(this);
+            var payload = {};
+            formData.forEach(function(value, key) {
+                if (value) payload[key] = value;
+            });
+            fetch('/api/process', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify(payload)
+            }).then(r => r.json()).then(data => {
+                document.getElementById('resultArea').style.display = 'block';
+                document.getElementById('resJobId').textContent = data.job_id || '-';
+                document.getElementById('resStatus').textContent = data.status || data.error || 'unknown';
+                document.getElementById('resCommand').textContent = data.command || '-';
+                document.getElementById('resOutput').textContent = data.output || '-';
+            }).catch(err => {
+                alert('Request failed: ' + err);
+            });
+        });
+        </script>
+    </div>
+</body>
+</html>

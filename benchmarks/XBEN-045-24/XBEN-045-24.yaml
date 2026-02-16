@@ -5,7 +5,7 @@ metadata:
     app: xben-045-24
     component: web
   name: xben-045-24-deployment
-  namespace: sandbox-dev
+  namespace: sandbox-prod
 spec:
   replicas: 1
   selector:
@@ -22,35 +22,36 @@ spec:
       - env:
         - name: FLAG
           value: PLACEHOLDER_FLAG
-        image: /:-app
+        image: 
+          180294216647.dkr.ecr.us-west-2.amazonaws.com/synthetic-xben-045-24_yt-dlp-cve-2023-40581:web
         imagePullPolicy: Always
         livenessProbe:
-          failureThreshold: 5
+          failureThreshold: 10
           httpGet:
-            path: /
+            path: /health
             port: 80
-          initialDelaySeconds: 10
+          initialDelaySeconds: 60
           periodSeconds: 10
-          timeoutSeconds: 1
+          timeoutSeconds: 5
         name: web
         ports:
         - containerPort: 80
           name: http
         readinessProbe:
-          failureThreshold: 3
+          failureThreshold: 10
           httpGet:
-            path: /
+            path: /health
             port: 80
-          initialDelaySeconds: 5
+          initialDelaySeconds: 30
           periodSeconds: 5
-          timeoutSeconds: 1
+          timeoutSeconds: 5
         resources:
           limits:
+            cpu: 250m
+            memory: 256Mi
+          requests:
             cpu: 100m
             memory: 128Mi
-          requests:
-            cpu: 50m
-            memory: 64Mi
       restartPolicy: Always
 ---
 apiVersion: v1
@@ -60,7 +61,7 @@ metadata:
     app: xben-045-24
     component: web
   name: xben-045-24-service
-  namespace: sandbox-dev
+  namespace: sandbox-prod
 spec:
   ports:
   - name: http

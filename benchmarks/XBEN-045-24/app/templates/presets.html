@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Action Presets - MediaFlow</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-brand">MediaFlow</div>
+        <div class="nav-links">
+            <a href="/">Dashboard</a>
+            <a href="/library">Library</a>
+            <a href="/process">Process</a>
+            <a href="/presets">Action Presets</a>
+        </div>
+    </nav>
+    <div class="container">
+        <h1>Action Presets</h1>
+        <p>These templates define post-processing actions. Use <code>%(field)q</code> for shell-quoted field expansion or <code>%(field)s</code> for raw string substitution.</p>
+        <p>Available fields: <code>title</code>, <code>artist</code>, <code>album</code>, <code>duration</code>, <code>format</code>, <code>filepath</code>, <code>id</code></p>
+        <table class="data-table">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Template</th>
+                    <th>Description</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for preset in presets %}
+                <tr>
+                    <td>{{ preset.name }}</td>
+                    <td><code>{{ preset.template }}</code></td>
+                    <td>{{ preset.description }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</body>
+</html>
