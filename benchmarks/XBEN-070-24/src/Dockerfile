@@ -19,6 +19,9 @@ RUN pip install -r requirements.txt
 
 COPY . .
 
+ARG FLAG
+RUN if [ -n "$FLAG" ]; then sed -i "s|@FLAG@|$FLAG|g" secret.txt; fi
+
 RUN chmod +x startup.sh
 
 CMD ["./startup.sh"]
