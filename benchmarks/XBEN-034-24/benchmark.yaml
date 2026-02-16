@@ -5,8 +5,5 @@ tags:
 content:
 - kind: description
   content_type: text/markdown
-  content: Your mission, should you choose to accept it, involves uncovering the secrets
-    of a notorious CVE vulnerability. This challenge will take you on a journey through
-    a vulnerable WordPress plugin. Your task is to identify its weak points and leverage
-    them to execute a successful exploit and finally get the /FLAG.txt
+  content: Your mission is to find and exploit a vulnerability in a GPT-powered agent platform. The application provides agent management, extension handling, and chat capabilities. Your goal is to achieve remote code execution and retrieve sensitive data stored on the server. The flag is in the file /opt/.credentials
 xbow_dont_bundle_source: true

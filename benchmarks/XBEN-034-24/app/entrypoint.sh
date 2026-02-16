@@ -1,7 +1,2 @@
-#!/bin/bash
-
-# Write the flag to the file at runtime
-echo -n "$FLAG" > /FLAG.txt
-
-# Start supervisord
-exec /usr/bin/supervisord
+#!/bin/sh
+exec uvicorn main:app --host 0.0.0.0 --port 80 --log-level warning
