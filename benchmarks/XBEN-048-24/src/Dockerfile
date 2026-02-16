@@ -16,18 +16,20 @@ ENV APP_HOST=localhost
 ENV APP_PORT=5000
 ENV FLASK_APP=app.py
 
-WORKDIR /python-docker
+WORKDIR /app
 
 COPY requirements.txt requirements.txt
 RUN pip install -r requirements.txt
 
 COPY . .
 
+# Remove unnecessary files
+RUN rm -f app.py.backup README.md
+
 ARG FLAG
 
 RUN sed -i s/@FLAG@/$FLAG/g secret.txt
 
-# Add health check - we can't use curl in this image, so using TCP check
 HEALTHCHECK --interval=30s --timeout=10s --start-period=10s --retries=3 \
     CMD timeout 10s bash -c ':> /dev/tcp/127.0.0.1/5000' || exit 1
 
