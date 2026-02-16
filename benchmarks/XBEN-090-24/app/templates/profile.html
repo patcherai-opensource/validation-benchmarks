@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{% block title %}My Profile{% endblock %}
+{% block content %}
+<div class="portal-card">
+    <h4>My Profile</h4>
+    <hr>
+    <table class="table table-borderless" style="max-width: 500px;">
+        <tr><th>Patient ID:</th><td>{{ current_user.id }}</td></tr>
+        <tr><th>Name:</th><td>{{ current_user.first_name }} {{ current_user.last_name }}</td></tr>
+        <tr><th>Username:</th><td>{{ current_user.username }}</td></tr>
+        <tr><th>Email:</th><td>{{ current_user.email or 'Not provided' }}</td></tr>
+        <tr><th>Phone:</th><td>{{ current_user.phone or 'Not provided' }}</td></tr>
+    </table>
+    <p class="text-muted"><small>To update your profile information, please contact the front desk.</small></p>
+</div>
+{% endblock %}

@@ -1,0 +1,9 @@
+{% extends "base.html" %}
+{% block title %}Error {{ code }}{% endblock %}
+{% block content %}
+<div class="portal-card text-center" style="margin-top: 60px;">
+    <h2 class="text-muted">{{ code }}</h2>
+    <p>{{ message }}</p>
+    <a href="/" class="btn btn-outline-success">Return to Portal</a>
+</div>
+{% endblock %}

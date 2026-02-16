@@ -1,19 +1,23 @@
 {% extends "base.html" %}
-{% block title %}Login{% endblock %}
+{% block title %}Sign In{% endblock %}
 {% block content %}
-    <h2>Login</h2>
-    <form method="POST" action="/login">
+<div class="portal-card" style="max-width: 450px; margin: 40px auto;">
+    <h3 class="text-center mb-4">Patient Portal Sign In</h3>
+    <p class="text-muted text-center">Access your medical records, appointments, and more.</p>
+    <form method="POST" action="{{ url_for('portal_login') }}">
         {{ form.hidden_tag() }}
         <div class="form-group">
             {{ form.username.label(class="form-control-label") }}
-            {{ form.username(class="form-control form-control-lg") }}
+            {{ form.username(class="form-control", placeholder="Enter your username") }}
         </div>
         <div class="form-group">
             {{ form.password.label(class="form-control-label") }}
-            {{ form.password(class="form-control form-control-lg") }}
+            {{ form.password(class="form-control", placeholder="Enter your password") }}
         </div>
         <div class="form-group">
-            {{ form.submit(class="btn btn-primary btn-lg btn-block") }}
+            {{ form.submit(class="btn btn-success btn-block") }}
         </div>
     </form>
+    <p class="text-center mt-3"><small>New patient? <a href="{{ url_for('portal_register') }}">Register here</a></small></p>
+</div>
 {% endblock %}

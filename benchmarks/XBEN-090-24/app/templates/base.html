@@ -3,44 +3,79 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{% block title %}{% endblock %}</title>
+    <title>{% block title %}Patient Portal{% endblock %} - MedConnect Health</title>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+    <style>
+        body { background-color: #f4f6f9; }
+        .navbar { border-bottom: 3px solid #28a745; }
+        .navbar-brand { font-weight: 600; color: #28a745 !important; }
+        .portal-card { background: #fff; border-radius: 8px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); padding: 24px; margin-bottom: 20px; }
+        .sidebar-nav .nav-link { color: #495057; padding: 10px 15px; border-radius: 4px; margin-bottom: 2px; }
+        .sidebar-nav .nav-link:hover { background-color: #e9ecef; }
+        .sidebar-nav .nav-link.active { background-color: #28a745; color: #fff; }
+        .badge-status-confirmed { background-color: #28a745; }
+        .badge-status-pending { background-color: #ffc107; color: #212529; }
+        .badge-status-cancelled { background-color: #dc3545; }
+        .footer { margin-top: 40px; padding: 20px 0; border-top: 1px solid #dee2e6; color: #6c757d; font-size: 0.85rem; }
+    </style>
 </head>
 <body>
-    <nav class="navbar navbar-expand-lg navbar-light bg-light">
-        <a class="navbar-brand"  >Blog Raider</a>
+    <nav class="navbar navbar-expand-lg navbar-light bg-white">
+        <a class="navbar-brand" href="/">&#9764; MedConnect Patient Portal</a>
         <div class="collapse navbar-collapse">
             <ul class="navbar-nav ml-auto">
                 {% if current_user.is_authenticated %}
                     <li class="nav-item">
-                        <a class="nav-link" href="/create_draft">Create Draft</a>
+                        <span class="nav-link text-muted">Welcome, {{ current_user.first_name }} {{ current_user.last_name }}</span>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="/dashboard">My Drafts</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="/logout">Logout</a>
+                        <a class="nav-link" href="{{ url_for('portal_logout') }}">Sign Out</a>
                     </li>
                 {% else %}
                     <li class="nav-item">
-                        <a class="nav-link" href="/register">Register</a>
+                        <a class="nav-link" href="{{ url_for('portal_login') }}">Sign In</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="/login">Login</a>
+                        <a class="nav-link" href="{{ url_for('portal_register') }}">Register</a>
                     </li>
                 {% endif %}
             </ul>
         </div>
     </nav>
-    <div class="container">
-        {% with messages = get_flashed_messages(with_categories=true) %}
-            {% if messages %}
-                {% for category, message in messages %}
-                    <div class="alert alert-{{ category }}">{{ message }}</div>
-                {% endfor %}
+    <div class="container-fluid mt-3">
+        <div class="row">
+            {% if current_user.is_authenticated %}
+            <div class="col-md-2">
+                <nav class="sidebar-nav">
+                    <ul class="nav flex-column">
+                        <li class="nav-item"><a class="nav-link" href="{{ url_for('portal_home') }}">Dashboard</a></li>
+                        <li class="nav-item"><a class="nav-link" href="{{ url_for('list_appointments') }}">My Appointments</a></li>
+                        <li class="nav-item"><a class="nav-link" href="{{ url_for('schedule_appointment') }}">Schedule Visit</a></li>
+                        <li class="nav-item"><a class="nav-link" href="{{ url_for('view_medications') }}">Medications</a></li>
+                        <li class="nav-item"><a class="nav-link" href="{{ url_for('view_lab_results') }}">Lab Results</a></li>
+                        <li class="nav-item"><a class="nav-link" href="{{ url_for('view_profile') }}">My Profile</a></li>
+                    </ul>
+                </nav>
+            </div>
+            <div class="col-md-10">
+            {% else %}
+            <div class="col-md-8 offset-md-2">
             {% endif %}
-        {% endwith %}
-        {% block content %}{% endblock %}
+                {% with messages = get_flashed_messages(with_categories=true) %}
+                    {% if messages %}
+                        {% for category, message in messages %}
+                            <div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
+                                {{ message }}
+                            </div>
+                        {% endfor %}
+                    {% endif %}
+                {% endwith %}
+                {% block content %}{% endblock %}
+            </div>
+        </div>
+    </div>
+    <div class="footer text-center">
+        <small>&copy; 2024 MedConnect Health Systems. All rights reserved. | <a href="#">Privacy Policy</a> | <a href="#">Terms of Use</a></small>
     </div>
 </body>
 </html>

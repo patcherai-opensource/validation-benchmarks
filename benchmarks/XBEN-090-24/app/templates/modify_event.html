@@ -1,0 +1,54 @@
+{% extends "base.html" %}
+{% block title %}Modify Appointment{% endblock %}
+{% block content %}
+<div class="portal-card">
+    <h4>Modify Appointment #{{ event.id }}</h4>
+    <hr>
+
+    <div class="mb-4">
+        <p><strong>Visit Type:</strong> {{ event.category }}</p>
+        {% if provider %}<p><strong>Provider:</strong> {{ provider.name }}</p>{% endif %}
+        {% if facility %}<p><strong>Location:</strong> {{ facility.name }}</p>{% endif %}
+        <p><strong>Status:</strong> <span class="badge badge-status-{{ event.status }}">{{ event.status|capitalize }}</span></p>
+    </div>
+
+    {% if event.status != 'cancelled' %}
+    <h5>Update Details</h5>
+    <form method="POST" action="{{ url_for('modify_appointment', eid=event.id) }}">
+        <input type="hidden" name="form_action" value="save">
+        <div class="form-row">
+            <div class="form-group col-md-4">
+                <label for="event_date">Appointment Date</label>
+                <input type="date" class="form-control" name="event_date" value="{{ event.event_date.strftime('%Y-%m-%d') }}">
+            </div>
+            <div class="form-group col-md-4">
+                <label for="start_time">Start Time</label>
+                <input type="time" class="form-control" name="start_time" value="{{ event.start_time }}">
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="comments">Comments</label>
+            <textarea class="form-control" name="comments" rows="3">{{ event.comments or '' }}</textarea>
+        </div>
+        <button type="submit" class="btn btn-success">Save Changes</button>
+    </form>
+
+    <hr>
+
+    <h5 class="text-danger">Cancel Appointment</h5>
+    <form method="POST" action="{{ url_for('modify_appointment', eid=event.id) }}">
+        <input type="hidden" name="form_action" value="cancel">
+        <div class="form-group">
+            <label for="cancel_reason">Reason for Cancellation</label>
+            <textarea class="form-control" name="cancel_reason" rows="2" placeholder="Please provide a reason (min 10 characters)"></textarea>
+        </div>
+        <button type="submit" class="btn btn-danger">Cancel This Appointment</button>
+    </form>
+    {% else %}
+    <div class="alert alert-warning">This appointment has been cancelled and cannot be modified.</div>
+    {% endif %}
+
+    <hr>
+    <a href="{{ url_for('list_appointments') }}" class="btn btn-outline-secondary">Back to Appointments</a>
+</div>
+{% endblock %}

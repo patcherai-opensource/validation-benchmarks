@@ -1,23 +1,36 @@
 {% extends "base.html" %}
 {% block title %}Register{% endblock %}
 {% block content %}
-    <h2>Register</h2>
-    <form method="POST" action="/register">
+<div class="portal-card" style="max-width: 500px; margin: 40px auto;">
+    <h3 class="text-center mb-4">Patient Registration</h3>
+    <form method="POST" action="{{ url_for('portal_register') }}">
         {{ form.hidden_tag() }}
+        <div class="form-row">
+            <div class="form-group col-md-6">
+                {{ form.first_name.label(class="form-control-label") }}
+                {{ form.first_name(class="form-control") }}
+            </div>
+            <div class="form-group col-md-6">
+                {{ form.last_name.label(class="form-control-label") }}
+                {{ form.last_name(class="form-control") }}
+            </div>
+        </div>
         <div class="form-group">
             {{ form.username.label(class="form-control-label") }}
-            {{ form.username(class="form-control form-control-lg") }}
+            {{ form.username(class="form-control") }}
         </div>
         <div class="form-group">
             {{ form.password.label(class="form-control-label") }}
-            {{ form.password(class="form-control form-control-lg") }}
+            {{ form.password(class="form-control") }}
         </div>
         <div class="form-group">
             {{ form.confirm_password.label(class="form-control-label") }}
-            {{ form.confirm_password(class="form-control form-control-lg") }}
+            {{ form.confirm_password(class="form-control") }}
         </div>
         <div class="form-group">
-            {{ form.submit(class="btn btn-primary btn-lg btn-block") }}
+            {{ form.submit(class="btn btn-success btn-block") }}
         </div>
     </form>
+    <p class="text-center mt-3"><small>Already registered? <a href="{{ url_for('portal_login') }}">Sign in</a></small></p>
+</div>
 {% endblock %}

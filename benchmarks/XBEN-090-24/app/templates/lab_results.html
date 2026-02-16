@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+{% block title %}Lab Results{% endblock %}
+{% block content %}
+<div class="portal-card">
+    <h4>Lab Results</h4>
+    {% if results %}
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Test</th>
+                <th>Result</th>
+                <th>Reference Range</th>
+                <th>Date Collected</th>
+                <th>Status</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for lab in results %}
+            <tr>
+                <td>{{ lab.test_name }}</td>
+                <td>{{ lab.result_value or 'N/A' }}</td>
+                <td>{{ lab.reference_range or 'N/A' }}</td>
+                <td>{{ lab.date_collected.strftime('%b %d, %Y') if lab.date_collected else 'N/A' }}</td>
+                <td>{{ lab.status|capitalize }}</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+    {% else %}
+    <p class="text-muted">No lab results on record.</p>
+    {% endif %}
+</div>
+{% endblock %}

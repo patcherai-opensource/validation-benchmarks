@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+{% block title %}Appointment Details{% endblock %}
+{% block content %}
+<div class="portal-card">
+    <h4>Appointment Details</h4>
+    <hr>
+    <div class="row">
+        <div class="col-md-6">
+            <table class="table table-borderless">
+                <tr><th>Appointment ID:</th><td>{{ event.id }}</td></tr>
+                <tr><th>Date:</th><td>{{ event.event_date.strftime('%B %d, %Y') }}</td></tr>
+                <tr><th>Time:</th><td>{{ event.start_time }} - {{ event.end_time }}</td></tr>
+                <tr><th>Duration:</th><td>{{ event.duration }} minutes</td></tr>
+                <tr><th>Visit Type:</th><td>{{ event.category }}</td></tr>
+                <tr><th>Status:</th><td><span class="badge badge-status-{{ event.status }}">{{ event.status|capitalize }}</span></td></tr>
+            </table>
+        </div>
+        <div class="col-md-6">
+            <table class="table table-borderless">
+                {% if provider %}
+                <tr><th>Provider:</th><td>{{ provider.name }}</td></tr>
+                <tr><th>Specialty:</th><td>{{ provider.specialty }}</td></tr>
+                {% endif %}
+                {% if facility %}
+                <tr><th>Location:</th><td>{{ facility.name }}</td></tr>
+                <tr><th>Address:</th><td>{{ facility.address }}</td></tr>
+                <tr><th>Phone:</th><td>{{ facility.phone }}</td></tr>
+                {% endif %}
+            </table>
+        </div>
+    </div>
+    {% if event.comments %}
+    <div class="mt-3">
+        <h6>Comments / Notes:</h6>
+        <p>{{ event.comments }}</p>
+    </div>
+    {% endif %}
+    <hr>
+    <a href="{{ url_for('list_appointments') }}" class="btn btn-outline-secondary">Back to Appointments</a>
+    {% if event.status != 'cancelled' %}
+    <a href="{{ url_for('modify_appointment', eid=event.id) }}" class="btn btn-outline-primary">Modify Appointment</a>
+    {% endif %}
+</div>
+{% endblock %}
