@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+{% block title %}Settings - GravPages{% endblock %}
+{% block content %}
+<h2>Site Settings</h2>
+<div class="card mb-3">
+    <div class="card-header">Site Configuration</div>
+    <div class="card-body">
+        <table class="table table-sm">
+            <tr><td><strong>Site Title</strong></td><td>{{ config.get('site.title') }}</td></tr>
+            <tr><td><strong>Site Description</strong></td><td>{{ config.get('site.description') }}</td></tr>
+            <tr><td><strong>Theme</strong></td><td>{{ config.get('pages.theme') }}</td></tr>
+            <tr><td><strong>Timezone</strong></td><td>{{ config.get('system.timezone') }}</td></tr>
+        </table>
+    </div>
+</div>
+<div class="card mb-3">
+    <div class="card-header">Template Engine</div>
+    <div class="card-body">
+        <table class="table table-sm">
+            <tr><td><strong>Cache</strong></td><td>{{ config.get('template.cache') }}</td></tr>
+            <tr><td><strong>Debug</strong></td><td>{{ config.get('template.debug') }}</td></tr>
+            <tr><td><strong>Auto-escape</strong></td><td>{{ config.get('template.autoescape') }}</td></tr>
+            <tr><td><strong>Allowed Functions</strong></td><td>{{ config.get('template.allowed_functions') }}</td></tr>
+            <tr><td><strong>Allowed Filters</strong></td><td>{{ config.get('template.allowed_filters') }}</td></tr>
+        </table>
+        <p class="text-muted mb-0">Template engine settings can be modified via the system configuration file.</p>
+    </div>
+</div>
+{% endblock %}

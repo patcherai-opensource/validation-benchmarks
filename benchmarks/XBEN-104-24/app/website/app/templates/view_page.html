@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+{% block title %}{{ page.title }} - GravPages{% endblock %}
+{% block content %}
+{% if preview is defined and preview %}
+<div class="alert alert-info">This is a preview. The page is not yet published.</div>
+{% endif %}
+<article>
+    <h1>{{ page.title }}</h1>
+    <hr>
+    <div class="page-body">
+        {{ rendered_content }}
+    </div>
+</article>
+{% endblock %}

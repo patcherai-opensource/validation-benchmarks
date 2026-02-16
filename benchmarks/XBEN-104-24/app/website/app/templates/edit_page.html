@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+{% block title %}{% if page %}Edit Page{% else %}New Page{% endif %} - GravPages{% endblock %}
+{% block content %}
+<h2>{% if page %}Edit Page{% else %}Create New Page{% endif %}</h2>
+{% if error %}
+<div class="alert alert-danger">{{ error }}</div>
+{% endif %}
+<form method="post">
+    <div class="mb-3">
+        <label for="title" class="form-label">Title</label>
+        <input type="text" class="form-control" id="title" name="title" value="{{ title }}" required>
+    </div>
+    <div class="mb-3">
+        <label for="slug" class="form-label">Slug</label>
+        <input type="text" class="form-control" id="slug" name="slug" value="{{ slug }}" {% if page %}readonly{% endif %} required>
+        <div class="form-text">URL-friendly identifier. Once set, this cannot be changed.</div>
+    </div>
+    <div class="mb-3">
+        <label for="body" class="form-label">Content</label>
+        <textarea class="form-control" id="body" name="body" rows="15">{{ body }}</textarea>
+        <div class="form-text">You can use HTML markup in your page content. Enable template processing below to use template variables and expressions.</div>
+    </div>
+    <div class="row mb-3">
+        <div class="col-md-6">
+            <div class="form-check">
+                <input class="form-check-input" type="checkbox" id="process_twig" name="process_twig" value="1" {% if process_twig %}checked{% endif %}>
+                <label class="form-check-label" for="process_twig">Enable template processing</label>
+                <div class="form-text">When enabled, template expressions like <code>{{ "{{ variable }}" }}</code> will be evaluated. Available variables include <code>config</code>, <code>site_name</code>, <code>page</code>, and <code>now</code>.</div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="form-check">
+                <input class="form-check-input" type="checkbox" id="published" name="published" value="1" {% if published %}checked{% endif %}>
+                <label class="form-check-label" for="published">Published</label>
+                <div class="form-text">Published pages are accessible at <code>/p/slug</code>.</div>
+            </div>
+        </div>
+    </div>
+    <div class="d-flex gap-2">
+        <button type="submit" class="btn btn-primary">{% if page %}Save Changes{% else %}Create Page{% endif %}</button>
+        <a href="{{ url_for('list_pages') }}" class="btn btn-secondary">Cancel</a>
+    </div>
+</form>
+{% endblock %}

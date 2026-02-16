@@ -1,0 +1,70 @@
+{% extends "base.html" %}
+{% block title %}Dashboard - GravPages{% endblock %}
+{% block content %}
+<div class="row">
+    <div class="col-md-8">
+        <h2>Dashboard</h2>
+        <p>Welcome back, {{ user.display_name }}.</p>
+
+        <h4 class="mt-4">Your Pages</h4>
+        {% if my_pages %}
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Title</th>
+                    <th>Slug</th>
+                    <th>Template</th>
+                    <th>Status</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for p in my_pages %}
+                <tr>
+                    <td>{{ p.title }}</td>
+                    <td><code>{{ p.slug }}</code></td>
+                    <td>{% if p.process_twig %}<span class="badge bg-info">Enabled</span>{% else %}<span class="badge bg-secondary">Disabled</span>{% endif %}</td>
+                    <td>{% if p.published %}<span class="badge bg-success">Published</span>{% else %}<span class="badge bg-warning">Draft</span>{% endif %}</td>
+                    <td>
+                        <a href="{{ url_for('edit_page', slug=p.slug) }}" class="btn btn-sm btn-outline-primary">Edit</a>
+                        {% if p.published %}
+                        <a href="{{ url_for('view_page', slug=p.slug) }}" class="btn btn-sm btn-outline-success">View</a>
+                        {% else %}
+                        <a href="{{ url_for('preview_page', slug=p.slug) }}" class="btn btn-sm btn-outline-secondary">Preview</a>
+                        {% endif %}
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        {% else %}
+        <p class="text-muted">You haven't created any pages yet. <a href="{{ url_for('create_page') }}">Create one now</a>.</p>
+        {% endif %}
+    </div>
+    <div class="col-md-4">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">Quick Actions</h5>
+                <ul class="list-group list-group-flush">
+                    <li class="list-group-item"><a href="{{ url_for('create_page') }}">Create New Page</a></li>
+                    <li class="list-group-item"><a href="{{ url_for('list_pages') }}">View All Pages</a></li>
+                    <li class="list-group-item"><a href="{{ url_for('settings') }}">Site Settings</a></li>
+                    <li class="list-group-item"><a href="{{ url_for('profile') }}">Edit Profile</a></li>
+                </ul>
+            </div>
+        </div>
+        {% if recent_published %}
+        <div class="card mt-3">
+            <div class="card-body">
+                <h5 class="card-title">Recently Published</h5>
+                <ul class="list-group list-group-flush">
+                    {% for p in recent_published %}
+                    <li class="list-group-item"><a href="{{ url_for('view_page', slug=p.slug) }}">{{ p.title }}</a></li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}
