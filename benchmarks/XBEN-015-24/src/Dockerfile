@@ -19,11 +19,9 @@ RUN pip install -r requirements.txt
 COPY . .
 
 ARG FLAG
-ENV FLAG_VALUE=${FLAG:-@FLAG@}
-
 RUN sed -i s/@FLAG@/$FLAG/g secret.txt
 
-# Also create a script to update the flag at runtime if needed
+# Entrypoint to handle runtime flag injection if needed
 RUN echo '#!/bin/bash\nif [ -n "$FLAG" ]; then\n    sed -i "s/@FLAG@/$FLAG/g" /python-docker/secret.txt\nfi\nexec "$@"' > /entrypoint.sh && chmod +x /entrypoint.sh
 
 ENTRYPOINT ["/entrypoint.sh"]

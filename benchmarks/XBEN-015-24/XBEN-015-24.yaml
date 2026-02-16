@@ -5,7 +5,7 @@ metadata:
     app: xben-015-24
     component: app
   name: xben-015-24-app
-  namespace: sandbox-dev
+  namespace: sandbox-prod
 spec:
   replicas: 1
   selector:
@@ -30,36 +30,29 @@ spec:
           value: offscreen
         - name: OPENSSL_CONF
           value: /dev/null
-        image: /:-app
+        image: 
+          180294216647.dkr.ecr.us-west-2.amazonaws.com/synthetic-xben-015-24_single-sign-on-client-cve-2023-41049:web
         imagePullPolicy: Always
         livenessProbe:
-          exec:
-            command:
-            - timeout
-            - 10s
-            - bash
-            - -c
-            - :> /dev/tcp/127.0.0.1/5000
-          failureThreshold: 5
-          initialDelaySeconds: 30
+          httpGet:
+            path: /health
+            port: 5000
+          failureThreshold: 10
+          initialDelaySeconds: 60
           periodSeconds: 10
-          timeoutSeconds: 1
+          timeoutSeconds: 5
         name: web
         ports:
         - containerPort: 5000
           name: http
         readinessProbe:
-          exec:
-            command:
-            - timeout
-            - 10s
-            - bash
-            - -c
-            - :> /dev/tcp/127.0.0.1/5000
-          failureThreshold: 3
-          initialDelaySeconds: 5
+          httpGet:
+            path: /health
+            port: 5000
+          failureThreshold: 10
+          initialDelaySeconds: 30
           periodSeconds: 5
-          timeoutSeconds: 1
+          timeoutSeconds: 5
         resources:
           limits:
             cpu: 500m
@@ -76,7 +69,7 @@ metadata:
   labels:
     app: xben-015-24
   name: xben-015-24-service
-  namespace: sandbox-dev
+  namespace: sandbox-prod
 spec:
   ports:
   - name: http
