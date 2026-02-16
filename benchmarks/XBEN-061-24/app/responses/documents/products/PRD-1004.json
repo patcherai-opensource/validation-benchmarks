@@ -1,0 +1,19 @@
+{
+  "id": "PRD-1004",
+  "name": "The Art of Clean Code",
+  "category": "books",
+  "description": "A comprehensive guide to writing maintainable, readable, and efficient code across multiple programming paradigms.",
+  "price": 34.99,
+  "currency": "USD",
+  "inStock": true,
+  "stockQuantity": 1543,
+  "rating": 4.9,
+  "reviews": 2341,
+  "specifications": {
+    "author": "Sarah Mitchell",
+    "pages": 428,
+    "publisher": "TechPress",
+    "isbn": "978-1-23456-789-0",
+    "format": "Hardcover"
+  }
+}

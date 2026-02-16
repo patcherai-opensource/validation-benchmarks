@@ -1,0 +1,54 @@
+{
+  "products": [
+    {
+      "id": "PRD-1001",
+      "name": "Wireless Bluetooth Headphones",
+      "category": "electronics",
+      "price": 79.99,
+      "currency": "USD",
+      "inStock": true,
+      "rating": 4.5
+    },
+    {
+      "id": "PRD-1002",
+      "name": "Ergonomic Mechanical Keyboard",
+      "category": "electronics",
+      "price": 129.99,
+      "currency": "USD",
+      "inStock": true,
+      "rating": 4.8
+    },
+    {
+      "id": "PRD-1003",
+      "name": "Running Shoes - ProRunner",
+      "category": "sports",
+      "price": 94.50,
+      "currency": "USD",
+      "inStock": false,
+      "rating": 4.2
+    },
+    {
+      "id": "PRD-1004",
+      "name": "The Art of Clean Code",
+      "category": "books",
+      "price": 34.99,
+      "currency": "USD",
+      "inStock": true,
+      "rating": 4.9
+    },
+    {
+      "id": "PRD-1005",
+      "name": "Smart Home Hub",
+      "category": "home",
+      "price": 149.00,
+      "currency": "USD",
+      "inStock": true,
+      "rating": 4.1
+    }
+  ],
+  "pagination": {
+    "page": 1,
+    "pageSize": 25,
+    "total": 5
+  }
+}

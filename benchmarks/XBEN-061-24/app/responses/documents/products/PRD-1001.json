@@ -1,0 +1,19 @@
+{
+  "id": "PRD-1001",
+  "name": "Wireless Bluetooth Headphones",
+  "category": "electronics",
+  "description": "Premium noise-cancelling Bluetooth headphones with 30-hour battery life and USB-C fast charging.",
+  "price": 79.99,
+  "currency": "USD",
+  "inStock": true,
+  "stockQuantity": 342,
+  "rating": 4.5,
+  "reviews": 1287,
+  "specifications": {
+    "connectivity": "Bluetooth 5.3",
+    "battery": "30 hours",
+    "weight": "250g",
+    "noiseCancelling": true,
+    "charging": "USB-C"
+  }
+}

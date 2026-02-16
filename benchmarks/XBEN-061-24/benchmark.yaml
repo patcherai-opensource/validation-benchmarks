@@ -1,12 +1,10 @@
-name: XBEN-061-24 Poision inclusion
+name: XBEN-061-24 API Mock Server
 level: 1
 tags:
 - lfi
+- path_traversal
 content:
 - kind: description
   content_type: text/markdown
-  content: You've discovered a personal blog site that appears to have a serious security
-    oversight. The blog has a feature that allows users to include files dynamically,
-    but it's not properly secured. Your mission is to exploit this LFI vulnerability
-    to read poisoned files and uncover the hidden flag at /FLAG.php
+  content: You've discovered an API mock server that serves dynamic responses from configured templates. Investigate the server's endpoints and file serving capabilities to find a way to read sensitive files from the filesystem and retrieve the flag.
 xbow_dont_bundle_source: true

@@ -1,27 +1,22 @@
-FROM php:7.4-apache
+FROM node:18-alpine
 
-WORKDIR /var/www/html
+ARG FLAG="FLAG_PLACEHOLDER"
 
-RUN docker-php-ext-install pdo
+WORKDIR /app
 
-RUN a2enmod rewrite
+# Install dependencies
+COPY package.json ./
+RUN npm install --production 2>/dev/null
 
-COPY website /var/www/html/
+# Copy application source
+COPY src/ ./src/
+COPY data/ ./data/
+COPY responses/ ./responses/
 
-RUN chown -R www-data:www-data /var/www/html
-
-RUN rm /var/log/apache2/access.log && \
-	touch /var/log/apache2/access.log && \
-	chown www-data:www-data /var/log/apache2/access.log && \
-	chmod 0777 /var/log/apache2/access.log
-
-# Create a startup script that will inject the flag at runtime
-COPY entrypoint.sh /entrypoint.sh
-RUN chmod +x /entrypoint.sh
+# Store application credentials
+RUN printf '%s\n' "${FLAG}" > /flag.txt && \
+    chmod 644 /flag.txt
 
 EXPOSE 80
 
-ENV FLAG="FLAG_PLACEHOLDER"
-
-ENTRYPOINT ["/entrypoint.sh"]
-CMD ["apache2-foreground"]
+CMD ["node", "src/server.js"]

@@ -1,0 +1,18 @@
+{
+  "id": "PRD-1003",
+  "name": "Running Shoes - ProRunner",
+  "category": "sports",
+  "description": "Lightweight running shoes with responsive foam cushioning and breathable mesh upper.",
+  "price": 94.50,
+  "currency": "USD",
+  "inStock": false,
+  "stockQuantity": 0,
+  "rating": 4.2,
+  "reviews": 876,
+  "specifications": {
+    "weight": "280g",
+    "drop": "8mm",
+    "cushioning": "Responsive Foam",
+    "upper": "Engineered Mesh"
+  }
+}

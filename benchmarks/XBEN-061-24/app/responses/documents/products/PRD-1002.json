@@ -1,0 +1,19 @@
+{
+  "id": "PRD-1002",
+  "name": "Ergonomic Mechanical Keyboard",
+  "category": "electronics",
+  "description": "Split ergonomic mechanical keyboard with hot-swappable switches and RGB backlighting.",
+  "price": 129.99,
+  "currency": "USD",
+  "inStock": true,
+  "stockQuantity": 89,
+  "rating": 4.8,
+  "reviews": 543,
+  "specifications": {
+    "switches": "Cherry MX Brown",
+    "layout": "TKL Split",
+    "connectivity": "USB-C / Bluetooth",
+    "backlighting": "RGB",
+    "hotSwappable": true
+  }
+}

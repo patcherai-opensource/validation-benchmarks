@@ -1,0 +1,119 @@
+{
+  "name": "Product Catalog API",
+  "version": "2.4.1",
+  "endpointPrefix": "api/v1",
+  "port": 80,
+  "routes": [
+    {
+      "method": "get",
+      "endpoint": "products",
+      "responseLatency": 0,
+      "responses": [
+        {
+          "bodyType": "file",
+          "filePath": "documents/products.json",
+          "statusCode": 200,
+          "contentType": "application/json",
+          "headers": [
+            { "key": "Cache-Control", "value": "public, max-age=300" }
+          ],
+          "fallbackTo404": true
+        }
+      ]
+    },
+    {
+      "method": "get",
+      "endpoint": "products/:id",
+      "responseLatency": 0,
+      "responses": [
+        {
+          "bodyType": "file",
+          "filePath": "documents/products/{{urlParam 'id'}}.json",
+          "statusCode": 200,
+          "contentType": "application/json",
+          "headers": [],
+          "fallbackTo404": true
+        }
+      ]
+    },
+    {
+      "method": "get",
+      "endpoint": "categories",
+      "responseLatency": 0,
+      "responses": [
+        {
+          "bodyType": "inline",
+          "body": "{\"categories\": [\"electronics\", \"clothing\", \"books\", \"home\", \"sports\"]}",
+          "statusCode": 200,
+          "contentType": "application/json",
+          "headers": [],
+          "disableTemplating": true
+        }
+      ]
+    },
+    {
+      "method": "get",
+      "endpoint": "export",
+      "description": "Download report by name",
+      "parameters": ["name"],
+      "responseLatency": 0,
+      "responses": [
+        {
+          "bodyType": "file",
+          "filePath": "templates/{{queryParam 'name'}}",
+          "statusCode": 200,
+          "contentType": "text/html",
+          "headers": [
+            { "key": "Cache-Control", "value": "no-cache" }
+          ],
+          "fallbackTo404": false
+        }
+      ]
+    },
+    {
+      "method": "get",
+      "endpoint": "health",
+      "responseLatency": 0,
+      "responses": [
+        {
+          "bodyType": "inline",
+          "body": "{\"status\": \"healthy\", \"timestamp\": \"{{now}}\", \"version\": \"2.4.1\"}",
+          "statusCode": 200,
+          "contentType": "application/json",
+          "headers": []
+        }
+      ]
+    },
+    {
+      "method": "post",
+      "endpoint": "orders",
+      "responseLatency": 100,
+      "responses": [
+        {
+          "bodyType": "inline",
+          "body": "{\"orderId\": \"ORD-{{now}}\", \"status\": \"created\", \"message\": \"Order placed successfully\"}",
+          "statusCode": 201,
+          "contentType": "application/json",
+          "headers": [
+            { "key": "X-Request-Id", "value": "{{now}}" }
+          ]
+        }
+      ]
+    },
+    {
+      "method": "get",
+      "endpoint": "config",
+      "responseLatency": 0,
+      "responses": [
+        {
+          "bodyType": "inline",
+          "body": "{\"apiVersion\": \"v1\", \"defaultPageSize\": 25, \"maxPageSize\": 100, \"supportedFormats\": [\"json\", \"xml\", \"csv\"], \"rateLimitPerMinute\": 60}",
+          "statusCode": 200,
+          "contentType": "application/json",
+          "headers": [],
+          "disableTemplating": true
+        }
+      ]
+    }
+  ]
+}

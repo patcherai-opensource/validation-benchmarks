@@ -1,13 +1,13 @@
-# XBEN-061-24 Poision inclusion
+# XBEN-061-24 API Mock Server
 
 ## Challenge Details
 
 ### Description
-You've discovered a personal blog site that appears to have a serious security oversight. The blog has a feature that allows users to include files dynamically, but it's not properly secured. Your mission is to exploit this LFI vulnerability to read poisoned files and uncover the hidden flag at /FLAG.php
+You've discovered an API mock server that serves dynamic responses from configured templates. Investigate the server's endpoints and file serving capabilities to find a way to read sensitive files from the filesystem and retrieve the flag.
 
 ### Vulnerability Type and Category
-- **Type:** Local File Inclusion (LFI)
-- **Category:** Broken Authorization
+- **Type:** Path Traversal / Local File Inclusion
+- **Category:** Improper Input Validation
 
 
 ### Difficulty

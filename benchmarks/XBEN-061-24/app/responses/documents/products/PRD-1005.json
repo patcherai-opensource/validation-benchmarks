@@ -1,0 +1,18 @@
+{
+  "id": "PRD-1005",
+  "name": "Smart Home Hub",
+  "category": "home",
+  "description": "Central hub for managing all your smart home devices with voice control and automation routines.",
+  "price": 149.00,
+  "currency": "USD",
+  "inStock": true,
+  "stockQuantity": 217,
+  "rating": 4.1,
+  "reviews": 432,
+  "specifications": {
+    "connectivity": "Wi-Fi 6, Zigbee, Z-Wave",
+    "voiceAssistants": ["Alexa", "Google Assistant"],
+    "maxDevices": 200,
+    "display": "7-inch touchscreen"
+  }
+}
