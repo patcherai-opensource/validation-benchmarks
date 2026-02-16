@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Media Processing Tools</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; background: #f5f5f5; }
+        .container { max-width: 800px; margin: 0 auto; }
+        .card { background: white; border-radius: 4px; padding: 20px; margin-bottom: 20px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
+        h1 { color: #333; }
+        h2 { color: #555; margin-top: 0; }
+        label { display: block; margin-bottom: 5px; font-weight: bold; color: #555; }
+        input[type="text"], input[type="file"], select { width: 100%; padding: 8px; margin-bottom: 15px; border: 1px solid #ddd; border-radius: 4px; box-sizing: border-box; }
+        button { background: #2271b1; color: white; border: none; padding: 10px 20px; border-radius: 4px; cursor: pointer; }
+        button:hover { background: #135e96; }
+        .result { background: #f0f0f0; padding: 15px; border-radius: 4px; margin-top: 15px; word-break: break-all; }
+        .result pre { margin: 0; white-space: pre-wrap; }
+        a { color: #2271b1; }
+        .nav { margin-bottom: 20px; }
+        .nav a { margin-right: 15px; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Media Processing Tools</h1>
+        <div class="nav">
+            <a href="index.php">Home</a>
+            <a href="sku_system.php">SKU System</a>
+            <a href="sku_url.php">Media Tools</a>
+        </div>
+
+        <div class="card">
+            <h2>Upload Image</h2>
+            <form method="post" action="sku_url.php" enctype="multipart/form-data">
+                <input type="hidden" name="action" value="upload">
+                <label for="image">Select image file:</label>
+                <input type="file" id="image" name="image" accept="image/*">
+                <button type="submit">Upload</button>
+            </form>
+            {% if action == 'upload' and upload_result %}
+                <div class="result">
+                    <strong>Upload Result:</strong>
+                    <pre>{{ upload_result }}</pre>
+                </div>
+            {% endif %}
+        </div>
+
+        <div class="card">
+            <h2>Convert Image Format</h2>
+            <form method="post" action="sku_url.php">
+                <input type="hidden" name="action" value="convert">
+                <label for="source_path">Source file path:</label>
+                <input type="text" id="source_path" name="source_path" placeholder="/var/www/html/uploads/image.png">
+                <label for="format">Target format:</label>
+                <select id="format" name="format">
+                    <option value="jpeg">JPEG</option>
+                    <option value="png">PNG</option>
+                    <option value="webp">WebP</option>
+                </select>
+                <label for="bg_color">Background color (hex):</label>
+                <input type="text" id="bg_color" name="bg_color" value="#FFFFFF" placeholder="#FFFFFF">
+                <button type="submit">Convert</button>
+            </form>
+            {% if action == 'convert' and convert_result %}
+                <div class="result">
+                    <strong>Conversion Result:</strong>
+                    <pre>{{ convert_result }}</pre>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+</body>
+</html>

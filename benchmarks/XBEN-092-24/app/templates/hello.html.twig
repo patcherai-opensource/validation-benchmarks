@@ -1,20 +1,41 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Hello</title>
+    <title>SKU Product System</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; background: #f5f5f5; }
+        .container { max-width: 800px; margin: 0 auto; }
+        .card { background: white; border-radius: 4px; padding: 20px; margin-bottom: 20px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
+        h1 { color: #333; }
+        h2 { color: #555; margin-top: 0; }
+        a { color: #2271b1; }
+        ul { padding-left: 20px; }
+        li { margin-bottom: 8px; }
+        .meta { color: #888; font-size: 0.9em; }
+    </style>
 </head>
 <body>
-    <h1>Welcome to the SKU product system !</h1>
-    <p>Profile: {{ username }}</p>
-    <p>Sandbox mode: {{ sandboxEnabled ? 'Enabled' : 'Disabled' }}</p>
-    <p>Twig version: {{ twigVersion }}</p>
-    
-    <h2>SKU Management</h2>
-    <ul>
-        <li><a href="sku_system.php">View SKU List</a></li>
-        <li><a href="sku_search.php">Search SKU</a></li>
-        <li><a href="sku_add.php">Add SKU</a></li>
-        <li><a href="sku_url.php">Process your SKU model</a></li>
-    </ul>
+    <div class="container">
+        <div class="card">
+            <h1>SKU Product System</h1>
+            <p class="meta">Profile: {{ username }}</p>
+        </div>
+
+        <div class="card">
+            <h2>SKU Management</h2>
+            <ul>
+                <li><a href="sku_system.php">View SKU List</a></li>
+                <li><a href="sku_search.php">Search SKU</a></li>
+                <li><a href="sku_add.php">Add SKU</a></li>
+            </ul>
+        </div>
+
+        <div class="card">
+            <h2>Media Processing</h2>
+            <ul>
+                <li><a href="sku_url.php">Image Upload &amp; Conversion</a></li>
+            </ul>
+        </div>
+    </div>
 </body>
 </html>

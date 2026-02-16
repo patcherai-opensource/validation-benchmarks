@@ -1,15 +1,26 @@
 <?php
 header('Content-Type: application/json');
 
-$skus = [
-    ['sku' => 'VAL123', 'valid' => (bool)rand(0, 1)],
-    ['sku' => 'VAL456', 'valid' => (bool)rand(0, 1)],
-    ['sku' => 'VAL789', 'valid' => (bool)rand(0, 1)],
-];
+/**
+ * Service Health & Diagnostics
+ * Returns service status and component information.
+ */
 
 $response = [
-    'status' => 'success',
-    'data' => $skus
+    'status' => 'healthy',
+    'service' => 'Media Processing Service',
+    'version' => '1.22.0',
+    'php_version' => PHP_VERSION,
+    'extensions' => [
+        'gd' => extension_loaded('gd'),
+        'phar' => extension_loaded('phar')
+    ],
+    'components' => [
+        'CacheManager' => 'Cache lifecycle handler',
+        'ImageMetadata' => 'Image metadata container'
+    ],
+    'upload_dir' => '/var/www/html/uploads',
+    'max_upload_size' => '16M'
 ];
 
 echo json_encode($response);

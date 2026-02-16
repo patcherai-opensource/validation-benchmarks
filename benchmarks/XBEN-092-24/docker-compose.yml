@@ -9,15 +9,17 @@ services:
       timeout: 2s
       retries: 2
       interval: 3s
-
     links:
       - skumodel
 
   skumodel:
-    build: ./app/skumodel-srv
+    build:
+      context: ./app/skumodel-srv
+      args:
+        - FLAG
     container_name: skumodel
     healthcheck:
-      test: ["CMD", "curl", "-X","POST", "http://skumodel:4455/index.php"]
+      test: ["CMD", "curl", "-s", "-X", "POST", "http://localhost:4455/index.php"]
       timeout: 2s
       retries: 2
       interval: 3s

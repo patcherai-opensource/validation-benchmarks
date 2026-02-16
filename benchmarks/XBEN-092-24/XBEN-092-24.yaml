@@ -4,7 +4,7 @@ metadata:
   labels:
     app: xben-092-24
   name: xben-092-24-deployment
-  namespace: sandbox-dev
+  namespace: sandbox-prod
 spec:
   replicas: 1
   selector:
@@ -16,46 +16,49 @@ spec:
         app: xben-092-24
     spec:
       containers:
-      - image: /:-app
+      - image: 
+          180294216647.dkr.ecr.us-west-2.amazonaws.com/synthetic-xben-092-24_timber-cve-2024-29800:web
         imagePullPolicy: Always
         livenessProbe:
+          failureThreshold: 10
           httpGet:
             path: /index.php
             port: 8081
-          initialDelaySeconds: 30
+          initialDelaySeconds: 60
           periodSeconds: 10
           timeoutSeconds: 5
         name: web
         ports:
         - containerPort: 8081
         readinessProbe:
+          failureThreshold: 10
           httpGet:
             path: /index.php
             port: 8081
-          initialDelaySeconds: 5
+          initialDelaySeconds: 30
           periodSeconds: 5
           timeoutSeconds: 3
         resources:
           limits:
             cpu: 500m
-            memory: 128Mi
+            memory: 256Mi
           requests:
             cpu: 250m
-            memory: 64Mi
+            memory: 128Mi
       - env:
         - name: NGINX_PORT
           value: '4455'
-        - name: FLAG
-          value: PLACEHOLDER_FLAG
-        image: /:-skumodel
+        image: 
+          180294216647.dkr.ecr.us-west-2.amazonaws.com/synthetic-xben-092-24_timber-cve-2024-29800:skumodel
         imagePullPolicy: Always
         livenessProbe:
           exec:
             command:
             - /bin/sh
             - -c
-            - curl -X POST http://localhost:4455/index.php
-          initialDelaySeconds: 30
+            - curl -s -X POST http://localhost:4455/index.php > /dev/null
+          failureThreshold: 10
+          initialDelaySeconds: 60
           periodSeconds: 10
           timeoutSeconds: 5
         name: skumodel
@@ -66,17 +69,18 @@ spec:
             command:
             - /bin/sh
             - -c
-            - curl -X POST http://localhost:4455/index.php
-          initialDelaySeconds: 5
+            - curl -s -X POST http://localhost:4455/index.php > /dev/null
+          failureThreshold: 10
+          initialDelaySeconds: 30
           periodSeconds: 5
           timeoutSeconds: 3
         resources:
           limits:
             cpu: 500m
-            memory: 128Mi
+            memory: 256Mi
           requests:
             cpu: 250m
-            memory: 64Mi
+            memory: 128Mi
       restartPolicy: Always
 ---
 apiVersion: v1
@@ -85,17 +89,13 @@ metadata:
   labels:
     app: xben-092-24
   name: xben-092-24-service
-  namespace: sandbox-dev
+  namespace: sandbox-prod
 spec:
   ports:
   - name: web
     port: 8080
     protocol: TCP
     targetPort: 8081
-  - name: skumodel
-    port: 4455
-    protocol: TCP
-    targetPort: 4455
   selector:
     app: xben-092-24
   type: ClusterIP
