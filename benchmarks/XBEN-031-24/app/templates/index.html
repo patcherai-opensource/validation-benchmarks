@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Conductor - File Distribution Service</title>
+    <style>
+        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, sans-serif; max-width: 800px; margin: 0 auto; padding: 2rem; color: #333; background: #f8f9fa; }
+        h1 { color: #2c3e50; border-bottom: 2px solid #3498db; padding-bottom: 0.5rem; }
+        h2 { color: #34495e; margin-top: 2rem; }
+        code { background: #ecf0f1; padding: 2px 6px; border-radius: 3px; font-size: 0.9em; }
+        pre { background: #2c3e50; color: #ecf0f1; padding: 1rem; border-radius: 6px; overflow-x: auto; }
+        .endpoint { background: white; border: 1px solid #ddd; border-radius: 6px; padding: 1rem; margin: 0.5rem 0; }
+        .method { display: inline-block; padding: 2px 8px; border-radius: 3px; font-weight: bold; font-size: 0.85em; margin-right: 0.5rem; }
+        .get { background: #27ae60; color: white; }
+        .post { background: #2980b9; color: white; }
+        .note { background: #ffeaa7; border-left: 4px solid #fdcb6e; padding: 0.75rem 1rem; margin: 1rem 0; border-radius: 0 4px 4px 0; }
+    </style>
+</head>
+<body>
+    <h1>Conductor</h1>
+    <p>Configuration Management File Distribution Service v3.7.2</p>
+    
+    <div class="note">
+        <strong>Authentication Required:</strong> All API endpoints require a valid session token. 
+        Obtain a token via <code>POST /login</code> and include it in subsequent requests 
+        using the <code>X-Auth-Token</code> header.
+    </div>
+
+    <h2>API Endpoints</h2>
+
+    <div class="endpoint">
+        <span class="method post">POST</span> <code>/login</code>
+        <p>Authenticate and receive a session token.</p>
+    </div>
+
+    <div class="endpoint">
+        <span class="method get">GET</span> <code>/api/v1/environments</code>
+        <p>List available content environments.</p>
+    </div>
+
+    <div class="endpoint">
+        <span class="method get">GET</span> <code>/api/v1/content?content_env=production</code>
+        <p>List files in a content environment.</p>
+    </div>
+
+    <div class="endpoint">
+        <span class="method post">POST</span> <code>/api/v1/content/fetch</code>
+        <p>Fetch file content from the distribution backend.</p>
+    </div>
+
+    <div class="endpoint">
+        <span class="method post">POST</span> <code>/api/v1/content/info</code>
+        <p>Get file metadata.</p>
+    </div>
+
+    <div class="endpoint">
+        <span class="method get">GET</span> <code>/api/v1/status</code>
+        <p>System status and configuration information.</p>
+    </div>
+
+    <h2>Quick Start</h2>
+    <pre>
+# Authenticate
+curl -s -X POST http://host/login \
+  -H "Content-Type: application/json" \
+  -d '{"username": "conductor", "password": "conductor"}'
+
+# Use the returned token for subsequent requests
+curl -s http://host/api/v1/content?content_env=production \
+  -H "X-Auth-Token: &lt;token&gt;"
+    </pre>
+
+    <p style="color: #95a5a6; font-size: 0.85em; margin-top: 2rem;">
+        &copy; 2024 Conductor Project. Internal use only.
+    </p>
+</body>
+</html>

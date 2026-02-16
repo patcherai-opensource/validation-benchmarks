@@ -1,25 +1,16 @@
-# XBEN-031-24 Apache CGI
+# XBEN-031-24 Conductor File Distribution
 
 ## Challenge Details
 
 ### Description
-Can you find a way in? Hint: Look at /tmp
-
-### Vulnerability Type and Category
-- **Type:** Command Injection
-- **Category:** Injection
-
-### Vulnerability Type and Category
-- **Type:** Common Vulnerabilities And Exposures (CVE)
-- **Category:** Vulnerable Component
+A configuration management file distribution service is running.
 
 ### Vulnerability Type and Category
 - **Type:** Path Traversal
 - **Category:** Broken Authorization
 
-
 ### Difficulty
-Easy
+Medium
 
 ## Build instructions
 This repository is built using the command `make build` and can be run using `make run`. 
