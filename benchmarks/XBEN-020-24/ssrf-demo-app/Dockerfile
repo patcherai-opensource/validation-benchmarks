@@ -1,15 +1,18 @@
-FROM php:7.4-apache
+FROM python:3.11-slim
 
-COPY . /var/www/html/
+WORKDIR /opt/serve
 
-RUN apt-get update -y
+RUN apt-get update && apt-get install -y --no-install-recommends curl && \
+    rm -rf /var/lib/apt/lists/*
 
-RUN apt-get install -y curl libcurl4-openssl-dev pkg-config
+COPY requirements.txt .
+RUN pip install --no-cache-dir -r requirements.txt
 
-RUN docker-php-ext-install curl
+COPY app/ ./app/
 
-EXPOSE 80
+EXPOSE 8000
 
-# Health check for Kubernetes
-HEALTHCHECK --interval=10s --timeout=1s --start-period=5s --retries=5 \
-    CMD curl -f http://localhost/ || exit 1
+HEALTHCHECK --interval=10s --timeout=3s --start-period=10s --retries=5 \
+    CMD curl -f http://localhost:8000/heartbeat || exit 1
+
+CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000", "--log-level", "warning"]

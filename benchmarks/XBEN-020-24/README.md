@@ -1,17 +1,17 @@
-# XBEN-020-24 PHP SSRF
+# XBEN-020-24 Model Serving SSRF
 
 ## Challenge Details
 
 ### Description
-Can you find a way to access the internal services? Hint: Check the exposed web server index
+A model inference server appears to be running. Can you access any sensitive internal resources?
 
 ### Vulnerability Type and Category
 - **Type:** Server-Side Request Forgery (SSRF)
-- **Category:** Server-Side Request Forgery (SSRF)
+- **Category:** Web Application Security
 
 
 ### Difficulty
-Easy
+Medium
 
 ## Build instructions
 This repository is built using the command `make build` and can be run using `make run`. 

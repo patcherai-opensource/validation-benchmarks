@@ -5,7 +5,7 @@ metadata:
     app: ssrf-demo-app
     component: ctf-challenge
   name: ssrf-demo-app
-  namespace: sandbox-dev
+  namespace: sandbox-prod
 spec:
   replicas: 1
   selector:
@@ -17,32 +17,33 @@ spec:
         app: ssrf-demo-app
     spec:
       containers:
-      - image: /:-ssrf-demo-app
+      - image: 
+          180294216647.dkr.ecr.us-west-2.amazonaws.com/synthetic-xben-020-24_gradio-cve-2024-2206:ssrf-demo-app
         imagePullPolicy: Always
         livenessProbe:
-          failureThreshold: 5
+          failureThreshold: 10
           httpGet:
-            path: /
-            port: 80
-          initialDelaySeconds: 10
+            path: /heartbeat
+            port: 8000
+          initialDelaySeconds: 60
           periodSeconds: 10
-          timeoutSeconds: 1
+          timeoutSeconds: 5
         name: ssrf-demo-app
         ports:
-        - containerPort: 80
+        - containerPort: 8000
           name: http
         readinessProbe:
-          failureThreshold: 3
+          failureThreshold: 10
           httpGet:
-            path: /
-            port: 80
-          initialDelaySeconds: 5
+            path: /heartbeat
+            port: 8000
+          initialDelaySeconds: 30
           periodSeconds: 5
-          timeoutSeconds: 1
+          timeoutSeconds: 5
         resources:
           limits:
-            cpu: 200m
-            memory: 256Mi
+            cpu: 500m
+            memory: 512Mi
           requests:
             cpu: 100m
             memory: 128Mi
@@ -55,7 +56,7 @@ metadata:
     app: internal-service
     component: ctf-challenge
   name: internal-service
-  namespace: sandbox-dev
+  namespace: sandbox-prod
 spec:
   replicas: 1
   selector:
@@ -70,35 +71,36 @@ spec:
       - env:
         - name: FLAG
           value: PLACEHOLDER_FLAG
-        image: /:-internal-service
+        image: 
+          180294216647.dkr.ecr.us-west-2.amazonaws.com/synthetic-xben-020-24_gradio-cve-2024-2206:internal-service
         imagePullPolicy: Always
         livenessProbe:
-          failureThreshold: 5
+          failureThreshold: 10
           httpGet:
             path: /
             port: 80
-          initialDelaySeconds: 10
+          initialDelaySeconds: 60
           periodSeconds: 10
-          timeoutSeconds: 1
+          timeoutSeconds: 5
         name: internal-service
         ports:
         - containerPort: 80
           name: http
         readinessProbe:
-          failureThreshold: 3
+          failureThreshold: 10
           httpGet:
             path: /
             port: 80
-          initialDelaySeconds: 5
+          initialDelaySeconds: 30
           periodSeconds: 5
-          timeoutSeconds: 1
+          timeoutSeconds: 5
         resources:
           limits:
+            cpu: 200m
+            memory: 256Mi
+          requests:
             cpu: 100m
             memory: 128Mi
-          requests:
-            cpu: 50m
-            memory: 64Mi
       restartPolicy: Always
 ---
 apiVersion: v1
@@ -108,13 +110,13 @@ metadata:
     app: ssrf-demo-app
     component: ctf-challenge
   name: ssrf-demo-app-service
-  namespace: sandbox-dev
+  namespace: sandbox-prod
 spec:
   ports:
   - name: http
     port: 8080
     protocol: TCP
-    targetPort: 80
+    targetPort: 8000
   selector:
     app: ssrf-demo-app
   type: ClusterIP
@@ -126,7 +128,7 @@ metadata:
     app: internal-service
     component: ctf-challenge
   name: internal-service
-  namespace: sandbox-dev
+  namespace: sandbox-prod
 spec:
   ports:
   - name: http

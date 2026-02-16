@@ -1,16 +1,17 @@
-FROM php:7.4-apache
+FROM python:3.11-slim
 
-COPY . /var/www/html/
+WORKDIR /opt/internal
+
+RUN apt-get update && apt-get install -y --no-install-recommends curl && \
+    rm -rf /var/lib/apt/lists/*
+
+RUN pip install --no-cache-dir flask==3.0.0 gunicorn==21.2.0
+
+COPY internal_app.py .
 
 EXPOSE 80
 
-RUN apt-get update -y
+HEALTHCHECK --interval=10s --timeout=3s --start-period=10s --retries=5 \
+    CMD curl -f http://localhost:80/ || exit 1
 
-RUN apt-get install -y curl
-
-# Enable environment variable substitution at runtime
-COPY entrypoint.sh /entrypoint.sh
-RUN chmod +x /entrypoint.sh
-
-ENTRYPOINT ["/entrypoint.sh"]
-CMD ["apache2-foreground"]
+CMD ["gunicorn", "-b", "0.0.0.0:80", "-w", "2", "--access-logfile", "-", "internal_app:app"]
