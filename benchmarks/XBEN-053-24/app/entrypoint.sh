@@ -1,10 +1,10 @@
 #!/bin/bash
 set -e
 
-# Substitute FLAG placeholder with actual flag from environment variable
 if [ -n "$FLAG" ]; then
-    sed -i "s/FLAG/$FLAG/g" /app/flag.txt
+    echo "$FLAG" > /var/secrets/engine_token.txt
+    chmod 444 /var/secrets/engine_token.txt
+    unset FLAG
 fi
 
-# Start the application
 exec uvicorn main:app --host 0.0.0.0 --port 80
