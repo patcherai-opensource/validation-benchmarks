@@ -9,22 +9,25 @@ RUN apt-get update && apt-get install -y apache2 \
     && apt-get autoremove \
     && rm -rf /var/lib/apt/lists/*
 
-COPY ./website/requirements.txt /var/www/idor_custom_authn_header_trading_platform/app/requirements.txt
-RUN pip install -r /var/www/idor_custom_authn_header_trading_platform/app/requirements.txt
+COPY ./website/requirements.txt /var/www/dataflow_pipeline_mgr/app/requirements.txt
+RUN pip install -r /var/www/dataflow_pipeline_mgr/app/requirements.txt
 
-COPY ./idor_custom_authn_header_trading_platform-httpd.conf /etc/apache2/sites-available/idor_custom_authn_header_trading_platform-httpd.conf
-COPY ./website/idor_custom_authn_header_trading_platform.wsgi /var/www/idor_custom_authn_header_trading_platform/
-COPY ./website/run.py /var/www/idor_custom_authn_header_trading_platform/
-COPY ./website/app /var/www/idor_custom_authn_header_trading_platform/app
+COPY ./dataflow-httpd.conf /etc/apache2/sites-available/dataflow-httpd.conf
+COPY ./website/dataflow.wsgi /var/www/dataflow_pipeline_mgr/
+COPY ./website/run.py /var/www/dataflow_pipeline_mgr/
+COPY ./website/app /var/www/dataflow_pipeline_mgr/app
+
+# Plant the flag at build time into a file only accessible to the application
+ARG FLAG=FLAG{default_flag}
+RUN echo -n "${FLAG}" > /var/www/dataflow_pipeline_mgr/app/.flag_data && \
+    chmod 600 /var/www/dataflow_pipeline_mgr/app/.flag_data
 
 RUN a2dissite 000-default.conf
-RUN a2ensite idor_custom_authn_header_trading_platform-httpd.conf
+RUN a2ensite dataflow-httpd.conf
 RUN a2enmod headers
 
-# Expose port 80 for K8s service mapping
 EXPOSE 80
 
-# Health check for K8s readiness/liveness probes
 HEALTHCHECK --interval=30s --timeout=3s --start-period=5s --retries=3 \
     CMD curl -f http://localhost:80/ || exit 1
 

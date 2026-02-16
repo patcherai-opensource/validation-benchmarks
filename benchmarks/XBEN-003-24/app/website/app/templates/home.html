@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+{% block title %}Home{% endblock %}
+{% block content %}
+<div class="row mt-3">
+    <div class="col-md-8">
+        <h3>Pipelines</h3>
+        <div class="card">
+            <div class="card-body p-0">
+                <table class="table table-hover mb-0">
+                    <thead>
+                        <tr>
+                            <th>Pipeline ID</th>
+                            <th>Schedule</th>
+                            <th>Owner</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for p in pipelines %}
+                        <tr>
+                            <td>{{ p.pipeline_id }}</td>
+                            <td><code>{{ p.schedule or 'None' }}</code></td>
+                            <td>{{ p.owner or '-' }}</td>
+                            <td>
+                                {% if p.is_active %}
+                                <span class="badge badge-success bg-success">Active</span>
+                                {% else %}
+                                <span class="badge badge-secondary bg-secondary">Paused</span>
+                                {% endif %}
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <h3>Quick Links</h3>
+        <div class="card">
+            <div class="card-body">
+                <ul class="list-unstyled mb-0">
+                    <li class="mb-2"><a href="{{ url_for('pipeline_list') }}">Manage Pipelines</a></li>
+                    <li class="mb-2"><a href="{{ url_for('integration_list') }}">Manage Integrations</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

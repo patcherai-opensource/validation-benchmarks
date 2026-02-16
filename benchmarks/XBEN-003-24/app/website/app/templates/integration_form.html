@@ -1,0 +1,92 @@
+{% extends "base.html" %}
+{% block title %}{{ title }}{% endblock %}
+{% block content %}
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="{{ url_for('home') }}">Home</a></li>
+        <li class="breadcrumb-item"><a href="{{ url_for('integration_list') }}">Integrations</a></li>
+        <li class="breadcrumb-item active">{{ title }}</li>
+    </ol>
+</nav>
+<h3>{{ title }}</h3>
+<div class="card">
+    <div class="card-body">
+        <form method="POST">
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="mb-3">
+                        <label for="conn_id" class="form-label">Connection ID</label>
+                        <input type="text" class="form-control" id="conn_id" name="conn_id"
+                               value="{{ form_data.get('conn_id', '') }}"
+                               {{ 'readonly' if action == 'edit' else '' }} required>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="mb-3">
+                        <label for="conn_type" class="form-label">Connection Type</label>
+                        <select class="form-control" id="conn_type" name="conn_type" required>
+                            <option value="">-- Select --</option>
+                            {% for t in ['postgres', 'mysql', 'aws', 'gcp', 'azure', 'http', 'ssh', 'ftp', 'redis', 'mongo', 'elasticsearch', 'kafka', 'spark', 'hdfs'] %}
+                            <option value="{{ t }}" {{ 'selected' if form_data.get('conn_type') == t else '' }}>{{ t }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="mb-3">
+                <label for="description" class="form-label">Description</label>
+                <input type="text" class="form-control" id="description" name="description"
+                       value="{{ form_data.get('description', '') }}">
+            </div>
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="mb-3">
+                        <label for="host" class="form-label">Host</label>
+                        <input type="text" class="form-control" id="host" name="host"
+                               value="{{ form_data.get('host', '') }}">
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="mb-3">
+                        <label for="schema_name" class="form-label">Schema</label>
+                        <input type="text" class="form-control" id="schema_name" name="schema_name"
+                               value="{{ form_data.get('schema_name', '') }}">
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="mb-3">
+                        <label for="port" class="form-label">Port</label>
+                        <input type="text" class="form-control" id="port" name="port"
+                               value="{{ form_data.get('port', '') }}">
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="mb-3">
+                        <label for="login" class="form-label">Login</label>
+                        <input type="text" class="form-control" id="login" name="login"
+                               value="{{ form_data.get('login', '') }}">
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="mb-3">
+                        <label for="password" class="form-label">Password</label>
+                        <input type="password" class="form-control" id="password" name="password"
+                               value="{{ form_data.get('password', '') }}">
+                    </div>
+                </div>
+            </div>
+            <div class="mb-3">
+                <label for="extra" class="form-label">Extra</label>
+                <textarea class="form-control" id="extra" name="extra" rows="6">{{ form_data.get('extra', '') }}</textarea>
+                <small class="form-text text-muted">JSON format. Connection-specific parameters.</small>
+            </div>
+            <div class="d-flex justify-content-between">
+                <a href="{{ url_for('integration_list') }}" class="btn btn-outline-secondary">Cancel</a>
+                <button type="submit" class="btn btn-primary">Save</button>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

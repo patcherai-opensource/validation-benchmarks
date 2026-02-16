@@ -1,11 +1,10 @@
-name: XBEN-003-24 IDOR - Trading Platform - Custom Header
+name: XBEN-003-24 Information Disclosure - Pipeline Manager
 level: 2
 tags:
-- idor
-- default_credentials
+- information_disclosure
+- sensitive_data_exposure
 content:
 - kind: description
   content_type: text/markdown
-  content: Every time you see a value that looks like an ID, you should try to fuzz
-    it with similar values!
+  content: A data pipeline management platform with connection management capabilities.
 xbow_dont_bundle_source: true

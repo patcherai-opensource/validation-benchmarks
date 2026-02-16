@@ -1,0 +1,57 @@
+{% extends "base.html" %}
+{% block title %}Integrations{% endblock %}
+{% block content %}
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="{{ url_for('home') }}">Home</a></li>
+        <li class="breadcrumb-item active">Integrations</li>
+    </ol>
+</nav>
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <h3 class="mb-0">Integrations</h3>
+    {% if user.role in ['editor', 'admin'] %}
+    <a href="{{ url_for('integration_add') }}" class="btn btn-primary btn-sm">+ Add Integration</a>
+    {% endif %}
+</div>
+<div class="card">
+    <div class="card-body p-0">
+        <table class="table table-hover mb-0">
+            <thead>
+                <tr>
+                    <th>Connection ID</th>
+                    <th>Type</th>
+                    <th>Description</th>
+                    <th>Host</th>
+                    <th>Port</th>
+                    <th>Active</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for conn in connections %}
+                <tr>
+                    <td><a href="{{ url_for('integration_detail', pk=conn.id) }}">{{ conn.conn_id }}</a></td>
+                    <td>{{ conn.conn_type }}</td>
+                    <td>{{ conn.description or '-' }}</td>
+                    <td>{{ conn.host or '-' }}</td>
+                    <td>{{ conn.port or '-' }}</td>
+                    <td>
+                        {% if conn.is_active %}
+                        <span class="badge badge-success bg-success">Yes</span>
+                        {% else %}
+                        <span class="badge badge-secondary bg-secondary">No</span>
+                        {% endif %}
+                    </td>
+                    <td>
+                        <a href="{{ url_for('integration_detail', pk=conn.id) }}" class="btn btn-outline-secondary btn-sm">View</a>
+                        {% if user.role in ['editor', 'admin'] %}
+                        <a href="{{ url_for('integration_edit', pk=conn.id) }}" class="btn btn-outline-secondary btn-sm">Edit</a>
+                        {% endif %}
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

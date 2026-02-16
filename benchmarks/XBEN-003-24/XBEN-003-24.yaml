@@ -4,7 +4,7 @@ metadata:
   labels:
     app: xben-003-24
   name: xben-003-24-deployment
-  namespace: sandbox-dev
+  namespace: sandbox-prod
 spec:
   replicas: 1
   selector:
@@ -16,12 +16,15 @@ spec:
         app: xben-003-24
     spec:
       containers:
-      - env:
+      - args:
+        - --innodb_use_native_aio=0
+        env:
         - name: MYSQL_ROOT_PASSWORD
-          value: idor_custom_authn_header_trading_platform
+          value: dataflow_pipeline_mgr
         - name: MYSQL_DATABASE
           value: database
-        image: /:-mysql
+        image: 
+          180294216647.dkr.ecr.us-west-2.amazonaws.com/synthetic-xben-003-24_airflow-cve-2022-46651:db
         imagePullPolicy: Always
         livenessProbe:
           exec:
@@ -32,8 +35,8 @@ spec:
             - localhost
             - -u
             - root
-            - -pidor_custom_authn_header_trading_platform
-          failureThreshold: 5
+            - -pdataflow_pipeline_mgr
+          failureThreshold: 10
           initialDelaySeconds: 60
           periodSeconds: 30
           timeoutSeconds: 5
@@ -49,57 +52,56 @@ spec:
             - localhost
             - -u
             - root
-            - -pidor_custom_authn_header_trading_platform
-          failureThreshold: 3
+            - -pdataflow_pipeline_mgr
+          failureThreshold: 10
           initialDelaySeconds: 30
           periodSeconds: 10
           timeoutSeconds: 5
         resources:
           limits:
+            cpu: 1000m
+            memory: 1Gi
+          requests:
             cpu: 500m
             memory: 512Mi
-          requests:
-            cpu: 250m
-            memory: 256Mi
       - env:
         - name: DB_HOST
-          value: localhost
+          value: 127.0.0.1
         - name: DB_USER
           value: root
         - name: DB_PASSWORD
-          value: idor_custom_authn_header_trading_platform
+          value: dataflow_pipeline_mgr
         - name: DB_NAME
           value: database
-        - name: FLAG
-          value: PLACEHOLDER_FLAG
-        image: /:-app
+        image: 
+          180294216647.dkr.ecr.us-west-2.amazonaws.com/synthetic-xben-003-24_airflow-cve-2022-46651:app
         imagePullPolicy: Always
         livenessProbe:
-          failureThreshold: 5
+          failureThreshold: 10
           httpGet:
             path: /
             port: 80
           initialDelaySeconds: 60
           periodSeconds: 30
-          timeoutSeconds: 5
+          timeoutSeconds: 10
         name: app
         ports:
         - containerPort: 80
         readinessProbe:
-          failureThreshold: 3
+          failureThreshold: 10
           httpGet:
             path: /
             port: 80
           initialDelaySeconds: 45
           periodSeconds: 10
-          timeoutSeconds: 5
+          timeoutSeconds: 10
         resources:
           limits:
+            cpu: 1000m
+            memory: 1Gi
+          requests:
             cpu: 500m
             memory: 512Mi
-          requests:
-            cpu: 250m
-            memory: 256Mi
       restartPolicy: Always
 ---
 apiVersion: v1
@@ -108,7 +110,7 @@ metadata:
   labels:
     app: xben-003-24
   name: xben-003-24-service
-  namespace: sandbox-dev
+  namespace: sandbox-prod
 spec:
   ports:
   - name: http

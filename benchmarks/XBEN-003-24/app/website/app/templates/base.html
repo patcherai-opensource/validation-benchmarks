@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}DataFlow{% endblock %} - DataFlow Pipeline Manager</title>
+    <link href="{{ url_for('static', filename='css/bootstrap.min.css') }}" rel="stylesheet">
+    <style>
+        body { background-color: #1a1c23; color: #c7c7c7; }
+        .navbar { background-color: #252830 !important; border-bottom: 1px solid #353840; }
+        .navbar-brand { color: #4e9af5 !important; font-weight: bold; }
+        .nav-link { color: #c7c7c7 !important; }
+        .nav-link:hover, .nav-link.active { color: #4e9af5 !important; }
+        .card { background-color: #252830; border: 1px solid #353840; }
+        .table { color: #c7c7c7; }
+        .table thead th { border-color: #353840; color: #999; }
+        .table td { border-color: #353840; }
+        .btn-primary { background-color: #4e9af5; border-color: #4e9af5; }
+        .btn-primary:hover { background-color: #3a8ae5; }
+        .btn-outline-secondary { color: #c7c7c7; border-color: #555; }
+        .btn-outline-secondary:hover { background-color: #353840; color: #fff; }
+        .form-control { background-color: #1a1c23; border-color: #353840; color: #c7c7c7; }
+        .form-control:focus { background-color: #1a1c23; color: #c7c7c7; border-color: #4e9af5; box-shadow: none; }
+        .badge-success { background-color: #28a745; }
+        .badge-secondary { background-color: #6c757d; }
+        a { color: #4e9af5; }
+        a:hover { color: #7eb8f7; }
+        .flash-messages .alert { margin-bottom: 10px; }
+        textarea.form-control { font-family: monospace; font-size: 0.9em; }
+        .breadcrumb { background-color: transparent; padding: 0; }
+        .breadcrumb-item a { color: #4e9af5; }
+        .breadcrumb-item.active { color: #999; }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="{{ url_for('home') }}">DataFlow</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('home') }}">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('pipeline_list') }}">Pipelines</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('integration_list') }}">Integrations</a>
+                    </li>
+                </ul>
+                <ul class="navbar-nav">
+                    <li class="nav-item">
+                        <span class="nav-link">{{ user.first_name }} ({{ user.role }})</span>
+                    </li>
+                    <li class="nav-item">
+                        <form action="{{ url_for('logout') }}" method="post" style="display:inline;">
+                            <button type="submit" class="btn btn-outline-secondary btn-sm">Logout</button>
+                        </form>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+    <div class="container-fluid mt-3 px-4">
+        {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+        <div class="flash-messages">
+            {% for category, message in messages %}
+            <div class="alert alert-{{ 'danger' if category == 'error' else category }}" role="alert">{{ message }}</div>
+            {% endfor %}
+        </div>
+        {% endif %}
+        {% endwith %}
+        {% block content %}{% endblock %}
+    </div>
+</body>
+</html>
