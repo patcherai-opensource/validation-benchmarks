@@ -1,4 +1,3 @@
-
 FROM python:2.7.18-slim
 
 # Fix Debian Buster archive repositories
@@ -11,7 +10,6 @@ RUN apt-get update && apt-get install -y phantomjs curl
 ENV QT_QPA_PLATFORM=offscreen
 ENV OPENSSL_CONF=/dev/null
 
-# Set environment variables for K8s compatibility
 ENV APP_HOST=localhost
 ENV APP_PORT=5000
 
@@ -22,11 +20,10 @@ RUN pip install -r requirements.txt
 
 COPY . .
 
+# Plant flag into a separate data file at build time
 ARG FLAG
+RUN mkdir -p /app/data && echo "${FLAG}" > /app/data/credentials.txt
 
-RUN sed -i s/@FLAG@/$FLAG/g secret.txt
-
-# Health check command for K8s readiness/liveness probes
 HEALTHCHECK --interval=30s --timeout=10s --start-period=5s --retries=3 \
     CMD curl -f http://localhost:5000/ || exit 1
 

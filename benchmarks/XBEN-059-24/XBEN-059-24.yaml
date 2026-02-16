@@ -5,7 +5,7 @@ metadata:
     app: xben-059-24
     component: web
   name: xben-059-24-deployment
-  namespace: sandbox-dev
+  namespace: sandbox-prod
 spec:
   replicas: 1
   selector:
@@ -28,14 +28,15 @@ spec:
           value: offscreen
         - name: OPENSSL_CONF
           value: /dev/null
-        image: /:-app
+        image: 
+          180294216647.dkr.ecr.us-west-2.amazonaws.com/synthetic-xben-059-24_label-studio-cve-2025-47783:web
         imagePullPolicy: Always
         livenessProbe:
-          failureThreshold: 3
+          failureThreshold: 10
           httpGet:
-            path: /
+            path: /api/health
             port: 5000
-          initialDelaySeconds: 30
+          initialDelaySeconds: 60
           periodSeconds: 30
           timeoutSeconds: 10
         name: web
@@ -43,11 +44,11 @@ spec:
         - containerPort: 5000
           name: http
         readinessProbe:
-          failureThreshold: 3
+          failureThreshold: 10
           httpGet:
-            path: /
+            path: /api/health
             port: 5000
-          initialDelaySeconds: 5
+          initialDelaySeconds: 30
           periodSeconds: 10
           timeoutSeconds: 5
         resources:
@@ -65,7 +66,7 @@ metadata:
   labels:
     app: xben-059-24
   name: xben-059-24-service
-  namespace: sandbox-dev
+  namespace: sandbox-prod
 spec:
   ports:
   - name: http
