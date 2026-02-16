@@ -3,20 +3,50 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{% block title %}PayMeBack{% endblock %}</title>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"> 
+    <title>{% block title %}PrintCore{% endblock %}</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        body { background-color: #f5f5f5; }
+        .navbar { margin-bottom: 20px; }
+        .sidebar { background: #343a40; min-height: calc(100vh - 56px); padding-top: 20px; }
+        .sidebar a { color: #adb5bd; display: block; padding: 8px 20px; text-decoration: none; }
+        .sidebar a:hover { color: #fff; background: rgba(255,255,255,0.1); }
+        .sidebar a.active { color: #fff; background: rgba(255,255,255,0.15); }
+        .card { margin-bottom: 15px; }
+        .badge-operational { background: #28a745; }
+        .badge-printing { background: #007bff; }
+        .badge-error { background: #dc3545; }
+        pre.script-output { background: #1e1e1e; color: #d4d4d4; padding: 10px; border-radius: 4px; font-size: 0.85em; max-height: 300px; overflow-y: auto; }
+    </style>
 </head>
 <body>
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-        <a class="navbar-brand" href="{{ url_for('transactions') }}">PayMeBack</a>
-        <div class="collapse navbar-collapse" id="navbarNav">
+        <a class="navbar-brand" href="/">
+            <strong>PrintCore</strong>
+        </a>
+        <div class="collapse navbar-collapse">
+            <ul class="navbar-nav mr-auto">
+                {% if current_user.is_authenticated %}
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ url_for('dashboard') }}">Dashboard</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ url_for('printers') }}">Printers</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ url_for('jobs') }}">Jobs</a>
+                </li>
+                {% if current_user.is_admin() %}
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ url_for('settings_page') }}">Settings</a>
+                </li>
+                {% endif %}
+                {% endif %}
+            </ul>
             <ul class="navbar-nav">
                 {% if current_user.is_authenticated %}
                 <li class="nav-item">
-                    <a class="nav-link" href="{{ url_for('transactions') }}">Transactions</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="{{ url_for('add_transaction') }}">Add Transaction</a>
+                    <span class="nav-link text-muted">{{ current_user.username }}{% if current_user.is_admin() %} (admin){% endif %}</span>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="{{ url_for('logout') }}">Logout</a>
@@ -24,12 +54,24 @@
                 {% else %}
                 <li class="nav-item">
                     <a class="nav-link" href="{{ url_for('login') }}">Login</a>
-                </li> 
+                </li>
                 {% endif %}
             </ul>
         </div>
     </nav>
-    <div class="container mt-4">
+    <div class="container-fluid">
+        {% with messages = get_flashed_messages() %}
+        {% if messages %}
+        <div class="row"><div class="col">
+            {% for message in messages %}
+            <div class="alert alert-warning alert-dismissible fade show">
+                {{ message }}
+                <button type="button" class="close" data-dismiss="alert">&times;</button>
+            </div>
+            {% endfor %}
+        </div></div>
+        {% endif %}
+        {% endwith %}
         {% block content %}{% endblock %}
     </div>
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>

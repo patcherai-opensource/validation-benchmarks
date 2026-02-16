@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+
+{% block title %}Printers - PrintCore{% endblock %}
+
+{% block content %}
+<h3>Printer Profiles</h3>
+<div class="row">
+    {% for p in profiles %}
+    <div class="col-md-4">
+        <div class="card">
+            <div class="card-header">
+                <strong>{{ p.name }}</strong>
+            </div>
+            <div class="card-body">
+                <p><strong>Model:</strong> {{ p.model }}</p>
+                <p><strong>Build Volume:</strong> {{ p.volume_x }} x {{ p.volume_y }} x {{ p.volume_z }} mm</p>
+                <p><strong>Nozzle:</strong> {{ p.nozzle_diameter }} mm</p>
+                <p><strong>Heated Bed:</strong> {{ "Yes" if p.heated_bed else "No" }}</p>
+                <span class="badge badge-operational">Operational</span>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% endblock %}

@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+
+{% block title %}Settings - PrintCore{% endblock %}
+
+{% block content %}
+<h3>Settings</h3>
+<ul class="nav nav-tabs" role="tablist">
+    <li class="nav-item">
+        <a class="nav-link active" data-toggle="tab" href="#printer-tab">Printer</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link" data-toggle="tab" href="#scripts-tab">Command Scripts</a>
+    </li>
+</ul>
+<div class="tab-content mt-3">
+    <div class="tab-pane active" id="printer-tab">
+        <div class="card">
+            <div class="card-body">
+                {% if printer %}
+                <p><strong>Name:</strong> {{ printer.name }}</p>
+                <p><strong>Model:</strong> {{ printer.model }}</p>
+                <p><strong>Build Volume:</strong> {{ printer.volume_x }} x {{ printer.volume_y }} x {{ printer.volume_z }} mm</p>
+                {% else %}
+                <p class="text-muted">No printer configured.</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+    <div class="tab-pane" id="scripts-tab">
+        <p class="text-muted">Command scripts are executed as templates during printer events (connect, disconnect, print start, etc.). Edit via the Settings API.</p>
+        {% for s in scripts %}
+        <div class="card mb-2">
+            <div class="card-header">
+                <code>{{ s.event_name }}</code>
+                <small class="text-muted float-right">Last updated: {{ s.updated_at.strftime('%Y-%m-%d %H:%M') if s.updated_at else 'never' }}</small>
+            </div>
+            <div class="card-body">
+                {% if s.script_body.strip() %}
+                <pre class="script-output">{{ s.script_body }}</pre>
+                {% else %}
+                <em class="text-muted">No script configured.</em>
+                {% endif %}
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

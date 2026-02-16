@@ -1,0 +1,83 @@
+{% extends "base.html" %}
+
+{% block title %}Dashboard - PrintCore{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-8">
+        <div class="card">
+            <div class="card-header">
+                <h5>Printer Status</h5>
+            </div>
+            <div class="card-body">
+                {% if printers %}
+                {% for p in printers %}
+                <div class="d-flex justify-content-between align-items-center mb-2">
+                    <div>
+                        <strong>{{ p.name }}</strong>
+                        <small class="text-muted">({{ p.model }})</small>
+                    </div>
+                    <span class="badge badge-operational">Operational</span>
+                </div>
+                {% endfor %}
+                {% else %}
+                <p class="text-muted">No printers configured.</p>
+                {% endif %}
+            </div>
+        </div>
+
+        <div class="card mt-3">
+            <div class="card-header d-flex justify-content-between">
+                <h5>Recent Jobs</h5>
+                <a href="{{ url_for('jobs') }}" class="btn btn-sm btn-outline-primary">View All</a>
+            </div>
+            <div class="card-body">
+                {% if jobs %}
+                <table class="table table-sm">
+                    <thead>
+                        <tr>
+                            <th>File</th>
+                            <th>Status</th>
+                            <th>Created</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for j in jobs %}
+                        <tr>
+                            <td>{{ j.filename }}</td>
+                            <td><span class="badge badge-secondary">{{ j.status }}</span></td>
+                            <td>{{ j.created_at.strftime('%Y-%m-%d %H:%M') if j.created_at else '-' }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+                {% else %}
+                <p class="text-muted">No print jobs yet.</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-4">
+        <div class="card">
+            <div class="card-header"><h5>Quick Actions</h5></div>
+            <div class="card-body">
+                <a href="{{ url_for('printers') }}" class="btn btn-outline-secondary btn-block mb-2">Manage Printers</a>
+                <a href="{{ url_for('jobs') }}" class="btn btn-outline-secondary btn-block mb-2">Print Jobs</a>
+                {% if current_user.is_admin() %}
+                <a href="{{ url_for('settings_page') }}" class="btn btn-outline-secondary btn-block mb-2">Settings</a>
+                {% endif %}
+            </div>
+        </div>
+        <div class="card mt-3">
+            <div class="card-header"><h5>System Info</h5></div>
+            <div class="card-body">
+                <small class="text-muted">
+                    PrintCore v1.8.7<br>
+                    Python {{ "3.x" }}<br>
+                </small>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
