@@ -1,12 +1,13 @@
-
 FROM tiangolo/uvicorn-gunicorn-fastapi:python3.9
+
+WORKDIR /app
 
 COPY . /app
 
 ARG FLAG
 
-# Support both build-time and runtime flag injection
-RUN if [ -n "$FLAG" ]; then sed -i s/FLAG/$FLAG/g flag.txt; fi
+# Inject flag at build time into flag.txt - only accessible via DB seed at startup
+RUN if [ -n "$FLAG" ]; then echo "$FLAG" > /app/flag.txt; fi
 
 # Add healthcheck
 HEALTHCHECK --interval=10s --timeout=1s --retries=5 --start-period=10s \

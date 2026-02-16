@@ -3,92 +3,229 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ultimate Job Aggregator</title>
+    <title>DataCatalog Platform</title>
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body { background-color: #f8f9fa; }
+        .navbar { background-color: #7147e8; }
+        .navbar-brand, .nav-link { color: #fff !important; }
+        .card { border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.08); }
+        .sidebar { min-height: calc(100vh - 56px); background: #fff; border-right: 1px solid #e9ecef; }
+        .sidebar .nav-link { color: #495057; padding: 0.75rem 1.25rem; }
+        .sidebar .nav-link:hover { background-color: #f1f3f5; }
+        .sidebar .nav-link.active { color: #7147e8; font-weight: 600; border-left: 3px solid #7147e8; }
+        .stat-card { text-align: center; padding: 1.5rem; }
+        .stat-card h3 { color: #7147e8; margin-bottom: 0.25rem; }
+        .table-container { max-height: 400px; overflow-y: auto; }
+        .badge-running { background-color: #17a2b8; }
+        .badge-completed { background-color: #28a745; }
+        .badge-failed { background-color: #dc3545; }
+        .badge-idle { background-color: #6c757d; }
+    </style>
 </head>
 <body>
-    <div class="container mt-5">
-        <h1 class="text-center">Ultimate Job Aggregator</h1>
-        <div class="row justify-content-center mt-4">
-            <div class="col-md-6">
-                <form id="filter-form">
-                    <div class="form-group">
-                        <label for="job-type">Filter by Job Type</label>
-                        <select id="job-type" class="form-control">
-                            <option value="">All</option>
-                            <option value="back-end">back-end</option>
-                            <option value="front-end">front-end</option>
-                            <option value="private">private</option>
-                        </select>
+    <nav class="navbar navbar-expand-lg navbar-dark">
+        <a class="navbar-brand" href="/">
+            <strong>DataCatalog</strong> <small class="text-light">Platform</small>
+        </a>
+        <div class="collapse navbar-collapse">
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item"><a class="nav-link" href="/api/v1/system/version">API</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <div class="container-fluid">
+        <div class="row">
+            <nav class="col-md-2 sidebar pt-3">
+                <ul class="nav flex-column">
+                    <li class="nav-item"><a class="nav-link active" href="#" data-section="overview">Overview</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#" data-section="services">Services</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#" data-section="pipelines">Ingestion</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#" data-section="automations">Automations</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#" data-section="settings">Settings</a></li>
+                </ul>
+            </nav>
+
+            <main class="col-md-10 pt-3 px-4">
+                <!-- Overview Section -->
+                <div id="section-overview">
+                    <h4>Platform Overview</h4>
+                    <div class="row mt-3" id="stats-row">
+                        <div class="col-md-3">
+                            <div class="card stat-card">
+                                <h3 id="service-count">-</h3>
+                                <small class="text-muted">Services</small>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="card stat-card">
+                                <h3 id="pipeline-count">-</h3>
+                                <small class="text-muted">Pipelines</small>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="card stat-card">
+                                <h3 id="task-count">-</h3>
+                                <small class="text-muted">Automation Tasks</small>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="card stat-card">
+                                <h3>1.4.1</h3>
+                                <small class="text-muted">Version</small>
+                            </div>
+                        </div>
                     </div>
-                    <button type="submit" class="btn btn-primary btn-block">Filter Jobs</button>
-                </form>
-                <div class="mt-4" id="result"></div>
-            </div>
+                </div>
+
+                <!-- Services Section -->
+                <div id="section-services" style="display:none;">
+                    <h4>Services</h4>
+                    <div class="table-container mt-3">
+                        <table class="table table-hover" id="services-table">
+                            <thead class="thead-light">
+                                <tr><th>Name</th><th>Type</th><th>Description</th><th>Updated</th></tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Pipelines Section -->
+                <div id="section-pipelines" style="display:none;">
+                    <h4>Ingestion Pipelines</h4>
+                    <div class="table-container mt-3">
+                        <table class="table table-hover" id="pipelines-table">
+                            <thead class="thead-light">
+                                <tr><th>Name</th><th>Type</th><th>Service</th><th>Updated</th></tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Automations Section -->
+                <div id="section-automations" style="display:none;">
+                    <h4>Automation Tasks</h4>
+                    <div class="row mb-3">
+                        <div class="col-md-3">
+                            <select id="filter-taskType" class="form-control form-control-sm">
+                                <option value="">All Task Types</option>
+                                <option value="testConnection">testConnection</option>
+                                <option value="dataProfiler">dataProfiler</option>
+                                <option value="dataQuality">dataQuality</option>
+                                <option value="lineageIngestion">lineageIngestion</option>
+                            </select>
+                        </div>
+                        <div class="col-md-3">
+                            <select id="filter-status" class="form-control form-control-sm">
+                                <option value="">All Statuses</option>
+                                <option value="idle">idle</option>
+                                <option value="running">running</option>
+                                <option value="completed">completed</option>
+                                <option value="failed">failed</option>
+                            </select>
+                        </div>
+                        <div class="col-md-2">
+                            <button class="btn btn-primary btn-sm btn-block" onclick="loadTasks()">Filter</button>
+                        </div>
+                    </div>
+                    <div class="table-container">
+                        <table class="table table-hover" id="tasks-table">
+                            <thead class="thead-light">
+                                <tr><th>Name</th><th>Task Type</th><th>Status</th></tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Settings Section -->
+                <div id="section-settings" style="display:none;">
+                    <h4>Platform Settings</h4>
+                    <div class="card mt-3 p-3">
+                        <h6>Public Configuration</h6>
+                        <pre id="config-display" class="bg-light p-3 rounded"></pre>
+                    </div>
+                </div>
+            </main>
         </div>
     </div>
 
     <script>
-        document.getElementById('filter-form').addEventListener('submit', async function(event) {
-            event.preventDefault();
-            const jobType = document.getElementById('job-type').value;
-            const resultDiv = document.getElementById('result');
-            resultDiv.innerHTML = '';
-
-            try {
-                const response = await fetch('/jobs', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({ job_type: jobType })
-                });
-                if (response.ok) {
-                    const data = await response.json();
-                    if (data.length === 0) {
-                        resultDiv.innerHTML = '<div class="alert alert-warning" role="alert">No jobs found</div>';
-                    } else {
-                        let jobsTable = `
-                            <table class="table table-bordered mt-4">
-                                <thead>
-                                    <tr>
-                                        <th>ID</th>
-                                        <th>Name</th>
-                                        <th>Type</th>
-                                        <th>Description</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                        `;
-                        data.forEach(user => {
-                            jobsTable += `
-                                <tr>
-                                    <td>${user.id}</td>
-                                    <td>${user.name}</td>
-                                    <td>${user.type}</td>
-                                    <td>${user.description}</td>
-                                </tr>
-                            `;
-                        });
-                        jobsTable += '</tbody></table>';
-                        resultDiv.innerHTML = jobsTable;
-                    }
-                } else {
-                    const errorData = await response.json();
-                    resultDiv.innerHTML = `
-                        <div class="alert alert-danger" role="alert">
-                            Error: ${errorData.detail}
-                        </div>
-                    `;
-                }
-            } catch (error) {
-                resultDiv.innerHTML = `
-                    <div class="alert alert-danger" role="alert">
-                        Network error or server is down.
-                    </div>
-                `;
-            }
+        // Navigation
+        document.querySelectorAll('.sidebar .nav-link').forEach(link => {
+            link.addEventListener('click', function(e) {
+                e.preventDefault();
+                document.querySelectorAll('.sidebar .nav-link').forEach(l => l.classList.remove('active'));
+                this.classList.add('active');
+                const section = this.dataset.section;
+                document.querySelectorAll('main > div').forEach(s => s.style.display = 'none');
+                document.getElementById('section-' + section).style.display = 'block';
+                if (section === 'services') loadServices();
+                if (section === 'pipelines') loadPipelines();
+                if (section === 'automations') loadTasks();
+                if (section === 'settings') loadConfig();
+            });
         });
+
+        async function loadOverview() {
+            try {
+                const [svc, pip, tsk] = await Promise.all([
+                    fetch('/api/v1/services').then(r => r.json()),
+                    fetch('/api/v1/services/ingestionPipelines').then(r => r.json()),
+                    fetch('/api/v1/automations/tasks').then(r => r.json())
+                ]);
+                document.getElementById('service-count').textContent = svc.paging.total;
+                document.getElementById('pipeline-count').textContent = pip.paging.total;
+                document.getElementById('task-count').textContent = tsk.paging.total;
+            } catch(e) {}
+        }
+
+        async function loadServices() {
+            const res = await fetch('/api/v1/services?limit=50');
+            const data = await res.json();
+            const tbody = document.querySelector('#services-table tbody');
+            tbody.innerHTML = '';
+            data.data.forEach(s => {
+                tbody.innerHTML += `<tr><td>${s.name}</td><td><span class="badge badge-info">${s.serviceType}</span></td><td>${s.description||''}</td><td>${s.updatedAt||''}</td></tr>`;
+            });
+        }
+
+        async function loadPipelines() {
+            const res = await fetch('/api/v1/services/ingestionPipelines?limit=50');
+            const data = await res.json();
+            const tbody = document.querySelector('#pipelines-table tbody');
+            tbody.innerHTML = '';
+            data.data.forEach(p => {
+                tbody.innerHTML += `<tr><td>${p.name}</td><td>${p.pipelineType}</td><td>${p.serviceId}</td><td>${p.updatedAt||''}</td></tr>`;
+            });
+        }
+
+        async function loadTasks() {
+            const taskType = document.getElementById('filter-taskType').value;
+            const status = document.getElementById('filter-status').value;
+            let url = '/api/v1/automations/tasks?limit=50';
+            if (taskType) url += '&taskType=' + encodeURIComponent(taskType);
+            if (status) url += '&status=' + encodeURIComponent(status);
+            const res = await fetch(url);
+            const data = await res.json();
+            const tbody = document.querySelector('#tasks-table tbody');
+            tbody.innerHTML = '';
+            (data.data || []).forEach(t => {
+                const statusClass = 'badge-' + (t.status || 'idle');
+                tbody.innerHTML += `<tr><td>${t.name||''}</td><td>${t.taskType||''}</td><td><span class="badge ${statusClass}">${t.status||''}</span></td></tr>`;
+            });
+        }
+
+        async function loadConfig() {
+            const res = await fetch('/api/v1/system/config');
+            const data = await res.json();
+            document.getElementById('config-display').textContent = JSON.stringify(data.data, null, 2);
+        }
+
+        loadOverview();
     </script>
 </body>
 </html>

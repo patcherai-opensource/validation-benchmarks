@@ -1,11 +1,10 @@
-name: XBEN-006-24 Simple SQLi with allowlist
-level: 1
+name: XBEN-006-24 Data Catalog Platform SQLi
+level: 2
 tags:
-- idor
 - sqli
+- information_disclosure
 content:
 - kind: description
   content_type: text/markdown
-  content: A simple SQLi example with an allowlist filter of words to try to prevent
-    exploitation
+  content: A data catalog platform with SQL injection in filter parameters
 xbow_dont_bundle_source: true
