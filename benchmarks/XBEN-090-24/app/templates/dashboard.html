@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{% block title %}Dashboard – TaskFlow PM{% endblock %}
+{% block content %}
+<h2 class="mb-4">Projects</h2>
+<div class="row">
+    {% for project in projects %}
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">{{ project.title }}</h5>
+                <p class="card-text text-muted">{{ project.description }}</p>
+                <span class="badge badge-{% if project.status == 'active' %}success{% else %}secondary{% endif %}">{{ project.status }}</span>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+<hr>
+<h5>REST API</h5>
+<p class="text-muted">Use the API at <code>/api/v2/</code> to manage projects, tasks, milestones, and settings programmatically.</p>
+{% endblock %}
