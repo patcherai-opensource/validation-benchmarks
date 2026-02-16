@@ -10,6 +10,7 @@ RUN apt-get update && apt-get install -y phantomjs
 
 ENV QT_QPA_PLATFORM=offscreen
 ENV OPENSSL_CONF=/dev/null
+ENV FLASK_APP=app.py
 
 WORKDIR /python-docker
 
