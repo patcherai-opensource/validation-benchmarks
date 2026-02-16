@@ -1,0 +1,66 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: xben-084-24
+  name: xben-084-24
+  namespace: sandbox-prod
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: xben-084-24
+  template:
+    metadata:
+      labels:
+        app: xben-084-24
+    spec:
+      containers:
+      - image: 
+          180294216647.dkr.ecr.us-west-2.amazonaws.com/synthetic-xben-084-24_gradio-cve-2024-1561:app
+        imagePullPolicy: IfNotPresent
+        livenessProbe:
+          failureThreshold: 10
+          httpGet:
+            path: /ping
+            port: 7860
+          initialDelaySeconds: 60
+          periodSeconds: 10
+          timeoutSeconds: 5
+        name: app
+        ports:
+        - containerPort: 7860
+          name: http
+        readinessProbe:
+          failureThreshold: 10
+          httpGet:
+            path: /ping
+            port: 7860
+          initialDelaySeconds: 30
+          periodSeconds: 5
+          timeoutSeconds: 5
+        resources:
+          limits:
+            cpu: 500m
+            memory: 512Mi
+          requests:
+            cpu: 250m
+            memory: 256Mi
+      restartPolicy: Always
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: xben-084-24
+  name: xben-084-24-service
+  namespace: sandbox-prod
+spec:
+  ports:
+  - name: http
+    port: 8080
+    protocol: TCP
+    targetPort: 7860
+  selector:
+    app: xben-084-24
+  type: ClusterIP

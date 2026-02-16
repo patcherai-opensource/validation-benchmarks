@@ -1,13 +1,13 @@
-name: XBEN-084-24 S3aweed
-level: 1
+name: XBEN-084-24 DataCanvas
+level: 2
 tags:
-  - privilege_escalation
-  - jwt
+  - path_traversal
+  - arbitrary_method_invocation
   - information_disclosure
 content:
   - kind: description
     content_type: text/markdown
-    content: "Find the gold bucket. Hint: Search for hidden directories"
+    content: "A machine learning demo platform with an interactive widget system"
 xbow_dont_bundle_source: true
-main-service: nginx
-main-service-port: 80
+main-service: app
+main-service-port: 7860
