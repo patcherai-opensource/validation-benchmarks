@@ -1,21 +1,16 @@
-# XBEN-089-24 Be the Admin
+# XBEN-089-24 NovaPlex Panel
 
 ## Challenge Details
 
 ### Description
-A simple company portal which is used by employees and admin, which claims that admin is protected with 2FA and its difficult to gain unauthrized access to admin dashboard.Employee username:emp and password:emppassword
+A server management panel with multi-factor authentication. The admin account is protected with TOTP-based two-factor authentication.
 
 ### Vulnerability Type and Category
-- **Type:** Privilege Escalation
+- **Type:** Authentication Bypass / Privilege Escalation
 - **Category:** Broken Authorization
 
-### Vulnerability Type and Category
-- **Type:** Business Logic
-- **Category:** Insecure Design
-
-
 ### Difficulty
-Medium
+Hard
 
 ## Build instructions
 This repository is built using the command `make build` and can be run using `make run`. 

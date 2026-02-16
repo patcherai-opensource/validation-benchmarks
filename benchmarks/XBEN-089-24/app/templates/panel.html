@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NovaPlex Panel &mdash; Dashboard</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <style>
+        body { background-color: #111827; }
+        .sidebar { background-color: #1f2937; border-right: 1px solid #374151; }
+        .content-card { background-color: #1f2937; border: 1px solid #374151; }
+        .status-running { color: #34d399; }
+        .status-stopped { color: #f87171; }
+        .nav-item { color: #9ca3af; transition: all 0.15s; }
+        .nav-item:hover { color: #e5e7eb; background-color: #374151; }
+        .nav-item.active { color: #60a5fa; background-color: rgba(59,130,246,0.1); }
+    </style>
+</head>
+<body class="text-gray-200">
+    <div class="flex min-h-screen">
+        <div class="sidebar w-64 flex-shrink-0 flex flex-col">
+            <div class="p-4 border-b border-gray-700">
+                <h1 class="text-lg font-bold text-white">NovaPlex</h1>
+                <p class="text-xs text-gray-500">Server Management Panel</p>
+            </div>
+            <nav class="flex-1 p-4">
+                <a href="/panel" class="nav-item active block px-3 py-2 rounded text-sm mb-1">Servers</a>
+                <a href="/api/client" class="nav-item block px-3 py-2 rounded text-sm mb-1">Account</a>
+                <a href="/api/client/activity" class="nav-item block px-3 py-2 rounded text-sm mb-1">Activity</a>
+                {% if user['role'] == 'admin' %}
+                <div class="mt-6 pt-4 border-t border-gray-700">
+                    <p class="text-xs text-gray-500 uppercase tracking-wider mb-2">Administration</p>
+                    <a href="/panel/admin" class="nav-item block px-3 py-2 rounded text-sm mb-1">Settings</a>
+                </div>
+                {% endif %}
+            </nav>
+            <div class="p-4 border-t border-gray-700">
+                <p class="text-sm text-gray-400">{{ user['username'] }}</p>
+                <p class="text-xs text-gray-600">{{ user['email'] }}</p>
+                <a href="/auth/signout" class="text-xs text-red-400 hover:text-red-300 mt-2 inline-block">Sign Out</a>
+            </div>
+        </div>
+
+        <div class="flex-1 p-8">
+            <div class="mb-8">
+                <h2 class="text-2xl font-bold text-white">Your Servers</h2>
+                <p class="text-gray-400 text-sm mt-1">Manage and monitor your game servers.</p>
+            </div>
+
+            {% if servers %}
+            <div class="grid gap-4 grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
+                {% for server in servers %}
+                <div class="content-card rounded-lg p-5">
+                    <div class="flex items-center justify-between mb-3">
+                        <h3 class="text-white font-medium">{{ server['name'] }}</h3>
+                        <span class="text-xs px-2 py-1 rounded {% if server['status'] == 'running' %}bg-green-900 status-running{% else %}bg-red-900 status-stopped{% endif %}">
+                            {{ server['status'] }}
+                        </span>
+                    </div>
+                    <div class="text-xs text-gray-500 space-y-1">
+                        <p>UUID: {{ server['uuid'][:8] }}...</p>
+                        <p>Memory: {{ server['memory'] }} MB</p>
+                        <p>Disk: {{ server['disk'] }} MB</p>
+                        <p>CPU: {{ server['cpu'] }}%</p>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+            {% else %}
+            <div class="content-card rounded-lg p-8 text-center">
+                <p class="text-gray-400">No servers found. Contact an administrator to get started.</p>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</body>
+</html>
