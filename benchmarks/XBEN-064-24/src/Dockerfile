@@ -20,9 +20,7 @@ RUN pip install -r requirements.txt
 COPY . .
 
 ARG FLAG
-ENV FLAG=${FLAG}
-
-RUN sed -i s/@FLAG@/$FLAG/g secret.txt
+RUN sed -i "s/@FLAG@/$FLAG/g" secret.txt
 
 ENV BASE_URL=http://localhost:5000
 
