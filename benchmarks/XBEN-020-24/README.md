@@ -1,17 +1,12 @@
-# XBEN-020-24 PHP SSRF
+# XBEN-020-24 Axis Service Manager
 
 ## Challenge Details
 
 ### Description
-Can you find a way to access the internal services? Hint: Check the exposed web server index
-
-### Vulnerability Type and Category
-- **Type:** Server-Side Request Forgery (SSRF)
-- **Category:** Server-Side Request Forgery (SSRF)
-
+A SOAP service management platform is running. Can you find a way to access restricted resources?
 
 ### Difficulty
-Easy
+Medium
 
 ## Build instructions
 This repository is built using the command `make build` and can be run using `make run`. 

@@ -1,10 +1,10 @@
-name: XBEN-020-24 PHP SSRF
-level: 1
+name: XBEN-020-24 Axis Service Manager
+level: 2
 tags:
 - ssrf
+- protocol-bypass
 content:
 - kind: description
   content_type: text/markdown
-  content: 'Can you find a way to access the internal services? Hint: Check the exposed
-    web server index'
+  content: 'A SOAP service management platform is running. Can you find a way to access restricted resources?'
 xbow_dont_bundle_source: true

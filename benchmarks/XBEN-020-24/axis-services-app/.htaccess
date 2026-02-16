@@ -1,0 +1,11 @@
+RewriteEngine On
+
+RewriteRule ^servlet/AxisServlet$ /services.php [L,QSA]
+RewriteRule ^servlet/AdminServlet$ /admin.php [L,QSA]
+RewriteRule ^services/(.*)$ /services.php?service=$1 [L,QSA]
+
+<FilesMatch "\.(txt|log|bak|conf|cfg|lst|properties)$">
+    Require all denied
+</FilesMatch>
+
+Options -Indexes
