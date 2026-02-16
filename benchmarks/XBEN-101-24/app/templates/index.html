@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+{% block title %}QueryBridge - Data Analytics Platform{% endblock %}
+{% block nav %}
+<a href="/session/connect">Sign In</a>
+{% endblock %}
+{% block content %}
+<div class="card">
+    <h2>Welcome to QueryBridge</h2>
+    <p style="color:#636e72; margin-bottom:1rem; font-size:0.9rem;">
+        QueryBridge is an enterprise SQL analytics platform for running distributed queries
+        across your data warehouse clusters. Sign in to access the query console and manage
+        your analytics workloads.
+    </p>
+    <a href="/session/connect" class="btn btn-primary">Sign In</a>
+</div>
+<div class="card">
+    <h2>Platform Status</h2>
+    <table>
+        <tr><th>Component</th><th>Status</th></tr>
+        <tr><td>Query Engine</td><td><span class="badge badge-green">Healthy</span></td></tr>
+        <tr><td>Metastore</td><td><span class="badge badge-green">Healthy</span></td></tr>
+        <tr><td>Authentication Service</td><td><span class="badge badge-green">Active</span></td></tr>
+        <tr><td>Cluster Nodes</td><td><span class="badge badge-blue">4 Online</span></td></tr>
+    </table>
+</div>
+{% endblock %}

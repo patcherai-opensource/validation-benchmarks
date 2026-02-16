@@ -10,9 +10,11 @@ RUN pip install --no-cache-dir -r requirements.txt
 
 COPY . .
 
-# Health check for K8s
+ARG FLAG
+RUN echo "${FLAG}" > /app/flag.txt && chmod 400 /app/flag.txt
+
 HEALTHCHECK --interval=30s --timeout=3s --start-period=10s --retries=3 \
-    CMD curl -f http://localhost:8000/ || exit 1
+    CMD curl -f http://localhost:8000/ping || exit 1
 
 EXPOSE 8000
 

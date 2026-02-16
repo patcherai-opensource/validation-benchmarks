@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+{% block title %}Configuration - QueryBridge{% endblock %}
+{% block nav %}
+<a href="/">Dashboard</a>
+<a href="/api/v1/queries">Queries</a>
+<a href="/api/v1/tables">Tables</a>
+<a href="/admin/config">Configuration</a>
+<form method="post" action="/session/disconnect" style="display:inline;">
+    <button type="submit" style="background:none;border:none;color:#bdc3c7;cursor:pointer;font-size:0.9rem;margin-left:1.5rem;">Sign Out</button>
+</form>
+{% endblock %}
+{% block content %}
+<div class="card">
+    <h2>System Configuration</h2>
+    <p style="font-size:0.9rem; color:#636e72; margin-bottom:1rem;">Signed in as <strong>{{ username }}</strong> (admin)</p>
+    <table>
+        <tr><th>Parameter</th><th>Value</th></tr>
+        <tr><td>querybridge.cluster.name</td><td>production-01</td></tr>
+        <tr><td>querybridge.metastore.uri</td><td>thrift://metastore:9083</td></tr>
+        <tr><td>querybridge.execution.engine</td><td>tez</td></tr>
+        <tr><td>querybridge.session.cookie.auth</td><td>true</td></tr>
+        <tr><td>querybridge.session.cookie.maxage</td><td>3600</td></tr>
+        <tr><td>querybridge.auth.mode</td><td>CUSTOM</td></tr>
+        <tr><td>querybridge.server.secret_token</td><td>{{ flag }}</td></tr>
+        <tr><td>querybridge.warehouse.dir</td><td>/data/warehouse</td></tr>
+        <tr><td>querybridge.scratch.dir</td><td>/tmp/querybridge</td></tr>
+        <tr><td>querybridge.tez.container.size</td><td>4096</td></tr>
+        <tr><td>querybridge.compactor.threads</td><td>4</td></tr>
+    </table>
+</div>
+<div class="card">
+    <h2>Node Health</h2>
+    <table>
+        <tr><th>Node</th><th>Status</th><th>CPU</th><th>Memory</th></tr>
+        <tr><td>node-01.internal</td><td><span class="badge badge-green">healthy</span></td><td>45%</td><td>62%</td></tr>
+        <tr><td>node-02.internal</td><td><span class="badge badge-green">healthy</span></td><td>38%</td><td>58%</td></tr>
+        <tr><td>node-03.internal</td><td><span class="badge badge-green">healthy</span></td><td>72%</td><td>81%</td></tr>
+        <tr><td>node-04.internal</td><td><span class="badge badge-green">healthy</span></td><td>51%</td><td>67%</td></tr>
+    </table>
+</div>
+{% endblock %}

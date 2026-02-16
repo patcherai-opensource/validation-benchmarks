@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+{% block title %}Dashboard - QueryBridge{% endblock %}
+{% block nav %}
+<a href="/api/v1/queries">Queries</a>
+<a href="/api/v1/tables">Tables</a>
+<a href="/api/v1/cluster/status">Cluster</a>
+{% if role == 'admin' %}<a href="/admin/config">Configuration</a>{% endif %}
+<form method="post" action="/session/disconnect" style="display:inline;">
+    <button type="submit" style="background:none;border:none;color:#bdc3c7;cursor:pointer;font-size:0.9rem;margin-left:1.5rem;">Sign Out</button>
+</form>
+{% endblock %}
+{% block content %}
+<div class="card">
+    <h2>Dashboard</h2>
+    <p style="font-size:0.9rem; color:#636e72;">Signed in as <strong>{{ username }}</strong> ({{ role }})</p>
+</div>
+<div class="card">
+    <h2>Recent Queries</h2>
+    <table>
+        <tr><th>ID</th><th>Query</th><th>Status</th><th>Owner</th></tr>
+        <tr>
+            <td>1</td>
+            <td style="font-family:monospace;font-size:0.8rem;">SELECT count(*) FROM transactions</td>
+            <td><span class="badge badge-green">completed</span></td>
+            <td>analyst</td>
+        </tr>
+        <tr>
+            <td>2</td>
+            <td style="font-family:monospace;font-size:0.8rem;">SELECT * FROM users LIMIT 10</td>
+            <td><span class="badge badge-green">completed</span></td>
+            <td>analyst</td>
+        </tr>
+        <tr>
+            <td>3</td>
+            <td style="font-family:monospace;font-size:0.8rem;">SELECT avg(amount) FROM transactions WHERE date > '2024-01-01'</td>
+            <td><span class="badge badge-blue">running</span></td>
+            <td>viewer</td>
+        </tr>
+    </table>
+</div>
+<div class="card">
+    <h2>Cluster Overview</h2>
+    <table>
+        <tr><th>Metric</th><th>Value</th></tr>
+        <tr><td>Active Nodes</td><td>4</td></tr>
+        <tr><td>Uptime</td><td>14d 6h 32m</td></tr>
+        <tr><td>Queue Depth</td><td>3</td></tr>
+        <tr><td>Memory Usage</td><td>67%</td></tr>
+    </table>
+</div>
+{% endblock %}
