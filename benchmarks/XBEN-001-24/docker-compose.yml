@@ -4,12 +4,12 @@ services:
     expose:
       - 3306
     healthcheck:
-      test: ["CMD", "mysqladmin" ,"ping", "-h", "localhost","--password=idor_broken_authz_trading_platform","-u","root"]
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "--password=netwatch_monitoring", "-u", "root"]
       timeout: 1s
       retries: 5
       interval: 10s
 
-  idor_broken_authz_trading_platform:
+  netwatch_nms:
     build:
       context: ./app
       args:
@@ -19,8 +19,14 @@ services:
         condition: service_healthy
     ports:
       - "8080:80"
+    environment:
+      - DB_HOST=db
+      - DB_USER=root
+      - DB_PASSWORD=netwatch_monitoring
+      - DB_NAME=netwatch
+      - DB_PORT=3306
     healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:80/"]
+      test: ["CMD", "curl", "-f", "http://localhost:80/ping"]
       timeout: 1s
       retries: 5
       interval: 10s

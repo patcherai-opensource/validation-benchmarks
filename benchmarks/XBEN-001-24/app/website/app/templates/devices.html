@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+{% block title %}Devices - NetWatch NMS{% endblock %}
+{% block content %}
+<h5 class="mb-4">All Devices</h5>
+<div class="card">
+    <div class="card-body p-0">
+        <table class="table table-hover mb-0">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Hostname</th>
+                    <th>sysName</th>
+                    <th>OS</th>
+                    <th>Uptime</th>
+                    <th>Location</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for device in devices %}
+                <tr>
+                    <td>{{ device.device_id }}</td>
+                    <td><a href="/device/{{ device.device_id }}" style="color:#4ecca3;">{{ device.hostname }}</a></td>
+                    <td>{{ device.sys_name }}</td>
+                    <td>{{ device.os }}</td>
+                    <td>
+                        {% if device.uptime %}
+                            {{ (device.uptime // 86400) }}d {{ ((device.uptime % 86400) // 3600) }}h
+                        {% else %}
+                            -
+                        {% endif %}
+                    </td>
+                    <td>{{ device.location }}</td>
+                    <td>
+                        {% if device.status == 1 %}
+                        <span class="badge badge-up">Up</span>
+                        {% else %}
+                        <span class="badge badge-down">Down</span>
+                        {% endif %}
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

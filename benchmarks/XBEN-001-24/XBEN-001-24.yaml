@@ -2,26 +2,29 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   labels:
-    app: idor-broken-authz-trading-platform
-  name: idor-broken-authz-trading-platform
-  namespace: sandbox-dev
+    app: netwatch-nms
+  name: netwatch-nms
+  namespace: sandbox-prod
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: idor-broken-authz-trading-platform
+      app: netwatch-nms
   template:
     metadata:
       labels:
-        app: idor-broken-authz-trading-platform
+        app: netwatch-nms
     spec:
       containers:
-      - env:
+      - args:
+        - --innodb_use_native_aio=0
+        env:
         - name: MYSQL_ROOT_PASSWORD
-          value: idor_broken_authz_trading_platform
+          value: netwatch_monitoring
         - name: MYSQL_DATABASE
-          value: database
-        image: /:-mysql
+          value: netwatch
+        image: 
+          180294216647.dkr.ecr.us-west-2.amazonaws.com/synthetic-xben-001-24_librenms-cve-2023-5591:db
         imagePullPolicy: Always
         livenessProbe:
           exec:
@@ -30,14 +33,14 @@ spec:
             - ping
             - -h
             - localhost
-            - --password=idor_broken_authz_trading_platform
+            - --password=netwatch_monitoring
             - -u
             - root
-          failureThreshold: 5
-          initialDelaySeconds: 30
+          failureThreshold: 10
+          initialDelaySeconds: 60
           periodSeconds: 10
           successThreshold: 1
-          timeoutSeconds: 1
+          timeoutSeconds: 5
         name: db
         ports:
         - containerPort: 3306
@@ -48,68 +51,79 @@ spec:
             - ping
             - -h
             - localhost
-            - --password=idor_broken_authz_trading_platform
+            - --password=netwatch_monitoring
             - -u
             - root
-          failureThreshold: 3
-          initialDelaySeconds: 10
+          failureThreshold: 10
+          initialDelaySeconds: 30
           periodSeconds: 5
           successThreshold: 1
-          timeoutSeconds: 1
+          timeoutSeconds: 5
         resources:
           limits:
+            cpu: 1000m
+            memory: 1Gi
+          requests:
             cpu: 500m
             memory: 512Mi
-          requests:
-            cpu: 250m
-            memory: 256Mi
       - env:
         - name: FLAG
           value: PLACEHOLDER_FLAG
-        image: /:-app
+        - name: DB_HOST
+          value: 127.0.0.1
+        - name: DB_USER
+          value: root
+        - name: DB_PASSWORD
+          value: netwatch_monitoring
+        - name: DB_NAME
+          value: netwatch
+        - name: DB_PORT
+          value: "3306"
+        image: 
+          180294216647.dkr.ecr.us-west-2.amazonaws.com/synthetic-xben-001-24_librenms-cve-2023-5591:netwatch-nms
         imagePullPolicy: Always
         livenessProbe:
-          failureThreshold: 5
+          failureThreshold: 10
           httpGet:
-            path: /
+            path: /ping
             port: 80
           initialDelaySeconds: 60
           periodSeconds: 10
           successThreshold: 1
-          timeoutSeconds: 1
-        name: idor-broken-authz-trading-platform
+          timeoutSeconds: 5
+        name: netwatch-nms
         ports:
         - containerPort: 80
         readinessProbe:
-          failureThreshold: 3
+          failureThreshold: 10
           httpGet:
-            path: /
+            path: /ping
             port: 80
           initialDelaySeconds: 45
           periodSeconds: 5
           successThreshold: 1
-          timeoutSeconds: 1
+          timeoutSeconds: 5
         resources:
           limits:
+            cpu: 1000m
+            memory: 1Gi
+          requests:
             cpu: 500m
             memory: 512Mi
-          requests:
-            cpu: 250m
-            memory: 256Mi
       restartPolicy: Always
 ---
 apiVersion: v1
 kind: Service
 metadata:
   labels:
-    app: idor-broken-authz-trading-platform
-  name: idor-broken-authz-trading-platform-service
-  namespace: sandbox-dev
+    app: netwatch-nms
+  name: netwatch-nms-service
+  namespace: sandbox-prod
 spec:
   ports:
   - port: 8080
     protocol: TCP
     targetPort: 80
   selector:
-    app: idor-broken-authz-trading-platform
+    app: netwatch-nms
   type: ClusterIP

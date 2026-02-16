@@ -1,6 +1,6 @@
 FROM mysql:5.7
 
-ENV MYSQL_ROOT_PASSWORD=idor_broken_authz_trading_platform
-ENV MYSQL_DATABASE=database
+ENV MYSQL_ROOT_PASSWORD=netwatch_monitoring
+ENV MYSQL_DATABASE=netwatch
 
 EXPOSE 3306

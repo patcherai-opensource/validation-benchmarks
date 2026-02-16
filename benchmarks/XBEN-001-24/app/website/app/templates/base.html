@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}NetWatch NMS{% endblock %}</title>
+    <link href="{{ url_for('static', filename='css/bootstrap.min.css') }}" rel="stylesheet">
+    <style>
+        body { background-color: #1a1a2e; color: #e0e0e0; font-size: 14px; }
+        .navbar { background-color: #16213e !important; border-bottom: 1px solid #0f3460; }
+        .navbar-brand { color: #4ecca3 !important; font-weight: bold; }
+        .nav-link { color: #a0a0c0 !important; }
+        .nav-link:hover, .nav-link.active { color: #4ecca3 !important; }
+        .sidebar { background-color: #16213e; min-height: calc(100vh - 56px); padding-top: 1rem; border-right: 1px solid #0f3460; }
+        .sidebar .nav-link { color: #a0a0c0; padding: 0.5rem 1rem; font-size: 13px; }
+        .sidebar .nav-link:hover { color: #4ecca3; background-color: rgba(78, 204, 163, 0.1); }
+        .sidebar .nav-link.active { color: #4ecca3; border-left: 3px solid #4ecca3; }
+        .sidebar .sidebar-heading { font-size: 11px; text-transform: uppercase; color: #606080; padding: 0.5rem 1rem; margin-top: 0.5rem; }
+        .card { background-color: #16213e; border: 1px solid #0f3460; color: #e0e0e0; }
+        .card-header { background-color: #0f3460; border-bottom: 1px solid #0f3460; }
+        .table { color: #e0e0e0; }
+        .table thead th { border-bottom: 2px solid #0f3460; color: #4ecca3; font-size: 12px; }
+        .table td { border-top: 1px solid #0f3460; font-size: 13px; }
+        .table-hover tbody tr:hover { background-color: rgba(78, 204, 163, 0.05); color: #fff; }
+        .badge-up { background-color: #27ae60; }
+        .badge-down { background-color: #c0392b; }
+        .badge-warning { background-color: #f39c12; }
+        .stat-card { text-align: center; padding: 1rem; }
+        .stat-card .stat-value { font-size: 2rem; font-weight: bold; }
+        .stat-card .stat-label { font-size: 12px; color: #a0a0c0; }
+        .form-control { background-color: #1a1a2e; border: 1px solid #0f3460; color: #e0e0e0; }
+        .form-control:focus { background-color: #1a1a2e; border-color: #4ecca3; color: #e0e0e0; box-shadow: 0 0 0 0.2rem rgba(78, 204, 163, 0.25); }
+        .btn-primary { background-color: #4ecca3; border-color: #4ecca3; color: #1a1a2e; }
+        .btn-primary:hover { background-color: #3dbd94; border-color: #3dbd94; color: #1a1a2e; }
+        .content-area { padding: 1.5rem; }
+        select.form-control { appearance: auto; }
+        .breadcrumb { background-color: transparent; padding: 0; margin-bottom: 1rem; }
+        .breadcrumb-item a { color: #4ecca3; }
+        .breadcrumb-item.active { color: #a0a0c0; }
+    </style>
+    {% block extra_css %}{% endblock %}
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="/overview">NetWatch <small style="font-size:11px;color:#a0a0c0;">NMS</small></a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ml-auto">
+                    <li class="nav-item">
+                        <span class="nav-link">{{ user.first_name }} {{ user.last_name }} ({{ user.role }})</span>
+                    </li>
+                    <li class="nav-item">
+                        <form action="/logout" method="post" style="display:inline;">
+                            <button type="submit" class="btn btn-sm btn-outline-secondary">Logout</button>
+                        </form>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+    <div class="container-fluid">
+        <div class="row">
+            <nav class="col-md-2 sidebar d-none d-md-block">
+                <div class="sidebar-heading">Monitoring</div>
+                <a class="nav-link" href="/overview">Overview</a>
+                <a class="nav-link" href="/devices">Devices</a>
+                <a class="nav-link" href="/ports">Ports</a>
+                <a class="nav-link" href="/alerts">Alert Rules</a>
+                <a class="nav-link" href="/eventlog">Event Log</a>
+                <div class="sidebar-heading">Search</div>
+                <a class="nav-link" href="/search/inventory">Inventory Search</a>
+            </nav>
+            <main class="col-md-10 content-area">
+                {% block content %}{% endblock %}
+            </main>
+        </div>
+    </div>
+    <script src="{{ url_for('static', filename='js/jquery-3.5.1.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/bootstrap.bundle.min.js') }}"></script>
+    {% block extra_js %}{% endblock %}
+</body>
+</html>

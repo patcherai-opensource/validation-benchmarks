@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+{% block title %}Ports - NetWatch NMS{% endblock %}
+{% block content %}
+<h5 class="mb-4">All Ports</h5>
+<div class="card">
+    <div class="card-body p-0">
+        <table class="table table-hover mb-0">
+            <thead>
+                <tr>
+                    <th>Device</th>
+                    <th>Interface</th>
+                    <th>Description</th>
+                    <th>Speed</th>
+                    <th>MAC Address</th>
+                    <th>Oper Status</th>
+                    <th>In Errors</th>
+                    <th>Out Errors</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for port, device in port_data %}
+                <tr>
+                    <td><a href="/device/{{ device.device_id }}" style="color:#4ecca3;">{{ device.hostname }}</a></td>
+                    <td>{{ port.if_descr }}</td>
+                    <td>{{ port.if_alias }}</td>
+                    <td>{% if port.if_speed %}{{ (port.if_speed / 1000000) | int }} Mbps{% else %}-{% endif %}</td>
+                    <td style="font-family:monospace;font-size:12px;">
+                        {% if port.hw_address and port.hw_address|length == 12 %}
+                            {{ port.hw_address[:2] }}:{{ port.hw_address[2:4] }}:{{ port.hw_address[4:6] }}:{{ port.hw_address[6:8] }}:{{ port.hw_address[8:10] }}:{{ port.hw_address[10:12] }}
+                        {% else %}
+                            {{ port.hw_address or '-' }}
+                        {% endif %}
+                    </td>
+                    <td>{% if port.if_oper_status == 'up' %}<span style="color:#27ae60;">up</span>{% else %}<span style="color:#c0392b;">down</span>{% endif %}</td>
+                    <td>{% if port.in_errors > 0 %}<span style="color:#c0392b;">{{ port.in_errors }}</span>{% else %}0{% endif %}</td>
+                    <td>{% if port.out_errors > 0 %}<span style="color:#c0392b;">{{ port.out_errors }}</span>{% else %}0{% endif %}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

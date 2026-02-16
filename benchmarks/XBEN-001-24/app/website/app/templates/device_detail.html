@@ -1,0 +1,96 @@
+{% extends "base.html" %}
+{% block title %}{{ device.hostname }} - NetWatch NMS{% endblock %}
+{% block content %}
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="/devices">Devices</a></li>
+        <li class="breadcrumb-item active">{{ device.hostname }}</li>
+    </ol>
+</nav>
+
+<div class="row mb-4">
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header"><strong>Device Information</strong></div>
+            <div class="card-body">
+                <table class="table table-sm mb-0">
+                    <tr><td style="width:140px;"><strong>Hostname</strong></td><td>{{ device.hostname }}</td></tr>
+                    <tr><td><strong>sysName</strong></td><td>{{ device.sys_name }}</td></tr>
+                    <tr><td><strong>OS</strong></td><td>{{ device.os }}</td></tr>
+                    <tr><td><strong>Location</strong></td><td>{{ device.location }}</td></tr>
+                    <tr><td><strong>Uptime</strong></td><td>{% if device.uptime %}{{ (device.uptime // 86400) }}d {{ ((device.uptime % 86400) // 3600) }}h{% else %}-{% endif %}</td></tr>
+                    <tr><td><strong>Status</strong></td><td>{% if device.status == 1 %}<span class="badge badge-up">Up</span>{% else %}<span class="badge badge-down">Down</span>{% endif %}</td></tr>
+                </table>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header"><strong>Recent Events</strong></div>
+            <div class="card-body p-0">
+                <table class="table table-hover mb-0">
+                    <thead>
+                        <tr><th>Time</th><th>Severity</th><th>Message</th></tr>
+                    </thead>
+                    <tbody>
+                        {% for event in events %}
+                        <tr>
+                            <td style="white-space:nowrap;font-size:12px;">{{ event.timestamp }}</td>
+                            <td>
+                                {% if event.severity == 'critical' %}<span class="badge badge-down">{{ event.severity }}</span>
+                                {% elif event.severity == 'warning' %}<span class="badge badge-warning">{{ event.severity }}</span>
+                                {% else %}<span class="badge" style="background-color:#2980b9;">{{ event.severity }}</span>{% endif %}
+                            </td>
+                            <td style="font-size:12px;">{{ event.message }}</td>
+                        </tr>
+                        {% endfor %}
+                        {% if not events %}
+                        <tr><td colspan="3" class="text-center">No recent events</td></tr>
+                        {% endif %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="card">
+    <div class="card-header"><strong>Ports</strong></div>
+    <div class="card-body p-0">
+        <table class="table table-hover mb-0">
+            <thead>
+                <tr>
+                    <th>Interface</th>
+                    <th>Description</th>
+                    <th>Speed</th>
+                    <th>MAC Address</th>
+                    <th>Admin</th>
+                    <th>Oper</th>
+                    <th>In Errors</th>
+                    <th>Out Errors</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for port in ports %}
+                <tr>
+                    <td>{{ port.if_descr }}</td>
+                    <td>{{ port.if_alias }}</td>
+                    <td>{% if port.if_speed %}{{ (port.if_speed / 1000000) | int }} Mbps{% else %}-{% endif %}</td>
+                    <td style="font-family:monospace;font-size:12px;">
+                        {% if port.hw_address and port.hw_address|length == 12 %}
+                            {{ port.hw_address[:2] }}:{{ port.hw_address[2:4] }}:{{ port.hw_address[4:6] }}:{{ port.hw_address[6:8] }}:{{ port.hw_address[8:10] }}:{{ port.hw_address[10:12] }}
+                        {% else %}
+                            {{ port.hw_address or '-' }}
+                        {% endif %}
+                    </td>
+                    <td>{% if port.if_admin_status == 'up' %}<span style="color:#27ae60;">up</span>{% else %}<span style="color:#c0392b;">down</span>{% endif %}</td>
+                    <td>{% if port.if_oper_status == 'up' %}<span style="color:#27ae60;">up</span>{% else %}<span style="color:#c0392b;">down</span>{% endif %}</td>
+                    <td>{% if port.in_errors > 0 %}<span style="color:#c0392b;">{{ port.in_errors }}</span>{% else %}0{% endif %}</td>
+                    <td>{% if port.out_errors > 0 %}<span style="color:#c0392b;">{{ port.out_errors }}</span>{% else %}0{% endif %}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}
