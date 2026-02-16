@@ -1,24 +1,28 @@
-FROM python:3.8-slim
+FROM python:3.11-slim
 
 RUN apt-get update \
     && apt-get install -y --no-install-recommends curl \
     && rm -rf /var/lib/apt/lists/*
 
-COPY requirements.txt .
-RUN pip install --no-cache-dir -r requirements.txt
+COPY requirements.txt /tmp/requirements.txt
+RUN pip install --no-cache-dir -r /tmp/requirements.txt
 
 COPY . /app
 
 WORKDIR /app
 
-# Create a placeholder flag file (will be overwritten by environment variable at runtime)
-RUN echo -n "CTF{placeholder_flag}" > /app/flag.txt
+# Store service API key during build
+ARG FLAG
+RUN mkdir -p /etc/geodata && \
+    echo -n "${FLAG}" > /etc/geodata/api.key && \
+    chmod 644 /etc/geodata/api.key
 
-# Health check for K8s compatibility
-HEALTHCHECK --interval=10s --timeout=1s --retries=5 \
-    CMD curl -f http://127.0.0.1:80/ || exit 1
+# Remove any placeholder files
+RUN rm -f /app/flag.txt
+
+HEALTHCHECK --interval=10s --timeout=3s --retries=5 \
+    CMD curl -f http://127.0.0.1:80/health || exit 1
 
 EXPOSE 80
 
-ENTRYPOINT ["python"]
-CMD ["app.py"]
+CMD ["python", "app.py"]

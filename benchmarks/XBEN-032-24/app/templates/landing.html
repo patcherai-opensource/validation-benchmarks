@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ title }}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>{{ title }}</h1>
+            <p class="version">Version {{ version }}</p>
+        </header>
+
+        <section class="description">
+            <p>A catalogue service for discovering and accessing geospatial data and services.
+               This service implements OGC-compatible metadata search and retrieval operations.</p>
+        </section>
+
+        <section class="endpoints">
+            <h2>Available Endpoints</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Operation</th>
+                        <th>Endpoint</th>
+                        <th>Method</th>
+                        <th>Description</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>GetCapabilities</td>
+                        <td><a href="/catalogue/capabilities">/catalogue/capabilities</a></td>
+                        <td>GET</td>
+                        <td>Service capabilities and metadata</td>
+                    </tr>
+                    <tr>
+                        <td>Collections</td>
+                        <td><a href="/catalogue/collections">/catalogue/collections</a></td>
+                        <td>GET</td>
+                        <td>List available metadata collections</td>
+                    </tr>
+                    <tr>
+                        <td>GetRecords</td>
+                        <td>/catalogue/query</td>
+                        <td>POST</td>
+                        <td>Execute XML filter queries</td>
+                    </tr>
+                    <tr>
+                        <td>DescribeRecord</td>
+                        <td><a href="/catalogue/describe">/catalogue/describe</a></td>
+                        <td>GET</td>
+                        <td>Record schema information</td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
+
+        <section class="query-example">
+            <h2>Query Example</h2>
+            <p>Send an XML filter query via POST to <code>/catalogue/query</code>:</p>
+            <pre>&lt;GetRecords xmlns="http://geodata.example.com/gdc"
+            xmlns:ogc="http://www.opengis.net/ogc"&gt;
+  &lt;Query&gt;
+    &lt;Constraint&gt;
+      &lt;ogc:Filter&gt;
+        &lt;ogc:PropertyIsEqualTo&gt;
+          &lt;ogc:PropertyName&gt;type&lt;/ogc:PropertyName&gt;
+          &lt;ogc:Literal&gt;dataset&lt;/ogc:Literal&gt;
+        &lt;/ogc:PropertyIsEqualTo&gt;
+      &lt;/ogc:Filter&gt;
+    &lt;/Constraint&gt;
+  &lt;/Query&gt;
+&lt;/GetRecords&gt;</pre>
+        </section>
+
+        <footer>
+            <p>&copy; GeoData Services</p>
+        </footer>
+    </div>
+</body>
+</html>
