@@ -1,7 +1,6 @@
 FROM mysql:5.7
 
-# Default values, can be overridden by K8s environment variables
-ENV MYSQL_ROOT_PASSWORD=ssti_blind_loan_calculator
-ENV MYSQL_DATABASE=database
+ENV MYSQL_ROOT_PASSWORD=svc_monitor_admin
+ENV MYSQL_DATABASE=monitordb
 
 EXPOSE 3306

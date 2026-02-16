@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Service Monitor - Notifications</title>
+    <link href="{{ url_for('static', filename='css/bootstrap.min.css') }}" rel="stylesheet">
+    <style>
+        body { background-color: #1a1a2e; color: #eee; }
+        .sidebar { background: #16213e; min-height: 100vh; padding: 20px 0; }
+        .sidebar .nav-link { color: #a0a0b0; padding: 12px 20px; }
+        .sidebar .nav-link:hover, .sidebar .nav-link.active { color: #e94560; background: #0f3460; }
+        .sidebar .brand { color: #e94560; padding: 15px 20px; font-size: 1.2em; font-weight: bold; border-bottom: 1px solid #233554; margin-bottom: 10px; }
+        .main-content { padding: 30px; }
+        .config-card { background: #16213e; border: 1px solid #233554; border-radius: 8px; padding: 20px; margin-bottom: 20px; }
+        .status-badge { display: inline-block; padding: 4px 12px; border-radius: 20px; font-size: 0.85em; font-weight: bold; }
+        .status-UP { background: #1b5e20; color: #69f0ae; }
+        .status-DOWN { background: #b71c1c; color: #ff8a80; }
+        .status-UNKNOWN { background: #424242; color: #bdbdbd; }
+        .log-entry { background: #0f3460; border-radius: 6px; padding: 12px 15px; margin-bottom: 8px; }
+    </style>
+</head>
+<body>
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-2 sidebar">
+                <div class="brand">Service Monitor</div>
+                <nav class="nav flex-column">
+                    <a class="nav-link" href="{{ url_for('dashboard') }}">Dashboard</a>
+                    <a class="nav-link" href="{{ url_for('wallboard') }}">Wallboard</a>
+                    <a class="nav-link active" href="{{ url_for('notifications') }}">Notifications</a>
+                    <a class="nav-link" href="{{ url_for('notification_settings') }}">Alert Settings</a>
+                    <a class="nav-link" href="{{ url_for('alert_history') }}">Alert History</a>
+                    <a class="nav-link" href="{{ url_for('logout') }}">Sign Out</a>
+                </nav>
+            </div>
+            <div class="col-md-10 main-content">
+                <h2>Notification Overview</h2>
+
+                <div class="config-card">
+                    <h5>Current Configuration</h5>
+                    {% if config %}
+                    <table class="table table-dark table-sm">
+                        <tr><td style="width:200px;color:#a0a0b0;">Status</td><td>{{ 'Enabled' if config.enabled else 'Disabled' }}</td></tr>
+                        <tr><td style="color:#a0a0b0;">Recipients</td><td>{{ config.recipients }}</td></tr>
+                        <tr><td style="color:#a0a0b0;">Sender</td><td>{{ config.sender }}</td></tr>
+                    </table>
+                    <a href="{{ url_for('notification_settings') }}" class="btn btn-sm btn-outline-light">Edit Settings</a>
+                    {% else %}
+                    <p style="color:#a0a0b0;">No notification configuration found. <a href="{{ url_for('notification_settings') }}">Configure now</a>.</p>
+                    {% endif %}
+                </div>
+
+                <h4>Recent Alert Log</h4>
+                {% if logs %}
+                {% for log in logs %}
+                <div class="log-entry">
+                    <div class="d-flex justify-content-between">
+                        <div>
+                            <strong>{{ log.instance_name }}</strong>
+                            <span class="status-badge status-{{ log.previous_status }}">{{ log.previous_status }}</span>
+                            &rarr;
+                            <span class="status-badge status-{{ log.current_status }}">{{ log.current_status }}</span>
+                        </div>
+                        <small style="color:#777;">{{ log.timestamp.strftime('%Y-%m-%d %H:%M:%S') if log.timestamp else '' }}</small>
+                    </div>
+                    <div style="margin-top:5px;color:#999;">
+                        <small>To: {{ log.recipients }}</small>
+                    </div>
+                </div>
+                {% endfor %}
+                {% else %}
+                <p style="color:#a0a0b0;">No alerts have been generated yet.</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+    <script src="{{ url_for('static', filename='js/bootstrap.bundle.min.js') }}"></script>
+</body>
+</html>

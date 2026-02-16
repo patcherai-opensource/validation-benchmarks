@@ -3,42 +3,64 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login</title>
+    <title>Service Monitor - Login</title>
     <link href="{{ url_for('static', filename='css/bootstrap.min.css') }}" rel="stylesheet">
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <style>
+        body { background-color: #1a1a2e; color: #eee; }
+        .login-card {
+            max-width: 400px;
+            margin: 120px auto;
+            background: #16213e;
+            border-radius: 8px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+        }
+        .login-card .card-header {
+            background: #0f3460;
+            color: #e94560;
+            border-radius: 8px 8px 0 0;
+            text-align: center;
+            padding: 20px;
+        }
+        .login-card .card-body { padding: 30px; }
+        .btn-login {
+            background: #e94560;
+            border: none;
+            width: 100%;
+            padding: 10px;
+        }
+        .btn-login:hover { background: #c73650; }
+        .form-control { background: #0f3460; border: 1px solid #233554; color: #eee; }
+        .form-control:focus { background: #0f3460; color: #eee; border-color: #e94560; box-shadow: none; }
+        .form-label { color: #a0a0b0; }
+    </style>
 </head>
 <body>
-    <!-- TODO: Delete the testing account (test:test). --> 
     <div class="container">
-        <div class="row justify-content-center mt-5">
-            <div class="col-md-6">
-                <div class="card">
-                    <div class="card-body">
-                        <h2 class="card-title text-center">Login</h2>
-                        <form id="loginForm" action="{{ url_for('login') }}" method="post">
-                            <div class="mb-3">
-                                <label for="username" class="form-label">Username:</label>
-                                <input type="text" class="form-control" id="username" name="username" required>
-                            </div>
-                            <div class="mb-3">
-                                <label for="password" class="form-label">Password:</label>
-                                <input type="password" class="form-control" id="password" name="password" required>
-                            </div>
-                            <button type="submit" class="btn btn-primary">Login</button>
-                        </form>
-                        {% if error %}
-                        <!-- Display error message if login fails -->
-                        <div class="alert alert-danger mt-3" role="alert">
-                            {{ error }}
-                        </div>
-                        {% endif %}
+        <div class="login-card card">
+            <div class="card-header">
+                <h3 style="margin:0;">Service Monitor</h3>
+                <small>Administration Console</small>
+            </div>
+            <div class="card-body">
+                <form action="{{ url_for('login') }}" method="post">
+                    <div class="mb-3">
+                        <label for="username" class="form-label">Username</label>
+                        <input type="text" class="form-control" id="username" name="username" required autocomplete="username">
                     </div>
+                    <div class="mb-3">
+                        <label for="password" class="form-label">Password</label>
+                        <input type="password" class="form-control" id="password" name="password" required autocomplete="current-password">
+                    </div>
+                    <button type="submit" class="btn btn-login text-white">Sign In</button>
+                </form>
+                {% if error %}
+                <div class="alert alert-danger mt-3" role="alert" style="background:#2a1a1a;border-color:#e94560;color:#e94560;">
+                    {{ error }}
                 </div>
+                {% endif %}
             </div>
         </div>
     </div>
-
-    <!-- Bootstrap Bundle with Popper -->
     <script src="{{ url_for('static', filename='js/bootstrap.bundle.min.js') }}"></script>
 </body>
 </html>

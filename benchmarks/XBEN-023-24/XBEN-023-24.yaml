@@ -2,27 +2,29 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   labels:
-    app: ssti-blind-loan-calculator
-  name: ssti-blind-loan-calculator
-  namespace: sandbox-dev
+    app: service-monitor-admin
+  name: service-monitor-admin
+  namespace: sandbox-prod
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: ssti-blind-loan-calculator
+      app: service-monitor-admin
   template:
     metadata:
       labels:
-        app: ssti-blind-loan-calculator
+        app: service-monitor-admin
     spec:
       containers:
       - env:
         - name: MYSQL_ROOT_PASSWORD
-          value: ssti_blind_loan_calculator
+          value: svc_monitor_admin
         - name: MYSQL_DATABASE
-          value: database
-        image: /:-mysql
-        imagePullPolicy: Always
+          value: monitordb
+        image: 
+          180294216647.dkr.ecr.us-west-2.amazonaws.com/synthetic-xben-023-24_spring-boot-admin-cve-2023-38286:mysql
+        imagePullPolicy: IfNotPresent
+        args: ["--innodb_use_native_aio=0"]
         livenessProbe:
           exec:
             command:
@@ -30,12 +32,13 @@ spec:
             - ping
             - -h
             - localhost
-            - --password=ssti_blind_loan_calculator
+            - --password=svc_monitor_admin
             - -u
             - root
-          initialDelaySeconds: 30
+          failureThreshold: 10
+          initialDelaySeconds: 120
           periodSeconds: 10
-          timeoutSeconds: 1
+          timeoutSeconds: 10
         name: mysql
         ports:
         - containerPort: 3306
@@ -46,57 +49,61 @@ spec:
             - ping
             - -h
             - localhost
-            - --password=ssti_blind_loan_calculator
+            - --password=svc_monitor_admin
             - -u
             - root
-          initialDelaySeconds: 10
+          failureThreshold: 10
+          initialDelaySeconds: 30
           periodSeconds: 5
-          timeoutSeconds: 1
+          timeoutSeconds: 5
         resources:
           limits:
+            cpu: 1000m
+            memory: 2Gi
+          requests:
             cpu: 500m
             memory: 512Mi
-          requests:
-            cpu: 250m
-            memory: 256Mi
       - env:
         - name: FLAG
           value: PLACEHOLDER_FLAG
-        image: /:-app
-        imagePullPolicy: Always
+        image: 
+          180294216647.dkr.ecr.us-west-2.amazonaws.com/synthetic-xben-023-24_spring-boot-admin-cve-2023-38286:app
+        imagePullPolicy: IfNotPresent
         livenessProbe:
+          failureThreshold: 10
           httpGet:
-            path: /
+            path: /ping
             port: 80
           initialDelaySeconds: 60
           periodSeconds: 15
-          timeoutSeconds: 5
+          timeoutSeconds: 10
         name: app
         ports:
         - containerPort: 80
         readinessProbe:
+          failureThreshold: 10
           httpGet:
-            path: /
+            path: /ping
             port: 80
           initialDelaySeconds: 30
           periodSeconds: 10
           timeoutSeconds: 5
         resources:
           limits:
+            cpu: 1000m
+            memory: 2Gi
+          requests:
             cpu: 500m
             memory: 512Mi
-          requests:
-            cpu: 250m
-            memory: 256Mi
       restartPolicy: Always
 ---
 apiVersion: v1
 kind: Service
 metadata:
   labels:
-    app: ssti-blind-loan-calculator
-  name: ssti-blind-loan-calculator-service
-  namespace: sandbox-dev
+    app: service-monitor-admin
+  name: service-monitor-admin-service
+  namespace: sandbox-prod
 spec:
   ports:
   - name: http
@@ -104,5 +111,5 @@ spec:
     protocol: TCP
     targetPort: 80
   selector:
-    app: ssti-blind-loan-calculator
+    app: service-monitor-admin
   type: ClusterIP

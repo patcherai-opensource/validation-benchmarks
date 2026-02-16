@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Service Monitor - Alert History</title>
+    <link href="{{ url_for('static', filename='css/bootstrap.min.css') }}" rel="stylesheet">
+    <style>
+        body { background-color: #1a1a2e; color: #eee; }
+        .sidebar { background: #16213e; min-height: 100vh; padding: 20px 0; }
+        .sidebar .nav-link { color: #a0a0b0; padding: 12px 20px; }
+        .sidebar .nav-link:hover, .sidebar .nav-link.active { color: #e94560; background: #0f3460; }
+        .sidebar .brand { color: #e94560; padding: 15px 20px; font-size: 1.2em; font-weight: bold; border-bottom: 1px solid #233554; margin-bottom: 10px; }
+        .main-content { padding: 30px; }
+        .alert-card { background: #16213e; border: 1px solid #233554; border-radius: 8px; padding: 15px; margin-bottom: 10px; cursor: pointer; }
+        .alert-card:hover { border-color: #e94560; }
+        .status-badge { display: inline-block; padding: 4px 12px; border-radius: 20px; font-size: 0.85em; font-weight: bold; }
+        .status-UP { background: #1b5e20; color: #69f0ae; }
+        .status-DOWN { background: #b71c1c; color: #ff8a80; }
+        .status-UNKNOWN { background: #424242; color: #bdbdbd; }
+        .detail-panel { background: #0f3460; border-radius: 8px; padding: 20px; margin-top: 15px; display: none; }
+    </style>
+</head>
+<body>
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-2 sidebar">
+                <div class="brand">Service Monitor</div>
+                <nav class="nav flex-column">
+                    <a class="nav-link" href="{{ url_for('dashboard') }}">Dashboard</a>
+                    <a class="nav-link" href="{{ url_for('wallboard') }}">Wallboard</a>
+                    <a class="nav-link" href="{{ url_for('notifications') }}">Notifications</a>
+                    <a class="nav-link" href="{{ url_for('notification_settings') }}">Alert Settings</a>
+                    <a class="nav-link active" href="{{ url_for('alert_history') }}">Alert History</a>
+                    <a class="nav-link" href="{{ url_for('logout') }}">Sign Out</a>
+                </nav>
+            </div>
+            <div class="col-md-10 main-content">
+                <h2>Alert History</h2>
+                <p style="color:#a0a0b0;">View rendered notification alerts for status change events.</p>
+
+                {% if logs %}
+                {% for log in logs %}
+                <div class="alert-card" onclick="toggleDetail({{ log.id }})">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <strong>{{ log.instance_name }}</strong>
+                            <span class="status-badge status-{{ log.previous_status }}">{{ log.previous_status }}</span>
+                            &rarr;
+                            <span class="status-badge status-{{ log.current_status }}">{{ log.current_status }}</span>
+                        </div>
+                        <small style="color:#777;">{{ log.timestamp.strftime('%Y-%m-%d %H:%M:%S') if log.timestamp else '' }}</small>
+                    </div>
+                    <div id="detail-{{ log.id }}" class="detail-panel">
+                        <p><strong>Subject:</strong> {{ log.rendered_subject }}</p>
+                        <p><strong>Recipients:</strong> {{ log.recipients }}</p>
+                        <hr style="border-color:#233554;">
+                        <div>{{ log.rendered_body|safe }}</div>
+                    </div>
+                </div>
+                {% endfor %}
+                {% else %}
+                <p style="color:#a0a0b0;">No alerts have been generated yet. Alerts are created when a monitored service instance changes status.</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+    <script src="{{ url_for('static', filename='js/bootstrap.bundle.min.js') }}"></script>
+    <script>
+        function toggleDetail(id) {
+            var el = document.getElementById('detail-' + id);
+            el.style.display = el.style.display === 'none' ? 'block' : 'none';
+        }
+    </script>
+</body>
+</html>

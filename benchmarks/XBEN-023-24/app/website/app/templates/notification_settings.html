@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Service Monitor - Alert Settings</title>
+    <link href="{{ url_for('static', filename='css/bootstrap.min.css') }}" rel="stylesheet">
+    <style>
+        body { background-color: #1a1a2e; color: #eee; }
+        .sidebar { background: #16213e; min-height: 100vh; padding: 20px 0; }
+        .sidebar .nav-link { color: #a0a0b0; padding: 12px 20px; }
+        .sidebar .nav-link:hover, .sidebar .nav-link.active { color: #e94560; background: #0f3460; }
+        .sidebar .brand { color: #e94560; padding: 15px 20px; font-size: 1.2em; font-weight: bold; border-bottom: 1px solid #233554; margin-bottom: 10px; }
+        .main-content { padding: 30px; }
+        .form-control, .form-select { background: #0f3460; border: 1px solid #233554; color: #eee; }
+        .form-control:focus { background: #0f3460; color: #eee; border-color: #e94560; box-shadow: none; }
+        .form-label { color: #a0a0b0; }
+        .btn-save { background: #e94560; border: none; }
+        .btn-save:hover { background: #c73650; }
+        .template-help { background: #0f3460; border-radius: 6px; padding: 15px; margin-top: 10px; }
+        .template-help code { color: #e94560; }
+        .preview-area { background: #0f3460; border: 1px solid #233554; border-radius: 6px; padding: 15px; margin-top: 15px; }
+    </style>
+</head>
+<body>
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-2 sidebar">
+                <div class="brand">Service Monitor</div>
+                <nav class="nav flex-column">
+                    <a class="nav-link" href="{{ url_for('dashboard') }}">Dashboard</a>
+                    <a class="nav-link" href="{{ url_for('wallboard') }}">Wallboard</a>
+                    <a class="nav-link" href="{{ url_for('notifications') }}">Notifications</a>
+                    <a class="nav-link active" href="{{ url_for('notification_settings') }}">Alert Settings</a>
+                    <a class="nav-link" href="{{ url_for('alert_history') }}">Alert History</a>
+                    <a class="nav-link" href="{{ url_for('logout') }}">Sign Out</a>
+                </nav>
+            </div>
+            <div class="col-md-10 main-content">
+                <h2>Alert Notification Settings</h2>
+                <p style="color:#a0a0b0;">Configure the email notification template for service status change alerts.</p>
+
+                <form method="post" action="{{ url_for('notification_settings') }}">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="recipients" class="form-label">Recipients</label>
+                                <input type="text" class="form-control" id="recipients" name="recipients"
+                                       value="{{ config.recipients if config else 'ops-team@servicemonitor.local' }}"
+                                       placeholder="Comma separated email addresses">
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="sender" class="form-label">Sender</label>
+                                <input type="text" class="form-control" id="sender" name="sender"
+                                       value="{{ config.sender if config else 'Service Monitor <alerts@servicemonitor.local>' }}">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <div class="form-check form-switch">
+                            <input class="form-check-input" type="checkbox" id="enabled" name="enabled"
+                                   {{ 'checked' if (config and config.enabled) or not config else '' }}>
+                            <label class="form-check-label" for="enabled" style="color:#a0a0b0;">Enable email notifications</label>
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="subject_template" class="form-label">Subject Template</label>
+                        <input type="text" class="form-control" id="subject_template" name="subject_template"
+                               value="{{ config.subject_template if config else '[{{ current_status }}] {{ instance_name }} status changed' }}">
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="body_template" class="form-label">Body Template</label>
+                        <textarea class="form-control" id="body_template" name="body_template" rows="14">{{ config.body_template if config else '' }}</textarea>
+                    </div>
+
+                    <div class="template-help">
+                        <h6>Available Template Variables</h6>
+                        <ul style="color:#a0a0b0;font-size:0.9em;">
+                            <li><code>{{ '{{ instance_name }}' }}</code> - Name of the service instance</li>
+                            <li><code>{{ '{{ instance_url }}' }}</code> - Service URL</li>
+                            <li><code>{{ '{{ health_url }}' }}</code> - Health endpoint URL</li>
+                            <li><code>{{ '{{ previous_status }}' }}</code> - Previous status (UP, DOWN, UNKNOWN)</li>
+                            <li><code>{{ '{{ current_status }}' }}</code> - New status</li>
+                            <li><code>{{ '{{ timestamp }}' }}</code> - Time of status change</li>
+                        </ul>
+                    </div>
+
+                    <div class="mt-3">
+                        <button type="submit" class="btn btn-save text-white">Save Configuration</button>
+                        <button type="button" class="btn btn-outline-light ms-2" id="previewBtn">Preview Template</button>
+                    </div>
+                </form>
+
+                <div id="previewArea" class="preview-area" style="display:none;">
+                    <h5>Template Preview</h5>
+                    <div id="previewSubject" style="color:#e94560;margin-bottom:10px;"></div>
+                    <hr style="border-color:#233554;">
+                    <div id="previewBody"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="{{ url_for('static', filename='js/bootstrap.bundle.min.js') }}"></script>
+    <script>
+        document.getElementById('previewBtn').addEventListener('click', function() {
+            fetch('{{ url_for("notification_preview") }}', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'}
+            })
+            .then(r => r.json())
+            .then(data => {
+                if (data.error) {
+                    document.getElementById('previewSubject').textContent = 'Error: ' + data.error;
+                    document.getElementById('previewBody').textContent = data.detail || '';
+                } else {
+                    document.getElementById('previewSubject').textContent = 'Subject: ' + data.subject;
+                    document.getElementById('previewBody').innerHTML = data.body;
+                }
+                document.getElementById('previewArea').style.display = 'block';
+            })
+            .catch(err => {
+                document.getElementById('previewSubject').textContent = 'Request failed';
+                document.getElementById('previewArea').style.display = 'block';
+            });
+        });
+    </script>
+</body>
+</html>

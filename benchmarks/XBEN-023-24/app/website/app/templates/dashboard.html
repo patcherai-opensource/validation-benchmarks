@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Service Monitor - Dashboard</title>
+    <link href="{{ url_for('static', filename='css/bootstrap.min.css') }}" rel="stylesheet">
+    <style>
+        body { background-color: #1a1a2e; color: #eee; }
+        .sidebar { background: #16213e; min-height: 100vh; padding: 20px 0; }
+        .sidebar .nav-link { color: #a0a0b0; padding: 12px 20px; }
+        .sidebar .nav-link:hover, .sidebar .nav-link.active { color: #e94560; background: #0f3460; }
+        .sidebar .brand { color: #e94560; padding: 15px 20px; font-size: 1.2em; font-weight: bold; border-bottom: 1px solid #233554; margin-bottom: 10px; }
+        .main-content { padding: 30px; }
+        .stat-card { background: #16213e; border: 1px solid #233554; border-radius: 8px; padding: 20px; margin-bottom: 15px; }
+        .stat-card h3 { color: #e94560; margin: 0; font-size: 2em; }
+        .stat-card p { color: #a0a0b0; margin: 5px 0 0; }
+        .status-badge { display: inline-block; padding: 4px 12px; border-radius: 20px; font-size: 0.85em; font-weight: bold; }
+        .status-UP { background: #1b5e20; color: #69f0ae; }
+        .status-DOWN { background: #b71c1c; color: #ff8a80; }
+        .status-UNKNOWN { background: #424242; color: #bdbdbd; }
+        .status-OFFLINE { background: #e65100; color: #ffcc80; }
+        .instance-table { background: #16213e; border-radius: 8px; overflow: hidden; }
+        .instance-table th { background: #0f3460; color: #a0a0b0; border: none; padding: 12px 15px; }
+        .instance-table td { border-color: #233554; padding: 10px 15px; color: #ccc; }
+        .alert-row { background: #16213e; border: 1px solid #233554; border-radius: 6px; padding: 12px 15px; margin-bottom: 8px; }
+        .user-info { color: #a0a0b0; padding: 15px 20px; border-top: 1px solid #233554; position: absolute; bottom: 0; width: 100%; }
+    </style>
+</head>
+<body>
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-2 sidebar position-relative" style="min-height:100vh;">
+                <div class="brand">Service Monitor</div>
+                <nav class="nav flex-column">
+                    <a class="nav-link active" href="{{ url_for('dashboard') }}">Dashboard</a>
+                    <a class="nav-link" href="{{ url_for('wallboard') }}">Wallboard</a>
+                    <a class="nav-link" href="{{ url_for('notifications') }}">Notifications</a>
+                    <a class="nav-link" href="{{ url_for('notification_settings') }}">Alert Settings</a>
+                    <a class="nav-link" href="{{ url_for('alert_history') }}">Alert History</a>
+                    <a class="nav-link" href="{{ url_for('logout') }}">Sign Out</a>
+                </nav>
+                <div class="user-info">
+                    <small>Signed in as <strong>{{ user.username }}</strong></small>
+                </div>
+            </div>
+            <div class="col-md-10 main-content">
+                <h2 style="margin-bottom:25px;">Service Instances</h2>
+                <div class="row mb-4">
+                    <div class="col-md-3">
+                        <div class="stat-card">
+                            <h3>{{ instances|length }}</h3>
+                            <p>Total Instances</p>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="stat-card">
+                            <h3>{{ instances|selectattr('status','equalto','UP')|list|length }}</h3>
+                            <p>Healthy</p>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="stat-card">
+                            <h3>{{ instances|selectattr('status','equalto','DOWN')|list|length }}</h3>
+                            <p>Down</p>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="stat-card">
+                            <h3>{{ alerts|length }}</h3>
+                            <p>Recent Alerts</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="instance-table">
+                    <table class="table table-dark mb-0">
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>URL</th>
+                                <th>Health Endpoint</th>
+                                <th>Status</th>
+                                <th>Last Checked</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for inst in instances %}
+                            <tr>
+                                <td><strong>{{ inst.name }}</strong></td>
+                                <td>{{ inst.service_url }}</td>
+                                <td>{{ inst.health_url }}</td>
+                                <td><span class="status-badge status-{{ inst.status }}">{{ inst.status }}</span></td>
+                                <td>{{ inst.last_checked.strftime('%Y-%m-%d %H:%M') if inst.last_checked else 'Never' }}</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+
+                {% if alerts %}
+                <h3 style="margin-top:30px;margin-bottom:15px;">Recent Alerts</h3>
+                {% for alert in alerts %}
+                <div class="alert-row">
+                    <strong>{{ alert.instance_name }}</strong>
+                    <span class="status-badge status-{{ alert.previous_status }}">{{ alert.previous_status }}</span>
+                    &rarr;
+                    <span class="status-badge status-{{ alert.current_status }}">{{ alert.current_status }}</span>
+                    <small class="float-end" style="color:#777;">{{ alert.timestamp.strftime('%Y-%m-%d %H:%M:%S') if alert.timestamp else '' }}</small>
+                </div>
+                {% endfor %}
+                {% endif %}
+            </div>
+        </div>
+    </div>
+    <script src="{{ url_for('static', filename='js/bootstrap.bundle.min.js') }}"></script>
+</body>
+</html>

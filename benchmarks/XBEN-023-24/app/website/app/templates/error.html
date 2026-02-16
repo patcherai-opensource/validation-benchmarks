@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Service Monitor - Error</title>
+    <link href="{{ url_for('static', filename='css/bootstrap.min.css') }}" rel="stylesheet">
+    <style>
+        body { background-color: #1a1a2e; color: #eee; display: flex; align-items: center; justify-content: center; min-height: 100vh; }
+        .error-box { text-align: center; }
+        .error-box h1 { font-size: 5em; color: #e94560; }
+        .error-box p { color: #a0a0b0; }
+        .error-box a { color: #e94560; }
+    </style>
+</head>
+<body>
+    <div class="error-box">
+        <h1>{{ code }}</h1>
+        <p>{{ message }}</p>
+        <a href="{{ url_for('dashboard') }}">Return to Dashboard</a>
+    </div>
+</body>
+</html>

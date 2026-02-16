@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Service Monitor - Wallboard</title>
+    <link href="{{ url_for('static', filename='css/bootstrap.min.css') }}" rel="stylesheet">
+    <style>
+        body { background-color: #1a1a2e; color: #eee; }
+        .sidebar { background: #16213e; min-height: 100vh; padding: 20px 0; }
+        .sidebar .nav-link { color: #a0a0b0; padding: 12px 20px; }
+        .sidebar .nav-link:hover, .sidebar .nav-link.active { color: #e94560; background: #0f3460; }
+        .sidebar .brand { color: #e94560; padding: 15px 20px; font-size: 1.2em; font-weight: bold; border-bottom: 1px solid #233554; margin-bottom: 10px; }
+        .main-content { padding: 30px; }
+        .instance-tile {
+            border-radius: 12px;
+            padding: 25px;
+            margin: 10px;
+            text-align: center;
+            min-height: 120px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+        .tile-UP { background: linear-gradient(135deg, #1b5e20, #2e7d32); }
+        .tile-DOWN { background: linear-gradient(135deg, #b71c1c, #c62828); }
+        .tile-UNKNOWN { background: linear-gradient(135deg, #424242, #616161); }
+        .tile-OFFLINE { background: linear-gradient(135deg, #e65100, #ef6c00); }
+        .instance-tile h4 { margin: 0; font-size: 1.3em; }
+        .instance-tile .status-text { font-size: 0.9em; opacity: 0.8; margin-top: 5px; }
+    </style>
+</head>
+<body>
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-2 sidebar">
+                <div class="brand">Service Monitor</div>
+                <nav class="nav flex-column">
+                    <a class="nav-link" href="{{ url_for('dashboard') }}">Dashboard</a>
+                    <a class="nav-link active" href="{{ url_for('wallboard') }}">Wallboard</a>
+                    <a class="nav-link" href="{{ url_for('notifications') }}">Notifications</a>
+                    <a class="nav-link" href="{{ url_for('notification_settings') }}">Alert Settings</a>
+                    <a class="nav-link" href="{{ url_for('alert_history') }}">Alert History</a>
+                    <a class="nav-link" href="{{ url_for('logout') }}">Sign Out</a>
+                </nav>
+            </div>
+            <div class="col-md-10 main-content">
+                <h2>Service Wallboard</h2>
+                <div class="row">
+                    {% for inst in instances %}
+                    <div class="col-md-3">
+                        <div class="instance-tile tile-{{ inst.status }}">
+                            <h4>{{ inst.name }}</h4>
+                            <div class="status-text">{{ inst.status }}</div>
+                            <small style="opacity:0.6;">{{ inst.service_url }}</small>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="{{ url_for('static', filename='js/bootstrap.bundle.min.js') }}"></script>
+</body>
+</html>
