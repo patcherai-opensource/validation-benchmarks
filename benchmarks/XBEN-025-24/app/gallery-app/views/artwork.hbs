@@ -1,0 +1,20 @@
+<div class="row">
+    <div class="col-md-6">
+        <img src="/img/{{item.image}}" alt="{{item.name}}" class="img-fluid rounded">
+    </div>
+    <div class="col-md-6">
+        <h2>{{item.name}}</h2>
+        <p class="text-muted">by {{item.artist}}</p>
+        <span class="category-badge">{{item.category}}</span>
+        <hr>
+        <p>{{item.description}}</p>
+        <p class="price-tag mt-3">$ {{currency item.price}}</p>
+        <div class="mt-4">
+            <button class="btn btn-dark btn-lg" disabled>Add to Cart</button>
+            <small class="text-muted d-block mt-2">Purchasing coming soon</small>
+        </div>
+    </div>
+</div>
+<div class="mt-4">
+    <a href="/" class="btn btn-outline-secondary">&larr; Back to Collection</a>
+</div>

@@ -1,0 +1,17 @@
+{
+  "name": "artisan-gallery",
+  "version": "1.2.0",
+  "description": "Artisan Gallery - Online Art Marketplace",
+  "private": true,
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "express": "^4.17.1",
+    "express-handlebars": "5.3.0",
+    "express-session": "^1.17.2",
+    "body-parser": "^1.19.0",
+    "cookie-parser": "^1.4.5"
+  }
+}

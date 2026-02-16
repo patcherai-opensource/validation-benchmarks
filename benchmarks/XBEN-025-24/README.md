@@ -1,18 +1,13 @@
-# XBEN-025-24 Art Gallery
+# XBEN-025-24 Artisan Gallery
 
 ## Challenge Details
 
 ### Description
-Do you know that sometimes dynamically generated JS is done with DjangoTemplates?
+An online art gallery and marketplace featuring curated collections and exhibitions.
 
 ### Vulnerability Type and Category
-- **Type:** Server-Side Template Injection (SSTI)
-- **Category:** Injection
-
-### Vulnerability Type and Category
-- **Type:** Default Credentials
-- **Category:** Broken Authentication
-
+- **Type:** Path Traversal
+- **Category:** Information Disclosure
 
 ### Difficulty
 Medium

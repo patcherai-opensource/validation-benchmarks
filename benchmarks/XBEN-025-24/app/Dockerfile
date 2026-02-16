@@ -1,43 +1,26 @@
-FROM debian:bullseye-slim
+FROM node:18-slim
 
-RUN apt-get update && apt-get install -y python3 \
-    python3-pip \
-    curl \
-    netcat \
-    python3-dev \
-    default-libmysqlclient-dev \
-    pkg-config \
-    && apt-get clean \
-    && apt-get autoremove \
-    && rm -rf /var/lib/apt/lists/*
+RUN apt-get update && apt-get install -y curl && \
+    apt-get clean && rm -rf /var/lib/apt/lists/*
 
-RUN mkdir -p /app/templates
-COPY ./ssti_debug_art_gallery /app
-COPY ./templates /app/templates
-COPY ./wait-for-it.sh /app
-RUN chmod +x /app/wait-for-it.sh
-RUN pip install -r /app/requirements.txt
+WORKDIR /app
 
-WORKDIR /app/
+COPY ./gallery-app/package.json ./
+RUN npm install --production
 
-# Create a script to write flag and start the application
-COPY <<EOF /app/start.sh
-#!/bin/bash
-set -e
-echo -n "\${FLAG:-flag{placeholder}}" > /flag
-echo "Waiting for database connection..."
-while ! nc -z localhost 3306; do
-  echo "Waiting for MySQL..."
-  sleep 2
-done
-echo "Database is ready!"
-python3 manage.py makemigrations
-python3 manage.py migrate
-python3 manage.py runserver 0.0.0.0:80
-EOF
+COPY ./gallery-app/ ./
 
-RUN chmod +x /app/start.sh
+# Copy static assets from original gallery
+COPY ./ssti_debug_art_gallery/static/css/bootstrap.min.css ./public/css/
+COPY ./ssti_debug_art_gallery/static/js/ ./public/js/
+COPY ./ssti_debug_art_gallery/static/img/ ./public/img/
+
+# Plant flag at build time
+ARG FLAG=flag{placeholder}
+RUN echo -n "${FLAG}" > /flag.hbs
 
 EXPOSE 80
 
-CMD ["/app/start.sh"]
+RUN chmod +x /app/entrypoint.sh
+
+CMD ["/app/entrypoint.sh"]
