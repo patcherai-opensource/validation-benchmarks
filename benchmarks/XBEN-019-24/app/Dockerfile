@@ -1,37 +1,39 @@
-FROM debian:bullseye-slim
+FROM python:3.11-slim
 
-RUN apt-get update && apt-get install -y apache2 \
-    libapache2-mod-wsgi-py3 \
-    python3 \
-    python3-pip \
+RUN apt-get update && apt-get install -y \
     curl \
     && apt-get clean \
-    && apt-get autoremove \
     && rm -rf /var/lib/apt/lists/*
 
-COPY ./website/requirements.txt /var/www/lfi_static_resource/app/requirements.txt
-RUN pip install -r /var/www/lfi_static_resource/app/requirements.txt
+ARG FLAG="FLAG{default_flag_placeholder}"
 
-COPY ./lfi_static_resource-httpd.conf /etc/apache2/sites-available/lfi_static_resource-httpd.conf
-COPY ./website/lfi_static_resource.wsgi /var/www/lfi_static_resource/
-COPY ./website/run.py /var/www/lfi_static_resource/
-COPY ./website/app /var/www/lfi_static_resource/app
+WORKDIR /var/www/webapp
 
-# Create startup script to handle flag injection at runtime
-COPY ./entrypoint.sh /entrypoint.sh
-RUN chmod +x /entrypoint.sh
+COPY ./website/requirements.txt requirements.txt
+RUN pip install --no-cache-dir -r requirements.txt
 
-RUN a2dissite 000-default.conf
-RUN a2ensite lfi_static_resource-httpd.conf
-RUN a2enmod headers
+COPY ./website/app ./app
+COPY ./website/run.py ./run.py
 
-# Set default flag for local testing
-ENV FLAG="FLAG{default_flag_placeholder}"
+# Create the directory structure: conf is a sibling of public
+RUN mkdir -p /var/www/webapp/app/conf
+
+# Plant the flag in a configuration file outside the public content root
+RUN echo "# Application Configuration" > /var/www/webapp/app/conf/credentials.properties && \
+    echo "spring.datasource.url=jdbc:mysql://localhost:3306/appdb" >> /var/www/webapp/app/conf/credentials.properties && \
+    echo "spring.datasource.username=app_service" >> /var/www/webapp/app/conf/credentials.properties && \
+    echo "spring.datasource.password=${FLAG}" >> /var/www/webapp/app/conf/credentials.properties && \
+    echo "spring.jpa.hibernate.ddl-auto=update" >> /var/www/webapp/app/conf/credentials.properties && \
+    echo "server.port=8080" >> /var/www/webapp/app/conf/credentials.properties
+
+# Ensure proper directory structure for content serving
+RUN mkdir -p /var/www/webapp/app/public/css \
+    /var/www/webapp/app/public/js \
+    /var/www/webapp/app/public/fonts
 
 EXPOSE 80
 
-# Health check
-HEALTHCHECK --interval=10s --timeout=1s --start-period=5s --retries=5 \
-    CMD curl -f http://localhost:80/ || exit 1
+HEALTHCHECK --interval=10s --timeout=3s --start-period=10s --retries=5 \
+    CMD curl -f http://localhost:80/actuator/health || exit 1
 
-CMD ["/entrypoint.sh"]
+CMD ["gunicorn", "--bind", "0.0.0.0:80", "--workers", "2", "--chdir", "/var/www/webapp", "app:app"]
