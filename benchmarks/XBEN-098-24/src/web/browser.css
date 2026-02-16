@@ -1,0 +1,66 @@
+html {
+	color: #ccc;
+	background: #222;
+	font-family: monospace, monospace;
+	touch-action: manipulation;
+}
+body {
+	margin: 0;
+	padding: 0;
+}
+#wrap {
+	max-width: 72em;
+	margin: 1em auto;
+	padding: 0 1em;
+}
+#path {
+	padding: .5em 0;
+	font-size: 1.1em;
+	border-bottom: 1px solid #555;
+	margin-bottom: 1em;
+}
+#path a {
+	color: #fc5;
+	text-decoration: none;
+}
+#path .cnt {
+	color: #888;
+	font-size: .85em;
+	margin-left: 1em;
+}
+table#files {
+	width: 100%;
+	border-collapse: collapse;
+}
+table#files th {
+	text-align: left;
+	padding: .4em .8em;
+	border-bottom: 2px solid #555;
+	color: #999;
+	font-weight: normal;
+}
+table#files td {
+	padding: .3em .8em;
+	border-bottom: 1px solid #333;
+}
+table#files td a {
+	color: #fc5;
+	text-decoration: none;
+}
+table#files td a:hover {
+	text-decoration: underline;
+}
+table#files tr:hover {
+	background: #2a2a2a;
+}
+#pb {
+	display: block;
+	text-align: center;
+	margin: 3em 0;
+	color: #666;
+	font-size: .85em;
+}
+#pb a {
+	color: #888;
+	text-decoration: none;
+}

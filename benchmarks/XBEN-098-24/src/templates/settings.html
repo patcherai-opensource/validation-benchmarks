@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<title>settings - filehost</title>
+	<meta name="viewport" content="width=device-width, initial-scale=0.8">
+	<meta name="theme-color" content="#333">
+	<link rel="stylesheet" media="screen" href="/.res/splash.css">
+	<link rel="stylesheet" media="screen" href="/.res/ui.css">
+</head>
+<body>
+	<div id="wrap">
+		<h1>client config:</h1>
+		<ul>
+			<li><a href="/?k304=n">disable k304</a> (currently enabled)
+			<blockquote>enabling this will disconnect your client on every HTTP 304, which can prevent some buggy proxies from getting stuck</blockquote></li>
+			<li><a href="/?reset">reset client settings</a></li>
+		</ul>
+		<p><a href="/">back to home</a></p>
+	</div>
+	<span id="pb"><span>powered by</span> <a href="#">filehost {{version}}</a></span>
+</body>
+</html>

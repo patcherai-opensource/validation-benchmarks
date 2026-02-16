@@ -1,0 +1,6 @@
+Server configuration notes
+--------------------------
+- File hosting service running on port 80
+- Static resources served from embedded web directory
+- Authentication required for uploads
+- Public read access to shared directory

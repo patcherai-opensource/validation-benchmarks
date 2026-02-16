@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<title>{{title}} - filehost</title>
+	<meta name="viewport" content="width=device-width, initial-scale=0.8">
+	<meta name="theme-color" content="#333">
+	<link rel="stylesheet" media="screen" href="/.res/ui.css">
+	<link rel="stylesheet" media="screen" href="/.res/browser.css">
+</head>
+<body>
+	<div id="wrap">
+		<div id="path">
+			<a href="/">home</a> &raquo; <strong>{{path}}</strong>
+			<span class="cnt">({{count}} items)</span>
+		</div>
+
+		<table id="files">
+			<thead>
+				<tr>
+					<th>name</th>
+					<th>size</th>
+					<th>modified</th>
+				</tr>
+			</thead>
+			<tbody>
+{{rows}}
+			</tbody>
+		</table>
+	</div>
+	<span id="pb"><span>powered by</span> <a href="#">filehost {{version}}</a></span>
+</body>
+</html>

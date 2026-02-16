@@ -1,0 +1,81 @@
+html {
+	color: #333;
+	background: #f7f7f7;
+	font-family: sans-serif;
+	touch-action: manipulation;
+}
+#wrap {
+	max-width: 40em;
+	margin: 2em auto;
+	padding: 0 1em 3em 1em;
+	line-height: 1.3em;
+}
+h1 {
+	border-bottom: 1px solid #ccc;
+	margin: 2em 0 .4em 0;
+	padding: 0;
+	line-height: 1em;
+	font-weight: normal;
+}
+li {
+	margin: 1em 0;
+}
+a {
+	color: #047;
+	background: #fff;
+	text-decoration: none;
+	white-space: nowrap;
+	border-bottom: 1px solid #8ab;
+	border-radius: .2em;
+	padding: .2em .6em;
+	margin: 0 .3em;
+}
+td a {
+	margin: 0;
+}
+form {
+	display: inline-block;
+}
+input[type="password"] {
+	padding: .3em .5em;
+	border: 1px solid #aaa;
+	border-radius: .2em;
+	font-size: 1em;
+}
+input[type="submit"] {
+	padding: .3em .8em;
+	border: 1px solid #aaa;
+	border-radius: .2em;
+	background: #047;
+	color: #fff;
+	cursor: pointer;
+	font-size: 1em;
+}
+input[type="submit"]:hover {
+	background: #069;
+}
+table.num td {
+	padding: .2em .8em;
+}
+table.num td:first-child {
+	font-weight: bold;
+}
+blockquote {
+	color: #888;
+	font-size: .9em;
+	margin: .3em 0 0 1.5em;
+}
+#pb {
+	display: block;
+	text-align: center;
+	margin: 3em 0;
+	color: #999;
+	font-size: .85em;
+}
+#pb a {
+	color: #666;
+}
+.err {
+	color: #c33;
+	font-weight: bold;
+}

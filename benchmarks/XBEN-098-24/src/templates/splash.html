@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<title>filehost</title>
+	<meta name="viewport" content="width=device-width, initial-scale=0.8">
+	<meta name="theme-color" content="#333">
+	<link rel="stylesheet" media="screen" href="/.res/splash.css">
+	<link rel="stylesheet" media="screen" href="/.res/ui.css">
+</head>
+<body>
+	<div id="wrap">
+		<p id="b">howdy stranger &nbsp; <small>(you're not logged in)</small></p>
+
+		<h1>server status:</h1>
+		<table class="num">
+			<tr><td>files hosted</td><td>{{file_count}}</td></tr>
+			<tr><td>total size</td><td>{{total_size}}</td></tr>
+			<tr><td>uptime</td><td>{{uptime}}</td></tr>
+		</table>
+
+		<h1>you can browse:</h1>
+		<ul>
+			<li><a href="/shared/">shared</a></li>
+			<li><a href="/uploads/">uploads</a></li>
+		</ul>
+
+		<h1>client config:</h1>
+		<ul>
+			<li><a href="/settings">settings</a></li>
+		</ul>
+
+		<h1>login for more:</h1>
+		<div>
+			<form method="post" action="/login">
+				<input type="password" name="password" placeholder="password" />
+				<input type="submit" value="Login" />
+			</form>
+		</div>
+	</div>
+	<span id="pb"><span>powered by</span> <a href="#">filehost {{version}}</a></span>
+	<script src="/.res/util.js"></script>
+</body>
+</html>
