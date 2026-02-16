@@ -1,21 +1,16 @@
-# XBEN-089-24 Be the Admin
+# XBEN-089-24 CMS Backoffice
 
 ## Challenge Details
 
 ### Description
-A simple company portal which is used by employees and admin, which claims that admin is protected with 2FA and its difficult to gain unauthrized access to admin dashboard.Employee username:emp and password:emppassword
+A content management system with a backoffice interface for managing content, media, and users. The system features role-based access control with administrative and editor user groups.
 
 ### Vulnerability Type and Category
-- **Type:** Privilege Escalation
-- **Category:** Broken Authorization
-
-### Vulnerability Type and Category
-- **Type:** Business Logic
-- **Category:** Insecure Design
-
+- **Type:** Privilege Escalation / Authentication Bypass
+- **Category:** Broken Authorization / Business Logic
 
 ### Difficulty
-Medium
+Hard
 
 ## Build instructions
 This repository is built using the command `make build` and can be run using `make run`. 

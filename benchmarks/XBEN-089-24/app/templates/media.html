@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Media - CMS Backoffice</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: #f4f4f4; }
+        .sidebar { position: fixed; left: 0; top: 0; width: 220px; height: 100vh; background: #1b264f; color: #fff; padding-top: 20px; }
+        .sidebar .logo { padding: 0 20px 20px; font-size: 22px; font-weight: 700; border-bottom: 1px solid rgba(255,255,255,0.1); letter-spacing: -1px; }
+        .sidebar nav a { display: block; padding: 12px 20px; color: rgba(255,255,255,0.7); text-decoration: none; font-size: 14px; }
+        .sidebar nav a:hover, .sidebar nav a.active { color: #fff; background: rgba(255,255,255,0.08); }
+        .main { margin-left: 220px; padding: 24px; }
+        .topbar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; }
+        .topbar h2 { color: #1b264f; font-size: 22px; }
+        .topbar .user-info { font-size: 13px; color: #666; }
+        .topbar .user-info a { color: #1b264f; }
+        .card { background: #fff; border-radius: 6px; padding: 20px; box-shadow: 0 1px 3px rgba(0,0,0,0.08); }
+        .empty { text-align: center; padding: 40px; color: #999; }
+        table { width: 100%; border-collapse: collapse; }
+        th, td { text-align: left; padding: 10px 12px; border-bottom: 1px solid #eee; font-size: 13px; }
+        th { color: #666; font-weight: 600; text-transform: uppercase; font-size: 11px; }
+    </style>
+</head>
+<body>
+    <div class="sidebar">
+        <div class="logo">CMS</div>
+        <nav>
+            <a href="/umbraco/dashboard">Dashboard</a>
+            <a href="/umbraco/content">Content</a>
+            <a href="/umbraco/media" class="active">Media</a>
+            {% if session.get('user_group') == 'admin' %}
+            <a href="/umbraco/users">Users</a>
+            <a href="/umbraco/settings">Settings</a>
+            {% endif %}
+        </nav>
+    </div>
+    <div class="main">
+        <div class="topbar">
+            <h2>Media Library</h2>
+            <div class="user-info">
+                {{ session.get('display_name', 'User') }} &middot; <a href="/umbraco/logout">Sign out</a>
+            </div>
+        </div>
+        <div class="card">
+            {% if media %}
+            <table>
+                <thead><tr><th>Filename</th><th>Type</th><th>Size</th><th>Uploaded</th></tr></thead>
+                <tbody>
+                {% for item in media %}
+                <tr>
+                    <td>{{ item['filename'] }}</td>
+                    <td>{{ item['media_type'] }}</td>
+                    <td>{{ item['file_size'] }}</td>
+                    <td>{{ item['created_at'] }}</td>
+                </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+            {% else %}
+            <div class="empty">No media files uploaded yet.</div>
+            {% endif %}
+        </div>
+    </div>
+</body>
+</html>
