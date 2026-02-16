@@ -1,16 +1,116 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>Ping Tool</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Task Orchestrator</title>
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles.css') }}">
 </head>
 <body>
+    <nav class="navbar">
+        <div class="nav-brand">Task Orchestrator</div>
+        <div class="nav-links">
+            <a href="/">Dashboard</a>
+            <a href="/docs">API Docs</a>
+        </div>
+    </nav>
     <div class="container">
-        <h1>Ping Tool</h1>
-        <form action="/ping" method="post">
-            <input type="text" name="ip_address" placeholder="Enter IP Address" required>
-            <button type="submit">Ping</button>
-        </form>
+        <div class="panel">
+            <h2>Execute Task</h2>
+            <form id="taskForm">
+                <div class="form-group">
+                    <label for="executable">Executable Command</label>
+                    <select id="executable" name="executable_cmd">
+                        <option value="echo">echo</option>
+                        <option value="date">date</option>
+                        <option value="hostname">hostname</option>
+                        <option value="uptime">uptime</option>
+                        <option value="whoami">whoami</option>
+                        <option value="uname">uname</option>
+                        <option value="df">df</option>
+                        <option value="free">free</option>
+                        <option value="ps">ps</option>
+                        <option value="ls">ls</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="args">Arguments (one per line)</label>
+                    <textarea id="args" name="cmdline_args" rows="3" placeholder="Enter arguments, one per line"></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="mode">Execution Mode</label>
+                    <select id="mode" name="runner_mode">
+                        <option value="subprocess">subprocess</option>
+                        <option value="pexpect">pexpect</option>
+                    </select>
+                </div>
+                <button type="submit" class="btn-primary">Run Task</button>
+            </form>
+        </div>
+        <div class="panel" id="resultPanel" style="display:none;">
+            <h2>Task Result</h2>
+            <div class="result-meta">
+                <span id="taskStatus" class="badge"></span>
+                <span id="taskIdent" class="ident"></span>
+            </div>
+            <div class="output-section">
+                <h3>Standard Output</h3>
+                <pre id="stdout"></pre>
+            </div>
+            <div class="output-section">
+                <h3>Standard Error</h3>
+                <pre id="stderr"></pre>
+            </div>
+        </div>
+        <div class="panel">
+            <h2>Recent Tasks</h2>
+            <table id="taskTable">
+                <thead>
+                    <tr><th>Ident</th><th>Status</th><th>Return Code</th></tr>
+                </thead>
+                <tbody id="taskList"></tbody>
+            </table>
+        </div>
     </div>
+    <script>
+        document.getElementById('taskForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            const execCmd = document.getElementById('executable').value;
+            const argsText = document.getElementById('args').value.trim();
+            const mode = document.getElementById('mode').value;
+            const args = argsText ? argsText.split('\n').map(a => a.trim()).filter(a => a) : [];
+            try {
+                const resp = await fetch('/api/v1/execute', {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({executable_cmd: execCmd, cmdline_args: args, runner_mode: mode})
+                });
+                const data = await resp.json();
+                document.getElementById('resultPanel').style.display = 'block';
+                document.getElementById('taskStatus').textContent = data.status || 'unknown';
+                document.getElementById('taskStatus').className = 'badge ' + (data.status || '');
+                document.getElementById('taskIdent').textContent = 'ID: ' + (data.ident || '-');
+                document.getElementById('stdout').textContent = data.stdout || '(empty)';
+                document.getElementById('stderr').textContent = data.stderr || '(empty)';
+                loadTasks();
+            } catch (err) {
+                alert('Error: ' + err.message);
+            }
+        });
+        async function loadTasks() {
+            try {
+                const resp = await fetch('/api/v1/tasks');
+                const data = await resp.json();
+                const tbody = document.getElementById('taskList');
+                tbody.innerHTML = '';
+                (data.tasks || []).slice(-10).reverse().forEach(t => {
+                    const tr = document.createElement('tr');
+                    tr.innerHTML = '<td>' + t.ident + '</td><td><span class="badge ' + t.status + '">' + t.status + '</span></td><td>' + (t.rc !== null ? t.rc : '-') + '</td>';
+                    tbody.appendChild(tr);
+                });
+            } catch (err) {}
+        }
+        loadTasks();
+    </script>
 </body>
 </html>

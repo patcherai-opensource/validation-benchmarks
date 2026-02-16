@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>API Documentation - Task Orchestrator</title>
+    <link rel="stylesheet" type="text/css" href="/static/styles.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-brand">Task Orchestrator</div>
+        <div class="nav-links">
+            <a href="/">Dashboard</a>
+            <a href="/docs">API Docs</a>
+        </div>
+    </nav>
+    <div class="container">
+        <div class="panel">
+            <h2>API Documentation</h2>
+            <p>Task Orchestrator provides a REST API for executing system and automation commands.</p>
+
+            <h3>Endpoints</h3>
+
+            <div class="endpoint">
+                <h4><span class="method get">GET</span> /api/v1/health</h4>
+                <p>Returns the health status of the service.</p>
+                <pre>curl http://localhost:8080/api/v1/health</pre>
+            </div>
+
+            <div class="endpoint">
+                <h4><span class="method post">POST</span> /api/v1/execute</h4>
+                <p>Execute a task with the given command and arguments.</p>
+                <h5>Request Body (JSON)</h5>
+                <table>
+                    <tr><th>Field</th><th>Type</th><th>Required</th><th>Description</th></tr>
+                    <tr><td>executable_cmd</td><td>string</td><td>Yes</td><td>The command to execute</td></tr>
+                    <tr><td>cmdline_args</td><td>list</td><td>No</td><td>List of arguments to pass to the command</td></tr>
+                    <tr><td>runner_mode</td><td>string</td><td>No</td><td>Execution mode: "subprocess" (default) or "pexpect"</td></tr>
+                    <tr><td>timeout</td><td>integer</td><td>No</td><td>Timeout in seconds (1-120, default 30)</td></tr>
+                </table>
+                <h5>Example</h5>
+                <pre>curl -X POST http://localhost:8080/api/v1/execute \
+  -H "Content-Type: application/json" \
+  -d '{"executable_cmd": "echo", "cmdline_args": ["hello", "world"]}'</pre>
+                <h5>Response</h5>
+                <pre>{
+  "status": "successful",
+  "rc": 0,
+  "ident": "a1b2c3d4",
+  "stdout": "hello world\n",
+  "stderr": ""
+}</pre>
+            </div>
+
+            <div class="endpoint">
+                <h4><span class="method get">GET</span> /api/v1/tasks</h4>
+                <p>List all completed tasks.</p>
+                <pre>curl http://localhost:8080/api/v1/tasks</pre>
+            </div>
+
+            <div class="endpoint">
+                <h4><span class="method get">GET</span> /api/v1/tasks/{ident}</h4>
+                <p>Get details for a specific task.</p>
+                <pre>curl http://localhost:8080/api/v1/tasks/a1b2c3d4</pre>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
