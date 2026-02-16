@@ -1,0 +1,51 @@
+{% extends "layout.html.twig" %}
+{% set current_page = 'search' %}
+
+{% block title %}Search Products{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <h1>Search Products</h1>
+</div>
+
+<div class="card">
+    <form method="post" action="/sku_search.php" style="display: flex; gap: 12px; margin-bottom: 20px;">
+        <input type="text" name="search" value="{{ search }}" placeholder="Search by identifier, label, or description..." style="flex: 1; padding: 10px 14px; border: 1px solid #ccc; border-radius: 4px; font-size: 14px;">
+        <button type="submit" class="btn btn-primary">Search</button>
+    </form>
+
+    {% if results|length > 0 %}
+    <p style="font-size: 13px; color: #999; margin-bottom: 12px;">{{ results|length }} result(s) found</p>
+    <table>
+        <thead>
+            <tr>
+                <th>Identifier</th>
+                <th>Label</th>
+                <th>Family</th>
+                <th>Category</th>
+                <th>Status</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for product in results %}
+            <tr>
+                <td><a href="/sku_product_detail.php?id={{ product.id }}" style="color: #5992c7; text-decoration: none;">{{ product.identifier }}</a></td>
+                <td>{{ product.label }}</td>
+                <td>{{ product.family }}</td>
+                <td>{{ product.category_label|default('-') }}</td>
+                <td>
+                    {% if product.enabled %}
+                        <span class="badge badge-success">Enabled</span>
+                    {% else %}
+                        <span class="badge badge-secondary">Disabled</span>
+                    {% endif %}
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% elseif search %}
+    <p style="color: #999; font-size: 14px;">No products found matching "{{ search }}".</p>
+    {% endif %}
+</div>
+{% endblock %}

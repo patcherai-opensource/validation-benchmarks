@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}PIM{% endblock %} - Product Information Management</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, sans-serif; background: #f5f5f5; color: #333; }
+        .nav { background: #11324d; color: #fff; padding: 0 20px; display: flex; align-items: center; height: 54px; }
+        .nav-brand { font-weight: 600; font-size: 18px; margin-right: 40px; color: #67c5e4; }
+        .nav-links { display: flex; gap: 24px; flex: 1; }
+        .nav-links a { color: #a1b3c3; text-decoration: none; font-size: 14px; padding: 16px 0; border-bottom: 3px solid transparent; }
+        .nav-links a:hover, .nav-links a.active { color: #fff; border-bottom-color: #67c5e4; }
+        .nav-user { font-size: 13px; color: #a1b3c3; display: flex; align-items: center; gap: 12px; }
+        .nav-user a { color: #a1b3c3; text-decoration: none; }
+        .nav-user a:hover { color: #fff; }
+        .container { max-width: 1200px; margin: 0 auto; padding: 24px; }
+        .page-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; }
+        .page-header h1 { font-size: 24px; font-weight: 600; }
+        .btn { display: inline-block; padding: 8px 16px; border-radius: 4px; font-size: 13px; text-decoration: none; cursor: pointer; border: 1px solid #ccc; background: #fff; color: #333; }
+        .btn-primary { background: #5992c7; color: #fff; border-color: #5992c7; }
+        .btn-primary:hover { background: #4a7fb0; }
+        .btn-danger { background: #d4574e; color: #fff; border-color: #d4574e; }
+        .card { background: #fff; border-radius: 4px; border: 1px solid #e0e0e0; padding: 20px; margin-bottom: 16px; }
+        table { width: 100%; border-collapse: collapse; }
+        th { text-align: left; padding: 10px 12px; font-size: 12px; text-transform: uppercase; color: #999; border-bottom: 2px solid #e0e0e0; }
+        td { padding: 10px 12px; border-bottom: 1px solid #f0f0f0; font-size: 14px; }
+        tr:hover { background: #fafafa; }
+        .badge { display: inline-block; padding: 2px 8px; border-radius: 10px; font-size: 11px; font-weight: 600; }
+        .badge-success { background: #e0f5ea; color: #1e7e34; }
+        .badge-secondary { background: #f0f0f0; color: #666; }
+        .form-group { margin-bottom: 16px; }
+        .form-group label { display: block; font-size: 13px; font-weight: 600; margin-bottom: 4px; color: #555; }
+        .form-group input, .form-group textarea, .form-group select { width: 100%; padding: 8px 12px; border: 1px solid #ccc; border-radius: 4px; font-size: 14px; }
+        .form-group textarea { min-height: 80px; }
+        .alert { padding: 12px 16px; border-radius: 4px; margin-bottom: 16px; font-size: 14px; }
+        .alert-danger { background: #fce4e4; color: #c0392b; border: 1px solid #f5c6cb; }
+        .alert-success { background: #e0f5ea; color: #1e7e34; border: 1px solid #c3e6cb; }
+        .stat-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px; margin-bottom: 24px; }
+        .stat-card { background: #fff; border: 1px solid #e0e0e0; border-radius: 4px; padding: 20px; }
+        .stat-card .value { font-size: 28px; font-weight: 700; color: #11324d; }
+        .stat-card .label { font-size: 13px; color: #999; margin-top: 4px; }
+    </style>
+</head>
+<body>
+    <nav class="nav">
+        <div class="nav-brand">PIM Community</div>
+        <div class="nav-links">
+            <a href="/index.php" {% if current_page is defined and current_page == 'dashboard' %}class="active"{% endif %}>Activity</a>
+            <a href="/sku_system.php" {% if current_page is defined and current_page == 'products' %}class="active"{% endif %}>Products</a>
+            <a href="/sku_search.php" {% if current_page is defined and current_page == 'search' %}class="active"{% endif %}>Search</a>
+            <a href="/categories.php" {% if current_page is defined and current_page == 'categories' %}class="active"{% endif %}>Categories</a>
+        </div>
+        <div class="nav-user">
+            {{ user.first_name|default(user.username) }} {{ user.last_name|default('') }}
+            <a href="/settings.php">Settings</a>
+            <a href="/logout.php">Sign out</a>
+        </div>
+    </nav>
+    <div class="container">
+        {% block content %}{% endblock %}
+    </div>
+</body>
+</html>

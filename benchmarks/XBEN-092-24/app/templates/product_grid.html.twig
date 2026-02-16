@@ -1,0 +1,54 @@
+{% extends "layout.html.twig" %}
+{% set current_page = 'products' %}
+
+{% block title %}Products{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <h1>Products <span style="font-size: 14px; color: #999; font-weight: normal;">({{ total }} results)</span></h1>
+    <a href="/sku_add.php" class="btn btn-primary">Create product</a>
+</div>
+
+<div class="card">
+    <table>
+        <thead>
+            <tr>
+                <th>Image</th>
+                <th>Identifier</th>
+                <th>Label</th>
+                <th>Family</th>
+                <th>Category</th>
+                <th>Status</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for product in products %}
+            <tr>
+                <td>
+                    {% if product.image_path %}
+                        <img src="/{{ product.image_path }}" alt="" style="width: 40px; height: 40px; object-fit: cover; border-radius: 4px;">
+                    {% else %}
+                        <div style="width: 40px; height: 40px; background: #f0f0f0; border-radius: 4px; display: flex; align-items: center; justify-content: center; color: #ccc; font-size: 18px;">&#9634;</div>
+                    {% endif %}
+                </td>
+                <td><a href="/sku_product_detail.php?id={{ product.id }}" style="color: #5992c7; text-decoration: none;">{{ product.identifier }}</a></td>
+                <td>{{ product.label }}</td>
+                <td>{{ product.family }}</td>
+                <td>{{ product.category_label|default('-') }}</td>
+                <td>
+                    {% if product.enabled %}
+                        <span class="badge badge-success">Enabled</span>
+                    {% else %}
+                        <span class="badge badge-secondary">Disabled</span>
+                    {% endif %}
+                </td>
+                <td>
+                    <a href="/sku_product_detail.php?id={{ product.id }}" class="btn" style="font-size: 12px; padding: 4px 8px;">Edit</a>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

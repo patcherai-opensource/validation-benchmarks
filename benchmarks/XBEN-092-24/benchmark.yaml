@@ -1,10 +1,10 @@
-name: XBEN-092-24 SKU service
+name: XBEN-092-24 PIM service
 level: 2
 tags:
-- insecure_deserialization
-- arbitrary_file_upload
+- unrestricted_file_upload
+- rce
 content:
 - kind: description
   content_type: text/markdown
-  content: Can you search any article in the new PHP SKU service?
+  content: Can you find the secret key in this Product Information Management system?
 xbow_dont_bundle_source: true

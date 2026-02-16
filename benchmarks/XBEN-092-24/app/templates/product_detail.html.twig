@@ -1,0 +1,144 @@
+{% extends "layout.html.twig" %}
+{% set current_page = 'products' %}
+
+{% block title %}{{ product ? product.label : 'Product not found' }}{% endblock %}
+
+{% block content %}
+{% if product %}
+<div class="page-header">
+    <h1>{{ product.label }} <span style="font-size: 14px; color: #999;">{{ product.identifier }}</span></h1>
+    <div>
+        {% if product.enabled %}
+            <span class="badge badge-success">Enabled</span>
+        {% else %}
+            <span class="badge badge-secondary">Disabled</span>
+        {% endif %}
+    </div>
+</div>
+
+<div style="display: grid; grid-template-columns: 2fr 1fr; gap: 20px;">
+    <div>
+        <div class="card">
+            <h2 style="font-size: 16px; margin-bottom: 16px;">General</h2>
+            <div class="form-group">
+                <label>Identifier</label>
+                <input type="text" value="{{ product.identifier }}" readonly style="background: #f9f9f9;">
+            </div>
+            <div class="form-group">
+                <label>Label</label>
+                <input type="text" value="{{ product.label }}">
+            </div>
+            <div class="form-group">
+                <label>Family</label>
+                <input type="text" value="{{ product.family }}">
+            </div>
+            <div class="form-group">
+                <label>Description</label>
+                <textarea>{{ product.description }}</textarea>
+            </div>
+        </div>
+
+        <div class="card">
+            <h2 style="font-size: 16px; margin-bottom: 16px;">Media</h2>
+            {% if media|length > 0 %}
+            <table>
+                <thead>
+                    <tr>
+                        <th>Preview</th>
+                        <th>Filename</th>
+                        <th>Type</th>
+                        <th>Size</th>
+                        <th>Uploaded</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for m in media %}
+                    <tr>
+                        <td>
+                            <img src="/{{ m.file_path }}" alt="" style="width: 48px; height: 48px; object-fit: cover; border-radius: 4px;" onerror="this.style.display='none'">
+                        </td>
+                        <td><a href="/{{ m.file_path }}" style="color: #5992c7;">{{ m.original_filename }}</a></td>
+                        <td>{{ m.mime_type }}</td>
+                        <td>{{ (m.file_size / 1024)|round(1) }} KB</td>
+                        <td>{{ m.uploaded_at }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            {% else %}
+            <p style="color: #999; font-size: 14px;">No media files uploaded for this product.</p>
+            {% endif %}
+
+            <div style="margin-top: 16px; padding-top: 16px; border-top: 1px solid #e0e0e0;">
+                <h3 style="font-size: 14px; margin-bottom: 12px;">Upload Media</h3>
+                <form id="uploadForm" enctype="multipart/form-data">
+                    <input type="hidden" name="product_id" value="{{ product.id }}">
+                    <div class="form-group">
+                        <input type="file" name="file" id="mediaFile" accept="image/*,.pdf,.doc,.docx">
+                    </div>
+                    <button type="submit" class="btn btn-primary">Upload</button>
+                    <span id="uploadStatus" style="margin-left: 12px; font-size: 13px;"></span>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div>
+        <div class="card">
+            <h2 style="font-size: 16px; margin-bottom: 16px;">Classification</h2>
+            <div class="form-group">
+                <label>Category</label>
+                <input type="text" value="{{ product.category_label|default('Unclassified') }}" readonly style="background: #f9f9f9;">
+            </div>
+        </div>
+        <div class="card">
+            <h2 style="font-size: 16px; margin-bottom: 16px;">Metadata</h2>
+            <p style="font-size: 13px; color: #666; margin-bottom: 8px;">Created: {{ product.created_at }}</p>
+            <p style="font-size: 13px; color: #666;">Updated: {{ product.updated_at }}</p>
+        </div>
+        {% if product.image_path %}
+        <div class="card">
+            <h2 style="font-size: 16px; margin-bottom: 16px;">Product Image</h2>
+            <img src="/{{ product.image_path }}" alt="{{ product.label }}" style="max-width: 100%; border-radius: 4px;" onerror="this.parentElement.innerHTML='<p style=color:#999;font-size:13px>Image not available</p>'">
+        </div>
+        {% endif %}
+    </div>
+</div>
+
+<script>
+document.getElementById('uploadForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+    var formData = new FormData(this);
+    var status = document.getElementById('uploadStatus');
+    status.textContent = 'Uploading...';
+    status.style.color = '#666';
+
+    fetch('/sku_url.php', {
+        method: 'POST',
+        body: formData
+    })
+    .then(function(response) { return response.json(); })
+    .then(function(data) {
+        if (data.filePath) {
+            status.textContent = 'Upload successful';
+            status.style.color = '#1e7e34';
+            setTimeout(function() { location.reload(); }, 1000);
+        } else {
+            status.textContent = data.error || 'Upload failed';
+            status.style.color = '#c0392b';
+        }
+    })
+    .catch(function(err) {
+        status.textContent = 'Upload failed';
+        status.style.color = '#c0392b';
+    });
+});
+</script>
+
+{% else %}
+<div class="card">
+    <p>Product not found.</p>
+    <p><a href="/sku_system.php" style="color: #5992c7;">Back to products</a></p>
+</div>
+{% endif %}
+{% endblock %}

@@ -1,0 +1,33 @@
+{% extends "layout.html.twig" %}
+{% set current_page = 'categories' %}
+
+{% block title %}Categories{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <h1>Categories</h1>
+</div>
+
+<div class="card">
+    <table>
+        <thead>
+            <tr>
+                <th>Code</th>
+                <th>Label</th>
+                <th>Products</th>
+                <th>Created</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for category in categories %}
+            <tr>
+                <td>{{ category.code }}</td>
+                <td>{{ category.label }}</td>
+                <td>{{ category.product_count }}</td>
+                <td>{{ category.created_at }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

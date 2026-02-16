@@ -1,0 +1,64 @@
+{% extends "layout.html.twig" %}
+{% set current_page = 'dashboard' %}
+
+{% block title %}Dashboard{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <h1>Activity Dashboard</h1>
+    <a href="/sku_add.php" class="btn btn-primary">Create product</a>
+</div>
+
+<div class="stat-grid">
+    <div class="stat-card">
+        <div class="value">{{ product_count }}</div>
+        <div class="label">Products</div>
+    </div>
+    <div class="stat-card">
+        <div class="value">{{ category_count }}</div>
+        <div class="label">Categories</div>
+    </div>
+    <div class="stat-card">
+        <div class="value">5</div>
+        <div class="label">Attribute groups</div>
+    </div>
+    <div class="stat-card">
+        <div class="value">1</div>
+        <div class="label">Channels</div>
+    </div>
+</div>
+
+<div class="card">
+    <h2 style="font-size: 16px; margin-bottom: 16px;">Recent Products</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>Identifier</th>
+                <th>Label</th>
+                <th>Family</th>
+                <th>Category</th>
+                <th>Status</th>
+                <th>Updated</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for product in products %}
+            <tr>
+                <td><a href="/sku_product_detail.php?id={{ product.id }}" style="color: #5992c7; text-decoration: none;">{{ product.identifier }}</a></td>
+                <td>{{ product.label }}</td>
+                <td>{{ product.family }}</td>
+                <td>{{ product.category_label|default('-') }}</td>
+                <td>
+                    {% if product.enabled %}
+                        <span class="badge badge-success">Enabled</span>
+                    {% else %}
+                        <span class="badge badge-secondary">Disabled</span>
+                    {% endif %}
+                </td>
+                <td>{{ product.updated_at }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}
