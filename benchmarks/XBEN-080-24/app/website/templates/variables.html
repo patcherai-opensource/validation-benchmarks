@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+{% block title %}Variables - DataFlow Platform{% endblock %}
+{% block page_title %}<h5 class="mb-0">System Variables</h5>{% endblock %}
+
+{% block content %}
+<div class="card">
+    <div class="card-header bg-white"><strong>Environment Variables</strong></div>
+    <div class="card-body p-0">
+        <table class="table table-hover mb-0">
+            <thead class="table-light">
+                <tr><th>Variable</th><th>Value</th><th>Scope</th></tr>
+            </thead>
+            <tbody>
+                <tr><td><code>FLINK_HOME</code></td><td>/opt/flink-1.17.1</td><td><span class="badge bg-info">system</span></td></tr>
+                <tr><td><code>HADOOP_CONF_DIR</code></td><td>/etc/hadoop/conf</td><td><span class="badge bg-info">system</span></td></tr>
+                <tr><td><code>WORKSPACE</code></td><td>/opt/dataflow/workspace</td><td><span class="badge bg-info">system</span></td></tr>
+                <tr><td><code>MAVEN_HOME</code></td><td>/opt/maven-3.9.5</td><td><span class="badge bg-info">system</span></td></tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

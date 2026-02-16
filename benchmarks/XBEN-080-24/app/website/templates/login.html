@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DataFlow Platform - Sign In</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
+    <style>
+        body { background: linear-gradient(135deg, #001529 0%, #003a70 100%); min-height: 100vh; display: flex; align-items: center; justify-content: center; }
+        .login-card { width: 400px; border: none; box-shadow: 0 4px 24px rgba(0,0,0,.2); border-radius: 8px; }
+        .login-header { text-align: center; padding: 32px 0 16px; }
+        .login-header h3 { color: #001529; font-weight: 600; }
+        .login-header p { color: #8c8c8c; font-size: 14px; }
+        .btn-primary { background-color: #1890ff; border-color: #1890ff; }
+        .btn-primary:hover { background-color: #40a9ff; border-color: #40a9ff; }
+    </style>
+</head>
+<body>
+    <div class="card login-card">
+        <div class="card-body p-4">
+            <div class="login-header">
+                <h3><i class="bi bi-activity"></i> DataFlow Platform</h3>
+                <p>Stream Processing Management Console</p>
+            </div>
+            {% if error %}
+            <div class="alert alert-danger py-2" role="alert">{{ error }}</div>
+            {% endif %}
+            <form method="POST" action="/passport/signin">
+                <input type="hidden" name="loginType" value="account">
+                <div class="mb-3">
+                    <label for="username" class="form-label">Username</label>
+                    <div class="input-group">
+                        <span class="input-group-text"><i class="bi bi-person"></i></span>
+                        <input type="text" class="form-control" id="username" name="username" placeholder="Enter username" required>
+                    </div>
+                </div>
+                <div class="mb-3">
+                    <label for="password" class="form-label">Password</label>
+                    <div class="input-group">
+                        <span class="input-group-text"><i class="bi bi-lock"></i></span>
+                        <input type="password" class="form-control" id="password" name="password" placeholder="Enter password" required>
+                    </div>
+                </div>
+                <div class="d-grid">
+                    <button type="submit" class="btn btn-primary btn-lg">Sign In</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</body>
+</html>

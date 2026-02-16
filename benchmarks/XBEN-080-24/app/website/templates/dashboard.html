@@ -1,0 +1,90 @@
+{% extends "base.html" %}
+{% block title %}Dashboard - DataFlow Platform{% endblock %}
+{% block page_title %}<h5 class="mb-0">Dashboard</h5>{% endblock %}
+
+{% block content %}
+<div class="row mb-4">
+    <div class="col-md-3">
+        <div class="card p-3">
+            <div class="d-flex align-items-center">
+                <div class="rounded-circle bg-primary bg-opacity-10 p-3 me-3">
+                    <i class="bi bi-diagram-3 text-primary fs-4"></i>
+                </div>
+                <div>
+                    <div class="text-muted" style="font-size:12px">Total Jobs</div>
+                    <div class="fw-bold fs-5">{{ jobs|length }}</div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card p-3">
+            <div class="d-flex align-items-center">
+                <div class="rounded-circle bg-success bg-opacity-10 p-3 me-3">
+                    <i class="bi bi-check-circle text-success fs-4"></i>
+                </div>
+                <div>
+                    <div class="text-muted" style="font-size:12px">Running</div>
+                    <div class="fw-bold fs-5">{{ jobs.values()|selectattr('status', 'equalto', 'RUNNING')|list|length }}</div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card p-3">
+            <div class="d-flex align-items-center">
+                <div class="rounded-circle bg-danger bg-opacity-10 p-3 me-3">
+                    <i class="bi bi-exclamation-circle text-danger fs-4"></i>
+                </div>
+                <div>
+                    <div class="text-muted" style="font-size:12px">Failed</div>
+                    <div class="fw-bold fs-5">{{ jobs.values()|selectattr('status', 'equalto', 'FAILED')|list|length }}</div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card p-3">
+            <div class="d-flex align-items-center">
+                <div class="rounded-circle bg-info bg-opacity-10 p-3 me-3">
+                    <i class="bi bi-hdd-rack text-info fs-4"></i>
+                </div>
+                <div>
+                    <div class="text-muted" style="font-size:12px">Clusters</div>
+                    <div class="fw-bold fs-5">{{ clusters|length }}</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="card mb-4">
+    <div class="card-header bg-white"><strong>Active Jobs</strong></div>
+    <div class="card-body p-0">
+        <table class="table table-hover mb-0">
+            <thead class="table-light">
+                <tr><th>Job Name</th><th>Status</th><th>Mode</th><th>Cluster</th><th>Started</th></tr>
+            </thead>
+            <tbody>
+                {% for id, job in jobs.items() %}
+                <tr>
+                    <td>{{ job.name }}</td>
+                    <td>
+                        {% if job.status == 'RUNNING' %}
+                        <span class="badge bg-success">{{ job.status }}</span>
+                        {% elif job.status == 'FAILED' %}
+                        <span class="badge bg-danger">{{ job.status }}</span>
+                        {% else %}
+                        <span class="badge bg-secondary">{{ job.status }}</span>
+                        {% endif %}
+                    </td>
+                    <td><span class="text-muted">{{ job.mode }}</span></td>
+                    <td>{{ job.cluster }}</td>
+                    <td>{{ job.start_time }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+{% block title %}Clusters - DataFlow Platform{% endblock %}
+{% block page_title %}<h5 class="mb-0">Cluster Management</h5>{% endblock %}
+
+{% block content %}
+<div class="card">
+    <div class="card-header bg-white"><strong>Registered Clusters</strong></div>
+    <div class="card-body p-0">
+        <table class="table table-hover mb-0">
+            <thead class="table-light">
+                <tr><th>Cluster ID</th><th>Type</th><th>Address</th><th>Status</th><th>Slots (Used/Total)</th></tr>
+            </thead>
+            <tbody>
+                {% for cid, cluster in clusters.items() %}
+                <tr>
+                    <td><strong>{{ cid }}</strong></td>
+                    <td><span class="badge bg-info">{{ cluster.type }}</span></td>
+                    <td class="text-muted">{{ cluster.address }}</td>
+                    <td><span class="badge bg-success">{{ cluster.status }}</span></td>
+                    <td>{{ cluster.slots_used }} / {{ cluster.slots_total }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

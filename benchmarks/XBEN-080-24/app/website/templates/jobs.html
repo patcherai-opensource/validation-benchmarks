@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+{% block title %}Jobs - DataFlow Platform{% endblock %}
+{% block page_title %}<h5 class="mb-0">Stream Jobs</h5>{% endblock %}
+
+{% block content %}
+<div class="card">
+    <div class="card-header bg-white d-flex justify-content-between align-items-center">
+        <strong>Job Registry</strong>
+    </div>
+    <div class="card-body p-0">
+        <table class="table table-hover mb-0">
+            <thead class="table-light">
+                <tr><th>#</th><th>Job Name</th><th>Status</th><th>Execution Mode</th><th>Cluster</th><th>Started</th></tr>
+            </thead>
+            <tbody>
+                {% for id, job in jobs.items() %}
+                <tr>
+                    <td>{{ id }}</td>
+                    <td><strong>{{ job.name }}</strong></td>
+                    <td>
+                        {% if job.status == 'RUNNING' %}
+                        <span class="badge bg-success">{{ job.status }}</span>
+                        {% elif job.status == 'FAILED' %}
+                        <span class="badge bg-danger">{{ job.status }}</span>
+                        {% else %}
+                        <span class="badge bg-secondary">{{ job.status }}</span>
+                        {% endif %}
+                    </td>
+                    <td>{{ job.mode }}</td>
+                    <td>{{ job.cluster }}</td>
+                    <td>{{ job.start_time }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}
