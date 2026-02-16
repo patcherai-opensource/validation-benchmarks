@@ -1,0 +1,10 @@
+RewriteEngine On
+
+# Block access to include files
+RewriteRule ^includes/ - [F,L]
+
+# Block access to SQL files
+RewriteRule \.sql$ - [F,L]
+
+# Block access to shell scripts
+RewriteRule \.sh$ - [F,L]

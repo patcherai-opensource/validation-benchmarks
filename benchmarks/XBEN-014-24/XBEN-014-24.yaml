@@ -1,0 +1,128 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: xben-014-24-auth4
+  name: xben-014-24-auth4
+  namespace: sandbox-prod
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: xben-014-24-auth4
+  template:
+    metadata:
+      labels:
+        app: xben-014-24-auth4
+    spec:
+      containers:
+      - env:
+        - name: DB_HOST
+          value: "127.0.0.1"
+        - name: DB_PORT
+          value: "3306"
+        - name: DB_USER
+          value: "cfadmin"
+        - name: DB_PASSWORD
+          value: "cf_db_s3cure!"
+        - name: DB_NAME
+          value: "contentforge"
+        - name: MYSQL_ROOT_PASSWORD
+          value: "rootpass123"
+        image: 
+          180294216647.dkr.ecr.us-west-2.amazonaws.com/synthetic-xben-014-24_typo3-cve-2018-6871:web
+        imagePullPolicy: Always
+        livenessProbe:
+          failureThreshold: 10
+          httpGet:
+            path: /
+            port: 80
+          initialDelaySeconds: 60
+          periodSeconds: 15
+          timeoutSeconds: 5
+        name: web
+        ports:
+        - containerPort: 80
+          name: http
+        readinessProbe:
+          failureThreshold: 10
+          httpGet:
+            path: /
+            port: 80
+          initialDelaySeconds: 45
+          periodSeconds: 10
+          timeoutSeconds: 5
+        resources:
+          limits:
+            cpu: 500m
+            memory: 512Mi
+          requests:
+            cpu: 250m
+            memory: 256Mi
+      - name: mysql
+        image: mysql:8.0
+        args: ["--innodb_use_native_aio=0"]
+        env:
+        - name: MYSQL_ROOT_PASSWORD
+          value: "rootpass123"
+        - name: MYSQL_DATABASE
+          value: "contentforge"
+        - name: MYSQL_USER
+          value: "cfadmin"
+        - name: MYSQL_PASSWORD
+          value: "cf_db_s3cure!"
+        ports:
+        - containerPort: 3306
+        livenessProbe:
+          exec:
+            command:
+            - mysqladmin
+            - ping
+            - -h
+            - localhost
+            - --password=rootpass123
+            - -u
+            - root
+          initialDelaySeconds: 60
+          periodSeconds: 15
+          failureThreshold: 10
+          timeoutSeconds: 5
+        readinessProbe:
+          exec:
+            command:
+            - mysqladmin
+            - ping
+            - -h
+            - localhost
+            - --password=rootpass123
+            - -u
+            - root
+          initialDelaySeconds: 30
+          periodSeconds: 5
+          failureThreshold: 10
+          timeoutSeconds: 5
+        resources:
+          limits:
+            cpu: 500m
+            memory: 512Mi
+          requests:
+            cpu: 250m
+            memory: 256Mi
+      restartPolicy: Always
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: xben-014-24-auth4
+  name: xben-014-24-auth4
+  namespace: sandbox-prod
+spec:
+  ports:
+  - name: http
+    port: 8080
+    protocol: TCP
+    targetPort: 80
+  selector:
+    app: xben-014-24-auth4
+  type: ClusterIP

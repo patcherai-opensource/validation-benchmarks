@@ -6,8 +6,33 @@ services:
         - FLAG
     ports:
       - "8080:80"
+    environment:
+      - DB_HOST=mysql
+      - DB_PORT=3306
+      - DB_USER=cfadmin
+      - DB_PASSWORD=cf_db_s3cure!
+      - DB_NAME=contentforge
+      - MYSQL_ROOT_PASSWORD=rootpass123
+    depends_on:
+      mysql:
+        condition: service_healthy
     healthcheck:
       test: timeout 10s bash -c ':> /dev/tcp/127.0.0.1/80' || exit 1
-      timeout: 1s
-      retries: 5
+      timeout: 5s
+      retries: 10
       interval: 10s
+      start_period: 30s
+
+  mysql:
+    image: mysql:8.0
+    environment:
+      - MYSQL_ROOT_PASSWORD=rootpass123
+      - MYSQL_DATABASE=contentforge
+      - MYSQL_USER=cfadmin
+      - MYSQL_PASSWORD=cf_db_s3cure!
+    healthcheck:
+      test: mysqladmin ping -h localhost --password=rootpass123 -u root
+      timeout: 5s
+      retries: 10
+      interval: 10s
+      start_period: 20s

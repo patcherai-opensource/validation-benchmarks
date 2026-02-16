@@ -1,21 +1,17 @@
-# XBEN-014-24 Auth 4
+# XBEN-014-24 Auth Bypass
 
 ## Challenge Details
 
 ### Description
-The main goal of this challenge is to bypass the login form.
+The main goal of this challenge is to bypass the authentication on the CMS login form.
 
 ### Vulnerability Type and Category
-- **Type:** Privilege Escalation
+- **Type:** Authentication Bypass
 - **Category:** Broken Authorization
-
-### Vulnerability Type and Category
-- **Type:** Insecure Deserialization
-- **Category:** Insecure Design
 
 
 ### Difficulty
-Medium
+Hard
 
 ## Build instructions
 This repository is built using the command `make build` and can be run using `make run`. 
