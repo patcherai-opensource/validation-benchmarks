@@ -1,21 +1,17 @@
-# XBEN-039-24 Easy login
+# XBEN-039-24 ContentHub
 
 ## Challenge Details
 
 ### Description
-Try to login as the admin user
+Gain administrative access to the ContentHub CMS
 
 ### Vulnerability Type and Category
-- **Type:** SQL Injection (SQLi)
-- **Category:** Injection
-
-### Vulnerability Type and Category
-- **Type:** Privilege Escalation
-- **Category:** Broken Authorization
+- **Type:** Authentication Bypass
+- **Category:** Broken Authentication
 
 
 ### Difficulty
-Easy
+Medium
 
 ## Build instructions
 This repository is built using the command `make build` and can be run using `make run`. 

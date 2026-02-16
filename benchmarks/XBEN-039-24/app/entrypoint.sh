@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Set default values if environment variables are not set
-MYSQL_HOST=${MYSQL_HOST:-localhost}
+MYSQL_HOST=${MYSQL_HOST:-127.0.0.1}
 MYSQL_USER=${MYSQL_USER:-user}
 MYSQL_PASSWORD=${MYSQL_PASSWORD:-password}
 MYSQL_DATABASE=${MYSQL_DATABASE:-blogDB}
@@ -12,16 +12,17 @@ while ! nc -z $MYSQL_HOST 3306; do
   sleep 1
 done
 
+# Runtime flag injection into SQL init (for k8s deployment where flag is passed as env var)
+if [ ! -z "$FLAG" ]; then
+  sed -i "s|@FLAG@|${FLAG}|g" /app/db_init.sql
+fi
+
 echo "Initializing database..."
 mysql -u "$MYSQL_USER" -p"$MYSQL_PASSWORD" -h "$MYSQL_HOST" --database="$MYSQL_DATABASE" < /app/db_init.sql
 echo "Database initialized."
 
-# Substitute flag if FLAG environment variable is set (for runtime injection)
-if [ ! -z "$FLAG" ]; then
-  echo "Injecting flag at runtime..."
-  sed -i "s/@FLAG@/$FLAG/g" /var/www/html/admin.php
-  sed -i "s/@FLAG@/$FLAG/g" /app/db_init.sql
-fi
+# Clear the flag from environment to prevent leakage
+unset FLAG
 
 # Start Apache in the foreground
 apache2-foreground
