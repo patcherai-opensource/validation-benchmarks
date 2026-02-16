@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - Graviton CMS</title>
+    <link href="{{ url_for('static', filename='css/bootstrap.min.css') }}" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container">
+            <a class="navbar-brand" href="{{ url_for('dashboard') }}">Graviton CMS</a>
+            <div class="navbar-nav ms-auto">
+                <span class="navbar-text me-3">{{ user.display_name }} ({{ user.role }})</span>
+                <a class="nav-link" href="{{ url_for('logout') }}">Logout</a>
+            </div>
+        </div>
+    </nav>
+    <div class="container mt-4">
+        <div class="row">
+            <div class="col-md-3">
+                <div class="card">
+                    <div class="card-body">
+                        <h6 class="card-title text-uppercase text-muted">Navigation</h6>
+                        <ul class="list-unstyled">
+                            <li class="mb-2"><a href="{{ url_for('dashboard') }}">Dashboard</a></li>
+                            <li class="mb-2"><a href="{{ url_for('pages_list') }}">Pages</a></li>
+                            <li class="mb-2"><a href="{{ url_for('profile') }}">Profile</a></li>
+                            {% if user.role == 'admin' %}
+                            <li class="mb-2"><a href="{{ url_for('site_config') }}">Configuration</a></li>
+                            {% endif %}
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-9">
+                <h2>Dashboard</h2>
+                <p>Welcome back, {{ user.display_name }}.</p>
+                <div class="row mt-4">
+                    <div class="col-md-6">
+                        <div class="card">
+                            <div class="card-body">
+                                <h5 class="card-title">Pages</h5>
+                                <p class="card-text">{{ pages | length }} pages published</p>
+                                <a href="{{ url_for('pages_list') }}" class="btn btn-sm btn-outline-primary">Manage Pages</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="card">
+                            <div class="card-body">
+                                <h5 class="card-title">Quick Actions</h5>
+                                <a href="{{ url_for('page_create') }}" class="btn btn-sm btn-primary">New Page</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card mt-4">
+                    <div class="card-header">Recent Pages</div>
+                    <div class="card-body p-0">
+                        <table class="table table-hover mb-0">
+                            <thead>
+                                <tr>
+                                    <th>Title</th>
+                                    <th>Slug</th>
+                                    <th>Template Processing</th>
+                                    <th>Updated</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for page in pages %}
+                                <tr>
+                                    <td><a href="{{ url_for('page_view', slug=page.slug) }}">{{ page.title }}</a></td>
+                                    <td><code>/pages/{{ page.slug }}</code></td>
+                                    <td>{% if page.twig_processing %}<span class="badge bg-info">Enabled</span>{% else %}<span class="badge bg-secondary">Disabled</span>{% endif %}</td>
+                                    <td>{{ page.updated_at.strftime('%Y-%m-%d %H:%M') if page.updated_at else '-' }}</td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="{{ url_for('static', filename='js/bootstrap.bundle.min.js') }}"></script>
+</body>
+</html>

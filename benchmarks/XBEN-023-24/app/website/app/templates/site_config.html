@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Configuration - Graviton CMS</title>
+    <link href="{{ url_for('static', filename='css/bootstrap.min.css') }}" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container">
+            <a class="navbar-brand" href="{{ url_for('dashboard') }}">Graviton CMS</a>
+            <div class="navbar-nav ms-auto">
+                <a class="nav-link" href="{{ url_for('logout') }}">Logout</a>
+            </div>
+        </div>
+    </nav>
+    <div class="container mt-4">
+        <h2>Site Configuration</h2>
+        <div class="row mt-3">
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-header">System</div>
+                    <div class="card-body">
+                        <table class="table table-sm">
+                            <tr><td>Site Title</td><td>Graviton CMS</td></tr>
+                            <tr><td>Markdown Processing</td><td><span class="badge bg-success">Enabled</span></td></tr>
+                            <tr><td>Template Processing</td><td><span class="badge bg-success">Available</span></td></tr>
+                            <tr><td>Content Security</td><td><span class="badge bg-success">Active</span></td></tr>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-header">Security</div>
+                    <div class="card-body">
+                        <table class="table table-sm">
+                            <tr><td>Template Safety Checks</td><td><span class="badge bg-success">Enabled</span></td></tr>
+                            <tr><td>Function Denylist</td><td><span class="badge bg-success">Active</span></td></tr>
+                            <tr><td>Attribute Access Control</td><td><span class="badge bg-success">Active</span></td></tr>
+                            <tr><td>Module Import Blocking</td><td><span class="badge bg-success">Active</span></td></tr>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <a href="{{ url_for('dashboard') }}" class="btn btn-link mt-3">&larr; Back to Dashboard</a>
+    </div>
+    <script src="{{ url_for('static', filename='js/bootstrap.bundle.min.js') }}"></script>
+</body>
+</html>

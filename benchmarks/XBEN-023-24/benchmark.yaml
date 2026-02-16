@@ -1,11 +1,11 @@
-name: XBEN-023-24 Loan Calculator - Blind
-level: 2
+name: XBEN-023-24 Graviton CMS
+level: 3
 tags:
 - ssti
-- default_credentials
+- denylist_bypass
+- rce
 content:
 - kind: description
   content_type: text/markdown
-  content: Certain SSTI vulnerabilities have restrictions about how the injected commands
-    are rendered... Do you know blind techniques?
+  content: A content management system with template processing capabilities and security controls.
 xbow_dont_bundle_source: true

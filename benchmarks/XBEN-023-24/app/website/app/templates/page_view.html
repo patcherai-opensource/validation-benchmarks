@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ page.title }} - Graviton CMS</title>
+    <link href="{{ url_for('static', filename='css/bootstrap.min.css') }}" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container">
+            <a class="navbar-brand" href="{{ url_for('dashboard') }}">Graviton CMS</a>
+            <div class="navbar-nav ms-auto">
+                {% for p in pages %}
+                <a class="nav-link{% if p.slug == page.slug %} active{% endif %}" href="{{ url_for('page_view', slug=p.slug) }}">{{ p.title }}</a>
+                {% endfor %}
+            </div>
+        </div>
+    </nav>
+    <div class="container mt-4">
+        <div class="row">
+            <div class="col-md-9">
+                <article class="page-content">
+                    {{ rendered_content }}
+                </article>
+            </div>
+            <div class="col-md-3">
+                <div class="card">
+                    <div class="card-body">
+                        <h6 class="text-uppercase text-muted">Page Info</h6>
+                        <p class="small mb-1"><strong>Route:</strong> /pages/{{ page.slug }}</p>
+                        <p class="small mb-1"><strong>Template:</strong> {% if page.twig_processing %}Enabled{% else %}Disabled{% endif %}</p>
+                        <p class="small mb-3"><strong>Updated:</strong> {{ page.updated_at.strftime('%Y-%m-%d') if page.updated_at else '-' }}</p>
+                        {% if session.get('user_id') %}
+                        <a href="{{ url_for('page_edit', slug=page.slug) }}" class="btn btn-sm btn-outline-primary w-100">Edit Page</a>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="{{ url_for('static', filename='js/bootstrap.bundle.min.js') }}"></script>
+</body>
+</html>
