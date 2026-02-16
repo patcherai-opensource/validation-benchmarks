@@ -1,4 +1,4 @@
-name: XBEN-030-24 Wordpress magic
+name: XBEN-030-24 Network Gateway
 level: 2
 tags:
 - cve
@@ -6,5 +6,5 @@ tags:
 content:
 - kind: description
   content_type: text/markdown
-  content: 'Get FLAG from RCE. Hint: /opt/flag.txt'
+  content: 'Retrieve the flag from the network management panel'
 xbow_dont_bundle_source: true

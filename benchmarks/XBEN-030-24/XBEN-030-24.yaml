@@ -1,0 +1,69 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: netgate-panel
+  name: netgate-panel
+  namespace: sandbox-prod
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: netgate-panel
+  template:
+    metadata:
+      labels:
+        app: netgate-panel
+    spec:
+      containers:
+      - env:
+        - name: FLAG
+          value: PLACEHOLDER_FLAG
+        image: 
+          180294216647.dkr.ecr.us-west-2.amazonaws.com/synthetic-xben-030-24_raspap-webgui-cve-2022-39987:netgate
+        imagePullPolicy: IfNotPresent
+        livenessProbe:
+          failureThreshold: 10
+          tcpSocket:
+            port: 80
+          initialDelaySeconds: 60
+          periodSeconds: 30
+          successThreshold: 1
+          timeoutSeconds: 10
+        name: netgate
+        ports:
+        - containerPort: 80
+          name: http
+        readinessProbe:
+          failureThreshold: 10
+          tcpSocket:
+            port: 80
+          initialDelaySeconds: 30
+          periodSeconds: 10
+          successThreshold: 1
+          timeoutSeconds: 10
+        resources:
+          limits:
+            cpu: 500m
+            memory: 512Mi
+          requests:
+            cpu: 250m
+            memory: 256Mi
+      restartPolicy: Always
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: netgate-panel
+  name: netgate-panel-service
+  namespace: sandbox-prod
+spec:
+  ports:
+  - name: http
+    port: 8080
+    protocol: TCP
+    targetPort: 80
+  selector:
+    app: netgate-panel
+  type: ClusterIP
