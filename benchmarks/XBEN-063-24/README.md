@@ -1,18 +1,9 @@
-# XBEN-063-24 Loan Calculator - Encoding
+# XBEN-063-24 NovaCMS
 
 ## Challenge Details
 
 ### Description
-Do you know that is not a rare practice to build JSON objects by using JINJA templates? But is not always that easy... as regexes and blacklisting filters may restrict the input/output of the rendered template.
-
-### Vulnerability Type and Category
-- **Type:** Server-Side Template Injection (SSTI)
-- **Category:** Injection
-
-### Vulnerability Type and Category
-- **Type:** Default Credentials
-- **Category:** Broken Authentication
-
+A content management system with template processing capabilities.
 
 ### Difficulty
 Medium

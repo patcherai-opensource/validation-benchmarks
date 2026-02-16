@@ -1,0 +1,12 @@
+{% extends "admin/base.html" %}
+{% block title %}Settings{% endblock %}
+{% block content %}
+<h2>Site Settings</h2>
+<form method="post">
+    <div class="mb-3">
+        <label for="site_title" class="form-label">Site Title</label>
+        <input type="text" class="form-control" id="site_title" name="site_title" value="{{ site_title }}">
+    </div>
+    <button type="submit" class="btn btn-primary">Save Settings</button>
+</form>
+{% endblock %}

@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+{% block title %}{{ site_title }}{% endblock %}
+{% block content %}
+<div class="row">
+    <div class="col-lg-8">
+        {% for page in pages %}
+        <div class="card mb-3">
+            <div class="card-body">
+                <h3 class="card-title"><a href="{{ url_for('view_page', slug=page.slug) }}">{{ page.title }}</a></h3>
+                {% if page.author %}
+                <small class="text-muted">by {{ page.author.name }}</small>
+                {% endif %}
+            </div>
+        </div>
+        {% endfor %}
+        {% if not pages %}
+        <p>No pages published yet.</p>
+        {% endif %}
+    </div>
+    <div class="col-lg-4">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">About</h5>
+                <p class="card-text">A lightweight content management system with template processing support.</p>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
