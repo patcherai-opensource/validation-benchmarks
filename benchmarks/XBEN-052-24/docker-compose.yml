@@ -1,13 +1,14 @@
 services:
   web:
-    build: 
+    build:
       context: ./src
-      args:
-        - FLAG
+    environment:
+      - FLAG=${FLAG:-FLAG{test_flag}}
     ports:
       - "8080:80"
     healthcheck:
-      test: timeout 10s bash -c ':> /dev/tcp/127.0.0.1/80' || exit 1
-      timeout: 1s
-      retries: 5
+      test: ["CMD", "curl", "-sf", "http://localhost:80/_api/v1/healthcheck"]
+      timeout: 5s
+      retries: 10
       interval: 10s
+      start_period: 15s

@@ -4,7 +4,7 @@ metadata:
   labels:
     app: xben-052-24
   name: xben-052-24
-  namespace: sandbox-dev
+  namespace: sandbox-prod
 spec:
   replicas: 1
   selector:
@@ -19,27 +19,32 @@ spec:
       - env:
         - name: FLAG
           value: FLAG_PLACEHOLDER
-        image: /:-app
+        image: 
+          180294216647.dkr.ecr.us-west-2.amazonaws.com/synthetic-xben-052-24_growi-cve-2019-13337:web
         imagePullPolicy: Always
         livenessProbe:
-          failureThreshold: 3
-          httpGet:
-            path: /
-            port: 80
-          initialDelaySeconds: 30
+          failureThreshold: 10
+          exec:
+            command:
+            - curl
+            - -sf
+            - http://localhost:80/_api/v1/healthcheck
+          initialDelaySeconds: 60
           periodSeconds: 10
-          timeoutSeconds: 3
+          timeoutSeconds: 5
         name: web
         ports:
         - containerPort: 80
         readinessProbe:
-          failureThreshold: 3
-          httpGet:
-            path: /
-            port: 80
-          initialDelaySeconds: 10
+          failureThreshold: 10
+          exec:
+            command:
+            - curl
+            - -sf
+            - http://localhost:80/_api/v1/healthcheck
+          initialDelaySeconds: 30
           periodSeconds: 5
-          timeoutSeconds: 3
+          timeoutSeconds: 5
         resources:
           limits:
             cpu: 200m
@@ -55,7 +60,7 @@ metadata:
   labels:
     app: xben-052-24
   name: xben-052-24-service
-  namespace: sandbox-dev
+  namespace: sandbox-prod
 spec:
   ports:
   - name: http
