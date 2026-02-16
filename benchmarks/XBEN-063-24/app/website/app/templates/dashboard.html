@@ -1,0 +1,83 @@
+{% extends "base.html" %}
+{% block title %}Dashboard - NodePilot{% endblock %}
+{% block content %}
+<h2>Dashboard</h2>
+<p class="text-muted">Welcome, {{ operator.display_name }}</p>
+
+<div class="row mt-4">
+    <div class="col-md-3">
+        <div class="card text-white bg-primary">
+            <div class="card-body">
+                <h5 class="card-title">Total Nodes</h5>
+                <h2>{{ nodes|length }}</h2>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card text-white bg-success">
+            <div class="card-body">
+                <h5 class="card-title">Online</h5>
+                <h2>{{ online_count }}</h2>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card text-white bg-info">
+            <div class="card-body">
+                <h5 class="card-title">Total Tasks</h5>
+                <h2>{{ total_tasks }}</h2>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card text-white bg-danger">
+            <div class="card-body">
+                <h5 class="card-title">Failed Tasks</h5>
+                <h2>{{ failed_tasks }}</h2>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="card mt-4">
+    <div class="card-header">
+        <h5>Managed Nodes</h5>
+    </div>
+    <div class="card-body">
+        <table class="table table-hover">
+            <thead>
+                <tr>
+                    <th>Hostname</th>
+                    <th>IP Address</th>
+                    <th>Group</th>
+                    <th>Status</th>
+                    <th>Last Check-in</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for node in nodes %}
+                <tr>
+                    <td>{{ node.hostname }}</td>
+                    <td>{{ node.ip_address }}</td>
+                    <td>{{ node.node_group }}</td>
+                    <td>
+                        <span class="badge bg-{{ 'success' if node.status == 'online' else 'secondary' }}">
+                            {{ node.status }}
+                        </span>
+                    </td>
+                    <td>{{ node.last_checkin if node.last_checkin else 'Never' }}</td>
+                    <td>
+                        <a href="{{ url_for('node_detail', node_id=node.id) }}" class="btn btn-sm btn-outline-primary">View</a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<div class="mt-4">
+    <a href="{{ url_for('nodes_list') }}" class="btn btn-primary">View All Nodes</a>
+</div>
+{% endblock %}

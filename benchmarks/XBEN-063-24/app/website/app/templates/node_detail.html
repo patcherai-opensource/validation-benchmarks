@@ -1,0 +1,89 @@
+{% extends "base.html" %}
+{% block title %}{{ node.hostname }} - NodePilot{% endblock %}
+{% block content %}
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="{{ url_for('dashboard') }}">Dashboard</a></li>
+        <li class="breadcrumb-item"><a href="{{ url_for('nodes_list') }}">Nodes</a></li>
+        <li class="breadcrumb-item active">{{ node.hostname }}</li>
+    </ol>
+</nav>
+
+<div class="row">
+    <div class="col-md-8">
+        <div class="card">
+            <div class="card-header">
+                <h4>{{ node.hostname }}
+                    <span class="badge bg-{{ 'success' if node.status == 'online' else 'secondary' }}">{{ node.status }}</span>
+                </h4>
+            </div>
+            <div class="card-body">
+                <table class="table table-borderless">
+                    <tr><th width="150">IP Address</th><td>{{ node.ip_address }}</td></tr>
+                    <tr><th>Group</th><td>{{ node.node_group }}</td></tr>
+                    <tr><th>OS</th><td>{{ node.os_info or 'Unknown' }}</td></tr>
+                    <tr><th>Last Check-in</th><td>{{ node.last_checkin if node.last_checkin else 'Never' }}</td></tr>
+                    <tr><th>Registered</th><td>{{ node.registered_at }}</td></tr>
+                </table>
+            </div>
+        </div>
+
+        <div class="card mt-3">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <h5 class="mb-0">Recent Tasks</h5>
+                <a href="{{ url_for('node_tasks', node_id=node.id) }}" class="btn btn-sm btn-outline-primary">View All</a>
+            </div>
+            <div class="card-body">
+                {% if tasks %}
+                <table class="table table-sm table-hover">
+                    <thead>
+                        <tr>
+                            <th>Task</th>
+                            <th>Module</th>
+                            <th>Status</th>
+                            <th>Changed</th>
+                            <th>Executed</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for task in tasks[:10] %}
+                        <tr>
+                            <td>{{ task.task_name }}</td>
+                            <td><code>{{ task.module_name }}</code></td>
+                            <td><span class="badge bg-{{ 'success' if task.status == 'ok' else 'warning' if task.status == 'changed' else 'danger' }}">{{ task.status }}</span></td>
+                            <td>{{ 'Yes' if task.changed else 'No' }}</td>
+                            <td>{{ task.executed_at }}</td>
+                            <td><a href="{{ url_for('task_output', task_id=task.id) }}" class="btn btn-sm btn-outline-info">Output</a></td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+                {% else %}
+                <p class="text-muted">No tasks recorded for this node.</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-4">
+        <div class="card">
+            <div class="card-header"><h5 class="mb-0">Node Facts</h5></div>
+            <div class="card-body">
+                {% if facts %}
+                <table class="table table-sm">
+                    <thead><tr><th>Key</th><th>Value</th></tr></thead>
+                    <tbody>
+                        {% for fact in facts %}
+                        <tr><td><code>{{ fact.fact_key }}</code></td><td>{{ fact.fact_value }}</td></tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+                {% else %}
+                <p class="text-muted">No facts collected yet.</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

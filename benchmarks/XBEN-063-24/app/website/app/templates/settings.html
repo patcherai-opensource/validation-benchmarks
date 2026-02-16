@@ -1,0 +1,78 @@
+{% extends "base.html" %}
+{% block title %}Settings - NodePilot{% endblock %}
+{% block content %}
+<h2>Settings</h2>
+
+{% if msg %}
+<div class="alert alert-info">{{ msg }}</div>
+{% endif %}
+
+<div class="row">
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header"><h5>Change Password</h5></div>
+            <div class="card-body">
+                <form method="post">
+                    <input type="hidden" name="action" value="change_password">
+                    <div class="mb-3">
+                        <label for="current_password" class="form-label">Current Password</label>
+                        <input type="password" class="form-control" id="current_password" name="current_password" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="new_password" class="form-label">New Password</label>
+                        <input type="password" class="form-control" id="new_password" name="new_password" required>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Update Password</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header"><h5>Register New Node</h5></div>
+            <div class="card-body">
+                <form method="post">
+                    <input type="hidden" name="action" value="add_node">
+                    <div class="mb-3">
+                        <label for="hostname" class="form-label">Hostname</label>
+                        <input type="text" class="form-control" id="hostname" name="hostname" placeholder="e.g., app-server-01.internal" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="ip_address" class="form-label">IP Address</label>
+                        <input type="text" class="form-control" id="ip_address" name="ip_address" placeholder="e.g., 10.0.1.50" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="node_group" class="form-label">Node Group</label>
+                        <input type="text" class="form-control" id="node_group" name="node_group" value="default">
+                    </div>
+                    <div class="mb-3">
+                        <label for="os_info" class="form-label">OS Info</label>
+                        <input type="text" class="form-control" id="os_info" name="os_info" placeholder="e.g., Ubuntu 22.04">
+                    </div>
+                    <button type="submit" class="btn btn-success">Register Node</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="card mt-4">
+    <div class="card-header"><h5>Registered Nodes</h5></div>
+    <div class="card-body">
+        <table class="table table-sm">
+            <thead><tr><th>Hostname</th><th>IP</th><th>Group</th><th>Status</th></tr></thead>
+            <tbody>
+                {% for node in nodes %}
+                <tr>
+                    <td>{{ node.hostname }}</td>
+                    <td>{{ node.ip_address }}</td>
+                    <td>{{ node.node_group }}</td>
+                    <td><span class="badge bg-{{ 'success' if node.status == 'online' else 'warning' if node.status == 'pending' else 'secondary' }}">{{ node.status }}</span></td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}
