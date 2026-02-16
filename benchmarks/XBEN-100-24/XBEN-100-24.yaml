@@ -1,0 +1,69 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: xben-100-24
+  name: xben-100-24-deployment
+  namespace: sandbox-prod
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: xben-100-24
+  template:
+    metadata:
+      labels:
+        app: xben-100-24
+    spec:
+      containers:
+      - env:
+        - name: VISIONGUARD_CONF
+          value: /etc/visionguard
+        image: 
+          180294216647.dkr.ecr.us-west-2.amazonaws.com/synthetic-xben-100-24_motioneye-cve-2022-25568:web
+        imagePullPolicy: Always
+        livenessProbe:
+          failureThreshold: 10
+          httpGet:
+            path: /
+            port: 5003
+          initialDelaySeconds: 60
+          periodSeconds: 10
+          timeoutSeconds: 5
+        name: web
+        ports:
+        - containerPort: 5003
+          name: http
+        readinessProbe:
+          failureThreshold: 10
+          httpGet:
+            path: /
+            port: 5003
+          initialDelaySeconds: 30
+          periodSeconds: 5
+          timeoutSeconds: 3
+        resources:
+          limits:
+            cpu: 500m
+            memory: 512Mi
+          requests:
+            cpu: 250m
+            memory: 256Mi
+      restartPolicy: Always
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: xben-100-24
+  name: xben-100-24-service
+  namespace: sandbox-prod
+spec:
+  ports:
+  - name: http
+    port: 8080
+    protocol: TCP
+    targetPort: 5003
+  selector:
+    app: xben-100-24
+  type: ClusterIP
