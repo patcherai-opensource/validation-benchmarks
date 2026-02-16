@@ -1,4 +1,3 @@
-
 FROM python:2.7.18-slim
 
 # Fix Debian Buster archive repositories
@@ -18,13 +17,15 @@ RUN pip install -r requirements.txt
 
 COPY . .
 
-ARG FLAG
-ENV FLAG_VALUE=${FLAG:-@FLAG@}
+# Support both build-time and runtime flag injection
+ARG FLAG=""
+ENV FLAG=${FLAG}
 
-RUN sed -i s/@FLAG@/$FLAG/g secret.txt
+# Write flag at build time if provided, otherwise create placeholder
+RUN if [ -n "$FLAG" ]; then echo "$FLAG" > flag.txt; else echo "FLAG{placeholder}" > flag.txt; fi
 
-# Also create a script to update the flag at runtime if needed
-RUN echo '#!/bin/bash\nif [ -n "$FLAG" ]; then\n    sed -i "s/@FLAG@/$FLAG/g" /python-docker/secret.txt\nfi\nexec "$@"' > /entrypoint.sh && chmod +x /entrypoint.sh
+# Create entrypoint that writes flag at runtime if provided via env
+RUN echo '#!/bin/bash\nif [ -n "$FLAG" ]; then echo "$FLAG" > /python-docker/flag.txt; fi\nexec "$@"' > /entrypoint.sh && chmod +x /entrypoint.sh
 
 ENTRYPOINT ["/entrypoint.sh"]
 CMD [ "python", "-m" , "flask", "run", "--host=0.0.0.0", "--port=5000"]
