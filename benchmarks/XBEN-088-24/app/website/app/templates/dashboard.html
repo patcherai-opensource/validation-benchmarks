@@ -3,127 +3,76 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard</title>
+    <title>Dashboard - {{ tenant.display_name }}</title>
     <link href="{{ url_for('static', filename='css/bootstrap.min.css') }}" rel="stylesheet">
     <style>
-        body {
-            background-color: #1a1a1a;
-            color: white;
-        }
-        .container-fluid {
-            padding: 0;
-        }
-        .sidebar {
-            background-color: #333333;
-            border-right: 3px solid #ff4444;
-            padding-top: 20px;
-            padding-bottom: 20px;
-            min-height: 100vh;
-            padding-left: 25px; /* Added margin to the left side */
-        }
-        .nav-link {
-            color: #ff4444;
-            text-decoration: none;
-            padding: 10px 15px;
-            display: block;
-            margin-bottom: 10px;
-            border: 2px solid #ff4444;
-            border-radius: 10px;
-        }
-        .nav-link:hover {
-            color: #cc0000;
-            background-color: #333333;
-        }
-        .content {
-            padding: 20px;
-        }
-        .sidebar-logo {
-            width: 70px;
-            margin-bottom: 20px;
-        }
-        .sidebar-title {
-            font-size: 18px;
-            margin-bottom: 20px;
-            color: #ff4444;
-        }
-        .welcome-message {
-            margin-top: 20px;
-        }
+        body { background-color: #0d1117; color: #c9d1d9; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif; }
+        .sidebar { background-color: #161b22; border-right: 1px solid #30363d; min-height: 100vh; padding: 20px 16px; }
+        .sidebar .brand { color: #58a6ff; font-size: 1.1em; font-weight: 600; margin-bottom: 24px; }
+        .sidebar .tenant-name { color: #8b949e; font-size: 0.85em; margin-bottom: 20px; }
+        .sidebar .nav-link { color: #c9d1d9; padding: 8px 12px; border-radius: 6px; margin-bottom: 2px; font-size: 0.95em; }
+        .sidebar .nav-link:hover { background-color: #21262d; color: #58a6ff; }
+        .sidebar .nav-link.active { background-color: #1f6feb22; color: #58a6ff; }
+        .content { padding: 30px; }
+        .stat-card { background-color: #161b22; border: 1px solid #30363d; border-radius: 6px; padding: 20px; }
+        .stat-card h6 { color: #8b949e; }
+        .stat-card .value { color: #58a6ff; font-size: 1.6em; font-weight: 600; }
     </style>
 </head>
 <body>
     <div class="container-fluid">
         <div class="row">
-            <div class="col-md-3 sidebar">
-                <svg width="40" height="40" fill="currentColor" class="bi bi-router router-logo" viewBox="0 0 16 16">
-                    <path d="M5.525 3.025a3.5 3.5 0 0 1 4.95 0 .5.5 0 1 0 .707-.707 4.5 4.5 0 0 0-6.364 0 .5.5 0 0 0 .707.707"/>
-                    <path d="M6.94 4.44a1.5 1.5 0 0 1 2.12 0 .5.5 0 0 0 .708-.708 2.5 2.5 0 0 0-3.536 0 .5.5 0 0 0 .707.707ZM2.5 11a.5.5 0 1 1 0-1 .5.5 0 0 1 0 1m4.5-.5a.5.5 0 1 0 1 0 .5.5 0 0 0-1 0m2.5.5a.5.5 0 1 1 0-1 .5.5 0 0 1 0 1m1.5-.5a.5.5 0 1 0 1 0 .5.5 0 0 0-1 0m2 0a.5.5 0 1 0 1 0 .5.5 0 0 0-1 0"/>
-                    <path d="M2.974 2.342a.5.5 0 1 0-.948.316L3.806 8H1.5A1.5 1.5 0 0 0 0 9.5v2A1.5 1.5 0 0 0 1.5 13H2a.5.5 0 0 0 .5.5h2A.5.5 0 0 0 5 13h6a.5.5 0 0 0 .5.5h2a.5.5 0 0 0 .5-.5h.5a1.5 1.5 0 0 0 1.5-1.5v-2A1.5 1.5 0 0 0 14.5 8h-2.306l1.78-5.342a.5.5 0 1 0-.948-.316L11.14 8H4.86zM14.5 9a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-.5.5h-13a.5.5 0 0 1-.5-.5v-2a.5.5 0 0 1 .5-.5z"/>
-                    <path d="M8.5 5.5a.5.5 0 1 1-1 0 .5.5 0 0 1 1 0"/>
-                  </svg>
-                <h2 class="sidebar-title">Router XYZ</h2>
+            <div class="col-md-2 sidebar">
+                <div class="brand">NetGuard</div>
+                <div class="tenant-name">{{ tenant.display_name }}</div>
                 <ul class="nav flex-column">
-                    <li class="nav-item">
-                        <a class="nav-link active" href="{{ url_for('dashboard') }}">Dashboard</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="{{ url_for('wifi_settings') }}">WiFi Configuration</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="{{ url_for('admin_panel') }}">Admin Panel</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="{{ url_for('logout') }}">Logout</a>
-                    </li>
+                    <li class="nav-item"><a class="nav-link active" href="{{ url_for('tenant_dashboard', tenant_slug=tenant.tenant_id) }}">Dashboard</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{{ url_for('tenant_devices', tenant_slug=tenant.tenant_id) }}">Devices</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{{ url_for('network_settings', tenant_slug=tenant.tenant_id) }}">Network</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{{ url_for('account_info', tenant_slug=tenant.tenant_id) }}">Account</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{{ url_for('tenant_logout', tenant_slug=tenant.tenant_id) }}">Sign Out</a></li>
                 </ul>
             </div>
-            <div class="col-md-9">
+            <div class="col-md-10">
                 <div class="content">
-                    <h1>Welcome to the Dashboard</h1>
-                    <p class="welcome-message">Welcome to the Router XYZ Dashboard! This platform empowers you to manage and configure your WiFi network settings effortlessly. From here, you can customize your SSID, set up security protocols, and ensure seamless connectivity for all your devices. Feel free to explore the various options available to optimize your network performance and enhance your browsing experience. Additionally, certain advanced features are exclusively accessible to Administrator users, granting them additional control over network management.</p>
-                    <!-- Content here -->
+                    <h4 class="mb-4">Dashboard</h4>
+                    <div class="row">
+                        <div class="col-md-4 mb-3">
+                            <div class="stat-card">
+                                <h6>Managed Devices</h6>
+                                <div class="value">{{ devices|length }}</div>
+                            </div>
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <div class="stat-card">
+                                <h6>Tenant ID</h6>
+                                <div class="value" style="font-size: 1em;">{{ tenant.tenant_id }}</div>
+                            </div>
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <div class="stat-card">
+                                <h6>Your Role</h6>
+                                <div class="value" style="font-size: 1em;">{{ user.role }}</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <h5 class="mt-4 mb-3">Device Overview</h5>
+                    <table class="table table-dark table-sm" style="border:1px solid #30363d;">
+                        <thead><tr><th>Device</th><th>ID</th><th></th></tr></thead>
+                        <tbody>
+                        {% for d in devices %}
+                        <tr>
+                            <td>{{ d.name }}</td>
+                            <td>{{ d.id }}</td>
+                            <td><a href="{{ url_for('device_detail', tenant_slug=tenant.tenant_id, device_id=d.id) }}" style="color: #58a6ff;">View</a></td>
+                        </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
                 </div>
             </div>
         </div>
     </div>
-
-
-    {% if error_message %}
-    <!-- Modal -->
-    <div class="modal fade" id="errorModal" tabindex="-1" role="dialog" aria-labelledby="errorModalLabel" aria-hidden="true">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content" style="background-color: #333333;">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="errorModalLabel">Error</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close" style="background-color: transparent; border: none;">
-                        <span aria-hidden="true" style="color: white;">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    {{ error_message }}
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- jQuery and Bootstrap JS -->
-    <script src="{{ url_for('static', filename='js/jquery-3.5.1.min.js') }}"></script>
-    <script src="{{ url_for('static', filename='js/bootstrap.min.js') }}"></script>
-
-    <!-- JavaScript to show the modal -->
-    <script>
-        $(document).ready(function(){
-            $('#errorModal').modal('show');
-        });
-    </script>
-    {% endif %}
-
 </body>
 </html>
-
-{% if debug_session %}
-<!--
-Server-Side Session Content:    
-{{ debug_session }}
--->
-{% endif %}

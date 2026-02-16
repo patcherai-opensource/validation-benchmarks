@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Error {{ code }}</title>
+    <link href="{{ url_for('static', filename='css/bootstrap.min.css') }}" rel="stylesheet">
+    <style>
+        body { background-color: #0d1117; color: #c9d1d9; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif; }
+        .error-container { max-width: 500px; margin: 120px auto; text-align: center; }
+        .error-code { font-size: 4em; color: #f85149; font-weight: 700; }
+        .error-msg { color: #8b949e; margin-top: 12px; }
+        .back-link { color: #58a6ff; }
+    </style>
+</head>
+<body>
+    <div class="error-container">
+        <div class="error-code">{{ code }}</div>
+        <div class="error-msg">{{ message }}</div>
+        <a href="{{ url_for('index') }}" class="back-link mt-4 d-block">&larr; Return to portal</a>
+    </div>
+</body>
+</html>

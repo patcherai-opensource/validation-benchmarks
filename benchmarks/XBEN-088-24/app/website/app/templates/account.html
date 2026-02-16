@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Account - {{ tenant.display_name }}</title>
+    <link href="{{ url_for('static', filename='css/bootstrap.min.css') }}" rel="stylesheet">
+    <style>
+        body { background-color: #0d1117; color: #c9d1d9; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif; }
+        .sidebar { background-color: #161b22; border-right: 1px solid #30363d; min-height: 100vh; padding: 20px 16px; }
+        .sidebar .brand { color: #58a6ff; font-size: 1.1em; font-weight: 600; margin-bottom: 24px; }
+        .sidebar .tenant-name { color: #8b949e; font-size: 0.85em; margin-bottom: 20px; }
+        .sidebar .nav-link { color: #c9d1d9; padding: 8px 12px; border-radius: 6px; margin-bottom: 2px; font-size: 0.95em; }
+        .sidebar .nav-link:hover { background-color: #21262d; color: #58a6ff; }
+        .sidebar .nav-link.active { background-color: #1f6feb22; color: #58a6ff; }
+        .content { padding: 30px; }
+        .info-row { border-bottom: 1px solid #30363d; padding: 12px 0; }
+        .info-label { color: #8b949e; font-size: 0.9em; }
+        .info-value { color: #c9d1d9; }
+    </style>
+</head>
+<body>
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-2 sidebar">
+                <div class="brand">NetGuard</div>
+                <div class="tenant-name">{{ tenant.display_name }}</div>
+                <ul class="nav flex-column">
+                    <li class="nav-item"><a class="nav-link" href="{{ url_for('tenant_dashboard', tenant_slug=tenant.tenant_id) }}">Dashboard</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{{ url_for('tenant_devices', tenant_slug=tenant.tenant_id) }}">Devices</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{{ url_for('network_settings', tenant_slug=tenant.tenant_id) }}">Network</a></li>
+                    <li class="nav-item"><a class="nav-link active" href="{{ url_for('account_info', tenant_slug=tenant.tenant_id) }}">Account</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{{ url_for('tenant_logout', tenant_slug=tenant.tenant_id) }}">Sign Out</a></li>
+                </ul>
+            </div>
+            <div class="col-md-10">
+                <div class="content">
+                    <h4 class="mb-4">Account Information</h4>
+                    <div style="max-width:500px;">
+                        <div class="info-row">
+                            <div class="info-label">Username</div>
+                            <div class="info-value">{{ user.username }}</div>
+                        </div>
+                        <div class="info-row">
+                            <div class="info-label">Name</div>
+                            <div class="info-value">{{ user.name }} {{ user.lastname }}</div>
+                        </div>
+                        <div class="info-row">
+                            <div class="info-label">Email</div>
+                            <div class="info-value">{{ user.email }}</div>
+                        </div>
+                        <div class="info-row">
+                            <div class="info-label">Role</div>
+                            <div class="info-value">{{ user.role }}</div>
+                        </div>
+                        <div class="info-row">
+                            <div class="info-label">Organization</div>
+                            <div class="info-value">{{ tenant.display_name }} ({{ tenant.tenant_id }})</div>
+                        </div>
+                        <div class="info-row">
+                            <div class="info-label">Realm</div>
+                            <div class="info-value">{{ tenant.realm }}</div>
+                        </div>
+                        <div class="info-row">
+                            <div class="info-label">Identity Provider</div>
+                            <div class="info-value"><code>{{ tenant.auth_endpoint }}</code></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

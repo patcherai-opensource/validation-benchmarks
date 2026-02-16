@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Network - {{ tenant.display_name }}</title>
+    <link href="{{ url_for('static', filename='css/bootstrap.min.css') }}" rel="stylesheet">
+    <style>
+        body { background-color: #0d1117; color: #c9d1d9; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif; }
+        .sidebar { background-color: #161b22; border-right: 1px solid #30363d; min-height: 100vh; padding: 20px 16px; }
+        .sidebar .brand { color: #58a6ff; font-size: 1.1em; font-weight: 600; margin-bottom: 24px; }
+        .sidebar .tenant-name { color: #8b949e; font-size: 0.85em; margin-bottom: 20px; }
+        .sidebar .nav-link { color: #c9d1d9; padding: 8px 12px; border-radius: 6px; margin-bottom: 2px; font-size: 0.95em; }
+        .sidebar .nav-link:hover { background-color: #21262d; color: #58a6ff; }
+        .sidebar .nav-link.active { background-color: #1f6feb22; color: #58a6ff; }
+        .content { padding: 30px; }
+        .form-control { background-color: #0d1117; border: 1px solid #30363d; color: #c9d1d9; }
+        .form-control:focus { background-color: #0d1117; border-color: #58a6ff; color: #c9d1d9; }
+        .btn-primary { background-color: #238636; border-color: #238636; }
+        .btn-primary:hover { background-color: #2ea043; }
+        .info-msg { color: #3fb950; font-size: 0.9em; }
+    </style>
+</head>
+<body>
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-2 sidebar">
+                <div class="brand">NetGuard</div>
+                <div class="tenant-name">{{ tenant.display_name }}</div>
+                <ul class="nav flex-column">
+                    <li class="nav-item"><a class="nav-link" href="{{ url_for('tenant_dashboard', tenant_slug=tenant.tenant_id) }}">Dashboard</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{{ url_for('tenant_devices', tenant_slug=tenant.tenant_id) }}">Devices</a></li>
+                    <li class="nav-item"><a class="nav-link active" href="{{ url_for('network_settings', tenant_slug=tenant.tenant_id) }}">Network</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{{ url_for('account_info', tenant_slug=tenant.tenant_id) }}">Account</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{{ url_for('tenant_logout', tenant_slug=tenant.tenant_id) }}">Sign Out</a></li>
+                </ul>
+            </div>
+            <div class="col-md-10">
+                <div class="content">
+                    <h4 class="mb-4">Network Settings</h4>
+                    {% if info %}
+                    <div class="info-msg mb-3">{{ info }}</div>
+                    {% endif %}
+                    <form method="POST" style="max-width:500px;">
+                        <div class="form-group mb-3">
+                            <label>VLAN ID</label>
+                            <input type="number" class="form-control" name="vlan" placeholder="100">
+                        </div>
+                        <div class="form-group mb-3">
+                            <label>Subnet</label>
+                            <input type="text" class="form-control" name="subnet" placeholder="10.0.0.0/24">
+                        </div>
+                        <div class="form-group mb-3">
+                            <label>Gateway</label>
+                            <input type="text" class="form-control" name="gateway" placeholder="10.0.0.1">
+                        </div>
+                        <button type="submit" class="btn btn-primary">Apply Changes</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
