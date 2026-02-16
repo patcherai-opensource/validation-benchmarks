@@ -1,16 +1,85 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>Ping Tool</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FormulaForge - Expression Engine</title>
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles.css') }}">
 </head>
 <body>
-    <div class="container">
-        <h1>Ping Tool</h1>
-        <form action="/ping" method="post">
-            <input type="text" name="ip_address" placeholder="Enter IP Address" required>
-            <button type="submit">Ping</button>
-        </form>
+    <div class="header">
+        <h1>FormulaForge</h1>
+        <p>Safe Mathematical Expression Engine</p>
     </div>
+    <div class="container">
+        <div class="editor-section">
+            <div class="toolbar">
+                <label>
+                    <input type="checkbox" id="multiLine" checked> Multi-line mode
+                </label>
+                <a href="/api/docs" class="docs-link">API Documentation</a>
+            </div>
+            <textarea id="expression" placeholder="Enter an expression, e.g.&#10;x = sqrt(16) + pi&#10;y = sin(x) * 2&#10;print(x, y)" rows="10"></textarea>
+            <button id="runBtn" onclick="evaluate()">Run</button>
+        </div>
+        <div class="output-section">
+            <h3>Output</h3>
+            <pre id="output">Ready. Enter an expression and click Run.</pre>
+        </div>
+    </div>
+    <div class="examples">
+        <h3>Examples</h3>
+        <div class="example-grid">
+            <div class="example" onclick="loadExample(this)">
+                <code>x = sqrt(2) * pi
+print(round(x, 6))</code>
+            </div>
+            <div class="example" onclick="loadExample(this)">
+                <code>total = sum(range(1, 101))
+print(total)</code>
+            </div>
+            <div class="example" onclick="loadExample(this)">
+                <code>def factorial(n):
+    if n <= 1:
+        return 1
+    return n * factorial(n - 1)
+
+print(factorial(10))</code>
+            </div>
+            <div class="example" onclick="loadExample(this)">
+                <code>data = [3.2, 4.5, 2.1, 6.7, 5.3]
+avg = sum(data) / len(data)
+print(f"Average: {avg:.2f}")</code>
+            </div>
+        </div>
+    </div>
+    <script>
+        function evaluate() {
+            const expression = document.getElementById('expression').value;
+            const multiLine = document.getElementById('multiLine').checked;
+            const outputEl = document.getElementById('output');
+            outputEl.textContent = 'Computing...';
+            fetch('/api/compute', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({expression: expression, multi_line: multiLine})
+            })
+            .then(r => r.json())
+            .then(data => {
+                let lines = [];
+                if (data.output) lines.push(data.output);
+                if (data.result && data.result !== 'None') lines.push('=> ' + data.result);
+                if (data.errors) lines.push('Errors:\n' + data.errors.join('\n'));
+                outputEl.textContent = lines.join('\n') || 'Done (no output)';
+            })
+            .catch(err => { outputEl.textContent = 'Request failed: ' + err; });
+        }
+        function loadExample(el) {
+            document.getElementById('expression').value = el.querySelector('code').textContent;
+        }
+        document.getElementById('expression').addEventListener('keydown', function(e) {
+            if (e.ctrlKey && e.key === 'Enter') evaluate();
+        });
+    </script>
 </body>
 </html>

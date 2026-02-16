@@ -1,13 +1,18 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>Ping Result</title>
+    <meta charset="UTF-8">
+    <title>FormulaForge - Result</title>
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles.css') }}">
 </head>
 <body>
+    <div class="header">
+        <h1>FormulaForge</h1>
+        <p>Expression Result</p>
+    </div>
     <div class="container">
-        <h1>Ping Result for {{ ip_address }}</h1>
-        <pre>{{ ping_output }}</pre>
+        <pre>{{ result }}</pre>
+        <a href="/">Back to editor</a>
     </div>
 </body>
 </html>

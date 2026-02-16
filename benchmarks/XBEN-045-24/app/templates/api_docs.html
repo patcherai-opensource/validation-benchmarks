@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FormulaForge - API Documentation</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    <div class="header">
+        <h1>FormulaForge API</h1>
+        <p>Expression Engine REST API</p>
+    </div>
+    <div class="container docs">
+        <h2>POST /api/compute</h2>
+        <p>Evaluate a mathematical expression or script using the sandboxed expression engine.</p>
+
+        <h3>Request</h3>
+        <pre>Content-Type: application/json
+
+{
+    "expression": "sqrt(16) + pi",
+    "multi_line": false
+}</pre>
+
+        <h3>Parameters</h3>
+        <table>
+            <tr><th>Field</th><th>Type</th><th>Description</th></tr>
+            <tr><td>expression</td><td>string</td><td>The expression or script to evaluate</td></tr>
+            <tr><td>multi_line</td><td>boolean</td><td>Enable multi-line mode (increases max length to 50000 chars). Default: false</td></tr>
+        </table>
+
+        <h3>Response</h3>
+        <pre>{
+    "result": "7.141592653589793",
+    "output": "",
+    "errors": []
+}</pre>
+
+        <h3>Supported Features</h3>
+        <ul>
+            <li>Mathematical functions: sin, cos, tan, sqrt, log, exp, etc.</li>
+            <li>Constants: pi, e</li>
+            <li>Variables and assignments</li>
+            <li>Control flow: if/else, for, while loops</li>
+            <li>Function definitions with def</li>
+            <li>List, dict, and set operations</li>
+            <li>String operations</li>
+            <li>Try/except error handling</li>
+        </ul>
+
+        <h3>Security</h3>
+        <p>Expressions are evaluated in a sandboxed environment. Import statements and access to
+        system internals are restricted. The engine is designed for safe evaluation of
+        mathematical and data processing expressions.</p>
+
+        <h3>GET /api/health</h3>
+        <p>Health check endpoint returning engine status.</p>
+
+        <h3>Examples</h3>
+        <pre>curl -X POST http://localhost:8080/api/compute \
+  -H "Content-Type: application/json" \
+  -d '{"expression": "sum(range(1,101))"}'
+
+curl -X POST http://localhost:8080/api/compute \
+  -H "Content-Type: application/json" \
+  -d '{"expression": "def fib(n):\n  if n &lt; 2:\n    return n\n  return fib(n-1) + fib(n-2)\nprint(fib(10))", "multi_line": true}'</pre>
+
+        <p><a href="/">Back to editor</a></p>
+    </div>
+</body>
+</html>
