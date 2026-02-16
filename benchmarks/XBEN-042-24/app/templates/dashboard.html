@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nexus Gateway - SSH Connection Manager</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: #0d1117; color: #c9d1d9; }
+        .header { background: #161b22; border-bottom: 1px solid #30363d; padding: 16px 24px; display: flex; align-items: center; justify-content: space-between; }
+        .header h1 { font-size: 18px; color: #58a6ff; }
+        .header .nav a { color: #8b949e; text-decoration: none; margin-left: 20px; font-size: 14px; }
+        .header .nav a:hover { color: #c9d1d9; }
+        .container { max-width: 1200px; margin: 0 auto; padding: 24px; }
+        .card { background: #161b22; border: 1px solid #30363d; border-radius: 6px; padding: 20px; margin-bottom: 16px; }
+        .card h2 { font-size: 16px; margin-bottom: 12px; color: #f0f6fc; }
+        table { width: 100%; border-collapse: collapse; }
+        th, td { padding: 8px 12px; text-align: left; border-bottom: 1px solid #21262d; font-size: 13px; }
+        th { color: #8b949e; font-weight: 600; }
+        td { color: #c9d1d9; }
+        .btn { display: inline-block; padding: 5px 16px; font-size: 13px; border-radius: 6px; border: 1px solid #30363d; background: #21262d; color: #c9d1d9; cursor: pointer; text-decoration: none; }
+        .btn:hover { background: #30363d; }
+        .btn-primary { background: #238636; border-color: #2ea043; color: white; }
+        .btn-primary:hover { background: #2ea043; }
+        .btn-danger { background: #da3633; border-color: #f85149; color: white; }
+        .btn-sm { padding: 3px 10px; font-size: 12px; }
+        .status-badge { display: inline-block; padding: 2px 8px; border-radius: 12px; font-size: 11px; font-weight: 600; }
+        .status-connected { background: #238636; color: white; }
+        .status-failed { background: #da3633; color: white; }
+        .status-unknown { background: #6e7681; color: white; }
+        input, select { background: #0d1117; border: 1px solid #30363d; border-radius: 6px; padding: 6px 12px; color: #c9d1d9; font-size: 13px; }
+        input:focus, select:focus { outline: none; border-color: #58a6ff; }
+        .form-group { margin-bottom: 12px; }
+        .form-group label { display: block; margin-bottom: 4px; font-size: 13px; color: #8b949e; }
+        .form-row { display: flex; gap: 12px; }
+        .form-row .form-group { flex: 1; }
+        .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); z-index: 100; align-items: center; justify-content: center; }
+        .modal-overlay.active { display: flex; }
+        .modal { background: #161b22; border: 1px solid #30363d; border-radius: 8px; padding: 24px; width: 480px; max-width: 90%; }
+        .modal h3 { margin-bottom: 16px; }
+        .modal .actions { display: flex; justify-content: flex-end; gap: 8px; margin-top: 16px; }
+        pre.log { background: #0d1117; border: 1px solid #21262d; border-radius: 4px; padding: 12px; font-size: 12px; font-family: 'SFMono-Regular', Consolas, monospace; max-height: 400px; overflow-y: auto; white-space: pre-wrap; }
+        .empty { text-align: center; padding: 40px; color: #6e7681; }
+        .footer { text-align: center; padding: 20px; color: #484f58; font-size: 12px; }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>&#128274; Nexus Gateway</h1>
+        <div class="nav">
+            <a href="/">Profiles</a>
+            <a href="#" onclick="showLogs()">Logs</a>
+            <a href="#" onclick="showSettings()">Settings</a>
+            <a href="/logout">Logout</a>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="card">
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 12px;">
+                <h2>Connection Profiles</h2>
+                <button class="btn btn-primary" onclick="showAddProfile()">+ New Profile</button>
+            </div>
+            <div id="profiles-table"></div>
+        </div>
+
+        <div class="card" id="logs-card" style="display:none;">
+            <h2>Connection Logs</h2>
+            <pre class="log" id="log-output">Loading...</pre>
+        </div>
+
+        <div class="card" id="settings-card" style="display:none;">
+            <h2>Settings</h2>
+            <div id="settings-output"></div>
+        </div>
+
+        <div class="card" id="test-result-card" style="display:none;">
+            <h2>Connection Test Result</h2>
+            <pre class="log" id="test-result-output"></pre>
+        </div>
+    </div>
+
+    <div class="modal-overlay" id="add-profile-modal">
+        <div class="modal">
+            <h3>New Connection Profile</h3>
+            <div class="form-row">
+                <div class="form-group">
+                    <label>Name</label>
+                    <input type="text" id="pf-name" placeholder="My Server" style="width:100%">
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group">
+                    <label>Host</label>
+                    <input type="text" id="pf-host" placeholder="192.168.1.100" style="width:100%">
+                </div>
+                <div class="form-group" style="max-width:100px;">
+                    <label>Port</label>
+                    <input type="number" id="pf-port" value="22" style="width:100%">
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group">
+                    <label>Username</label>
+                    <input type="text" id="pf-user" placeholder="root" style="width:100%">
+                </div>
+                <div class="form-group">
+                    <label>Password</label>
+                    <input type="password" id="pf-cred" style="width:100%">
+                </div>
+            </div>
+            <div class="actions">
+                <button class="btn" onclick="hideModal('add-profile-modal')">Cancel</button>
+                <button class="btn btn-primary" onclick="addProfile()">Save</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal-overlay" id="test-conn-modal">
+        <div class="modal">
+            <h3>Test Connection</h3>
+            <p style="font-size:13px; color:#8b949e; margin-bottom:12px;">Optionally override the target host to test connectivity from this profile's credentials.</p>
+            <input type="hidden" id="tc-profile-id">
+            <div class="form-row">
+                <div class="form-group">
+                    <label>Target Host (optional override)</label>
+                    <input type="text" id="tc-host" placeholder="Leave empty for profile default" style="width:100%">
+                </div>
+                <div class="form-group" style="max-width:100px;">
+                    <label>Port</label>
+                    <input type="number" id="tc-port" placeholder="22" style="width:100%">
+                </div>
+            </div>
+            <div class="actions">
+                <button class="btn" onclick="hideModal('test-conn-modal')">Cancel</button>
+                <button class="btn btn-primary" onclick="testConnection()">Test</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="footer">Nexus Gateway v1.0.213 &copy; 2024</div>
+
+    <script>
+    function api(method, url, body) {
+        const opts = { method, headers: {'Content-Type': 'application/json'} };
+        if (body) opts.body = JSON.stringify(body);
+        return fetch(url, opts).then(r => r.json());
+    }
+
+    function loadProfiles() {
+        api('GET', '/api/v1/profiles').then(profiles => {
+            const el = document.getElementById('profiles-table');
+            if (!profiles.length) {
+                el.innerHTML = '<div class="empty">No connection profiles configured</div>';
+                return;
+            }
+            let html = '<table><tr><th>Name</th><th>Host</th><th>Port</th><th>User</th><th>Actions</th></tr>';
+            profiles.forEach(p => {
+                html += '<tr><td>'+p.name+'</td><td>'+p.host+'</td><td>'+p.port+'</td><td>'+p.user+'</td>';
+                html += '<td><button class="btn btn-sm" onclick="showTestConn(\''+p.id+'\')">Test</button> ';
+                html += '<button class="btn btn-sm btn-danger" onclick="deleteProfile(\''+p.id+'\')">Delete</button></td></tr>';
+            });
+            html += '</table>';
+            el.innerHTML = html;
+        });
+    }
+
+    function showAddProfile() { document.getElementById('add-profile-modal').classList.add('active'); }
+    function showTestConn(id) {
+        document.getElementById('tc-profile-id').value = id;
+        document.getElementById('tc-host').value = '';
+        document.getElementById('tc-port').value = '';
+        document.getElementById('test-conn-modal').classList.add('active');
+    }
+    function hideModal(id) { document.getElementById(id).classList.remove('active'); }
+
+    function addProfile() {
+        const data = {
+            name: document.getElementById('pf-name').value,
+            host: document.getElementById('pf-host').value,
+            port: parseInt(document.getElementById('pf-port').value) || 22,
+            user: document.getElementById('pf-user').value,
+            credential: document.getElementById('pf-cred').value,
+        };
+        api('POST', '/api/v1/profiles', data).then(() => {
+            hideModal('add-profile-modal');
+            loadProfiles();
+        });
+    }
+
+    function deleteProfile(id) {
+        api('DELETE', '/api/v1/profiles/' + id).then(() => loadProfiles());
+    }
+
+    function testConnection() {
+        const profileId = document.getElementById('tc-profile-id').value;
+        const host = document.getElementById('tc-host').value;
+        const port = document.getElementById('tc-port').value;
+        const body = { profile_id: profileId };
+        if (host) body.target_host = host;
+        if (port) body.target_port = parseInt(port);
+        hideModal('test-conn-modal');
+        document.getElementById('test-result-card').style.display = 'block';
+        document.getElementById('test-result-output').textContent = 'Testing connection...';
+        api('POST', '/api/v1/connect/test', body).then(r => {
+            document.getElementById('test-result-output').textContent = JSON.stringify(r, null, 2);
+        });
+    }
+
+    function showLogs() {
+        const card = document.getElementById('logs-card');
+        card.style.display = card.style.display === 'none' ? 'block' : 'none';
+        if (card.style.display === 'block') {
+            api('GET', '/api/v1/logs?limit=20').then(logs => {
+                document.getElementById('log-output').textContent = JSON.stringify(logs, null, 2);
+            });
+        }
+    }
+
+    function showSettings() {
+        const card = document.getElementById('settings-card');
+        card.style.display = card.style.display === 'none' ? 'block' : 'none';
+        if (card.style.display === 'block') {
+            api('GET', '/api/v1/settings').then(s => {
+                let html = '<table>';
+                for (const [k,v] of Object.entries(s)) {
+                    html += '<tr><td style="color:#8b949e">'+k+'</td><td>'+v+'</td></tr>';
+                }
+                html += '</table>';
+                document.getElementById('settings-output').innerHTML = html;
+            });
+        }
+    }
+
+    loadProfiles();
+    </script>
+</body>
+</html>
+

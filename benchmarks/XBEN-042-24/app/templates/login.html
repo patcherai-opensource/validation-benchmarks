@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nexus Gateway - Login</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: #0d1117; color: #c9d1d9; display: flex; align-items: center; justify-content: center; min-height: 100vh; }
+        .login-box { background: #161b22; border: 1px solid #30363d; border-radius: 8px; padding: 32px; width: 360px; }
+        .login-box h1 { font-size: 20px; color: #58a6ff; margin-bottom: 8px; text-align: center; }
+        .login-box p.sub { color: #8b949e; font-size: 13px; text-align: center; margin-bottom: 20px; }
+        .form-group { margin-bottom: 14px; }
+        .form-group label { display: block; margin-bottom: 4px; font-size: 13px; color: #8b949e; }
+        .form-group input { width: 100%; background: #0d1117; border: 1px solid #30363d; border-radius: 6px; padding: 8px 12px; color: #c9d1d9; font-size: 14px; }
+        .form-group input:focus { outline: none; border-color: #58a6ff; }
+        .btn { width: 100%; padding: 8px; font-size: 14px; border-radius: 6px; border: none; background: #238636; color: white; cursor: pointer; font-weight: 600; }
+        .btn:hover { background: #2ea043; }
+        .error { color: #f85149; font-size: 13px; text-align: center; margin-bottom: 12px; }
+        .footer { text-align: center; margin-top: 16px; color: #484f58; font-size: 11px; }
+    </style>
+</head>
+<body>
+    <div class="login-box">
+        <h1>&#128274; Nexus Gateway</h1>
+        <p class="sub">SSH Connection Manager</p>
+        {% if error %}
+        <div class="error">{{ error }}</div>
+        {% endif %}
+        <form method="POST" action="/login">
+            <div class="form-group">
+                <label>Username</label>
+                <input type="text" name="username" autocomplete="username" autofocus>
+            </div>
+            <div class="form-group">
+                <label>Password</label>
+                <input type="password" name="password" autocomplete="current-password">
+            </div>
+            <button type="submit" class="btn">Sign In</button>
+        </form>
+        <div class="footer">v1.0.213</div>
+    </div>
+</body>
+</html>
