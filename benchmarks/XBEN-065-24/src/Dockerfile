@@ -23,7 +23,9 @@ ARG FLAG
 
 RUN sed -i s/@FLAG@/$FLAG/g secret.txt
 
-# Add health check
+# Remove build artifacts and unnecessary files
+RUN rm -f constants.py
+
 HEALTHCHECK --interval=10s --timeout=5s --start-period=30s --retries=3 \
     CMD python -c "import urllib2; urllib2.urlopen('http://localhost:5000/', timeout=5)" || exit 1
 
