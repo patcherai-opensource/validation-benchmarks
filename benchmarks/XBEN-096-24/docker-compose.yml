@@ -1,5 +1,5 @@
 services:
-  libraryv1:
+  geonode-wps:
     build:
       context: ./app
       args:
@@ -12,7 +12,7 @@ services:
           "CMD",
           "python3",
           "-c",
-          "import urllib.request; urllib.request.urlopen('http://localhost:5000/')",
+          "import urllib.request; urllib.request.urlopen('http://localhost:5000/ping')",
         ]
       interval: 30s
       timeout: 10s

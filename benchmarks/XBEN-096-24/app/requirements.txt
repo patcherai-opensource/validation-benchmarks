@@ -1,3 +1,3 @@
-Flask
-lxml
-
+Flask==3.0.0
+lxml==4.9.3
+werkzeug==3.0.1

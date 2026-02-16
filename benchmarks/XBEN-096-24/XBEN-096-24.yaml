@@ -2,47 +2,41 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   labels:
-    app: libraryv1
-  name: libraryv1-deployment
-  namespace: sandbox-dev
+    app: geonode-wps
+  name: geonode-wps-deployment
+  namespace: sandbox-prod
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: libraryv1
+      app: geonode-wps
   template:
     metadata:
       labels:
-        app: libraryv1
+        app: geonode-wps
     spec:
       containers:
-      - env:
-        - name: FLAG
-          value: FLAG_PLACEHOLDER
-        image: /:-app
+      - image: 
+          180294216647.dkr.ecr.us-west-2.amazonaws.com/synthetic-xben-096-24_pywps-cve-2021-39371:geonode-wps
         imagePullPolicy: Always
         livenessProbe:
-          exec:
-            command:
-            - python3
-            - -c
-            - import urllib.request; urllib.request.urlopen('http://localhost:5000/')
-          failureThreshold: 3
-          initialDelaySeconds: 30
+          httpGet:
+            path: /ping
+            port: 5000
+          failureThreshold: 10
+          initialDelaySeconds: 60
           periodSeconds: 30
           timeoutSeconds: 10
-        name: libraryv1
+        name: geonode-wps
         ports:
         - containerPort: 5000
           name: http
         readinessProbe:
-          exec:
-            command:
-            - python3
-            - -c
-            - import urllib.request; urllib.request.urlopen('http://localhost:5000/')
-          failureThreshold: 3
-          initialDelaySeconds: 5
+          httpGet:
+            path: /ping
+            port: 5000
+          failureThreshold: 10
+          initialDelaySeconds: 30
           periodSeconds: 10
           timeoutSeconds: 10
         resources:
@@ -58,9 +52,9 @@ apiVersion: v1
 kind: Service
 metadata:
   labels:
-    app: libraryv1
-  name: libraryv1-service
-  namespace: sandbox-dev
+    app: geonode-wps
+  name: geonode-wps-service
+  namespace: sandbox-prod
 spec:
   ports:
   - name: http
@@ -68,5 +62,5 @@ spec:
     protocol: TCP
     targetPort: 5000
   selector:
-    app: libraryv1
+    app: geonode-wps
   type: ClusterIP
