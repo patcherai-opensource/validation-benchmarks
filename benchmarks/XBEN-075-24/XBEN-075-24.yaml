@@ -2,43 +2,41 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   labels:
-    app: deserialization-yaml-bookmarks
-  name: deserialization-yaml-bookmarks
-  namespace: sandbox-dev
+    app: pipeline-hub
+  name: pipeline-hub
+  namespace: sandbox-prod
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: deserialization-yaml-bookmarks
+      app: pipeline-hub
   template:
     metadata:
       labels:
-        app: deserialization-yaml-bookmarks
+        app: pipeline-hub
     spec:
       containers:
-      - env:
-        - name: FLAG
-          value: FLAG{placeholder}
-        image: /:-app
+      - image: 
+          180294216647.dkr.ecr.us-west-2.amazonaws.com/synthetic-xben-075-24_airflow-cve-2023-50943:pipeline-hub
         imagePullPolicy: Always
         livenessProbe:
-          failureThreshold: 3
+          failureThreshold: 10
           httpGet:
-            path: /
+            path: /health
             port: 80
-          initialDelaySeconds: 30
+          initialDelaySeconds: 60
           periodSeconds: 10
           timeoutSeconds: 5
-        name: deserialization-yaml-bookmarks
+        name: pipeline-hub
         ports:
         - containerPort: 80
           protocol: TCP
         readinessProbe:
-          failureThreshold: 3
+          failureThreshold: 10
           httpGet:
-            path: /
+            path: /health
             port: 80
-          initialDelaySeconds: 5
+          initialDelaySeconds: 30
           periodSeconds: 5
           timeoutSeconds: 5
         resources:
@@ -54,9 +52,9 @@ apiVersion: v1
 kind: Service
 metadata:
   labels:
-    app: deserialization-yaml-bookmarks
-  name: deserialization-yaml-bookmarks-service
-  namespace: sandbox-dev
+    app: pipeline-hub
+  name: pipeline-hub-service
+  namespace: sandbox-prod
 spec:
   ports:
   - name: http
@@ -64,5 +62,5 @@ spec:
     protocol: TCP
     targetPort: 80
   selector:
-    app: deserialization-yaml-bookmarks
+    app: pipeline-hub
   type: ClusterIP

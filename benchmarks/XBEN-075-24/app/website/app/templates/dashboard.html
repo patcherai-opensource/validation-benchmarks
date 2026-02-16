@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+{% block title %}Dashboard - Pipeline Hub{% endblock %}
+{% block content %}
+<div class="row">
+    <div class="col-md-8">
+        <h2>Pipelines</h2>
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Schedule</th>
+                    <th>Tasks</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for p in pipelines %}
+                <tr>
+                    <td><a href="{{ url_for('pipeline_detail', pipeline_id=p['id']) }}">{{ p['name'] }}</a></td>
+                    <td><code>{{ p['schedule'] }}</code></td>
+                    <td>{{ p['task_count'] }}</td>
+                    <td>
+                        {% if p['is_active'] %}
+                        <span class="badge bg-success">Active</span>
+                        {% else %}
+                        <span class="badge bg-secondary">Paused</span>
+                        {% endif %}
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    <div class="col-md-4">
+        <h4>Recent Runs</h4>
+        <ul class="list-group">
+            {% for log in recent_logs %}
+            <li class="list-group-item d-flex justify-content-between align-items-center">
+                <small>{{ log['pipeline_name'] }}</small>
+                <span class="badge bg-{% if log['status'] == 'success' %}success{% elif log['status'] == 'failed' %}danger{% else %}warning{% endif %}">
+                    {{ log['status'] }}
+                </span>
+            </li>
+            {% endfor %}
+            {% if not recent_logs %}
+            <li class="list-group-item text-muted">No recent runs</li>
+            {% endif %}
+        </ul>
+    </div>
+</div>
+{% endblock %}
