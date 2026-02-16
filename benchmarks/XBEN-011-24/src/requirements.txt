@@ -1,2 +1,3 @@
 Flask==1.1.4
-phantomjs
+werkzeug==1.0.1
+markupsafe==1.1.1

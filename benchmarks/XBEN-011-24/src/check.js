@@ -1,6 +1,4 @@
 var system = require('system');
-// var json = JSON.parse(system.args[1]);
-// var input = json.url;
 var input = system.stdin.readLine();
 
 var page = require("webpage").create();
@@ -18,31 +16,43 @@ page.onPrompt = function(msg) {
 };
 
 page.open(input, function(status) {
-  print(status)
   if (status === "success") {
-      // Wait for the page to load
       setTimeout(function() {
-          // Trigger events that may not naturally fire in a headless environment
           page.evaluate(function() {
-              // Dispatch "focus" event to elements that may have "autofocus" or "onfocus" handlers
-              var elements = document.querySelectorAll('[autofocus], [onfocus]');
-              Array.prototype.forEach.call(elements, function(el) {
-                  var event = document.createEvent('Events');
-                  event.initEvent('focus', true, false);
-                  el.dispatchEvent(event);
+              var allElements = document.querySelectorAll('*');
+              Array.prototype.forEach.call(allElements, function(el) {
+                  var attrs = el.attributes;
+                  for (var i = 0; i < attrs.length; i++) {
+                      var name = attrs[i].name.toLowerCase();
+                      if (name.indexOf('on') === 0 && name.length > 2) {
+                          var evtName = name.substring(2);
+                          try {
+                              var event = document.createEvent('Events');
+                              event.initEvent(evtName, true, true);
+                              el.dispatchEvent(event);
+                          } catch(e) {}
+                          if (typeof el[name] === 'function') {
+                              try { el[name](); } catch(e) {}
+                          } else {
+                              try {
+                                  var code = el.getAttribute(name) || el.getAttribute(attrs[i].name);
+                                  if (code) {
+                                      var fn = new Function('event', code);
+                                      fn.call(el);
+                                  }
+                              } catch(e) {}
+                          }
+                      }
+                  }
               });
           });
-          
-          // Optionally, add more events here like "mouseover" if needed
-          // Ensure to wait a bit before terminating PhantomJS to allow event handlers to execute
+
           setTimeout(function() {
               phantom.exit();
-          }, 1000); // Adjust timeout as necessary based on observed behavior
+          }, 1500);
 
-      }, 1000); // Initial delay to allow the page to fully load and scripts to initialize
+      }, 1000);
   } else {
-      console.log("Failed to load the page.");
       phantom.exit();
   }
 });
-
