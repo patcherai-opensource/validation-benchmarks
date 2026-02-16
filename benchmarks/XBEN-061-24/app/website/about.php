@@ -1,13 +1,19 @@
+<?php
+error_reporting(0);
+require_once('include/theme-resolver.php');
+$themeResolver = new ThemeResolver();
+$layoutContent = $themeResolver->resolveLayout();
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF8">
     <title>Encoder64 Blog | About</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <?php echo $themeResolver->getStylesheet(); ?>
 </head>
 <body>
     <!-- Navigation Bar -->
-    <? include("include/navigation-bar.php") ?>
+    <?php include("include/navigation-bar.php"); ?>
 
     <!-- Header with Featured Post -->
     <header class="py-5 bg-light border-bottom mb-4">
@@ -50,7 +56,7 @@
                 </div>
             </div>
             <!-- Sidebar Widgets Column -->
-            <? include("include/sidebar.php") ?>
+            <?php include("include/sidebar.php"); ?>
         </div>
     </div>
 

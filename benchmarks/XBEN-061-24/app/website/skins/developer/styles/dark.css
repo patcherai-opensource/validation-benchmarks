@@ -1,0 +1,8 @@
+/* Dark Theme Stylesheet */
+body { background-color: #1a1a2e; color: #e0e0e0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+.bg-light { background-color: #16213e !important; }
+.navbar-light { background-color: #0f3460 !important; }
+.navbar-light .navbar-brand, .navbar-light .nav-link { color: #e0e0e0 !important; }
+.card { background-color: #16213e; border-color: #0f3460; color: #e0e0e0; }
+.card-header { background-color: #0f3460; color: #e0e0e0; }
+a { color: #53a8b6; }

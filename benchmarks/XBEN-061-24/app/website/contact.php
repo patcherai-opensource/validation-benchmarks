@@ -1,4 +1,9 @@
 <?php
+error_reporting(0);
+require_once('include/theme-resolver.php');
+$themeResolver = new ThemeResolver();
+$layoutContent = $themeResolver->resolveLayout();
+
 // Define variables and initialize with empty values
 $name = $email = $message = "";
 $name_err = $email_err = $message_err = "";
@@ -38,11 +43,11 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
 <head>
     <meta charset="UTF8">
     <title>Encoder64 Blog | Contact</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <?php echo $themeResolver->getStylesheet(); ?>
 </head>
 <body>
     <!-- Navigation Bar -->
-    <? include("include/navigation-bar.php") ?>
+    <?php include("include/navigation-bar.php"); ?>
 
     <!-- Header with Featured Post -->
     <header class="py-5 bg-light border-bottom mb-4">
@@ -84,7 +89,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
                 </div>
             </div>
             <!-- Sidebar Widgets Column -->
-            <? include("include/sidebar.php") ?>
+            <?php include("include/sidebar.php"); ?>
         </div>
     </div>
 

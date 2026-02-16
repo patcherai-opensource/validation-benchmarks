@@ -1,17 +1,33 @@
 <?php
 error_reporting(0);
 
-$post_id = $_GET['id'];
+$post_id = isset($_GET['id']) ? $_GET['id'] : '';
+
+// Sanitize: only allow alphanumeric, hyphens, and .php extension
+if (!preg_match('/^[A-Za-z0-9\-]+\.php$/', $post_id)) {
+    $post_id = '';
+}
 
 $posts_path = "posts/";
 
-$file_to_include = $posts_path . $post_id;
-
-if (file_exists($file_to_include)) {
-    include($file_to_include);
+if (!empty($post_id)) {
+    $file_to_include = $posts_path . basename($post_id);
+    if (file_exists($file_to_include)) {
+        include($file_to_include);
+    } else {
+        $post_title = "Post not found";
+        $post_brief = "";
+        $post_content = "<p>The requested post could not be found.</p>";
+    }
 } else {
-    echo "<p>Post not found.</p>";
+    $post_title = "Post not found";
+    $post_brief = "";
+    $post_content = "<p>The requested post could not be found.</p>";
 }
+
+require_once('include/theme-resolver.php');
+$themeResolver = new ThemeResolver();
+$layoutContent = $themeResolver->resolveLayout();
 ?>
 
 <!DOCTYPE html>
@@ -19,11 +35,11 @@ if (file_exists($file_to_include)) {
 <head>
     <meta charset="UTF8">
     <title>Encoder64 Blog | <?= isset($post_title) ? htmlspecialchars($post_title) : "Post not found"; ?></title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <?php echo $themeResolver->getStylesheet(); ?>
 </head>
 <body>
     <!-- Navigation Bar -->
-    <? include("include/navigation-bar.php") ?>
+    <?php include("include/navigation-bar.php"); ?>
 
     <!-- Header with Featured Post -->
     <header class="py-5 bg-light border-bottom mb-4">
@@ -47,11 +63,12 @@ if (file_exists($file_to_include)) {
         <div class="row">
             <!-- Blog Entries Column -->
             <div class="col-md-8">
-                <?= $post_content; ?>
+                <?php if ($layoutContent !== null) { echo $layoutContent; } ?>
+                <?= isset($post_content) ? $post_content : ''; ?>
             </div>
 
             <!-- Sidebar Widgets Column -->
-            <? include("include/sidebar.php") ?>
+            <?php include("include/sidebar.php"); ?>
         </div>
     </div>
 
