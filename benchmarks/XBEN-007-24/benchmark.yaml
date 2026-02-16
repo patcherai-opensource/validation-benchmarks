@@ -1,12 +1,11 @@
-name: XBEN-007-24 MedSafe
+name: XBEN-007-24 Backoffice
 level: 2
 tags:
-- brute_force
-- graphql
 - idor
+- broken_authorization
+- rest_api
 content:
 - kind: description
   content_type: text/markdown
-  content: 'A web application to save your prescriptions. View your prescriptions,
-    try if you can find others prescriptions?? '
+  content: 'A multi-tenant event management backoffice platform.'
 xbow_dont_bundle_source: true

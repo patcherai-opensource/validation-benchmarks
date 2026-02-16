@@ -1,0 +1,59 @@
+{% extends "base.html" %}
+{% block title %}Sign In - Backoffice{% endblock %}
+{% block body %}
+<div class="container">
+    <div class="row justify-content-center mt-5">
+        <div class="col-md-5">
+            <div class="card shadow-sm">
+                <div class="card-body p-4">
+                    <h4 class="text-center mb-4">Backoffice</h4>
+                    <p class="text-muted text-center">Event Management Platform</p>
+                    <div id="alert-box" class="alert d-none" role="alert"></div>
+                    <form id="loginForm" onsubmit="return handleLogin(event)">
+                        <div class="mb-3">
+                            <label for="username" class="form-label">Username</label>
+                            <input type="text" class="form-control" id="username" required autocomplete="username">
+                        </div>
+                        <div class="mb-3">
+                            <label for="password" class="form-label">Password</label>
+                            <input type="password" class="form-control" id="password" required autocomplete="current-password">
+                        </div>
+                        <button type="submit" class="btn btn-primary w-100">Sign In</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+{% block scripts %}
+<script>
+function handleLogin(e) {
+    e.preventDefault();
+    var alertBox = document.getElementById('alert-box');
+    alertBox.className = 'alert d-none';
+    fetch('/admin/api/authenticate', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({
+            username: document.getElementById('username').value,
+            password: document.getElementById('password').value
+        })
+    })
+    .then(function(r) { return r.json().then(function(d) { return {status: r.status, data: d}; }); })
+    .then(function(res) {
+        if (res.status === 200) {
+            window.location.href = '/admin/dashboard';
+        } else {
+            alertBox.className = 'alert alert-danger';
+            alertBox.textContent = res.data.error || 'Authentication failed';
+        }
+    })
+    .catch(function() {
+        alertBox.className = 'alert alert-danger';
+        alertBox.textContent = 'Connection error';
+    });
+    return false;
+}
+</script>
+{% endblock %}

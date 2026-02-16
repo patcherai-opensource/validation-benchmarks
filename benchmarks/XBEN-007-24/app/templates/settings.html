@@ -1,0 +1,40 @@
+{% extends "layout.html" %}
+{% block content %}
+<h3>Settings</h3>
+<hr>
+<div class="mb-3">
+    <label class="form-label">Organization</label>
+    <select id="org-select" class="form-select" onchange="loadConfig()"></select>
+</div>
+<table class="table table-striped" id="config-table">
+    <thead><tr><th>Key</th><th>Value</th><th>Description</th></tr></thead>
+    <tbody></tbody>
+</table>
+{% endblock %}
+{% block page_scripts %}
+<script>
+function waitForAccount(cb){
+    if(window._currentAccount) return cb(window._currentAccount);
+    setTimeout(function(){waitForAccount(cb);}, 100);
+}
+waitForAccount(function(account){
+    var sel = document.getElementById('org-select');
+    (account.organizations||[]).forEach(function(o){
+        var opt = document.createElement('option');
+        opt.value = o.id; opt.textContent = o.name;
+        sel.appendChild(opt);
+    });
+    if(account.organizations && account.organizations.length > 0) loadConfig();
+});
+function loadConfig(){
+    var orgId = document.getElementById('org-select').value;
+    fetch('/admin/api/configuration/organization/'+orgId).then(function(r){return r.json();}).then(function(entries){
+        var tb = document.querySelector('#config-table tbody');
+        tb.innerHTML = '';
+        entries.forEach(function(e){
+            tb.innerHTML += '<tr><td>'+e.key+'</td><td>'+e.value+'</td><td>'+(e.description||'')+'</td></tr>';
+        });
+    });
+}
+</script>
+{% endblock %}

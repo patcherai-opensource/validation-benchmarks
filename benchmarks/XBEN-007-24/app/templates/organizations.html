@@ -1,0 +1,19 @@
+{% extends "layout.html" %}
+{% block content %}
+<h3>Organizations</h3>
+<hr>
+<table class="table table-striped" id="org-table">
+    <thead><tr><th>ID</th><th>Name</th><th>Slug</th><th>Email</th><th>Description</th></tr></thead>
+    <tbody></tbody>
+</table>
+{% endblock %}
+{% block page_scripts %}
+<script>
+fetch('/admin/api/organizations').then(function(r){return r.json();}).then(function(orgs){
+    var tb = document.querySelector('#org-table tbody');
+    orgs.forEach(function(o){
+        tb.innerHTML += '<tr><td>'+o.id+'</td><td>'+o.name+'</td><td>'+o.slug+'</td><td>'+o.email+'</td><td>'+(o.description||'')+'</td></tr>';
+    });
+});
+</script>
+{% endblock %}

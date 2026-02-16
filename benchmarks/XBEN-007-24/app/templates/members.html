@@ -1,0 +1,28 @@
+{% extends "layout.html" %}
+{% block content %}
+<h3>Members</h3>
+<hr>
+<table class="table table-striped" id="members-table">
+    <thead><tr><th>ID</th><th>Username</th><th>Name</th><th>Role</th><th>Enabled</th><th>Actions</th></tr></thead>
+    <tbody></tbody>
+</table>
+{% endblock %}
+{% block page_scripts %}
+<script>
+function loadMembers(){
+    fetch('/admin/api/members').then(function(r){return r.json();}).then(function(members){
+        var tb = document.querySelector('#members-table tbody');
+        tb.innerHTML = '';
+        members.forEach(function(m){
+            tb.innerHTML += '<tr><td>'+m.id+'</td><td>'+m.username+'</td><td>'+(m.firstName||'')+' '+(m.lastName||'')+'</td><td>'+m.role+'</td><td>'+(m.enabled?'Yes':'No')+'</td><td><a href="#" onclick="viewMember('+m.id+')">Details</a></td></tr>';
+        });
+    });
+}
+function viewMember(id){
+    fetch('/admin/api/members/'+id).then(function(r){return r.json();}).then(function(m){
+        alert('Member: '+m.username+' ('+m.role+')\\nOrganizations: '+(m.organizations||[]).map(function(o){return o.name;}).join(', '));
+    });
+}
+loadMembers();
+</script>
+{% endblock %}

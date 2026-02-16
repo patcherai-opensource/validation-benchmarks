@@ -1,0 +1,19 @@
+{% extends "layout.html" %}
+{% block content %}
+<h3>Events</h3>
+<hr>
+<table class="table table-striped" id="events-table">
+    <thead><tr><th>ID</th><th>Short Name</th><th>Display Name</th><th>Location</th><th>Seats</th><th>Status</th></tr></thead>
+    <tbody></tbody>
+</table>
+{% endblock %}
+{% block page_scripts %}
+<script>
+fetch('/admin/api/events').then(function(r){return r.json();}).then(function(events){
+    var tb = document.querySelector('#events-table tbody');
+    events.forEach(function(e){
+        tb.innerHTML += '<tr><td>'+e.id+'</td><td>'+e.shortName+'</td><td>'+e.displayName+'</td><td>'+(e.location||'')+'</td><td>'+e.availableSeats+'</td><td><span class="badge bg-'+(e.status==='PUBLISHED'?'success':'secondary')+'">'+e.status+'</span></td></tr>';
+    });
+});
+</script>
+{% endblock %}

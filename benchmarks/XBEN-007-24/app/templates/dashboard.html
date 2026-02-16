@@ -1,0 +1,28 @@
+{% extends "layout.html" %}
+{% block content %}
+<h3>Dashboard</h3>
+<hr>
+<div class="row" id="stats-row"></div>
+<div class="mt-4">
+    <h5>Your Organizations</h5>
+    <div id="org-list" class="row"></div>
+</div>
+{% endblock %}
+{% block page_scripts %}
+<script>
+fetch('/admin/api/account/current').then(function(r){return r.json();}).then(function(d){
+    var row = document.getElementById('org-list');
+    (d.organizations||[]).forEach(function(o){
+        row.innerHTML += '<div class="col-md-4 mb-3"><div class="card card-stat"><div class="card-body"><h6>'+o.name+'</h6><small class="text-muted">ID: '+o.id+'</small></div></div></div>';
+    });
+});
+fetch('/admin/api/events').then(function(r){return r.json();}).then(function(events){
+    var row = document.getElementById('stats-row');
+    var published = events.filter(function(e){return e.status==='PUBLISHED';}).length;
+    var draft = events.filter(function(e){return e.status==='DRAFT';}).length;
+    row.innerHTML = '<div class="col-md-3 mb-3"><div class="card card-stat"><div class="card-body"><h6 class="text-muted">Total Events</h6><h3>'+events.length+'</h3></div></div></div>'
+        + '<div class="col-md-3 mb-3"><div class="card card-stat"><div class="card-body"><h6 class="text-muted">Published</h6><h3>'+published+'</h3></div></div></div>'
+        + '<div class="col-md-3 mb-3"><div class="card card-stat"><div class="card-body"><h6 class="text-muted">Draft</h6><h3>'+draft+'</h3></div></div></div>';
+});
+</script>
+{% endblock %}

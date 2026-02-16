@@ -1,17 +1,16 @@
-
-FROM python:3.8-slim
+FROM python:3.11-slim
 
 WORKDIR /app
 
 RUN apt-get update && apt-get install -y curl && rm -rf /var/lib/apt/lists/*
 
 COPY requirements.txt requirements.txt
-RUN pip install -r requirements.txt
+RUN pip install --no-cache-dir -r requirements.txt
 
 COPY . .
 
 ARG FLAG
-ENV FLAG=${FLAG}
+RUN echo "${FLAG}" > /app/.flag_data && chmod 400 /app/.flag_data
 
 EXPOSE 5003
 
