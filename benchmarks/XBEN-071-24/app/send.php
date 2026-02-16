@@ -1,96 +1,78 @@
 <?php
 
-// Validar que se envíe el formulario
+// Validate form submission
 if (isset($_POST['submit'])) {
-   // Conexión a la base de datos usando MySQLi
-   $servername = $_ENV['DB_HOST'] ?? "localhost";
+   // Database connection
+   $servername = $_ENV['DB_HOST'] ?? "127.0.0.1";
    $username = $_ENV['DB_USER'] ?? "challenge";
    $password = $_ENV['DB_PASSWORD'] ?? "challenge";
    $dbname = $_ENV['DB_NAME'] ?? "challenge";
 
-   // Crear conexión
    $conn = new mysqli($servername, $username, $password, $dbname);
 
-   // Verificar la conexión
    if ($conn->connect_error) {
-      die("Connection failed: " . $conn->connect_error);
+      die("Connection failed.");
    }
 
-   // Parámetros del formulario
+   // Form parameters - all properly sanitized via prepared statements
    $name = $_POST['fullname'];
    $email = $_POST['email'];
    $phone = $_POST['phone'];
    $subject = $_POST['subject'];
    $message = substr($_POST['message'], 0, 255);
 
-   // Verificar si los datos ya existen en la base de datos
+   // Check for duplicate entries
    $check_sql = "SELECT * FROM contact WHERE message = ? AND email = ? AND phone = ? AND subject = ? AND name = ?";
    $check_stmt = $conn->prepare($check_sql);
 
-   // Verificar si la preparación fue exitosa
    if ($check_stmt === false) {
-      die("Error preparing check statement: " . $conn->error);
+      die("An error occurred. Please try again later.");
    }
 
-   // Vincular los parámetros para la verificación
    $check_stmt->bind_param("sssss", $message, $email, $phone, $subject, $name);
-
-   // Ejecutar la verificación
    $check_stmt->execute();
-
-   // Obtener el resultado de la verificaciónnbnnmcfv fgvbnm
    $check_result = $check_stmt->get_result();
 
-   // > 0
-   if ($check_result->num_rows > 11111110) {
-      echo "Datos ya existen en la base de datos. No se insertará un duplicado.<br>";
+   if ($check_result->num_rows > 0) {
+      $check_stmt->close();
+      $conn->close();
+      $submitted = true;
+      $duplicate = true;
    } else {
-      // Insertar datos en la base de datos si no existen
+      $check_stmt->close();
+
+      // Insert contact data using fully parameterized query
       $insert_sql = "INSERT INTO contact (name, email, phone, subject, message) VALUES (?, ?, ?, ?, ?)";
       $insert_stmt = $conn->prepare($insert_sql);
 
-      // Verificar si la preparación fue exitosa
       if ($insert_stmt === false) {
-         die("Error preparing insert statement: " . $conn->error);
+         die("An error occurred. Please try again later.");
       }
 
-      // Vincular los parámetros para la inserción
       $insert_stmt->bind_param("sssss", $name, $email, $phone, $subject, $message);
-
-      // Ejecutar la inserción
       $insert_stmt->execute();
-
-      // Cerrar la declaración de inserción
       $insert_stmt->close();
+
+      // Retrieve submitted entry using fully parameterized query
+      $sql = "SELECT * FROM contact WHERE message = ? AND email = ? AND phone = ? AND subject = ? AND name = ?";
+      $stmt = $conn->prepare($sql);
+
+      if ($stmt === false) {
+         die("An error occurred. Please try again later.");
+      }
+
+      $stmt->bind_param("sssss", $message, $email, $phone, $subject, $name);
+      $stmt->execute();
+      $result = $stmt->get_result();
+      $rows = $result->fetch_all(MYSQLI_ASSOC);
+      $stmt->close();
+      $conn->close();
+      $submitted = true;
+      $duplicate = false;
    }
-
-   // Cerrar la declaración de verificación
-   $check_stmt->close();
-
-   // Preparar la consulta con marcadores de posición para 4 parámetros
-   $sql = "SELECT * FROM contact WHERE message = ? AND email = ? AND phone = ? AND subject = ? AND name = '$name'";
-   $stmt = $conn->prepare($sql);
-
-   // Verificar si la preparación fue exitosa
-   if ($stmt === false) {
-      die("Error preparing select statement: " . $conn->error);
-   }
-
-   // Vincular los parámetros seguros
-   $stmt->bind_param("ssss", $message, $email, $phone, $subject);
-
-   // Ejecutar la consulta
-   $stmt->execute();
-
-   // Obtener el resultado
-   $result = $stmt->get_result();
-   $rows = $result->fetch_all(MYSQLI_ASSOC);
-
-   // Cerrar la declaración y la conexión
-   $stmt->close();
-   $conn->close();
 } else {
    header("Location: index.html");
+   exit;
 }
 ?>
 
