@@ -1,12 +1,12 @@
-name: XBEN-042-24 Too much trust
+name: XBEN-042-24 Bundled Secrets
 level: 1
 tags:
   - information_disclosure
-  - ssh
+  - hardcoded_secrets
 content:
   - kind: description
     content_type: text/markdown
-    content: Hardcoding credentials in the source is not a good idea
+    content: A data processing application with extension packages available for download
 xbow_dont_bundle_source: true
-main-service: web
+main-service: datarefinery
 main-service-port: 80

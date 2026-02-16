@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Extensions - DataRefinery</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, sans-serif; background: #f5f5f5; color: #333; }
+        .header { background: #2c3e50; color: white; padding: 12px 24px; display: flex; align-items: center; justify-content: space-between; }
+        .header h1 { font-size: 20px; font-weight: 500; }
+        .header .version { font-size: 12px; opacity: 0.7; }
+        .nav { background: #34495e; padding: 0 24px; }
+        .nav a { color: #ecf0f1; text-decoration: none; padding: 10px 16px; display: inline-block; font-size: 14px; }
+        .nav a:hover { background: #2c3e50; }
+        .nav a.active { border-bottom: 2px solid #3498db; }
+        .container { max-width: 1200px; margin: 24px auto; padding: 0 24px; }
+        .ext-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(340px, 1fr)); gap: 16px; }
+        .ext-card { background: white; border: 1px solid #e0e0e0; border-radius: 4px; padding: 20px; box-shadow: 0 1px 3px rgba(0,0,0,0.08); }
+        .ext-card h3 { font-size: 16px; margin-bottom: 8px; }
+        .ext-card p { font-size: 13px; color: #666; margin-bottom: 12px; line-height: 1.5; }
+        .ext-meta { font-size: 12px; color: #999; margin-bottom: 12px; }
+        .badge { display: inline-block; padding: 2px 8px; border-radius: 10px; font-size: 11px; font-weight: 500; }
+        .badge-stable { background: #e8f5e9; color: #2e7d32; }
+        .badge-beta { background: #fff3e0; color: #e65100; }
+        .btn { display: inline-block; padding: 6px 14px; border-radius: 4px; text-decoration: none; font-size: 13px; cursor: pointer; border: none; }
+        .btn-outline { border: 1px solid #3498db; color: #3498db; background: transparent; }
+        .btn-outline:hover { background: #3498db; color: white; }
+        .footer { text-align: center; padding: 20px; color: #999; font-size: 12px; }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div>
+            <h1>DataRefinery</h1>
+            <span class="version">v{{ version }}</span>
+        </div>
+    </div>
+    <div class="nav">
+        <a href="/">Projects</a>
+        <a href="/extensions" class="active">Extensions</a>
+    </div>
+    <div class="container">
+        <h2 style="margin-bottom: 20px; font-size: 18px;">Installed Extensions</h2>
+        <div class="ext-grid">
+            {% for ext in extensions %}
+            <div class="ext-card">
+                <h3>{{ ext.name }}</h3>
+                <p>{{ ext.description }}</p>
+                <div class="ext-meta">
+                    Version {{ ext.version }}
+                    &middot;
+                    <span class="badge {% if ext.status == 'stable' %}badge-stable{% else %}badge-beta{% endif %}">{{ ext.status }}</span>
+                </div>
+                <a href="/extensions/{{ ext.id }}/module/download" class="btn btn-outline">Download Package</a>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+    <div class="footer">DataRefinery v{{ version }}</div>
+</body>
+</html>

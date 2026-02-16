@@ -2,40 +2,93 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta http-equiv="refresh" content="5">
-    <title>Server Processes</title>
+    <title>DataRefinery</title>
     <style>
-        body { font-family: Arial, sans-serif; }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, sans-serif; background: #f5f5f5; color: #333; }
+        .header { background: #2c3e50; color: white; padding: 12px 24px; display: flex; align-items: center; justify-content: space-between; }
+        .header h1 { font-size: 20px; font-weight: 500; }
+        .header .version { font-size: 12px; opacity: 0.7; }
+        .nav { background: #34495e; padding: 0 24px; }
+        .nav a { color: #ecf0f1; text-decoration: none; padding: 10px 16px; display: inline-block; font-size: 14px; }
+        .nav a:hover { background: #2c3e50; }
+        .nav a.active { border-bottom: 2px solid #3498db; }
+        .container { max-width: 1200px; margin: 24px auto; padding: 0 24px; }
+        .card { background: white; border-radius: 4px; box-shadow: 0 1px 3px rgba(0,0,0,0.12); margin-bottom: 20px; }
+        .card-header { padding: 16px 20px; border-bottom: 1px solid #e0e0e0; font-weight: 500; }
+        .card-body { padding: 20px; }
+        .btn { display: inline-block; padding: 8px 16px; border-radius: 4px; text-decoration: none; font-size: 14px; cursor: pointer; border: none; }
+        .btn-primary { background: #3498db; color: white; }
+        .btn-primary:hover { background: #2980b9; }
+        .btn-secondary { background: #95a5a6; color: white; }
+        .btn-secondary:hover { background: #7f8c8d; }
+        .btn-sm { padding: 4px 10px; font-size: 12px; }
         table { width: 100%; border-collapse: collapse; }
-        th, td { border: 1px solid #ddd; padding: 8px; text-align: left; }
-        th { background-color: #f2f2f2; }
+        th, td { padding: 10px 12px; text-align: left; border-bottom: 1px solid #eee; }
+        th { background: #fafafa; font-weight: 500; font-size: 13px; color: #666; text-transform: uppercase; }
+        td { font-size: 14px; }
+        .empty-state { text-align: center; padding: 40px; color: #999; }
+        .ext-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(340px, 1fr)); gap: 16px; }
+        .ext-card { border: 1px solid #e0e0e0; border-radius: 4px; padding: 16px; }
+        .ext-card h3 { font-size: 16px; margin-bottom: 6px; }
+        .ext-card p { font-size: 13px; color: #666; margin-bottom: 10px; }
+        .ext-meta { font-size: 12px; color: #999; }
+        .badge { display: inline-block; padding: 2px 8px; border-radius: 10px; font-size: 11px; font-weight: 500; }
+        .badge-stable { background: #e8f5e9; color: #2e7d32; }
+        .badge-beta { background: #fff3e0; color: #e65100; }
+        .footer { text-align: center; padding: 20px; color: #999; font-size: 12px; }
     </style>
 </head>
 <body>
-    <h1>Server Processes</h1>
-    <table>
-        <tr>
-            <th>USER</th>
-            <th>PID</th>
-            <th>%CPU</th>
-            <th>%MEM</th>
-            <th>VSZ</th>
-            <th>RSS</th>
-            <th>TTY</th>
-            <th>STAT</th>
-            <th>START</th>
-            <th>TIME</th>
-            <th>COMMAND</th>
-        </tr>
-        {% for process in processes %}
-        <tr>
-            {% for item in process.split() %}
-            <td>{{ item }}</td>
-            {% endfor %}
-        </tr>
-        {% endfor %}
-    </table>
-    <a href="/source" style="font-size: small;">View Source Code</a>
+    <div class="header">
+        <div>
+            <h1>DataRefinery</h1>
+            <span class="version">v{{ version }}</span>
+        </div>
+    </div>
+    <div class="nav">
+        <a href="/" class="active">Projects</a>
+        <a href="/extensions">Extensions</a>
+    </div>
+    <div class="container">
+        <div class="card">
+            <div class="card-header" style="display:flex;justify-content:space-between;align-items:center;">
+                <span>Projects</span>
+                <button class="btn btn-primary btn-sm" onclick="document.getElementById('create-dialog').style.display='block'">Create Project</button>
+            </div>
+            <div class="card-body">
+                {% if projects %}
+                <table>
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Name</th>
+                            <th>Created</th>
+                            <th>Rows</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for pid, proj in projects.items() %}
+                        <tr>
+                            <td>{{ pid }}</td>
+                            <td>{{ proj.name }}</td>
+                            <td>{{ proj.created }}</td>
+                            <td>{{ proj.row_count }}</td>
+                            <td><a href="/command/core/get-rows?project={{ pid }}" class="btn btn-secondary btn-sm">View</a></td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+                {% else %}
+                <div class="empty-state">
+                    <p>No projects yet. Create a project or import data to get started.</p>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+    <div class="footer">DataRefinery v{{ version }}</div>
 </body>
 </html>
 
