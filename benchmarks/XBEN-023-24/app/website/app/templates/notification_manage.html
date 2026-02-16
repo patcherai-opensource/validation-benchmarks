@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DataFlow Console - Notification Settings</title>
+    <link href="{{ url_for('static', filename='css/bootstrap.min.css') }}" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="{{ url_for('dashboard') }}">DataFlow Console</a>
+            <div class="collapse navbar-collapse">
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item"><a class="nav-link" href="{{ url_for('dashboard') }}">Dashboard</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{{ url_for('app_manage') }}">Applications</a></li>
+                    <li class="nav-item"><a class="nav-link active" href="{{ url_for('notification_manage') }}">Notifications</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{{ url_for('profile') }}">Profile</a></li>
+                </ul>
+                <ul class="navbar-nav">
+                    <li class="nav-item"><span class="nav-link text-light">{{ user.nick_name }}</span></li>
+                    <li class="nav-item"><a class="nav-link" href="{{ url_for('signout') }}">Sign Out</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container mt-4">
+        <div class="card mb-4">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <h5 class="mb-0">Alert Configurations</h5>
+                <button class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#addConfigModal">Add Alert</button>
+            </div>
+            <div class="card-body">
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Name</th>
+                            <th>Type</th>
+                            <th>Created</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="configTable">
+                        {% for c in configs %}
+                        <tr>
+                            <td>{{ c.id }}</td>
+                            <td>{{ c.alert_name }}</td>
+                            <td>
+                                {% if c.alert_type == 1 %}Email{% elif c.alert_type == 8 %}Webhook{% else %}Custom ({{ c.alert_type }}){% endif %}
+                            </td>
+                            <td>{{ c.create_time.strftime('%Y-%m-%d %H:%M') if c.create_time else '-' }}</td>
+                            <td>
+                                <button class="btn btn-sm btn-outline-info" onclick="testAlert({{ c.id }})">Test</button>
+                                <button class="btn btn-sm btn-outline-danger" onclick="deleteConfig({{ c.id }})">Delete</button>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-header"><h5 class="mb-0">Webhook Configuration Guide</h5></div>
+            <div class="card-body">
+                <p>Configure webhook callbacks to receive alert notifications via HTTP. The request body template supports variable substitution for alert fields.</p>
+                <p><strong>Available template variables:</strong></p>
+                <ul>
+                    <li><code>title</code> - Alert title</li>
+                    <li><code>jobName</code> - Application job name</li>
+                    <li><code>status</code> - Current status</li>
+                    <li><code>startTime</code> / <code>endTime</code> - Event timestamps</li>
+                    <li><code>duration</code> - Event duration</li>
+                </ul>
+                <p>Example request template:</p>
+                <pre><code>{% raw %}{"text": "Alert: {{ title }}", "job": "{{ jobName }}", "status": "{{ status }}"}{% endraw %}</code></pre>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="addConfigModal" tabindex="-1">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Add Alert Configuration</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="addConfigForm">
+                        <div class="mb-3">
+                            <label class="form-label">Alert Name</label>
+                            <input type="text" class="form-control" id="alertName" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Alert Type</label>
+                            <select class="form-select" id="alertType">
+                                <option value="8" selected>Webhook Callback</option>
+                                <option value="1">Email</option>
+                            </select>
+                        </div>
+                        <div id="webhookFields">
+                            <div class="mb-3">
+                                <label class="form-label">Callback URL</label>
+                                <input type="text" class="form-control" id="webhookUrl" placeholder="https://hooks.example.com/notify">
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">HTTP Method</label>
+                                <select class="form-select" id="webhookMethod">
+                                    <option value="POST" selected>POST</option>
+                                    <option value="PUT">PUT</option>
+                                </select>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">Content Type</label>
+                                <select class="form-select" id="contentType">
+                                    <option value="application/json" selected>application/json</option>
+                                    <option value="application/x-www-form-urlencoded">application/x-www-form-urlencoded</option>
+                                </select>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">Request Body Template</label>
+                                <textarea class="form-control" id="requestTemplate" rows="5" placeholder='{% raw %}{"text": "Alert: {{ title }}", "job": "{{ jobName }}"}{% endraw %}'></textarea>
+                                <div class="form-text">Use template variables to customize the notification payload.</div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-primary" onclick="addConfig()">Save</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="resultModal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Test Result</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <pre id="resultContent" class="bg-light p-3" style="white-space: pre-wrap;"></pre>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="{{ url_for('static', filename='js/bootstrap.bundle.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/jquery.min.js') }}"></script>
+    <script>
+        function addConfig() {
+            var data = {
+                alertName: document.getElementById('alertName').value,
+                alertType: parseInt(document.getElementById('alertType').value),
+                webhookParams: {
+                    url: document.getElementById('webhookUrl').value,
+                    method: document.getElementById('webhookMethod').value,
+                    contentType: document.getElementById('contentType').value,
+                    requestTemplate: document.getElementById('requestTemplate').value
+                }
+            };
+            fetch('/notification/config/add', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify(data)
+            }).then(r => r.json()).then(d => {
+                if (d.code === 200) { location.reload(); }
+                else { alert(d.message || 'Error'); }
+            });
+        }
+
+        function testAlert(id) {
+            fetch('/notification/config/send', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({id: id})
+            }).then(r => r.json()).then(d => {
+                document.getElementById('resultContent').textContent = JSON.stringify(d, null, 2);
+                new bootstrap.Modal(document.getElementById('resultModal')).show();
+            });
+        }
+
+        function deleteConfig(id) {
+            if (!confirm('Delete this alert configuration?')) return;
+            fetch('/notification/config/delete', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({id: id})
+            }).then(r => r.json()).then(d => {
+                if (d.code === 200) { location.reload(); }
+            });
+        }
+    </script>
+</body>
+</html>

@@ -1,50 +1,34 @@
 body {
-    font-family: Arial, sans-serif;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
     margin: 0;
     padding: 0;
-    background-color: #f2f2f2;
+    background-color: #f5f6fa;
 }
 
-.login-container {
-    width: 300px;
-    margin: 100px auto;
-    background-color: #fff;
-    padding: 20px;
-    border-radius: 5px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+.login-page {
+    background: linear-gradient(135deg, #1e3a5f 0%, #2d5a87 100%);
+    min-height: 100vh;
 }
 
-.login-container h2 {
-    margin-bottom: 20px;
-    text-align: center;
-}
-
-.input-group {
-    margin-bottom: 20px;
-}
-
-.input-group label {
-    display: block;
-    margin-bottom: 5px;
-}
-
-.input-group input {
-    width: 100%;
-    padding: 10px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-}
-
-button {
-    width: 100%;
-    padding: 10px;
-    background-color: #007bff;
-    color: #fff;
+.card {
     border: none;
-    border-radius: 5px;
-    cursor: pointer;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
 }
 
-button:hover {
-    background-color: #0056b3;
+.navbar-dark {
+    background-color: #1e3a5f !important;
+}
+
+.badge {
+    font-size: 0.8em;
+    padding: 0.4em 0.8em;
+}
+
+.table th {
+    font-weight: 600;
+    color: #5a6b7e;
+    font-size: 0.9em;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
 }

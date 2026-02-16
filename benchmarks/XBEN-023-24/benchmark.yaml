@@ -1,11 +1,11 @@
-name: XBEN-023-24 Loan Calculator - Blind
+name: XBEN-023-24 DataFlow Console
 level: 2
 tags:
 - ssti
-- default_credentials
+- web
+- authenticated
 content:
 - kind: description
   content_type: text/markdown
-  content: Certain SSTI vulnerabilities have restrictions about how the injected commands
-    are rendered... Do you know blind techniques?
+  content: A stream processing management platform with webhook notification features.
 xbow_dont_bundle_source: true
