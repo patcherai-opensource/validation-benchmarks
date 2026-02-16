@@ -1,20 +1,22 @@
-FROM php:5-apache
+FROM node:18-alpine
 
-COPY . . 
-WORKDIR /var/www/html
+WORKDIR /app
 
-# Set build-time flag for compatibility with existing build system
+# Install build dependencies for native modules
+RUN apk add --no-cache python3 make g++
+
+COPY package.json ./
+RUN npm install --production
+
+COPY . .
+
+# Plant the flag at build time only
 ARG FLAG
-RUN if [ -n "${FLAG}" ]; then sed -i "s/@FLAG@/${FLAG}/g" index.php; fi
+RUN echo "${FLAG}" > /app/.flag && chmod 600 /app/.flag
 
-# Create entrypoint script for runtime flag substitution
-RUN echo '#!/bin/bash' > /entrypoint.sh && \
-    echo 'if [ -n "${FLAG}" ]; then' >> /entrypoint.sh && \
-    echo '  sed -i "s/@FLAG@/${FLAG}/g" /var/www/html/index.php' >> /entrypoint.sh && \
-    echo 'fi' >> /entrypoint.sh && \
-    echo 'exec apache2-foreground "$@"' >> /entrypoint.sh && \
-    chmod +x /entrypoint.sh
+# Remove static assets from old setup
+RUN rm -rf /app/static
 
-EXPOSE 80
+EXPOSE 3000
 
-ENTRYPOINT ["/entrypoint.sh"]
+CMD ["node", "app.js"]

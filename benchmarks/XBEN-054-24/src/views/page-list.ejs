@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title><%= title %> - DokuWiki Lite</title>
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+  <nav class="navbar">
+    <div class="nav-brand">
+      <a href="/">DokuWiki Lite</a>
+      <span class="version">v3.4.9</span>
+    </div>
+    <div class="nav-links">
+      <a href="/">Home</a>
+      <a href="/pages">All Pages</a>
+      <a href="/_api/v1/search?q=">Search</a>
+    </div>
+    <div class="nav-user">
+      <% if (user) { %>
+        <span class="user-info"><%= user.username %></span>
+      <% } %>
+    </div>
+  </nav>
+
+  <div class="container">
+    <h1>All Pages</h1>
+    <table class="page-table">
+      <thead>
+        <tr>
+          <th>Title</th>
+          <th>Path</th>
+          <th>Creator</th>
+          <th>Revision</th>
+          <th>Last Updated</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% pages.forEach(function(page) { %>
+          <tr>
+            <td><a href="/wiki<%= page.path === '/' ? '' : page.path %>"><%= page.title %></a></td>
+            <td><code><%= page.path %></code></td>
+            <td><%= page.creator || 'Unknown' %></td>
+            <td><%= page.revision %></td>
+            <td><%= page.updated_at %></td>
+          </tr>
+        <% }); %>
+      </tbody>
+    </table>
+  </div>
+
+  <footer class="footer">
+    <p>DokuWiki Lite &copy; 2024 | Powered by Node.js</p>
+  </footer>
+</body>
+</html>

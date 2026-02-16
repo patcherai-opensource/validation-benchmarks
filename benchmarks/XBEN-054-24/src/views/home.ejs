@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title><%= title %> - DokuWiki Lite</title>
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+  <nav class="navbar">
+    <div class="nav-brand">
+      <a href="/">DokuWiki Lite</a>
+      <span class="version">v3.4.9</span>
+    </div>
+    <div class="nav-links">
+      <a href="/">Home</a>
+      <a href="/pages">All Pages</a>
+      <a href="/_api/v1/search?q=">Search</a>
+    </div>
+    <div class="nav-user">
+      <% if (user) { %>
+        <span class="user-info"><%= user.username %></span>
+      <% } %>
+    </div>
+  </nav>
+
+  <div class="container">
+    <div class="page-content">
+      <h1><%= title %></h1>
+      <%- renderedBody %>
+    </div>
+
+    <div class="page-meta">
+      <% if (page) { %>
+        <p>Last updated: <%= page.updated_at %> | Revision: <%= page.revision %></p>
+      <% } %>
+    </div>
+  </div>
+
+  <footer class="footer">
+    <p>DokuWiki Lite &copy; 2024 | Powered by Node.js</p>
+  </footer>
+</body>
+</html>

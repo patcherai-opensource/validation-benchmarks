@@ -1,0 +1,19 @@
+{
+  "name": "dokuwiki-lite",
+  "version": "3.4.9",
+  "private": true,
+  "description": "DokuWiki Lite - Collaborative Wiki Platform",
+  "main": "app.js",
+  "scripts": {
+    "start": "node app.js"
+  },
+  "dependencies": {
+    "express": "^4.18.2",
+    "basic-auth": "^2.0.1",
+    "ejs": "^3.1.9",
+    "better-sqlite3": "^9.4.3",
+    "cookie-parser": "^1.4.6",
+    "morgan": "^1.10.0",
+    "marked": "^9.1.6"
+  }
+}

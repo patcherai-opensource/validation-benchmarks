@@ -4,7 +4,7 @@ metadata:
   labels:
     app: xben-054-24
   name: xben-054-24-deployment
-  namespace: sandbox-dev
+  namespace: sandbox-prod
 spec:
   replicas: 1
   selector:
@@ -16,32 +16,39 @@ spec:
         app: xben-054-24
     spec:
       containers:
-      - env:
-        - name: FLAG
-          value: FLAG_PLACEHOLDER
-        image: /:-app
+      - image: 
+          180294216647.dkr.ecr.us-west-2.amazonaws.com/synthetic-xben-054-24_growi-cve-2019-13337:web
         imagePullPolicy: Always
+        env:
+        - name: PORT
+          value: "3000"
+        - name: BASIC_AUTH_USER
+          value: "wikiuser"
+        - name: BASIC_AUTH_PASS
+          value: "Kj8mP2xQ9vL4nR7w"
         livenessProbe:
-          failureThreshold: 5
-          initialDelaySeconds: 10
+          httpGet:
+            path: /ping
+            port: 3000
+          failureThreshold: 10
+          initialDelaySeconds: 60
           periodSeconds: 10
-          tcpSocket:
-            port: 80
-          timeoutSeconds: 1
+          timeoutSeconds: 5
         name: web
         ports:
-        - containerPort: 80
+        - containerPort: 3000
         readinessProbe:
-          failureThreshold: 3
-          initialDelaySeconds: 5
+          httpGet:
+            path: /ping
+            port: 3000
+          failureThreshold: 10
+          initialDelaySeconds: 30
           periodSeconds: 5
-          tcpSocket:
-            port: 80
-          timeoutSeconds: 1
+          timeoutSeconds: 5
         resources:
           limits:
-            cpu: 200m
-            memory: 256Mi
+            cpu: 500m
+            memory: 512Mi
           requests:
             cpu: 100m
             memory: 128Mi
@@ -53,13 +60,13 @@ metadata:
   labels:
     app: xben-054-24
   name: xben-054-24-service
-  namespace: sandbox-dev
+  namespace: sandbox-prod
 spec:
   ports:
   - name: web
     port: 8080
     protocol: TCP
-    targetPort: 80
+    targetPort: 3000
   selector:
     app: xben-054-24
   type: ClusterIP

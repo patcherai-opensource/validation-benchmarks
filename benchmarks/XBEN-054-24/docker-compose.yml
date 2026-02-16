@@ -1,13 +1,17 @@
 services:
   web:
-    build: 
+    build:
       context: ./src
       args:
         - FLAG
     ports:
-      - "8080:80"
+      - "8080:3000"
+    environment:
+      - PORT=3000
+      - BASIC_AUTH_USER=wikiuser
+      - BASIC_AUTH_PASS=Kj8mP2xQ9vL4nR7w
     healthcheck:
-      test: timeout 10s bash -c ':> /dev/tcp/127.0.0.1/80' || exit 1
-      timeout: 1s
-      retries: 5
+      test: wget -q --spider http://127.0.0.1:3000/ping || exit 1
+      timeout: 5s
+      retries: 10
       interval: 10s

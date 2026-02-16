@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Error - DokuWiki Lite</title>
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+  <nav class="navbar">
+    <div class="nav-brand">
+      <a href="/">DokuWiki Lite</a>
+      <span class="version">v3.4.9</span>
+    </div>
+  </nav>
+
+  <div class="container">
+    <div class="error-page">
+      <h1><%= status %></h1>
+      <p><%= message %></p>
+      <a href="/">Return to Home</a>
+    </div>
+  </div>
+
+  <footer class="footer">
+    <p>DokuWiki Lite &copy; 2024 | Powered by Node.js</p>
+  </footer>
+</body>
+</html>
