@@ -1,27 +1,92 @@
 body {
-    font-family: Arial, sans-serif;
-    background-color: #f4f4f9;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #f0f2f5;
     margin: 0;
-    padding: 20px;
+    padding: 0;
 }
 .container {
     width: 80%;
+    max-width: 1200px;
     margin: auto;
     background: white;
-    padding: 20px;
-    border-radius: 8px;
+    padding: 30px;
+    border-radius: 4px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.12);
+    margin-top: 20px;
+}
+header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 2px solid #4a90d9;
+    padding-bottom: 15px;
+    margin-bottom: 25px;
+}
+header h1 {
+    color: #2c3e50;
+    font-size: 1.6em;
+    margin: 0;
+}
+header nav a {
+    color: #4a90d9;
+    text-decoration: none;
+    margin-left: 15px;
+    font-size: 0.9em;
+}
+header nav a:hover {
+    text-decoration: underline;
+}
+form {
+    margin-bottom: 25px;
+    padding: 15px;
+    background: #f8f9fa;
+    border-radius: 4px;
+}
+form label {
+    font-weight: 600;
+    color: #555;
+    margin-right: 10px;
+}
+form select {
+    padding: 6px 12px;
+    border: 1px solid #ccc;
+    border-radius: 3px;
+    font-size: 14px;
 }
 .post {
-    border-bottom: 1px solid #ccc;
+    border-bottom: 1px solid #e1e4e8;
     padding-bottom: 20px;
     margin-bottom: 20px;
 }
+.post:last-child {
+    border-bottom: none;
+}
+.post h2 {
+    color: #2c3e50;
+    font-size: 1.3em;
+    margin-bottom: 5px;
+}
 .post h2 a {
-    color: #333;
+    color: #2c3e50;
     text-decoration: none;
+}
+.post h2 a:hover {
+    color: #4a90d9;
+}
+.post p {
+    color: #666;
+    line-height: 1.5;
 }
 .post img {
     width: 100%;
+    max-width: 200px;
     height: auto;
-    border-radius: 5px;
+    border-radius: 3px;
+}
+.resource-id {
+    display: block;
+    font-size: 0.75em;
+    color: #aaa;
+    font-family: monospace;
+    margin-top: 8px;
 }
