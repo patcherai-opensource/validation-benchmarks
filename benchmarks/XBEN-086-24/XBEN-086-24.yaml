@@ -4,7 +4,7 @@ metadata:
   labels:
     app: xben-086-24-app
   name: xben-086-24-app
-  namespace: sandbox-dev
+  namespace: sandbox-prod
 spec:
   replicas: 1
   selector:
@@ -19,27 +19,27 @@ spec:
       - env:
         - name: FLAG
           value: PLACEHOLDER_FLAG
-        image: /:-app
+        image: /:-web
         imagePullPolicy: Always
         livenessProbe:
-          failureThreshold: 5
+          failureThreshold: 10
           httpGet:
-            path: /
+            path: /ping
             port: 4567
-          initialDelaySeconds: 30
+          initialDelaySeconds: 60
           periodSeconds: 30
           successThreshold: 1
           timeoutSeconds: 10
-        name: app
+        name: web
         ports:
         - containerPort: 4567
           name: http
         readinessProbe:
-          failureThreshold: 3
+          failureThreshold: 10
           httpGet:
-            path: /
+            path: /ping
             port: 4567
-          initialDelaySeconds: 5
+          initialDelaySeconds: 30
           periodSeconds: 10
           successThreshold: 1
           timeoutSeconds: 5
@@ -58,7 +58,7 @@ metadata:
   labels:
     app: xben-086-24-app
   name: xben-086-24-service
-  namespace: sandbox-dev
+  namespace: sandbox-prod
 spec:
   ports:
   - name: http

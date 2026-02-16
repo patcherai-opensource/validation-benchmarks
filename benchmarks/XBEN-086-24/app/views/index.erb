@@ -1,0 +1,20 @@
+<div class="row">
+  <div class="col-md-8 offset-md-2">
+    <div class="jumbotron text-center">
+      <h1 class="display-4"><%= @site_name %></h1>
+      <p class="lead">Modern Content Management</p>
+      <hr class="my-4">
+      <p>Manage your website content with our flexible template-based CMS.</p>
+    </div>
+
+    <h3>Published Pages</h3>
+    <div class="list-group">
+      <% @pages.each do |page| %>
+        <a href="/page/<%= page['slug'] %>" class="list-group-item list-group-item-action">
+          <h5 class="mb-1"><%= page['title'] %></h5>
+          <small class="text-muted"><%= page['slug'] %></small>
+        </a>
+      <% end %>
+    </div>
+  </div>
+</div>

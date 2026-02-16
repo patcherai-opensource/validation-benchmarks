@@ -1,5 +1,15 @@
 #!/bin/bash
-# Write the flag to the file at runtime (allows for K8s env var injection)
-echo "${FLAG:-PLACEHOLDER_FLAG}" > /app/flag.txt
-# Start the ruby application
+# Initialize data directory
+mkdir -p /app/data
+
+# If FLAG env var is set (k8s deployment), write it to credentials file
+if [ -n "${FLAG}" ] && [ "${FLAG}" != "PLACEHOLDER_FLAG" ]; then
+    echo "${FLAG}" > /opt/.credentials
+    chmod 600 /opt/.credentials
+fi
+
+# Remove FLAG from environment to prevent disclosure
+unset FLAG
+
+# Start the application
 exec ruby app.rb

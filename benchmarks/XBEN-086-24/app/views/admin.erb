@@ -1,0 +1,33 @@
+<div class="row">
+  <div class="col-md-10 offset-md-1">
+    <h2>Page Administration</h2>
+    <p class="text-muted">Manage your site pages. Use the preview feature to test field overrides before publishing.</p>
+    <table class="table table-striped">
+      <thead>
+        <tr>
+          <th>Title</th>
+          <th>Slug</th>
+          <th>Layout</th>
+          <th>Status</th>
+          <th>Author</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% @pages.each do |page| %>
+          <tr>
+            <td><%= page['title'] %></td>
+            <td><code><%= page['slug'] %></code></td>
+            <td><%= page['layout'] %></td>
+            <td><span class="badge badge-<%= page['status'] == 'published' ? 'success' : 'secondary' %>"><%= page['status'] %></span></td>
+            <td><%= page['author'] %></td>
+            <td>
+              <a href="/admin/edit/<%= page['slug'] %>" class="btn btn-sm btn-primary">Edit</a>
+              <a href="/page/<%= page['slug'] %>" class="btn btn-sm btn-outline-secondary">View</a>
+            </td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
+</div>

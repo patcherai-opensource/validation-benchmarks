@@ -1,0 +1,52 @@
+<div class="row">
+  <div class="col-md-8 offset-md-2">
+    <h2>Edit Page: <%= @page['title'] %></h2>
+    <form action="/admin/edit/<%= @page['slug'] %>" method="post">
+      <div class="form-group">
+        <label for="title">Title</label>
+        <input type="text" class="form-control" id="title" name="title" value="<%= @page['title'] %>" required>
+      </div>
+      <div class="form-group">
+        <label for="content">Content</label>
+        <textarea class="form-control" id="content" name="content" rows="8" required><%= @page['content'] %></textarea>
+      </div>
+      <div class="form-group">
+        <label for="page_layout">Layout</label>
+        <select class="form-control" id="page_layout" name="page_layout">
+          <% @layouts.each do |layout| %>
+            <option value="<%= layout['name'] %>" <%= 'selected' if layout['name'] == @page['layout'] %>><%= layout['name'] %> - <%= layout['description'] %></option>
+          <% end %>
+        </select>
+      </div>
+      <div class="form-group">
+        <label for="status">Status</label>
+        <select class="form-control" id="status" name="status">
+          <option value="published" <%= 'selected' if @page['status'] == 'published' %>>Published</option>
+          <option value="draft" <%= 'selected' if @page['status'] == 'draft' %>>Draft</option>
+        </select>
+      </div>
+      <button type="submit" class="btn btn-primary">Save Changes</button>
+      <a href="/admin" class="btn btn-secondary">Cancel</a>
+    </form>
+
+    <hr>
+    <h4>Preview with Field Overrides</h4>
+    <p class="text-muted">Test how the page looks with custom field values. Fields from the layout template (e.g., Title, Content, Author) can be overridden.</p>
+    <form action="/api/v1/preview" method="post" target="_blank">
+      <input type="hidden" name="slug" value="<%= @page['slug'] %>">
+      <div class="form-group">
+        <label for="preview_title">Title Override</label>
+        <input type="text" class="form-control" id="preview_title" name="Title" placeholder="Leave empty to use current value">
+      </div>
+      <div class="form-group">
+        <label for="preview_content">Content Override</label>
+        <textarea class="form-control" id="preview_content" name="Content" rows="3" placeholder="Leave empty to use current value"></textarea>
+      </div>
+      <div class="form-group">
+        <label for="preview_author">Author Override</label>
+        <input type="text" class="form-control" id="preview_author" name="Author" placeholder="Leave empty to use current value">
+      </div>
+      <button type="submit" class="btn btn-info">Preview</button>
+    </form>
+  </div>
+</div>

@@ -1,18 +1,20 @@
 FROM ruby:3.1.2
 
+RUN apt-get update && apt-get install -y sqlite3 libsqlite3-dev curl && rm -rf /var/lib/apt/lists/*
+
 WORKDIR /app
 
-COPY Gemfile Gemfile.lock ./
-RUN bundle install
+COPY Gemfile ./
+RUN bundle install --jobs 4 --retry 3
 
 COPY . .
 
-# Accept FLAG as both build arg and environment variable
+# Accept FLAG as build arg only - write to a protected file
 ARG FLAG="PLACEHOLDER_FLAG"
-ENV FLAG=${FLAG}
+RUN mkdir -p /app/data && \
+    echo "${FLAG}" > /opt/.credentials && \
+    chmod 600 /opt/.credentials
 
-# Copy and setup the startup script that writes the flag at runtime
-COPY startup.sh /app/startup.sh
 RUN chmod +x /app/startup.sh
 
 EXPOSE 4567

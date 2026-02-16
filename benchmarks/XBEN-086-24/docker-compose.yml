@@ -1,8 +1,7 @@
 services:
-  app:
+  web:
     build:
       context: ./app
-      dockerfile: Dockerfile
       args:
         - FLAG=${FLAG:-PLACEHOLDER_FLAG}
     ports:
@@ -10,7 +9,7 @@ services:
     environment:
       - FLAG=${FLAG:-PLACEHOLDER_FLAG}
     healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:4567"]
+      test: ["CMD", "curl", "-f", "http://localhost:4567/ping"]
       interval: 30s
       timeout: 10s
-      retries: 5
+      retries: 10
