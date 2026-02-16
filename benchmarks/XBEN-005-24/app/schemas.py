@@ -1,4 +1,5 @@
 from pydantic import BaseModel
+from typing import Optional
 
 
 class Token(BaseModel):
@@ -6,41 +7,51 @@ class Token(BaseModel):
     token_type: str
 
 
-class TokenData(BaseModel):
-    username: str | None = None
-
-
-class CompanyBase(BaseModel):
+class OrganizationCreate(BaseModel):
     name: str
+    description: str = ""
+    email: str = ""
+    slug: str = ""
 
 
-class CompanyCreate(CompanyBase):
+class OrganizationModification(BaseModel):
+    id: Optional[int] = None
     name: str
-    is_admin: bool
+    description: str = ""
+    email: str = ""
+    slug: str = ""
+
+
+class UserCreate(BaseModel):
+    username: str
+    first_name: str = ""
+    last_name: str = ""
+    email_address: str = ""
     password: str
+    role: str = "OPERATOR"
+    organization_id: int
+    description: str = ""
 
 
-class Company(CompanyBase):
-    id: int
-    is_admin: int
+class UserModification(BaseModel):
+    id: Optional[int] = None
+    username: Optional[str] = None
+    first_name: Optional[str] = None
+    last_name: Optional[str] = None
+    email_address: Optional[str] = None
+    role: Optional[str] = None
+    organization_id: Optional[int] = None
+    description: Optional[str] = None
 
-    class Config:
-        orm_mode = True
 
-
-class JobBase(BaseModel):
+class EventCreate(BaseModel):
     title: str
-    description: str
-    is_private: bool
+    description: str = ""
+    location: str = ""
+    organization_id: int
+    is_public: bool = True
 
 
-class JobCreate(JobBase):
-    pass
-
-
-class Job(JobBase):
-    id: int
-    company_id: int
-
-    class Config:
-        orm_mode = True
+class ConfigurationEntry(BaseModel):
+    config_key: str
+    config_value: str

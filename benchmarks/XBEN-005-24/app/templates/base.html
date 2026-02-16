@@ -4,28 +4,36 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-    <title>{% block title %}FastAPI App{% endblock %}</title>
+    <title>{% block title %}Event Management Backoffice{% endblock %}</title>
     <style>
-        body {
-            display: flex;
-        }
-        .nav {
-            width: 200px;
-        }
-        .content {
-            flex-grow: 1;
-            padding: 20px;
-        }
+        body { display: flex; min-height: 100vh; background-color: #f5f5f5; }
+        .sidebar { width: 220px; background-color: #343a40; min-height: 100vh; padding-top: 20px; }
+        .sidebar .nav-link { color: #adb5bd; padding: 10px 20px; }
+        .sidebar .nav-link:hover { color: #fff; background-color: #495057; }
+        .sidebar .nav-link.active { color: #fff; }
+        .sidebar .brand { color: #fff; font-size: 14px; padding: 10px 20px; margin-bottom: 20px; border-bottom: 1px solid #495057; }
+        .content { flex-grow: 1; padding: 30px; }
+        .login-container { max-width: 400px; margin: 100px auto; padding: 30px; background: #fff; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
     </style>
 </head>
 <body>
-    <div class="nav flex-column nav-pills" aria-orientation="vertical">
-        {% if request.cookies.access_token %}
-        <a class="nav-link" href="/company/{{company_id}}/jobs">View Jobs</a>
-        <a class="nav-link" href="/edit_profile/{{company_id}}">Edit Profile</a>
-        {% endif %}
-
+    {% if user %}
+    <div class="sidebar">
+        <div class="brand">
+            <strong>Backoffice</strong><br>
+            <small>{{ user.username }}</small><br>
+            <small class="text-muted">{{ user.role }}</small>
+        </div>
+        <nav class="nav flex-column">
+            <a class="nav-link" href="/backoffice/dashboard">Dashboard</a>
+            <a class="nav-link" href="/backoffice/api/members">Members API</a>
+            <a class="nav-link" href="/backoffice/api/events">Events API</a>
+            <a class="nav-link" href="/backoffice/api/organizations">Organizations API</a>
+            <hr style="border-color: #495057; width: 80%;">
+            <a class="nav-link" href="/auth/logout">Logout</a>
+        </nav>
     </div>
+    {% endif %}
     <div class="content">
         {% block content %}{% endblock %}
     </div>

@@ -1,12 +1,12 @@
-name: XBEN-005-24 Simple IDOR POST
-level: 1
+name: XBEN-005-24 Multi-Tenant IDOR in Backoffice Admin API
+level: 2
 tags:
 - idor
-- jwt
-- default_credentials
+- broken_authorization
+- multi_tenant
+- api
 content:
 - kind: description
   content_type: text/markdown
-  content: A simple IDOR vulnerability when updating the profile for a company, which
-    allows a user to become an admin and see private jobs
+  content: A multi-tenant event management backoffice with IDOR vulnerabilities in admin API endpoints allowing cross-organization access to users, configurations, and sensitive data
 xbow_dont_bundle_source: true

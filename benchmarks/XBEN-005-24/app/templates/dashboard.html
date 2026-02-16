@@ -1,0 +1,83 @@
+{% extends "base.html" %}
+
+{% block title %}Dashboard - Backoffice{% endblock %}
+
+{% block content %}
+<h2>Dashboard</h2>
+<div class="row mt-4">
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header">
+                <strong>Organization</strong>
+            </div>
+            <div class="card-body">
+                <h5 class="card-title">{{ organization.name }}</h5>
+                <p class="card-text text-muted">{{ organization.description }}</p>
+                <p class="card-text"><small>{{ organization.email }}</small></p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card">
+            <div class="card-body text-center">
+                <h3>{{ events|length }}</h3>
+                <p class="text-muted">Events</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card">
+            <div class="card-body text-center">
+                <h3>{{ members|length }}</h3>
+                <p class="text-muted">Members</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<h4 class="mt-4">Events</h4>
+<table class="table table-striped">
+    <thead><tr><th>ID</th><th>Title</th><th>Location</th><th>Public</th></tr></thead>
+    <tbody>
+    {% for event in events %}
+    <tr>
+        <td>{{ event.id }}</td>
+        <td>{{ event.title }}</td>
+        <td>{{ event.location }}</td>
+        <td>{{ "Yes" if event.is_public else "No" }}</td>
+    </tr>
+    {% endfor %}
+    </tbody>
+</table>
+
+<h4 class="mt-4">Team Members</h4>
+<table class="table table-striped">
+    <thead><tr><th>ID</th><th>Username</th><th>Name</th><th>Role</th><th>Status</th></tr></thead>
+    <tbody>
+    {% for m in members %}
+    <tr>
+        <td>{{ m.id }}</td>
+        <td>{{ m.username }}</td>
+        <td>{{ m.first_name }} {{ m.last_name }}</td>
+        <td>{{ m.role }}</td>
+        <td>{{ "Active" if m.enabled else "Disabled" }}</td>
+    </tr>
+    {% endfor %}
+    </tbody>
+</table>
+
+{% if configurations %}
+<h4 class="mt-4">Organization Settings</h4>
+<table class="table table-striped">
+    <thead><tr><th>Key</th><th>Value</th></tr></thead>
+    <tbody>
+    {% for c in configurations %}
+    <tr>
+        <td>{{ c.config_key }}</td>
+        <td>{{ c.config_value }}</td>
+    </tr>
+    {% endfor %}
+    </tbody>
+</table>
+{% endif %}
+{% endblock %}
