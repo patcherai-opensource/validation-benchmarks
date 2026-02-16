@@ -1,0 +1,69 @@
+{% extends "base.html" %}
+{% block title %}PipelineFlow - {{ pipeline.name }}{% endblock %}
+{% block content %}
+<div class="breadcrumb">
+    <a href="{{ url_for('dashboard') }}">Pipelines</a> &raquo; {{ pipeline.name }}
+</div>
+
+<h1>{{ pipeline.name }}</h1>
+
+<div class="detail-grid">
+    <div class="detail-item">
+        <label>Schedule</label>
+        <span><code>{{ pipeline.schedule }}</code></span>
+    </div>
+    <div class="detail-item">
+        <label>Owner</label>
+        <span>{{ pipeline.owner }}</span>
+    </div>
+    <div class="detail-item">
+        <label>Status</label>
+        <span class="status status-{{ pipeline.status }}">{{ pipeline.status }}</span>
+    </div>
+    <div class="detail-item">
+        <label>Last Run</label>
+        <span>{{ pipeline.last_run }}</span>
+    </div>
+    <div class="detail-item">
+        <label>Next Run</label>
+        <span>{{ pipeline.next_run }}</span>
+    </div>
+    <div class="detail-item">
+        <label>Tags</label>
+        <span>
+            {% for tag in pipeline.tags %}
+            <span class="tag">{{ tag }}</span>
+            {% endfor %}
+        </span>
+    </div>
+</div>
+
+<h2>Recent Runs</h2>
+<table class="data-table">
+    <thead>
+        <tr>
+            <th>Run ID</th>
+            <th>State</th>
+            <th>Start Date</th>
+            <th>End Date</th>
+            <th>Execution Date</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for run in runs %}
+        <tr>
+            <td>{{ run.id }}</td>
+            <td><span class="status status-{{ run.state }}">{{ run.state }}</span></td>
+            <td>{{ run.start_date }}</td>
+            <td>{{ run.end_date or '-' }}</td>
+            <td>{{ run.execution_date }}</td>
+        </tr>
+        {% endfor %}
+        {% if not runs %}
+        <tr>
+            <td colspan="5" class="empty">No runs recorded</td>
+        </tr>
+        {% endif %}
+    </tbody>
+</table>
+{% endblock %}

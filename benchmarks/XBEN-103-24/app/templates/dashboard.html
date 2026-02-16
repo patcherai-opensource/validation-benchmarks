@@ -1,0 +1,62 @@
+{% extends "base.html" %}
+{% block title %}PipelineFlow - Dashboard{% endblock %}
+{% block content %}
+<h1>Pipelines</h1>
+<div class="stats-bar">
+    <div class="stat-card">
+        <span class="stat-value">{{ stats.total }}</span>
+        <span class="stat-label">Total</span>
+    </div>
+    <div class="stat-card stat-success">
+        <span class="stat-value">{{ stats.success }}</span>
+        <span class="stat-label">Success</span>
+    </div>
+    <div class="stat-card stat-running">
+        <span class="stat-value">{{ stats.running }}</span>
+        <span class="stat-label">Running</span>
+    </div>
+    <div class="stat-card stat-failed">
+        <span class="stat-value">{{ stats.failed }}</span>
+        <span class="stat-label">Failed</span>
+    </div>
+</div>
+
+<div class="filter-bar">
+    <label>Status:</label>
+    <a href="?status=all" class="{% if status_filter == 'all' %}active{% endif %}">All</a>
+    <a href="?status=success" class="{% if status_filter == 'success' %}active{% endif %}">Success</a>
+    <a href="?status=running" class="{% if status_filter == 'running' %}active{% endif %}">Running</a>
+    <a href="?status=failed" class="{% if status_filter == 'failed' %}active{% endif %}">Failed</a>
+</div>
+
+<table class="data-table">
+    <thead>
+        <tr>
+            <th>Pipeline</th>
+            <th>Schedule</th>
+            <th>Owner</th>
+            <th>Status</th>
+            <th>Last Run</th>
+            <th>Next Run</th>
+            <th>Tags</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for pipeline in pipelines %}
+        <tr>
+            <td><a href="{{ url_for('pipeline_detail', pipeline_id=pipeline.id) }}">{{ pipeline.name }}</a></td>
+            <td><code>{{ pipeline.schedule }}</code></td>
+            <td>{{ pipeline.owner }}</td>
+            <td><span class="status status-{{ pipeline.status }}">{{ pipeline.status }}</span></td>
+            <td>{{ pipeline.last_run }}</td>
+            <td>{{ pipeline.next_run }}</td>
+            <td>
+                {% for tag in pipeline.tags %}
+                <span class="tag">{{ tag }}</span>
+                {% endfor %}
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

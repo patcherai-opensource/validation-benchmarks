@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}PipelineFlow{% endblock %}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    {% if session.get('username') %}
+    <nav class="navbar">
+        <div class="nav-brand">
+            <a href="{{ url_for('dashboard') }}">PipelineFlow</a>
+        </div>
+        <div class="nav-links">
+            <a href="{{ url_for('dashboard') }}">Pipelines</a>
+            <a href="{{ url_for('browse_runs') }}">Browse Runs</a>
+            {% if session.get('role') == 'admin' %}
+            <div class="nav-dropdown">
+                <a href="#">Admin ▾</a>
+                <div class="dropdown-content">
+                    <a href="{{ url_for('admin_connections') }}">Connections</a>
+                    <a href="{{ url_for('admin_variables') }}">Variables</a>
+                    <a href="{{ url_for('admin_configuration') }}">Configuration</a>
+                </div>
+            </div>
+            {% endif %}
+        </div>
+        <div class="nav-user">
+            <span>{{ session.get('username') }} ({{ session.get('role') }})</span>
+            <a href="{{ url_for('logout') }}">Logout</a>
+        </div>
+    </nav>
+    {% endif %}
+    <div class="container">
+        {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+        {% for category, message in messages %}
+        <div class="alert alert-{{ category }}">{{ message }}</div>
+        {% endfor %}
+        {% endif %}
+        {% endwith %}
+        {% block content %}{% endblock %}
+    </div>
+    <footer class="footer">
+        <span>PipelineFlow v0.9.12</span>
+    </footer>
+</body>
+</html>

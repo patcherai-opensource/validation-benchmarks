@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+{% block title %}PipelineFlow - Variables{% endblock %}
+{% block content %}
+<div class="breadcrumb">
+    <a href="{{ url_for('dashboard') }}">Home</a> &raquo; Admin &raquo; Variables
+</div>
+
+<h1>Variables</h1>
+<table class="data-table">
+    <thead>
+        <tr>
+            <th>Key</th>
+            <th>Value</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for var in variables %}
+        <tr>
+            <td>{{ var.key }}</td>
+            <td><code>{{ var.value }}</code></td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+{% block title %}PipelineFlow - Connections{% endblock %}
+{% block content %}
+<div class="breadcrumb">
+    <a href="{{ url_for('dashboard') }}">Home</a> &raquo; Admin &raquo; Connections
+</div>
+
+<h1>Connections</h1>
+<table class="data-table">
+    <thead>
+        <tr>
+            <th>Conn Id</th>
+            <th>Conn Type</th>
+            <th>Host</th>
+            <th>Port</th>
+            <th>Schema</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for conn in connections %}
+        <tr>
+            <td>{{ conn.id }}</td>
+            <td>{{ conn.type }}</td>
+            <td>{{ conn.host or '-' }}</td>
+            <td>{{ conn.port or '-' }}</td>
+            <td>{{ conn.schema or '-' }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

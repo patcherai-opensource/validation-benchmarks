@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+{% block title %}PipelineFlow - Browse Runs{% endblock %}
+{% block content %}
+<h1>Pipeline Runs</h1>
+<table class="data-table">
+    <thead>
+        <tr>
+            <th>Run ID</th>
+            <th>Pipeline</th>
+            <th>State</th>
+            <th>Start Date</th>
+            <th>End Date</th>
+            <th>Execution Date</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for run in runs %}
+        <tr>
+            <td>{{ run.id }}</td>
+            <td><a href="{{ url_for('pipeline_detail', pipeline_id=run.pipeline_id) }}">{{ run.pipeline_id }}</a></td>
+            <td><span class="status status-{{ run.state }}">{{ run.state }}</span></td>
+            <td>{{ run.start_date }}</td>
+            <td>{{ run.end_date or '-' }}</td>
+            <td>{{ run.execution_date }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

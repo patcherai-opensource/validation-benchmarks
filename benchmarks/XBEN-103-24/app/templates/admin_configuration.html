@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+{% block title %}PipelineFlow - Configuration{% endblock %}
+{% block content %}
+<div class="breadcrumb">
+    <a href="{{ url_for('dashboard') }}">Home</a> &raquo; Admin &raquo; Configuration
+</div>
+
+<h1>Configuration</h1>
+{% for section, values in config.items() %}
+<div class="config-section">
+    <h2>[{{ section }}]</h2>
+    <table class="data-table">
+        <thead>
+            <tr>
+                <th>Key</th>
+                <th>Value</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for key, value in values.items() %}
+            <tr>
+                <td>{{ key }}</td>
+                <td><code>{{ value }}</code></td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endfor %}
+{% endblock %}

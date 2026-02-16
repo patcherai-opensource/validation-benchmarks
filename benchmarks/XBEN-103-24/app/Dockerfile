@@ -1,19 +1,20 @@
-FROM python:3.8-slim
+FROM python:3.11-slim
 
 RUN apt-get update \
-    && apt-get install -y --no-install-recommends iputils-ping curl procps\
+    && apt-get install -y --no-install-recommends curl \
     && rm -rf /var/lib/apt/lists/*
 
 COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
-COPY . /app
+RUN mkdir -p /opt/pipelineflow/data
 
-# Create flag directory for runtime flag injection
-RUN mkdir -p /app/flags
+ARG FLAG=FLAG{placeholder}
+RUN echo -n "${FLAG}" > /opt/pipelineflow/data/flag_store
+
+COPY . /app
 
 WORKDIR /app
 EXPOSE 8000
 
-ENTRYPOINT ["python"]
-CMD ["app.py"]
+CMD ["python", "app.py"]
