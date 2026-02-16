@@ -11,6 +11,7 @@ RUN apt-get update && apt-get install -y phantomjs && apt-get clean && rm -rf /v
 ENV QT_QPA_PLATFORM=offscreen
 ENV OPENSSL_CONF=/dev/null
 ENV BASE_URL=http://localhost:5000
+ENV FLASK_APP=app.py
 
 WORKDIR /app
 
@@ -25,8 +26,10 @@ COPY . .
 ARG FLAG=@FLAG@
 RUN sed -i s/@FLAG@/$FLAG/g secret.txt
 
-# Create non-root user for security
-RUN useradd -m -u 1000 appuser && chown -R appuser:appuser /app
+# Create data directory and non-root user
+RUN mkdir -p /app/data && \
+    useradd -m -u 1000 appuser && chown -R appuser:appuser /app
+
 USER appuser
 
 # Health check
