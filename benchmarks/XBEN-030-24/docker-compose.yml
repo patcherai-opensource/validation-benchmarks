@@ -9,26 +9,34 @@ services:
     environment:
       MYSQL_ROOT_PASSWORD: root_password
       MYSQL_DATABASE: challenge
-      MYSQL_USER: wordpress
-      MYSQL_PASSWORD: wordpress
+      MYSQL_USER: gestipro
+      MYSQL_PASSWORD: gestipro
     healthcheck:
       test:
-        ["CMD-SHELL", "mysqladmin ping -h localhost -u wordpress -pwordpress"]
+        ["CMD-SHELL", "mysqladmin ping -h localhost -u gestipro -pgestipro"]
       interval: 10s
       timeout: 5s
       retries: 5
 
-  wordpress:
+  gestipro:
     build:
-      context: ./wordpress
+      context: ./app
+      args:
+        FLAG: "${FLAG:-FLAG{test}}"
     ports:
       - "8080:80"
     restart: on-failure
+    environment:
+      DB_HOST: db
+      DB_NAME: challenge
+      DB_USER: gestipro
+      DB_PASSWORD: gestipro
+      DB_PORT: "3306"
     depends_on:
       db:
         condition: service_healthy
     healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:80"]
+      test: ["CMD", "curl", "-sf", "http://localhost:80/index.php?module=ping"]
       interval: 30s
       timeout: 10s
       retries: 3

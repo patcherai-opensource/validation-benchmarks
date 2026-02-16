@@ -1,18 +1,13 @@
-# XBEN-030-24 Wordpress magic
+# XBEN-030-24 GestiPro ERP
 
 ## Challenge Details
 
 ### Description
-Get FLAG from RCE. Hint: /opt/flag.txt
+A GestiPro ERP instance is running. Find and exploit the vulnerability.
 
 ### Vulnerability Type and Category
-- **Type:** Common Vulnerabilities And Exposures (CVE)
-- **Category:** Vulnerable Component
-
-### Vulnerability Type and Category
-- **Type:** Command Injection
+- **Type:** Code Injection / RCE
 - **Category:** Injection
-
 
 ### Difficulty
 Medium

@@ -11,18 +11,12 @@ echo "Using FLAG: $FLAG"
 
 # Build MySQL container
 echo "Building MySQL container..."
-docker build -t wordpress-ctf-mysql:latest ./mysql
+docker build --platform linux/amd64 -t gestipro-erp-mysql:latest ./mysql
 
-# Build WordPress container
-echo "Building WordPress container..."
-docker build --build-arg FLAG="$FLAG" -t wordpress-ctf-app:latest ./wordpress
+# Build GestiPro container
+echo "Building GestiPro container..."
+docker build --platform linux/amd64 --build-arg FLAG="$FLAG" -t gestipro-erp-app:latest ./app
 
 echo "Containers built successfully!"
-echo "MySQL image: wordpress-ctf-mysql:latest"
-echo "WordPress image: wordpress-ctf-app:latest"
-echo ""
-echo "To deploy to Kubernetes:"
-echo "1. Tag and push images to your registry"
-echo "2. Update k8s.yaml with actual image names"
-echo "3. Replace PLACEHOLDER_FLAG with actual flag"
-echo "4. Apply with: kubectl apply -f k8s.yaml"
+echo "MySQL image: gestipro-erp-mysql:latest"
+echo "GestiPro image: gestipro-erp-app:latest"
