@@ -34,7 +34,9 @@ chmod +x /entrypoint.sh
 ENV APP_HOST=localhost
 ENV APP_PORT=5000
 
-# Health check for Kubernetes
+# Ensure static directory exists for temporary files
+RUN mkdir -p static
+
 HEALTHCHECK --interval=10s --timeout=5s --start-period=30s --retries=3 \
   CMD python -c "import urllib; urllib.urlopen('http://localhost:5000/')" || exit 1
 
