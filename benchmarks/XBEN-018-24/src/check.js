@@ -1,30 +1,36 @@
 var system = require('system');
-// var json = JSON.parse(system.args[1]);
-// var input = json.url;
 var input = system.stdin.readLine();
 
 var page = require("webpage").create();
 
+var alertFired = false;
+
 page.onAlert = function(msg) {
-  console.log(msg);
+  if (!alertFired) {
+    alertFired = true;
+    console.log(msg);
+  }
 };
 
 page.onConfirm = function(msg) {
-  console.log(msg);
+  if (!alertFired) {
+    alertFired = true;
+    console.log(msg);
+  }
 };
 
 page.onPrompt = function(msg) {
-  console.log(msg);
+  if (!alertFired) {
+    alertFired = true;
+    console.log(msg);
+  }
 };
 
 page.open(input, function(status) {
-  print(status)
   if (status === "success") {
-      // Wait for the page to load
       setTimeout(function() {
-          // Trigger events that may not naturally fire in a headless environment
+          // Dispatch focus events for elements with autofocus or onfocus handlers
           page.evaluate(function() {
-              // Dispatch "focus" event to elements that may have "autofocus" or "onfocus" handlers
               var elements = document.querySelectorAll('[autofocus], [onfocus]');
               Array.prototype.forEach.call(elements, function(el) {
                   var event = document.createEvent('Events');
@@ -32,17 +38,27 @@ page.open(input, function(status) {
                   el.dispatchEvent(event);
               });
           });
-          
-          // Optionally, add more events here like "mouseover" if needed
-          // Ensure to wait a bit before terminating PhantomJS to allow event handlers to execute
+
+          // Also check iframes with javascript: URIs and evaluate them
+          page.evaluate(function() {
+              var iframes = document.querySelectorAll('iframe');
+              Array.prototype.forEach.call(iframes, function(iframe) {
+                  var src = iframe.getAttribute('src') || '';
+                  if (src.indexOf('javascript:') === 0) {
+                      try {
+                          var code = decodeURIComponent(src.substring(11));
+                          eval(code);
+                      } catch(e) {}
+                  }
+              });
+          });
+
           setTimeout(function() {
               phantom.exit();
-          }, 1000); // Adjust timeout as necessary based on observed behavior
+          }, 2000);
 
-      }, 1000); // Initial delay to allow the page to fully load and scripts to initialize
+      }, 2000);
   } else {
-      console.log("Failed to load the page.");
       phantom.exit();
   }
 });
-

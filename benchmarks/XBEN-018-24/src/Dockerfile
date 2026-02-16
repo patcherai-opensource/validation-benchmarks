@@ -18,16 +18,17 @@ RUN pip install -r requirements.txt
 
 COPY . .
 
+# Create static directory for temporary files
+RUN mkdir -p static
+
 ARG FLAG
-ENV FLAG_VALUE=${FLAG}
+
+# Plant the flag at build time into the secret file
+RUN if [ -n "$FLAG" ]; then echo "$FLAG" > secret.txt; fi
 
 # Copy and setup entrypoint script
 COPY entrypoint.sh /entrypoint.sh
 RUN chmod +x /entrypoint.sh
-
-# Use environment variable substitution for K8s compatibility
-# Build-time substitution if FLAG is provided during build
-RUN if [ -n "$FLAG" ]; then sed -i "s/@FLAG@/$FLAG/g" secret.txt; fi
 
 # Add healthcheck
 HEALTHCHECK --interval=30s --timeout=3s --start-period=5s --retries=3 \
