@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ContentPlatform - Administration</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: #f0f2f5; }
+        .sidebar { position: fixed; left: 0; top: 0; bottom: 0; width: 240px; background: #1a1a2e; color: #fff; padding-top: 20px; }
+        .sidebar .brand { padding: 0 20px 20px; border-bottom: 1px solid #2a2a4e; font-size: 16px; font-weight: 600; }
+        .sidebar .brand span { color: #4a6cf7; }
+        .sidebar nav { padding: 16px 0; }
+        .sidebar nav a { display: block; padding: 10px 20px; color: #a0a0c0; text-decoration: none; font-size: 14px; }
+        .sidebar nav a:hover, .sidebar nav a.active { color: #fff; background: rgba(255,255,255,0.05); }
+        .sidebar nav a.active { border-left: 3px solid #4a6cf7; }
+        .main { margin-left: 240px; }
+        .topbar { background: #fff; padding: 16px 24px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #e0e0e0; }
+        .topbar h2 { font-size: 18px; color: #333; }
+        .topbar .user-info { font-size: 13px; color: #888; }
+        .topbar .user-info button { background: none; border: 1px solid #ddd; padding: 6px 12px; border-radius: 4px; cursor: pointer; font-size: 12px; margin-left: 12px; }
+        .content { padding: 24px; }
+        .card { background: #fff; border-radius: 8px; box-shadow: 0 1px 4px rgba(0,0,0,0.06); margin-bottom: 20px; }
+        .card-header { padding: 16px 20px; border-bottom: 1px solid #eee; display: flex; justify-content: space-between; align-items: center; }
+        .card-header h3 { font-size: 15px; color: #333; }
+        .card-body { padding: 20px; }
+        .toolbar { display: flex; gap: 12px; align-items: center; margin-bottom: 16px; flex-wrap: wrap; }
+        .toolbar select, .toolbar input { padding: 8px 12px; border: 1px solid #ddd; border-radius: 4px; font-size: 13px; }
+        .toolbar select { min-width: 140px; }
+        .toolbar input { min-width: 200px; }
+        .toolbar button { padding: 8px 16px; border: none; background: #4a6cf7; color: #fff; border-radius: 4px; cursor: pointer; font-size: 13px; }
+        .toolbar button.secondary { background: #6c757d; }
+        table { width: 100%; border-collapse: collapse; font-size: 13px; }
+        table th { text-align: left; padding: 10px 12px; background: #f8f9fa; border-bottom: 2px solid #dee2e6; font-weight: 600; color: #555; }
+        table td { padding: 10px 12px; border-bottom: 1px solid #eee; color: #333; }
+        table tr:hover { background: #f8f9fc; }
+        .pagination { display: flex; justify-content: space-between; align-items: center; padding: 12px 0; font-size: 13px; color: #888; }
+        .pagination button { padding: 6px 12px; border: 1px solid #ddd; background: #fff; border-radius: 4px; cursor: pointer; font-size: 12px; }
+        .pagination button:disabled { opacity: 0.5; cursor: default; }
+        .stats-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-bottom: 24px; }
+        .stat-card { background: #fff; border-radius: 8px; padding: 20px; box-shadow: 0 1px 4px rgba(0,0,0,0.06); }
+        .stat-card .label { font-size: 12px; color: #888; text-transform: uppercase; letter-spacing: 0.5px; }
+        .stat-card .value { font-size: 28px; font-weight: 700; color: #1a1a2e; margin-top: 4px; }
+        .empty-state { text-align: center; padding: 40px; color: #888; }
+        #section-translations { display: none; }
+        #section-settings { display: none; }
+    </style>
+</head>
+<body>
+    <div class="sidebar">
+        <div class="brand">Content<span>Platform</span></div>
+        <nav>
+            <a href="#" class="active" data-section="dashboard">Dashboard</a>
+            <a href="#" data-section="translations">Translations</a>
+            <a href="#" data-section="settings">Settings</a>
+        </nav>
+    </div>
+    <div class="main">
+        <div class="topbar">
+            <h2 id="page-title">Dashboard</h2>
+            <div class="user-info">
+                <span id="user-display"></span>
+                <button onclick="logout()">Sign Out</button>
+            </div>
+        </div>
+        <div class="content">
+            <div id="section-dashboard">
+                <div class="stats-grid">
+                    <div class="stat-card"><div class="label">Total Translations</div><div class="value" id="stat-total">-</div></div>
+                    <div class="stat-card"><div class="label">Languages</div><div class="value" id="stat-langs">-</div></div>
+                    <div class="stat-card"><div class="label">Domains</div><div class="value" id="stat-domains">-</div></div>
+                    <div class="stat-card"><div class="label">System Version</div><div class="value" style="font-size:18px;" id="stat-version">-</div></div>
+                </div>
+            </div>
+
+            <div id="section-translations">
+                <div class="card">
+                    <div class="card-header">
+                        <h3>Translation Management</h3>
+                    </div>
+                    <div class="card-body">
+                        <div class="toolbar">
+                            <select id="domain-select"><option value="messages">messages</option><option value="admin">admin</option></select>
+                            <input type="text" id="search-input" placeholder="Search translations...">
+                            <button onclick="loadTranslations()">Search</button>
+                            <button class="secondary" onclick="clearFilters()">Clear</button>
+                        </div>
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Key</th>
+                                    <th>Language</th>
+                                    <th>Text</th>
+                                    <th>Type</th>
+                                    <th>Modified</th>
+                                </tr>
+                            </thead>
+                            <tbody id="translations-body"></tbody>
+                        </table>
+                        <div class="pagination">
+                            <span id="page-info">-</span>
+                            <div>
+                                <button id="prev-btn" onclick="prevPage()" disabled>Previous</button>
+                                <button id="next-btn" onclick="nextPage()">Next</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="section-settings">
+                <div class="card">
+                    <div class="card-header"><h3>System Settings</h3></div>
+                    <div class="card-body" id="settings-body">
+                        <div class="empty-state">Loading settings...</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let currentPage = 0;
+        const pageSize = 20;
+        let totalItems = 0;
+
+        async function checkSession() {
+            const res = await fetch('/admin/api/session');
+            if (!res.ok) { window.location.href = '/admin/login'; return; }
+            const data = await res.json();
+            document.getElementById('user-display').textContent = data.user.username + ' (' + data.user.role + ')';
+        }
+
+        async function logout() {
+            await fetch('/admin/logout', {method:'POST'});
+            window.location.href = '/admin/login';
+        }
+
+        document.querySelectorAll('.sidebar nav a').forEach(a => {
+            a.addEventListener('click', function(e) {
+                e.preventDefault();
+                document.querySelectorAll('.sidebar nav a').forEach(x => x.classList.remove('active'));
+                this.classList.add('active');
+                const section = this.dataset.section;
+                document.getElementById('page-title').textContent = this.textContent;
+                ['dashboard','translations','settings'].forEach(s => {
+                    document.getElementById('section-' + s).style.display = s === section ? 'block' : 'none';
+                });
+                if (section === 'translations') loadTranslations();
+                if (section === 'settings') loadSettings();
+            });
+        });
+
+        async function loadTranslations() {
+            const domain = document.getElementById('domain-select').value;
+            const search = document.getElementById('search-input').value;
+            const body = { domain: domain, limit: pageSize, start: currentPage * pageSize };
+            if (search) body.searchString = search;
+
+            const res = await fetch('/admin/api/localization/entries', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify(body)
+            });
+            if (!res.ok) { return; }
+            const data = await res.json();
+            totalItems = data.total;
+            const tbody = document.getElementById('translations-body');
+            tbody.innerHTML = '';
+            data.data.forEach(t => {
+                const d = t.modificationDate ? new Date(t.modificationDate * 1000).toLocaleDateString() : '-';
+                tbody.innerHTML += '<tr><td>' + t.id + '</td><td>' + escHtml(t.key) + '</td><td>' + escHtml(t.language) + '</td><td>' + escHtml(t.text || '') + '</td><td>' + escHtml(t.type) + '</td><td>' + d + '</td></tr>';
+            });
+            if (data.data.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="6" style="text-align:center;color:#888;">No translations found</td></tr>';
+            }
+            document.getElementById('page-info').textContent = 'Showing ' + (currentPage * pageSize + 1) + '-' + Math.min((currentPage + 1) * pageSize, totalItems) + ' of ' + totalItems;
+            document.getElementById('prev-btn').disabled = currentPage === 0;
+            document.getElementById('next-btn').disabled = (currentPage + 1) * pageSize >= totalItems;
+        }
+
+        function prevPage() { if (currentPage > 0) { currentPage--; loadTranslations(); } }
+        function nextPage() { if ((currentPage + 1) * pageSize < totalItems) { currentPage++; loadTranslations(); } }
+        function clearFilters() { document.getElementById('search-input').value = ''; currentPage = 0; loadTranslations(); }
+
+        async function loadSettings() {
+            const res = await fetch('/admin/api/settings');
+            const container = document.getElementById('settings-body');
+            if (!res.ok) { container.innerHTML = '<div class="empty-state">Access denied or error loading settings</div>'; return; }
+            const data = await res.json();
+            let html = '';
+            for (const [scope, entries] of Object.entries(data.settings)) {
+                html += '<h4 style="margin: 16px 0 8px; color: #1a1a2e; text-transform: capitalize;">' + escHtml(scope) + '</h4>';
+                html += '<table><tbody>';
+                for (const [name, value] of Object.entries(entries)) {
+                    html += '<tr><td style="width:300px;font-weight:600;">' + escHtml(name) + '</td><td>' + escHtml(value) + '</td></tr>';
+                }
+                html += '</tbody></table>';
+            }
+            container.innerHTML = html;
+        }
+
+        async function loadDashboard() {
+            try {
+                const res = await fetch('/admin/api/localization/entries', {
+                    method: 'POST', headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({domain: 'messages', limit: 1, start: 0})
+                });
+                if (res.ok) { const d = await res.json(); document.getElementById('stat-total').textContent = d.total; }
+            } catch(e) {}
+            try {
+                const res = await fetch('/admin/api/languages');
+                if (res.ok) { const d = await res.json(); document.getElementById('stat-langs').textContent = d.languages.length; }
+            } catch(e) {}
+            try {
+                const res = await fetch('/admin/api/domains');
+                if (res.ok) { const d = await res.json(); document.getElementById('stat-domains').textContent = d.domains.length; }
+            } catch(e) {}
+            document.getElementById('stat-version').textContent = 'v4.2.1';
+        }
+
+        function escHtml(s) { const d = document.createElement('div'); d.textContent = s; return d.innerHTML; }
+
+        checkSession();
+        loadDashboard();
+    </script>
+</body>
+</html>

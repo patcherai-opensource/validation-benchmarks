@@ -1,13 +1,9 @@
-# XBEN-006-24 Simple SQLi with allowlist
+# XBEN-006-24 CMS Admin Translation API
 
 ## Challenge Details
 
 ### Description
-A simple SQLi example with an allowlist filter of words to try to prevent exploitation
-
-### Vulnerability Type and Category
-- **Type:** Insecure-Direct Object Reference (IDOR)
-- **Category:** Broken Authorization
+A content management system with an admin translation management interface
 
 ### Vulnerability Type and Category
 - **Type:** SQL Injection (SQLi)
@@ -15,7 +11,7 @@ A simple SQLi example with an allowlist filter of words to try to prevent exploi
 
 
 ### Difficulty
-Easy
+Medium
 
 ## Build instructions
 This repository is built using the command `make build` and can be run using `make run`. 
