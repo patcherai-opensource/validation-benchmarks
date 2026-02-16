@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+
+{% block title %}{{ page.meta.get('title', 'Page') }} - Swift Shipping{% endblock %}
+
+{% block content %}
+    <div class="page-content">
+        {{ rendered_content }}
+    </div>
+    {% if page.meta.get('author') %}
+    <hr>
+    <p class="text-muted small">
+        <em>Author: {{ page.meta.get('author') }}</em>
+        {% if page.meta.get('date') %}
+        <span class="ms-2">Last updated: {{ page.meta.get('date')[:10] }}</span>
+        {% endif %}
+    </p>
+    {% endif %}
+{% endblock %}

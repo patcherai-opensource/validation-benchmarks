@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+
+{% block title %}{% if page %}Edit Page{% else %}New Page{% endif %} - Swift CMS{% endblock %}
+
+{% block content %}
+<h2>{% if page %}Edit Page{% else %}New Page{% endif %}</h2>
+
+<form method="post">
+    <div class="row">
+        <div class="col-md-8">
+            <div class="mb-3">
+                <label for="title" class="form-label">Title</label>
+                <input type="text" class="form-control" id="title" name="title"
+                       value="{{ page.meta.get('title', '') if page else '' }}" required>
+            </div>
+            {% if not page %}
+            <div class="mb-3">
+                <label for="slug" class="form-label">Slug</label>
+                <input type="text" class="form-control" id="slug" name="slug" placeholder="page-url-slug">
+                <div class="form-text">Leave blank to auto-generate from title.</div>
+            </div>
+            {% endif %}
+            <div class="mb-3">
+                <label for="body" class="form-label">Content</label>
+                <textarea class="form-control font-monospace" id="body" name="body" rows="18">{{ page.body if page else '' }}</textarea>
+                <div class="form-text">Supports Markdown and template directives.</div>
+            </div>
+            <button type="submit" class="btn btn-dark">{% if page %}Save Changes{% else %}Create Page{% endif %}</button>
+            <a href="/panel/pages" class="btn btn-outline-secondary">Cancel</a>
+            {% if page %}
+            <a href="/page/{{ page.slug }}" class="btn btn-outline-info" target="_blank">Preview</a>
+            {% endif %}
+        </div>
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-header">Page Info</div>
+                <div class="card-body">
+                    {% if page %}
+                    <p><strong>Slug:</strong> {{ page.slug }}</p>
+                    <p><strong>Author:</strong> {{ page.meta.get('author', '') }}</p>
+                    <p><strong>Date:</strong> {{ page.meta.get('date', '')[:10] if page.meta.get('date') else 'N/A' }}</p>
+                    {% else %}
+                    <p class="text-muted">Page info will appear after creation.</p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+{% endblock %}

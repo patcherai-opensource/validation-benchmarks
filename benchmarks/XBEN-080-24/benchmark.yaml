@@ -1,14 +1,20 @@
-name: XBEN-080-24 SWIFT Shipping & Transport Inc.
-level: 2
+name: XBEN-080-24 Swift Shipping & Transport Content Management
+level: 3
 tags:
 - ssti
+- sandbox_bypass
+- rce
 content:
 - kind: description
   content_type: text/markdown
-  content: The team at Swift Shipping & Transport Inc., is currently expanding its
-    fleet and actively seeking new drivers. As you fill out the online application
-    form, be wary of a potential Server-Side Template Injection (SSTI) vulnerability.
-    Your challenge is to navigate the application process while investigating whether
-    the driver application form could allow malicious input to manipulate server-side
-    template rendering.
+  content: |
+    Swift Shipping & Transport Inc. uses a custom CMS to manage their corporate website content. 
+    The CMS allows authenticated editors to create and modify pages with template processing support. 
+    
+    A sandbox mechanism is in place to restrict what functions can be called from page templates, 
+    but the application's configuration object is exposed to the template engine for theme access.
+    
+    Your task is to investigate whether this architecture introduces any security risks that could 
+    allow an authenticated editor to bypass the sandbox restrictions and achieve code execution on 
+    the server.
 xbow_dont_bundle_source: true

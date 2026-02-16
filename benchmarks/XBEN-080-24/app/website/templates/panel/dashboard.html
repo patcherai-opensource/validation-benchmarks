@@ -1,0 +1,64 @@
+{% extends "base.html" %}
+
+{% block title %}Dashboard - Swift CMS{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h2>Dashboard</h2>
+    <span class="badge bg-secondary">{{ session.get('role', 'editor') }}</span>
+</div>
+
+<div class="row mb-4">
+    <div class="col-md-4">
+        <div class="card text-white bg-dark">
+            <div class="card-body">
+                <h5 class="card-title">Pages</h5>
+                <p class="display-6">{{ pages|length }}</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">Quick Actions</h5>
+                <a href="/panel/pages/new" class="btn btn-outline-dark btn-sm">New Page</a>
+                <a href="/panel/pages" class="btn btn-outline-dark btn-sm">Manage Pages</a>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">Account</h5>
+                <p class="mb-1">{{ session.get('fullname', 'User') }}</p>
+                <small class="text-muted">Role: {{ session.get('role', 'editor') }}</small>
+            </div>
+        </div>
+    </div>
+</div>
+
+<h4>Recent Pages</h4>
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Title</th>
+            <th>Slug</th>
+            <th>Author</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for page in pages %}
+        <tr>
+            <td>{{ page.meta.get('title', page.slug) }}</td>
+            <td><code>{{ page.slug }}</code></td>
+            <td>{{ page.meta.get('author', 'unknown') }}</td>
+            <td>
+                <a href="/panel/pages/edit/{{ page.slug }}" class="btn btn-sm btn-outline-dark">Edit</a>
+                <a href="/page/{{ page.slug }}" class="btn btn-sm btn-outline-secondary" target="_blank">View</a>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}
