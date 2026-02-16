@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Workspace - Formula Toolkit</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-brand">Formula Toolkit</div>
+        <div class="nav-links">
+            <a href="/">Home</a>
+            <a href="/api/v1/formulas">Formula Library</a>
+            <a href="/workspace">Workspace</a>
+            <a href="/logout">Logout</a>
+        </div>
+    </nav>
+    <div class="workspace-container">
+        <h2>Formula Workspace</h2>
+        <p>Welcome, {{ session['display_name'] }}.</p>
+
+        <div class="workspace-section">
+            <h3>Render MathML</h3>
+            <p>Submit MathML content to parse and render. Supports structured JSON, LaTeX, or display output formats.</p>
+            <div class="editor-area">
+                <label for="mathml-input">MathML Input:</label>
+                <textarea id="mathml-input" rows="10" placeholder="Enter MathML XML content...">&lt;math xmlns="http://www.w3.org/1998/Math/MathML"&gt;
+  &lt;mrow&gt;
+    &lt;mi&gt;x&lt;/mi&gt;
+    &lt;mo&gt;=&lt;/mo&gt;
+    &lt;mfrac&gt;
+      &lt;mrow&gt;
+        &lt;mo&gt;-&lt;/mo&gt;&lt;mi&gt;b&lt;/mi&gt;
+      &lt;/mrow&gt;
+      &lt;mrow&gt;
+        &lt;mn&gt;2&lt;/mn&gt;&lt;mi&gt;a&lt;/mi&gt;
+      &lt;/mrow&gt;
+    &lt;/mfrac&gt;
+  &lt;/mrow&gt;
+&lt;/math&gt;</textarea>
+                <div class="control-row">
+                    <select id="output-format">
+                        <option value="structured">Structured JSON</option>
+                        <option value="latex">LaTeX</option>
+                        <option value="display">Display XML</option>
+                    </select>
+                    <button onclick="renderFormula()" class="btn btn-primary">Render</button>
+                </div>
+            </div>
+            <div class="result-area" id="render-result" style="display:none;">
+                <h4>Output:</h4>
+                <pre id="render-output"></pre>
+            </div>
+        </div>
+
+        <div class="workspace-section">
+            <h3>Library Formulas</h3>
+            <div id="formula-list" class="formula-grid"></div>
+        </div>
+    </div>
+
+    <script>
+        function renderFormula() {
+            const input = document.getElementById('mathml-input').value;
+            const format = document.getElementById('output-format').value;
+            const resultDiv = document.getElementById('render-result');
+            const outputPre = document.getElementById('render-output');
+
+            fetch('/api/v1/renderFormula?format=' + format, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/xml' },
+                body: input
+            })
+            .then(response => response.text())
+            .then(data => {
+                resultDiv.style.display = 'block';
+                outputPre.textContent = data;
+            })
+            .catch(error => {
+                resultDiv.style.display = 'block';
+                outputPre.textContent = 'Error: ' + error.message;
+            });
+        }
+
+        function loadLibrary() {
+            fetch('/api/v1/formulas')
+            .then(r => r.json())
+            .then(data => {
+                const container = document.getElementById('formula-list');
+                container.innerHTML = data.formulas.map(f =>
+                    '<div class="formula-card">' +
+                    '<h4>' + f.name + '</h4>' +
+                    '<span class="category-badge">' + f.category + '</span>' +
+                    '<p>' + f.description + '</p>' +
+                    '<button onclick="convertFormula(\'' + f.id + '\')" class="btn btn-small">Convert to LaTeX</button>' +
+                    '</div>'
+                ).join('');
+            });
+        }
+
+        function convertFormula(formulaId) {
+            fetch('/api/v1/convertFormula', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ formula_id: formulaId })
+            })
+            .then(r => r.json())
+            .then(data => {
+                const resultDiv = document.getElementById('render-result');
+                const outputPre = document.getElementById('render-output');
+                resultDiv.style.display = 'block';
+                outputPre.textContent = JSON.stringify(data, null, 2);
+            });
+        }
+
+        document.addEventListener('DOMContentLoaded', loadLibrary);
+    </script>
+</body>
+</html>

@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Formula Toolkit - Mathematical Notation Service</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-brand">Formula Toolkit</div>
+        <div class="nav-links">
+            <a href="/">Home</a>
+            <a href="/api/v1/formulas">Formula Library</a>
+            {% if session.get('user') %}
+            <a href="/workspace">Workspace</a>
+            <a href="/logout">Logout</a>
+            {% else %}
+            <a href="/login">Sign In</a>
+            {% endif %}
+        </div>
+    </nav>
+    <div class="hero">
+        <h1>Formula Toolkit</h1>
+        <p>A comprehensive MathML processing and rendering service for mathematical notation.</p>
+        <p class="subtitle">Parse, transform, and convert mathematical formulas between MathML and LaTeX formats.</p>
+        <div class="cta-buttons">
+            <a href="/api/v1/formulas" class="btn btn-secondary">Browse Library</a>
+            {% if session.get('user') %}
+            <a href="/workspace" class="btn btn-primary">Open Workspace</a>
+            {% else %}
+            <a href="/login" class="btn btn-primary">Sign In</a>
+            {% endif %}
+        </div>
+    </div>
+    <div class="features">
+        <div class="feature-card">
+            <h3>MathML Processing</h3>
+            <p>Parse and validate MathML 2.0 content with full DTD support for mathematical notation standards.</p>
+        </div>
+        <div class="feature-card">
+            <h3>LaTeX Conversion</h3>
+            <p>Convert MathML formulas to LaTeX representation for use in documents and publications.</p>
+        </div>
+        <div class="feature-card">
+            <h3>Formula Library</h3>
+            <p>Access a curated collection of common mathematical formulas with MathML templates.</p>
+        </div>
+    </div>
+</body>
+</html>

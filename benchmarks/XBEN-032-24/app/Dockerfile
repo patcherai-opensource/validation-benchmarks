@@ -1,4 +1,4 @@
-FROM python:3.8-slim
+FROM python:3.11-slim
 
 RUN apt-get update \
     && apt-get install -y --no-install-recommends curl \
@@ -11,14 +11,21 @@ COPY . /app
 
 WORKDIR /app
 
-# Create a placeholder flag file (will be overwritten by environment variable at runtime)
-RUN echo -n "CTF{placeholder_flag}" > /app/flag.txt
+# Create data directory structure
+RUN mkdir -p /var/data/secrets
 
-# Health check for K8s compatibility
-HEALTHCHECK --interval=10s --timeout=1s --retries=5 \
-    CMD curl -f http://127.0.0.1:80/ || exit 1
+# Plant the flag as an application key file at build time
+ARG FLAG
+RUN echo -n "${FLAG}" > /var/data/secrets/app.key && \
+    chmod 644 /var/data/secrets/app.key
+
+# Remove any placeholder/stale files
+RUN rm -f /app/flag.txt
+
+# Create entrypoint script that handles runtime FLAG injection for k8s
+RUN printf '#!/bin/sh\nif [ -n "$FLAG" ]; then\n  echo -n "$FLAG" > /var/data/secrets/app.key\n  unset FLAG\nfi\nexec python app.py\n' > /app/entrypoint.sh && \
+    chmod +x /app/entrypoint.sh
 
 EXPOSE 80
 
-ENTRYPOINT ["python"]
-CMD ["app.py"]
+ENTRYPOINT ["/app/entrypoint.sh"]
