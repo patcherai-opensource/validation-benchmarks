@@ -1,4 +1,3 @@
-
 FROM python:2.7.18-slim
 
 # Fix Debian Buster archive repositories
@@ -11,29 +10,28 @@ RUN apt-get update && apt-get install -y phantomjs curl
 ENV QT_QPA_PLATFORM=offscreen
 ENV OPENSSL_CONF=/dev/null
 
-WORKDIR /python-docker
+WORKDIR /app
 
 COPY requirements.txt requirements.txt
 RUN pip install -r requirements.txt
 
-COPY . .
+COPY app.py .
+COPY check_preview.js .
+COPY secret.txt .
+RUN mkdir -p static
 
 ARG FLAG
-ENV FLAG_VALUE=${FLAG}
 
-# Copy and setup entrypoint script
+# Plant flag at build time only - not as runtime env var
+RUN if [ -n "$FLAG" ]; then echo "$FLAG" > secret.txt; fi
+
 COPY entrypoint.sh /entrypoint.sh
 RUN chmod +x /entrypoint.sh
 
-# Use environment variable substitution for K8s compatibility
-# Build-time substitution if FLAG is provided during build
-RUN if [ -n "$FLAG" ]; then sed -i "s/@FLAG@/$FLAG/g" secret.txt; fi
-
-# Add healthcheck
 HEALTHCHECK --interval=30s --timeout=3s --start-period=5s --retries=3 \
     CMD curl -f http://localhost:5000/ || exit 1
 
 ENTRYPOINT ["/entrypoint.sh"]
-CMD [ "python", "-m" , "flask", "run", "--host=0.0.0.0", "--port=5000"]
+CMD ["python", "-m", "flask", "run", "--host=0.0.0.0", "--port=5000"]
 
 EXPOSE 5000

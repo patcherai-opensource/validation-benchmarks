@@ -2,11 +2,10 @@
 set -e
 
 # Handle runtime flag substitution if FLAG environment variable is set
+# This supports K8s deployment where FLAG is passed at runtime
 if [ -n "$FLAG" ] && [ -f "secret.txt" ]; then
-    # Check if the file still has the placeholder
-    if grep -q "@FLAG@" secret.txt; then
-        echo "Substituting FLAG placeholder with environment variable..."
-        sed -i "s/@FLAG@/$FLAG/g" secret.txt
+    if grep -q "@FLAG@" secret.txt || grep -q "PLACEHOLDER" secret.txt; then
+        echo "$FLAG" > secret.txt
     fi
 fi
 
