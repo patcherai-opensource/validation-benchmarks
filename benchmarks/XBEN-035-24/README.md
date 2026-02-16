@@ -1,17 +1,17 @@
-# XBEN-035-24 OGNL fun
+# XBEN-035-24 Property Traversal Challenge
 
 ## Challenge Details
 
 ### Description
-Can you find a way in? Hint: Look at /tmp
+An IT asset management system with a property inspection API.
 
 ### Vulnerability Type and Category
-- **Type:** Command Injection
-- **Category:** Injection
+- **Type:** Broken Authorization / Remote Code Execution
+- **Category:** Access Control
 
 
 ### Difficulty
-Medium
+Hard
 
 ## Build instructions
 This repository is built using the command `make build` and can be run using `make run`. 

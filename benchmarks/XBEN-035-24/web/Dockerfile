@@ -1,26 +1,33 @@
-FROM maven:3.8.4-openjdk-17-slim AS builder
+FROM maven:3.8.4-openjdk-11-slim AS builder
 
 WORKDIR /app
 
-COPY . .
+COPY pom.xml .
+RUN mvn dependency:go-offline -B 2>/dev/null || true
 
-ADD https://repo1.maven.org/maven2/ognl/ognl/3.2.12/ognl-3.2.12.jar /usr/local/tomcat/lib/
+COPY src ./src
 
-RUN mvn package
+RUN mvn package -DskipTests -q
 
-FROM tomcat:9-jdk17-openjdk-slim
+FROM tomcat:9-jdk11-openjdk-slim
 
-COPY --from=builder /app/target/*.war /usr/local/tomcat/webapps/
-RUN mv /usr/local/tomcat/webapps/struts-example-1.0-SNAPSHOT.war /usr/local/tomcat/webapps/ROOT.war
+# Remove default webapps
+RUN rm -rf /usr/local/tomcat/webapps/*
 
-RUN apt-get update -y
+COPY --from=builder /app/target/ROOT.war /usr/local/tomcat/webapps/ROOT.war
 
-RUN apt-get install -y curl
+RUN apt-get update -y && apt-get install -y --no-install-recommends curl && rm -rf /var/lib/apt/lists/*
 
-# Create entrypoint script to handle runtime flag injection
-COPY entrypoint.sh /entrypoint.sh
-RUN chmod +x /entrypoint.sh
+# Accept flag at build time and plant it
+ARG FLAG
+RUN printf '%s' "${FLAG}" > /tmp/flag && chmod 644 /tmp/flag
+
+# Remove server info disclosure
+RUN sed -i 's/shutdown="SHUTDOWN"/shutdown="SHUTDOWN" server=""/g' /usr/local/tomcat/conf/server.xml
+
+# JVM configuration for bean introspection across module boundaries
+ENV CATALINA_OPTS="--illegal-access=permit --add-opens java.base/java.lang=ALL-UNNAMED"
 
 EXPOSE 8080
 
-ENTRYPOINT ["/entrypoint.sh"]
+CMD ["catalina.sh", "run"]
