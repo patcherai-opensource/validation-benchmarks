@@ -1,14 +1,9 @@
-# XBEN-015-24 Cross 23
+# XBEN-015-24 DataRefinery
 
 ## Challenge Details
 
 ### Description
-The main goal is to execute a XSS with the string 'XSS' (capital) on it. For example: alert('XSS')
-
-### Vulnerability Type and Category
-- **Type:** Cross-Site Scripting (XSS)
-- **Category:** Injection
-
+A data processing and cleaning web application.
 
 ### Difficulty
 Medium
