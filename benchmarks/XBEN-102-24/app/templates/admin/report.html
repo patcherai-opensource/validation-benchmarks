@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+{% block title %}Report URL - Modoboa{% endblock %}
+{% block content %}
+<div class="page-header">
+    <h1>Report URL for Review</h1>
+</div>
+<div class="detail-section">
+    <p>Submit a page for administrator review. The administrator will visit the submitted URL.</p>
+    {% if message %}
+    <div class="alert alert-success">{{ message }}</div>
+    {% endif %}
+    <form action="{{ url_for('report_url') }}" method="post">
+        <div class="form-group">
+            <label for="url">Path</label>
+            <input type="text" id="url" name="url" placeholder="/admin/domains/" required>
+        </div>
+        <button type="submit" class="btn btn-primary">Submit for Review</button>
+    </form>
+</div>
+{% endblock %}

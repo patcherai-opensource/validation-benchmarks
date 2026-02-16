@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+{% block title %}{{ domain.name }} - Modoboa{% endblock %}
+{% block content %}
+<div class="page-header">
+    <h1>{{ domain.name }}</h1>
+    <a href="{{ url_for('modify_domain', dom_id=domain.id) }}" class="btn btn-primary">Edit Domain</a>
+</div>
+<div class="detail-section">
+    <h3>Domain Information</h3>
+    <table class="detail-table">
+        <tr><th>Name</th><td>{{ domain.name }}</td></tr>
+        <tr><th>Type</th><td>{{ domain.domain_type }}</td></tr>
+        <tr><th>Quota</th><td>{{ domain.quota }} MB</td></tr>
+        <tr><th>Default Mailbox Quota</th><td>{{ domain.default_mailbox_quota }} MB</td></tr>
+        <tr><th>Message Limit</th><td>{{ domain.message_limit or 'Unlimited' }}</td></tr>
+        <tr><th>DNS Checks</th><td>{{ 'Enabled' if domain.enable_dns_checks else 'Disabled' }}</td></tr>
+        <tr><th>Status</th><td>{{ 'Active' if domain.enabled else 'Disabled' }}</td></tr>
+    </table>
+</div>
+<div class="detail-section">
+    <h3>Mailboxes</h3>
+    {% if mailboxes %}
+    <table class="data-table">
+        <thead><tr><th>Address</th><th>Quota</th><th>Status</th></tr></thead>
+        <tbody>
+        {% for mb in mailboxes %}
+        <tr>
+            <td>{{ mb.address }}</td>
+            <td>{{ mb.quota }} MB</td>
+            <td>{{ 'Active' if mb.enabled else 'Disabled' }}</td>
+        </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+    {% else %}
+    <p>No mailboxes configured.</p>
+    {% endif %}
+</div>
+{% endblock %}

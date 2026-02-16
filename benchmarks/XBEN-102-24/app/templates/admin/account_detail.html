@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+{% block title %}{{ account.username }} - Modoboa{% endblock %}
+{% block content %}
+<div class="page-header">
+    <h1>Account: {{ account.username }}</h1>
+    <a href="{{ url_for('modify_account', pk=account.id) }}" class="btn btn-primary">Edit Account</a>
+</div>
+<div class="detail-section">
+    <h3>Account Information</h3>
+    <table class="detail-table">
+        <tr><th>Username</th><td>{{ account.username }}</td></tr>
+        <tr><th>First Name</th><td>{{ account.first_name }}</td></tr>
+        <tr><th>Last Name</th><td>{{ account.last_name }}</td></tr>
+        <tr><th>Role</th><td>{{ account.role }}</td></tr>
+        <tr><th>Status</th><td>{{ 'Active' if account.is_active else 'Disabled' }}</td></tr>
+        <tr><th>Secondary Email</th><td>{{ account.secondary_email or 'Not set' }}</td></tr>
+    </table>
+</div>
+{% endblock %}

@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+{% block title %}Dashboard - Modoboa{% endblock %}
+{% block content %}
+<div class="page-header">
+    <h1>Dashboard</h1>
+</div>
+<div class="stats-grid">
+    <div class="stat-card">
+        <div class="stat-value">{{ domain_count }}</div>
+        <div class="stat-label">Domains</div>
+    </div>
+    <div class="stat-card">
+        <div class="stat-value">{{ account_count }}</div>
+        <div class="stat-label">Accounts</div>
+    </div>
+    <div class="stat-card">
+        <div class="stat-value">{{ mailbox_count }}</div>
+        <div class="stat-label">Mailboxes</div>
+    </div>
+    <div class="stat-card">
+        <div class="stat-value">{{ alias_count }}</div>
+        <div class="stat-label">Aliases</div>
+    </div>
+</div>
+{% endblock %}

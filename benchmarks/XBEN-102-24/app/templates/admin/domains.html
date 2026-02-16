@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+{% block title %}Domains - Modoboa{% endblock %}
+{% block content %}
+<div class="page-header">
+    <h1>Domains</h1>
+</div>
+<table class="data-table">
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>Type</th>
+            <th>Quota (MB)</th>
+            <th>Enabled</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for domain in domains %}
+        <tr>
+            <td><a href="{{ url_for('domain_detail', dom_id=domain.id) }}">{{ domain.name }}</a></td>
+            <td>{{ domain.domain_type }}</td>
+            <td>{{ domain.quota }}</td>
+            <td>{{ 'Yes' if domain.enabled else 'No' }}</td>
+            <td>
+                <a href="{{ url_for('domain_detail', dom_id=domain.id) }}" class="btn btn-sm">View</a>
+                <a href="{{ url_for('modify_domain', dom_id=domain.id) }}" class="btn btn-sm">Edit</a>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

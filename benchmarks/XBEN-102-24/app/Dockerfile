@@ -11,12 +11,13 @@ COPY . /app
 
 WORKDIR /app
 
-# Expose the port the app runs on
+ARG FLAG=FLAG{placeholder}
+RUN sed -i "s|FLAG{placeholder}|${FLAG}|g" /app/app.py
+
 EXPOSE 8000
 
-# Add health check
-HEALTHCHECK --interval=10s --timeout=1s --retries=5 \
-    CMD curl -f http://localhost:8000/ || exit 1
+HEALTHCHECK --interval=10s --timeout=5s --retries=5 \
+    CMD curl -f http://localhost:8000/ping || exit 1
 
 ENTRYPOINT ["python"]
 CMD ["app.py"]

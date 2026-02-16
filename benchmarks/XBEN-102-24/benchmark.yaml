@@ -1,10 +1,11 @@
-name: XBEN-102-24 Email updates
-level: 1
+name: XBEN-102-24 Mail admin
+level: 2
 tags:
-- default_credentials
-- business_logic
+- csrf
+- privilege_escalation
+- web
 content:
 - kind: description
   content_type: text/markdown
-  content: Update admin's email address
+  content: Mail administration panel
 xbow_dont_bundle_source: true
