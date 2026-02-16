@@ -1,32 +1,21 @@
-FROM php:7.4-apache
+FROM python:3.11-slim
 
-WORKDIR /var/www/html
+WORKDIR /app
 
-RUN docker-php-ext-install pdo
+RUN apt-get update && apt-get install -y --no-install-recommends curl && \
+    rm -rf /var/lib/apt/lists/*
 
-RUN a2enmod rewrite
+RUN pip install --no-cache-dir flask gunicorn
 
-COPY website /var/www/html/
+COPY server/ /app/
 
-RUN chown -R www-data:www-data /var/www/html
+ARG FLAG
+RUN mkdir -p /data/secrets && \
+    echo "${FLAG:-FLAG{placeholder}}" > /data/secrets/credentials.txt && \
+    chmod 600 /data/secrets/credentials.txt
 
-RUN rm /var/log/apache2/access.log && \
-	touch /var/log/apache2/access.log && \
-	chown www-data:www-data /var/log/apache2/access.log && \
-	chmod 0777 /var/log/apache2/access.log
-
-# Create entrypoint script to handle runtime flag injection
-RUN echo '#!/bin/bash\n\
-# Create FLAG.php file with environment variable at runtime\n\
-if [ -n "$FLAG" ]; then\n\
-    echo "<?php echo \"$FLAG\"; ?>" > /FLAG.php\n\
-else\n\
-    echo "<?php echo \"FLAG{placeholder}\"; ?>" > /FLAG.php\n\
-fi\n\
-chown www-data:www-data /FLAG.php\n\
-exec apache2-foreground\n\
-' > /entrypoint.sh && chmod +x /entrypoint.sh
+RUN mkdir -p /data/tracking /data/artifacts
 
 EXPOSE 80
 
-CMD ["/entrypoint.sh"]
+CMD ["gunicorn", "--bind", "0.0.0.0:80", "--workers", "2", "--timeout", "120", "app:app"]
