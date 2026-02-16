@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DataLens - Document Analysis Platform</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Source Sans Pro', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: #0b0f19;
+            color: #c5c8d6;
+            min-height: 100vh;
+        }
+        .header {
+            background: linear-gradient(135deg, #1a1c2e 0%, #2d1b69 100%);
+            padding: 24px 32px;
+            border-bottom: 1px solid rgba(255,255,255,0.06);
+        }
+        .header h1 {
+            font-size: 22px;
+            color: #e8eaf6;
+            font-weight: 600;
+        }
+        .header .version {
+            font-size: 12px;
+            color: #7c7f9a;
+            margin-top: 4px;
+        }
+        .container {
+            max-width: 920px;
+            margin: 0 auto;
+            padding: 32px 24px;
+        }
+        .description {
+            background: #151929;
+            border: 1px solid #2a2d40;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 28px;
+            font-size: 14px;
+            line-height: 1.6;
+            color: #9ca3af;
+        }
+        .component-group {
+            background: #151929;
+            border: 1px solid #2a2d40;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 16px;
+        }
+        .component-group label {
+            display: block;
+            font-size: 14px;
+            font-weight: 600;
+            color: #e0e2ed;
+            margin-bottom: 8px;
+        }
+        textarea {
+            width: 100%;
+            min-height: 100px;
+            background: #0b0f19;
+            border: 1px solid #2a2d40;
+            border-radius: 6px;
+            padding: 12px;
+            color: #c5c8d6;
+            font-size: 14px;
+            font-family: inherit;
+            resize: vertical;
+        }
+        textarea:focus {
+            outline: none;
+            border-color: #6366f1;
+        }
+        .upload-area {
+            border: 2px dashed #2a2d40;
+            border-radius: 6px;
+            padding: 28px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.2s;
+            background: #0b0f19;
+        }
+        .upload-area:hover {
+            border-color: #6366f1;
+            background: #111528;
+        }
+        .upload-area.has-file {
+            border-color: #22c55e;
+            background: #0d1a14;
+        }
+        .upload-area p {
+            font-size: 13px;
+            color: #7c7f9a;
+        }
+        .upload-area .file-name {
+            color: #22c55e;
+            font-weight: 500;
+        }
+        .btn-row {
+            display: flex;
+            gap: 12px;
+            margin: 20px 0;
+        }
+        .btn {
+            padding: 10px 24px;
+            border: none;
+            border-radius: 6px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.15s;
+        }
+        .btn-primary {
+            background: #6366f1;
+            color: white;
+        }
+        .btn-primary:hover { background: #5558e6; }
+        .btn-primary:disabled {
+            background: #3a3d5c;
+            cursor: not-allowed;
+        }
+        .btn-secondary {
+            background: #1e2235;
+            color: #9ca3af;
+            border: 1px solid #2a2d40;
+        }
+        .btn-secondary:hover { background: #252940; }
+        .output-text {
+            width: 100%;
+            min-height: 120px;
+            background: #0b0f19;
+            border: 1px solid #2a2d40;
+            border-radius: 6px;
+            padding: 12px;
+            color: #c5c8d6;
+            font-size: 13px;
+            font-family: 'Courier New', monospace;
+            white-space: pre-wrap;
+        }
+        .file-output {
+            background: #0b0f19;
+            border: 1px solid #2a2d40;
+            border-radius: 6px;
+            padding: 16px;
+        }
+        .file-output a {
+            color: #6366f1;
+            text-decoration: none;
+        }
+        .file-output a:hover { text-decoration: underline; }
+        .status-bar {
+            font-size: 12px;
+            color: #4a4d6a;
+            text-align: center;
+            padding: 16px;
+            border-top: 1px solid #1a1d30;
+            margin-top: 32px;
+        }
+        .spinner {
+            display: none;
+            width: 20px;
+            height: 20px;
+            border: 2px solid #2a2d40;
+            border-top-color: #6366f1;
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+            margin: 0 auto;
+        }
+        @keyframes spin { to { transform: rotate(360deg); } }
+        .footer-links {
+            display: flex;
+            gap: 16px;
+            justify-content: center;
+            margin-top: 8px;
+        }
+        .footer-links a {
+            color: #4a4d6a;
+            text-decoration: none;
+            font-size: 12px;
+        }
+        .footer-links a:hover { color: #6366f1; }
+        input[type="file"] { display: none; }
+        .tabs {
+            display: flex;
+            gap: 0;
+            margin-bottom: -1px;
+            position: relative;
+            z-index: 1;
+        }
+        .tab {
+            padding: 10px 20px;
+            font-size: 13px;
+            background: transparent;
+            border: 1px solid transparent;
+            border-bottom: none;
+            color: #7c7f9a;
+            cursor: pointer;
+            border-radius: 6px 6px 0 0;
+        }
+        .tab.active {
+            background: #151929;
+            border-color: #2a2d40;
+            color: #e0e2ed;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>DataLens</h1>
+        <div class="version">Document Analysis Platform</div>
+    </div>
+
+    <div class="container">
+        <div class="description">
+            Upload documents or enter text for automated analysis. The platform processes your input
+            through our NLP pipeline and returns structured insights including word frequency,
+            readability scores, and content classification.
+            Supported formats: .txt, .csv, .json, .pdf
+        </div>
+
+        <div class="tabs">
+            <div class="tab active">Analyze</div>
+            <div class="tab">API</div>
+        </div>
+
+        <div class="component-group">
+            <label>Input Text</label>
+            <textarea id="input-text" placeholder="Enter text to analyze..."></textarea>
+        </div>
+
+        <div class="component-group">
+            <label>Upload Document</label>
+            <div class="upload-area" id="upload-area" onclick="document.getElementById('file-input').click()">
+                <p id="upload-label">Click to upload or drag a file here</p>
+                <p style="font-size: 11px; margin-top: 6px; color: #4a4d6a;">Accepted: .txt, .csv, .json, .pdf</p>
+            </div>
+            <input type="file" id="file-input" accept=".txt,.csv,.json,.pdf" onchange="handleFileSelect(event)">
+        </div>
+
+        <div class="btn-row">
+            <button class="btn btn-primary" id="analyze-btn" onclick="submitAnalysis()">Analyze</button>
+            <button class="btn btn-secondary" onclick="clearAll()">Clear</button>
+        </div>
+
+        <div class="spinner" id="spinner"></div>
+
+        <div class="component-group">
+            <label>Analysis Result</label>
+            <div class="output-text" id="output-text">Waiting for input...</div>
+        </div>
+
+        <div class="component-group">
+            <label>Processed Output</label>
+            <div class="file-output" id="file-output">
+                <p style="color: #4a4d6a; font-size: 13px;">No output file generated yet.</p>
+            </div>
+        </div>
+
+        <div class="status-bar">
+            <div class="footer-links">
+                <a href="/config">API Config</a>
+                <a href="/info">Info</a>
+                <a href="/examples">Examples</a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let uploadedFilePath = null;
+        let uploadedFileName = null;
+        const sessionHash = crypto.randomUUID ? crypto.randomUUID() : Math.random().toString(36).substring(2);
+
+        function handleFileSelect(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+
+            const formData = new FormData();
+            formData.append('files', file);
+
+            fetch('/upload', {
+                method: 'POST',
+                body: formData
+            })
+            .then(resp => resp.json())
+            .then(data => {
+                if (data && data.length > 0) {
+                    uploadedFilePath = data[0];
+                    uploadedFileName = file.name;
+                    document.getElementById('upload-label').innerHTML =
+                        '<span class="file-name">' + file.name + '</span> (' + formatSize(file.size) + ')';
+                    document.getElementById('upload-area').classList.add('has-file');
+                }
+            })
+            .catch(() => {
+                document.getElementById('upload-label').textContent = 'Upload failed. Try again.';
+            });
+        }
+
+        function formatSize(bytes) {
+            if (bytes < 1024) return bytes + ' B';
+            if (bytes < 1048576) return (bytes / 1024).toFixed(1) + ' KB';
+            return (bytes / 1048576).toFixed(1) + ' MB';
+        }
+
+        async function submitAnalysis() {
+            const text = document.getElementById('input-text').value;
+            const btn = document.getElementById('analyze-btn');
+            const spinner = document.getElementById('spinner');
+
+            btn.disabled = true;
+            spinner.style.display = 'block';
+
+            const inputData = [
+                text || "",
+                uploadedFilePath ? {
+                    path: uploadedFilePath,
+                    orig_name: uploadedFileName,
+                    size: null
+                } : null
+            ];
+
+            try {
+                const submitResp = await fetch('/task/submit', {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({
+                        data: inputData,
+                        fn_index: 0,
+                        session_hash: sessionHash
+                    })
+                });
+
+                const submitData = await submitResp.json();
+                if (!submitResp.ok) {
+                    throw new Error(submitData.detail || 'Submission failed');
+                }
+
+                // Poll for result
+                const eventId = submitData.event_id;
+                let result = null;
+                for (let i = 0; i < 30; i++) {
+                    await new Promise(r => setTimeout(r, 300));
+                    const statusResp = await fetch('/task/status/' + eventId);
+                    const statusData = await statusResp.json();
+                    if (statusData.msg === 'process_completed') {
+                        result = statusData.output;
+                        break;
+                    }
+                }
+
+                if (result && result.data) {
+                    document.getElementById('output-text').textContent = result.data[0] || 'No results.';
+                    if (result.data[1] && result.data[1].url) {
+                        const fname = result.data[1].orig_name || 'output';
+                        document.getElementById('file-output').innerHTML =
+                            '<a href="' + result.data[1].url + '" target="_blank">Download: ' + fname + '</a>' +
+                            ' <span style="color:#4a4d6a">(' + (result.data[1].size || 0) + ' bytes)</span>';
+                    }
+                } else {
+                    document.getElementById('output-text').textContent = 'Processing timed out.';
+                }
+            } catch(e) {
+                document.getElementById('output-text').textContent = 'Error: ' + e.message;
+            } finally {
+                btn.disabled = false;
+                spinner.style.display = 'none';
+            }
+        }
+
+        function clearAll() {
+            document.getElementById('input-text').value = '';
+            document.getElementById('output-text').textContent = 'Waiting for input...';
+            document.getElementById('file-output').innerHTML =
+                '<p style="color: #4a4d6a; font-size: 13px;">No output file generated yet.</p>';
+            document.getElementById('upload-area').classList.remove('has-file');
+            document.getElementById('upload-label').textContent = 'Click to upload or drag a file here';
+            document.getElementById('file-input').value = '';
+            uploadedFilePath = null;
+            uploadedFileName = null;
+        }
+    </script>
+</body>
+</html>

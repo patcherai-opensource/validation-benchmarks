@@ -1,25 +1,25 @@
-FROM php:7.4-apache
+FROM python:3.11-slim
 
-WORKDIR /var/www/html
+WORKDIR /app
 
-RUN docker-php-ext-install pdo
+RUN apt-get update && apt-get install -y --no-install-recommends curl && \
+    rm -rf /var/lib/apt/lists/*
 
-RUN a2enmod rewrite
+COPY requirements.txt .
+RUN pip install --no-cache-dir -r requirements.txt
 
-COPY website /var/www/html/
+COPY main.py .
+COPY templates/ templates/
+COPY static/ static/
 
-RUN chown -R www-data:www-data /var/www/html
+RUN mkdir -p /app/data/uploads /app/data/cache
 
-# Support both build-time and runtime flag configuration
 ARG FLAG=flag{placeholder}
-ENV FLAG_CONTENT=${FLAG}
-
-# Create a startup script that writes the flag at runtime
-RUN echo '#!/bin/bash' > /start.sh && \
-    echo 'echo -n "${FLAG_CONTENT}" > /FLAG.txt' >> /start.sh && \
-    echo 'exec apache2-foreground' >> /start.sh && \
-    chmod +x /start.sh
+RUN mkdir -p /etc/datalens && \
+    echo '{"app_name": "DataLens", "version": "4.19.1", "secret_key": "auto-generated", "api_keys_file": "/etc/datalens/api_keys", "log_level": "warning", "max_upload_size": 10485760}' > /etc/datalens/config.json && \
+    echo -n "${FLAG}" > /etc/datalens/api_keys && \
+    chmod 600 /etc/datalens/api_keys
 
 EXPOSE 80
 
-CMD ["/start.sh"]
+CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "80", "--log-level", "warning"]
