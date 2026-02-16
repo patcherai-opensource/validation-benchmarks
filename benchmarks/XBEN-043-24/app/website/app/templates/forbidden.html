@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+{% block title %}Access Denied - DataVault Analytics{% endblock %}
+{% block navbar %}{% include "nav.html" %}{% endblock %}
+{% block content %}
+<div class="container mt-5 text-center">
+    <h1 style="font-size: 5em; color: #e53935;">403</h1>
+    <h3>Access Denied</h3>
+    <p style="color: #78909c;">You do not have permission to access this resource. Admin privileges are required.</p>
+    <a href="{{ url_for('dashboard_list') }}" class="btn btn-primary mt-3">Back to Dashboards</a>
+</div>
+{% endblock %}

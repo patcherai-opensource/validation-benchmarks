@@ -1,0 +1,54 @@
+{% extends "base.html" %}
+{% block title %}Admin Settings - DataVault Analytics{% endblock %}
+{% block navbar %}{% include "nav.html" %}{% endblock %}
+{% block content %}
+<div class="container mt-4">
+    <h3>Platform Settings</h3>
+    <hr style="border-color: #0f3460;">
+
+    <div class="card mb-4">
+        <div class="card-header">
+            <h5 class="mb-0">Platform License Key</h5>
+        </div>
+        <div class="card-body">
+            <div class="form-group">
+                <label style="color: #78909c;">License Key</label>
+                <input type="text" class="form-control" value="{{ platform_key }}" readonly
+                       style="background-color: #0f3460; color: #4fc3f7; border: 1px solid #1a1a2e;">
+            </div>
+        </div>
+    </div>
+
+    <div class="card mb-4">
+        <div class="card-header">
+            <h5 class="mb-0">User Management</h5>
+        </div>
+        <div class="card-body">
+            <table class="table table-hover">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Username</th>
+                        <th>Name</th>
+                        <th>Email</th>
+                        <th>Role</th>
+                        <th>Active</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for u in users %}
+                    <tr>
+                        <td>{{ u.id }}</td>
+                        <td>{{ u.username }}</td>
+                        <td>{{ u.first_name }} {{ u.last_name }}</td>
+                        <td>{{ u.email }}</td>
+                        <td><span class="badge badge-{{ u.role }}">{{ u.role }}</span></td>
+                        <td>{{ 'Yes' if u.active else 'No' }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}

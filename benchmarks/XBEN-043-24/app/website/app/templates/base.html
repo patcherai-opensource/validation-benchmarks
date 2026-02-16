@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}DataVault Analytics{% endblock %}</title>
+    <link href="{{ url_for('static', filename='css/bootstrap.min.css') }}" rel="stylesheet">
+    <style>
+        body {
+            background-color: #1a1a2e;
+            color: #e0e0e0;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+        }
+        .navbar {
+            background-color: #16213e !important;
+            border-bottom: 1px solid #0f3460;
+        }
+        .navbar-brand {
+            color: #4fc3f7 !important;
+            font-weight: 600;
+        }
+        .nav-link {
+            color: #b0bec5 !important;
+        }
+        .nav-link:hover {
+            color: #4fc3f7 !important;
+        }
+        .nav-link.active {
+            color: #4fc3f7 !important;
+        }
+        .card {
+            background-color: #16213e;
+            border: 1px solid #0f3460;
+            color: #e0e0e0;
+        }
+        .card-header {
+            background-color: #0f3460;
+            border-bottom: 1px solid #1a1a2e;
+        }
+        .btn-primary {
+            background-color: #0f3460;
+            border-color: #4fc3f7;
+        }
+        .btn-primary:hover {
+            background-color: #4fc3f7;
+            border-color: #4fc3f7;
+            color: #1a1a2e;
+        }
+        .table {
+            color: #e0e0e0;
+        }
+        .table-hover tbody tr:hover {
+            color: #4fc3f7;
+            background-color: rgba(79, 195, 247, 0.05);
+        }
+        .badge-admin { background-color: #e53935; }
+        .badge-viewer { background-color: #43a047; }
+        a { color: #4fc3f7; }
+        a:hover { color: #81d4fa; }
+        .user-menu { color: #b0bec5; font-size: 0.9em; }
+    </style>
+    {% block extra_css %}{% endblock %}
+</head>
+<body>
+    {% block navbar %}{% endblock %}
+    <div class="container-fluid mt-3">
+        {% block content %}{% endblock %}
+    </div>
+</body>
+</html>

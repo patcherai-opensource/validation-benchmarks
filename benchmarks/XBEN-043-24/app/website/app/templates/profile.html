@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+{% block title %}Profile - DataVault Analytics{% endblock %}
+{% block navbar %}{% include "nav.html" %}{% endblock %}
+{% block content %}
+<div class="container mt-4">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="mb-0">User Profile</h5>
+                </div>
+                <div class="card-body">
+                    <table class="table table-borderless">
+                        <tr><td style="color: #78909c;">Name</td><td>{{ user.first_name }} {{ user.last_name }}</td></tr>
+                        <tr><td style="color: #78909c;">Username</td><td>{{ user.username }}</td></tr>
+                        <tr><td style="color: #78909c;">Email</td><td>{{ user.email }}</td></tr>
+                        <tr><td style="color: #78909c;">Role</td><td><span class="badge badge-{{ user.role }}">{{ user.role }}</span></td></tr>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

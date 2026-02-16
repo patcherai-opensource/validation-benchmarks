@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+{% block title %}About - DataVault Analytics{% endblock %}
+{% block content %}
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="mb-0">About DataVault Analytics</h5>
+                </div>
+                <div class="card-body">
+                    <p>DataVault Analytics is a modern business intelligence and data exploration platform.</p>
+                    <table class="table table-borderless">
+                        <tr><td style="color: #78909c;">Version</td><td>{{ version }}</td></tr>
+                        <tr><td style="color: #78909c;">Build</td><td>{{ build }}</td></tr>
+                    </table>
+                    <hr style="border-color: #0f3460;">
+                    <h6>Getting Started</h6>
+                    <p style="color: #78909c;">
+                        Please refer to the
+                        <a href="/static/docs/setup.md">installation guide</a>
+                        for configuration instructions. Make sure to review all default settings
+                        before deploying to production.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

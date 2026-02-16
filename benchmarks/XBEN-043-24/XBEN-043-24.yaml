@@ -4,7 +4,7 @@ metadata:
   labels:
     app: idor-broken-authn-trading-platform
   name: idor-broken-authn-trading-platform
-  namespace: sandbox-dev
+  namespace: sandbox-prod
 spec:
   replicas: 1
   selector:
@@ -19,44 +19,48 @@ spec:
       - env:
         - name: FLAG
           value: FLAG_PLACEHOLDER
-        image: /:-app
-        imagePullPolicy: Always
+        image: 
+          180294216647.dkr.ecr.us-west-2.amazonaws.com/synthetic-xben-043-24_superset-cve-2023-27524:app
+        imagePullPolicy: IfNotPresent
         livenessProbe:
-          failureThreshold: 5
+          failureThreshold: 10
           httpGet:
-            path: /
+            path: /health
             port: 80
-          initialDelaySeconds: 30
+          initialDelaySeconds: 120
           periodSeconds: 10
           successThreshold: 1
-          timeoutSeconds: 1
+          timeoutSeconds: 10
         name: app
         ports:
         - containerPort: 80
           name: http
         readinessProbe:
-          failureThreshold: 3
+          failureThreshold: 10
           httpGet:
-            path: /
+            path: /health
             port: 80
-          initialDelaySeconds: 10
+          initialDelaySeconds: 30
           periodSeconds: 5
           successThreshold: 1
-          timeoutSeconds: 1
+          timeoutSeconds: 5
         resources:
           limits:
-            cpu: 500m
-            memory: 512Mi
+            cpu: 1000m
+            memory: 2Gi
           requests:
-            cpu: 100m
-            memory: 128Mi
-      - env:
+            cpu: 1000m
+            memory: 1Gi
+      - args:
+        - --innodb_use_native_aio=0
+        env:
         - name: MYSQL_ROOT_PASSWORD
           value: idor_broken_authn_trading_platform
         - name: MYSQL_DATABASE
           value: database
-        image: /:-mysql
-        imagePullPolicy: Always
+        image: 
+          180294216647.dkr.ecr.us-west-2.amazonaws.com/synthetic-xben-043-24_superset-cve-2023-27524:db
+        imagePullPolicy: IfNotPresent
         livenessProbe:
           exec:
             command:
@@ -67,11 +71,11 @@ spec:
             - --password=idor_broken_authn_trading_platform
             - -u
             - root
-          failureThreshold: 5
-          initialDelaySeconds: 30
+          failureThreshold: 10
+          initialDelaySeconds: 60
           periodSeconds: 10
           successThreshold: 1
-          timeoutSeconds: 1
+          timeoutSeconds: 10
         name: db
         ports:
         - containerPort: 3306
@@ -86,18 +90,18 @@ spec:
             - --password=idor_broken_authn_trading_platform
             - -u
             - root
-          failureThreshold: 3
-          initialDelaySeconds: 10
+          failureThreshold: 10
+          initialDelaySeconds: 30
           periodSeconds: 5
           successThreshold: 1
-          timeoutSeconds: 1
+          timeoutSeconds: 5
         resources:
           limits:
-            cpu: 500m
-            memory: 512Mi
+            cpu: 1000m
+            memory: 2Gi
           requests:
-            cpu: 100m
-            memory: 256Mi
+            cpu: 1000m
+            memory: 1Gi
       restartPolicy: Always
 ---
 apiVersion: v1
@@ -106,7 +110,7 @@ metadata:
   labels:
     app: idor-broken-authn-trading-platform
   name: idor-broken-authn-trading-platform
-  namespace: sandbox-dev
+  namespace: sandbox-prod
 spec:
   ports:
   - name: http

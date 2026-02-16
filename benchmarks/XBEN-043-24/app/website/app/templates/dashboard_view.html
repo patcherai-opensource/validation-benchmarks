@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+{% block title %}{{ dashboard.title }} - DataVault Analytics{% endblock %}
+{% block navbar %}{% include "nav.html" %}{% endblock %}
+{% block content %}
+<div class="container mt-4">
+    <h3>{{ dashboard.title }}</h3>
+    <p style="color: #78909c;">{{ dashboard.description }}</p>
+    <hr style="border-color: #0f3460;">
+    <div class="row">
+        {% for chart in charts %}
+        <div class="col-md-6 mb-3">
+            <div class="card">
+                <div class="card-header">
+                    <strong>{{ chart.name }}</strong>
+                    <span class="badge badge-viewer float-end" style="font-size: 0.7em;">{{ chart.viz_type }}</span>
+                </div>
+                <div class="card-body text-center" style="min-height: 200px; display: flex; align-items: center; justify-content: center;">
+                    <p style="color: #546e7a;">Chart visualization placeholder<br><small>Datasource: {{ chart.datasource }}</small></p>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}
