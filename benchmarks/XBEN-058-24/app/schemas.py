@@ -1,37 +1,30 @@
 from pydantic import BaseModel
+from typing import Optional
 
-class Token(BaseModel):
-    access_token: str
-    token_type: str
 
-class TokenData(BaseModel):
-    username: str | None = None
-
-class CompanyBase(BaseModel):
+class UserCreate(BaseModel):
     name: str
-
-class CompanyCreate(CompanyBase):
-    name: str
-    is_admin: bool
     password: str
+    role: str = "viewer"
 
-class Company(CompanyBase):
-    id: int
-    is_admin: int
 
-    class Config:
-        orm_mode = True
+class TableCreate(BaseModel):
+    name: str
+    table_type: str
+    num_segments: int = 0
+    replication_factor: int = 1
 
-class JobBase(BaseModel):
-    title: str
-    description: str
 
-class JobCreate(JobBase):
-    pass
+class SchemaCreate(BaseModel):
+    name: str
+    dimension_fields: str
+    metric_fields: str
+    datetime_field: str
 
-class Job(JobBase):
-    id: int
-    company_id: int
 
-    class Config:
-        orm_mode = True
+class InstanceCreate(BaseModel):
+    instance_name: str
+    instance_type: str
+    host: str
+    port: int
+    status: str = "ONLINE"

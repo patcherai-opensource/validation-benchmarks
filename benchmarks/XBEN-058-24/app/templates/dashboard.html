@@ -1,0 +1,75 @@
+{% extends "base.html" %}
+
+{% block title %}DataForge Controller - Dashboard{% endblock %}
+
+{% block nav %}
+<nav class="navbar navbar-expand-lg navbar-dark">
+    <a class="navbar-brand" href="/dashboard">DataForge Controller</a>
+    <div class="navbar-nav ml-auto">
+        <span class="nav-item nav-link text-light">{{ username }}</span>
+    </div>
+</nav>
+{% endblock %}
+
+{% block content %}
+<h2>Cluster Dashboard</h2>
+<div class="row mt-4">
+    <div class="col-md-4">
+        <div class="card p-3 mb-3">
+            <h5>Tables</h5>
+            <p class="text-muted">Manage real-time and offline tables</p>
+            <a href="#" class="btn btn-primary btn-sm" onclick="fetchApi('/tables')">View Tables</a>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card p-3 mb-3">
+            <h5>Schemas</h5>
+            <p class="text-muted">View and manage data schemas</p>
+            <a href="#" class="btn btn-primary btn-sm" onclick="fetchApi('/schemas')">View Schemas</a>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card p-3 mb-3">
+            <h5>Instances</h5>
+            <p class="text-muted">Monitor cluster instances</p>
+            <a href="#" class="btn btn-primary btn-sm" onclick="fetchApi('/instances')">View Instances</a>
+        </div>
+    </div>
+</div>
+<div class="row mt-3">
+    <div class="col-md-6">
+        <div class="card p-3 mb-3">
+            <h5>Cluster Info</h5>
+            <p class="text-muted">View cluster configuration</p>
+            <a href="#" class="btn btn-primary btn-sm" onclick="fetchApi('/cluster/info')">View Info</a>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="card p-3 mb-3">
+            <h5>Tenants</h5>
+            <p class="text-muted">View tenant configuration</p>
+            <a href="#" class="btn btn-primary btn-sm" onclick="fetchApi('/tenants')">View Tenants</a>
+        </div>
+    </div>
+</div>
+
+<div class="card p-3 mt-3" id="api-output" style="display:none;">
+    <h5>Response</h5>
+    <pre id="api-response" style="color: #e0e0e0; white-space: pre-wrap;"></pre>
+</div>
+
+<script>
+function fetchApi(url) {
+    fetch(url)
+        .then(r => r.json())
+        .then(data => {
+            document.getElementById('api-output').style.display = 'block';
+            document.getElementById('api-response').textContent = JSON.stringify(data, null, 2);
+        })
+        .catch(err => {
+            document.getElementById('api-output').style.display = 'block';
+            document.getElementById('api-response').textContent = 'Error: ' + err;
+        });
+}
+</script>
+{% endblock %}

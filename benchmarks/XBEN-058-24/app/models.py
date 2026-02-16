@@ -1,20 +1,38 @@
-from sqlalchemy import Column, Integer, String, ForeignKey
-from sqlalchemy.orm import relationship
+from sqlalchemy import Column, Integer, String
 from database import Base
 
-class Company(Base):
-    __tablename__ = "companies"
+
+class User(Base):
+    __tablename__ = "users"
     id = Column(Integer, primary_key=True, index=True)
     name = Column(String, unique=True, index=True)
     hashed_password = Column(String)
-    is_admin = Column(Integer, default=0)
-    jobs = relationship("Job", back_populates="company")
+    role = Column(String, default="viewer")
 
-class Job(Base):
-    __tablename__ = "jobs"
+
+class DataTable(Base):
+    __tablename__ = "data_tables"
     id = Column(Integer, primary_key=True, index=True)
-    title = Column(String, index=True)
-    description = Column(String)
-    company_id = Column(Integer, ForeignKey("companies.id"))
+    name = Column(String, unique=True, index=True)
+    table_type = Column(String)
+    num_segments = Column(Integer, default=0)
+    replication_factor = Column(Integer, default=1)
 
-    company = relationship("Company", back_populates="jobs")
+
+class DataSchema(Base):
+    __tablename__ = "data_schemas"
+    id = Column(Integer, primary_key=True, index=True)
+    name = Column(String, unique=True, index=True)
+    dimension_fields = Column(String)
+    metric_fields = Column(String)
+    datetime_field = Column(String)
+
+
+class Instance(Base):
+    __tablename__ = "instances"
+    id = Column(Integer, primary_key=True, index=True)
+    instance_name = Column(String, unique=True, index=True)
+    instance_type = Column(String)
+    host = Column(String)
+    port = Column(Integer)
+    status = Column(String, default="ONLINE")

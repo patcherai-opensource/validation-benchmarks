@@ -1,26 +1,33 @@
 {% extends "base.html" %}
 
-{% block title %}Login{% endblock %}
+{% block title %}DataForge Controller - Login{% endblock %}
 
 {% block content %}
-<h2>Login</h2>
-{% if error %}
-<div class="alert alert-danger" role="alert">
-    {{ error }}
+<div class="row justify-content-center mt-5">
+    <div class="col-md-5">
+        <div class="card p-4">
+            <h3 class="text-center mb-4">DataForge Controller</h3>
+            <p class="text-center text-muted">Real-time Analytics Platform</p>
+            {% if error %}
+            <div class="alert alert-danger" role="alert">
+                {{ error }}
+            </div>
+            {% endif %}
+
+            <form method="post" action="/auth/login">
+                <div class="form-group">
+                    <label for="username">Username</label>
+                    <input type="text" class="form-control" id="username" name="username" required>
+                </div>
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <input type="password" class="form-control" id="password" name="password" required>
+                </div>
+                <button type="submit" class="btn btn-primary btn-block">Sign In</button>
+            </form>
+            <hr>
+            <p class="text-muted small text-center mb-0">Demo access: <strong>analyst</strong> / <strong>analyst</strong></p>
+        </div>
+    </div>
 </div>
-{% endif %}
-
-<p>To try the app you can use the demo account: <strong>Username:</strong> demo, <strong>Password:</strong> demo</p>
-
-<form method="post" action="/token">
-    <div class="form-group">
-        <label for="username">Company Name</label>
-        <input type="text" class="form-control" id="username" name="username" required>
-    </div>
-    <div class="form-group">
-        <label for="password">Password</label>
-        <input type="password" class="form-control" id="password" name="password" required>
-    </div>
-    <button type="submit" class="btn btn-primary">Login</button>
-</form>
 {% endblock %}

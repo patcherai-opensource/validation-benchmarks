@@ -4,10 +4,20 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-    <title>{% block title %}FastAPI App{% endblock %}</title>
+    <title>{% block title %}DataForge Controller{% endblock %}</title>
+    <style>
+        body { background-color: #1a1a2e; color: #e0e0e0; }
+        .navbar { background-color: #16213e; }
+        .card { background-color: #0f3460; border: none; }
+        .btn-primary { background-color: #533483; border-color: #533483; }
+        .btn-primary:hover { background-color: #6a42a0; border-color: #6a42a0; }
+        a { color: #e94560; }
+        a:hover { color: #ff6b81; }
+    </style>
 </head>
 <body>
-    <div class="container">
+    {% block nav %}{% endblock %}
+    <div class="container mt-4">
         {% block content %}{% endblock %}
     </div>
 </body>
