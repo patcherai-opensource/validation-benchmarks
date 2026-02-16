@@ -1,73 +1,57 @@
 <?php
-    $conn = new mysqli(getenv('MYSQL_HOST') ?: 'localhost', getenv('MYSQL_USER') ?: 'user', getenv('MYSQL_PASSWORD') ?: 'password', getenv('MYSQL_DATABASE') ?: 'blogDB');
+    $conn = new mysqli(getenv('MYSQL_HOST') ?: '127.0.0.1', getenv('MYSQL_USER') ?: 'user', getenv('MYSQL_PASSWORD') ?: 'password', getenv('MYSQL_DATABASE') ?: 'cmsDB');
     if ($conn->connect_error) {
-        die("Connection failed: " . $conn->connect_error);
+        die("Service Unavailable");
     }
-?>
 
+    $result = $conn->query("SELECT id, `key`, title FROM documents WHERE `type` = 'page' AND published = 1 ORDER BY id ASC");
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Blog Home</title>
-    <link rel="stylesheet" href="styles.css">
+    <title>Corporate Portal</title>
+    <link rel="stylesheet" href="/assets/css/styles.css">
 </head>
 <body>
-<div class="container">
-    <h1>Welcome to Our Blog</h1>
-
-
-    <form action="" method="GET">
-        <label for="category">Choose a category:</label>
-        <select name="category" id="category" onchange="this.form.submit()">
-            <option value="">All Categories</option>        
+<div class="site-header">
+    <div class="container">
+        <h1>Corporate Portal</h1>
+        <nav>
             <?php
-            $cat_result = $conn->query("SELECT DISTINCT category FROM posts");
-            while ($row = $cat_result->fetch_assoc()) {
-                $selected = ($row['category'] == $category) ? 'selected' : '';
-                echo "<option value='{$row['category']}' {$selected}>{$row['category']}</option>";
+            if ($result && $result->num_rows > 0) {
+                while ($row = $result->fetch_assoc()) {
+                    echo "<a href='/{$row['key']}'>" . htmlspecialchars($row['title']) . "</a> ";
+                }
             }
             ?>
-        </select>
-    </form>
-
-    <?php
-
-    #$category = isset($_GET['category']) ? $_GET['category'] : '';
-    $category = ""; #disable feature for this challenge
-
-    $sql = "SELECT * FROM posts WHERE published = 1 ";
-
-    if ($category == "Secret")
-        $category = "";
-
-    if (!empty($category)) {
-        $sql .= "and category = '" . $category . "' ";
-    }
-    $sql .= "ORDER BY created_at DESC";
-
-    $result = $conn->query($sql);
-
-    if ($result === false) {
-        die("Error in query: " . $conn->error);
-    }
-
-    if ($result->num_rows > 0) {
-        while($row = $result->fetch_assoc()) {
-            echo "<div class='post'>
-                    <h2>{$row['title']}</h2>
-                    <p>Category: {$row['category']}</p>
-                    <img src='images/{$row['image']}' alt='{$row['title']}' style='width:200px;height:200px;'/>
-                    <p>" . substr($row['content'], 0, 200) . "...</p>
-                </div>";
-        }
-    } else {
-        echo "<p>No posts found.</p>";
-    }
-    $conn->close();
-    ?>
+        </nav>
+    </div>
 </div>
-<a href="admin.php">Admin Login</a>
+<div class="container main-content">
+    <h2>Welcome to Our Corporate Portal</h2>
+    <p>This is the main landing page of our content management platform.</p>
+    <div class="content-grid">
+        <div class="card">
+            <h3>About Us</h3>
+            <p>Learn more about our company and mission.</p>
+        </div>
+        <div class="card">
+            <h3>Services</h3>
+            <p>Explore our range of consulting and development services.</p>
+        </div>
+        <div class="card">
+            <h3>Contact</h3>
+            <p>Get in touch with our team.</p>
+        </div>
+    </div>
+</div>
+<div class="site-footer">
+    <div class="container">
+        <p>&copy; 2024 Corporate Portal. All rights reserved.</p>
+    </div>
+</div>
+<?php $conn->close(); ?>
 </body>
 </html>

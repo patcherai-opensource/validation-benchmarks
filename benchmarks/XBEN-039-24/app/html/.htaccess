@@ -1,0 +1,15 @@
+RewriteEngine On
+
+# Admin login
+RewriteRule ^admin/?$ /admin.php [L]
+
+# Healthcheck
+RewriteRule ^ping$ /ping.php [L]
+
+# Don't rewrite existing files/directories
+RewriteCond %{REQUEST_FILENAME} -f [OR]
+RewriteCond %{REQUEST_FILENAME} -d
+RewriteRule ^ - [L]
+
+# Route non-existent paths to index
+RewriteRule ^(.+)$ /index.php [L]
