@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+{% block title %}{{ collection.title }} — Contributor Portal{% endblock %}
+{% block content %}
+<div class="breadcrumb">
+    <a href="/">Home</a> / {{ collection.title }}
+</div>
+
+<div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+    <h1>{{ collection.title }}</h1>
+    <a href="/collection/{{ collection_handle }}/submit" class="btn btn-primary">New Entry</a>
+</div>
+
+{% if request.query_params.get('success') %}
+<div class="alert alert-success">Your entry has been submitted successfully.</div>
+{% endif %}
+
+{% if entries %}
+    {% for entry in entries %}
+    <div class="card">
+        <h3><a href="/collection/{{ collection_handle }}/entry/{{ entry._id }}">{{ entry.title or "Untitled" }}</a></h3>
+        <p class="meta">By {{ entry.author or "Anonymous" }} &middot; {% if entry.attachment %}<span class="badge">Has attachment</span>{% endif %}</p>
+        <p>{{ entry.content[:200] if entry.content else "" }}{% if entry.content and entry.content|length > 200 %}...{% endif %}</p>
+    </div>
+    {% endfor %}
+{% else %}
+    <div class="card">
+        <p style="color: #888;">No entries yet. Be the first to contribute!</p>
+    </div>
+{% endif %}
+{% endblock %}

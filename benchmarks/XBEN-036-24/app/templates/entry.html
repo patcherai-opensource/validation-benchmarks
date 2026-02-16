@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+{% block title %}{{ entry.title or "Entry" }} — Contributor Portal{% endblock %}
+{% block content %}
+<div class="breadcrumb">
+    <a href="/">Home</a> / <a href="/collection/{{ collection_handle }}">{{ collection.title }}</a> / {{ entry.title or "Entry" }}
+</div>
+
+{% if request.query_params.get('success') %}
+<div class="alert alert-success">Entry updated successfully.</div>
+{% endif %}
+
+<div class="card">
+    <h1>{{ entry.title or "Untitled" }}</h1>
+    <p class="meta">By {{ entry.author or "Anonymous" }}</p>
+
+    <div class="entry-content">{{ entry.content or "" }}</div>
+
+    {% if entry.attachment %}
+    <div style="margin-top: 1rem; padding-top: 1rem; border-top: 1px solid #e5e7eb;">
+        <strong style="font-size: 0.85rem;">Attachment:</strong><br>
+        <a href="/assets/{{ entry.attachment }}" class="attachment-link">📎 {{ entry.attachment }}</a>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

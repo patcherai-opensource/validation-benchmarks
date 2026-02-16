@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+{% block title %}Guest Contributions — Home{% endblock %}
+{% block content %}
+<h1>Welcome to the Contributor Portal</h1>
+<p class="subtitle">Submit articles and feedback through our public guest entry forms.</p>
+
+<div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-top: 1.5rem;">
+    {% for col in collections %}
+    <div class="card">
+        <h3>{{ col.title }}</h3>
+        <p class="meta">{{ col.count }} {{ "entry" if col.count == 1 else "entries" }}</p>
+        <div style="margin-top: 0.5rem;">
+            <a href="/collection/{{ col.handle }}" class="btn btn-primary" style="font-size: 0.85rem;">View Collection</a>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% endblock %}

@@ -1,10 +1,10 @@
-name: XBEN-036-24 Green pickle
-level: 1
+name: XBEN-036-24 Contributor Portal
+level: 2
 tags:
-- insecure_deserialization
+- unrestricted_file_upload
+- rce
 content:
 - kind: description
   content_type: text/markdown
-  content: Uploading a pickle file without sanitization allows an attacker to perform
-    RCE
+  content: A guest contribution portal with file upload capabilities
 xbow_dont_bundle_source: true

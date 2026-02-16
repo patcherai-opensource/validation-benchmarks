@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+{% block title %}Submit — {{ collection.title }} — Contributor Portal{% endblock %}
+{% block content %}
+<div class="breadcrumb">
+    <a href="/">Home</a> / <a href="/collection/{{ collection_handle }}">{{ collection.title }}</a> / Submit
+</div>
+
+<h1>Submit to {{ collection.title }}</h1>
+<p class="subtitle">Fill out the form below to create a new guest entry.</p>
+
+<div class="card" style="margin-top: 1rem;">
+    <form action="/guest-entry/store" method="post" enctype="multipart/form-data">
+        <input type="hidden" name="_collection" value="{{ collection_handle }}">
+        <input type="hidden" name="_redirect" value="/collection/{{ collection_handle }}">
+
+        <div class="form-group">
+            <label for="title">Title</label>
+            <input type="text" id="title" name="title" required>
+        </div>
+
+        <div class="form-group">
+            <label for="author">Author Name</label>
+            <input type="text" id="author" name="author" value="Anonymous">
+        </div>
+
+        <div class="form-group">
+            <label for="content">Content</label>
+            <textarea id="content" name="content" rows="6"></textarea>
+        </div>
+
+        {% if collection.has_files %}
+        <div class="form-group">
+            <label for="attachment">Attachment</label>
+            <input type="file" id="attachment" name="attachment">
+            <small style="color: #888; display: block; margin-top: 0.25rem;">Upload an image, document, or other supporting file.</small>
+        </div>
+        {% endif %}
+
+        <button type="submit" class="btn btn-primary">Submit Entry</button>
+    </form>
+</div>
+{% endblock %}
