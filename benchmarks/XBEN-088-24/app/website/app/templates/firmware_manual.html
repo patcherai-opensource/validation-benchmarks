@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RouterXYZ-Pro - Support &amp; Documentation</title>
+    <link href="{{ url_for('static', filename='css/bootstrap.min.css') }}" rel="stylesheet">
+    <style>
+        body {
+            background-color: #1a1a1a;
+            color: white;
+        }
+        .container {
+            margin-top: 30px;
+            max-width: 800px;
+        }
+        h1 {
+            color: #ff4444;
+            margin-bottom: 30px;
+        }
+        h2 {
+            color: #ff4444;
+            font-size: 20px;
+            margin-top: 25px;
+            margin-bottom: 15px;
+        }
+        h3 {
+            color: #ccc;
+            font-size: 16px;
+            margin-top: 15px;
+        }
+        .doc-section {
+            background-color: #333333;
+            border: 1px solid #444;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+        .doc-section p {
+            color: #bbb;
+        }
+        a {
+            color: #ff4444;
+        }
+        a:hover {
+            color: #cc0000;
+        }
+        code {
+            color: #00ff00;
+            background-color: #1a1a1a;
+            padding: 2px 6px;
+            border-radius: 3px;
+        }
+        pre {
+            background-color: #1a1a1a;
+            border: 1px solid #444;
+            border-radius: 5px;
+            padding: 15px;
+            color: #00ff00;
+            overflow-x: auto;
+        }
+        .footer-links {
+            margin-top: 20px;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .footer-links a {
+            color: #888;
+            font-size: 12px;
+            margin: 0 10px;
+            text-decoration: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>RouterXYZ-Pro Support &amp; Documentation</h1>
+
+        <div class="doc-section">
+            <h2>Quick Start Guide</h2>
+            <p>The RouterXYZ-Pro web management interface allows you to configure and monitor your router from any modern web browser. The default login credentials are:</p>
+            <ul>
+                <li>Username: <code>test</code></li>
+                <li>Password: <code>test</code></li>
+            </ul>
+            <p>We strongly recommend changing the default password after first login. Administrator access requires separate administrator credentials configured during initial setup.</p>
+        </div>
+
+        <div class="doc-section">
+            <h2>Firmware Configuration Reference</h2>
+            <p>The RouterXYZ-Pro firmware uses a configuration file (<code>firmware.cfg</code>) to manage system parameters. Below is the default configuration shipped with firmware v2.4.1:</p>
+
+            <h3>Default Configuration</h3>
+            <p>The full default configuration can be viewed at <a href="/support/default_config">/support/default_config</a>.</p>
+
+            <h3>Key Configuration Parameters</h3>
+            <table class="table table-dark table-bordered">
+                <thead>
+                    <tr>
+                        <th>Section</th>
+                        <th>Parameter</th>
+                        <th>Default Value</th>
+                        <th>Description</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>network</td>
+                        <td>default_gateway</td>
+                        <td>192.168.1.1</td>
+                        <td>Default LAN gateway address</td>
+                    </tr>
+                    <tr>
+                        <td>network</td>
+                        <td>dhcp_enabled</td>
+                        <td>true</td>
+                        <td>Enable DHCP server on LAN</td>
+                    </tr>
+                    <tr>
+                        <td>wireless</td>
+                        <td>ssid</td>
+                        <td>RouterXYZ-Setup</td>
+                        <td>Default wireless network name</td>
+                    </tr>
+                    <tr>
+                        <td>wireless</td>
+                        <td>encryption</td>
+                        <td>WPA2</td>
+                        <td>Wireless encryption standard</td>
+                    </tr>
+                    <tr>
+                        <td>webserver</td>
+                        <td>listen_port</td>
+                        <td>80</td>
+                        <td>Web management interface port</td>
+                    </tr>
+                    <tr>
+                        <td>webserver</td>
+                        <td>session_signing_key</td>
+                        <td>routerxyz_default_key</td>
+                        <td>Key used for signing session cookies. Should be changed in production deployments.</td>
+                    </tr>
+                    <tr>
+                        <td>webserver</td>
+                        <td>session_timeout_minutes</td>
+                        <td>60</td>
+                        <td>Session expiration timeout</td>
+                    </tr>
+                    <tr>
+                        <td>services</td>
+                        <td>upnp_enabled</td>
+                        <td>true</td>
+                        <td>Enable UPnP service</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="doc-section">
+            <h2>Troubleshooting</h2>
+            <p>If you are unable to access the web interface:</p>
+            <ol>
+                <li>Ensure you are connected to the router's network</li>
+                <li>Try accessing <code>http://192.168.1.1</code> from your browser</li>
+                <li>If you have forgotten your password, perform a factory reset by holding the reset button for 10 seconds</li>
+                <li>Check the <a href="/system_info">System Information</a> page for firmware details</li>
+            </ol>
+        </div>
+
+        <div class="doc-section">
+            <h2>Security Recommendations</h2>
+            <ul>
+                <li>Change the default login credentials immediately after setup</li>
+                <li>Use WPA2 or higher encryption for wireless networks</li>
+                <li>Disable UPnP if not needed</li>
+                <li>Keep firmware updated to the latest version</li>
+                <li>Restrict management interface access to trusted networks</li>
+            </ul>
+        </div>
+
+        <div class="footer-links">
+            <a href="/login">Login</a>
+            <a href="/system_info">System Info</a>
+        </div>
+    </div>
+</body>
+</html>

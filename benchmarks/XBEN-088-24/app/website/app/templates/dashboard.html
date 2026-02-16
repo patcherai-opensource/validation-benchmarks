@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard</title>
+    <title>RouterXYZ-Pro - Dashboard</title>
     <link href="{{ url_for('static', filename='css/bootstrap.min.css') }}" rel="stylesheet">
     <style>
         body {
@@ -19,7 +19,7 @@
             padding-top: 20px;
             padding-bottom: 20px;
             min-height: 100vh;
-            padding-left: 25px; /* Added margin to the left side */
+            padding-left: 25px;
         }
         .nav-link {
             color: #ff4444;
@@ -36,10 +36,6 @@
         }
         .content {
             padding: 20px;
-        }
-        .sidebar-logo {
-            width: 70px;
-            margin-bottom: 20px;
         }
         .sidebar-title {
             font-size: 18px;
@@ -60,17 +56,20 @@
                     <path d="M6.94 4.44a1.5 1.5 0 0 1 2.12 0 .5.5 0 0 0 .708-.708 2.5 2.5 0 0 0-3.536 0 .5.5 0 0 0 .707.707ZM2.5 11a.5.5 0 1 1 0-1 .5.5 0 0 1 0 1m4.5-.5a.5.5 0 1 0 1 0 .5.5 0 0 0-1 0m2.5.5a.5.5 0 1 1 0-1 .5.5 0 0 1 0 1m1.5-.5a.5.5 0 1 0 1 0 .5.5 0 0 0-1 0m2 0a.5.5 0 1 0 1 0 .5.5 0 0 0-1 0"/>
                     <path d="M2.974 2.342a.5.5 0 1 0-.948.316L3.806 8H1.5A1.5 1.5 0 0 0 0 9.5v2A1.5 1.5 0 0 0 1.5 13H2a.5.5 0 0 0 .5.5h2A.5.5 0 0 0 5 13h6a.5.5 0 0 0 .5.5h2a.5.5 0 0 0 .5-.5h.5a1.5 1.5 0 0 0 1.5-1.5v-2A1.5 1.5 0 0 0 14.5 8h-2.306l1.78-5.342a.5.5 0 1 0-.948-.316L11.14 8H4.86zM14.5 9a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-.5.5h-13a.5.5 0 0 1-.5-.5v-2a.5.5 0 0 1 .5-.5z"/>
                     <path d="M8.5 5.5a.5.5 0 1 1-1 0 .5.5 0 0 1 1 0"/>
-                  </svg>
-                <h2 class="sidebar-title">Router XYZ</h2>
+                </svg>
+                <h2 class="sidebar-title">RouterXYZ-Pro</h2>
                 <ul class="nav flex-column">
                     <li class="nav-item">
-                        <a class="nav-link active" href="{{ url_for('dashboard') }}">Dashboard</a>
+                        <a class="nav-link active" href="{{ url_for('home') }}">Dashboard</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="{{ url_for('wifi_settings') }}">WiFi Configuration</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="{{ url_for('admin_panel') }}">Admin Panel</a>
+                        <a class="nav-link" href="{{ url_for('network_status') }}">Network Status</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('system_panel') }}">System Panel</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="{{ url_for('logout') }}">Logout</a>
@@ -80,16 +79,13 @@
             <div class="col-md-9">
                 <div class="content">
                     <h1>Welcome to the Dashboard</h1>
-                    <p class="welcome-message">Welcome to the Router XYZ Dashboard! This platform empowers you to manage and configure your WiFi network settings effortlessly. From here, you can customize your SSID, set up security protocols, and ensure seamless connectivity for all your devices. Feel free to explore the various options available to optimize your network performance and enhance your browsing experience. Additionally, certain advanced features are exclusively accessible to Administrator users, granting them additional control over network management.</p>
-                    <!-- Content here -->
+                    <p class="welcome-message">Welcome to the RouterXYZ-Pro Dashboard. From here you can manage and configure your WiFi network settings, view network status, and access system administration tools. Certain advanced features in the System Panel are restricted to administrator accounts.</p>
                 </div>
             </div>
         </div>
     </div>
 
-
     {% if error_message %}
-    <!-- Modal -->
     <div class="modal fade" id="errorModal" tabindex="-1" role="dialog" aria-labelledby="errorModalLabel" aria-hidden="true">
         <div class="modal-dialog" role="document">
             <div class="modal-content" style="background-color: #333333;">
@@ -105,25 +101,13 @@
             </div>
         </div>
     </div>
-
-    <!-- jQuery and Bootstrap JS -->
     <script src="{{ url_for('static', filename='js/jquery-3.5.1.min.js') }}"></script>
     <script src="{{ url_for('static', filename='js/bootstrap.min.js') }}"></script>
-
-    <!-- JavaScript to show the modal -->
     <script>
         $(document).ready(function(){
             $('#errorModal').modal('show');
         });
     </script>
     {% endif %}
-
 </body>
 </html>
-
-{% if debug_session %}
-<!--
-Server-Side Session Content:    
-{{ debug_session }}
--->
-{% endif %}

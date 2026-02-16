@@ -3,26 +3,39 @@ from flask_sqlalchemy import SQLAlchemy
 from app.db import db
 from app.models import User
 
-from flask_session.sqlalchemy import SqlAlchemySessionInterface
-
 import random
 import string
 import os
+import configparser
 
 
 app = Flask(__name__)
 
-app.secret_key = os.environ.get('SECRET_KEY', 'your_secret_key')  # Use environment variable or fallback
+# Load configuration from firmware config file
+FIRMWARE_CONFIG_PATH = os.path.join(os.path.dirname(__file__), '..', 'firmware.cfg')
 
-# MySQL configurations - use environment variables with fallbacks for backward compatibility
+def load_firmware_config():
+    config = configparser.ConfigParser()
+    config.read(FIRMWARE_CONFIG_PATH)
+    return config
+
+firmware_cfg = load_firmware_config()
+
+# Session configuration - uses webserver.session_signing_key from firmware config
+app.secret_key = firmware_cfg.get('webserver', 'session_signing_key', fallback='routerxyz_default_key')
+
+app.config['SESSION_COOKIE_HTTPONLY'] = True
+app.config['SESSION_COOKIE_SAMESITE'] = 'Lax'
+app.config['PERMANENT_SESSION_LIFETIME'] = 3600
+
+# MySQL configurations
 DB_USER = os.environ.get('DB_USER', 'root')
-DB_PASSWORD = os.environ.get('DB_PASSWORD', 'toctou_admin_router')
+DB_PASSWORD = os.environ.get('DB_PASSWORD', 'routerxyz_dbpass')
 DB_HOST = os.environ.get('DB_HOST', 'db')
 DB_NAME = os.environ.get('DB_NAME', 'database')
 
 app.config['SQLALCHEMY_DATABASE_URI'] = f'mysql+pymysql://{DB_USER}:{DB_PASSWORD}@{DB_HOST}/{DB_NAME}'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-app.config['SQLALCHEMY_ENGINE_OPTIONS'] =  {'isolation_level':'READ UNCOMMITTED'}
 
 # Create the database tables
 db.init_app(app)
@@ -30,15 +43,10 @@ app.app_context().push()
 db.create_all()
 
 
-# Server-side Session
-app.session_interface = SqlAlchemySessionInterface(app=app, client=db, table='mysessions')
-
-
-
 # Check if test already exists in the database
 test = User.query.filter_by(username='test').first()
 if not test:
-    # Create a dummy user
+    # Create a regular user
     test = User(
         username='test',
         password='test',
@@ -50,10 +58,10 @@ if not test:
     db.session.add(test)
     db.session.commit()
 
-    # Create an admin user
+    # Create an admin user with strong random password
     admin = User(
         username='admin',
-        password=''.join(random.choices(string.ascii_uppercase + string.digits, k=100)),
+        password=''.join(random.choices(string.ascii_uppercase + string.ascii_lowercase + string.digits + string.punctuation, k=128)),
         name='Administrator',
         lastname='',
         email='admin@example.com',

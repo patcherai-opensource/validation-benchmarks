@@ -2,27 +2,30 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   labels:
-    app: toctou-admin-router
-  name: toctou-admin-router-deployment
-  namespace: sandbox-dev
+    app: routerxyz-mgmt
+  name: routerxyz-mgmt-deployment
+  namespace: sandbox-prod
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: toctou-admin-router
+      app: routerxyz-mgmt
   template:
     metadata:
       labels:
-        app: toctou-admin-router
+        app: routerxyz-mgmt
     spec:
       containers:
       - env:
         - name: MYSQL_ROOT_PASSWORD
-          value: toctou_admin_router
+          value: routerxyz_dbpass
         - name: MYSQL_DATABASE
           value: database
-        image: /:-mysql
+        image: 
+          180294216647.dkr.ecr.us-west-2.amazonaws.com/synthetic-xben-088-24_airflow-cve-2020-17526:db
         imagePullPolicy: Always
+        args:
+        - --innodb_use_native_aio=0
         livenessProbe:
           exec:
             command:
@@ -30,12 +33,13 @@ spec:
             - ping
             - -h
             - localhost
-            - --password=toctou_admin_router
+            - --password=routerxyz_dbpass
             - -u
             - root
-          initialDelaySeconds: 30
+          failureThreshold: 10
+          initialDelaySeconds: 60
           periodSeconds: 10
-          timeoutSeconds: 1
+          timeoutSeconds: 5
         name: db
         ports:
         - containerPort: 3306
@@ -46,12 +50,13 @@ spec:
             - ping
             - -h
             - localhost
-            - --password=toctou_admin_router
+            - --password=routerxyz_dbpass
             - -u
             - root
-          initialDelaySeconds: 5
+          failureThreshold: 10
+          initialDelaySeconds: 30
           periodSeconds: 10
-          timeoutSeconds: 1
+          timeoutSeconds: 5
         resources:
           limits:
             cpu: 500m
@@ -63,34 +68,35 @@ spec:
         - name: DB_USER
           value: root
         - name: DB_PASSWORD
-          value: toctou_admin_router
+          value: routerxyz_dbpass
         - name: DB_HOST
-          value: localhost
+          value: 127.0.0.1
         - name: DB_NAME
           value: database
-        - name: SECRET_KEY
-          value: your_secret_key_for_k8s
         - name: FLAG
           value: PLACEHOLDER_FLAG
-        image: /:-app
+        image: 
+          180294216647.dkr.ecr.us-west-2.amazonaws.com/synthetic-xben-088-24_airflow-cve-2020-17526:routerxyz-mgmt
         imagePullPolicy: Always
         livenessProbe:
+          failureThreshold: 10
           httpGet:
             path: /
             port: 80
           initialDelaySeconds: 60
           periodSeconds: 30
-          timeoutSeconds: 1
-        name: toctou-admin-router
+          timeoutSeconds: 5
+        name: routerxyz-mgmt
         ports:
         - containerPort: 80
         readinessProbe:
+          failureThreshold: 10
           httpGet:
             path: /
             port: 80
-          initialDelaySeconds: 15
+          initialDelaySeconds: 30
           periodSeconds: 10
-          timeoutSeconds: 1
+          timeoutSeconds: 5
         resources:
           limits:
             cpu: 500m
@@ -104,9 +110,9 @@ apiVersion: v1
 kind: Service
 metadata:
   labels:
-    app: toctou-admin-router
-  name: toctou-admin-router-service
-  namespace: sandbox-dev
+    app: routerxyz-mgmt
+  name: routerxyz-mgmt-service
+  namespace: sandbox-prod
 spec:
   ports:
   - name: http
@@ -114,5 +120,5 @@ spec:
     protocol: TCP
     targetPort: 80
   selector:
-    app: toctou-admin-router
+    app: routerxyz-mgmt
   type: ClusterIP

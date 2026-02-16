@@ -1,47 +1,39 @@
-from flask import Flask, render_template, render_template_string, redirect, url_for, request, session, Response
+from flask import Flask, render_template, redirect, url_for, request, session, Response
+from functools import wraps
 
 from app import app
 from app.db import db
 from app.models import User
 
 import hashlib
-import time
-import random
-import string
+import configparser
+import os
 
 
 @app.after_request
-def add_header(request):
-    request.headers['Cache-Control'] = 'no-cache, no-store, must-revalidate'
-    request.headers['Pragma'] = 'no-cache'
-    request.headers['Expires'] = '0'
-    request.headers['Cache-Control'] = 'public, max-age=0'
-    return request
+def add_header(response):
+    response.headers['Cache-Control'] = 'no-cache, no-store, must-revalidate'
+    response.headers['Pragma'] = 'no-cache'
+    response.headers['Expires'] = '0'
+    response.headers['X-Content-Type-Options'] = 'nosniff'
+    response.headers['X-Frame-Options'] = 'SAMEORIGIN'
+    return response
 
 
-class SessionError(Exception):
-    def __init__(self, message='Session verifcation failed.'):
-        self.message = message
-        super().__init__(self.message)
+def login_required(f):
+    @wraps(f)
+    def decorated_function(*args, **kwargs):
+        if not session.get('authenticated'):
+            return redirect(url_for('login'))
+        return f(*args, **kwargs)
+    return decorated_function
 
 
-def get_session():
-    return app.session_interface.open_session(app, request)
-
-def verify_session():
-    user = User.query.filter_by(username=session.get('username')).first()
-    if user:
-        user_password_hashed = hashlib.pbkdf2_hmac('sha256', user.password.encode(), app.secret_key.encode(), 100000).hex()
-        if session.get('password_hash') == user_password_hashed:
-            # Store user ID in session
-            session['user_id'] = user.id
-            session['session_id'] = session.sid
-            # If login successful, redirect to home page
-            return True
-        else:
-            raise SessionError(message='Wrong password.')
-    else:
-        raise SessionError(message='Invalid username.')
+def get_current_user():
+    user_id = session.get('user_id')
+    if user_id:
+        return User.query.get(user_id)
+    return None
 
 
 @app.route('/')
@@ -51,92 +43,109 @@ def index():
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
-    debug_session = None
-    debug = request.args.get('debug')
-    if debug == 'session':
-        debug = True
-
     if request.method == 'GET':
-        if debug:
-            debug_session = str(dict(session.items()))
-        return render_template('login.html', debug_session=debug_session)
+        if session.get('authenticated'):
+            return redirect(url_for('home'))
+        return render_template('login.html')
     elif request.method == 'POST':
-        username = request.form['username']
-        password = request.form['password']
+        username = request.form.get('username', '')
+        password = request.form.get('password', '')
 
-        session['username'] = username
-        session['password_hash'] = hashlib.pbkdf2_hmac('sha256', password.encode(), app.secret_key.encode(), 100000).hex()
-
-        try:
-            verify_session()
-            return redirect(url_for('dashboard'))
-        except SessionError as e:
-            if debug:
-                debug_session = str(dict(session.items()))
-            return render_template('login.html', error=e.message, debug_session=debug_session)
+        user = User.query.filter_by(username=username).first()
+        if user:
+            password_hash = hashlib.pbkdf2_hmac(
+                'sha256', password.encode(),
+                app.secret_key.encode(), 100000
+            ).hex()
+            stored_hash = hashlib.pbkdf2_hmac(
+                'sha256', user.password.encode(),
+                app.secret_key.encode(), 100000
+            ).hex()
+            if password_hash == stored_hash:
+                session['authenticated'] = True
+                session['user_id'] = user.id
+                session['username'] = user.username
+                session['is_admin'] = user.is_admin
+                return redirect(url_for('home'))
+            else:
+                return render_template('login.html', error='Invalid credentials.')
+        else:
+            return render_template('login.html', error='Invalid credentials.')
 
 
 @app.route('/logout')
 def logout():
-    # Clear user ID from session
-    session.pop('user_id', None)
+    session.clear()
     return redirect(url_for('login'))
 
 
-@app.route('/admin_panel')
-def admin_panel():
-    debug_session = None
-    debug = request.args.get('debug')
-    if debug == 'session':
-        debug = True
+@app.route('/home')
+@login_required
+def home():
+    return render_template('dashboard.html')
 
-    try:
-        verify_session()
-    except SessionError as e:
-        return render_template('login.html', error=e.message)
 
-    sess = get_session()
-    user = User.query.filter_by(username=sess.get('username')).first()
-    if  user.is_admin:
+@app.route('/system_panel')
+@login_required
+def system_panel():
+    if session.get('is_admin'):
         with open('/flag') as flag_file:
             flag_content = flag_file.read()
-
-        if debug:
-            debug_session = str(dict(sess.items()))
-        return render_template('admin_panel.html', flag=flag_content, debug_session=debug_session)
+        return render_template('admin_panel.html', flag=flag_content)
     else:
-        if debug:
-            debug_session = str(dict(sess.items()))
-        return render_template('dashboard.html', error_message='Only administrator users can open this section.', debug_session=debug_session)
-
-
-@app.route('/dashboard')
-def dashboard():
-    debug_session = None
-    debug = request.args.get('debug')
-    if debug == 'session':
-        debug = True
-
-    try:
-        verify_session()
-    except SessionError as e:
-        if debug:
-            debug_session = str(dict(get_session().items()))
-        return render_template('login.html', error=e.message, debug_session=debug_session)
-
-    if debug:
-        debug_session = str(dict(get_session().items()))
-    return render_template('dashboard.html', debug_session=debug_session)
+        return render_template('dashboard.html',
+                               error_message='Only administrator users can access the System Panel.')
 
 
 @app.route('/wifi_settings', methods=['GET', 'POST'])
+@login_required
 def wifi_settings():
-    try:
-        verify_session()
-    except SessionError as e:
-        return render_template('login.html', error=e.message)
-
     if request.method == 'GET':
         return render_template('wifi_settings.html')
     elif request.method == 'POST':
-        return render_template('wifi_settings.html', error_message='Settings can not be changed, the WiFi chipset is still booting.')
+        return render_template('wifi_settings.html',
+                               error_message='Settings can not be changed, the WiFi chipset is still booting.')
+
+
+@app.route('/network_status')
+@login_required
+def network_status():
+    return render_template('network_status.html')
+
+
+@app.route('/system_info')
+def system_info():
+    firmware_config_path = os.path.join(os.path.dirname(__file__), '..', 'firmware.cfg')
+    config = configparser.ConfigParser()
+    config.read(firmware_config_path)
+
+    info = {
+        'firmware_version': config.get('general', 'firmware_version', fallback='unknown'),
+        'model': config.get('general', 'model', fallback='unknown'),
+        'manufacturer': config.get('general', 'manufacturer', fallback='unknown'),
+        'build_date': config.get('general', 'build_date', fallback='unknown'),
+    }
+    return render_template('system_info.html', info=info)
+
+
+@app.route('/support/firmware_manual')
+def firmware_manual():
+    return render_template('firmware_manual.html')
+
+
+@app.route('/support/default_config')
+def default_config():
+    firmware_config_path = os.path.join(os.path.dirname(__file__), '..', 'firmware.cfg')
+    with open(firmware_config_path, 'r') as f:
+        config_content = f.read()
+    return Response(config_content, mimetype='text/plain')
+
+
+@app.errorhandler(404)
+def not_found(e):
+    return render_template('404.html'), 404
+
+
+@app.errorhandler(500)
+def internal_error(e):
+    return render_template('500.html'), 500
