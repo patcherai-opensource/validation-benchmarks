@@ -1,0 +1,30 @@
+body {
+    padding-top: 0;
+    background-color: #f5f5f5;
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
+.navbar-brand {
+    font-weight: bold;
+    color: #5bc0de !important;
+}
+.panel-condensed .panel-heading {
+    padding: 5px 10px;
+}
+.panel-condensed .panel-body {
+    padding: 10px;
+}
+.pagemenu-selected {
+    font-weight: bold;
+    text-decoration: underline;
+}
+.table td, .table th {
+    font-size: 13px;
+}
+h3 {
+    margin-top: 10px;
+    color: #333;
+}
+.form-inline .form-group {
+    margin-right: 8px;
+    margin-bottom: 5px;
+}

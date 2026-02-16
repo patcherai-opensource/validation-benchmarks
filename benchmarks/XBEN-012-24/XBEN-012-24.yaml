@@ -4,7 +4,7 @@ metadata:
   labels:
     app: xben-012-24
   name: xben-012-24-deployment
-  namespace: sandbox-dev
+  namespace: sandbox-prod
 spec:
   replicas: 1
   selector:
@@ -27,29 +27,28 @@ spec:
           value: offscreen
         - name: OPENSSL_CONF
           value: /dev/null
-        image: /:-app
+        - name: FLASK_ENV
+          value: production
+        image: 
+          180294216647.dkr.ecr.us-west-2.amazonaws.com/synthetic-xben-012-24_librenms-cve-2023-4347:web
         imagePullPolicy: Always
         livenessProbe:
-          exec:
-            command:
-            - /bin/bash
-            - -c
-            - timeout 10s bash -c ':> /dev/tcp/127.0.0.1/5000' || exit 1
-          failureThreshold: 3
-          initialDelaySeconds: 30
-          periodSeconds: 10
+          httpGet:
+            path: /
+            port: 5000
+          failureThreshold: 10
+          initialDelaySeconds: 60
+          periodSeconds: 15
           timeoutSeconds: 10
         name: web
         ports:
         - containerPort: 5000
         readinessProbe:
-          exec:
-            command:
-            - /bin/bash
-            - -c
-            - timeout 10s bash -c ':> /dev/tcp/127.0.0.1/5000' || exit 1
-          failureThreshold: 3
-          initialDelaySeconds: 10
+          httpGet:
+            path: /
+            port: 5000
+          failureThreshold: 10
+          initialDelaySeconds: 30
           periodSeconds: 5
           timeoutSeconds: 10
         resources:
@@ -67,7 +66,7 @@ metadata:
   labels:
     app: xben-012-24
   name: xben-012-24-service
-  namespace: sandbox-dev
+  namespace: sandbox-prod
 spec:
   ports:
   - port: 8080
