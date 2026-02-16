@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+{% block title %}Experiments{% endblock %}
+{% block content %}
+<div class="row">
+    <div class="col-md-8">
+        <h2>All Experiments</h2>
+    </div>
+    <div class="col-md-4 text-end">
+        <a href="{{ url_for('create_experiment') }}" class="btn btn-primary">New Experiment</a>
+    </div>
+</div>
+<hr>
+<table class="table table-hover">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Model Type</th>
+            <th>Dataset</th>
+            <th>Metric</th>
+            <th>Status</th>
+            <th>Best Score</th>
+            <th>Created</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for exp in experiments %}
+        <tr>
+            <td><code>{{ exp.id }}</code></td>
+            <td>{{ exp.name }}</td>
+            <td>{{ exp.model_type }}</td>
+            <td>{{ exp.dataset }}</td>
+            <td>{{ exp.metric }}</td>
+            <td>
+                {% if exp.status == 'completed' %}
+                <span class="badge bg-success">{{ exp.status }}</span>
+                {% elif exp.status == 'running' %}
+                <span class="badge bg-warning text-dark">{{ exp.status }}</span>
+                {% else %}
+                <span class="badge bg-secondary">{{ exp.status }}</span>
+                {% endif %}
+            </td>
+            <td>{{ exp.best_score if exp.best_score else '-' }}</td>
+            <td>{{ exp.created_at[:10] if exp.created_at else '-' }}</td>
+            <td>
+                <a href="{{ url_for('experiment_detail', exp_id=exp.id) }}" class="btn btn-sm btn-outline-primary">View</a>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

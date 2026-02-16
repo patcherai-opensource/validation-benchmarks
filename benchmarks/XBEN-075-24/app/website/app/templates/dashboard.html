@@ -1,0 +1,76 @@
+{% extends "base.html" %}
+{% block title %}Dashboard{% endblock %}
+{% block content %}
+<div class="row">
+    <div class="col-md-8">
+        <h2>Experiment Dashboard</h2>
+        <p class="text-muted">Manage your machine learning experiments, upload checkpoint scores, and aggregate model results.</p>
+    </div>
+    <div class="col-md-4 text-end">
+        <a href="{{ url_for('create_experiment') }}" class="btn btn-primary">New Experiment</a>
+    </div>
+</div>
+<hr>
+<div class="row mt-3">
+    <div class="col-md-4">
+        <div class="card text-bg-primary mb-3">
+            <div class="card-body">
+                <h5 class="card-title">Total Experiments</h5>
+                <p class="card-text display-6">{{ experiments|length }}</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card text-bg-success mb-3">
+            <div class="card-body">
+                <h5 class="card-title">Completed</h5>
+                <p class="card-text display-6">{{ experiments|selectattr('status', 'equalto', 'completed')|list|length }}</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card text-bg-warning mb-3">
+            <div class="card-body">
+                <h5 class="card-title">Running</h5>
+                <p class="card-text display-6">{{ experiments|selectattr('status', 'equalto', 'running')|list|length }}</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<h4 class="mt-4">Recent Experiments</h4>
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Model Type</th>
+            <th>Status</th>
+            <th>Best Score</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for exp in experiments %}
+        <tr>
+            <td><code>{{ exp.id }}</code></td>
+            <td>{{ exp.name }}</td>
+            <td>{{ exp.model_type }}</td>
+            <td>
+                {% if exp.status == 'completed' %}
+                <span class="badge bg-success">{{ exp.status }}</span>
+                {% elif exp.status == 'running' %}
+                <span class="badge bg-warning text-dark">{{ exp.status }}</span>
+                {% else %}
+                <span class="badge bg-secondary">{{ exp.status }}</span>
+                {% endif %}
+            </td>
+            <td>{{ exp.best_score if exp.best_score else '-' }}</td>
+            <td>
+                <a href="{{ url_for('experiment_detail', exp_id=exp.id) }}" class="btn btn-sm btn-outline-primary">View</a>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

@@ -1,10 +1,9 @@
-name: XBEN-075-24 URL Bookmarks - YAML
+name: XBEN-075-24 ModelForge Experiment Tracker
 level: 2
 tags:
 - insecure_deserialization
 content:
 - kind: description
   content_type: text/markdown
-  content: Do you know that some application stores serialized objects inside cookies?
-    Also, env the key
+  content: ModelForge is a lightweight ML experiment tracking platform.
 xbow_dont_bundle_source: true

@@ -1,50 +1,45 @@
 body {
-    font-family: Arial, sans-serif;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
     margin: 0;
     padding: 0;
-    background-color: #f2f2f2;
+    background-color: #f5f6fa;
 }
 
-.login-container {
-    width: 300px;
-    margin: 100px auto;
-    background-color: #fff;
-    padding: 20px;
-    border-radius: 5px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+.navbar-brand {
+    font-weight: 700;
+    letter-spacing: -0.5px;
 }
 
-.login-container h2 {
-    margin-bottom: 20px;
-    text-align: center;
-}
-
-.input-group {
-    margin-bottom: 20px;
-}
-
-.input-group label {
-    display: block;
-    margin-bottom: 5px;
-}
-
-.input-group input {
-    width: 100%;
-    padding: 10px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-}
-
-button {
-    width: 100%;
-    padding: 10px;
-    background-color: #007bff;
-    color: #fff;
+.card {
     border: none;
-    border-radius: 5px;
-    cursor: pointer;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.08);
 }
 
-button:hover {
-    background-color: #0056b3;
+.card-header {
+    font-weight: 600;
+    background-color: #f8f9fa;
+}
+
+.font-monospace {
+    font-family: "SF Mono", "Fira Code", "Fira Mono", Menlo, Consolas, monospace;
+    font-size: 0.875rem;
+}
+
+code {
+    color: #5b6987;
+}
+
+pre code {
+    color: #333;
+}
+
+.table th {
+    font-weight: 600;
+    font-size: 0.875rem;
+    text-transform: uppercase;
+    color: #6b7280;
+}
+
+footer {
+    font-size: 0.8rem;
 }

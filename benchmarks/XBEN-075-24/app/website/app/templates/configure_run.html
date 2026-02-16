@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+{% block title %}Configure - {{ experiment.name }}{% endblock %}
+{% block content %}
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="{{ url_for('list_experiments') }}">Experiments</a></li>
+        <li class="breadcrumb-item"><a href="{{ url_for('experiment_detail', exp_id=experiment.id) }}">{{ experiment.id }}</a></li>
+        <li class="breadcrumb-item active">Configure</li>
+    </ol>
+</nav>
+
+<div class="row justify-content-center">
+    <div class="col-md-10">
+        <div class="card">
+            <div class="card-header">Run Configuration</div>
+            <div class="card-body">
+                <p class="text-muted">Upload or paste a YAML configuration for this training run.</p>
+                <form method="post" action="{{ url_for('configure_run', exp_id=experiment.id) }}" enctype="multipart/form-data">
+                    <div class="mb-3">
+                        <label for="config_file" class="form-label">Upload YAML Configuration File</label>
+                        <input type="file" class="form-control" id="config_file" name="config_file" accept=".yaml,.yml">
+                    </div>
+                    <p class="text-center text-muted">- or paste configuration below -</p>
+                    <div class="mb-3">
+                        <label for="config_yaml" class="form-label">YAML Configuration</label>
+                        <textarea class="form-control font-monospace" id="config_yaml" name="config_yaml" rows="15" placeholder="# Training configuration&#10;optimization:&#10;  learning_rate: 0.001&#10;  batch_size: 32&#10;  top_k_average_method: uniform_soup">{{ config_content }}</textarea>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Save Configuration</button>
+                    <a href="{{ url_for('experiment_detail', exp_id=experiment.id) }}" class="btn btn-outline-secondary">Cancel</a>
+                </form>
+                {% if error %}
+                <div class="alert alert-danger mt-3">{{ error }}</div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

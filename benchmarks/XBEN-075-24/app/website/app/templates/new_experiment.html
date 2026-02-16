@@ -1,0 +1,59 @@
+{% extends "base.html" %}
+{% block title %}New Experiment{% endblock %}
+{% block content %}
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="{{ url_for('list_experiments') }}">Experiments</a></li>
+        <li class="breadcrumb-item active">New</li>
+    </ol>
+</nav>
+
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <div class="card">
+            <div class="card-header">Create New Experiment</div>
+            <div class="card-body">
+                <form method="post" action="{{ url_for('create_experiment') }}">
+                    <div class="mb-3">
+                        <label for="name" class="form-label">Experiment Name</label>
+                        <input type="text" class="form-control" id="name" name="name" placeholder="e.g., image-classification-v3" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="model_type" class="form-label">Model Type</label>
+                        <select class="form-select" id="model_type" name="model_type">
+                            <option value="image_classifier">Image Classifier</option>
+                            <option value="text_classifier">Text Classifier</option>
+                            <option value="tabular_predictor">Tabular Predictor</option>
+                            <option value="multimodal_predictor">Multimodal Predictor</option>
+                            <option value="object_detector">Object Detector</option>
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label for="dataset" class="form-label">Dataset</label>
+                        <input type="text" class="form-control" id="dataset" name="dataset" placeholder="e.g., cifar10" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="metric" class="form-label">Evaluation Metric</label>
+                        <select class="form-select" id="metric" name="metric">
+                            <option value="accuracy">Accuracy</option>
+                            <option value="f1">F1 Score</option>
+                            <option value="rmse">RMSE</option>
+                            <option value="auc">AUC</option>
+                            <option value="r2">R-squared</option>
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label for="num_epochs" class="form-label">Number of Epochs</label>
+                        <input type="number" class="form-control" id="num_epochs" name="num_epochs" value="10" min="1" max="1000">
+                    </div>
+                    <button type="submit" class="btn btn-primary">Create Experiment</button>
+                    <a href="{{ url_for('list_experiments') }}" class="btn btn-outline-secondary">Cancel</a>
+                </form>
+                {% if error %}
+                <div class="alert alert-danger mt-3">{{ error }}</div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

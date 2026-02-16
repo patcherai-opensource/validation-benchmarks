@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+{% block title %}Upload Results - {{ experiment.name }}{% endblock %}
+{% block content %}
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="{{ url_for('list_experiments') }}">Experiments</a></li>
+        <li class="breadcrumb-item"><a href="{{ url_for('experiment_detail', exp_id=experiment.id) }}">{{ experiment.id }}</a></li>
+        <li class="breadcrumb-item active">Upload Results</li>
+    </ol>
+</nav>
+
+<div class="row justify-content-center">
+    <div class="col-md-10">
+        <div class="card">
+            <div class="card-header">Upload Checkpoint Scores</div>
+            <div class="card-body">
+                <p class="text-muted">
+                    Upload checkpoint scores as a YAML file. The file should map checkpoint paths to their
+                    validation scores. After uploading, you can aggregate the results to select the best model.
+                </p>
+                <form method="post" action="{{ url_for('upload_results', exp_id=experiment.id) }}" enctype="multipart/form-data">
+                    <div class="mb-3">
+                        <label for="results_file" class="form-label">Upload YAML Results File</label>
+                        <input type="file" class="form-control" id="results_file" name="results_file" accept=".yaml,.yml">
+                    </div>
+                    <p class="text-center text-muted">- or paste results below -</p>
+                    <div class="mb-3">
+                        <label for="results_yaml" class="form-label">YAML Checkpoint Scores</label>
+                        <textarea class="form-control font-monospace" id="results_yaml" name="results_yaml" rows="12" placeholder="# Checkpoint scores&#10;/checkpoints/epoch_10.ckpt: 0.8523&#10;/checkpoints/epoch_20.ckpt: 0.8891&#10;/checkpoints/epoch_30.ckpt: 0.9012"></textarea>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Upload &amp; Aggregate</button>
+                    <a href="{{ url_for('experiment_detail', exp_id=experiment.id) }}" class="btn btn-outline-secondary">Cancel</a>
+                </form>
+                {% if error %}
+                <div class="alert alert-danger mt-3">{{ error }}</div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,73 @@
+{% extends "base.html" %}
+{% block title %}{{ experiment.name }}{% endblock %}
+{% block content %}
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="{{ url_for('list_experiments') }}">Experiments</a></li>
+        <li class="breadcrumb-item active">{{ experiment.id }}</li>
+    </ol>
+</nav>
+
+<div class="row">
+    <div class="col-md-8">
+        <h2>{{ experiment.name }}</h2>
+        <span class="badge {% if experiment.status == 'completed' %}bg-success{% elif experiment.status == 'running' %}bg-warning text-dark{% else %}bg-secondary{% endif %}">
+            {{ experiment.status }}
+        </span>
+    </div>
+    <div class="col-md-4 text-end">
+        <a href="{{ url_for('configure_run', exp_id=experiment.id) }}" class="btn btn-outline-secondary btn-sm">Configure</a>
+        <a href="{{ url_for('upload_results', exp_id=experiment.id) }}" class="btn btn-outline-primary btn-sm">Upload Results</a>
+        {% if checkpoints %}
+        <a href="{{ url_for('aggregate_checkpoints', exp_id=experiment.id) }}" class="btn btn-primary btn-sm">Aggregate</a>
+        {% endif %}
+    </div>
+</div>
+
+<hr>
+
+<div class="row mt-3">
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header">Experiment Details</div>
+            <div class="card-body">
+                <table class="table table-sm">
+                    <tr><td><strong>ID</strong></td><td><code>{{ experiment.id }}</code></td></tr>
+                    <tr><td><strong>Model Type</strong></td><td>{{ experiment.model_type }}</td></tr>
+                    <tr><td><strong>Dataset</strong></td><td>{{ experiment.dataset }}</td></tr>
+                    <tr><td><strong>Metric</strong></td><td>{{ experiment.metric }}</td></tr>
+                    <tr><td><strong>Epochs</strong></td><td>{{ experiment.num_epochs }}</td></tr>
+                    <tr><td><strong>Best Score</strong></td><td>{{ experiment.best_score if experiment.best_score else 'N/A' }}</td></tr>
+                    <tr><td><strong>Created</strong></td><td>{{ experiment.created_at }}</td></tr>
+                </table>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header">Checkpoint Scores</div>
+            <div class="card-body">
+                {% if checkpoints %}
+                    {% if checkpoints is mapping %}
+                    <table class="table table-sm">
+                        <thead><tr><th>Checkpoint</th><th>Score</th></tr></thead>
+                        <tbody>
+                        {% for path, score in checkpoints.items() %}
+                        <tr>
+                            <td><code>{{ path }}</code></td>
+                            <td>{{ score }}</td>
+                        </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                    {% else %}
+                    <pre>{{ checkpoints }}</pre>
+                    {% endif %}
+                {% else %}
+                <p class="text-muted">No checkpoint scores uploaded yet. Use "Upload Results" to add checkpoint score data.</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,57 @@
+{% extends "base.html" %}
+{% block title %}Documentation{% endblock %}
+{% block content %}
+<h2>ModelForge Documentation</h2>
+<hr>
+
+<div class="row">
+    <div class="col-md-8">
+        <h4>Overview</h4>
+        <p>ModelForge is a lightweight experiment tracking platform for machine learning workflows. It provides an interface
+        to manage experiments, upload training results, and aggregate model checkpoints.</p>
+
+        <h4 class="mt-4">Workflow</h4>
+        <ol>
+            <li><strong>Create an experiment</strong> — Define a new experiment with model type, dataset, and evaluation metric.</li>
+            <li><strong>Configure the run</strong> — Upload or paste a YAML training configuration for the experiment.</li>
+            <li><strong>Upload checkpoint scores</strong> — After training completes, upload checkpoint validation scores as YAML. The format should map checkpoint file paths to their score values.</li>
+            <li><strong>Aggregate results</strong> — Process the uploaded scores to determine the best model checkpoint using the uniform averaging method.</li>
+        </ol>
+
+        <h4 class="mt-4">Checkpoint Scores Format</h4>
+        <p>Checkpoint score files should be formatted as YAML mappings:</p>
+        <pre class="bg-light p-3 rounded"><code># checkpoint_scores.yaml
+/models/checkpoints/epoch_10.ckpt: 0.8523
+/models/checkpoints/epoch_20.ckpt: 0.8891
+/models/checkpoints/epoch_30.ckpt: 0.9012
+/models/checkpoints/epoch_40.ckpt: 0.9134</code></pre>
+
+        <h4 class="mt-4">API Endpoints</h4>
+        <table class="table table-sm">
+            <thead><tr><th>Method</th><th>Endpoint</th><th>Description</th></tr></thead>
+            <tbody>
+                <tr><td>GET</td><td><code>/api/v1/experiments</code></td><td>List all experiments</td></tr>
+                <tr><td>GET</td><td><code>/api/v1/experiments/&lt;id&gt;</code></td><td>Get experiment details</td></tr>
+                <tr><td>GET</td><td><code>/dashboard</code></td><td>Web dashboard</td></tr>
+                <tr><td>GET/POST</td><td><code>/experiments/new</code></td><td>Create new experiment</td></tr>
+                <tr><td>GET</td><td><code>/experiments/&lt;id&gt;</code></td><td>Experiment detail view</td></tr>
+                <tr><td>GET/POST</td><td><code>/experiments/&lt;id&gt;/configure</code></td><td>Upload training configuration</td></tr>
+                <tr><td>GET/POST</td><td><code>/experiments/&lt;id&gt;/upload_results</code></td><td>Upload checkpoint scores</td></tr>
+                <tr><td>GET</td><td><code>/experiments/&lt;id&gt;/aggregate</code></td><td>Aggregate checkpoint results</td></tr>
+            </tbody>
+        </table>
+    </div>
+    <div class="col-md-4">
+        <div class="card">
+            <div class="card-header">Quick Links</div>
+            <div class="card-body">
+                <ul class="list-group list-group-flush">
+                    <li class="list-group-item"><a href="{{ url_for('dashboard') }}">Dashboard</a></li>
+                    <li class="list-group-item"><a href="{{ url_for('create_experiment') }}">New Experiment</a></li>
+                    <li class="list-group-item"><a href="{{ url_for('list_experiments') }}">All Experiments</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
