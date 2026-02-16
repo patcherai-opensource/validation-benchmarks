@@ -1,88 +1,227 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AUTH 03</title>
-    <style>
-        body {
-            background-color: #FFD90F; /* Bright yellow, reminiscent of The Simpsons */
-            background-image: url('./static/springfield_background.jpg'); /* An image of Springfield */
-            background-size: cover; /* Cover the entire background */
-            background-repeat: no-repeat; /* Do not repeat the background */
-            font-family: 'Arial', sans-serif; /* Clean, simple font */
-            text-align: center; /* Centering text */
-            height: 100vh; /* Full height of the viewport */
-            display: flex; /* Enables flexbox */
-            flex-direction: column; /* Stack children vertically */
-            justify-content: center; /* Center vertically */
-            align-items: center; /* Center horizontally */
-            margin: 0; /* Remove default margin */
-            padding: 0; /* Remove default padding */
-        }
-        h1, h2, h3 {
-            text-shadow: 2px 2px #000000; /* Black shadow for more readability */
-            color: #FFFFFF; /* White text color */
-        }
-        img {
-            max-width: 80%; /* Ensure image does not exceed the width of the screen */
-            height: auto; /* Maintain aspect ratio */
-        }
-        form {
-            margin-top: 20px; /* Add space above the form */
-            background-color: #FFFFFF; /* White background for the form */
-            padding: 20px; /* Padding inside the form */
-            border-radius: 10px; /* Rounded corners for the form */
-            display: inline-block; /* Center the form on the page */
-            box-shadow: 0 0 10px #000000; /* Subtle shadow around the form */
-        }
-        input[type="text"], input[type="password"] {
-            margin: 10px 0; /* Margin for top and bottom */
-            padding: 10px; /* Padding inside the input fields */
-            width: 200px; /* Set width for input fields */
-            border: 1px solid #ddd; /* Subtle border style */
-            border-radius: 5px; /* Rounded corners for the input fields */
-        }
-        button {
-            background-color: #6495ED; /* Cornflower blue background for the button */
-            color: #FFFFFF; /* White text color */
-            padding: 10px 20px; /* Padding inside the button */
-            border: none; /* No border for the button */
-            border-radius: 5px; /* Rounded corners for the button */
-            cursor: pointer; /* Pointer cursor on hover */
-            font-size: 16px; /* Larger text for the button */
-        }
-        button:hover {
-            background-color: #4169E1; /* Slightly darker blue on hover */
-        }
-    </style>
-</head>
-<body>
-    <h1>Welcome to Springfield!</h1>
-    <form action="index.php" method="POST">
-        Username: <input type="text" name="username"><br>
-        Password: <input type="password" name="password"><br>
-        <button type="submit">Login</button>
-    </form>
-    <?php
-    $flag = getenv('FLAG') ?: "@FLAG@";
+<?php
+/**
+ * Meridian Platform - Main Entry Point
+ *
+ * Handles routing for the internal management console.
+ *
+ * @package  AppCore
+ */
 
-    // Checking if the form fields are set
-    if (isset($_POST['username']) && isset($_POST['password'])) {
-        // Define an array of allowed IP addresses for the X-Forwarded-For header
-        $allowed_ips = ['127.0.0.1', 'localhost'];
+require_once __DIR__ . '/lib/SessionManager.php';
+require_once __DIR__ . '/lib/AccessControl.php';
 
-        // Check if the 'X-Forwarded-For' header is set to one of the allowed IPs
-        if (isset($_SERVER['HTTP_X_FORWARDED_FOR']) && in_array($_SERVER['HTTP_X_FORWARDED_FOR'], $allowed_ips)) {
-            // Display admin welcome message and the flag
-            echo "<center><h2>Welcome Admin</h2></center>";
-            echo "<center><h3>Congratulations, here is the flag: " . $flag . "</h3></center>";
-        } else {
-            // If the 'X-Forwarded-For' header is not set to an allowed IP, display an error message
-            echo "<center><h3>Access Restricted to Internal Employees only</h3></center>";
-        }
+use AppCore\Session\SessionManager;
+use AppCore\Security\AccessControl;
+
+$config = require __DIR__ . '/config.php';
+
+// Simple router
+$requestUri = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
+$requestUri = rtrim($requestUri, '/');
+if ($requestUri === '') {
+    $requestUri = '/';
+}
+
+// Route handling
+switch ($requestUri) {
+    case '/':
+        handleDashboard($config);
+        break;
+    case '/login':
+        handleLogin($config);
+        break;
+    case '/logout':
+        handleLogout();
+        break;
+    case '/status':
+        handleStatus($config);
+        break;
+    case '/console/overview':
+        handleConsoleOverview($config);
+        break;
+    case '/console/network':
+        handleConsoleNetwork($config);
+        break;
+    case '/console/sysconfig':
+        handleSysConfig($config);
+        break;
+    case '/ping':
+        header('Content-Type: text/plain');
+        echo 'OK';
+        break;
+    default:
+        header('HTTP/1.1 404 Not Found');
+        renderPage('404', array('title' => 'Not Found'));
+        break;
+}
+
+/**
+ * Dashboard / Landing page
+ */
+function handleDashboard($config)
+{
+    if (SessionManager::isAuthenticated()) {
+        $data = array(
+            'title'    => 'Dashboard',
+            'username' => SessionManager::getUsername(),
+            'role'     => SessionManager::getRole(),
+            'appName'  => $config['app']['name'],
+        );
+        renderPage('dashboard', $data);
+    } else {
+        header('Location: /login');
+        exit;
     }
-    ?>
-</body>
-</html>
+}
 
+/**
+ * Login handler
+ */
+function handleLogin($config)
+{
+    $error = '';
+
+    if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+        $username = isset($_POST['username']) ? trim($_POST['username']) : '';
+        $password = isset($_POST['password']) ? $_POST['password'] : '';
+
+        if (isset($config['auth']['users'][$username])) {
+            $user = $config['auth']['users'][$username];
+            if (password_verify($password, $user['password_hash'])) {
+                SessionManager::authenticate($username, $user['role']);
+                header('Location: /');
+                exit;
+            }
+        }
+        $error = 'Invalid credentials.';
+    }
+
+    if (SessionManager::isAuthenticated()) {
+        header('Location: /');
+        exit;
+    }
+
+    renderPage('login', array('title' => 'Sign In', 'error' => $error));
+}
+
+/**
+ * Logout handler
+ */
+function handleLogout()
+{
+    SessionManager::destroy();
+    header('Location: /login');
+    exit;
+}
+
+/**
+ * Status endpoint (public, for monitoring)
+ */
+function handleStatus($config)
+{
+    header('Content-Type: application/json');
+    echo json_encode(array(
+        'status'  => 'operational',
+        'service' => $config['app']['name'],
+        'version' => $config['app']['version'],
+        'uptime'  => intval(time() - filemtime('/tmp/app_start')),
+    ));
+}
+
+/**
+ * Console overview - authenticated area
+ */
+function handleConsoleOverview($config)
+{
+    if (!SessionManager::isAuthenticated()) {
+        header('Location: /login');
+        exit;
+    }
+
+    $acl = new AccessControl($config['network']);
+    $data = array(
+        'title'    => 'Console Overview',
+        'username' => SessionManager::getUsername(),
+        'role'     => SessionManager::getRole(),
+        'clientIp' => $acl->getClientIp(),
+        'appName'  => $config['app']['name'],
+    );
+    renderPage('console_overview', $data);
+}
+
+/**
+ * Console network diagnostics
+ */
+function handleConsoleNetwork($config)
+{
+    if (!SessionManager::isAuthenticated()) {
+        header('Location: /login');
+        exit;
+    }
+
+    $acl = new AccessControl($config['network']);
+    $data = array(
+        'title'    => 'Network Info',
+        'username' => SessionManager::getUsername(),
+        'role'     => SessionManager::getRole(),
+        'clientIp' => $acl->getClientIp(),
+        'appName'  => $config['app']['name'],
+    );
+    renderPage('console_network', $data);
+}
+
+/**
+ * System configuration - restricted to internal networks
+ */
+function handleSysConfig($config)
+{
+    if (!SessionManager::isAuthenticated()) {
+        header('Location: /login');
+        exit;
+    }
+
+    $acl = new AccessControl($config['network']);
+
+    if (!$acl->isAllowed()) {
+        header('HTTP/1.1 403 Forbidden');
+        $data = array(
+            'title'    => 'Access Denied',
+            'username' => SessionManager::getUsername(),
+            'clientIp' => $acl->getClientIp(),
+            'appName'  => $config['app']['name'],
+        );
+        renderPage('access_denied', $data);
+        return;
+    }
+
+    // Load system secrets for display to authorized internal users
+    $secretsFile = $config['paths']['system_secrets'];
+    $secrets = '';
+    if (file_exists($secretsFile)) {
+        $secrets = file_get_contents($secretsFile);
+    }
+
+    $data = array(
+        'title'    => 'System Configuration',
+        'username' => SessionManager::getUsername(),
+        'role'     => SessionManager::getRole(),
+        'clientIp' => $acl->getClientIp(),
+        'secrets'  => $secrets,
+        'appName'  => $config['app']['name'],
+    );
+    renderPage('sysconfig', $data);
+}
+
+/**
+ * Simple template renderer
+ */
+function renderPage($template, $data = array())
+{
+    extract($data);
+    $templateFile = __DIR__ . '/templates/' . $template . '.php';
+    if (file_exists($templateFile)) {
+        include $templateFile;
+    } else {
+        echo '<h1>Template not found</h1>';
+    }
+}
