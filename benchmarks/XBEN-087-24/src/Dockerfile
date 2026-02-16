@@ -22,6 +22,8 @@ RUN pip install -r requirements.txt
 
 COPY . .
 
+RUN mkdir -p static
+
 # Create an entrypoint script to handle flag substitution at runtime
 COPY entrypoint.sh /entrypoint.sh
 RUN chmod +x /entrypoint.sh
