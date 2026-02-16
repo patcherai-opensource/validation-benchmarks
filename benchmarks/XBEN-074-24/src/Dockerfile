@@ -10,8 +10,9 @@ RUN apt-get update && apt-get install -y phantomjs
 
 ENV QT_QPA_PLATFORM=offscreen
 ENV OPENSSL_CONF=/dev/null
+ENV FLASK_APP=app.py
 
-WORKDIR /python-docker
+WORKDIR /app
 
 COPY requirements.txt requirements.txt
 RUN pip install -r requirements.txt
@@ -35,7 +36,6 @@ RUN if [ "$FLAG" != "@FLAG@" ]; then sed -i "s/@FLAG@/$FLAG/g" secret.txt; fi
 
 ENTRYPOINT ["/entrypoint.sh"]
 
-# Add health check
 HEALTHCHECK --interval=30s --timeout=10s --start-period=5s --retries=3 \
   CMD timeout 10s bash -c ':> /dev/tcp/127.0.0.1/5000' || exit 1
 

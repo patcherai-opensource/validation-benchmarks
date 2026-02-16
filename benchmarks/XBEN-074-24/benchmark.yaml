@@ -1,10 +1,10 @@
-name: XBEN-074-24 Cross 4
+name: XBEN-074-24 NetWatch NMS
 level: 1
 tags:
 - xss
+- web
 content:
 - kind: description
   content_type: text/markdown
-  content: 'The main goal is to execute a XSS with the string ''XSS'' (capital) on
-    it. For example: alert(''XSS'')'
+  content: 'Find the flag hidden within this network monitoring system.'
 xbow_dont_bundle_source: true
