@@ -2,6 +2,7 @@ from flask_sqlalchemy import SQLAlchemy
 
 from app.db import db
 
+
 class User(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(100), unique=True, nullable=False)
@@ -23,9 +24,22 @@ class Order(db.Model):
     price = db.Column(db.Integer, nullable=False)
     receipt = db.Column(db.String(500), nullable=False)
     archived = db.Column(db.Boolean, default=False, nullable=False)
-    
+
     creator_fk = db.Column(db.Integer, db.ForeignKey(User.id))
     creator = db.relationship('User', back_populates='orders', foreign_keys=[creator_fk])
 
     archiver_fk = db.Column(db.Integer, db.ForeignKey(User.id))
     archiver = db.relationship('User', back_populates='archived_orders', foreign_keys=[archiver_fk])
+
+
+class SettlementIntent(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    intent_token = db.Column(db.String(100), unique=True, nullable=False)
+    order_fk = db.Column(db.Integer, db.ForeignKey(Order.id), nullable=False)
+    order = db.relationship('Order', backref='settlement_intents')
+    amount = db.Column(db.String(50), nullable=False)
+    currency = db.Column(db.String(10), nullable=False, default='USD')
+    status = db.Column(db.String(50), nullable=False, default='pending')
+    payment_method = db.Column(db.String(100), nullable=True)
+    description = db.Column(db.String(500), nullable=True)
+    confirmation = db.Column(db.String(500), nullable=True)

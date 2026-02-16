@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Settlement - EquityTrade Pro</title>
+    <link href="{{ url_for('static', filename='css/bootstrap.min.css') }}" rel="stylesheet">
+    <style>
+        body { background-color: #1a1d23; color: #e0e0e0; }
+        .card { background-color: #2a2d35; border: 1px solid #3a3d45; color: #e0e0e0; }
+        .navbar { border-bottom: 1px solid #3a3d45; }
+        .brand-text { color: #0d6efd; font-weight: 700; }
+        table { width: 100%; }
+        th, td { padding: 10px; text-align: left; border-bottom: 1px solid #3a3d45; }
+        th { color: #8a8d95; font-weight: 600; font-size: 0.85rem; text-transform: uppercase; }
+        a { color: #0d6efd; }
+        .settlement-status { font-size: 0.8rem; padding: 3px 8px; border-radius: 3px; }
+        .status-completed { background-color: #1a3a2a; color: #4caf50; }
+        .status-pending { background-color: #3a3a1a; color: #ff9800; }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark" style="background-color: #1e2128;">
+        <div class="container">
+            <a class="navbar-brand" href="/dashboard"><span class="brand-text">EquityTrade</span> Pro</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ml-auto">
+                    <li class="nav-item"><a class="nav-link" href="/orders">Orders</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/orders_archive">Archive</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/checkout">Settlement</a></li>
+                    <li class="nav-item">
+                        <form action="/logout" method="post" class="d-inline">
+                            <button type="submit" class="btn btn-outline-light btn-sm ml-2">Logout</button>
+                        </form>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+    <div class="container mt-4">
+        <div class="row justify-content-center">
+            <div class="col-md-10">
+                <h2 class="mb-4">Settlement Overview</h2>
+                <div class="card mb-3">
+                    <div class="card-body">
+                        <p class="text-muted">Review and manage settlement details for your active orders. Payment method changes are processed through the settlement gateway.</p>
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Order</th>
+                                    <th>Ticker</th>
+                                    <th>Amount</th>
+                                    <th>Method</th>
+                                    <th>Status</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for order in orders %}
+                                <tr>
+                                    <td>#{{ order.id }}</td>
+                                    <td>{{ order.ticker }}</td>
+                                    <td>${{ order.quantity * order.price }}</td>
+                                    <td>Wire Transfer</td>
+                                    <td><span class="settlement-status status-completed">Completed</span></td>
+                                    <td><a href="#" class="update-settlement-link" data-order-ref="{{ order.id }}">Update</a></td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="settlementModal" tabindex="-1" role="dialog">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content" style="background-color: #2a2d35; color: #e0e0e0;">
+                <div class="modal-header" style="border-bottom: 1px solid #3a3d45;">
+                    <h5 class="modal-title">Update Settlement</h5>
+                    <button type="button" class="close text-white" data-dismiss="modal"><span>&times;</span></button>
+                </div>
+                <div class="modal-body">
+                    <form id="settlement-form">
+                        <input type="hidden" id="settlement-order-ref" name="order_ref">
+                        <div class="form-group mb-3">
+                            <label>Payment Method</label>
+                            <select class="form-control" name="payment_method" id="settlement-method" style="background-color: #1a1d23; color: #e0e0e0; border-color: #3a3d45;">
+                                <option value="wire_transfer">Wire Transfer</option>
+                                <option value="ach_debit">ACH Direct Debit</option>
+                                <option value="internal_transfer">Internal Transfer</option>
+                            </select>
+                        </div>
+                        <div class="form-check mb-3">
+                            <input type="checkbox" class="form-check-input" id="save-method" name="save_method" value="yes">
+                            <label class="form-check-label" for="save-method">Save as default method</label>
+                        </div>
+                        <button type="submit" class="btn btn-primary w-100">Update Settlement</button>
+                    </form>
+                    <div id="settlement-result" class="mt-3" style="display:none;">
+                        <hr style="border-color: #3a3d45;">
+                        <pre id="settlement-response" style="color: #e0e0e0; font-size: 0.85rem;"></pre>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="{{ url_for('static', filename='js/jquery-3.5.1.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/bootstrap.bundle.min.js') }}"></script>
+    <script>
+        $(document).ready(function () {
+            $('.update-settlement-link').click(function (event) {
+                event.preventDefault();
+                var orderRef = $(this).data('order-ref');
+                $('#settlement-order-ref').val(orderRef);
+                $('#settlement-result').hide();
+                $('#settlementModal').modal('show');
+            });
+
+            $('#settlement-form').submit(function (event) {
+                event.preventDefault();
+                var formData = $(this).serialize();
+                $.ajax({
+                    url: '/?ajax=modify_settlement',
+                    method: 'POST',
+                    data: formData,
+                    dataType: 'json',
+                    success: function (data) {
+                        if (data.success) {
+                            $('#settlement-response').text(JSON.stringify(data.data, null, 2));
+                            $('#settlement-result').show();
+                        } else {
+                            $('#settlement-response').text('Error: ' + (data.error ? data.error.message : 'Unknown error'));
+                            $('#settlement-result').show();
+                        }
+                    },
+                    error: function (xhr) {
+                        var resp = xhr.responseJSON || {};
+                        $('#settlement-response').text('Error: ' + (resp.error ? resp.error.message : 'Request failed'));
+                        $('#settlement-result').show();
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>

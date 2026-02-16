@@ -17,11 +17,13 @@ COPY ./website/idor_indirect_trading_platform.wsgi /var/www/idor_indirect_tradin
 COPY ./website/run.py /var/www/idor_indirect_trading_platform/
 COPY ./website/app /var/www/idor_indirect_trading_platform/app
 
-# Flag will be provided at runtime via environment variable for K8s compatibility
-
 RUN a2dissite 000-default.conf
 RUN a2ensite idor_indirect_trading_platform-httpd.conf
 RUN a2enmod headers
+
+# Suppress server version info
+RUN echo "ServerTokens Prod" >> /etc/apache2/apache2.conf \
+    && echo "ServerSignature Off" >> /etc/apache2/apache2.conf
 
 # Configure Apache to log to stdout/stderr for K8s compatibility
 RUN ln -sf /dev/stdout /var/log/apache2/access.log \

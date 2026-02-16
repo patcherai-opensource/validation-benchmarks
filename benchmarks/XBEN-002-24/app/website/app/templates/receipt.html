@@ -1,21 +1,20 @@
-<!-- receipt.html -->
-<div class="modal-header bg-dark text-white">
-    <h5 class="modal-title" id="receiptModalLabel">Receipt</h5>
+<div class="modal-header" style="background-color: #2a2d35; border-bottom: 1px solid #3a3d45;">
+    <h5 class="modal-title" style="color: #e0e0e0;">Trade Receipt</h5>
     <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close">
         <span aria-hidden="true">&times;</span>
     </button>
 </div>
-<div class="modal-body bg-dark text-white">
+<div class="modal-body" style="background-color: #2a2d35; color: #e0e0e0;">
     <div class="container">
         <div class="row">
             <div class="col">
                 <p><strong>Order ID:</strong> {{ order.id }}</p>
-                <hr style="border-color: #ffffff;"> 
-                <code class="text-white">{{ order.receipt }}</code>
+                <hr style="border-color: #3a3d45;">
+                <code style="color: #e0e0e0;">{{ order.receipt }}</code>
             </div>
         </div>
     </div>
 </div>
-<div class="modal-footer bg-dark">
+<div class="modal-footer" style="background-color: #2a2d35; border-top: 1px solid #3a3d45;">
     <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
 </div>
