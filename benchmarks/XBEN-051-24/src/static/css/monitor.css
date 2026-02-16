@@ -1,0 +1,152 @@
+body {
+    background-color: #191919;
+    font-size: 11px;
+    font-family: verdana, tahoma, arial;
+    word-wrap: break-word;
+    color: white;
+    font-weight: bold;
+    margin: 0;
+    padding: 0;
+}
+
+a:link, a:visited { text-decoration: none; color: #0088DD; }
+a:hover { color: #adcef1; }
+a:active { color: #adcef1; }
+
+#topmenu { padding: 1em; border-bottom: 2px dashed #333; list-style: none; }
+#topmenu > li { display: inline-block; padding: 0 10px; }
+#topmenu > li:before { content: '\25B6 '; }
+
+#container { max-width: 1000px; margin: 20px auto; padding: 0 10px; }
+
+.footer {
+    text-align: center;
+    font-family: tahoma;
+    font-size: 9px;
+    padding: 33px 0 11px 0;
+    color: #666;
+}
+
+/* Server list table */
+#server_list_table {
+    width: 100%;
+    border-collapse: collapse;
+    border: 1px solid #22252f;
+}
+
+#server_list_table_top th {
+    background-color: #22252f;
+    padding: 8px;
+    text-align: left;
+}
+
+#server_list_table tr { border: 1px solid #22252f; }
+#server_list_table td { padding: 8px; }
+#server_list_table tr:nth-child(even) { background-color: rgba(26, 28, 34, 0.3); }
+#server_list_table tr:nth-child(odd) { background-color: rgba(26, 28, 34, 0.1); }
+
+.status_online {
+    display: inline-block;
+    width: 10px; height: 10px;
+    border-radius: 50%;
+    background-color: #4CAF50;
+}
+.status_offline {
+    display: inline-block;
+    width: 10px; height: 10px;
+    border-radius: 50%;
+    background-color: #f44336;
+}
+
+.outer_bar {
+    background-color: #333;
+    border-radius: 3px;
+    overflow: hidden;
+    min-width: 80px;
+}
+.inner_bar {
+    background-color: #0088DD;
+    min-height: 18px;
+    line-height: 18px;
+    border-radius: 3px;
+}
+.players_numeric {
+    padding-left: 4px;
+    font-size: 10px;
+}
+
+/* Details page */
+.spacer { height: 20px; }
+
+[id^="servername_"] {
+    font-size: 18px;
+    padding: 12px;
+    margin-bottom: 10px;
+}
+#servername_online { color: #4CAF50; }
+#servername_offline { color: #f44336; }
+#servername_pending { color: #FF9800; }
+
+.details_info { margin: 10px 0; }
+.details_info_column { display: inline-block; vertical-align: top; }
+.details_info_row { margin-top: 14px; }
+.details_info_scolumn { display: inline-block; margin-right: 12px; }
+.details_info_srow { border: 1px solid #22252f; margin: -1px 3px; padding: 8px; }
+.details_info_ceil { display: inline-block; }
+.details_info_ceil:first-child { padding-right: 4px; }
+.details_info_ceil:nth-child(2) { font-weight: 300; }
+
+.settings_table {
+    margin: auto;
+    border: 1px solid #22252f;
+    border-spacing: 0;
+    border-collapse: collapse;
+    max-width: 600px;
+    width: 100%;
+}
+.settings_table tr { border: 1px solid #22252f; }
+.settings_table tr:nth-child(even) { background-color: rgba(26, 28, 34, 0.2); }
+.settings_table tr:nth-child(odd) { background-color: rgba(26, 28, 34, 0.1); }
+.settings_table td, .settings_table th { padding: 8px; border-top: 1px solid #22252f; white-space: pre-wrap; }
+
+.table_head { font-weight: bold; background-color: #22252f; }
+
+.noinfo {
+    text-align: center;
+    padding: 20px;
+    color: #888;
+}
+
+/* Add server form */
+.addserver_table { margin: auto; }
+.addserver_table td { padding: 6px 10px; }
+.addserver_table input, .addserver_table select {
+    background-color: #282828;
+    color: white;
+    border: 1px solid #444;
+    padding: 4px 8px;
+}
+.addserver_table input[type="submit"] {
+    background-color: #0088DD;
+    border: none;
+    padding: 8px 20px;
+    cursor: pointer;
+    font-weight: bold;
+}
+.addserver_table input[type="submit"]:hover { background-color: #006BB3; }
+
+.annotation {
+    text-align: center;
+    background-color: #282828;
+    padding: 17px;
+}
+
+.center { text-align: center; }
+
+.details_icon {
+    background-color: #333;
+    padding: 4px 8px;
+    border-radius: 3px;
+    font-size: 10px;
+}
+.details_icon:hover { background-color: #444; }
