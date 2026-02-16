@@ -3,91 +3,205 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Service Status Dashboard</title>
+    <title>NeuralTools - AI Assistant Toolkit</title>
     <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
         body {
-            font-family: Arial, sans-serif;
-            background: #f4f4f9;
-            margin: 0;
-            padding: 0;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #1a1a2e;
+            color: #e0e0e0;
+            min-height: 100vh;
         }
-
-        #service-container {
-            width: 80%;
-            max-width: 600px;
-            background: white;
-            border-radius: 8px;
-            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-            padding: 20px;
+        .navbar {
+            background: #16213e;
+            padding: 12px 24px;
             display: flex;
-            flex-direction: column;
+            align-items: center;
+            justify-content: space-between;
+            border-bottom: 1px solid #0f3460;
+        }
+        .navbar h1 {
+            font-size: 20px;
+            color: #e94560;
+            font-weight: 600;
+        }
+        .navbar .version {
+            font-size: 12px;
+            color: #666;
+        }
+        .container {
+            max-width: 900px;
+            margin: 30px auto;
+            padding: 0 20px;
+        }
+        .tools-section {
+            margin-bottom: 30px;
+        }
+        .tools-section h2 {
+            font-size: 16px;
+            color: #e94560;
+            margin-bottom: 15px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        .tool-card {
+            background: #16213e;
+            border: 1px solid #0f3460;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 15px;
+        }
+        .tool-card h3 {
+            color: #fff;
+            font-size: 15px;
+            margin-bottom: 8px;
+        }
+        .tool-card p {
+            color: #999;
+            font-size: 13px;
+            margin-bottom: 15px;
+        }
+        .input-group {
+            margin-bottom: 12px;
+        }
+        .input-group label {
+            display: block;
+            font-size: 12px;
+            color: #aaa;
+            margin-bottom: 4px;
+        }
+        .input-group input, .input-group select {
+            width: 100%;
+            padding: 8px 12px;
+            background: #0f3460;
+            border: 1px solid #1a1a5e;
+            border-radius: 4px;
+            color: #fff;
+            font-size: 14px;
+        }
+        .input-group input:focus {
+            outline: none;
+            border-color: #e94560;
+        }
+        .btn {
+            background: #e94560;
+            color: #fff;
+            border: none;
+            padding: 8px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 13px;
+            transition: background 0.2s;
+        }
+        .btn:hover { background: #c73652; }
+        .result-box {
+            margin-top: 12px;
+            padding: 10px;
+            background: #0a0a1a;
+            border-radius: 4px;
+            font-family: monospace;
+            font-size: 14px;
+            color: #4ecca3;
+            min-height: 24px;
+            white-space: pre-wrap;
+            word-break: break-all;
+        }
+        .inline-row {
+            display: flex;
             gap: 10px;
         }
-
-        .service {
-            padding: 10px 20px;
-            border-radius: 5px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            font-size: 16px;
-            transition: background-color 0.3s;
-        }
-
-        .red {
-            background-color: #ffdddd;
-            color: #d04437;
-        }
-
-        .green {
-            background-color: #ddffdd;
-            color: #4a934a;
-        }
+        .inline-row .input-group { flex: 1; }
     </style>
 </head>
 <body>
-    <div id="service-container">
-        <div id="apache" class="service">Apache: Loading...</div>
-        <div id="mysql" class="service">MySQL: Loading...</div>
-        <div id="nginx" class="service">Nginx: Loading...</div>
-        <div id="ssh" class="service">SSH: Loading...</div>
+    <nav class="navbar">
+        <h1>🧠 NeuralTools</h1>
+        <span class="version" id="app-version">loading...</span>
+    </nav>
+
+    <div class="container">
+        <div class="tools-section">
+            <h2>Available Tools</h2>
+
+            <div class="tool-card">
+                <h3>📐 Math Evaluator</h3>
+                <p>Evaluate mathematical expressions using standard math functions (sin, cos, sqrt, log, pow, pi, e, etc.)</p>
+                <div class="input-group">
+                    <label>Expression</label>
+                    <input type="text" id="math-expr" placeholder="e.g., sqrt(144) + pow(2, 10)" />
+                </div>
+                <button class="btn" onclick="evalMath()">Evaluate</button>
+                <div class="result-box" id="math-result"></div>
+            </div>
+
+            <div class="tool-card">
+                <h3>🔄 Unit Converter</h3>
+                <p>Convert between common measurement units (km/mi, kg/lb, C/F, m/ft, L/gal)</p>
+                <div class="inline-row">
+                    <div class="input-group">
+                        <label>Value</label>
+                        <input type="number" id="conv-value" placeholder="100" />
+                    </div>
+                    <div class="input-group">
+                        <label>From</label>
+                        <input type="text" id="conv-from" placeholder="km" />
+                    </div>
+                    <div class="input-group">
+                        <label>To</label>
+                        <input type="text" id="conv-to" placeholder="mi" />
+                    </div>
+                </div>
+                <button class="btn" onclick="convertUnit()">Convert</button>
+                <div class="result-box" id="conv-result"></div>
+            </div>
+        </div>
     </div>
 
     <script>
-        document.addEventListener("DOMContentLoaded", function() {
-            const services = ['apache', 'mysql', 'nginx', 'ssh'];
+        fetch('/api/v1/get_config')
+            .then(r => r.json())
+            .then(d => {
+                document.getElementById('app-version').textContent = 'v' + d.version;
+            })
+            .catch(() => {});
 
-            services.forEach(service => {
-                fetch('/check_service', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({ service_name: service })
-                })
-                .then(response => response.json())
-                .then(data => {
-                    const element = document.getElementById(service);
-                    if (data.status === "true") {
-                        element.classList.add('green');
-                        element.textContent = service.toUpperCase() + ": Running";
-                    } else {
-                        element.classList.add('red');
-                        element.textContent = service.toUpperCase() + ": Stopped";
-                    }
-                })
-                .catch(error => {
-                    console.error('Error:', error);
-                    const element = document.getElementById(service);
-                    element.textContent = service.toUpperCase() + ": Error";
-                });
-            });
+        function evalMath() {
+            const expr = document.getElementById('math-expr').value;
+            const box = document.getElementById('math-result');
+            box.textContent = 'Computing...';
+            fetch('/api/v1/execute_tool', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({tool_name: 'math_eval', parameters: {expression: expr}})
+            })
+            .then(r => r.json())
+            .then(d => {
+                box.textContent = d.status ? d.result : ('Error: ' + d.error);
+            })
+            .catch(e => { box.textContent = 'Request failed'; });
+        }
+
+        function convertUnit() {
+            const val = document.getElementById('conv-value').value;
+            const from = document.getElementById('conv-from').value;
+            const to = document.getElementById('conv-to').value;
+            const box = document.getElementById('conv-result');
+            box.textContent = 'Converting...';
+            fetch('/api/v1/execute_tool', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({tool_name: 'unit_convert', parameters: {value: parseFloat(val), from_unit: from, to_unit: to}})
+            })
+            .then(r => r.json())
+            .then(d => {
+                box.textContent = d.status ? d.result : ('Error: ' + d.error);
+            })
+            .catch(e => { box.textContent = 'Request failed'; });
+        }
+
+        document.getElementById('math-expr').addEventListener('keydown', function(e) {
+            if (e.key === 'Enter') evalMath();
         });
     </script>
 </body>
 </html>
-
