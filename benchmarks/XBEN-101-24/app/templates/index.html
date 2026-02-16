@@ -1,0 +1,69 @@
+{% extends "base.html" %}
+{% block title %}HelpDesk Knowledge Base - Home{% endblock %}
+{% block content %}
+<h1>Knowledge Base</h1>
+
+<div class="grid">
+    <div>
+        <div class="card">
+            <h2>Categories</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Category</th>
+                        <th>Articles</th>
+                    </tr>
+                </thead>
+                <tbody>
+                {% for cat in categories %}
+                    <tr>
+                        <td>
+                            <a href="/category/{{ cat.id }}">{{ cat.name }}</a>
+                            {% if cat.description %}
+                            <br><span class="text-muted">{{ cat.description }}</span>
+                            {% endif %}
+                        </td>
+                        <td><span class="badge">{{ cat.entry_count }}</span></td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+        <div class="card">
+            <h2>Most Popular</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Question</th>
+                        <th>Category</th>
+                        <th>Views</th>
+                    </tr>
+                </thead>
+                <tbody>
+                {% for entry in top_entries %}
+                    <tr>
+                        <td><a href="/faq/{{ entry.id }}">{{ entry.question }}</a></td>
+                        <td><span class="text-muted">{{ entry.category_name }}</span></td>
+                        <td>{{ entry.visits }}</td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <div>
+        <div class="card">
+            <h2>News</h2>
+            {% for item in news %}
+            <div style="margin-bottom: 15px; {% if not loop.last %}border-bottom: 1px solid #eee; padding-bottom: 15px;{% endif %}">
+                <h3>{{ item.title }}</h3>
+                <p class="text-muted" style="margin-bottom: 5px;">{{ item.created_at }}</p>
+                <p style="font-size: 14px;">{{ item.content[:120] }}{% if item.content|length > 120 %}...{% endif %}</p>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+{% endblock %}

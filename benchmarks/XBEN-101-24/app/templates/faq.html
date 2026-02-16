@@ -1,0 +1,92 @@
+{% extends "base.html" %}
+{% block title %}{{ entry.question }} - HelpDesk Knowledge Base{% endblock %}
+{% block content %}
+<div class="breadcrumb">
+    <a href="/">Home</a> &raquo; <a href="/category/{{ entry.category_id }}">{{ entry.category_name }}</a> &raquo; FAQ #{{ entry.id }}
+</div>
+
+<div class="card">
+    <h1 style="font-size: 20px;">{{ entry.question }}</h1>
+    <p class="text-muted" style="margin-bottom: 15px;">
+        Author: {{ entry.author }} | Views: {{ entry.visits }} | Last updated: {{ entry.updated_at }}
+    </p>
+    <div style="font-size: 15px; line-height: 1.8;">
+        {{ entry.answer }}
+    </div>
+</div>
+
+<div class="card">
+    <h2>Comments ({{ comments|length }})</h2>
+    {% for comment in comments %}
+    <div style="padding: 12px 0; {% if not loop.last %}border-bottom: 1px solid #eee;{% endif %}">
+        <div style="display: flex; justify-content: space-between; margin-bottom: 5px;">
+            <strong>{{ comment.username }}</strong>
+            <span class="text-muted">{{ comment.created_at }}</span>
+        </div>
+        <p style="font-size: 14px;">{{ comment.comment_text }}</p>
+    </div>
+    {% else %}
+    <p class="text-muted">No comments yet. Be the first to comment!</p>
+    {% endfor %}
+</div>
+
+<div class="card">
+    <h2>Add a Comment</h2>
+    <div id="comment-response"></div>
+    <form id="commentForm">
+        <input type="hidden" name="action" value="savecomment">
+        <input type="hidden" name="id" value="{{ entry.id }}">
+        <input type="hidden" name="type" value="faq">
+
+        <div class="form-group">
+            <label for="user">Name:</label>
+            <input type="text" id="user" name="user" required>
+        </div>
+
+        <div class="form-group">
+            <label for="mail">Email:</label>
+            <input type="text" id="mail" name="mail" required>
+        </div>
+
+        <div class="form-group">
+            <label for="comment_text">Comment:</label>
+            <textarea id="comment_text" name="comment_text" rows="4" required></textarea>
+        </div>
+
+        <div class="form-group">
+            <label for="captcha">Security Code:</label>
+            <div style="margin-bottom: 8px;">
+                <img src="data:image/png;base64,{{ captcha_image }}" alt="CAPTCHA" style="border: 1px solid #ddd; border-radius: 4px;">
+            </div>
+            <input type="text" id="captcha" name="captcha" placeholder="Enter the code shown above" required>
+        </div>
+
+        <button type="submit" class="btn btn-success">Submit Comment</button>
+    </form>
+</div>
+
+<script>
+document.getElementById('commentForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+    var formData = new FormData(this);
+    var responseDiv = document.getElementById('comment-response');
+
+    fetch('/service', {
+        method: 'POST',
+        body: formData
+    })
+    .then(function(response) { return response.json(); })
+    .then(function(data) {
+        if (data.error) {
+            responseDiv.innerHTML = '<div class="alert alert-error">' + data.error + '</div>';
+        } else if (data.success) {
+            responseDiv.innerHTML = '<div class="alert alert-success">' + data.success + '</div>';
+            document.getElementById('commentForm').reset();
+        }
+    })
+    .catch(function(err) {
+        responseDiv.innerHTML = '<div class="alert alert-error">An error occurred. Please try again.</div>';
+    });
+});
+</script>
+{% endblock %}

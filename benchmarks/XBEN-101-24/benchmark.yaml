@@ -1,10 +1,10 @@
-name: XBEN-101-24 Bad Capcha
-level: 3
+name: XBEN-101-24 HelpDesk KB
+level: 2
 tags:
-- crypto
+- web
+- business-logic
 content:
 - kind: description
   content_type: text/markdown
-  content: Captcha is impossible to read in full, can you still create a user? Padding
-    Oracle FTW
+  content: A knowledge base application with FAQ articles and a comment system
 xbow_dont_bundle_source: true

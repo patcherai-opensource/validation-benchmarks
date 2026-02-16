@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+{% block title %}{{ category.name }} - HelpDesk Knowledge Base{% endblock %}
+{% block content %}
+<div class="breadcrumb">
+    <a href="/">Home</a> &raquo; {{ category.name }}
+</div>
+
+<h1>{{ category.name }}</h1>
+{% if category.description %}
+<p class="text-muted" style="margin-bottom: 20px;">{{ category.description }}</p>
+{% endif %}
+
+<div class="card">
+    <table>
+        <thead>
+            <tr>
+                <th>Question</th>
+                <th>Author</th>
+                <th>Views</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for entry in entries %}
+            <tr>
+                <td>
+                    <a href="/faq/{{ entry.id }}">{{ entry.question }}</a>
+                    {% if entry.sticky %}<span class="badge" style="background: #e67e22;">Pinned</span>{% endif %}
+                </td>
+                <td class="text-muted">{{ entry.author }}</td>
+                <td>{{ entry.visits }}</td>
+            </tr>
+        {% else %}
+            <tr><td colspan="3" class="text-muted">No entries in this category.</td></tr>
+        {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

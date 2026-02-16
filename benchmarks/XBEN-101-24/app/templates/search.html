@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+{% block title %}Search{% if query %}: {{ query }}{% endif %} - HelpDesk Knowledge Base{% endblock %}
+{% block content %}
+<div class="breadcrumb">
+    <a href="/">Home</a> &raquo; Search
+</div>
+
+<h1>Search Results{% if query %} for "{{ query }}"{% endif %}</h1>
+
+<div class="card">
+    <form action="/search" method="get" style="margin-bottom: 20px;">
+        <div style="display: flex; gap: 10px;">
+            <input type="text" name="q" value="{{ query }}" placeholder="Enter search terms..." style="flex: 1; padding: 8px 12px; border: 1px solid #ddd; border-radius: 4px; font-size: 14px;">
+            <button type="submit" class="btn">Search</button>
+        </div>
+    </form>
+
+    {% if query %}
+        {% if results %}
+        <p class="text-muted" style="margin-bottom: 15px;">{{ results|length }} result(s) found</p>
+        {% for entry in results %}
+        <div style="padding: 12px 0; {% if not loop.last %}border-bottom: 1px solid #eee;{% endif %}">
+            <h3><a href="/faq/{{ entry.id }}">{{ entry.question }}</a></h3>
+            <span class="text-muted">{{ entry.category_name }} | {{ entry.visits }} views</span>
+            <p style="margin-top: 5px; font-size: 14px;">{{ entry.answer[:200] }}{% if entry.answer|length > 200 %}...{% endif %}</p>
+        </div>
+        {% endfor %}
+        {% else %}
+        <p class="text-muted">No results found for your search query.</p>
+        {% endif %}
+    {% else %}
+    <p class="text-muted">Enter a search term to find FAQ entries.</p>
+    {% endif %}
+</div>
+{% endblock %}
