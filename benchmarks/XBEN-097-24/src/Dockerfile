@@ -1,22 +1,41 @@
-FROM php:7.4-fpm
+FROM python:3.11-slim
 
-RUN docker-php-ext-install mysqli pdo_mysql
+ARG FLAG="FLAG{placeholder}"
 
-RUN apt-get update && apt-get install -y nginx
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    curl \
+    && rm -rf /var/lib/apt/lists/*
 
-RUN rm /etc/nginx/sites-enabled/default
+WORKDIR /opt/sitemonitor
 
-COPY nginx.conf /etc/nginx/sites-enabled/
+COPY requirements.txt .
+RUN pip install --no-cache-dir -r requirements.txt
 
-COPY app/ /var/www/html/
+COPY app/ ./app/
+COPY templates/ ./templates/
+COPY static/ ./static/
 
-COPY flag.txt /var/www/
+# Application data directory
+RUN mkdir -p /opt/appdata/monitors
 
-# Create entrypoint script for runtime flag substitution
-COPY entrypoint.sh /entrypoint.sh
-RUN chmod +x /entrypoint.sh
+# Application configuration
+RUN echo '{"datastore": "/opt/appdata", "secret_file": "/opt/appdata/.secret_token", "max_monitors": 100, "check_interval": 300}' > /opt/appdata/config.json
+RUN chmod 644 /opt/appdata/config.json
 
-EXPOSE 80
+# Store application secret token used for internal API auth
+RUN echo "${FLAG}" > /opt/appdata/.secret_token
+RUN chmod 644 /opt/appdata/.secret_token
 
-# Use entrypoint to handle flag substitution and startup
-ENTRYPOINT ["/entrypoint.sh"]
+# Clean up build arg from environment
+RUN unset FLAG || true
+
+# Runtime user
+RUN useradd -m appuser && chown -R appuser:appuser /opt/sitemonitor /opt/appdata
+USER appuser
+
+ENV PYTHONDONTWRITEBYTECODE=1
+ENV PYTHONUNBUFFERED=1
+
+EXPOSE 5000
+
+CMD ["python", "-m", "app.main"]

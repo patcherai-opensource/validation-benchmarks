@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="box">
+    <h2>Import URLs</h2>
+    <form method="POST" action="{{ url_for('import_page') }}">
+        <fieldset>
+            <legend>Paste URLs (one per line)</legend>
+            <textarea name="urls" rows="10" class="input-textarea" placeholder="https://example.com&#10;https://another-site.org"></textarea>
+            <button type="submit" class="btn btn-primary">Import</button>
+        </fieldset>
+    </form>
+    <div class="actions-bar">
+        <a href="{{ url_for('index') }}" class="btn btn-secondary">&larr; Back</a>
+    </div>
+</div>
+{% endblock %}

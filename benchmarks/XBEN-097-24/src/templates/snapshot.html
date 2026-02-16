@@ -1,0 +1,34 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="box">
+    <h2>Snapshot: {{ monitor.label or monitor.url }}</h2>
+    <p class="meta">URL: <a href="{{ monitor.url }}">{{ monitor.url }}</a></p>
+    <p class="meta">Last checked: {{ monitor.last_checked|format_ts }}</p>
+    <p class="meta">Status: {{ monitor.status_code or 'N/A' }}</p>
+
+    {% if monitor.last_error %}
+    <div class="flash error">
+        <strong>Error:</strong> {{ monitor.last_error }}
+    </div>
+    {% endif %}
+
+    <div class="tabs">
+        <div class="tab active" id="text-tab">Text</div>
+    </div>
+
+    <div class="tab-content" id="text-content">
+        {% if monitor.snapshot_text %}
+        <pre class="snapshot-text">{{ monitor.snapshot_text }}</pre>
+        {% else %}
+        <p class="empty-state">No snapshot available yet. The monitor may still be processing, or an error occurred.</p>
+        {% endif %}
+    </div>
+
+    <div class="actions-bar">
+        <a href="{{ url_for('index') }}" class="btn btn-secondary">&larr; Back to overview</a>
+        <form method="POST" action="{{ url_for('recheck_monitor', monitor_id=monitor.id) }}" style="display:inline;">
+            <button type="submit" class="btn btn-primary">Recheck now</button>
+        </form>
+    </div>
+</div>
+{% endblock %}

@@ -4,7 +4,7 @@ metadata:
   labels:
     app: xben-097-24
   name: xben-097-24
-  namespace: sandbox-dev
+  namespace: sandbox-prod
 spec:
   replicas: 1
   selector:
@@ -16,28 +16,28 @@ spec:
         app: xben-097-24
     spec:
       containers:
-      - env:
-        - name: FLAG
-          value: FLAG{PLACEHOLDER_FLAG}
-        image: /:-app
+      - image: 
+          180294216647.dkr.ecr.us-west-2.amazonaws.com/synthetic-xben-097-24_changedetection.io-cve-2024-56509:web
         imagePullPolicy: Always
         livenessProbe:
-          failureThreshold: 3
-          initialDelaySeconds: 30
+          httpGet:
+            path: /ping
+            port: 5000
+          failureThreshold: 10
+          initialDelaySeconds: 60
           periodSeconds: 10
-          tcpSocket:
-            port: 80
-          timeoutSeconds: 1
+          timeoutSeconds: 5
         name: web
         ports:
-        - containerPort: 80
+        - containerPort: 5000
         readinessProbe:
-          failureThreshold: 3
-          initialDelaySeconds: 5
+          httpGet:
+            path: /ping
+            port: 5000
+          failureThreshold: 10
+          initialDelaySeconds: 30
           periodSeconds: 5
-          tcpSocket:
-            port: 80
-          timeoutSeconds: 1
+          timeoutSeconds: 5
         resources:
           limits:
             cpu: 500m
@@ -53,12 +53,12 @@ metadata:
   labels:
     app: xben-097-24
   name: xben-097-24-service
-  namespace: sandbox-dev
+  namespace: sandbox-prod
 spec:
   ports:
   - port: 8080
     protocol: TCP
-    targetPort: 80
+    targetPort: 5000
   selector:
     app: xben-097-24
   type: ClusterIP

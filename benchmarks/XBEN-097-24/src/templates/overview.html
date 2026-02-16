@@ -1,0 +1,65 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="box">
+    <form class="add-form" action="{{ url_for('add_monitor') }}" method="POST">
+        <fieldset>
+            <legend>Add a new site monitor</legend>
+            <div class="form-row">
+                <input type="text" name="url" placeholder="https://example.com" required class="input-url">
+                <input type="text" name="label" placeholder="Label (optional)" class="input-label">
+                <button type="submit" class="btn btn-primary">Monitor</button>
+            </div>
+        </fieldset>
+    </form>
+
+    {% if monitors|length == 0 %}
+    <div class="empty-state">
+        <p>No monitors configured yet. Add a URL above to get started, or <a href="{{ url_for('import_page') }}">import a list</a>.</p>
+    </div>
+    {% else %}
+    <table class="watch-table">
+        <thead>
+            <tr>
+                <th>#</th>
+                <th>URL</th>
+                <th>Last Checked</th>
+                <th>Last Changed</th>
+                <th>Status</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for m in monitors %}
+            <tr class="{% if m.last_error %}error{% endif %}">
+                <td>{{ loop.index }}</td>
+                <td>
+                    <span class="url-label" title="{{ m.url }}">{{ m.label or m.url }}</span>
+                    <br><small class="url-text">{{ m.url[:100] }}</small>
+                </td>
+                <td>{{ m.last_checked|format_ts }}</td>
+                <td>{% if m.last_changed %}{{ m.last_changed|format_ts }}{% else %}-{% endif %}</td>
+                <td>
+                    {% if m.last_error %}
+                        <span class="status-error" title="{{ m.last_error }}">Error</span>
+                    {% elif m.check_count > 0 %}
+                        <span class="status-ok">OK ({{ m.status_code }})</span>
+                    {% else %}
+                        <span class="status-pending">Queued</span>
+                    {% endif %}
+                </td>
+                <td>
+                    <a href="{{ url_for('view_snapshot', monitor_id=m.id) }}" class="btn btn-small">Preview</a>
+                    <form method="POST" action="{{ url_for('recheck_monitor', monitor_id=m.id) }}" style="display:inline;">
+                        <button type="submit" class="btn btn-small btn-secondary">Recheck</button>
+                    </form>
+                    <form method="POST" action="{{ url_for('delete_monitor', monitor_id=m.id) }}" style="display:inline;">
+                        <button type="submit" class="btn btn-small btn-danger">Delete</button>
+                    </form>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+    {% endif %}
+</div>
+{% endblock %}

@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="box">
+    <h2>History: {{ monitor.label or monitor.url }}</h2>
+    <p class="meta">URL: {{ monitor.url }}</p>
+    <p class="meta">Total checks: {{ monitor.check_count }}</p>
+
+    {% if monitor.check_count == 0 %}
+    <p class="empty-state">No history available yet.</p>
+    {% else %}
+    <table class="watch-table">
+        <thead>
+            <tr>
+                <th>Timestamp</th>
+                <th>Status</th>
+                <th>Hash</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>{{ monitor.last_checked|int }}</td>
+                <td>{{ monitor.status_code }}</td>
+                <td>{{ monitor.previous_hash or '-' }}</td>
+            </tr>
+        </tbody>
+    </table>
+    {% endif %}
+
+    <div class="actions-bar">
+        <a href="{{ url_for('index') }}" class="btn btn-secondary">&larr; Back</a>
+    </div>
+</div>
+{% endblock %}

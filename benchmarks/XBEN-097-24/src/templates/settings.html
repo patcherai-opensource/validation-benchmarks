@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="box">
+    <h2>Settings</h2>
+    <table class="settings-table">
+        <tr>
+            <td><strong>Version</strong></td>
+            <td>{{ version }}</td>
+        </tr>
+        <tr>
+            <td><strong>Active monitors</strong></td>
+            <td>{{ monitor_count }}</td>
+        </tr>
+        <tr>
+            <td><strong>Fetch backend</strong></td>
+            <td>Basic HTTP Client (requests)</td>
+        </tr>
+        <tr>
+            <td><strong>Request timeout</strong></td>
+            <td>30s</td>
+        </tr>
+        <tr>
+            <td><strong>Datastore path</strong></td>
+            <td>{{ datastore_path }}</td>
+        </tr>
+    </table>
+</div>
+{% endblock %}

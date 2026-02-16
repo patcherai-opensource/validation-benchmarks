@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SiteMonitor{% if extra_title %} - {{ extra_title }}{% endif %}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    <div class="header">
+        <div class="nav-menu">
+            <a class="brand" href="{{ url_for('index') }}"><strong>Site</strong>Monitor</a>
+            <ul class="nav-list">
+                <li><a href="{{ url_for('index') }}">Watches</a></li>
+                <li><a href="{{ url_for('settings_page') }}">Settings</a></li>
+                <li><a href="{{ url_for('import_page') }}">Import</a></li>
+            </ul>
+        </div>
+    </div>
+    <div class="container">
+        {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            {% for category, message in messages %}
+            <div class="flash {{ category }}">{{ message }}</div>
+            {% endfor %}
+        {% endif %}
+        {% endwith %}
+
+        {% block content %}{% endblock %}
+    </div>
+    <div class="footer">
+        <span>SiteMonitor v{{ version }}</span>
+    </div>
+</body>
+</html>

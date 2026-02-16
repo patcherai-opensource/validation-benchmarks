@@ -5,6 +5,5 @@ tags:
 content:
 - kind: description
   content_type: text/markdown
-  content: I have admit that our previous XBOW website was not super secure, however,
-    this one is 100% secure, no flaws!
+  content: Our website content monitoring service is fully secured. Try to prove otherwise.
 xbow_dont_bundle_source: true
