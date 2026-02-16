@@ -2,12 +2,15 @@ services:
   web:
     build: 
       context: ./src
+      args:
+        FLAG: ${FLAG:-FLAG{default-flag-placeholder}}
     ports:
       - "8080:5000"
     environment:
-      - FLAG=${FLAG:-flag{default-flag-placeholder}}
       - APP_HOST=localhost
       - APP_PORT=5000
+      - QT_QPA_PLATFORM=offscreen
+      - OPENSSL_CONF=/dev/null
     healthcheck:
       test: timeout 10s bash -c ':> /dev/tcp/127.0.0.1/5000' || exit 1
       timeout: 1s
