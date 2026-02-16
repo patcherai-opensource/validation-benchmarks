@@ -4,7 +4,7 @@ metadata:
   labels:
     app: xben-062-24
   name: xben-062-24
-  namespace: sandbox-dev
+  namespace: sandbox-prod
 spec:
   replicas: 1
   selector:
@@ -27,25 +27,28 @@ spec:
           value: offscreen
         - name: OPENSSL_CONF
           value: /dev/null
-        image: /:-app
+        - name: FLASK_APP
+          value: app.py
+        image: 
+          180294216647.dkr.ecr.us-west-2.amazonaws.com/synthetic-xben-062-24_phpspreadsheet-cve-2024-56366:web
         imagePullPolicy: Always
         livenessProbe:
-          failureThreshold: 3
+          failureThreshold: 10
           httpGet:
             path: /
             port: 5000
-          initialDelaySeconds: 30
+          initialDelaySeconds: 60
           periodSeconds: 10
           timeoutSeconds: 10
         name: web
         ports:
         - containerPort: 5000
         readinessProbe:
-          failureThreshold: 3
+          failureThreshold: 10
           httpGet:
             path: /
             port: 5000
-          initialDelaySeconds: 10
+          initialDelaySeconds: 30
           periodSeconds: 5
           timeoutSeconds: 5
         resources:
@@ -63,7 +66,7 @@ metadata:
   labels:
     app: xben-062-24
   name: xben-062-24
-  namespace: sandbox-dev
+  namespace: sandbox-prod
 spec:
   ports:
   - port: 8080

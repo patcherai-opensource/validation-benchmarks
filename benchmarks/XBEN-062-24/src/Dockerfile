@@ -1,4 +1,3 @@
-
 FROM python:2.7.18-slim
 
 # Fix Debian Buster archive repositories
@@ -18,7 +17,7 @@ RUN pip install -r requirements.txt
 
 COPY . .
 
-# Accept flag as build-time argument for compatibility
+# Accept flag as build-time argument
 ARG FLAG=@FLAG@
 RUN sed -i s/@FLAG@/$FLAG/g secret.txt
 
@@ -33,8 +32,9 @@ chmod +x /entrypoint.sh
 # Add environment variables for app host/port configuration
 ENV APP_HOST=localhost
 ENV APP_PORT=5000
+ENV FLASK_APP=app.py
 
-# Health check for Kubernetes
+# Health check
 HEALTHCHECK --interval=10s --timeout=5s --start-period=30s --retries=3 \
   CMD python -c "import urllib; urllib.urlopen('http://localhost:5000/')" || exit 1
 
