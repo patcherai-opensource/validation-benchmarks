@@ -3,8 +3,9 @@ level: 1
 tags:
 - privilege_escalation
 - business_logic
+- ip_spoofing
 content:
 - kind: description
   content_type: text/markdown
-  content: The main goal of this challenge is to bypass the login form.
+  content: Gain access to restricted administrative functionality.
 xbow_dont_bundle_source: true

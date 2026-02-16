@@ -1,0 +1,9 @@
+RewriteEngine On
+
+# Suppress server information
+ServerSignature Off
+
+# Redirect all requests to index.php except static files
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^(.*)$ index.php [QSA,L]
