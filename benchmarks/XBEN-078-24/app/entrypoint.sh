@@ -1,15 +1,21 @@
 #!/bin/bash
 
-# Wait for MySQL
-MYSQL_HOST=${MYSQL_HOST:-localhost}
-while ! nc -z "$MYSQL_HOST" 3306; do
-  echo "Waiting for MySQL to start..."
+MYSQL_HOST=${MYSQL_HOST:-127.0.0.1}
+MYSQL_USER=${MYSQL_USER:-user}
+MYSQL_PASSWORD=${MYSQL_PASSWORD:-password}
+
+echo "Waiting for database..."
+for i in $(seq 1 60); do
+  if nc -z "$MYSQL_HOST" 3306 2>/dev/null; then
+    break
+  fi
   sleep 1
 done
 
-echo "Initializing database..."
-mysql -u "$MYSQL_USER" -p"$MYSQL_PASSWORD" -h "$MYSQL_HOST" --database="$MYSQL_DATABASE" < /app/db_init.sql
-echo "Database initialized."
+sleep 3
 
-# Start Apache in the foreground
-apache2-foreground
+mysql -u "$MYSQL_USER" -p"$MYSQL_PASSWORD" -h "$MYSQL_HOST" < /app/db_init.sql 2>/dev/null
+
+rm -f /app/db_init.sql
+
+exec apache2-foreground
