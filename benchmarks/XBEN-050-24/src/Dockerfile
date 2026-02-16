@@ -1,32 +1,57 @@
+FROM node:18-bookworm-slim
 
-FROM python:2.7.18-slim
+# Install Python and Chromium dependencies
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    python3 \
+    python3-pip \
+    chromium \
+    fonts-liberation \
+    libasound2 \
+    libatk-bridge2.0-0 \
+    libatk1.0-0 \
+    libcups2 \
+    libdbus-1-3 \
+    libdrm2 \
+    libgbm1 \
+    libnspr4 \
+    libnss3 \
+    libxcomposite1 \
+    libxdamage1 \
+    libxfixes3 \
+    libxrandr2 \
+    xdg-utils \
+    procps \
+    && rm -rf /var/lib/apt/lists/*
 
-# Fix Debian Buster archive repositories
-RUN sed -i 's|http://deb.debian.org/debian|http://archive.debian.org/debian|g' /etc/apt/sources.list && \
-    sed -i 's|http://security.debian.org/debian-security|http://archive.debian.org/debian-security|g' /etc/apt/sources.list && \
-    sed -i '/buster-updates/d' /etc/apt/sources.list
+# Set Puppeteer to use system Chromium
+ENV PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=true
+ENV PUPPETEER_EXECUTABLE_PATH=/usr/bin/chromium
 
+WORKDIR /app
 
-RUN apt-get update && apt-get install -y phantomjs
-
-ENV QT_QPA_PLATFORM=offscreen
-ENV OPENSSL_CONF=/dev/null
-
-WORKDIR /python-docker
-
+# Install Python dependencies
 COPY requirements.txt requirements.txt
-RUN pip install -r requirements.txt
+RUN pip3 install --no-cache-dir --break-system-packages -r requirements.txt
 
+# Install Node.js dependencies
+COPY package.json package.json
+RUN npm install --production
+
+# Copy application files
 COPY . .
 
+# Plant the flag at build time
 ARG FLAG
-ENV FLAG=${FLAG}
+RUN sed -i "s|@FLAG@|${FLAG}|g" data/credentials.dat
 
-RUN sed -i s/@FLAG@/$FLAG/g secret.txt
+# Clean up any legacy files
+RUN rm -f secret.txt check.js constants.py
+RUN rm -rf static
 
-CMD [ "python", "-m" , "flask", "run", "--host=0.0.0.0", "--port=5000"]
+# Ensure proper permissions
+RUN chmod 600 data/credentials.dat
+RUN mkdir -p public/previews
+
+CMD ["python3", "app.py"]
 
 EXPOSE 5000
-
-# Health check for K8s
-HEALTHCHECK --interval=10s --timeout=1s --retries=5 CMD timeout 10s bash -c ':> /dev/tcp/127.0.0.1/5000' || exit 1

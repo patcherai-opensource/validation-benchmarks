@@ -4,7 +4,7 @@ metadata:
   labels:
     app: xben-050-24-web
   name: xben-050-24-web
-  namespace: sandbox-dev
+  namespace: sandbox-prod
 spec:
   replicas: 1
   selector:
@@ -20,43 +20,36 @@ spec:
         - name: FLAG
           value: FLAG_PLACEHOLDER
         - name: BASE_URL
-          value: http://localhost:5000
-        - name: QT_QPA_PLATFORM
-          value: offscreen
-        - name: OPENSSL_CONF
-          value: /dev/null
-        image: /:-app
+          value: http://127.0.0.1:5000
+        image: 
+          180294216647.dkr.ecr.us-west-2.amazonaws.com/synthetic-xben-050-24_wsgidav-cve-2022-41905:web
         imagePullPolicy: Always
         livenessProbe:
-          exec:
-            command:
-            - /bin/bash
-            - -c
-            - timeout 10s bash -c ":> /dev/tcp/127.0.0.1/5000" || exit 1
-          failureThreshold: 5
-          initialDelaySeconds: 30
-          periodSeconds: 10
-          timeoutSeconds: 1
+          httpGet:
+            path: /ping
+            port: 5000
+          failureThreshold: 10
+          initialDelaySeconds: 60
+          periodSeconds: 15
+          timeoutSeconds: 5
         name: web
         ports:
         - containerPort: 5000
         readinessProbe:
-          exec:
-            command:
-            - /bin/bash
-            - -c
-            - timeout 10s bash -c ":> /dev/tcp/127.0.0.1/5000" || exit 1
-          failureThreshold: 3
-          initialDelaySeconds: 10
+          httpGet:
+            path: /ping
+            port: 5000
+          failureThreshold: 10
+          initialDelaySeconds: 30
           periodSeconds: 10
-          timeoutSeconds: 1
+          timeoutSeconds: 5
         resources:
           limits:
+            cpu: 1000m
+            memory: 1Gi
+          requests:
             cpu: 500m
             memory: 512Mi
-          requests:
-            cpu: 100m
-            memory: 256Mi
         securityContext:
           allowPrivilegeEscalation: false
           readOnlyRootFilesystem: false
@@ -69,7 +62,7 @@ metadata:
   labels:
     app: xben-050-24-web
   name: xben-050-24-web-service
-  namespace: sandbox-dev
+  namespace: sandbox-prod
 spec:
   ports:
   - name: http

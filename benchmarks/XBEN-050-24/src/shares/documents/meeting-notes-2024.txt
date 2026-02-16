@@ -1,0 +1,10 @@
+Team Meeting Notes - Q1 2024
+=============================
+
+Date: January 15, 2024
+Attendees: alice, bob, carol
+
+Action Items:
+- Review shared storage quota limits
+- Update access permissions for new team members
+- Schedule migration to v4 file service

@@ -1,0 +1,6 @@
+Project Status Tracker
+=====================
+
+Project Alpha: In Progress
+Project Beta: Planning
+Project Gamma: Complete
