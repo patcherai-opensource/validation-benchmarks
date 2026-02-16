@@ -1,0 +1,59 @@
+{% extends "base.html" %}
+{% block title %}FabricCtl - Dashboard{% endblock %}
+{% block content %}
+<div class="dashboard">
+    <div class="status-panel">
+        <h2>Device Status</h2>
+        <div class="status-grid">
+            <div class="status-card">
+                <h3>State</h3>
+                <span class="status-value operational">Operational</span>
+            </div>
+            <div class="status-card">
+                <h3>Connection</h3>
+                <span class="status-value">{{ fabricator.get('serialPort', '/dev/ttyUSB0') }} @ {{ fabricator.get('baudrate', 115200) }}</span>
+            </div>
+            <div class="status-card">
+                <h3>Profile</h3>
+                <span class="status-value">{{ fabricator.get('defaultProfile', 'standard_fdm') }}</span>
+            </div>
+            <div class="status-card">
+                <h3>Job</h3>
+                <span class="status-value idle">No active job</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="files-panel">
+        <h2>Files</h2>
+        <div class="file-list">
+            <div class="file-item">
+                <span class="file-name">calibration_cube.gcode</span>
+                <span class="file-size">277.8 KB</span>
+                <span class="file-date">2024-03-01</span>
+            </div>
+            <div class="file-item">
+                <span class="file-name">benchy.gcode</span>
+                <span class="file-size">1.5 MB</span>
+                <span class="file-date">2024-02-29</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="temp-panel">
+        <h2>Temperature</h2>
+        <div class="temp-grid">
+            <div class="temp-card">
+                <h3>Hotend</h3>
+                <span class="temp-actual">21.3°C</span>
+                <span class="temp-target">/ 0°C</span>
+            </div>
+            <div class="temp-card">
+                <h3>Bed</h3>
+                <span class="temp-actual">20.8°C</span>
+                <span class="temp-target">/ 0°C</span>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

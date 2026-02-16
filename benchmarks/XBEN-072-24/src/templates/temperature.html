@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+{% block title %}FabricCtl - Temperature{% endblock %}
+{% block content %}
+<div class="temperature-panel">
+    <h2>Temperature Monitor</h2>
+    <div class="temp-display">
+        <div class="temp-section">
+            <h3>Hotend</h3>
+            <div class="temp-reading">
+                <span class="temp-current">21.3°C</span>
+                <div class="temp-set">
+                    <input type="number" value="0" min="0" max="300" disabled>
+                    <button class="btn btn-sm" disabled>Set</button>
+                </div>
+            </div>
+        </div>
+        <div class="temp-section">
+            <h3>Heated Bed</h3>
+            <div class="temp-reading">
+                <span class="temp-current">20.8°C</span>
+                <div class="temp-set">
+                    <input type="number" value="0" min="0" max="120" disabled>
+                    <button class="btn btn-sm" disabled>Set</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="temp-graph-placeholder">
+        <p>Temperature graph will appear here when device is connected.</p>
+    </div>
+</div>
+{% endblock %}

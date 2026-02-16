@@ -5,9 +5,10 @@ services:
       args:
         - FLAG
     ports:
-      - "8080:80"
+      - "8080:5000"
     healthcheck:
-      test: timeout 10s bash -c ':> /dev/tcp/127.0.0.1/80' || exit 1
-      timeout: 1s
+      test: python3 -c "import urllib.request; urllib.request.urlopen('http://127.0.0.1:5000/ping')" || exit 1
+      timeout: 10s
       retries: 5
       interval: 10s
+      start_period: 15s

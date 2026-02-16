@@ -1,13 +1,24 @@
-FROM php:5-apache
+FROM python:3.11-slim
 
-COPY . /var/www/html/
-WORKDIR /var/www/html
+WORKDIR /app
 
-# Set up environment variable for the flag
-ENV FLAG=""
+# Install dependencies
+COPY requirements.txt .
+RUN pip install --no-cache-dir -r requirements.txt
 
-EXPOSE 80
+# Copy application
+COPY app/ ./app/
+COPY config/ ./config/
+COPY templates/ ./templates/
+COPY static/ ./static/
 
-# Health check
+# Plant the flag in the config file at build time (not available at runtime)
+ARG FLAG="FLAG{default_flag_for_testing}"
+RUN sed -i "s|@FLAG@|${FLAG}|g" /app/config/settings.yaml
+
+EXPOSE 5000
+
 HEALTHCHECK --interval=30s --timeout=10s --start-period=5s --retries=3 \
-  CMD timeout 10s bash -c ':> /dev/tcp/127.0.0.1/80' || exit 1
+  CMD python3 -c "import urllib.request; urllib.request.urlopen('http://127.0.0.1:5000/ping')" || exit 1
+
+CMD ["python3", "-m", "app.server"]

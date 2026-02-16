@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+{% block title %}FabricCtl - Control{% endblock %}
+{% block content %}
+<div class="control-panel">
+    <h2>Device Control</h2>
+    <div class="control-grid">
+        <div class="control-section">
+            <h3>Movement</h3>
+            <div class="jog-controls">
+                <div class="jog-row">
+                    <button class="btn btn-control" disabled>Y+</button>
+                </div>
+                <div class="jog-row">
+                    <button class="btn btn-control" disabled>X-</button>
+                    <button class="btn btn-control btn-home" disabled>Home</button>
+                    <button class="btn btn-control" disabled>X+</button>
+                </div>
+                <div class="jog-row">
+                    <button class="btn btn-control" disabled>Y-</button>
+                </div>
+            </div>
+        </div>
+        <div class="control-section">
+            <h3>Extruder</h3>
+            <div class="extrude-controls">
+                <button class="btn btn-control" disabled>Extrude</button>
+                <button class="btn btn-control" disabled>Retract</button>
+            </div>
+        </div>
+        <div class="control-section">
+            <h3>General</h3>
+            <div class="general-controls">
+                <button class="btn btn-control" disabled>Motors Off</button>
+                <button class="btn btn-control" disabled>Fan On</button>
+                <button class="btn btn-control" disabled>Fan Off</button>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

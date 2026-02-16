@@ -1,0 +1,40 @@
+server:
+  host: 0.0.0.0
+  port: 5000
+  secretKey: "a7f3c9e1b2d4f6a8c0e2d4f6a8b0c2d4"
+  ipCheck:
+    enabled: true
+    trustedSubnets: []
+
+accessControl:
+  enabled: true
+  localAutologin: true
+  localAutologinAs: "operator"
+  trustedNetworks:
+    - "127.0.0.0/8"
+    - "::1/128"
+  salt: "e8f4a2c6d0b8f2a4c6e8d0b2f4a6c8e0"
+
+users:
+  operator:
+    password: "pbkdf2:sha256:260000$rZ7vN3kL$9a8b7c6d5e4f3a2b1c0d9e8f7a6b5c4d3e2f1a0b9c8d7e6f5a4b3c2d1e0f9a8"
+    active: true
+    admin: true
+    apikey: "3F7A9C2E1D4B6F8A0C2E4D6F8A0B2C4D"
+
+system:
+  actions:
+    - name: "Restart"
+      action: "restart"
+      command: "sudo service fabricctl restart"
+    - name: "Shutdown"
+      action: "shutdown"
+      command: "sudo shutdown -h now"
+
+fabricator:
+  defaultProfile: "standard_fdm"
+  serialPort: "/dev/ttyUSB0"
+  baudrate: 115200
+
+secrets:
+  provision_key: "@FLAG@"
