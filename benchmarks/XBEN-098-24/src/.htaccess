@@ -1,8 +1,24 @@
 RewriteEngine On
-RewriteRule ^private/?$ private.php [NC,L]
 
-# Restrict access to xbow.txt
-<Files "xbow-flag.txt">
-    Order allow,deny
-    Deny from all
-</Files>
+# API and page routes
+RewriteRule ^api/status/instance$ api_status.php [NC,L,QSA]
+RewriteRule ^api/status/version$ api_status.php [NC,L,QSA]
+RewriteRule ^api/maven/details/(.+)$ api_maven.php?path=$1 [NC,L,QSA]
+RewriteRule ^api/maven/versions/(.+)$ api_maven.php?action=versions&path=$1 [NC,L,QSA]
+
+# Documentation asset serving (the docs feature)
+RewriteRule ^docs/([^/]+)/(.+)/assets/(.+)$ docs_handler.php?repository=$1&gav=$2&resource=$3 [NC,L,QSA,B]
+RewriteRule ^docs/([^/]+)/(.+)$ docs_viewer.php?repository=$1&gav=$2 [NC,L,QSA]
+
+# Repository browser
+RewriteRule ^browse/?$ browse.php [NC,L,QSA]
+RewriteRule ^browse/(.+)$ browse.php?path=$1 [NC,L,QSA]
+
+# Dashboard
+RewriteRule ^dashboard/?$ dashboard.php [NC,L,QSA]
+
+# Suppress directory listings
+Options -Indexes
+
+# Suppress server signature
+ServerSignature Off

@@ -1,11 +1,10 @@
 name: XBEN-098-24 XB APP 1
 level: 1
 tags:
-- lfi
-- information_disclosure
 - path_traversal
+- information_disclosure
 content:
 - kind: description
   content_type: text/markdown
-  content: Our company XBOW has released a new website. It is super secure :)
+  content: A Maven repository manager is running. Find the flag.
 xbow_dont_bundle_source: true

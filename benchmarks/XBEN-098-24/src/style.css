@@ -1,109 +1,293 @@
-body {
+* {
+    box-sizing: border-box;
     margin: 0;
-    font-family: 'Arial', sans-serif;
-    background: #1e1e1e;
-    color: #fff;
-}
-
-.sidebar {
-    position: fixed;
-    width: 250px;
-    height: 100%;
-    background: #000000;
-    transition: width 0.3s;
-}
-
-.sidebar .logo {
-    padding: 15px;
-    text-align: center;
-    background: #000000;
-    color: #C7FF6D;
-    font-size: 24px;
-    font-weight: bold;
-    border-bottom: 1px solid #444;
-}
-
-.sidebar ul {
-    list-style: none;
     padding: 0;
-    margin: 0;
 }
 
-.sidebar ul li {
-    border-bottom: 1px solid #444;
+body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+    background: #f5f5f5;
+    color: #333;
+    line-height: 1.6;
 }
 
-.sidebar ul li a {
+.header-bar {
+    background: #325064;
+    color: #fff;
+    border-bottom: 3px solid #588DB0;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+}
+
+.header-inner {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 1rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 56px;
+}
+
+.header-brand {
+    color: #fff;
     text-decoration: none;
-    color: #C7FF6D;
-    display: block;
-    padding: 15px;
-    transition: background 0.3s;
+    font-size: 1.3rem;
+    font-weight: 700;
 }
 
-.sidebar ul li a:hover {
-    background: #444;
+.header-nav a {
+    color: rgba(255,255,255,0.85);
+    text-decoration: none;
+    margin-left: 1.5rem;
+    font-size: 0.95rem;
 }
 
-.content {
-    margin-left: 250px;
-    padding: 20px;
-    background: url('background.jpg') no-repeat center center fixed;
-    background-size: cover;
-}
-
-.content h1 {
-    font-size: 36px;
-    font-family: 'Courier New', Courier, monospace;
-    color: #C7FF6D;
-}
-
-.content p {
-    font-size: 18px;
-}
-
-form {
-    background: rgba(0, 0, 0, 0.5);
-    padding: 20px;
-    border-radius: 10px;
-}
-
-input[type="text"], input[type="email"], input[type="password"], textarea {
-    width: 100%;
-    padding: 10px;
-    margin: 10px 0;
-    border: 1px solid #444;
-    border-radius: 5px;
-    background: #333;
+.header-nav a:hover {
     color: #fff;
 }
 
-input[type="submit"] {
-    background: #C7FF6D;
+.main-content {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 2rem 1rem;
+}
+
+.hero {
+    text-align: center;
+    padding: 3rem 0 2rem;
+}
+
+.hero h1 {
+    font-size: 2.5rem;
+    color: #325064;
+    margin-bottom: 0.5rem;
+}
+
+.subtitle {
+    color: #666;
+    font-size: 1.1rem;
+}
+
+.card-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+    gap: 1.5rem;
+    margin-top: 2rem;
+}
+
+.card {
+    background: #fff;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    padding: 1.5rem;
+}
+
+.card h3 {
+    color: #325064;
+    margin-bottom: 1rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 2px solid #588DB0;
+}
+
+.repo-list {
+    list-style: none;
+}
+
+.repo-list li {
+    padding: 0.5rem 0;
+    border-bottom: 1px solid #f0f0f0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.repo-list li:last-child {
+    border-bottom: none;
+}
+
+.repo-list a {
+    color: #325064;
+    text-decoration: none;
+    font-weight: 500;
+}
+
+.repo-list a:hover {
+    text-decoration: underline;
+}
+
+.badge {
+    background: #e8f4e8;
+    color: #2d7a2d;
+    padding: 2px 8px;
+    border-radius: 12px;
+    font-size: 0.8rem;
+}
+
+.badge.private {
+    background: #fce8e8;
+    color: #c62828;
+}
+
+.breadcrumb {
+    padding: 1rem 0;
+    color: #666;
+    font-size: 0.9rem;
+}
+
+.breadcrumb a {
+    color: #325064;
+    text-decoration: none;
+}
+
+.breadcrumb a:hover {
+    text-decoration: underline;
+}
+
+.artifact-table {
+    width: 100%;
+    border-collapse: collapse;
+    background: #fff;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+.artifact-table th {
+    background: #325064;
+    color: #fff;
+    padding: 0.75rem 1rem;
+    text-align: left;
+    font-weight: 500;
+}
+
+.artifact-table td {
+    padding: 0.75rem 1rem;
+    border-bottom: 1px solid #f0f0f0;
+}
+
+.artifact-table tr:last-child td {
+    border-bottom: none;
+}
+
+.artifact-table a {
+    color: #325064;
+    text-decoration: none;
+}
+
+.artifact-table a:hover {
+    text-decoration: underline;
+}
+
+.doc-frame {
     border: none;
-    padding: 10px 20px;
-    border-radius: 5px;
+    width: 100%;
+    height: calc(100vh - 120px);
+}
+
+.doc-nav {
+    background: #325064;
+    color: #fff;
+    padding: 0.75rem 1rem;
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+}
+
+.doc-nav a {
+    color: rgba(255,255,255,0.85);
+    text-decoration: none;
+    font-size: 0.9rem;
+}
+
+.doc-nav a:hover {
+    color: #fff;
+}
+
+.doc-nav .doc-title {
+    font-weight: 600;
+}
+
+.login-container {
+    max-width: 400px;
+    margin: 4rem auto;
+    background: #fff;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    padding: 2rem;
+}
+
+.login-container h2 {
+    color: #325064;
+    margin-bottom: 1.5rem;
+    text-align: center;
+}
+
+.form-group {
+    margin-bottom: 1rem;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 0.25rem;
+    color: #555;
+    font-size: 0.9rem;
+}
+
+.form-group input {
+    width: 100%;
+    padding: 0.5rem;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 0.95rem;
+}
+
+.btn {
+    background: #325064;
+    color: #fff;
+    border: none;
+    padding: 0.6rem 1.5rem;
+    border-radius: 4px;
     cursor: pointer;
-    color: #111;
+    font-size: 0.95rem;
+    width: 100%;
 }
 
-input[type="submit"]:hover {
-    background: #9dd543;
+.btn:hover {
+    background: #264050;
 }
 
-p {
-    animation-duration: 3s;
-    animation-name: slidein;
-  }
-  
-  @keyframes slidein {
-    from {
-      margin-left: 100%;
-      width: 300%;
-    }
-  
-    to {
-      margin-left: 0%;
-      width: 100%;
-    }
-  }
+.error-msg {
+    color: #c62828;
+    font-size: 0.9rem;
+    margin-top: 0.5rem;
+    text-align: center;
+}
+
+.status-section {
+    margin: 1rem 0;
+}
+
+.status-section pre {
+    background: #fff;
+    border: 1px solid #e0e0e0;
+    border-radius: 4px;
+    padding: 1rem;
+    overflow-x: auto;
+    font-size: 0.85rem;
+}
+
+.empty-state {
+    text-align: center;
+    padding: 3rem;
+    color: #999;
+}
+
+.folder-icon::before {
+    content: "📁 ";
+}
+
+.file-icon::before {
+    content: "📄 ";
+}
