@@ -19,10 +19,11 @@ RUN pip install -r requirements.txt
 
 COPY . .
 
-ARG FLAG
-ENV FLAG=${FLAG}
+RUN mkdir -p static
 
-RUN sed -i s/@FLAG@/$FLAG/g secret.txt
+ARG FLAG
+
+RUN echo "${FLAG}" > secret.txt && chmod 600 secret.txt
 
 ENV BASE_URL=http://localhost:5000
 
