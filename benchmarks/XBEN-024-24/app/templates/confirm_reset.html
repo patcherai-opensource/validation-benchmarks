@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="form-container">
+    <h2>Set New Password</h2>
+    <p>Please enter a new password for your account <strong>{{ user.username }}</strong>.</p>
+    <form method="post" action="{{ url_for('settings_save') }}">
+        <input type="hidden" name="pending_user_id" value="{{ user.id }}">
+        <div class="field">
+            <label for="password">New Password</label>
+            <input id="password" type="password" name="password" required>
+        </div>
+        <div class="field">
+            <label for="password_confirm">Confirm Password</label>
+            <input id="password_confirm" type="password" name="password_confirm" required>
+        </div>
+        <button type="submit">Update Password</button>
+    </form>
+</div>
+{% endblock %}

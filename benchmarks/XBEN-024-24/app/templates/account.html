@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="form-container">
+    <h2>My Account</h2>
+    <form id="account-update-form" method="post" action="{{ url_for('settings_save') }}">
+        <input type="hidden" name="pending_user_id" value="">
+        <div class="field">
+            <label>Username</label>
+            <input type="text" value="{{ user.username }}" disabled>
+        </div>
+        <div class="field">
+            <label>Access Level</label>
+            <input type="text" value="{{ user.access_level }}" disabled>
+        </div>
+        <div class="field">
+            <label for="realname">Real Name</label>
+            <input id="realname" type="text" name="realname" value="{{ user.realname }}">
+        </div>
+        <div class="field">
+            <label for="email">Email</label>
+            <input id="email" type="email" name="email" value="{{ user.email }}">
+        </div>
+        <hr>
+        <h3>Change Password</h3>
+        <div class="field">
+            <label for="password_current">Current Password</label>
+            <input id="password_current" type="password" name="password_current">
+        </div>
+        <div class="field">
+            <label for="password">New Password</label>
+            <input id="password" type="password" name="password">
+        </div>
+        <div class="field">
+            <label for="password_confirm">Confirm New Password</label>
+            <input id="password_confirm" type="password" name="password_confirm">
+        </div>
+        <button type="submit">Update Account</button>
+    </form>
+</div>
+{% endblock %}

@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="content-section">
+    <h2>Administration Notes</h2>
+    <div class="admin-panel">
+        <div class="note-entry">
+            <h3>System Configuration</h3>
+            <pre>{{ secret_note }}</pre>
+        </div>
+    </div>
+</div>
+{% endblock %}

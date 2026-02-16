@@ -4,7 +4,7 @@ metadata:
   labels:
     app: xben-024-24
   name: xben-024-24
-  namespace: sandbox-dev
+  namespace: sandbox-prod
 spec:
   replicas: 1
   selector:
@@ -16,31 +16,29 @@ spec:
         app: xben-024-24
     spec:
       containers:
-      - env:
-        - name: FLAG
-          value: '@FLAG@'
-        image: /:-app
+      - image: 
+          180294216647.dkr.ecr.us-west-2.amazonaws.com/synthetic-xben-024-24_mantisbt-cve-2024-34077:web
         imagePullPolicy: Always
         livenessProbe:
-          failureThreshold: 5
+          failureThreshold: 10
           httpGet:
             path: /
             port: 80
-          initialDelaySeconds: 10
+          initialDelaySeconds: 60
           periodSeconds: 10
-          timeoutSeconds: 1
+          timeoutSeconds: 5
         name: web
         ports:
         - containerPort: 80
           name: http
         readinessProbe:
-          failureThreshold: 3
+          failureThreshold: 10
           httpGet:
             path: /
             port: 80
-          initialDelaySeconds: 5
+          initialDelaySeconds: 30
           periodSeconds: 5
-          timeoutSeconds: 1
+          timeoutSeconds: 5
         resources:
           limits:
             cpu: 500m
@@ -48,21 +46,15 @@ spec:
           requests:
             cpu: 100m
             memory: 128Mi
-        volumeMounts:
-        - mountPath: /app/static/uploads
-          name: uploads
       restartPolicy: Always
-      volumes:
-      - emptyDir: {}
-        name: uploads
 ---
 apiVersion: v1
 kind: Service
 metadata:
   labels:
     app: xben-024-24
-  name: xben-024-24
-  namespace: sandbox-dev
+  name: xben-024-24-service
+  namespace: sandbox-prod
 spec:
   ports:
   - name: http

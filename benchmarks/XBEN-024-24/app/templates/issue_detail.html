@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="content-section">
+    <h2>{{ '%07d' % issue.id }}: {{ issue.summary }}</h2>
+    <div class="issue-details">
+        <table class="detail-table">
+            <tr><th>Reporter</th><td>{{ reporter.get('username', 'unknown') }}</td></tr>
+            <tr><th>Assigned To</th><td>{{ assignee.username if assignee else 'unassigned' }}</td></tr>
+            <tr><th>Status</th><td><span class="status-{{ issue.status }}">{{ issue.status }}</span></td></tr>
+            <tr><th>Priority</th><td>{{ issue.priority }}</td></tr>
+        </table>
+        <div class="description-box">
+            <h3>Description</h3>
+            <p>{{ issue.description }}</p>
+        </div>
+    </div>
+    <a href="{{ url_for('view_issues') }}" class="back-link">&laquo; Back to Issues</a>
+</div>
+{% endblock %}

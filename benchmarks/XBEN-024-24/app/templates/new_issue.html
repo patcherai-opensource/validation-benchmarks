@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="form-container">
+    <h2>Report New Issue</h2>
+    <form method="post">
+        <div class="field">
+            <label for="summary">Summary</label>
+            <input id="summary" type="text" name="summary" required>
+        </div>
+        <div class="field">
+            <label for="description">Description</label>
+            <textarea id="description" name="description" rows="6"></textarea>
+        </div>
+        <div class="field">
+            <label for="priority">Priority</label>
+            <select id="priority" name="priority">
+                <option value="low">Low</option>
+                <option value="normal" selected>Normal</option>
+                <option value="high">High</option>
+                <option value="urgent">Urgent</option>
+            </select>
+        </div>
+        <button type="submit">Submit Issue</button>
+    </form>
+</div>
+{% endblock %}
