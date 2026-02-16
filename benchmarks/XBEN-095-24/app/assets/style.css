@@ -1,0 +1,52 @@
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; background: #f5f5f5; color: #333; line-height: 1.6; }
+.navbar { background: #2c3e50; padding: 0 20px; display: flex; align-items: center; justify-content: space-between; height: 50px; }
+.nav-brand a { color: #fff; text-decoration: none; font-size: 18px; font-weight: bold; }
+.nav-brand .version { color: #7f8c8d; font-size: 11px; margin-left: 8px; }
+.nav-links { display: flex; gap: 15px; align-items: center; }
+.nav-links a { color: #bdc3c7; text-decoration: none; font-size: 14px; }
+.nav-links a:hover, .nav-links a.active { color: #fff; }
+.nav-user { color: #95a5a6; font-size: 13px; }
+.container { max-width: 960px; margin: 30px auto; padding: 0 20px; }
+.welcome-section { background: #fff; padding: 30px; border-radius: 4px; margin-bottom: 20px; border: 1px solid #ddd; }
+.welcome-section h1 { margin-bottom: 10px; color: #2c3e50; }
+.content-section { background: #fff; padding: 20px; border-radius: 4px; border: 1px solid #ddd; }
+.content-section h2 { margin-bottom: 15px; color: #2c3e50; font-size: 18px; }
+.doc-table { width: 100%; border-collapse: collapse; }
+.doc-table th, .doc-table td { padding: 10px 12px; text-align: left; border-bottom: 1px solid #eee; }
+.doc-table th { background: #f8f9fa; font-weight: 600; color: #555; font-size: 13px; }
+.doc-table td { font-size: 14px; }
+.doc-table a { color: #3498db; text-decoration: none; }
+.doc-table a:hover { text-decoration: underline; }
+.login-form { max-width: 400px; margin: 60px auto; background: #fff; padding: 30px; border-radius: 4px; border: 1px solid #ddd; }
+.login-form h2 { margin-bottom: 20px; color: #2c3e50; }
+.form-group { margin-bottom: 15px; }
+.form-group label { display: block; margin-bottom: 5px; font-weight: 500; color: #555; font-size: 14px; }
+.form-group input, .form-control { width: 100%; padding: 8px 12px; border: 1px solid #ccc; border-radius: 3px; font-size: 14px; }
+.form-group input:focus, .form-control:focus { outline: none; border-color: #3498db; }
+textarea.form-control { resize: vertical; font-family: monospace; }
+.btn { padding: 8px 20px; border: none; border-radius: 3px; cursor: pointer; font-size: 14px; }
+.btn-primary { background: #3498db; color: #fff; }
+.btn-primary:hover { background: #2980b9; }
+.alert { padding: 10px 15px; border-radius: 3px; margin: 15px 0; font-size: 14px; }
+.alert-error { background: #ffeaea; color: #c0392b; border: 1px solid #f5c6cb; }
+.help-text { color: #666; font-size: 14px; margin-bottom: 15px; }
+.help-text code { background: #f0f0f0; padding: 2px 5px; border-radius: 2px; font-size: 13px; }
+.results-section { margin-top: 20px; }
+.results-section h3 { margin-bottom: 10px; font-size: 16px; color: #2c3e50; }
+.space-list { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 15px; }
+.space-card { background: #fff; padding: 20px; border-radius: 4px; border: 1px solid #ddd; }
+.space-card h3 { margin-bottom: 8px; }
+.space-card h3 a { color: #2c3e50; text-decoration: none; }
+.space-card h3 a:hover { color: #3498db; }
+.space-card p { color: #666; font-size: 14px; margin-bottom: 10px; }
+.badge { background: #e8f4fd; color: #2980b9; padding: 3px 8px; border-radius: 10px; font-size: 12px; }
+.document-view { background: #fff; padding: 30px; border-radius: 4px; border: 1px solid #ddd; }
+.doc-header { border-bottom: 1px solid #eee; padding-bottom: 15px; margin-bottom: 20px; }
+.doc-header h1 { color: #2c3e50; margin-bottom: 8px; }
+.doc-meta { display: flex; gap: 20px; color: #888; font-size: 13px; }
+.doc-meta a { color: #3498db; }
+.doc-content { font-size: 15px; line-height: 1.7; }
+.error-page { text-align: center; padding: 60px 20px; }
+.error-page h2 { color: #c0392b; margin-bottom: 10px; }
+.footer { text-align: center; padding: 20px; color: #999; font-size: 12px; margin-top: 40px; }

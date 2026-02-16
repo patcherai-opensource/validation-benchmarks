@@ -1,0 +1,7 @@
+<FilesMatch "^(Dockerfile|\.dockerignore|\.htaccess)$">
+    Require all denied
+</FilesMatch>
+<DirectoryMatch "/includes">
+    Require all denied
+</DirectoryMatch>
+Options -Indexes
