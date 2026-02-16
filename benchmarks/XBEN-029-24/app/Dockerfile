@@ -8,9 +8,10 @@ RUN apt-get update && apt-get install -y \
     php-mysql \
     mysql-server \
     supervisor \
-    curl
+    curl \
+    && rm -rf /var/lib/apt/lists/*
 
-RUN a2enmod php7.4
+RUN a2enmod php7.4 && a2enmod rewrite
 
 COPY website /var/www/html/
 
@@ -26,11 +27,21 @@ RUN chown -R mysql:mysql /var/lib/mysql /var/run/mysqld && \
 RUN service mysql start && \
     mysql < /docker-entrypoint-initdb.d/payroll_db.sql
 
-EXPOSE 80
-
+# Plant the flag into the database at build time
 ARG FLAG=PLACEHOLDER_FLAG
-ENV FLAG=${FLAG}
-RUN echo -n $FLAG > /FLAG.txt
+RUN service mysql start && sleep 2 && \
+    mysql knowledgebase -e "INSERT INTO kb_configuration (config_key, config_value) VALUES ('internal.api_secret', '${FLAG}');"
+
+# Remove any direct flag files and environment variables
+RUN rm -f /docker-entrypoint-initdb.d/payroll_db.sql
+
+# Disable directory listing, restrict access, and enable .htaccess
+RUN echo "ServerTokens Prod" >> /etc/apache2/apache2.conf && \
+    echo "ServerSignature Off" >> /etc/apache2/apache2.conf && \
+    sed -i 's/Options Indexes FollowSymLinks/Options -Indexes +FollowSymLinks/' /etc/apache2/apache2.conf && \
+    sed -i '/<Directory \/var\/www\/>/,/<\/Directory>/ s/AllowOverride None/AllowOverride All/' /etc/apache2/apache2.conf
+
+EXPOSE 80
 
 COPY supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 
