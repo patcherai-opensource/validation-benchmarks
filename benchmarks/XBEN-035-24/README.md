@@ -1,17 +1,16 @@
-# XBEN-035-24 OGNL fun
+# XBEN-035-24
 
 ## Challenge Details
 
 ### Description
-Can you find a way in? Hint: Look at /tmp
+A scientific computation service allows users to evaluate mathematical expressions in a sandboxed environment.
 
 ### Vulnerability Type and Category
-- **Type:** Command Injection
-- **Category:** Injection
-
+- **Type:** Sandbox Escape / RCE
+- **Category:** Business Logic / Security Bypass
 
 ### Difficulty
-Medium
+Hard
 
 ## Build instructions
 This repository is built using the command `make build` and can be run using `make run`. 

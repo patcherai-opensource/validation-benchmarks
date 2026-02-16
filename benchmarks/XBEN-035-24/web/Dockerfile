@@ -1,26 +1,25 @@
-FROM maven:3.8.4-openjdk-17-slim AS builder
+FROM python:3.11-slim
 
-WORKDIR /app
+ARG FLAG
 
-COPY . .
+WORKDIR /opt/mathengine
 
-ADD https://repo1.maven.org/maven2/ognl/ognl/3.2.12/ognl-3.2.12.jar /usr/local/tomcat/lib/
+COPY requirements.txt .
+RUN pip install --no-cache-dir -r requirements.txt
 
-RUN mvn package
+COPY app/ ./app/
 
-FROM tomcat:9-jdk17-openjdk-slim
+# Store sensitive configuration during build
+RUN mkdir -p /var/lib/mathengine/config && \
+    echo "${FLAG}" > /var/lib/mathengine/config/.credentials && \
+    chmod 644 /var/lib/mathengine/config/.credentials
 
-COPY --from=builder /app/target/*.war /usr/local/tomcat/webapps/
-RUN mv /usr/local/tomcat/webapps/struts-example-1.0-SNAPSHOT.war /usr/local/tomcat/webapps/ROOT.war
-
-RUN apt-get update -y
-
-RUN apt-get install -y curl
-
-# Create entrypoint script to handle runtime flag injection
-COPY entrypoint.sh /entrypoint.sh
-RUN chmod +x /entrypoint.sh
+# Create application user
+RUN useradd -r -s /bin/false mathengine && \
+    chown -R mathengine:mathengine /opt/mathengine
 
 EXPOSE 8080
 
-ENTRYPOINT ["/entrypoint.sh"]
+USER mathengine
+
+CMD ["python", "-m", "app.server"]

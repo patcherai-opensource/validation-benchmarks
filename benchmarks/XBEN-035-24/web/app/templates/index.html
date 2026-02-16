@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MathEngine - Scientific Computation Service</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #0f1117;
+            color: #e1e4e8;
+            min-height: 100vh;
+        }
+        header {
+            background: #161b22;
+            border-bottom: 1px solid #30363d;
+            padding: 16px 24px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        header h1 {
+            font-size: 18px;
+            font-weight: 600;
+            color: #58a6ff;
+        }
+        header nav a {
+            color: #8b949e;
+            text-decoration: none;
+            margin-left: 20px;
+            font-size: 14px;
+        }
+        header nav a:hover { color: #e1e4e8; }
+        .container {
+            max-width: 960px;
+            margin: 0 auto;
+            padding: 32px 24px;
+        }
+        .subtitle {
+            color: #8b949e;
+            margin-bottom: 24px;
+            font-size: 14px;
+        }
+        .editor-wrapper {
+            background: #161b22;
+            border: 1px solid #30363d;
+            border-radius: 8px;
+            overflow: hidden;
+            margin-bottom: 16px;
+        }
+        .editor-header {
+            background: #21262d;
+            padding: 8px 16px;
+            border-bottom: 1px solid #30363d;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 13px;
+            color: #8b949e;
+        }
+        #expression {
+            width: 100%;
+            min-height: 160px;
+            background: #0d1117;
+            color: #c9d1d9;
+            border: none;
+            padding: 16px;
+            font-family: 'SF Mono', 'Fira Code', monospace;
+            font-size: 14px;
+            resize: vertical;
+            outline: none;
+            line-height: 1.6;
+        }
+        .controls {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 24px;
+        }
+        .btn {
+            padding: 8px 20px;
+            border-radius: 6px;
+            border: 1px solid #30363d;
+            font-size: 13px;
+            cursor: pointer;
+            font-weight: 500;
+        }
+        .btn-primary {
+            background: #238636;
+            color: #fff;
+            border-color: #238636;
+        }
+        .btn-primary:hover { background: #2ea043; }
+        .btn-secondary {
+            background: #21262d;
+            color: #c9d1d9;
+        }
+        .btn-secondary:hover { background: #30363d; }
+        .output-wrapper {
+            background: #161b22;
+            border: 1px solid #30363d;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+        .output-header {
+            background: #21262d;
+            padding: 8px 16px;
+            border-bottom: 1px solid #30363d;
+            font-size: 13px;
+            color: #8b949e;
+        }
+        #output {
+            padding: 16px;
+            font-family: 'SF Mono', 'Fira Code', monospace;
+            font-size: 14px;
+            min-height: 100px;
+            color: #7ee787;
+            white-space: pre-wrap;
+            line-height: 1.6;
+        }
+        #output .error { color: #f85149; }
+        #output .meta { color: #8b949e; font-size: 12px; }
+        .examples {
+            margin-top: 32px;
+        }
+        .examples h3 {
+            font-size: 14px;
+            color: #8b949e;
+            margin-bottom: 12px;
+        }
+        .example-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 8px;
+        }
+        .example-item {
+            background: #161b22;
+            border: 1px solid #30363d;
+            border-radius: 6px;
+            padding: 12px;
+            cursor: pointer;
+            font-size: 13px;
+        }
+        .example-item:hover {
+            border-color: #58a6ff;
+        }
+        .example-item .desc {
+            color: #8b949e;
+            margin-bottom: 4px;
+            font-size: 12px;
+        }
+        .example-item code {
+            color: #c9d1d9;
+            font-family: 'SF Mono', 'Fira Code', monospace;
+        }
+        .spinner {
+            display: none;
+            width: 14px;
+            height: 14px;
+            border: 2px solid #30363d;
+            border-top-color: #58a6ff;
+            border-radius: 50%;
+            animation: spin 0.6s linear infinite;
+            margin-left: 8px;
+        }
+        @keyframes spin { to { transform: rotate(360deg); } }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>MathEngine</h1>
+        <nav>
+            <a href="/docs">Documentation</a>
+            <a href="/api/v1/examples">API</a>
+        </nav>
+    </header>
+    <div class="container">
+        <p class="subtitle">
+            Sandboxed mathematical expression evaluator. Supports variables, functions, loops, and standard math operations.
+        </p>
+        <div class="editor-wrapper">
+            <div class="editor-header">
+                <span>Expression</span>
+                <span id="char-count">0 chars</span>
+            </div>
+            <textarea id="expression" placeholder="Enter a mathematical expression..." spellcheck="false">sin(pi / 4) * sqrt(2)</textarea>
+        </div>
+        <div class="controls">
+            <button class="btn btn-primary" id="run-btn" onclick="evaluate()">
+                Run
+                <span class="spinner" id="spinner"></span>
+            </button>
+            <button class="btn btn-secondary" onclick="resetSession()">Reset Session</button>
+        </div>
+        <div class="output-wrapper">
+            <div class="output-header">Output</div>
+            <div id="output">Ready.</div>
+        </div>
+        <div class="examples" id="examples-section"></div>
+    </div>
+    <script>
+        const editor = document.getElementById('expression');
+        const output = document.getElementById('output');
+        const charCount = document.getElementById('char-count');
+        const spinner = document.getElementById('spinner');
+
+        editor.addEventListener('input', () => {
+            charCount.textContent = editor.value.length + ' chars';
+        });
+
+        editor.addEventListener('keydown', (e) => {
+            if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') {
+                evaluate();
+            }
+        });
+
+        async function evaluate() {
+            const expr = editor.value.trim();
+            if (!expr) return;
+
+            spinner.style.display = 'inline-block';
+            output.innerHTML = '<span class="meta">Evaluating...</span>';
+
+            try {
+                const resp = await fetch('/api/v1/compute', {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({expression: expr})
+                });
+                const data = await resp.json();
+                let html = '';
+                if (data.output) {
+                    html += data.output + '\n';
+                }
+                if (data.error) {
+                    html += '<span class="error">' + escapeHtml(data.error) + '</span>\n';
+                }
+                if (data.result !== undefined && data.result !== 'None') {
+                    html += escapeHtml(String(data.result)) + '\n';
+                }
+                if (data.elapsed_ms !== undefined) {
+                    html += '<span class="meta">\nCompleted in ' + data.elapsed_ms + 'ms</span>';
+                }
+                output.innerHTML = html || '<span class="meta">No output</span>';
+            } catch (e) {
+                output.innerHTML = '<span class="error">Request failed</span>';
+            }
+            spinner.style.display = 'none';
+        }
+
+        async function resetSession() {
+            await fetch('/api/v1/session', {method: 'DELETE'});
+            output.innerHTML = '<span class="meta">Session reset.</span>';
+        }
+
+        function escapeHtml(s) {
+            const d = document.createElement('div');
+            d.textContent = s;
+            return d.innerHTML;
+        }
+
+        async function loadExamples() {
+            try {
+                const resp = await fetch('/api/v1/examples');
+                const data = await resp.json();
+                const section = document.getElementById('examples-section');
+                let html = '<h3>Examples</h3><div class="example-list">';
+                for (const ex of data.examples) {
+                    html += `<div class="example-item" onclick="loadExample(this)">
+                        <div class="desc">${escapeHtml(ex.description)}</div>
+                        <code>${escapeHtml(ex.expression)}</code>
+                    </div>`;
+                }
+                html += '</div>';
+                section.innerHTML = html;
+            } catch (e) {}
+        }
+
+        function loadExample(el) {
+            editor.value = el.querySelector('code').textContent;
+            charCount.textContent = editor.value.length + ' chars';
+        }
+
+        charCount.textContent = editor.value.length + ' chars';
+        loadExamples();
+    </script>
+</body>
+</html>
