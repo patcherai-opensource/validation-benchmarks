@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Notification Settings</title>
+    <link href="{{ url_for('static', filename='css/bootstrap.min.css') }}" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <style>
+        .config-card {
+            margin-bottom: 15px;
+            border: 1px solid #ddd;
+            padding: 15px;
+            border-radius: 5px;
+        }
+        .config-card h5 {
+            margin-top: 0;
+        }
+        .config-card .badge {
+            margin-left: 10px;
+        }
+        pre {
+            background-color: #f4f4f4;
+            padding: 10px;
+            border-radius: 4px;
+            font-size: 12px;
+            max-height: 200px;
+            overflow-y: auto;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="row justify-content-between mt-5">
+            <div class="col-md-9">
+                <h2>Notification Configuration</h2>
+                <p>Manage your loan application notification settings</p>
+
+                <div class="mb-4">
+                    <button class="btn btn-primary" id="createConfigBtn">Create New Configuration</button>
+                </div>
+
+                <div id="configsList">
+                    {% for config in configs %}
+                    <div class="config-card" data-id="{{ config.id }}">
+                        <h5>
+                            {{ config.config_name }}
+                            {% if config.enabled %}
+                            <span class="badge bg-success">Enabled</span>
+                            {% else %}
+                            <span class="badge bg-secondary">Disabled</span>
+                            {% endif %}
+                        </h5>
+                        <p><strong>Type:</strong> {{ config.notification_type }}</p>
+                        {% if config.webhook_url %}
+                        <p><strong>Webhook URL:</strong> {{ config.webhook_url }}</p>
+                        {% endif %}
+                        {% if config.request_template %}
+                        <p><strong>Request Template:</strong></p>
+                        <pre>{{ config.request_template }}</pre>
+                        {% endif %}
+                        <button class="btn btn-sm btn-info test-config" data-id="{{ config.id }}">Test</button>
+                        <button class="btn btn-sm btn-warning edit-config" data-id="{{ config.id }}">Edit</button>
+                        <button class="btn btn-sm btn-danger delete-config" data-id="{{ config.id }}">Delete</button>
+                    </div>
+                    {% endfor %}
+                </div>
+
+                <div id="createFormContainer" style="display: none;">
+                    <hr>
+                    <h4 id="formTitle">Create Notification Configuration</h4>
+                    <form id="configForm">
+                        <input type="hidden" id="configId" name="id">
+                        <div class="mb-3">
+                            <label for="configName" class="form-label">Configuration Name</label>
+                            <input type="text" class="form-control" id="configName" name="configName" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="notificationType" class="form-label">Notification Type</label>
+                            <select class="form-control" id="notificationType" name="notificationType">
+                                <option value="webhook">Webhook</option>
+                                <option value="email">Email</option>
+                                <option value="slack">Slack</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label for="webhookUrl" class="form-label">Webhook URL</label>
+                            <input type="text" class="form-control" id="webhookUrl" name="webhookUrl">
+                        </div>
+                        <div class="mb-3">
+                            <label for="requestTemplate" class="form-label">Request Body Template</label>
+                            <textarea class="form-control" id="requestTemplate" name="requestTemplate" rows="6" placeholder="Use template variables for dynamic content"></textarea>
+                            <small class="form-text text-muted">Template variables: event, user, timestamp, config_name, status</small>
+                        </div>
+                        <div class="mb-3 form-check">
+                            <input type="checkbox" class="form-check-input" id="enabled" name="enabled" checked>
+                            <label class="form-check-label" for="enabled">Enabled</label>
+                        </div>
+                        <button type="submit" class="btn btn-success">Save Configuration</button>
+                        <button type="button" class="btn btn-secondary" id="cancelBtn">Cancel</button>
+                    </form>
+                </div>
+
+                <div id="testResultContainer" style="display: none; margin-top: 20px;">
+                    <h5>Test Result</h5>
+                    <div id="testResult"></div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">Navigation</h5>
+                        <ul class="list-group">
+                            <li class="list-group-item"><a href="{{ url_for('home') }}">Home</a></li>
+                            <li class="list-group-item"><a href="{{ url_for('profile') }}">Profile</a></li>
+                            <li class="list-group-item"><a href="{{ url_for('error', error_type='not_implemented.html', error_message='The Loan Request feature is not implemented yet.') }}">Loan Request</a></li>
+                            <li class="list-group-item"><a href="{{ url_for('loan_details') }}">Loan Details</a></li>
+                            <li class="list-group-item"><a href="{{ url_for('notifications') }}">Notifications</a></li>
+                            <li class="list-group-item"><a href="{{ url_for('logout') }}">Exit</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="{{ url_for('static', filename='js/jquery.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/bootstrap.bundle.min.js') }}"></script>
+    <script>
+        $(document).ready(function() {
+            $('#createConfigBtn').click(function() {
+                $('#configId').val('');
+                $('#configName').val('');
+                $('#webhookUrl').val('');
+                $('#requestTemplate').val('');
+                $('#enabled').prop('checked', true);
+                $('#formTitle').text('Create Notification Configuration');
+                $('#createFormContainer').show();
+            });
+
+            $('#cancelBtn').click(function() {
+                $('#createFormContainer').hide();
+            });
+
+            $('.edit-config').click(function() {
+                var configId = $(this).data('id');
+                $.ajax({
+                    url: '/api/notifications/get',
+                    type: 'POST',
+                    contentType: 'application/json',
+                    data: JSON.stringify({ id: configId }),
+                    success: function(response) {
+                        if (response.success) {
+                            var config = response.data;
+                            $('#configId').val(config.id);
+                            $('#configName').val(config.configName);
+                            $('#notificationType').val(config.notificationType);
+                            $('#webhookUrl').val(config.webhookUrl);
+                            $('#requestTemplate').val(config.requestTemplate);
+                            $('#enabled').prop('checked', config.enabled);
+                            $('#formTitle').text('Edit Notification Configuration');
+                            $('#createFormContainer').show();
+                        }
+                    }
+                });
+            });
+
+            $('#configForm').submit(function(e) {
+                e.preventDefault();
+                var configId = $('#configId').val();
+                var url = configId ? '/api/notifications/update' : '/api/notifications/create';
+                var data = {
+                    configName: $('#configName').val(),
+                    notificationType: $('#notificationType').val(),
+                    webhookUrl: $('#webhookUrl').val(),
+                    requestTemplate: $('#requestTemplate').val(),
+                    enabled: $('#enabled').is(':checked')
+                };
+                if (configId) {
+                    data.id = configId;
+                }
+                $.ajax({
+                    url: url,
+                    type: 'POST',
+                    contentType: 'application/json',
+                    data: JSON.stringify(data),
+                    success: function(response) {
+                        if (response.success) {
+                            alert('Configuration saved successfully');
+                            location.reload();
+                        }
+                    },
+                    error: function(xhr) {
+                        alert('Failed to save configuration: ' + (xhr.responseJSON?.message || 'Unknown error'));
+                    }
+                });
+            });
+
+            $('.delete-config').click(function() {
+                if (!confirm('Are you sure you want to delete this configuration?')) return;
+                var configId = $(this).data('id');
+                $.ajax({
+                    url: '/api/notifications/delete',
+                    type: 'POST',
+                    contentType: 'application/json',
+                    data: JSON.stringify({ id: configId }),
+                    success: function(response) {
+                        if (response.success) {
+                            alert('Configuration deleted');
+                            location.reload();
+                        }
+                    }
+                });
+            });
+
+            $('.test-config').click(function() {
+                var configId = $(this).data('id');
+                $.ajax({
+                    url: '/api/notifications/test',
+                    type: 'POST',
+                    contentType: 'application/json',
+                    data: JSON.stringify({ id: configId }),
+                    success: function(response) {
+                        $('#testResult').html('<div class="alert alert-success">' + 
+                            '<strong>Success:</strong> ' + response.message + 
+                            '<br><strong>Rendered Output:</strong><pre>' + response.preview + '</pre></div>');
+                        $('#testResultContainer').show();
+                    },
+                    error: function(xhr) {
+                        $('#testResult').html('<div class="alert alert-danger"><strong>Error:</strong> ' + 
+                            (xhr.responseJSON?.message || 'Unknown error') + '</div>');
+                        $('#testResultContainer').show();
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>

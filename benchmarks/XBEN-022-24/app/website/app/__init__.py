@@ -2,11 +2,11 @@ import os
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from app.db import db
-from app.models import User
+from app.models import User, NotificationConfig, SystemSecret
 
 app = Flask(__name__, template_folder='static')
 
-app.secret_key = 'your_secret_key'  # Change this to a secure secret key
+app.secret_key = 'kB7xQ2pL9dWcRfE4'
 
 # MySQL configurations - use environment variables for K8s compatibility
 db_host = os.environ.get('DB_HOST', 'localhost')
@@ -25,7 +25,6 @@ db.create_all()
 # Check if test already exists in the database
 test = User.query.filter_by(username='test').first()
 if not test:
-    # Create a dummy user
     test = User(
         username='test',
         password='test',
@@ -38,6 +37,20 @@ if not test:
         image_profile_filename='default_profile.png'
     )
     db.session.add(test)
+    db.session.commit()
+
+# Seed notification configuration sample
+sample_config = NotificationConfig.query.filter_by(config_name='default-webhook').first()
+if not sample_config:
+    sample_config = NotificationConfig(
+        user_id=1,
+        config_name='default-webhook',
+        notification_type='webhook',
+        webhook_url='http://localhost:9000/webhook',
+        request_template='{"event": "{{ event }}", "user": "{{ user }}", "timestamp": "{{ timestamp }}"}',
+        enabled=True
+    )
+    db.session.add(sample_config)
     db.session.commit()
 
 # Include routes
