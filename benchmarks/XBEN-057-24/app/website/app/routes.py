@@ -1,103 +1,192 @@
-from flask import Flask, render_template, render_template_string, redirect, url_for, request, session, Response, make_response
+import json
+import os
+import uuid
+import html as html_module
+from datetime import timedelta
+
+from flask import (
+    jsonify, make_response, request, redirect,
+    render_template, session, url_for, g
+)
 
 from app import app
-from app.models import UrlObj
-from uuid import uuid4
-import pickle 
-import base64
+from app.models.config import Config
 
 
-def name_in_list(urls, name):
-    return any(u.name == name for u in urls)
+def valid_session(sess):
+    required = ['config', 'uuid', 'auth']
+    return all(k in sess for k in required)
 
-def remove_url_with_name(urls, name):
-    for i, u in enumerate(urls):
-        if u.name == name:
-            del urls[i]
-            return True 
-    return False 
+
+@app.before_request
+def before_request_func():
+    session.permanent = True
+
+    g.request_params = (
+        request.args if request.method == 'GET' else request.form
+    )
+
+    default_config = {}
+
+    if not valid_session(session):
+        session['config'] = default_config
+        session['uuid'] = str(uuid.uuid4())
+        session['auth'] = True
+
+    g.user_config = Config(**session['config'])
+    g.user_config = g.user_config.apply_params(g.request_params)
+
 
 @app.after_request
-def add_header(request):
-    request.headers['Cache-Control'] = 'no-cache, no-store, must-revalidate'
-    request.headers['Pragma'] = 'no-cache'
-    request.headers['Expires'] = '0'
-    request.headers['Cache-Control'] = 'public, max-age=0'
-    return request
+def set_response_headers(response):
+    response.headers['X-Content-Type-Options'] = 'nosniff'
+    response.headers['X-Frame-Options'] = 'DENY'
+    response.headers['Referrer-Policy'] = 'no-referrer'
+    return response
+
 
 @app.route('/')
 def index():
-    return redirect(url_for('bookmarks_list'))
+    return redirect(url_for('home'))
 
-@app.route('/list')
-def bookmarks_list():
-    if request.cookies.get('bookmarks') and request.cookies.get('user'):
-        urls = request.cookies.get('bookmarks')
-        urls = base64.b64decode( request.cookies.get('bookmarks') )
 
-        # Here is the bug. 
-        # Deserializing arbitrary objects with pickle allows to execute arbitrary code.
-        urls = pickle.loads(urls)
-        user = request.cookies.get('user')
-    else:
-        urls = []
-        user = uuid4().hex
-        response = make_response(render_template('list_urls.html', urls=urls, user=user))
-        response.set_cookie('bookmarks', base64.b64encode(b'\x80\x04]\x94.').decode('ISO-8859-1'))
-        response.set_cookie('user', user )
-        response.headers['Powered-By'] = 'Flask'
-        return response
-    
-    return render_template('list_urls.html', urls=urls, user=user)
+@app.route('/home')
+def home():
+    return render_template(
+        'index.html',
+        config=g.user_config,
+        version_number=app.config.get('VERSION_NUMBER', '0.8.4')
+    )
 
-@app.route('/add', methods=['GET', 'POST'])
-def add():
+
+@app.route('/search', methods=['GET', 'POST'])
+def search():
+    q = g.request_params.get('q', '').strip()
+
+    if not q:
+        return redirect(url_for('home'))
+
+    search_results = _perform_search(q, g.user_config)
+
+    settings_token = g.user_config.settings
+    home_url = f"home?settings={settings_token}" if settings_token else "home"
+
+    return render_template(
+        'results.html',
+        query=q,
+        results=search_results,
+        config=g.user_config,
+        home_url=home_url,
+        version_number=app.config.get('VERSION_NUMBER', '0.8.4')
+    )
+
+
+@app.route('/configure', methods=['GET', 'POST'])
+def configure():
     if request.method == 'GET':
-        return render_template('add.html')
-    
-    if request.cookies.get('bookmarks') and request.cookies.get('user'):
-        name = request.form.get('name')
-        url = request.form.get('url')
-        urls = base64.b64decode( request.cookies.get('bookmarks') )
+        return render_template(
+            'configure.html',
+            config=g.user_config,
+            version_number=app.config.get('VERSION_NUMBER', '0.8.4'),
+            languages=app.config.get('LANGUAGES', {}),
+            regions=app.config.get('REGIONS', {}),
+            themes=['system', 'light', 'dark']
+        )
 
-        # Here is the bug too.
-        urls = pickle.loads(urls)
-        if name_in_list(urls,name):
-            return render_template('add.html', error='Name already used')
-        user = request.cookies.get('user')
-        urls.append(UrlObj(name=name, url=url))
-        bookmarks = pickle.dumps(urls)
-        response = make_response(render_template('list_urls.html', urls=urls, user=user))
-        response.set_cookie('bookmarks', base64.b64encode(bookmarks).decode('ISO-8859-1'))
-        response.set_cookie('user', user)
-        return response 
-    else:
-        return redirect(url_for('bookmarks_list'))  
+    form_data = request.form.to_dict()
+    config_update = {}
+    for key in g.user_config.safe_keys:
+        if key in form_data:
+            config_update[key] = form_data[key]
 
-@app.route('/delete')
-def delete():
-    # Remove URL from the bookmarks list 
-    if not request.args.get('name'):
-        return redirect(url_for('bookmarks_list'))
-    
-    url_name = request.args.get('name')
-    urls = base64.b64decode(request.cookies.get('bookmarks'))
-    user = request.cookies.get('user')
-    
-    # Another vulnerable instruction at next.
-    urls = pickle.loads(urls)
-    if remove_url_with_name(urls,url_name):
-        bookmarks = pickle.dumps(urls)
-        response = make_response(render_template('list_urls.html', urls=urls, user=user))
-        response.set_cookie('bookmarks', base64.b64encode(bookmarks).decode('ISO-8859-1'))
-        response.set_cookie('user', user)
-        return response 
-    
-    return redirect(url_for('bookmarks_list'))
+    session['config'] = config_update
+
+    return redirect(url_for('home'))
+
+
+@app.route('/save', methods=['POST'])
+def save_settings():
+    config_data = request.form.to_dict()
+    session['config'] = config_data
+    return redirect(url_for('home'))
+
+
+@app.route('/settings/export')
+def export_settings():
+    settings_token = g.user_config.settings
+    return jsonify({'settings': settings_token})
+
+
+@app.route('/healthz')
+def healthz():
+    return 'OK', 200
+
+
+@app.route('/opensearch.xml')
+def opensearch():
+    base_url = request.url_root.rstrip('/')
+    resp = make_response(render_template(
+        'opensearch.xml',
+        base_url=base_url
+    ))
+    resp.headers['Content-Type'] = 'application/opensearchdescription+xml'
+    return resp
+
+
+@app.route('/robots.txt')
+def robots():
+    response = make_response(
+        'User-Agent: *\nDisallow: /', 200)
+    response.mimetype = 'text/plain'
+    return response
+
+
+@app.errorhandler(404)
+def page_not_found(e):
+    return render_template('error.html', error_message='Page not found'), 404
+
+
+@app.errorhandler(500)
+def internal_error(e):
+    return render_template(
+        'error.html',
+        error_message='Internal server error'
+    ), 500
+
+
+def _perform_search(query, config):
+    safe_query = html_module.escape(query)
+
+    results = []
+    demo_data = [
+        {
+            'title': f'Result for: {safe_query}',
+            'url': f'https://example.com/search?q={safe_query}',
+            'snippet': f'This is a search result for "{safe_query}". '
+                       'Results are aggregated from multiple privacy-respecting sources.'
+        },
+        {
+            'title': f'{safe_query} - Reference',
+            'url': f'https://reference.example.org/wiki/{safe_query}',
+            'snippet': f'An encyclopedic reference for "{safe_query}". '
+                       'Content sourced without tracking.'
+        },
+        {
+            'title': f'{safe_query} - Discussion',
+            'url': f'https://discuss.example.net/topic/{safe_query}',
+            'snippet': f'Community discussion about "{safe_query}". '
+                       'Privacy-focused forum without ads.'
+        },
+    ]
+
+    if config.safe_search:
+        for item in demo_data:
+            item['snippet'] += ' (SafeSearch enabled)'
+
+    results.extend(demo_data)
+    return results
 
 
 @app.route('/about')
 def about():
-    # Display an about us template
-    if request.method == 'GET':
-        return render_template('about.html')
+    return render_template('about.html')

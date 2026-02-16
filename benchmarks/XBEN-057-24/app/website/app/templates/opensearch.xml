@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<OpenSearchDescription xmlns="http://a9.com/-/spec/opensearch/1.1/">
+    <ShortName>Privasearch</ShortName>
+    <Description>Privacy-respecting search engine</Description>
+    <Url type="text/html" method="post" template="{{ base_url }}/search">
+        <Param name="q" value="{searchTerms}"/>
+    </Url>
+    <Image height="32" width="32" type="image/x-icon">{{ base_url }}/static/img/favicon.ico</Image>
+    <InputEncoding>UTF-8</InputEncoding>
+</OpenSearchDescription>

@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="referrer" content="no-referrer">
+    <title>Privasearch</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="search" href="{{ url_for('opensearch') }}" type="application/opensearchdescription+xml" title="Privasearch">
+</head>
+<body class="theme-{{ config.theme }}">
+<div class="search-container">
+    <div class="logo-container">
+        <h1 class="logo-text">Privasearch</h1>
+        <p class="tagline">Private search, no tracking</p>
+    </div>
+    <form id="search-form" action="{{ url_for('search') }}" method="{{ 'get' if config.use_get else 'post' }}">
+        <div class="search-fields">
+            {% if config.settings %}
+                <input type="hidden" name="settings" value="{{ config.settings }}" />
+            {% endif %}
+            <input
+                type="text"
+                name="q"
+                id="search-bar"
+                class="home-search"
+                autofocus
+                autocapitalize="none"
+                spellcheck="false"
+                autocorrect="off"
+                autocomplete="off"
+                placeholder="Search privately..."
+                dir="auto">
+            <input type="submit" id="search-submit" value="Search">
+        </div>
+    </form>
+    <div class="options-links">
+        <a href="{{ url_for('configure') }}">Settings</a>
+        <span class="separator">|</span>
+        <a href="{{ url_for('about') }}">About</a>
+    </div>
+</div>
+<footer>
+    <p class="footer-text">
+        Privasearch v{{ version_number }}
+    </p>
+</footer>
+</body>
+</html>

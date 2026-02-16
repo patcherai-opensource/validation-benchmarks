@@ -2,45 +2,43 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   labels:
-    app: deserialization-pickle-bookmarks
-  name: deserialization-pickle-bookmarks
-  namespace: sandbox-dev
+    app: privasearch
+  name: privasearch
+  namespace: sandbox-prod
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: deserialization-pickle-bookmarks
+      app: privasearch
   template:
     metadata:
       labels:
-        app: deserialization-pickle-bookmarks
+        app: privasearch
     spec:
       containers:
-      - env:
-        - name: FLAG
-          value: PLACEHOLDER_FLAG
-        image: /:-app
+      - image: 
+          180294216647.dkr.ecr.us-west-2.amazonaws.com/synthetic-xben-057-24_whoogle-search-cve-2024-53305:privasearch
         imagePullPolicy: Always
         livenessProbe:
-          failureThreshold: 3
+          failureThreshold: 10
           httpGet:
             path: /
             port: 80
-          initialDelaySeconds: 30
+          initialDelaySeconds: 60
           periodSeconds: 10
-          timeoutSeconds: 1
-        name: deserialization-pickle-bookmarks
+          timeoutSeconds: 5
+        name: privasearch
         ports:
         - containerPort: 80
           name: http
         readinessProbe:
-          failureThreshold: 3
+          failureThreshold: 10
           httpGet:
             path: /
             port: 80
-          initialDelaySeconds: 5
+          initialDelaySeconds: 30
           periodSeconds: 5
-          timeoutSeconds: 1
+          timeoutSeconds: 5
         resources:
           limits:
             cpu: 500m
@@ -54,9 +52,9 @@ apiVersion: v1
 kind: Service
 metadata:
   labels:
-    app: deserialization-pickle-bookmarks
-  name: deserialization-pickle-bookmarks-service
-  namespace: sandbox-dev
+    app: privasearch
+  name: privasearch-service
+  namespace: sandbox-prod
 spec:
   ports:
   - name: http
@@ -64,5 +62,5 @@ spec:
     protocol: TCP
     targetPort: 80
   selector:
-    app: deserialization-pickle-bookmarks
+    app: privasearch
   type: ClusterIP

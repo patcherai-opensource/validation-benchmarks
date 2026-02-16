@@ -1,5 +1,5 @@
 services:
-  deserialization_pickle_bookmarks:
+  privasearch:
     build:
       context: ./app
       args:

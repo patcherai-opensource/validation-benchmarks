@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="referrer" content="no-referrer">
+    <title>Settings - Privasearch</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body class="theme-{{ config.theme }}">
+<div class="config-container">
+    <h1>Search Settings</h1>
+    <p class="config-intro">Configure your search experience. Settings are stored as a portable token you can share across devices.</p>
+    <form action="{{ url_for('configure') }}" method="post">
+        <div class="config-section">
+            <h3>General</h3>
+            <div class="config-field">
+                <label for="lang_results">Results Language:</label>
+                <select name="lang_results" id="lang_results">
+                    <option value="">Any</option>
+                    {% for code, name in languages.items() %}
+                    <option value="{{ code }}" {{ 'selected' if config.lang_results == code else '' }}>{{ name }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="config-field">
+                <label for="region">Region:</label>
+                <select name="region" id="region">
+                    {% for code, name in regions.items() %}
+                    <option value="{{ code }}" {{ 'selected' if config.region == code else '' }}>{{ name }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="config-field">
+                <label for="theme">Theme:</label>
+                <select name="theme" id="theme">
+                    {% for t in themes %}
+                    <option value="{{ t }}" {{ 'selected' if config.theme == t else '' }}>{{ t|capitalize }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="config-field">
+                <label for="time_range">Time Range:</label>
+                <select name="time_range" id="time_range">
+                    <option value="">Any time</option>
+                    <option value="qdr:h" {{ 'selected' if config.time_range == 'qdr:h' else '' }}>Past hour</option>
+                    <option value="qdr:d" {{ 'selected' if config.time_range == 'qdr:d' else '' }}>Past day</option>
+                    <option value="qdr:w" {{ 'selected' if config.time_range == 'qdr:w' else '' }}>Past week</option>
+                    <option value="qdr:m" {{ 'selected' if config.time_range == 'qdr:m' else '' }}>Past month</option>
+                    <option value="qdr:y" {{ 'selected' if config.time_range == 'qdr:y' else '' }}>Past year</option>
+                </select>
+            </div>
+        </div>
+        <div class="config-section">
+            <h3>Privacy & Behavior</h3>
+            <div class="config-field">
+                <label for="safe_search">Safe Search:</label>
+                <input type="checkbox" name="safe_search" id="safe_search" value="on" {{ 'checked' if config.safe_search else '' }}>
+            </div>
+            <div class="config-field">
+                <label for="open_links_new_tab">Open links in new tab:</label>
+                <input type="checkbox" name="open_links_new_tab" id="open_links_new_tab" value="on" {{ 'checked' if config.open_links_new_tab else '' }}>
+            </div>
+            <div class="config-field">
+                <label for="show_images">Show images:</label>
+                <input type="checkbox" name="show_images" id="show_images" value="on" {{ 'checked' if config.show_images else '' }}>
+            </div>
+            <div class="config-field">
+                <label for="strip_trackers">Strip tracking parameters:</label>
+                <input type="checkbox" name="strip_trackers" id="strip_trackers" value="on" {{ 'checked' if config.strip_trackers else '' }}>
+            </div>
+        </div>
+        <div class="config-section">
+            <h3>Portable Settings</h3>
+            <p>Your settings token can be used to apply the same configuration on other instances:</p>
+            <div class="config-field">
+                <label for="settings-url">Settings URL:</label>
+                <input type="text" id="settings-url" class="settings-url-field" value="{{ request.url_root }}search?settings={{ config.settings }}&q=" readonly>
+            </div>
+        </div>
+        <div class="config-buttons">
+            <input type="submit" value="Apply Settings">
+            <a href="{{ url_for('home') }}" class="btn-cancel">Cancel</a>
+        </div>
+    </form>
+</div>
+<footer>
+    <p class="footer-text">
+        Privasearch v{{ version_number }}
+    </p>
+</footer>
+</body>
+</html>

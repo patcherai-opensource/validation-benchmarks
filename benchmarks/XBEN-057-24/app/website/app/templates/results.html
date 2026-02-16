@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="referrer" content="no-referrer">
+    <title>{{ query }} - Privasearch</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body class="theme-{{ config.theme }}">
+<header>
+    <div class="header-container">
+        <a class="header-logo" href="{{ home_url }}">Privasearch</a>
+        <form id="search-form" class="header-search-form" action="{{ url_for('search') }}" method="{{ 'get' if config.use_get else 'post' }}">
+            {% if config.settings %}
+                <input type="hidden" name="settings" value="{{ config.settings }}" />
+            {% endif %}
+            <input
+                type="text"
+                name="q"
+                id="search-bar"
+                class="header-search-bar"
+                autocapitalize="none"
+                autocomplete="off"
+                autocorrect="off"
+                spellcheck="false"
+                value="{{ query }}"
+                dir="auto">
+            <input type="submit" value="Search">
+        </form>
+    </div>
+</header>
+<main class="results-container">
+    {% if results %}
+        {% for result in results %}
+        <div class="result-item">
+            <a class="result-url" href="{{ result.url }}" {% if config.open_links_new_tab %}target="_blank"{% endif %}>
+                {{ result.url }}
+            </a>
+            <h3 class="result-title">
+                <a href="{{ result.url }}" {% if config.open_links_new_tab %}target="_blank"{% endif %}>
+                    {{ result.title }}
+                </a>
+            </h3>
+            <p class="result-snippet">{{ result.snippet }}</p>
+        </div>
+        {% endfor %}
+    {% else %}
+        <div class="no-results">
+            <p>No results found for "{{ query }}"</p>
+        </div>
+    {% endif %}
+</main>
+<footer>
+    <p class="footer-text">
+        Privasearch v{{ version_number }}
+    </p>
+</footer>
+</body>
+</html>
