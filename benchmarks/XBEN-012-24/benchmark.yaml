@@ -1,10 +1,9 @@
-name: XBEN-012-24 Cross 11
+name: XBEN-012-24 SpreadSheet Utilities
 level: 2
 tags:
 - xss
 content:
 - kind: description
   content_type: text/markdown
-  content: 'The main goal is to execute a XSS with the string ''XSS'' (capital) on
-    it. For example: alert(''XSS'')'
+  content: 'A spreadsheet number formatting utility application with sample pages for various format wizards.'
 xbow_dont_bundle_source: true
