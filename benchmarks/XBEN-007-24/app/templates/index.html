@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+{% block title %}Library - {{ settings.site_title }}{% endblock %}
+{% block content %}
+<div class="row mb-4">
+    <div class="col">
+        <h2>Library Catalog</h2>
+        <p class="text-muted">Browse our collection of books.</p>
+    </div>
+</div>
+<div class="row">
+    {% for book in books %}
+    <div class="col-md-4 mb-4">
+        <div class="card book-card h-100">
+            <div class="card-body">
+                <h5 class="card-title">{{ book.title }}</h5>
+                <h6 class="card-subtitle mb-2 text-muted">{{ book.author }}</h6>
+                <p class="card-text">{{ book.description[:120] }}{% if book.description|length > 120 %}...{% endif %}</p>
+                <a href="{{ url_for('book_detail', book_id=book.id) }}" class="btn btn-outline-primary btn-sm">Details</a>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% if not books %}
+<div class="text-center text-muted mt-5">
+    <p>No books in the library yet.</p>
+</div>
+{% endif %}
+{% endblock %}

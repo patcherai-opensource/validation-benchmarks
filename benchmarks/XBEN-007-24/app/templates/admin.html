@@ -1,0 +1,61 @@
+{% extends "base.html" %}
+{% block title %}Administration - {{ settings.site_title }}{% endblock %}
+{% block content %}
+<h3>Administration Panel</h3>
+<hr>
+
+<div class="row">
+    <div class="col-md-6">
+        <div class="card mb-4">
+            <div class="card-header">User Management</div>
+            <div class="card-body">
+                <table class="table table-sm">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Username</th>
+                            <th>Email</th>
+                            <th>Role</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for user in users %}
+                        <tr>
+                            <td>{{ user.id }}</td>
+                            <td>{{ user.username }}</td>
+                            <td>{{ user.email }}</td>
+                            <td>{{ 'Admin' if user.is_admin() else 'User' }}</td>
+                            <td><a href="{{ url_for('admin_edit_user', user_id=user.id) }}" class="btn btn-sm btn-outline-secondary">Edit</a></td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="card mb-4">
+            <div class="card-header">Admin Notes</div>
+            <div class="card-body">
+                {% for note in notes %}
+                <div class="mb-3">
+                    <strong>{{ note.title }}</strong>
+                    <p class="mb-1">{{ note.content }}</p>
+                </div>
+                {% if not loop.last %}<hr>{% endif %}
+                {% endfor %}
+                {% if not notes %}
+                <p class="text-muted">No notes.</p>
+                {% endif %}
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-header">Quick Links</div>
+            <div class="card-body">
+                <a href="{{ url_for('admin_settings') }}" class="btn btn-outline-primary btn-sm">Application Settings</a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

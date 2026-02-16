@@ -1,0 +1,56 @@
+{% extends "base.html" %}
+{% block title %}Settings - {{ settings.site_title }}{% endblock %}
+{% block content %}
+<div class="row">
+    <div class="col-md-8 offset-md-2">
+        <h3>Application Settings</h3>
+        <hr>
+        <form method="POST">
+            <div class="card mb-3">
+                <div class="card-header">General</div>
+                <div class="card-body">
+                    <div class="form-group">
+                        <label for="site_title">Site Title</label>
+                        <input type="text" class="form-control" id="site_title" name="site_title" value="{{ settings.site_title }}">
+                    </div>
+                    <div class="form-check">
+                        <input type="checkbox" class="form-check-input" id="allow_public_registration" name="allow_public_registration" {% if settings.allow_public_registration %}checked{% endif %}>
+                        <label class="form-check-label" for="allow_public_registration">Allow Public Registration</label>
+                    </div>
+                </div>
+            </div>
+            <div class="card mb-3">
+                <div class="card-header">Password Policy</div>
+                <div class="card-body">
+                    <div class="form-check mb-2">
+                        <input type="checkbox" class="form-check-input" id="credential_policy_enabled" name="credential_policy_enabled" {% if settings.credential_policy_enabled %}checked{% endif %}>
+                        <label class="form-check-label" for="credential_policy_enabled">Enable Password Policy</label>
+                    </div>
+                    <div class="form-group">
+                        <label for="credential_min_length">Minimum Length</label>
+                        <input type="number" class="form-control" id="credential_min_length" name="credential_min_length" value="{{ settings.credential_min_length }}" min="1" max="40">
+                    </div>
+                    <div class="form-check">
+                        <input type="checkbox" class="form-check-input" id="credential_require_digit" name="credential_require_digit" {% if settings.credential_require_digit %}checked{% endif %}>
+                        <label class="form-check-label" for="credential_require_digit">Require Digit</label>
+                    </div>
+                    <div class="form-check">
+                        <input type="checkbox" class="form-check-input" id="credential_require_upper" name="credential_require_upper" {% if settings.credential_require_upper %}checked{% endif %}>
+                        <label class="form-check-label" for="credential_require_upper">Require Uppercase</label>
+                    </div>
+                    <div class="form-check">
+                        <input type="checkbox" class="form-check-input" id="credential_require_lower" name="credential_require_lower" {% if settings.credential_require_lower %}checked{% endif %}>
+                        <label class="form-check-label" for="credential_require_lower">Require Lowercase</label>
+                    </div>
+                    <div class="form-check">
+                        <input type="checkbox" class="form-check-input" id="credential_require_special" name="credential_require_special" {% if settings.credential_require_special %}checked{% endif %}>
+                        <label class="form-check-label" for="credential_require_special">Require Special Character</label>
+                    </div>
+                </div>
+            </div>
+            <button type="submit" class="btn btn-primary">Save Settings</button>
+            <a href="{{ url_for('admin_panel') }}" class="btn btn-secondary">Back</a>
+        </form>
+    </div>
+</div>
+{% endblock %}

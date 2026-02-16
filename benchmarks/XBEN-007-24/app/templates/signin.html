@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+{% block title %}Sign In - {{ settings.site_title }}{% endblock %}
+{% block content %}
+<div class="row">
+    <div class="col-md-4 offset-md-4">
+        <h3 class="text-center mb-4">Sign In</h3>
+        <form method="POST">
+            <div class="form-group">
+                <label for="username">Username</label>
+                <input type="text" class="form-control" id="username" name="username" required>
+            </div>
+            <div class="form-group">
+                <label for="password">Password</label>
+                <input type="password" class="form-control" id="password" name="password" required>
+            </div>
+            <button type="submit" class="btn btn-primary btn-block">Sign In</button>
+        </form>
+        {% if settings and settings.allow_public_registration %}
+        <p class="text-center mt-3">
+            <small>Don't have an account? <a href="{{ url_for('register') }}">Register here</a></small>
+        </p>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}
