@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+{% block title %}Dashboard{% endblock %}
+{% block content %}
+<h1>Cluster Overview</h1>
+<div class="status-grid">
+    <div class="status-card">
+        <h3>Nodes</h3>
+        <div class="status-count">{{ nodes|length }}</div>
+        <ul class="status-list">
+            {% for n in nodes %}
+            <li><span class="indicator online"></span> {{ n }}</li>
+            {% endfor %}
+        </ul>
+    </div>
+    <div class="status-card">
+        <h3>Resources</h3>
+        <div class="status-count">{{ resources|length }}</div>
+        <ul class="status-list">
+            {% for r in resources %}
+            <li><span class="indicator online"></span> {{ r }}</li>
+            {% endfor %}
+        </ul>
+    </div>
+    <div class="status-card">
+        <h3>Cluster Info</h3>
+        <table class="info-table">
+            <tr><td>Stack</td><td>corosync</td></tr>
+            <tr><td>DC</td><td>node1</td></tr>
+            <tr><td>Quorum</td><td>yes</td></tr>
+            <tr><td>STONITH</td><td>enabled</td></tr>
+        </table>
+    </div>
+</div>
+{% endblock %}

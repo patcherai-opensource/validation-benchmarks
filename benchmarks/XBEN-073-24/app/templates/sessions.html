@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+{% block title %}Sessions{% endblock %}
+{% block content %}
+<h1>Report Sessions</h1>
+{% if message %}
+<div class="info-msg">{{ message }}</div>
+{% endif %}
+<form method="post" class="session-form">
+    <input type="text" name="name" placeholder="Session name" required>
+    <button type="submit" name="action" value="save">Save</button>
+    <button type="submit" name="action" value="delete">Delete</button>
+</form>
+{% if sessions %}
+<table class="data-table">
+    <thead>
+        <tr>
+            <th>Session</th>
+            <th>Created</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for s in sessions %}
+        <tr>
+            <td>{{ s.name }}</td>
+            <td>{{ s.created }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% else %}
+<p>No saved sessions.</p>
+{% endif %}
+{% endblock %}

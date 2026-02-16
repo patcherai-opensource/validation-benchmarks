@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+{% block title %}Reports{% endblock %}
+{% block content %}
+<h1>Cluster Reports</h1>
+<div class="report-nav">
+    <a href="/reports/logs" class="btn">View Logs</a>
+    <a href="/reports/events" class="btn">View Events</a>
+    <a href="/reports/transition" class="btn">Transitions</a>
+    <a href="/reports/session" class="btn">Sessions</a>
+</div>
+{% if reports %}
+<h2>Saved Reports</h2>
+<table class="data-table">
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>Created</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for rpt in reports %}
+        <tr>
+            <td>{{ rpt.name }}</td>
+            <td>{{ rpt.created }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% else %}
+<p>No saved reports. Use the report tools above to examine cluster history.</p>
+{% endif %}
+{% endblock %}

@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>{% block title %}CRM{% endblock %} - Cluster Resource Manager</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    <nav class="topnav">
+        <div class="nav-brand">CRM Console</div>
+        <div class="nav-links">
+            <a href="/">Dashboard</a>
+            <a href="/nodes">Nodes</a>
+            <a href="/resources">Resources</a>
+            <a href="/reports">Reports</a>
+        </div>
+    </nav>
+    <div class="container">
+        {% block content %}{% endblock %}
+    </div>
+</body>
+</html>

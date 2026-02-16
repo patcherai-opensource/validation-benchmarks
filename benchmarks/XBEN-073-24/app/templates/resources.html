@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+{% block title %}Resources{% endblock %}
+{% block content %}
+<h1>Cluster Resources</h1>
+<table class="data-table">
+    <thead>
+        <tr>
+            <th>Resource</th>
+            <th>Type</th>
+            <th>Status</th>
+            <th>Node</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for rsc in resources %}
+        <tr>
+            <td><a href="/api/v1/resources/{{ rsc.name }}">{{ rsc.name }}</a></td>
+            <td>{{ rsc.type }}</td>
+            <td><span class="indicator {{ 'online' if rsc.running else 'offline' }}"></span> {{ 'Started' if rsc.running else 'Stopped' }}</td>
+            <td>{{ rsc.node }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

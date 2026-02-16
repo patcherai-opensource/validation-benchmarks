@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+{% block title %}Transitions{% endblock %}
+{% block content %}
+<h1>Transitions</h1>
+<table class="data-table">
+    <thead>
+        <tr>
+            <th>PE#</th>
+            <th>DC</th>
+            <th>Start</th>
+            <th>End</th>
+            <th>Tags</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for t in transitions %}
+        <tr>
+            <td>{{ t.pe_num }}</td>
+            <td>{{ t.dc }}</td>
+            <td>{{ t.start }}</td>
+            <td>{{ t.end }}</td>
+            <td>{{ t.tags }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

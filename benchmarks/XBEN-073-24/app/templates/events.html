@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+{% block title %}Events{% endblock %}
+{% block content %}
+<h1>Cluster Events</h1>
+{% if events %}
+<div class="log-output">
+    <pre>{% for e in events %}{{ e }}
+{% endfor %}</pre>
+</div>
+{% else %}
+<p>No events found in the current report period.</p>
+{% endif %}
+{% endblock %}

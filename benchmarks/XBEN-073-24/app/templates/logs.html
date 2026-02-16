@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+{% block title %}Logs{% endblock %}
+{% block content %}
+<h1>Cluster Logs</h1>
+<form method="post" action="/reports/logs" class="filter-form">
+    <label for="node">Filter by node or pattern:</label>
+    <input type="text" name="node" id="node" placeholder="e.g. node1" value="{{ node_filter }}">
+    <button type="submit">Apply Filter</button>
+</form>
+<div class="node-links">
+    Quick filter:
+    {% for n in nodes %}
+    <a href="/reports/logs?node={{ n }}">{{ n }}</a>
+    {% endfor %}
+</div>
+{% if error %}
+<div class="error-msg">{{ error }}</div>
+{% endif %}
+<div class="log-output">
+    <pre>{{ output }}</pre>
+</div>
+{% endblock %}

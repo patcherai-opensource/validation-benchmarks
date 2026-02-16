@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+{% block title %}Nodes{% endblock %}
+{% block content %}
+<h1>Cluster Nodes</h1>
+<table class="data-table">
+    <thead>
+        <tr>
+            <th>Node</th>
+            <th>Status</th>
+            <th>Resources</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for node in nodes %}
+        <tr>
+            <td><a href="/api/v1/nodes/{{ node.name }}">{{ node.name }}</a></td>
+            <td><span class="indicator {{ 'online' if node.online else 'offline' }}"></span> {{ 'Online' if node.online else 'Offline' }}</td>
+            <td>{{ node.resources|join(', ') }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}
