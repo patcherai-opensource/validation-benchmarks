@@ -1,0 +1,70 @@
+{% extends "base.html" %}
+{% block title %}SurveillEye - {{ hostname }}{% endblock %}
+{% block body %}
+<div class="header">
+    <div>
+        <h1>SurveillEye</h1>
+        <span class="version">v{{ version }} &mdash; {{ hostname }}</span>
+    </div>
+    <div class="nav">
+        <a href="/">Cameras</a>
+        <a href="#" id="settings-link">Settings</a>
+        <a href="#" id="login-link">Login</a>
+    </div>
+</div>
+<div class="container">
+    <div id="cameras-area">
+        <h2 style="margin-bottom: 8px; font-size: 16px;">Camera Feeds</h2>
+        <p style="font-size: 12px; color: #777; margin-bottom: 16px;">Monitoring dashboard &mdash; administrator: {{ admin_username }}</p>
+        <div class="camera-grid" id="camera-grid">
+            <div class="camera-card">
+                <div class="camera-feed">Loading...</div>
+                <div class="camera-info">
+                    <h3>Connecting to cameras...</h3>
+                    <span class="status offline">Please wait</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="footer">
+    SurveillEye &copy; 2024 &mdash; Open Source Video Surveillance
+</div>
+<script>
+(function() {
+    fetch('/settings/cameras')
+        .then(function(r) { return r.json(); })
+        .then(function(data) {
+            if (data.error) {
+                document.getElementById('camera-grid').innerHTML =
+                    '<div class="camera-card"><div class="camera-feed">Authentication required</div>' +
+                    '<div class="camera-info"><h3>Access Denied</h3><span class="status offline">Please log in</span></div></div>';
+                return;
+            }
+            var grid = document.getElementById('camera-grid');
+            grid.innerHTML = '';
+            if (data.cameras && data.cameras.length > 0) {
+                data.cameras.forEach(function(cam) {
+                    var card = document.createElement('div');
+                    card.className = 'camera-card';
+                    card.innerHTML =
+                        '<div class="camera-feed">' + (cam.enabled ? 'Camera feed unavailable' : 'Camera disabled') + '</div>' +
+                        '<div class="camera-info"><h3>' + cam.name + '</h3>' +
+                        '<span class="status ' + (cam.enabled ? 'online' : 'offline') + '">' +
+                        (cam.enabled ? 'Enabled' : 'Disabled') + ' &mdash; ' + cam.protocol + ' &mdash; ' + cam.resolution +
+                        '</span></div>';
+                    grid.appendChild(card);
+                });
+            } else {
+                grid.innerHTML = '<div class="camera-card"><div class="camera-feed">No cameras configured</div>' +
+                    '<div class="camera-info"><h3>Add a camera</h3><span class="status offline">Go to Settings</span></div></div>';
+            }
+        })
+        .catch(function(e) {
+            document.getElementById('camera-grid').innerHTML =
+                '<div class="camera-card"><div class="camera-feed">Error loading cameras</div>' +
+                '<div class="camera-info"><h3>Connection Error</h3><span class="status offline">' + e + '</span></div></div>';
+        });
+})();
+</script>
+{% endblock %}

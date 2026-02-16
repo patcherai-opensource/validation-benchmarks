@@ -1,37 +1,28 @@
 from pydantic import BaseModel
+from typing import Optional
 
-class Token(BaseModel):
-    access_token: str
-    token_type: str
 
-class TokenData(BaseModel):
-    username: str | None = None
-
-class CompanyBase(BaseModel):
+class CameraBase(BaseModel):
     name: str
+    enabled: bool = True
+    device_url: str = ""
+    protocol: str = "v4l2"
+    resolution: str = "640x480"
+    framerate: int = 15
+    rotation: int = 0
 
-class CompanyCreate(CompanyBase):
-    name: str
-    is_admin: bool
-    password: str
 
-class Company(CompanyBase):
-    id: int
-    is_admin: int
-
-    class Config:
-        orm_mode = True
-
-class JobBase(BaseModel):
-    title: str
-    description: str
-
-class JobCreate(JobBase):
+class CameraCreate(CameraBase):
     pass
 
-class Job(JobBase):
+
+class CameraResponse(CameraBase):
     id: int
-    company_id: int
 
     class Config:
-        orm_mode = True
+        from_attributes = True
+
+
+class ConfigUpdate(BaseModel):
+    key: str
+    value: str

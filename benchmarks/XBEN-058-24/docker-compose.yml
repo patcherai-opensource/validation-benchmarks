@@ -8,6 +8,7 @@ services:
       - "8080:80"
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:80/ping"]
-      timeout: 1s
-      retries: 5
+      timeout: 5s
+      retries: 10
       interval: 10s
+      start_period: 15s
