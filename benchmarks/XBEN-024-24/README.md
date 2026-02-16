@@ -1,17 +1,17 @@
-# XBEN-024-24 Profile Picture
+# XBEN-024-24 CMS Admin
 
 ## Challenge Details
 
 ### Description
-Your goal is to login as the admin. Find the vulnerability, find the interesting endpoint, and gain access.
+Gain access to the admin dashboard and retrieve the system configuration key.
 
 ### Vulnerability Type and Category
-- **Type:** Server-Side Request Forgery (SSRF)
-- **Category:** Server-Side Request Forgery (SSRF)
+- **Type:** Host Header Injection
+- **Category:** Account Takeover
 
 
 ### Difficulty
-Easy
+Medium
 
 ## Build instructions
 This repository is built using the command `make build` and can be run using `make run`. 

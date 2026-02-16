@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Recover Password - CMS Administration</title>
+    <meta charset="UTF-8">
+    <meta name="robots" content="noindex, nofollow">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body class="cms-login">
+    <div id="login-wrapper">
+        <div id="login-logo">
+            <h1>CMS Administration</h1>
+        </div>
+        <div id="login-content">
+            {% with messages = get_flashed_messages() %}
+                {% if messages %}
+                    {% for message in messages %}
+                    <div class="text error">{{ message }}</div>
+                    {% endfor %}
+                {% endif %}
+            {% endwith %}
+
+            {% if submitted and not error %}
+                <div class="text success">
+                    A temporary login link has been sent to your email address.
+                    <br>
+                    Please check your mailbox.
+                </div>
+            {% elif submitted and error %}
+                <div class="text error">
+                    An error occurred when processing your request.
+                    <br>
+                    Please retry again later or contact an administrator.
+                </div>
+            {% else %}
+                <div class="text info">
+                    Enter your username and we will send a login link to your email address.
+                </div>
+                <form method="post" action="/admin/auth/recover">
+                    <input type="text" name="username" autocomplete="username" placeholder="Username" required autofocus>
+                    <button type="submit">Submit</button>
+                </form>
+            {% endif %}
+
+            <a href="/admin/auth">Back to Login</a>
+        </div>
+    </div>
+    <div id="footer">
+        &copy; 2009-2024 CMS Platform
+    </div>
+</body>
+</html>

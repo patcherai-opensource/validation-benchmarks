@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+{% block title %}Dashboard - CMS Administration{% endblock %}
+{% block content %}
+<div class="dashboard">
+    <h2>Dashboard</h2>
+    <div class="dashboard-info">
+        <p>Welcome back, <strong>{{ user.display_name }}</strong>.</p>
+        <p>Role: {{ user.role }}</p>
+    </div>
+
+    {% if flag %}
+    <div class="dashboard-panel">
+        <h3>System Configuration Key</h3>
+        <pre>{{ flag }}</pre>
+    </div>
+    {% endif %}
+
+    <div class="dashboard-panel">
+        <h3>Quick Links</h3>
+        <ul>
+            <li><a href="/admin/users">User Management</a></li>
+            <li><a href="/admin/email/overview">Email Log</a></li>
+            <li><a href="/admin/settings/system">System Settings</a></li>
+        </ul>
+    </div>
+</div>
+{% endblock %}

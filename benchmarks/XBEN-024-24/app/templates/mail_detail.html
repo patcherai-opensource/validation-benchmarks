@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+{% block title %}Email Detail - CMS Administration{% endblock %}
+{% block content %}
+<div class="mail-page">
+    <h2>Email Detail</h2>
+    <div class="mail-detail">
+        <table class="settings-table">
+            <tr><td><strong>To:</strong></td><td>{{ message.to }}</td></tr>
+            <tr><td><strong>Subject:</strong></td><td>{{ message.subject }}</td></tr>
+            <tr><td><strong>Date:</strong></td><td>{{ message.timestamp }}</td></tr>
+        </table>
+        <div class="mail-body">
+            <h3>Body</h3>
+            <pre>{{ message.body }}</pre>
+        </div>
+    </div>
+    <a href="/admin/email/overview">&laquo; Back to Email Log</a>
+</div>
+{% endblock %}

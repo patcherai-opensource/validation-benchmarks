@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+{% block title %}System Settings - CMS Administration{% endblock %}
+{% block content %}
+<div class="settings-page">
+    <h2>System Settings</h2>
+    <div class="settings-section">
+        <h3>General</h3>
+        <table class="settings-table">
+            <tr><td>Application Name</td><td>CMS Platform</td></tr>
+            <tr><td>Environment</td><td>production</td></tr>
+            <tr><td>Debug Mode</td><td>disabled</td></tr>
+            <tr><td>Timezone</td><td>UTC</td></tr>
+        </table>
+    </div>
+    <div class="settings-section">
+        <h3>Email Configuration</h3>
+        <table class="settings-table">
+            <tr><td>Transport</td><td>Local (mail log)</td></tr>
+            <tr><td>From Address</td><td>noreply@pimcore.local</td></tr>
+        </table>
+    </div>
+</div>
+{% endblock %}

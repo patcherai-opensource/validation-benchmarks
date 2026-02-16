@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Set New Password - CMS Administration</title>
+    <meta charset="UTF-8">
+    <meta name="robots" content="noindex, nofollow">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body class="cms-login">
+    <div id="login-wrapper">
+        <div id="login-logo">
+            <h1>CMS Administration</h1>
+        </div>
+        <div id="login-content">
+            {% with messages = get_flashed_messages() %}
+                {% if messages %}
+                    {% for message in messages %}
+                    <div class="text error">{{ message }}</div>
+                    {% endfor %}
+                {% endif %}
+            {% endwith %}
+
+            <div class="text info">
+                Enter your new password below.
+            </div>
+            <form method="post" action="/admin/auth/verify?token={{ token }}&action=reset">
+                <input type="password" name="new_password" placeholder="New Password" required autofocus>
+                <input type="password" name="confirm_password" placeholder="Confirm Password" required>
+                <button type="submit">Set Password</button>
+            </form>
+            <a href="/admin/auth">Back to Login</a>
+        </div>
+    </div>
+    <div id="footer">
+        &copy; 2009-2024 CMS Platform
+    </div>
+</body>
+</html>

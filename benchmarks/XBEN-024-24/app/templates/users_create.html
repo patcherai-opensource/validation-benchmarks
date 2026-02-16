@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+{% block title %}Create User - CMS Administration{% endblock %}
+{% block content %}
+<div class="users-page">
+    <h2>Create User</h2>
+    <form method="post" action="/admin/users/create">
+        <label for="username">Username:</label>
+        <input type="text" name="username" required>
+        <label for="password">Password:</label>
+        <input type="password" name="password" required>
+        <label for="display_name">Display Name:</label>
+        <input type="text" name="display_name">
+        <label for="email">Email:</label>
+        <input type="email" name="email">
+        <label for="role">Role:</label>
+        <select name="role">
+            <option value="editor">Editor</option>
+            <option value="viewer">Viewer</option>
+        </select>
+        <button type="submit">Create</button>
+    </form>
+</div>
+{% endblock %}

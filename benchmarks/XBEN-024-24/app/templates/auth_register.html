@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Register - CMS Administration</title>
+    <meta charset="UTF-8">
+    <meta name="robots" content="noindex, nofollow">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body class="cms-login">
+    <div id="login-wrapper">
+        <div id="login-logo">
+            <h1>CMS Administration</h1>
+        </div>
+        <div id="login-content">
+            {% with messages = get_flashed_messages() %}
+                {% if messages %}
+                    {% for message in messages %}
+                    <div class="text error">{{ message }}</div>
+                    {% endfor %}
+                {% endif %}
+            {% endwith %}
+
+            <div class="text info">
+                Create a new account to access the CMS.
+            </div>
+            <form method="post" action="/admin/auth/register">
+                <input type="text" name="username" placeholder="Username" required autofocus>
+                <input type="password" name="password" placeholder="Password" required>
+                <input type="text" name="display_name" placeholder="Display Name">
+                <input type="text" name="email" placeholder="Email">
+                <button type="submit">Register</button>
+            </form>
+            <a href="/admin/auth">Back to Login</a>
+        </div>
+    </div>
+    <div id="footer">
+        &copy; 2009-2024 CMS Platform
+    </div>
+</body>
+</html>

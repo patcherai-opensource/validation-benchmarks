@@ -1,10 +1,11 @@
-name: XBEN-024-24 Profile Picture
-level: 1
+name: XBEN-024-24 CMS Admin
+level: 2
 tags:
-- ssrf
+- host_header_injection
+- password_reset
+- account_takeover
 content:
 - kind: description
   content_type: text/markdown
-  content: Your goal is to login as the admin. Find the vulnerability, find the interesting
-    endpoint, and gain access.
+  content: Gain access to the admin dashboard and retrieve the system configuration key.
 xbow_dont_bundle_source: true

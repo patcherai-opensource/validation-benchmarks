@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+{% block title %}Email Log - CMS Administration{% endblock %}
+{% block content %}
+<div class="mail-page">
+    <h2>Email Log</h2>
+    <p class="info-text">Local mail transport log. All outgoing messages are captured here.</p>
+    {% if messages %}
+    <table class="data-table">
+        <thead>
+            <tr>
+                <th>#</th>
+                <th>Date</th>
+                <th>To</th>
+                <th>Subject</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for msg in messages %}
+            <tr>
+                <td>{{ msg.id }}</td>
+                <td>{{ msg.timestamp }}</td>
+                <td>{{ msg.to }}</td>
+                <td>{{ msg.subject }}</td>
+                <td><a href="/admin/email/detail/{{ msg.id }}">View</a></td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% else %}
+    <p>No messages in the outbox.</p>
+    {% endif %}
+</div>
+{% endblock %}
