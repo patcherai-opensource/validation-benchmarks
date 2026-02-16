@@ -1,0 +1,9 @@
+RewriteEngine On
+RewriteBase /
+
+# Don't rewrite requests for actual files
+RewriteCond %{REQUEST_FILENAME} -f
+RewriteRule ^ - [L]
+
+# Route everything else through index.php
+RewriteRule ^(.*)$ index.php [QSA,L]
