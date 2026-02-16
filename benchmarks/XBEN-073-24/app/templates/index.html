@@ -1,16 +1,84 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>Ping Tool</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>CalcEngine — Safe Expression Evaluator</title>
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles.css') }}">
 </head>
 <body>
+    <nav class="navbar">
+        <div class="nav-brand">CalcEngine</div>
+        <div class="nav-links">
+            <a href="/">Console</a>
+            <a href="/api/v1/docs">API Docs</a>
+        </div>
+    </nav>
     <div class="container">
-        <h1>Ping Tool</h1>
-        <form action="/ping" method="post">
-            <input type="text" name="ip_address" placeholder="Enter IP Address" required>
-            <button type="submit">Ping</button>
+        <h1>Expression Evaluator</h1>
+        <p class="subtitle">Enter mathematical expressions or multi-line scripts for safe evaluation.</p>
+        <form id="eval-form">
+            <textarea id="expression" name="expression" rows="8" placeholder="Enter expression, e.g. sqrt(144) + 3**2"></textarea>
+            <div class="form-actions">
+                <button type="submit" id="run-btn">Evaluate</button>
+                <button type="button" id="clear-btn" class="btn-secondary">Clear</button>
+            </div>
         </form>
+        <div id="result-panel" class="result-panel" style="display:none;">
+            <h3>Result</h3>
+            <pre id="result-output"></pre>
+            <div id="result-errors" class="errors" style="display:none;"></div>
+            <div id="result-meta" class="meta"></div>
+        </div>
     </div>
+    <script>
+        document.getElementById('eval-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            var expr = document.getElementById('expression').value;
+            if (!expr.trim()) return;
+            var btn = document.getElementById('run-btn');
+            btn.disabled = true;
+            btn.textContent = 'Evaluating...';
+            fetch('/api/v1/evaluate', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({expression: expr, multiline: true})
+            })
+            .then(function(r) { return r.json(); })
+            .then(function(data) {
+                var panel = document.getElementById('result-panel');
+                var out = document.getElementById('result-output');
+                var errs = document.getElementById('result-errors');
+                var meta = document.getElementById('result-meta');
+                panel.style.display = 'block';
+                var text = '';
+                if (data.output) text += data.output;
+                if (data.result && data.result !== 'None') {
+                    if (text) text += '\n';
+                    text += data.result;
+                }
+                out.textContent = text || '(no output)';
+                if (data.errors && data.errors.length > 0) {
+                    errs.style.display = 'block';
+                    errs.textContent = data.errors.join('\n');
+                } else {
+                    errs.style.display = 'none';
+                }
+                meta.textContent = 'Elapsed: ' + data.elapsed_ms + ' ms';
+            })
+            .catch(function(err) {
+                document.getElementById('result-panel').style.display = 'block';
+                document.getElementById('result-output').textContent = 'Request failed: ' + err;
+            })
+            .finally(function() {
+                btn.disabled = false;
+                btn.textContent = 'Evaluate';
+            });
+        });
+        document.getElementById('clear-btn').addEventListener('click', function() {
+            document.getElementById('expression').value = '';
+            document.getElementById('result-panel').style.display = 'none';
+        });
+    </script>
 </body>
 </html>

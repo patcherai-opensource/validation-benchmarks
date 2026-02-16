@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>CalcEngine — API Documentation</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-brand">CalcEngine</div>
+        <div class="nav-links">
+            <a href="/">Console</a>
+            <a href="/api/v1/docs">API Docs</a>
+        </div>
+    </nav>
+    <div class="container docs">
+        <h1>API Documentation</h1>
+        <p class="subtitle">CalcEngine provides a safe expression evaluation service for mathematical and scientific computations.</p>
+
+        <section>
+            <h2>POST /api/v1/evaluate</h2>
+            <p>Evaluate a mathematical expression or multi-line script.</p>
+            <h3>Request</h3>
+            <p>Accepts <code>application/json</code> or <code>application/x-www-form-urlencoded</code>.</p>
+            <table class="api-table">
+                <tr><th>Field</th><th>Type</th><th>Description</th></tr>
+                <tr><td><code>expression</code></td><td>string</td><td>The expression or script to evaluate (max 50,000 chars)</td></tr>
+                <tr><td><code>multiline</code></td><td>boolean</td><td>Enable multi-line script mode (default: false)</td></tr>
+            </table>
+            <h3>Response</h3>
+            <pre>{
+  "result": "42",
+  "output": null,
+  "elapsed_ms": 1.23,
+  "errors": []
+}</pre>
+            <h3>Examples</h3>
+            <pre>curl -X POST http://localhost:8080/api/v1/evaluate \
+  -H "Content-Type: application/json" \
+  -d '{"expression": "sqrt(144) + 3**2"}'</pre>
+            <p>Multi-line scripts with function definitions:</p>
+            <pre>curl -X POST http://localhost:8080/api/v1/evaluate \
+  -H "Content-Type: application/json" \
+  -d '{"expression": "def fib(n):\n  if n < 2:\n    return n\n  return fib(n-1) + fib(n-2)\nfib(10)", "multiline": true}'</pre>
+        </section>
+
+        <section>
+            <h2>GET /api/v1/symbols</h2>
+            <p>List available built-in functions and constants.</p>
+            <h3>Response</h3>
+            <pre>{
+  "symbols": {
+    "abs": "function",
+    "sin": "function",
+    "cos": "function",
+    "pi": "float",
+    "e": "float",
+    ...
+  }
+}</pre>
+        </section>
+
+        <section>
+            <h2>Supported Features</h2>
+            <ul>
+                <li>Arithmetic: <code>+</code>, <code>-</code>, <code>*</code>, <code>/</code>, <code>//</code>, <code>%</code>, <code>**</code></li>
+                <li>Math functions: <code>sin</code>, <code>cos</code>, <code>tan</code>, <code>sqrt</code>, <code>log</code>, <code>exp</code>, etc.</li>
+                <li>Constants: <code>pi</code>, <code>e</code></li>
+                <li>Variables and assignments</li>
+                <li>Conditionals: <code>if</code>/<code>elif</code>/<code>else</code></li>
+                <li>Loops: <code>for</code>, <code>while</code></li>
+                <li>Function definitions with <code>def</code></li>
+                <li>List, dict, and set comprehensions</li>
+                <li>Try/except blocks</li>
+            </ul>
+        </section>
+
+        <section>
+            <h2>Safety</h2>
+            <p>CalcEngine uses a sandboxed interpreter that restricts access to system resources. Imports, eval, exec, and other potentially dangerous operations are disabled.</p>
+        </section>
+    </div>
+</body>
+</html>
