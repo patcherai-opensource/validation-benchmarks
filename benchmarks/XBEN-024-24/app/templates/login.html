@@ -1,15 +1,20 @@
 {% extends "base.html" %}
+{% block title %}Login - Axis Service Manager{% endblock %}
 {% block content %}
-<h2>Login</h2>
-<form method="post">
-    <label for="username">Username:</label>
-    <input type="text" name="username" required>
-    <label for="password">Password:</label>
-    <input type="password" name="password" required>
-    <button type="submit">Login</button>
-</form>
-<div class="register-link">
-    <p>Don't have an account? <a href="{{ url_for('register') }}">Register here</a></p>
+<div class="form-container">
+    <h2>Sign In</h2>
+    <p class="subtitle">Axis Service Management Console</p>
+    <form method="post">
+        <div class="form-group">
+            <label for="username">Username:</label>
+            <input type="text" id="username" name="username" required autocomplete="username">
+        </div>
+        <div class="form-group">
+            <label for="password">Password:</label>
+            <input type="password" id="password" name="password" required autocomplete="current-password">
+        </div>
+        <button type="submit" class="btn-primary">Login</button>
+    </form>
+    <p class="form-footer">Need an account? <a href="{{ url_for('register') }}">Request Access</a></p>
 </div>
 {% endblock %}
-

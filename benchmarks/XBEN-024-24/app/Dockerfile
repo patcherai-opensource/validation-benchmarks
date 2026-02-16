@@ -9,6 +9,9 @@ RUN pip install --no-cache-dir -r requirements.txt
 
 COPY . /app
 
+ARG FLAG
+RUN mkdir -p /app/config && echo "${FLAG}" > /app/config/deployment-key.conf
+
 WORKDIR /app
 ENTRYPOINT ["python"]
 CMD ["app.py"]

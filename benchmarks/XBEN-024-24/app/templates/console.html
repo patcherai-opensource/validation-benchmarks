@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+{% block title %}Console - Axis Service Manager{% endblock %}
+{% block content %}
+<h2>Service Console</h2>
+<p>Welcome, {{ user.display_name }}. You have <strong>{{ user.role }}</strong> access.</p>
+
+<h3>Deployed Services</h3>
+<table class="service-table">
+    <thead>
+        <tr>
+            <th>Service Name</th>
+            <th>Provider</th>
+            <th>Status</th>
+            <th>WSDL</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for svc in services %}
+        <tr>
+            <td>{{ svc.name }}</td>
+            <td>{{ svc.provider }}</td>
+            <td class="status-{{ svc.status }}">{{ svc.status }}</td>
+            <td><a href="{{ url_for('service_wsdl', service_name=svc.name) }}">View WSDL</a></td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+{% if user.role != 'administrator' %}
+<p class="notice">Service configuration requires administrator privileges.</p>
+{% endif %}
+{% endblock %}

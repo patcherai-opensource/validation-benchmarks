@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+{% block title %}Admin Dashboard - Axis Service Manager{% endblock %}
+{% block content %}
+<h2>Administration Dashboard</h2>
+<p>Welcome, {{ user.display_name }}.</p>
+
+<div class="admin-nav">
+    <a href="{{ url_for('configure_service') }}" class="btn-secondary">Service Registry Configuration</a>
+    <a href="{{ url_for('wsdd_config') }}" class="btn-secondary">Deployment Descriptor</a>
+</div>
+
+<h3>Deployed Services</h3>
+<table class="service-table">
+    <thead>
+        <tr>
+            <th>Service Name</th>
+            <th>Provider</th>
+            <th>Class</th>
+            <th>Status</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for svc in services %}
+        <tr>
+            <td>{{ svc.name }}</td>
+            <td>{{ svc.provider }}</td>
+            <td><code>{{ svc.class_name }}</code></td>
+            <td class="status-{{ svc.status }}">{{ svc.status }}</td>
+            <td>
+                <form method="post" action="{{ url_for('control_service', service_name=svc.name) }}" style="display:inline">
+                    {% if svc.status == 'running' %}
+                    <input type="hidden" name="cmd" value="stop">
+                    <button type="submit" class="btn-small btn-danger">Stop</button>
+                    {% else %}
+                    <input type="hidden" name="cmd" value="start">
+                    <button type="submit" class="btn-small btn-success">Start</button>
+                    {% endif %}
+                </form>
+                <a href="{{ url_for('service_wsdl', service_name=svc.name) }}" class="btn-small">WSDL</a>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}
