@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+
+{% block title %}Delete Page{% endblock %}
+
+{% block content %}
+<nav class="navbar navbar-dark bg-dark">
+    <a class="navbar-brand" href="/">Art Gallery</a>
+</nav>
+
+<div class="container mt-4">
+    <h2>Delete Page</h2>
+    <div class="alert alert-danger">
+        <p>Are you sure you want to delete "<strong>{{ page.title }}</strong>"?</p>
+        <p>This action cannot be undone.</p>
+    </div>
+    <form method="post">
+        {% csrf_token %}
+        <button type="submit" class="btn btn-danger">Delete</button>
+        <a href="/accounts/pages/" class="btn btn-secondary">Cancel</a>
+    </form>
+</div>
+{% endblock %}

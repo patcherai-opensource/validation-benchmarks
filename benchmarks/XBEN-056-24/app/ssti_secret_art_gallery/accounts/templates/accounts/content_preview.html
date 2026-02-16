@@ -1,0 +1,53 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ page.title }} - Preview{% endblock %}
+
+{% block content %}
+<nav class="navbar navbar-dark bg-dark">
+    <a class="navbar-brand" href="/">Art Gallery</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExample01" aria-controls="navbarsExample01" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="navbarsExample01">
+    <ul class="navbar-nav mr-auto">
+        <li class="nav-item">
+        <a class="nav-link" href="/">Home</a>
+        </li>
+        <li class="nav-item">
+        <a class="nav-link" href="/accounts/pages/">My Pages</a>
+        </li>
+        <li class="nav-item">
+        <a class="nav-link" href="/accounts/preferences/">Settings</a>
+        </li>
+        <li class="nav-item">
+        <a class="nav-link" href="/accounts/logout/">Logout</a>
+        </li>
+    </ul>
+    </div>
+</nav>
+
+<div class="container mt-4">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h2>{{ page.title }}</h2>
+        <div>
+            <a href="/accounts/pages/{{ page.id }}/edit/" class="btn btn-warning btn-sm">Edit</a>
+            <a href="/accounts/pages/" class="btn btn-secondary btn-sm">Back to Pages</a>
+        </div>
+    </div>
+
+    {% if page.is_published %}
+    <span class="badge badge-success mb-3">Published</span>
+    {% else %}
+    <span class="badge badge-secondary mb-3">Draft</span>
+    {% endif %}
+
+    <div class="card">
+        <div class="card-body">
+            {{ rendered_body|linebreaksbr }}
+        </div>
+    </div>
+
+    <p class="text-muted small mt-2">Last updated: {{ page.updated_at|date:"M d, Y H:i" }}</p>
+</div>
+{% endblock %}

@@ -1,0 +1,70 @@
+{% extends 'base.html' %}
+
+{% block title %}{% if editing %}Edit Page{% else %}New Page{% endif %}{% endblock %}
+
+{% block content %}
+<nav class="navbar navbar-dark bg-dark">
+    <a class="navbar-brand" href="/">Art Gallery</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExample01" aria-controls="navbarsExample01" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="navbarsExample01">
+    <ul class="navbar-nav mr-auto">
+        <li class="nav-item">
+        <a class="nav-link" href="/">Home</a>
+        </li>
+        <li class="nav-item active">
+        <a class="nav-link" href="/accounts/pages/">My Pages</a>
+        </li>
+        <li class="nav-item">
+        <a class="nav-link" href="/accounts/preferences/">Settings</a>
+        </li>
+        <li class="nav-item">
+        <a class="nav-link" href="/accounts/logout/">Logout</a>
+        </li>
+    </ul>
+    </div>
+</nav>
+
+<div class="container mt-4">
+    <h2>{% if editing %}Edit Page{% else %}Create New Page{% endif %}</h2>
+
+    <div class="card mb-3">
+        <div class="card-body">
+            <h6 class="card-subtitle mb-2 text-muted">Template Variables</h6>
+            <p class="card-text small">You can use these variables in your content body:</p>
+            <ul class="small">
+                <li><code>{0.title}</code> - Site title</li>
+                <li><code>{0.author}</code> - Your display name</li>
+                <li><code>{0.year}</code> - Current year</li>
+                <li><code>{0.contact}</code> - Contact email</li>
+            </ul>
+        </div>
+    </div>
+
+    <form method="post">
+        {% csrf_token %}
+        <div class="form-group">
+            <label for="id_title">Title</label>
+            {{ form.title }}
+            {% for error in form.title.errors %}
+            <div class="text-danger small">{{ error }}</div>
+            {% endfor %}
+        </div>
+        <div class="form-group">
+            <label for="id_body">Content</label>
+            {{ form.body }}
+            {% for error in form.body.errors %}
+            <div class="text-danger small">{{ error }}</div>
+            {% endfor %}
+        </div>
+        <div class="form-group form-check">
+            {{ form.is_published }}
+            <label class="form-check-label" for="id_is_published">Publish this page</label>
+        </div>
+        <button type="submit" class="btn btn-primary">{% if editing %}Save Changes{% else %}Create Page{% endif %}</button>
+        <a href="/accounts/pages/" class="btn btn-secondary">Cancel</a>
+    </form>
+</div>
+{% endblock %}
