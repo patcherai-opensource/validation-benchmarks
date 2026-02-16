@@ -1,6 +1,8 @@
 <?php
-    $db_host = getenv('DB_HOST') ?: 'localhost';
-    $db_database = getenv('DB_DATABASE') ?: 'db';
-    $db_username = getenv('DB_USERNAME') ?: 'db_username';
-    $db_password = getenv('DB_PASSWORD') ?: 'pCxvkPyS9JYq27BVdUX4N8';
+    $db_path = '/var/www/data/velora.db';
+
+    // Cookie configuration
+    $customer_persist_cookie = 'cpsc';
+    $admin_persist_cookie = 'apsc';
+    $persist_cookie_lifetime = 2592000; // 30 days
 ?>

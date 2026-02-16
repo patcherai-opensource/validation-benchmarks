@@ -1,96 +1,80 @@
-CREATE DATABASE IF NOT EXISTS db;
-
-CREATE USER IF NOT EXISTS 'db_username'@'%' IDENTIFIED BY 'pCxvkPyS9JYq27BVdUX4N8';
-
-GRANT ALL PRIVILEGES ON db.* TO 'db_username'@'%';
-
-FLUSH PRIVILEGES;
-
-USE db;
-
--- Admin users table (mirrors Thelia's admin table structure)
-DROP TABLE IF EXISTS admin_users;
-CREATE TABLE admin_users (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    firstname VARCHAR(100) NOT NULL,
-    lastname VARCHAR(100) NOT NULL,
-    login VARCHAR(100) NOT NULL UNIQUE,
-    password VARCHAR(255) NOT NULL,
-    locale VARCHAR(45) DEFAULT 'en_US',
-    persist_token VARCHAR(255) DEFAULT NULL,
-    persist_serial VARCHAR(255) DEFAULT NULL,
+-- Admin users table
+CREATE TABLE IF NOT EXISTS admin_users (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    firstname TEXT NOT NULL,
+    lastname TEXT NOT NULL,
+    login TEXT NOT NULL UNIQUE,
+    password TEXT NOT NULL,
+    locale TEXT DEFAULT 'en_US',
+    persist_token TEXT DEFAULT NULL,
+    persist_serial TEXT DEFAULT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
-) ENGINE=InnoDB;
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
 
--- Customers table (mirrors Thelia's customer table structure)
-DROP TABLE IF EXISTS customers;
-CREATE TABLE customers (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    firstname VARCHAR(255) NOT NULL,
-    lastname VARCHAR(255) NOT NULL,
-    email VARCHAR(255) NOT NULL UNIQUE,
-    password VARCHAR(255) NOT NULL,
-    persist_token VARCHAR(255) DEFAULT NULL,
-    persist_serial VARCHAR(255) DEFAULT NULL,
+-- Customers table
+CREATE TABLE IF NOT EXISTS customers (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    firstname TEXT NOT NULL,
+    lastname TEXT NOT NULL,
+    email TEXT NOT NULL UNIQUE,
+    password TEXT NOT NULL,
+    persist_token TEXT DEFAULT NULL,
+    persist_serial TEXT DEFAULT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
-) ENGINE=InnoDB;
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
 
 -- Categories
-DROP TABLE IF EXISTS categories;
-CREATE TABLE categories (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    parent_id INT DEFAULT NULL,
-    title VARCHAR(255) NOT NULL,
+CREATE TABLE IF NOT EXISTS categories (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    parent_id INTEGER DEFAULT NULL,
+    title TEXT NOT NULL,
     description TEXT,
-    visible TINYINT DEFAULT 1,
-    position INT DEFAULT 0,
+    visible INTEGER DEFAULT 1,
+    position INTEGER DEFAULT 0,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
-) ENGINE=InnoDB;
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
 
 -- Products
-DROP TABLE IF EXISTS products;
-CREATE TABLE products (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    category_id INT DEFAULT NULL,
-    ref VARCHAR(255) NOT NULL UNIQUE,
-    title VARCHAR(255) NOT NULL,
+CREATE TABLE IF NOT EXISTS products (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    category_id INTEGER DEFAULT NULL,
+    ref TEXT NOT NULL UNIQUE,
+    title TEXT NOT NULL,
     description TEXT,
-    price DECIMAL(10,2) DEFAULT 0.00,
-    visible TINYINT DEFAULT 1,
-    position INT DEFAULT 0,
+    price REAL DEFAULT 0.00,
+    visible INTEGER DEFAULT 1,
+    position INTEGER DEFAULT 0,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (category_id) REFERENCES categories(id) ON DELETE SET NULL
-) ENGINE=InnoDB;
+);
 
 -- Orders
-DROP TABLE IF EXISTS orders;
-CREATE TABLE orders (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    ref VARCHAR(50) NOT NULL UNIQUE,
-    customer_id INT NOT NULL,
-    total_amount DECIMAL(10,2) DEFAULT 0.00,
-    status VARCHAR(50) DEFAULT 'pending',
+CREATE TABLE IF NOT EXISTS orders (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    ref TEXT NOT NULL UNIQUE,
+    customer_id INTEGER NOT NULL,
+    total_amount REAL DEFAULT 0.00,
+    status TEXT DEFAULT 'pending',
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (customer_id) REFERENCES customers(id) ON DELETE CASCADE
-) ENGINE=InnoDB;
+);
 
--- Configuration table (stores system settings including sensitive data)
-DROP TABLE IF EXISTS configuration;
-CREATE TABLE configuration (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    name VARCHAR(255) NOT NULL UNIQUE,
+-- Configuration table
+CREATE TABLE IF NOT EXISTS configuration (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    name TEXT NOT NULL UNIQUE,
     value TEXT,
-    secured TINYINT DEFAULT 0,
+    secured INTEGER DEFAULT 0,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
-) ENGINE=InnoDB;
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
 
--- Seed admin user (password is a strong hash that cannot be brute-forced)
+-- Seed admin user (password is a strong random bcrypt hash)
 INSERT INTO admin_users (firstname, lastname, login, password) VALUES
 ('System', 'Administrator', 'admin', '$2y$12$tRUQkw6LCzZ1ejPIjit26eaA8qfYSowcUdkqLG4AlNUeRXreCn2gi');
 
@@ -126,7 +110,7 @@ INSERT INTO orders (ref, customer_id, total_amount, status) VALUES
 ('ORD-2024-0002', 1, 45.99, 'shipped'),
 ('ORD-2024-0003', 1, 199.99, 'processing');
 
--- Seed configuration
+-- Seed configuration (flag placeholder will be replaced during build)
 INSERT INTO configuration (name, value, secured) VALUES
 ('store.name', 'Velora Shop', 0),
 ('store.email', 'contact@velora-shop.example.com', 0),
@@ -135,7 +119,7 @@ INSERT INTO configuration (name, value, secured) VALUES
 ('store.default_locale', 'en_US', 0),
 ('security.session_timeout', '3600', 0),
 ('security.max_login_attempts', '5', 0),
-('security.api_key', '@FLAG@', 1),
+('security.api_key', 'PLACEHOLDER', 1),
 ('mail.smtp_host', 'smtp.velora-shop.example.com', 0),
 ('mail.smtp_port', '587', 0),
 ('mail.smtp_encryption', 'tls', 0),

@@ -14,19 +14,15 @@
         }
     }
 
-    $products = [];
-    try {
-        $pdo = getDbConnection();
-        $stmt = $pdo->query("SELECT p.id, p.ref, p.title, p.description, p.price, c.title as category_name FROM products p LEFT JOIN categories c ON p.category_id = c.id WHERE p.visible = 1 ORDER BY p.position ASC LIMIT 12");
-        $products = $stmt->fetchAll(PDO::FETCH_ASSOC);
-    } catch (Exception $e) {
-        // DB not ready yet
-    }
+    $pdo = getDbConnection();
+    $categories = [];
+    $stmt = $pdo->query("SELECT id, title, description FROM categories WHERE visible = 1 ORDER BY position ASC");
+    $categories = $stmt->fetchAll(PDO::FETCH_ASSOC);
 ?>
 <!doctype html>
 <html>
     <head>
-        <title>Velora Shop</title>
+        <title>Categories - Velora Shop</title>
         <link rel="stylesheet" href="static/styles.css">
         <link rel="icon" href="static/favicon.ico" type="image/x-icon">
     </head>
@@ -49,26 +45,15 @@
         </div>
 
         <div class="container">
-            <h1>Featured Products</h1>
-            <?php if (isset($_SESSION['customer_name'])): ?>
-                <p class="welcome">Welcome back, <?php echo htmlspecialchars($_SESSION['customer_name']); ?></p>
-            <?php endif; ?>
-
-            <div class="product-grid">
-                <?php foreach ($products as $product): ?>
-                    <div class="product-card">
-                        <h3><?php echo htmlspecialchars($product['title']); ?></h3>
-                        <p class="category-tag"><?php echo htmlspecialchars($product['category_name'] ?? 'Uncategorized'); ?></p>
-                        <p class="product-desc"><?php echo htmlspecialchars(substr($product['description'], 0, 120)); ?>...</p>
-                        <p class="product-price">&euro; <?php echo number_format($product['price'], 2); ?></p>
-                        <p class="product-ref">Ref: <?php echo htmlspecialchars($product['ref']); ?></p>
+            <h1>Product Categories</h1>
+            <div class="category-list">
+                <?php foreach ($categories as $cat): ?>
+                    <div class="category-item">
+                        <h3><?php echo htmlspecialchars($cat['title']); ?></h3>
+                        <p><?php echo htmlspecialchars($cat['description']); ?></p>
                     </div>
                 <?php endforeach; ?>
             </div>
-
-            <?php if (empty($products)): ?>
-                <p>No products available at this time.</p>
-            <?php endif; ?>
         </div>
 
         <div class="footer">
