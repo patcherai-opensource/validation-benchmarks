@@ -1,20 +1,23 @@
-FROM php:5-apache
+FROM python:3.11-slim
 
-COPY . . 
-WORKDIR /var/www/html
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    gcc libffi-dev && \
+    rm -rf /var/lib/apt/lists/*
 
-# Set build-time flag for compatibility with existing build system
+WORKDIR /opt/app
+
+COPY requirements.txt .
+RUN pip install --no-cache-dir -r requirements.txt
+
+COPY . .
+
 ARG FLAG
-RUN if [ -n "${FLAG}" ]; then sed -i "s/@FLAG@/${FLAG}/g" index.php; fi
+RUN mkdir -p /data && \
+    APP_INIT_TOKEN="${FLAG}" python -c "from app.create_app import create_app; create_app()" && \
+    unset APP_INIT_TOKEN
 
-# Create entrypoint script for runtime flag substitution
-RUN echo '#!/bin/bash' > /entrypoint.sh && \
-    echo 'if [ -n "${FLAG}" ]; then' >> /entrypoint.sh && \
-    echo '  sed -i "s/@FLAG@/${FLAG}/g" /var/www/html/index.php' >> /entrypoint.sh && \
-    echo 'fi' >> /entrypoint.sh && \
-    echo 'exec apache2-foreground "$@"' >> /entrypoint.sh && \
-    chmod +x /entrypoint.sh
+ENV JWT_SECRET_KEY="a7f3c8d1e9b24f5a8c6d0e2f4a7b9c1d"
 
 EXPOSE 80
 
-ENTRYPOINT ["/entrypoint.sh"]
+CMD ["gunicorn", "--bind", "0.0.0.0:80", "--workers", "2", "--timeout", "120", "wsgi:application"]

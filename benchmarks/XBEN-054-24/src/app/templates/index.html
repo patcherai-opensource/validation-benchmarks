@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+{% block title %}AppBuilder - Home{% endblock %}
+{% block content %}
+<div class="card">
+    <h2>Welcome to AppBuilder</h2>
+    <p>This application provides a REST API for managing users, roles, and permissions.</p>
+    <p>Authentication is handled through LDAP integration with the corporate directory service.</p>
+    <h3>API Endpoints</h3>
+    <ul>
+        <li><code>POST /api/v1/auth/authenticate</code> - Obtain access token</li>
+        <li><code>POST /api/v1/auth/refresh</code> - Refresh access token</li>
+        <li><code>GET /api/v1/me/</code> - Current user info</li>
+        <li><code>GET /api/v1/users/</code> - List users (Admin only)</li>
+        <li><code>GET /api/v1/roles/</code> - List roles</li>
+        <li><code>GET /api/v1/config/</code> - System configuration (Admin only)</li>
+    </ul>
+    <p>For full API documentation, see the <a href="/api/v1/_openapi">OpenAPI specification</a>.</p>
+    <p>Send requests with <code>Content-Type: application/json</code> and include a Bearer token in the Authorization header for protected endpoints.</p>
+</div>
+{% endblock %}

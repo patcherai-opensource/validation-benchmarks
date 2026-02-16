@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+{% block title %}AppBuilder - Sign In{% endblock %}
+{% block content %}
+<div class="card" style="max-width: 400px; margin: 60px auto;">
+    <h2>Sign In</h2>
+    <p>Please use your LDAP credentials to sign in.</p>
+    <form id="loginForm">
+        <label for="username">Username</label>
+        <input type="text" id="username" name="username" required>
+        <label for="password">Password</label>
+        <input type="password" id="password" name="password" required>
+        <button type="submit" class="btn">Sign In</button>
+    </form>
+    <div id="message" style="margin-top: 12px; color: red;"></div>
+</div>
+<script>
+document.getElementById('loginForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+    var username = document.getElementById('username').value;
+    var password = document.getElementById('password').value;
+    fetch('/api/v1/auth/authenticate', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({username: username, password: password, provider: 'ldap'})
+    }).then(function(r) { return r.json().then(function(d) { return {status: r.status, data: d}; }); })
+    .then(function(resp) {
+        if (resp.status === 200) {
+            document.getElementById('message').style.color = 'green';
+            document.getElementById('message').textContent = 'Authentication successful.';
+        } else {
+            document.getElementById('message').textContent = resp.data.message || 'Authentication failed.';
+        }
+    }).catch(function() {
+        document.getElementById('message').textContent = 'Connection error.';
+    });
+});
+</script>
+{% endblock %}
