@@ -1,0 +1,113 @@
+{% extends "base.html" %}
+
+{% block title %}Notification Layouts - PrivacyHub{% endblock %}
+
+{% block content %}
+<h2 class="mb-4">Notification Layouts</h2>
+<p class="text-muted">Customize the notification templates sent to users during privacy request processing.</p>
+
+<div id="layoutsContainer"></div>
+
+<div class="modal fade" id="editModal" tabindex="-1">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Edit Notification Layout</h5>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="editForm">
+                    <input type="hidden" id="editLayoutId">
+                    <div class="form-group">
+                        <label>Type</label>
+                        <input type="text" id="editType" class="form-control" readonly>
+                    </div>
+                    <div class="form-group">
+                        <label>Subject</label>
+                        <input type="text" id="editSubject" class="form-control">
+                    </div>
+                    <div class="form-group">
+                        <label>Body</label>
+                        <textarea id="editBody" class="form-control" rows="6"></textarea>
+                        <small class="form-text text-muted">Available variables depend on the notification type.</small>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-primary" onclick="saveLayout()">Save Changes</button>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+function loadLayouts() {
+    $.get('/api/v1/notification-layouts', function(data) {
+        let html = '';
+        data.forEach(function(l) {
+            let activeBadge = l.is_active ?
+                '<span class="badge badge-success">Active</span>' :
+                '<span class="badge badge-secondary">Inactive</span>';
+            html += `
+            <div class="card mb-3">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <div>
+                        <strong>${l.label}</strong>
+                        <small class="text-muted ml-2">(${l.layout_type})</small>
+                        ${activeBadge}
+                    </div>
+                    <button class="btn btn-sm btn-outline-primary"
+                            onclick="editLayout(${l.id}, '${l.layout_type}', '${escapeHtml(l.content.subject)}', '${escapeHtml(l.content.body)}')">
+                        Edit
+                    </button>
+                </div>
+                <div class="card-body">
+                    <p><strong>Subject:</strong> ${l.content.subject}</p>
+                    <p><strong>Body:</strong> ${l.content.body}</p>
+                </div>
+            </div>`;
+        });
+        $('#layoutsContainer').html(html || '<p>No layouts configured.</p>');
+    });
+}
+
+function escapeHtml(str) {
+    return str.replace(/'/g, "\\'").replace(/"/g, '\\"').replace(/\n/g, '\\n');
+}
+
+function editLayout(id, type, subject, body) {
+    $('#editLayoutId').val(id);
+    $('#editType').val(type);
+    $('#editSubject').val(subject.replace(/\\n/g, '\n'));
+    $('#editBody').val(body.replace(/\\n/g, '\n'));
+    $('#editModal').modal('show');
+}
+
+function saveLayout() {
+    let id = $('#editLayoutId').val();
+    $.ajax({
+        url: '/api/v1/notification-layouts/' + id,
+        method: 'PUT',
+        contentType: 'application/json',
+        data: JSON.stringify({
+            content: {
+                subject: $('#editSubject').val(),
+                body: $('#editBody').val()
+            }
+        }),
+        success: function() {
+            $('#editModal').modal('hide');
+            loadLayouts();
+        },
+        error: function(xhr) {
+            alert('Error saving layout: ' + (xhr.responseJSON ? xhr.responseJSON.error : 'Unknown error'));
+        }
+    });
+}
+
+loadLayouts();
+</script>
+{% endblock %}

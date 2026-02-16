@@ -1,0 +1,57 @@
+{% extends "base.html" %}
+
+{% block title %}Dashboard - PrivacyHub{% endblock %}
+
+{% block content %}
+<h2 class="mb-4">Dashboard</h2>
+<div class="row">
+    <div class="col-md-3">
+        <div class="card card-stat mb-3">
+            <div class="card-body">
+                <h5 class="card-title text-muted">Total Requests</h5>
+                <h2>{{ total }}</h2>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card card-stat mb-3" style="border-left-color: #f39c12;">
+            <div class="card-body">
+                <h5 class="card-title text-muted">Pending</h5>
+                <h2>{{ pending }}</h2>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card card-stat mb-3" style="border-left-color: #27ae60;">
+            <div class="card-body">
+                <h5 class="card-title text-muted">Approved</h5>
+                <h2>{{ approved }}</h2>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card card-stat mb-3" style="border-left-color: #e74c3c;">
+            <div class="card-body">
+                <h5 class="card-title text-muted">Denied</h5>
+                <h2>{{ denied }}</h2>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row mt-4">
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header">
+                <h5>Quick Actions</h5>
+            </div>
+            <div class="card-body">
+                <a href="{{ url_for('privacy_requests_page') }}" class="btn btn-primary mr-2">View Requests</a>
+                {% if current_user.role in ['owner', 'contributor'] %}
+                <a href="{{ url_for('notification_layouts_page') }}" class="btn btn-secondary">Manage Notifications</a>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,95 @@
+{% extends "base.html" %}
+
+{% block title %}Privacy Requests - PrivacyHub{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h2>Privacy Requests</h2>
+    <div>
+        <select id="statusFilter" class="form-control d-inline-block" style="width: auto;">
+            <option value="">All Statuses</option>
+            <option value="pending">Pending</option>
+            <option value="approved">Approved</option>
+            <option value="denied">Denied</option>
+        </select>
+    </div>
+</div>
+
+<div class="table-responsive">
+    <table class="table table-striped" id="requestsTable">
+        <thead class="thead-dark">
+            <tr>
+                <th>ID</th>
+                <th>Email</th>
+                <th>Type</th>
+                <th>Status</th>
+                <th>Created</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody id="requestsBody">
+        </tbody>
+    </table>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+function loadRequests(status) {
+    let url = '/api/v1/privacy-requests';
+    if (status) url += '?status=' + status;
+    $.get(url, function(data) {
+        let html = '';
+        data.forEach(function(r) {
+            let actions = '';
+            if (r.status === 'pending') {
+                actions = `
+                    <button class="btn btn-sm btn-success" onclick="approveRequest('${r.id}')">Approve</button>
+                    <button class="btn btn-sm btn-danger" onclick="denyRequest('${r.id}')">Deny</button>
+                `;
+            } else {
+                actions = '<span class="text-muted">-</span>';
+            }
+            let statusBadge = r.status === 'pending' ? 'badge-warning' :
+                              r.status === 'approved' ? 'badge-success' : 'badge-danger';
+            html += `<tr>
+                <td><code>${r.id.substring(0, 8)}...</code></td>
+                <td>${r.requester_email}</td>
+                <td>${r.request_type}</td>
+                <td><span class="badge ${statusBadge}">${r.status}</span></td>
+                <td>${r.created_at ? new Date(r.created_at).toLocaleDateString() : '-'}</td>
+                <td>${actions}</td>
+            </tr>`;
+        });
+        $('#requestsBody').html(html || '<tr><td colspan="6" class="text-center">No requests found</td></tr>');
+    });
+}
+
+function approveRequest(id) {
+    $.post('/api/v1/privacy-requests/' + id + '/approve', function(data) {
+        loadRequests($('#statusFilter').val());
+    });
+}
+
+function denyRequest(id) {
+    let reason = prompt('Enter denial reason:');
+    if (reason !== null) {
+        $.ajax({
+            url: '/api/v1/privacy-requests/' + id + '/deny',
+            method: 'POST',
+            contentType: 'application/json',
+            data: JSON.stringify({reason: reason}),
+            success: function() {
+                loadRequests($('#statusFilter').val());
+            }
+        });
+    }
+}
+
+$('#statusFilter').change(function() {
+    loadRequests($(this).val());
+});
+
+loadRequests();
+</script>
+{% endblock %}
