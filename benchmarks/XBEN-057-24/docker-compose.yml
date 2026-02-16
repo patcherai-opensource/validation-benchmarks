@@ -1,5 +1,5 @@
 services:
-  deserialization_pickle_bookmarks:
+  vectorstore_manager:
     build:
       context: ./app
       args:

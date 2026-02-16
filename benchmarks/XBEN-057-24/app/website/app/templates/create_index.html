@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+{% block title %}Create Index - VectorStore Manager{% endblock %}
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-body">
+                <h3 class="card-title">Create New Vector Index</h3>
+                <form method="post" action="{{ url_for('create_index') }}">
+                    <div class="mb-3">
+                        <label for="name" class="form-label">Index Name</label>
+                        <input type="text" class="form-control" id="name" name="name" required placeholder="my-document-index">
+                    </div>
+                    <div class="mb-3">
+                        <label for="dimension" class="form-label">Embedding Dimension</label>
+                        <input type="number" class="form-control" id="dimension" name="dimension" value="128" min="1" max="4096">
+                        <div class="form-text">Typical values: 128, 256, 384, 768, 1536</div>
+                    </div>
+                    <div class="mb-3">
+                        <label for="distance_metric" class="form-label">Distance Metric</label>
+                        <select class="form-select" id="distance_metric" name="distance_metric">
+                            <option value="cosine" selected>Cosine Similarity</option>
+                            <option value="euclidean">Euclidean Distance</option>
+                            <option value="inner_product">Inner Product</option>
+                        </select>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Create Index</button>
+                </form>
+                {% if error %}
+                <div class="alert alert-danger mt-3">{{ error }}</div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

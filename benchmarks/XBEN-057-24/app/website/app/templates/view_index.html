@@ -1,0 +1,55 @@
+{% extends "base.html" %}
+{% block title %}Index {{ index_info.name }} - VectorStore Manager{% endblock %}
+{% block content %}
+<h2>Index: {{ index_info.name }}</h2>
+<div class="row mt-3">
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">Index Details</h5>
+                <table class="table table-sm">
+                    <tr><td><strong>ID</strong></td><td><code>{{ index_info.index_id }}</code></td></tr>
+                    <tr><td><strong>Name</strong></td><td>{{ index_info.name }}</td></tr>
+                    <tr><td><strong>Dimension</strong></td><td>{{ index_info.dimension }}</td></tr>
+                    <tr><td><strong>Distance Metric</strong></td><td>{{ index_info.distance_metric }}</td></tr>
+                    <tr><td><strong>Documents</strong></td><td>{{ index_info.document_count }}</td></tr>
+                    <tr><td><strong>Version</strong></td><td>{{ index_info.version }}</td></tr>
+                </table>
+                {% if loaded %}
+                <span class="badge bg-success">Loaded in Memory</span>
+                <a href="{{ url_for('export_index', index_id=index_info.index_id) }}" class="btn btn-sm btn-outline-secondary ms-2">Export</a>
+                {% else %}
+                <span class="badge bg-secondary">Not Loaded</span>
+                <p class="mt-2 text-muted small">To load this index, re-import it from an exported file.</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+
+{% if loaded and documents %}
+<div class="row mt-4">
+    <div class="col-12">
+        <h4>Documents ({{ documents|length }})</h4>
+        <table class="table table-sm table-striped">
+            <thead>
+                <tr>
+                    <th>Doc ID</th>
+                    <th>Content</th>
+                    <th>Metadata</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for doc in documents %}
+                <tr>
+                    <td><code>{{ doc.doc_id }}</code></td>
+                    <td>{{ doc.content }}</td>
+                    <td><code>{{ doc.metadata }}</code></td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endif %}
+{% endblock %}

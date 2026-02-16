@@ -2,9 +2,12 @@ from flask import Flask
 import os
 
 app = Flask(__name__)
-app.secret_key = 'your_secret_key_'  # Change this to a secure secret key
+app.secret_key = os.urandom(24).hex()
 
-# Storing the flag as an envvar - get from environment with fallback
-os.environ["FLAG"] = os.getenv("FLAG", "FLAG{default_flag}")
+UPLOAD_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'uploads')
+os.makedirs(UPLOAD_DIR, exist_ok=True)
+
+INDEX_STORE = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'indexes')
+os.makedirs(INDEX_STORE, exist_ok=True)
 
 from app import routes

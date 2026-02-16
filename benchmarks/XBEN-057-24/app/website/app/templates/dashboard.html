@@ -1,0 +1,73 @@
+{% extends "base.html" %}
+{% block title %}Dashboard - VectorStore Manager{% endblock %}
+{% block content %}
+<div class="row">
+    <div class="col-md-8">
+        <h2>Dashboard</h2>
+        <p class="text-muted">Manage your vector indexes for document similarity search and retrieval.</p>
+    </div>
+</div>
+<div class="row mt-3">
+    <div class="col-md-4">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">Stored Indexes</h5>
+                <p class="display-6">{{ stored_indexes|length }}</p>
+                <a href="{{ url_for('list_indexes') }}" class="btn btn-outline-primary btn-sm">View All</a>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">Loaded in Memory</h5>
+                <p class="display-6">{{ loaded_indexes|length }}</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">Quick Actions</h5>
+                <a href="{{ url_for('create_index') }}" class="btn btn-primary btn-sm mb-1 d-block">Create Index</a>
+                <a href="{{ url_for('import_index') }}" class="btn btn-secondary btn-sm d-block">Import Index</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% if loaded_indexes %}
+<div class="row mt-4">
+    <div class="col-12">
+        <h4>Active Indexes</h4>
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Name</th>
+                    <th>Dimension</th>
+                    <th>Metric</th>
+                    <th>Documents</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for id, info in loaded_indexes.items() %}
+                <tr>
+                    <td><code>{{ info.index_id }}</code></td>
+                    <td>{{ info.name }}</td>
+                    <td>{{ info.dimension }}</td>
+                    <td>{{ info.distance_metric }}</td>
+                    <td>{{ info.document_count }}</td>
+                    <td>
+                        <a href="{{ url_for('view_index', index_id=info.index_id) }}" class="btn btn-sm btn-outline-primary">View</a>
+                        <a href="{{ url_for('export_index', index_id=info.index_id) }}" class="btn btn-sm btn-outline-secondary">Export</a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endif %}
+{% endblock %}

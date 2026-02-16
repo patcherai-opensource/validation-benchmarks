@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+{% block title %}Indexes - VectorStore Manager{% endblock %}
+{% block content %}
+<h2>Vector Indexes</h2>
+<p class="text-muted">All stored vector indexes.</p>
+
+{% if indexes %}
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Dimension</th>
+            <th>Metric</th>
+            <th>Documents</th>
+            <th>Version</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for idx in indexes %}
+        <tr>
+            <td><code>{{ idx.index_id }}</code></td>
+            <td>{{ idx.name }}</td>
+            <td>{{ idx.dimension }}</td>
+            <td>{{ idx.distance_metric }}</td>
+            <td>{{ idx.document_count }}</td>
+            <td>{{ idx.version }}</td>
+            <td>
+                <a href="{{ url_for('view_index', index_id=idx.index_id) }}" class="btn btn-sm btn-outline-primary">View</a>
+                <form method="post" action="{{ url_for('delete_index', index_id=idx.index_id) }}" style="display:inline">
+                    <button type="submit" class="btn btn-sm btn-outline-danger" onclick="return confirm('Delete this index?')">Delete</button>
+                </form>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% else %}
+<div class="alert alert-info">No indexes found. <a href="{{ url_for('create_index') }}">Create one</a> or <a href="{{ url_for('import_index') }}">import an existing index</a>.</div>
+{% endif %}
+{% endblock %}

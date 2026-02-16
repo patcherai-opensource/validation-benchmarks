@@ -1,0 +1,66 @@
+{% extends "base.html" %}
+{% block title %}API Documentation - VectorStore Manager{% endblock %}
+{% block content %}
+<h2>API Documentation</h2>
+<p class="text-muted">REST API for programmatic access to vector index management.</p>
+
+<div class="card mb-3">
+    <div class="card-header"><strong>GET</strong> <code>/api/v1/indexes</code></div>
+    <div class="card-body">
+        <p>List all stored vector indexes.</p>
+        <h6>Response</h6>
+        <pre class="bg-light p-2"><code>{
+  "indexes": [...],
+  "count": 0
+}</code></pre>
+    </div>
+</div>
+
+<div class="card mb-3">
+    <div class="card-header"><strong>POST</strong> <code>/api/v1/indexes/restore</code></div>
+    <div class="card-body">
+        <p>Restore a vector index from serialized bytes. Accepts base64-encoded serialized index data.</p>
+        <h6>Content Types</h6>
+        <ul>
+            <li><code>application/json</code> — Send <code>{"serialized": "&lt;base64-data&gt;"}</code></li>
+            <li><code>application/octet-stream</code> — Send raw serialized bytes in request body</li>
+        </ul>
+        <h6>Example</h6>
+        <pre class="bg-light p-2"><code>curl -X POST /api/v1/indexes/restore \
+  -H "Content-Type: application/json" \
+  -d '{"serialized": "&lt;base64-encoded-data&gt;"}'</code></pre>
+        <h6>Response</h6>
+        <pre class="bg-light p-2"><code>{
+  "status": "ok",
+  "index": {
+    "index_id": "...",
+    "name": "...",
+    "dimension": 128,
+    "distance_metric": "cosine",
+    "document_count": 0,
+    "version": "1.0"
+  }
+}</code></pre>
+    </div>
+</div>
+
+<div class="card mb-3">
+    <div class="card-header"><strong>POST</strong> <code>/indexes/&lt;index_id&gt;/documents</code></div>
+    <div class="card-body">
+        <p>Add documents to a loaded index.</p>
+        <h6>Request Body (JSON)</h6>
+        <pre class="bg-light p-2"><code>{
+  "documents": [
+    {"content": "Document text here", "metadata": {"source": "file.pdf"}}
+  ]
+}</code></pre>
+    </div>
+</div>
+
+<div class="card mb-3">
+    <div class="card-header"><strong>GET</strong> <code>/indexes/&lt;index_id&gt;/export</code></div>
+    <div class="card-body">
+        <p>Export a loaded index as a base64-encoded serialized file (<code>.vidx</code>).</p>
+    </div>
+</div>
+{% endblock %}
