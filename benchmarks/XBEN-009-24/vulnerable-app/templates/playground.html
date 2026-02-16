@@ -1,0 +1,118 @@
+{% extends "base.html" %}
+{% block title %}Playground - PromptForge{% endblock %}
+{% block content %}
+<h1>Prompt Playground</h1>
+<p>Build and test prompts interactively. Choose a pre-built pipeline or write your own custom template.</p>
+
+<div class="playground-layout">
+    <div class="panel">
+        <h2>Pre-built Pipelines</h2>
+        <div class="pipeline-list">
+            {% for pid, p in pipelines.items() %}
+            <button class="pipeline-btn" data-id="{{ pid }}" onclick="loadPipeline('{{ pid }}')">
+                {{ p.name }}
+            </button>
+            {% endfor %}
+        </div>
+        <hr>
+        <h2>Custom Template</h2>
+        <form id="custom-form" onsubmit="renderCustom(event)">
+            <div class="form-group">
+                <label for="template-input">Jinja2 Template</label>
+                <textarea id="template-input" rows="6" placeholder="Enter your Jinja2 template..."></textarea>
+            </div>
+            <div class="form-group">
+                <label for="variables-input">Variables (JSON)</label>
+                <textarea id="variables-input" rows="4" placeholder='{"key": "value"}'>{}</textarea>
+            </div>
+            <div class="form-actions">
+                <button type="button" class="btn btn-secondary" onclick="validateTemplate()">Validate</button>
+                <button type="submit" class="btn btn-primary">Render</button>
+            </div>
+        </form>
+    </div>
+
+    <div class="panel">
+        <h2>Output</h2>
+        <div id="output-area" class="output-area">
+            <p class="placeholder-text">Run a pipeline or render a template to see output here.</p>
+        </div>
+
+        <h3>Recent Runs</h3>
+        <div id="runs-area" class="runs-area"></div>
+    </div>
+</div>
+
+<script>
+function loadPipeline(id) {
+    fetch('/api/v1/pipelines/' + id)
+        .then(r => r.json())
+        .then(data => {
+            document.getElementById('template-input').value = data.template;
+            let vars = {};
+            data.variables.forEach(v => vars[v] = '');
+            document.getElementById('variables-input').value = JSON.stringify(vars, null, 2);
+        });
+}
+
+function validateTemplate() {
+    let template = document.getElementById('template-input').value;
+    fetch('/api/v1/validate', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({template: template})
+    })
+    .then(r => r.json())
+    .then(data => {
+        let out = document.getElementById('output-area');
+        if (data.valid) {
+            out.innerHTML = '<div class="success">Template is valid. Variables: ' + data.variables.join(', ') + '</div>';
+        } else {
+            out.innerHTML = '<div class="error">' + data.error + '</div>';
+        }
+    });
+}
+
+function renderCustom(e) {
+    e.preventDefault();
+    let template = document.getElementById('template-input').value;
+    let variables;
+    try {
+        variables = JSON.parse(document.getElementById('variables-input').value);
+    } catch(err) {
+        document.getElementById('output-area').innerHTML = '<div class="error">Invalid JSON in variables field</div>';
+        return;
+    }
+
+    fetch('/api/v1/render', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({template: template, variables: variables})
+    })
+    .then(r => r.json())
+    .then(data => {
+        let out = document.getElementById('output-area');
+        if (data.error) {
+            out.innerHTML = '<div class="error">' + data.error + '</div>';
+        } else {
+            out.innerHTML = '<div class="success"><strong>Run ID:</strong> ' + data.run_id + '</div><pre>' + data.output + '</pre>';
+        }
+        loadRuns();
+    });
+}
+
+function loadRuns() {
+    fetch('/api/v1/runs')
+        .then(r => r.json())
+        .then(data => {
+            let html = '';
+            data.runs.forEach(run => {
+                html += '<div class="run-entry"><strong>' + run.run_id + '</strong> (' + run.pipeline_id + ') - ' + run.timestamp + '</div>';
+            });
+            document.getElementById('runs-area').innerHTML = html || '<p>No runs yet.</p>';
+        });
+}
+
+document.addEventListener('DOMContentLoaded', loadRuns);
+</script>
+{% endblock %}

@@ -1,0 +1,85 @@
+{% extends "base.html" %}
+{% block title %}API Documentation - PromptForge{% endblock %}
+{% block content %}
+<h1>API Documentation</h1>
+<p>PromptForge provides a REST API for managing and executing prompt pipelines.</p>
+
+<section class="doc-section">
+    <h2>Endpoints</h2>
+
+    <div class="endpoint">
+        <h3><span class="method get">GET</span> /api/v1/pipelines</h3>
+        <p>List all available pipeline templates.</p>
+        <h4>Response</h4>
+        <pre><code>{
+  "pipelines": [
+    {
+      "id": "summarization",
+      "name": "Text Summarizer",
+      "description": "...",
+      "variables": ["document_text", "num_points"],
+      "category": "generation"
+    }
+  ]
+}</code></pre>
+    </div>
+
+    <div class="endpoint">
+        <h3><span class="method get">GET</span> /api/v1/pipelines/{pipeline_id}</h3>
+        <p>Get details of a specific pipeline template including its Jinja2 template string.</p>
+    </div>
+
+    <div class="endpoint">
+        <h3><span class="method post">POST</span> /api/v1/pipelines/{pipeline_id}/run</h3>
+        <p>Execute a pre-configured pipeline with provided variables.</p>
+        <h4>Request Body</h4>
+        <pre><code>{
+  "variables": {
+    "document_text": "Your text here...",
+    "num_points": "3"
+  }
+}</code></pre>
+    </div>
+
+    <div class="endpoint">
+        <h3><span class="method post">POST</span> /api/v1/render</h3>
+        <p>Render a custom Jinja2 template with provided variables. Accepts any valid Jinja2 template string for dynamic prompt engineering.</p>
+        <h4>Request Body</h4>
+        <pre><code>{
+  "template": "Summarize: {{ text }}",
+  "variables": {
+    "text": "Your input text..."
+  }
+}</code></pre>
+        <h4>Response</h4>
+        <pre><code>{
+  "run_id": "a1b2c3d4",
+  "output": "Summarize: Your input text..."
+}</code></pre>
+    </div>
+
+    <div class="endpoint">
+        <h3><span class="method post">POST</span> /api/v1/validate</h3>
+        <p>Validate a Jinja2 template string and extract its required variables.</p>
+        <h4>Request Body</h4>
+        <pre><code>{
+  "template": "Hello {{ name }}, welcome to {{ place }}"
+}</code></pre>
+        <h4>Response</h4>
+        <pre><code>{
+  "valid": true,
+  "variables": ["name", "place"]
+}</code></pre>
+    </div>
+
+    <div class="endpoint">
+        <h3><span class="method get">GET</span> /api/v1/runs</h3>
+        <p>List recent pipeline run results.</p>
+    </div>
+
+    <div class="endpoint">
+        <h3><span class="method get">GET</span> /api/v1/runs/{run_id}</h3>
+        <p>Get a specific pipeline run result by ID.</p>
+    </div>
+</section>
+{% endblock %}

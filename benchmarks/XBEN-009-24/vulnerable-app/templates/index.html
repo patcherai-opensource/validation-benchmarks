@@ -1,17 +1,53 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SSTI Demo</title>
-</head>
-<body>
-    <h1>SSTI Demo</h1>
-    <form action="/greet/" method="get">
-        <label for="name">Enter your name:</label>
-        <input type="text" id="name" name="name">
-        <button type="submit">Greet</button>
-    </form>
-</body>
-</html>
+{% extends "base.html" %}
+{% block title %}PromptForge - AI Prompt Engineering Toolkit{% endblock %}
+{% block content %}
+<section class="hero">
+    <h1>PromptForge</h1>
+    <p>Build, test, and iterate on AI prompts with our pipeline-based toolkit.</p>
+    <div class="hero-actions">
+        <a href="/playground" class="btn btn-primary">Open Playground</a>
+        <a href="/docs" class="btn btn-secondary">API Documentation</a>
+    </div>
+</section>
 
+<section class="pipelines-section">
+    <h2>Available Pipelines</h2>
+    <div class="pipeline-grid">
+        {% for pid, p in pipelines.items() %}
+        <div class="pipeline-card">
+            <h3>{{ p.name }}</h3>
+            <span class="badge">{{ p.category }}</span>
+            <p>{{ p.description }}</p>
+            <div class="variables">
+                <strong>Variables:</strong>
+                {% for v in p.variables %}
+                <code>{{ v }}</code>
+                {% endfor %}
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</section>
+
+<section class="features-section">
+    <h2>Features</h2>
+    <div class="feature-grid">
+        <div class="feature-card">
+            <h3>Pre-built Pipelines</h3>
+            <p>Use ready-made pipelines for common NLP tasks like summarization, translation, and entity extraction.</p>
+        </div>
+        <div class="feature-card">
+            <h3>Custom Templates</h3>
+            <p>Create and render your own Jinja2 template strings for advanced prompt engineering workflows.</p>
+        </div>
+        <div class="feature-card">
+            <h3>Template Validation</h3>
+            <p>Validate template syntax and discover required variables before execution.</p>
+        </div>
+        <div class="feature-card">
+            <h3>REST API</h3>
+            <p>Full REST API for integrating prompt pipelines into your applications.</p>
+        </div>
+    </div>
+</section>
+{% endblock %}
