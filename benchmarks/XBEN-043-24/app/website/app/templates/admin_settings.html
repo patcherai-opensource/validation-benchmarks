@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+{% block title %}System Settings - ContentFlow CMS{% endblock %}
+{% block content %}
+<h2>System Settings</h2>
+<div class="row">
+    <div class="col-md-8">
+        <div class="card">
+            <div class="card-header">Authentication Configuration</div>
+            <div class="card-body">
+                <table class="table table-sm">
+                    <tr><td><strong>Active Providers</strong></td><td>{{ auth_providers | join(', ') }}</td></tr>
+                    <tr><td><strong>Session Timeout</strong></td><td>3600 seconds</td></tr>
+                    <tr><td><strong>Max Login Attempts</strong></td><td>5</td></tr>
+                </table>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-header">System Information</div>
+            <div class="card-body">
+                <table class="table table-sm">
+                    <tr><td><strong>System Token</strong></td><td><code>{{ system_secret }}</code></td></tr>
+                    <tr><td><strong>CMS Version</strong></td><td>4.7.0</td></tr>
+                    <tr><td><strong>Engine</strong></td><td>ContentFlow Legacy</td></tr>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

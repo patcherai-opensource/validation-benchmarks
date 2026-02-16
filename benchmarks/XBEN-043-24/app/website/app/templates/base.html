@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Content Management System{% endblock %}</title>
+    <link href="{{ url_for('static', filename='css/bootstrap.min.css') }}" rel="stylesheet">
+    <style>
+        body { background-color: #f5f5f5; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+        .navbar { background-color: #2c3e50; border-bottom: 3px solid #e74c3c; }
+        .navbar-brand { color: #ecf0f1 !important; font-weight: bold; }
+        .nav-link { color: #bdc3c7 !important; }
+        .nav-link:hover { color: #ecf0f1 !important; }
+        .content-wrapper { max-width: 1100px; margin: 30px auto; padding: 0 15px; }
+        .card { border: none; box-shadow: 0 1px 3px rgba(0,0,0,0.12); margin-bottom: 20px; }
+        .card-header { background-color: #2c3e50; color: white; }
+        .footer { text-align: center; padding: 20px; color: #7f8c8d; font-size: 0.85em; margin-top: 40px; }
+        .btn-primary { background-color: #2c3e50; border-color: #2c3e50; }
+        .btn-primary:hover { background-color: #34495e; border-color: #34495e; }
+    </style>
+    {% block extra_head %}{% endblock %}
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark">
+        <div class="container">
+            <a class="navbar-brand" href="{{ url_for('index') }}">ContentFlow CMS</a>
+            <div class="collapse navbar-collapse">
+                <ul class="navbar-nav ms-auto">
+                    {% if session.get('user_id') %}
+                        <li class="nav-item"><a class="nav-link" href="{{ url_for('content_dashboard') }}">Dashboard</a></li>
+                        <li class="nav-item"><a class="nav-link" href="{{ url_for('user_profile') }}">{{ session.get('first_name', 'User') }}</a></li>
+                        <li class="nav-item">
+                            <form action="{{ url_for('user_logout') }}" method="post" style="display:inline;">
+                                <button type="submit" class="btn btn-sm btn-outline-light mt-1">Logout</button>
+                            </form>
+                        </li>
+                    {% else %}
+                        <li class="nav-item"><a class="nav-link" href="{{ url_for('user_login') }}">Sign In</a></li>
+                    {% endif %}
+                </ul>
+            </div>
+        </div>
+    </nav>
+    <div class="content-wrapper">
+        {% block content %}{% endblock %}
+    </div>
+    <div class="footer">
+        &copy; 2024 ContentFlow CMS &mdash; Powered by ContentFlow Engine v4.7
+    </div>
+</body>
+</html>

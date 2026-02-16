@@ -4,7 +4,7 @@ metadata:
   labels:
     app: idor-broken-authn-trading-platform
   name: idor-broken-authn-trading-platform
-  namespace: sandbox-dev
+  namespace: sandbox-prod
 spec:
   replicas: 1
   selector:
@@ -20,43 +20,45 @@ spec:
         - name: FLAG
           value: FLAG_PLACEHOLDER
         image: /:-app
-        imagePullPolicy: Always
+        imagePullPolicy: IfNotPresent
         livenessProbe:
-          failureThreshold: 5
+          failureThreshold: 10
           httpGet:
             path: /
             port: 80
-          initialDelaySeconds: 30
+          initialDelaySeconds: 120
           periodSeconds: 10
           successThreshold: 1
-          timeoutSeconds: 1
+          timeoutSeconds: 10
         name: app
         ports:
         - containerPort: 80
           name: http
         readinessProbe:
-          failureThreshold: 3
+          failureThreshold: 10
           httpGet:
             path: /
             port: 80
-          initialDelaySeconds: 10
+          initialDelaySeconds: 45
           periodSeconds: 5
           successThreshold: 1
-          timeoutSeconds: 1
+          timeoutSeconds: 5
         resources:
           limits:
+            cpu: 1000m
+            memory: 2Gi
+          requests:
             cpu: 500m
             memory: 512Mi
-          requests:
-            cpu: 100m
-            memory: 128Mi
-      - env:
+      - args:
+        - --innodb_use_native_aio=0
+        env:
         - name: MYSQL_ROOT_PASSWORD
           value: idor_broken_authn_trading_platform
         - name: MYSQL_DATABASE
           value: database
-        image: /:-mysql
-        imagePullPolicy: Always
+        image: /:-db
+        imagePullPolicy: IfNotPresent
         livenessProbe:
           exec:
             command:
@@ -67,11 +69,11 @@ spec:
             - --password=idor_broken_authn_trading_platform
             - -u
             - root
-          failureThreshold: 5
-          initialDelaySeconds: 30
+          failureThreshold: 10
+          initialDelaySeconds: 60
           periodSeconds: 10
           successThreshold: 1
-          timeoutSeconds: 1
+          timeoutSeconds: 10
         name: db
         ports:
         - containerPort: 3306
@@ -86,18 +88,18 @@ spec:
             - --password=idor_broken_authn_trading_platform
             - -u
             - root
-          failureThreshold: 3
-          initialDelaySeconds: 10
+          failureThreshold: 10
+          initialDelaySeconds: 30
           periodSeconds: 5
           successThreshold: 1
-          timeoutSeconds: 1
+          timeoutSeconds: 5
         resources:
           limits:
+            cpu: 1000m
+            memory: 2Gi
+          requests:
             cpu: 500m
             memory: 512Mi
-          requests:
-            cpu: 100m
-            memory: 256Mi
       restartPolicy: Always
 ---
 apiVersion: v1
@@ -106,7 +108,7 @@ metadata:
   labels:
     app: idor-broken-authn-trading-platform
   name: idor-broken-authn-trading-platform
-  namespace: sandbox-dev
+  namespace: sandbox-prod
 spec:
   ports:
   - name: http

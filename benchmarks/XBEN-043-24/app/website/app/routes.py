@@ -1,82 +1,117 @@
-from flask import Flask, render_template, render_template_string, redirect, url_for, request, session, Response
+from flask import render_template, redirect, url_for, request, session, jsonify
+from functools import wraps
 
 from app import app
 from app.db import db
-from app.models import User
+from app.models import User, Content
+from app.auth import verify_credentials
 
 
 @app.after_request
-def add_header(request):
-    request.headers['Cache-Control'] = 'no-cache, no-store, must-revalidate'
-    request.headers['Pragma'] = 'no-cache'
-    request.headers['Expires'] = '0'
-    request.headers['Cache-Control'] = 'public, max-age=0'
-    return request
+def add_header(response):
+    response.headers['Cache-Control'] = 'no-cache, no-store, must-revalidate'
+    response.headers['Pragma'] = 'no-cache'
+    response.headers['Expires'] = '0'
+    response.headers['X-Content-Type-Options'] = 'nosniff'
+    response.headers['X-Frame-Options'] = 'DENY'
+    return response
 
 
+def login_required(f):
+    @wraps(f)
+    def decorated_function(*args, **kwargs):
+        if 'user_id' not in session:
+            return redirect(url_for('user_login'))
+        return f(*args, **kwargs)
+    return decorated_function
 
-# Route for login page
-@app.route('/', methods=['GET', 'POST'])
-def login():
-    error = request.args.get('error')
+
+def admin_required(f):
+    @wraps(f)
+    def decorated_function(*args, **kwargs):
+        if 'user_id' not in session:
+            return redirect(url_for('user_login'))
+        if session.get('role') != 'admin':
+            return render_template('error.html', message='Insufficient privileges'), 403
+        return f(*args, **kwargs)
+    return decorated_function
+
+
+@app.route('/')
+def index():
+    articles = Content.query.filter_by(status='published').order_by(Content.created_at.desc()).all()
+    return render_template('index.html', articles=articles, session=session)
+
+
+@app.route('/user/login', methods=['GET', 'POST'])
+def user_login():
+    error = None
     if request.method == 'POST':
-        username = request.form['username']
-        # Check if username exists
-        user = User.query.filter_by(username=username).first()
+        login = request.form.get('LoginName', '').strip()
+        password = request.form.get('Password', '')
+
+        user = verify_credentials(login, password)
         if user:
-            # Redirect to password page if username exists
-            return redirect(url_for('password', username=username))
+            session['user_id'] = user.id
+            session['username'] = user.username
+            session['role'] = user.role
+            session['first_name'] = user.first_name
+            return redirect(url_for('content_dashboard'))
         else:
-            # Render login page with error message if username doesn't exist
-            return render_template('login.html', error='User not found')
+            error = 'Invalid username or password.'
+
     return render_template('login.html', error=error)
 
 
-# Route for logout
-@app.route('/logout', methods=['POST'])
-def logout():
-    # Clear user ID from session
-    session.pop('user_id', None)
-    return redirect(url_for('login'))
+@app.route('/user/logout', methods=['POST'])
+def user_logout():
+    session.clear()
+    return redirect(url_for('index'))
 
 
-# Route for password page
-@app.route('/password/<username>', methods=['GET', 'POST'])
-def password(username):
-    user = User.query.filter_by(username=username).first()
-    if not user:
-        # Render login page with error message if username doesn't exist
-        return redirect(url_for('login', error='User not found'))
-
-    if request.method == 'POST':
-        password = request.form['password']
-        user = User.query.filter_by(username=username, password=password).first()
-        if user:
-            # User provided a valid username/password pair.
-            # But the application trusts the supplied user_id to set up the current session
-            # this situation creates an IDOR during the authentication process
-            if User.query.get(request.form['user_id']):
-                session['user_id'] = request.form['user_id']
-                # If login successful, redirect to home page
-                return redirect(url_for('dashboard'))
-            else:
-                return redirect(url_for('login'))
-
-
-        else:
-            # Render login page with error message if password is incorrect
-            return redirect(url_for('login', error='Incorrect password'))
-    # Render password page for GET request
-    return render_template('password.html', first_name=user.first_name, username=username, user_id=user.id)
-
-# Route for dashboard page
-@app.route('/dashboard')
-def dashboard():
-    # Retrieve user from session
-    user_id = session.get('user_id')
-    if user_id:
-        user = User.query.get(user_id)
-        return render_template('dashboard.html', user=user)
+@app.route('/content/dashboard')
+@login_required
+def content_dashboard():
+    if session.get('role') == 'admin':
+        articles = Content.query.order_by(Content.created_at.desc()).all()
+    elif session.get('role') == 'editor':
+        articles = Content.query.order_by(Content.created_at.desc()).all()
     else:
-        # If user not in session, redirect to login
-        return redirect(url_for('login'))
+        articles = Content.query.filter_by(author_id=session['user_id']).order_by(Content.created_at.desc()).all()
+    users = None
+    if session.get('role') == 'admin':
+        users = User.query.all()
+    return render_template('dashboard.html', articles=articles, users=users, session=session)
+
+
+@app.route('/content/view/<int:content_id>')
+def content_view(content_id):
+    article = Content.query.get_or_404(content_id)
+    if article.status != 'published' and 'user_id' not in session:
+        return render_template('error.html', message='Content not found'), 404
+    return render_template('content_view.html', article=article, session=session)
+
+
+@app.route('/admin/settings')
+@admin_required
+def admin_settings():
+    flag = app.config.get('SYSTEM_SECRET', '')
+    auth_providers = app.config.get('AUTH_PROVIDERS', [])
+    return render_template('admin_settings.html', system_secret=flag, auth_providers=auth_providers, session=session)
+
+
+@app.route('/user/profile')
+@login_required
+def user_profile():
+    user = User.query.get(session['user_id'])
+    return render_template('profile.html', user=user, session=session)
+
+
+@app.errorhandler(404)
+def not_found(e):
+    return render_template('error.html', message='The requested page was not found.'), 404
+
+
+@app.errorhandler(500)
+def server_error(e):
+    return render_template('error.html', message='An internal error occurred.'), 500

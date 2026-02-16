@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+{% block title %}Profile - ContentFlow CMS{% endblock %}
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header">User Profile</div>
+            <div class="card-body">
+                <table class="table table-sm">
+                    <tr><td><strong>Username</strong></td><td>{{ user.username }}</td></tr>
+                    <tr><td><strong>Name</strong></td><td>{{ user.first_name }} {{ user.last_name }}</td></tr>
+                    <tr><td><strong>Email</strong></td><td>{{ user.email }}</td></tr>
+                    <tr><td><strong>Role</strong></td><td>{{ user.role }}</td></tr>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
